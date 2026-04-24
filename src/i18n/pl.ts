@@ -285,4 +285,11 @@ export const pl: Translations = {
     copyright: "© 2026 Michał Sagan. Wszelkie prawa zastrzeżone.",
     roleAt: "Architekt Produktu w",
   },
+  cookies: {
+    bannerText:
+      "Używamy plików cookie do analizy ruchu przez Google Analytics i poprawy Twojego doświadczenia. Przeczytaj naszą",
+    policyLink: "Politykę Cookies",
+    accept: "Zaakceptuj wszystkie",
+    reject: "Odrzuć nieobowiązkowe",
+  },
 };

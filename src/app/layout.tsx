@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { CookieBanner } from "@/components/CookieBanner";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sagan.dev"),
@@ -76,6 +77,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Google Consent Mode v2 — must run BEFORE GTM */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  analytics_storage: 'denied',
+  ad_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied',
+  wait_for_update: 500
+});
+            `.trim(),
+          }}
+        />
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
@@ -101,6 +118,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {/* End Google Tag Manager (noscript) */}
         <LanguageProvider>
           <LanguageSwitcher />
+          <CookieBanner />
           {children}
         </LanguageProvider>
       </body>

@@ -283,6 +283,13 @@ export const en = {
     copyright: "© 2026 Michał Sagan. All rights reserved.",
     roleAt: "Product Architect at",
   },
+  cookies: {
+    bannerText:
+      "We use cookies to analyze site traffic via Google Analytics and improve your experience. Read our",
+    policyLink: "Cookie Policy",
+    accept: "Accept all",
+    reject: "Reject non-essential",
+  },
 };
 
 export type Translations = typeof en;
