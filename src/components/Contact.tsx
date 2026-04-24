@@ -103,7 +103,7 @@ export function Contact() {
             </div>
 
             <motion.div
-              className="flex justify-center"
+              className="flex justify-center items-end overflow-hidden -mb-4"
               initial={{ opacity: 0, scale: 0.85 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -112,7 +112,7 @@ export function Contact() {
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full blur-3xl opacity-30 scale-75"></div>
                 <motion.div
-                  animate={{ y: [0, -12, 0] }}
+                  animate={{ y: [0, 12, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 >
                   <Image
@@ -120,7 +120,7 @@ export function Contact() {
                     alt="Michał Sagan"
                     width={384}
                     height={500}
-                    className="relative w-80 h-auto md:w-100 -mb-4 md:h-auto object-contain drop-shadow-2xl"
+                    className="relative w-80 h-auto md:w-100 object-contain object-bottom drop-shadow-2xl"
                   />
                 </motion.div>
               </div>
