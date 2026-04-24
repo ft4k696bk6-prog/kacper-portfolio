@@ -2,31 +2,12 @@
 
 import { Code2, Cloud, Database, Shield } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+const icons = [Code2, Cloud, Database, Shield];
 
 export function Profile() {
-  const highlights = [
-    {
-      icon: Code2,
-      title: "GraphQL Federation",
-      description:
-        "Architecting federated GraphQL solutions at enterprise scale",
-    },
-    {
-      icon: Cloud,
-      title: "Cloud Architecture",
-      description: "Azure & AWS cloud-native integration platforms",
-    },
-    {
-      icon: Database,
-      title: "API Ecosystems",
-      description: "Building scalable, well-governed API solutions",
-    },
-    {
-      icon: Shield,
-      title: "CIAM & Security",
-      description: "OAuth2, OIDC, PKCE, JWT implementation expertise",
-    },
-  ];
+  const { t } = useLanguage();
 
   return (
     <section className="py-24 px-6 md:px-12 lg:px-24">
@@ -39,7 +20,7 @@ export function Profile() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            Profile
+            {t.profile.title}
           </motion.h2>
 
           <motion.p
@@ -49,13 +30,7 @@ export function Profile() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.15 }}
           >
-            Experienced Software Engineer specializing in cloud-native
-            integration platforms and API ecosystems. Strong expertise in Web
-            Apps, Commerce, GraphQL Federation, CIAM, and secure
-            service-to-service communication, with hands-on experience in
-            Node.js, TypeScript, and Azure/AWS. Proven ability to translate
-            complex business requirements into scalable, well-governed technical
-            solutions while collaborating effectively across teams.
+            {t.profile.bio}
           </motion.p>
 
           <motion.div
@@ -65,7 +40,9 @@ export function Profile() {
             viewport={{ once: true }}
             variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
           >
-            {highlights.map((item, index) => (
+            {t.profile.highlights.map((item, index) => {
+              const Icon = icons[index];
+              return (
               <motion.div
                 key={index}
                 variants={{
@@ -76,7 +53,7 @@ export function Profile() {
               >
                 <div className="flex items-start gap-4">
                   <div className="p-3 bg-cyan-500/10 rounded-lg group-hover:bg-cyan-500/20 transition-colors">
-                    <item.icon className="w-6 h-6 text-cyan-400" />
+                    <Icon className="w-6 h-6 text-cyan-400" />
                   </div>
                   <div className="flex-1">
                     <h3 className="text-white mb-2">{item.title}</h3>
@@ -84,7 +61,7 @@ export function Profile() {
                   </div>
                 </div>
               </motion.div>
-            ))}
+            );})}
           </motion.div>
         </div>
       </div>

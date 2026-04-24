@@ -3,8 +3,10 @@
 import Image from "next/image";
 import { Quote } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Recommendations() {
+  const { t } = useLanguage();
   const recommendations = [
     {
       name: "Mikel Bitson",
@@ -37,7 +39,7 @@ export function Recommendations() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            Recommendations
+            {t.recommendations.title}
           </motion.h2>
 
           <motion.div

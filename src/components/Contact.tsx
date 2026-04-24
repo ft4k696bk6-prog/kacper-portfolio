@@ -3,8 +3,10 @@
 import Image from "next/image";
 import { Mail, Linkedin, Phone, Download } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Contact() {
+  const { t } = useLanguage();
   return (
     <section className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900/50">
       <div className="w-full">
@@ -16,15 +18,13 @@ export function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            Get In Touch
+            {t.contact.title}
           </motion.h2>
 
           <div className="mb-4 grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <p className="text-lg text-slate-300 leading-relaxed">
-                I&apos;m always open to discussing new projects, creative ideas,
-                or opportunities to be part of your vision. <br/>Let&apos;s build
-                something great together.
+                {t.contact.description}
               </p>
 
               <div className="space-y-4 max-w-md">
@@ -40,7 +40,7 @@ export function Contact() {
                     <Mail className="w-6 h-6 text-cyan-400" />
                   </div>
                   <div>
-                    <div className="text-sm text-slate-400">Email</div>
+                    <div className="text-sm text-slate-400">{t.contact.emailLabel}</div>
                     <div className="text-white">michal@sagan.dev</div>
                   </div>
                 </motion.a>
@@ -57,7 +57,7 @@ export function Contact() {
                     <Phone className="w-6 h-6 text-cyan-400" />
                   </div>
                   <div>
-                    <div className="text-sm text-slate-400">Phone</div>
+                    <div className="text-sm text-slate-400">{t.contact.phoneLabel}</div>
                     <div className="text-white">+48 600 341 211</div>
                   </div>
                 </motion.a>
@@ -76,7 +76,7 @@ export function Contact() {
                     <Linkedin className="w-6 h-6 text-cyan-400" />
                   </div>
                   <div>
-                    <div className="text-sm text-slate-400">LinkedIn</div>
+                    <div className="text-sm text-slate-400">{t.contact.linkedinLabel}</div>
                     <div className="text-white">in/michal-sagan</div>
                   </div>
                 </motion.a>
@@ -94,9 +94,9 @@ export function Contact() {
                   </div>
                   <div className="text-left">
                     <div className="text-sm text-cyan-100">
-                      Download / Print
+                      {t.contact.downloadLabel}
                     </div>
-                    <div className="text-white">Save as PDF</div>
+                    <div className="text-white">{t.contact.saveLabel}</div>
                   </div>
                 </motion.button>
               </div>
@@ -131,12 +131,12 @@ export function Contact() {
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-slate-400">
               <div>
                 <p className="text-sm">
-                  © 2026 Michał Sagan. All rights reserved.
+                  {t.contact.copyright}
                 </p>
               </div>
               <div className="text-sm">
                 <p>
-                  Product Architect at{" "}
+                  {t.contact.roleAt}{" "}
                   <span className="text-cyan-400">Heineken</span>
                 </p>
               </div>

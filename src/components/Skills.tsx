@@ -1,58 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Skills() {
-  const skillCategories = [
-    {
-      category: "Core Technologies",
-      skills: [
-        { name: "TypeScript & Node.js", level: 95 },
-        { name: "GraphQL", level: 90 },
-        { name: "React.js", level: 85 },
-        { name: "SQL", level: 85 },
-      ],
-    },
-    {
-      category: "Cloud & Infrastructure",
-      skills: [
-        { name: "Azure", level: 88 },
-        { name: "AWS", level: 85 },
-        { name: "Docker & Kubernetes", level: 80 },
-        { name: "Git", level: 90 },
-      ],
-    },
-    {
-      category: "Architecture & Security",
-      skills: [
-        { name: "Technical Design", level: 92 },
-        { name: "CIAM & IAM", level: 88 },
-        { name: "Adobe Commerce", level: 90 },
-        { name: "API Governance", level: 87 },
-      ],
-    },
-    {
-      category: "Additional",
-      skills: [
-        { name: "C#", level: 75 },
-        { name: "Python & PyTorch", level: 70 },
-      ],
-    },
-  ];
-
-  const languages = [
-    { name: "English", level: 95 },
-    { name: "Polish", level: 100 },
-  ];
-
-  const hobbies = [
-    "Home Automation",
-    "3D Printing",
-    "Skiing",
-    "Biking",
-    "Sailing",
-    "Squash",
-  ];
+  const { t } = useLanguage();
 
   return (
     <section className="py-24 px-6 md:px-12 lg:px-24">
@@ -65,7 +17,7 @@ export function Skills() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            Skills &amp; Expertise
+            {t.skills.title}
           </motion.h2>
 
           <motion.div
@@ -75,7 +27,7 @@ export function Skills() {
             viewport={{ once: true }}
             variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
           >
-            {skillCategories.map((category, index) => (
+            {t.skills.categories.map((category, index) => (
               <motion.div
                 key={index}
                 variants={{
@@ -122,9 +74,11 @@ export function Skills() {
             <motion.div
               variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
               className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
-              <h3 className="text-xl text-cyan-400 mb-6">Languages</h3>
+              <h3 className="text-xl text-cyan-400 mb-6">
+                  {t.skills.languagesTitle}
+                </h3>
               <div className="space-y-4">
-                {languages.map((lang, i) => (
+                {t.skills.languages.map((lang, i) => (
                   <div key={i}>
                     <div className="flex justify-between mb-2">
                       <span className="text-white">{lang.name}</span>
@@ -150,10 +104,10 @@ export function Skills() {
               variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
               className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
               <h3 className="text-xl text-cyan-400 mb-6">
-                Hobbies & Interests
+                {t.skills.hobbiesTitle}
               </h3>
               <div className="flex flex-wrap gap-3">
-                {hobbies.map((hobby, i) => (
+                {t.skills.hobbies.map((hobby, i) => (
                   <span
                     key={i}
                     className="px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white rounded-lg border border-cyan-500/30 hover:border-cyan-500/50 transition-colors"
@@ -163,8 +117,7 @@ export function Skills() {
                 ))}
               </div>
               <p className="mt-6 text-slate-400 text-sm">
-                Technology enthusiast with passion for automation and outdoor
-                activities. Balancing innovation with adventure.
+                {t.skills.bio}
               </p>
             </motion.div>
           </motion.div>

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Mail, Linkedin, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const containerVariants = {
   hidden: {},
@@ -15,6 +16,7 @@ const fadeUp = {
 };
 
 export function Hero() {
+  const { t } = useLanguage();
   return (
     <section className="min-h-screen flex relative overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 lg:px-24 flex flex-col justify-center">
@@ -32,7 +34,7 @@ export function Hero() {
               <div className="flex items-center gap-3 justify-center md:justify-start">
                 <div className="h-px bg-gradient-to-r from-cyan-500 to-transparent w-12"></div>
                 <p className="text-xl md:text-2xl text-cyan-400 uppercase tracking-wider">
-                  Software Engineer
+                  {t.hero.title}
                 </p>
               </div>
             </motion.div>
@@ -41,9 +43,7 @@ export function Hero() {
               className="text-lg text-slate-300 leading-relaxed max-w-xl"
               variants={fadeUp}
             >
-              Product Architect specializing in cloud-native integration
-              platforms, GraphQL Federation, and API ecosystems. Transforming
-              complex business requirements into scalable technical solutions.
+              {t.hero.description}
             </motion.p>
 
             <motion.div
@@ -55,7 +55,7 @@ export function Hero() {
                 className="flex items-center gap-2 px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-all hover:shadow-lg hover:shadow-cyan-500/50"
               >
                 <Mail className="w-5 h-5" />
-                <span>Contact</span>
+                <span>{t.hero.contactBtn}</span>
               </a>
               <a
                 href="https://linkedin.com/in/michal-sagan"

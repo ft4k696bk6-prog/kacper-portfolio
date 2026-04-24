@@ -3,94 +3,11 @@
 import { useState } from "react";
 import { Building2, Calendar, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Experience() {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
-
-  const experiences = [
-    {
-      role: "Product Architect",
-      company: "Heineken",
-      period: "October 2024 - Present",
-      description:
-        "Defining and governing target architecture for global digital commerce platforms across multiple OpCos. Designing and scaling federated GraphQL architecture, including subgraph ownership models, domain boundaries, and governance standards.",
-      technologies: [
-        "GraphQL Federation",
-        "Azure",
-        "Node.js",
-        "TypeScript",
-        "CIAM",
-      ],
-      highlights: [
-        "Leading architectural decision-making (KDDs/ADRs) for GraphQL Federation",
-        "Designing CIAM and authentication flows (OAuth2, OIDC, PKCE, JWT)",
-        "Platform engineering and developer enablement initiatives",
-      ],
-    },
-    {
-      role: "Software Architect & Developer",
-      company: "Schneider Electric",
-      period: "October 2023 - October 2024",
-      description:
-        "Modeling architecture of integrations with external applications, solution topology, and security. Developing TypeScript code for AWS Lambda with S3, DynamoDB, AWS EventBridge.",
-      technologies: [
-        "AWS",
-        "Node.js",
-        "SvelteKit",
-        "GitHub Actions",
-        "Builder.io",
-      ],
-      highlights: [
-        "Implemented web components (CAAS) architecture",
-        "Managed complex Builder.io (SAAS) integrations",
-        "Automated deployment pipelines",
-      ],
-    },
-    {
-      role: "Full-Stack Developer",
-      company: "Hunter Douglas USA",
-      period: "January 2022 - September 2023",
-      description:
-        "Designed and delivered custom migration tool from Magento 1. Integrated SAP pricing engine and Order Management System. Built Progressive Web App with Magento PWA Studio.",
-      technologies: ["PHP", "AWS", "React", "PWA", "SAP", "Adobe Commerce"],
-      highlights: [
-        "Custom migration tool implementation",
-        "SAP pricing engine integration",
-        "Platform performance optimization",
-      ],
-    },
-    {
-      role: "Adobe Commerce Architect & Developer",
-      company: "ABB (via Accenture)",
-      period: "February 2021 - July 2022",
-      description:
-        "Hybrid role combining Architect and Principal Software Engineer for Adobe Commerce Cloud B2B platform. Designed integrations across MuleSoft, SAP, Salesforce, and Fastly.",
-      technologies: [
-        "MuleSoft",
-        "PHP",
-        "Adobe Commerce Cloud",
-        "Knockout.js",
-      ],
-      highlights: [
-        "Microfrontend architecture implementation",
-        "Complex enterprise integrations",
-        "Global platform performance optimization",
-      ],
-    },
-    {
-      role: "Software Architect",
-      company: "JTI Geneva",
-      period: "May 2019 - November 2020",
-      description:
-        "Led design of development environment and software architecture for large-scale B2C eCommerce platform at Japanese Tobacco International HQ.",
-      technologies: ["AEM", "React.js", "Adobe Commerce", "Agile"],
-      highlights: [
-        "Designed headless commerce architecture",
-        "Collaborated with Adobe and BuzzBrothers engineering teams",
-        "Delivered platform enablement and training",
-      ],
-    },
-  ];
+  const { t } = useLanguage();
 
   return (
     <section className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900/50">
@@ -103,14 +20,14 @@ export function Experience() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            Employment History
+            {t.experience.title}
           </motion.h2>
 
           <div className="relative">
             <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-cyan-500 via-blue-500 to-transparent"></div>
 
             <div className="space-y-8">
-              {experiences.map((exp, index) => (
+              {t.experience.items.map((exp, index) => (
                 <motion.div
                   key={index}
                   className="relative pl-20 pb-8 group cursor-pointer"

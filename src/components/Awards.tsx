@@ -3,61 +3,12 @@
 import { Award, Trophy, Star } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-interface AwardItem {
-  icon: LucideIcon;
-  title: string;
-  issuer: string;
-  date: string;
-  description: string;
-}
+const icons: LucideIcon[] = [Trophy, Award, Star, Award, Trophy, Star];
 
 export function Awards() {
-  const awards: AwardItem[] = [
-    {
-      icon: Trophy,
-      title: "Adobe Certified Expert",
-      issuer: "Adobe",
-      date: "2020",
-      description: "Adobe Commerce Cloud Developer certification",
-    },
-    {
-      icon: Award,
-      title: "Solution Architecture Excellence",
-      issuer: "Heineken",
-      date: "2024",
-      description:
-        "Recognition for outstanding GraphQL Federation architecture design",
-    },
-    {
-      icon: Star,
-      title: "Innovation Award",
-      issuer: "Schneider Electric",
-      date: "2024",
-      description: "Custom web components architecture implementation",
-    },
-    {
-      icon: Award,
-      title: "Azure Solutions Architect",
-      issuer: "Microsoft",
-      date: "2023",
-      description: "Certified Azure Solutions Architect Expert",
-    },
-    {
-      icon: Trophy,
-      title: "Team Excellence Award",
-      issuer: "ABB",
-      date: "2022",
-      description: "Outstanding contribution to enterprise platform delivery",
-    },
-    {
-      icon: Star,
-      title: "AWS Certified Developer",
-      issuer: "Amazon Web Services",
-      date: "2022",
-      description: "AWS Certified Developer - Associate",
-    },
-  ];
+  const { t } = useLanguage();
 
   return (
     <section className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900/50">
@@ -70,7 +21,7 @@ export function Awards() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            Honors &amp; Awards
+            {t.awards.title}
           </motion.h2>
 
           <motion.div
@@ -80,7 +31,9 @@ export function Awards() {
             viewport={{ once: true }}
             variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
           >
-            {awards.map((award, index) => (
+            {t.awards.items.map((award, index) => {
+              const Icon = icons[index];
+              return (
               <motion.div
                 key={index}
                 variants={{
@@ -97,7 +50,7 @@ export function Awards() {
                 <div className="flex flex-col h-full">
                   <div className="flex items-start gap-4 mb-4">
                     <div className="p-3 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-lg group-hover:from-cyan-500/30 group-hover:to-blue-500/30 transition-colors">
-                      <award.icon className="w-6 h-6 text-cyan-400" />
+                      <Icon className="w-6 h-6 text-cyan-400" />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-white mb-1">{award.title}</h3>
@@ -113,7 +66,7 @@ export function Awards() {
                   </p>
                 </div>
               </motion.div>
-            ))}
+            );})}
           </motion.div>
         </div>
       </div>
