@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Building2, Calendar, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 export function Experience() {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
@@ -95,18 +96,28 @@ export function Experience() {
     <section className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900/50">
       <div className="container mx-auto">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl text-white mb-12">
+          <motion.h2
+            className="text-4xl md:text-5xl text-white mb-12"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
             Employment History
-          </h2>
+          </motion.h2>
 
           <div className="relative">
             <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-cyan-500 via-blue-500 to-transparent"></div>
 
             <div className="space-y-8">
               {experiences.map((exp, index) => (
-                <div
+                <motion.div
                   key={index}
                   className="relative pl-20 pb-8 group cursor-pointer"
+                  initial={{ opacity: 0, x: -40 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
                   onClick={() =>
                     setExpandedIndex(expandedIndex === index ? null : index)
                   }
@@ -174,7 +185,7 @@ export function Experience() {
                       </div>
                     )}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

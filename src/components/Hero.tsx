@@ -1,31 +1,55 @@
+"use client";
+
 import Image from "next/image";
 import { Mail, Linkedin, ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 32 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
+};
 
 export function Hero() {
   return (
     <section className="min-h-screen flex relative overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 lg:px-24 flex flex-col justify-center">
         <div className="grid md:grid-cols-2 gap-12 md:items-end min-h-screen">
-          <div className="order-2 md:order-2 space-y-6 self-center">
-            <div className="space-y-2">
+          <motion.div
+            className="order-1 md:order-2 space-y-6 self-center pt-[10%] text-center md:text-left"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.div className="space-y-2" variants={fadeUp}>
               <h1 className="text-5xl md:text-6xl lg:text-7xl text-white tracking-tight">
                 Michał Sagan
               </h1>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 justify-center md:justify-start">
                 <div className="h-px bg-gradient-to-r from-cyan-500 to-transparent w-12"></div>
                 <p className="text-xl md:text-2xl text-cyan-400 uppercase tracking-wider">
                   Software Engineer
                 </p>
               </div>
-            </div>
+            </motion.div>
 
-            <p className="text-lg text-slate-300 leading-relaxed max-w-xl">
+            <motion.p
+              className="text-lg text-slate-300 leading-relaxed max-w-xl"
+              variants={fadeUp}
+            >
               Product Architect specializing in cloud-native integration
               platforms, GraphQL Federation, and API ecosystems. Transforming
               complex business requirements into scalable technical solutions.
-            </p>
+            </motion.p>
 
-            <div className="flex gap-4 pt-4">
+            <motion.div
+              className="flex gap-4 pt-4 justify-center md:justify-start"
+              variants={fadeUp}
+            >
               <a
                 href="mailto:michal@sagan.dev"
                 className="flex items-center gap-2 px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-all hover:shadow-lg hover:shadow-cyan-500/50"
@@ -42,30 +66,44 @@ export function Hero() {
                 <Linkedin className="w-5 h-5" />
                 <span>LinkedIn</span>
               </a>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          <div className="order-1 md:order-1 flex justify-center items-end pt-[10%]">
+          <motion.div
+            className="order-2 md:order-1 flex justify-center items-end pt-[10%]"
+            initial={{ opacity: 0, x: 60 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.9, delay: 0.3, ease: "easeOut" }}
+          >
             <div className="relative">
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-[70%] bg-gradient-to-t from-cyan-500 via-blue-600 to-transparent blur-3xl opacity-40"></div>
-              <Image
-                src="/hero_banner.png"
-                alt="Michał Sagan"
-                width={448}
-                height={600}
-                priority
-                className="relative h-screen w-auto object-contain drop-shadow-2xl object-bottom"
-              />
+              <motion.div
+                animate={{ x: [0, 14, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Image
+                  src="/hero_banner.png"
+                  alt="Michał Sagan"
+                  width={448}
+                  height={600}
+                  priority
+                  className="relative h-screen w-auto object-contain drop-shadow-2xl object-bottom"
+                />
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        animate={{ y: [0, 8, 0] }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+      >
         <ChevronDown className="w-8 h-8 text-cyan-400" />
-      </div>
+      </motion.div>
     </section>
   );
 }
