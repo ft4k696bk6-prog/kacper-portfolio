@@ -7,8 +7,25 @@ import { Awards } from "@/components/Awards";
 import { Recommendations } from "@/components/Recommendations";
 import { Contact } from "@/components/Contact";
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Michał Sagan",
+  url: "https://sagan.dev",
+  jobTitle: "Product Architect",
+  description:
+    "Product Architect specializing in cloud-native integration platforms, GraphQL Federation, and API ecosystems.",
+  sameAs: ["https://www.linkedin.com/in/michal-sagan"],
+  image: "https://sagan.dev/hero_banner.png",
+};
+
 export default function Home() {
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <div className="fixed top-0 left-0 w-full h-full opacity-30 pointer-events-none">
         <div className="absolute top-20 left-20 w-96 h-96 bg-cyan-500 rounded-full blur-[120px]"></div>
@@ -26,5 +43,6 @@ export default function Home() {
         <Contact />
       </div>
     </div>
+    </>
   );
 }

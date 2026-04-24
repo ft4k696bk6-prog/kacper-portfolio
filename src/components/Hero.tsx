@@ -71,7 +71,7 @@ export function Hero() {
 
           <motion.div
             className="order-2 md:order-1 flex justify-center items-end pt-[10%]"
-            initial={{ opacity: 0, x: 60 }}
+            initial={{ opacity: 0, x: -120 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.9, delay: 0.3, ease: "easeOut" }}
           >
