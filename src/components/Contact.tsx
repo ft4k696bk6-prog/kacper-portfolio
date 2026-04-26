@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Mail, Linkedin, Phone, Download } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -134,7 +135,13 @@ export function Contact() {
                   {t.contact.copyright}
                 </p>
               </div>
-              <div className="text-sm">
+              <div className="flex items-center gap-4 text-sm">
+                <Link
+                  href="/cookies"
+                  className="hover:text-cyan-400 transition-colors"
+                >
+                  {t.cookies.policyLink}
+                </Link>
                 <p>
                   {t.contact.roleAt}{" "}
                   <span className="text-cyan-400">Heineken</span>

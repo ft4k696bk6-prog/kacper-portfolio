@@ -1,8 +1,10 @@
 "use client";
 
+import { clearStoredConsent } from "@/services/consent";
+
 export function ResetConsentButton() {
   function reset() {
-    localStorage.removeItem("cookie_consent");
+    clearStoredConsent();
     window.location.reload();
   }
 

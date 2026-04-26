@@ -4,43 +4,29 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-type ConsentValue = "granted" | "denied";
-
-function updateConsent(analytics: ConsentValue, ads: ConsentValue) {
-  if (typeof window === "undefined") return;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (window as any).gtag?.("consent", "update", {
-    analytics_storage: analytics,
-    ad_storage: ads,
-    ad_user_data: ads,
-    ad_personalization: ads,
-  });
-}
+import { getStoredConsent, setStoredConsent } from "@/services/consent";
 
 export function CookieBanner() {
   const { t } = useLanguage();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem("cookie_consent");
+    const stored = getStoredConsent();
     if (!stored) {
       setVisible(true);
     } else {
-      const value: ConsentValue = stored === "granted" ? "granted" : "denied";
-      updateConsent(value, value);
+      // Re-apply persisted choice so GTM tags fire correctly after hydration
+      setStoredConsent(stored);
     }
   }, []);
 
   function accept() {
-    localStorage.setItem("cookie_consent", "granted");
-    updateConsent("granted", "granted");
+    setStoredConsent("granted");
     setVisible(false);
   }
 
   function reject() {
-    localStorage.setItem("cookie_consent", "denied");
-    updateConsent("denied", "denied");
+    setStoredConsent("denied");
     setVisible(false);
   }
 
