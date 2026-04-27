@@ -1,15 +1,73 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Mail, Linkedin, Phone, Download } from "lucide-react";
 import { motion } from "framer-motion";
+import { useQuery } from "@apollo/client/react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CONTACT_INFO_QUERY } from "@/lib/graphql/operations";
+import { ContactForm } from "@/components/ContactForm";
+import { Button } from "@/components/ui/button";
+
+function ContactInfoSkeleton({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-4 p-4 bg-slate-800/50 border border-slate-700 rounded-lg">
+      <div className="p-3 bg-cyan-500/10 rounded-lg">
+        <div className="w-6 h-6 bg-slate-700 rounded animate-pulse" />
+      </div>
+      <div>
+        <div className="text-sm text-slate-400">{label}</div>
+        <div className="w-36 h-4 mt-1 bg-slate-700 rounded animate-pulse" />
+      </div>
+    </div>
+  );
+}
 
 export function Contact() {
   const { t } = useLanguage();
+  const sectionRef = useRef<HTMLElement>(null);
+  const [triggered, setTriggered] = useState(false);
+  const [timeReady, setTimeReady] = useState(false);
+  const [inView, setInView] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
+
+  // 2-second page timer
+  useEffect(() => {
+    const id = setTimeout(() => setTimeReady(true), 2000);
+    return () => clearTimeout(id);
+  }, []);
+
+  // IntersectionObserver for the section
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setInView(true);
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Trigger when both conditions are met
+  useEffect(() => {
+    if (!triggered && timeReady && inView) {
+      setTriggered(true);
+      window.dataLayer?.push({ event: "contact_info_revealed" });
+    }
+  }, [triggered, timeReady, inView]);
+
+  type ContactInfoData = {
+    contactInfo: { email: string; phone: string; mailto: string; tel: string };
+  };
+  const { data } = useQuery<ContactInfoData>(CONTACT_INFO_QUERY, { skip: !triggered });
+  const contact = data?.contactInfo;
   return (
-    <section className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900/50">
+    <section ref={sectionRef} className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900/50">
       <div className="w-full">
         <div className="max-w-none w-full">
           <motion.h2
@@ -29,40 +87,57 @@ export function Contact() {
               </p>
 
               <div className="space-y-4 max-w-md">
-                <motion.a
-                  href="mailto:michal@sagan.dev"
-                  className="flex items-center gap-4 p-4 bg-slate-800/50 border border-slate-700 rounded-lg hover:border-cyan-500/50 transition-all group"
+                {/* Email */}
+                <motion.div
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4 }}
                 >
-                  <div className="p-3 bg-cyan-500/10 rounded-lg group-hover:bg-cyan-500/20 transition-colors">
-                    <Mail className="w-6 h-6 text-cyan-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-slate-400">{t.contact.emailLabel}</div>
-                    <div className="text-white">michal@sagan.dev</div>
-                  </div>
-                </motion.a>
+                  {contact ? (
+                    <a
+                      href={contact.mailto}
+                      className="flex items-center gap-4 p-4 bg-slate-800/50 border border-slate-700 rounded-lg hover:border-cyan-500/50 transition-all group"
+                    >
+                      <div className="p-3 bg-cyan-500/10 rounded-lg group-hover:bg-cyan-500/20 transition-colors">
+                        <Mail className="w-6 h-6 text-cyan-400" />
+                      </div>
+                      <div>
+                        <div className="text-sm text-slate-400">{t.contact.emailLabel}</div>
+                        <div className="text-white">{contact.email}</div>
+                      </div>
+                    </a>
+                  ) : (
+                    <ContactInfoSkeleton label={t.contact.emailLabel} />
+                  )}
+                </motion.div>
 
-                <motion.a
-                  href="tel:+48600341211"
-                  className="flex items-center gap-4 p-4 bg-slate-800/50 border border-slate-700 rounded-lg hover:border-cyan-500/50 transition-all group"
+                {/* Phone */}
+                <motion.div
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: 0.1 }}
                 >
-                  <div className="p-3 bg-cyan-500/10 rounded-lg group-hover:bg-cyan-500/20 transition-colors">
-                    <Phone className="w-6 h-6 text-cyan-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-slate-400">{t.contact.phoneLabel}</div>
-                    <div className="text-white">+48 600 341 211</div>
-                  </div>
-                </motion.a>
+                  {contact ? (
+                    <a
+                      href={contact.tel}
+                      className="flex items-center gap-4 p-4 bg-slate-800/50 border border-slate-700 rounded-lg hover:border-cyan-500/50 transition-all group"
+                    >
+                      <div className="p-3 bg-cyan-500/10 rounded-lg group-hover:bg-cyan-500/20 transition-colors">
+                        <Phone className="w-6 h-6 text-cyan-400" />
+                      </div>
+                      <div>
+                        <div className="text-sm text-slate-400">{t.contact.phoneLabel}</div>
+                        <div className="text-white">{contact.phone}</div>
+                      </div>
+                    </a>
+                  ) : (
+                    <ContactInfoSkeleton label={t.contact.phoneLabel} />
+                  )}
+                </motion.div>
 
+                {/* LinkedIn */}
                 <motion.a
                   href="https://linkedin.com/in/michal-sagan"
                   target="_blank"
@@ -82,19 +157,44 @@ export function Contact() {
                   </div>
                 </motion.a>
 
+                {/* Write to me */}
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.25 }}
+                >
+                  <Button
+                    onClick={() => {
+                      setFormOpen(true);
+                      window.dataLayer?.push({ event: "contact_form_opened" });
+                    }}
+                    className="w-full flex items-center gap-4 p-4 h-auto bg-gradient-to-r from-cyan-500 to-blue-500 hover:shadow-lg hover:shadow-cyan-500/50 transition-all cursor-pointer rounded-lg text-white"
+                  >
+                    <div className="p-3 bg-white/10 rounded-lg">
+                      <Mail className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm text-cyan-100">{t.contact.writeToMe}</div>
+                      <div className="font-medium">{t.contact.formTitle}</div>
+                    </div>
+                  </Button>
+                </motion.div>
+
+                {/* Download / Save as PDF */}
                 <motion.button
                   onClick={() => window.print()}
-                  className="flex items-center gap-4 p-4 w-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg hover:shadow-lg hover:shadow-cyan-500/50 transition-all group cursor-pointer"
+                  className="flex items-center gap-4 p-4 w-full bg-slate-800/50 border border-slate-700 rounded-lg hover:border-cyan-500/50 transition-all group cursor-pointer"
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: 0.3 }}
                 >
-                  <div className="p-3 bg-white/10 rounded-lg">
-                    <Download className="w-6 h-6 text-white" />
+                  <div className="p-3 bg-cyan-500/10 rounded-lg group-hover:bg-cyan-500/20 transition-colors">
+                    <Download className="w-6 h-6 text-cyan-400" />
                   </div>
                   <div className="text-left">
-                    <div className="text-sm text-cyan-100">
+                    <div className="text-sm text-slate-400">
                       {t.contact.downloadLabel}
                     </div>
                     <div className="text-white">{t.contact.saveLabel}</div>
@@ -151,6 +251,8 @@ export function Contact() {
           </div>
         </div>
       </div>
+
+      <ContactForm open={formOpen} onOpenChange={setFormOpen} />
     </section>
   );
 }

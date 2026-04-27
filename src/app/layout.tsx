@@ -4,6 +4,11 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { CookieBanner } from "@/components/CookieBanner";
 import { PageViewTracker } from "@/components/PageViewTracker";
+import { ApolloWrapper } from "@/app/ApolloWrapper";
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sagan.dev"),
@@ -76,7 +81,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <head>
         {/* Google Consent Mode v2 — must run BEFORE GTM */}
         <script
@@ -117,12 +122,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
-        <LanguageProvider>
-          <LanguageSwitcher />
-          <CookieBanner />
-          <PageViewTracker />
-          {children}
-        </LanguageProvider>
+        <ApolloWrapper>
+          <LanguageProvider>
+            <LanguageSwitcher />
+            <CookieBanner />
+            <PageViewTracker />
+            {children}
+          </LanguageProvider>
+        </ApolloWrapper>
       </body>
     </html>
   );

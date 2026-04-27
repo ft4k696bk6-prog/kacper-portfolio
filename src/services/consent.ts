@@ -23,7 +23,6 @@ interface GtagFunction {
 declare global {
   interface Window {
     gtag?: GtagFunction;
-    dataLayer?: Record<string, unknown>[];
   }
 }
 
