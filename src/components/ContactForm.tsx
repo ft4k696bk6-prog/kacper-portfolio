@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Send } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { SEND_CONTACT_MESSAGE_MUTATION } from "@/lib/graphql/operations";
 
@@ -65,6 +66,20 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
       companyWebsite: "",
     },
   });
+
+  const handleEmailBlur = useCallback(
+    (email: string) => {
+      if (!email || form.getValues("name")) return;
+      const local = email.split("@")[0];
+      const name = local
+        .split(/[._\-+]/)
+        .filter(Boolean)
+        .map((p) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
+        .join(" ");
+      if (name.length >= 2) form.setValue("name", name);
+    },
+    [form]
+  );
 
   const [sendMessage, { loading }] = useMutation<SendResult>(
     SEND_CONTACT_MESSAGE_MUTATION
@@ -128,7 +143,7 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-lg bg-slate-900 border-slate-700 text-white">
+      <DialogContent className="sm:max-w-2xl bg-slate-900 border-slate-700 text-white">
         <DialogHeader>
           <DialogTitle className="text-xl text-white">
             {t.contact.formTitle}
@@ -183,6 +198,32 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
 
               <FormField
                 control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-slate-300">
+                      {t.contact.formEmail}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder={t.contact.formEmailPlaceholder}
+                        className="bg-slate-800 border-slate-600 text-white placeholder:text-slate-500 focus:border-cyan-500"
+                        autoFocus
+                        {...field}
+                        onBlur={(e) => {
+                          field.onBlur();
+                          handleEmailBlur(e.target.value);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
@@ -203,27 +244,6 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
 
               <FormField
                 control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-slate-300">
-                      {t.contact.formEmail}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder={t.contact.formEmailPlaceholder}
-                        className="bg-slate-800 border-slate-600 text-white placeholder:text-slate-500 focus:border-cyan-500"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
                 name="message"
                 render={({ field }) => (
                   <FormItem>
@@ -233,8 +253,8 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
                     <FormControl>
                       <Textarea
                         placeholder={t.contact.formMessagePlaceholder}
-                        rows={5}
-                        className="bg-slate-800 border-slate-600 text-white placeholder:text-slate-500 focus:border-cyan-500 resize-none"
+                        rows={12}
+                        className="bg-slate-800 border-slate-600 text-white placeholder:text-slate-500 focus:border-cyan-500 resize-y min-h-[200px]"
                         {...field}
                       />
                     </FormControl>
@@ -262,13 +282,16 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
                 </p>
               )}
 
-              <Button
-                type="submit"
-                disabled={loading || !turnstileToken}
-                className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:shadow-lg hover:shadow-cyan-500/50 disabled:opacity-50 text-white"
-              >
-                {loading ? t.contact.formSending : t.contact.formSubmit}
-              </Button>
+              <div className="flex justify-start">
+                <Button
+                  type="submit"
+                  disabled={loading || (!!siteKey && !turnstileToken)}
+                  className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:shadow-lg hover:shadow-cyan-500/50 disabled:opacity-50 text-white px-8 py-6 gap-2"
+                >
+                  <Send className="w-4 h-4" />
+                  {loading ? t.contact.formSending : t.contact.formSubmit}
+                </Button>
+              </div>
             </form>
           </Form>
         )}

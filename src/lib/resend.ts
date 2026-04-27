@@ -16,7 +16,7 @@ export async function sendContactEmail(params: {
 
   const resend = getResendClient();
   await resend.emails.send({
-    from: "Contact Form <contact@sagan.dev>",
+    from: "Contact Form <noreply@sagan.dev>",
     to: [recipient],
     replyTo: params.email,
     subject: `New message from ${params.name}`,
