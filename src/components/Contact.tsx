@@ -7,6 +7,7 @@ import { Mail, Linkedin, Phone, Download } from "lucide-react";
 import { motion } from "framer-motion";
 import { useQuery } from "@apollo/client/react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useContactForm } from "@/contexts/ContactFormContext";
 import { CONTACT_INFO_QUERY } from "@/lib/graphql/operations";
 
 function ContactInfoSkeleton({ label }: { label: string }) {
@@ -25,6 +26,7 @@ function ContactInfoSkeleton({ label }: { label: string }) {
 
 export function Contact() {
   const { t } = useLanguage();
+  const { openForm } = useContactForm();
   const sectionRef = useRef<HTMLElement>(null);
   const [triggered, setTriggered] = useState(false);
   const [timeReady, setTimeReady] = useState(false);
@@ -209,12 +211,15 @@ export function Contact() {
                 </p>
               </div>
               <div className="flex items-center gap-4 text-sm">
-                <a
-                  href="mailto:michal@sagan.dev"
-                  className="hover:text-cyan-400 transition-colors"
+                <button
+                  onClick={() => {
+                    openForm();
+                    window.dataLayer?.push({ event: "contact_form_opened_from_footer" });
+                  }}
+                  className="hover:text-cyan-400 transition-colors cursor-pointer"
                 >
                   Email
-                </a>
+                </button>
                 <Link
                   href="/cookies"
                   className="hover:text-cyan-400 transition-colors"
