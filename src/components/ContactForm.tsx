@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { TerminalToast } from "@/components/ui/terminal-toast";
 import { Send } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { SEND_CONTACT_MESSAGE_MUTATION } from "@/lib/graphql/operations";
@@ -49,10 +50,10 @@ type SendResult = {
 export function ContactForm({ open, onOpenChange }: ContactFormProps) {
   const { t } = useLanguage();
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
-  const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "success" | "error"
-  >("idle");
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "error">("idle");
   const [serverMessage, setServerMessage] = useState<string>("");
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   const turnstileRef = useRef<TurnstileInstance>(null);
 
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
@@ -104,13 +105,14 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
       const result = data?.sendContactMessage;
 
       if (result?.ok) {
-        setSubmitStatus("success");
-        setServerMessage(result.message ?? t.contact.formSuccess);
         window.dataLayer?.push({
           event: "contact_form_submitted",
           form_status: "success",
         });
         form.reset();
+        handleOpenChange(false);
+        setToastMessage(result.message ?? t.contact.formSuccess);
+        setToastVisible(true);
       } else {
         setSubmitStatus("error");
         setServerMessage(result?.message ?? t.contact.formError);
@@ -142,8 +144,9 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-2xl bg-slate-900 border-slate-700 text-white">
+    <>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
+        <DialogContent className="sm:max-w-2xl bg-slate-900 border-slate-700 text-white">
         <DialogHeader>
           <DialogTitle className="text-xl text-white">
             {t.contact.formTitle}
@@ -159,18 +162,7 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
           </p>
         </DialogHeader>
 
-        {submitStatus === "success" ? (
-          <div className="py-8 text-center space-y-4">
-            <p className="text-cyan-400 text-lg">{serverMessage}</p>
-            <Button
-              onClick={() => handleOpenChange(false)}
-              className="bg-cyan-500 hover:bg-cyan-600 text-white"
-            >
-              Close
-            </Button>
-          </div>
-        ) : (
-          <Form {...form}>
+        <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-4"
@@ -277,9 +269,17 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
               )}
 
               {submitStatus === "error" && serverMessage && (
-                <p className="text-sm text-red-400 text-center">
-                  {serverMessage}
-                </p>
+                <div className="text-sm text-red-400 text-center space-y-1">
+                  <p>{serverMessage}</p>
+                  <p>
+                    <a
+                      href="mailto:michal@sagan.dev?bcc=m+resend-issue@sagan.dev"
+                      className="text-cyan-400 hover:text-cyan-300 underline transition-colors"
+                    >
+                      Send directly via email →
+                    </a>
+                  </p>
+                </div>
               )}
 
               <div className="flex justify-start">
@@ -294,8 +294,15 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
               </div>
             </form>
           </Form>
-        )}
       </DialogContent>
     </Dialog>
+
+    <TerminalToast
+      visible={toastVisible}
+      onClose={() => setToastVisible(false)}
+      type="success"
+      message={toastMessage}
+    />
+    </>
   );
 }

@@ -293,7 +293,7 @@ export const en = {
     formMessagePlaceholder: "Hello, I'd like to discuss…",
     formSubmit: "Send message",
     formSending: "Sending…",
-    formSuccess: "Your message has been sent. Thank you!",
+    formSuccess: "Message sent successfully.",
     formError: "Failed to send the message. Please try again.",
   },
   cookies: {

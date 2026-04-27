@@ -295,7 +295,7 @@ export const pl: Translations = {
     formMessagePlaceholder: "Cześć, chciałem zapytać o…",
     formSubmit: "Wyślij wiadomość",
     formSending: "Wysyłanie…",
-    formSuccess: "Twoja wiadomość została wysłana. Dziękuję!",
+    formSuccess: "Wiadomość wysłana pomyślnie.",
     formError: "Nie udało się wysłać wiadomości. Spróbuj ponownie.",
   },
   cookies: {
