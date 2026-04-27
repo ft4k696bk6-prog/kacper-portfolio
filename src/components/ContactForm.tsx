@@ -133,6 +133,15 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
           <DialogTitle className="text-xl text-white">
             {t.contact.formTitle}
           </DialogTitle>
+          <p className="text-sm text-slate-400 mt-2">
+            Or reach me at{" "}
+            <a
+              href="mailto:michal@sagan.dev"
+              className="text-cyan-400 hover:text-cyan-300 transition-colors"
+            >
+              michal@sagan.dev
+            </a>
+          </p>
         </DialogHeader>
 
         {submitStatus === "success" ? (

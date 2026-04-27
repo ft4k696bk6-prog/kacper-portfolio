@@ -5,6 +5,10 @@ import { Mail, Linkedin, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+interface HeroProps {
+  onOpenForm?: () => void;
+}
+
 const containerVariants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
@@ -15,7 +19,7 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
 };
 
-export function Hero() {
+export function Hero({ onOpenForm }: HeroProps) {
   const { t } = useLanguage();
   return (
     <section className="min-h-screen flex relative overflow-hidden">
@@ -50,13 +54,16 @@ export function Hero() {
               className="flex gap-4 pt-4 justify-center md:justify-start"
               variants={fadeUp}
             >
-              <a
-                href="mailto:michal@sagan.dev"
+              <button
+                onClick={() => {
+                  onOpenForm?.();
+                  window.dataLayer?.push({ event: "contact_form_opened_from_hero" });
+                }}
                 className="flex items-center gap-2 px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-all hover:shadow-lg hover:shadow-cyan-500/50"
               >
                 <Mail className="w-5 h-5" />
                 <span>{t.hero.contactBtn}</span>
-              </a>
+              </button>
               <a
                 href="https://linkedin.com/in/michal-sagan"
                 target="_blank"

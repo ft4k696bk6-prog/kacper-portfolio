@@ -8,8 +8,6 @@ import { motion } from "framer-motion";
 import { useQuery } from "@apollo/client/react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CONTACT_INFO_QUERY } from "@/lib/graphql/operations";
-import { ContactForm } from "@/components/ContactForm";
-import { Button } from "@/components/ui/button";
 
 function ContactInfoSkeleton({ label }: { label: string }) {
   return (
@@ -31,7 +29,6 @@ export function Contact() {
   const [triggered, setTriggered] = useState(false);
   const [timeReady, setTimeReady] = useState(false);
   const [inView, setInView] = useState(false);
-  const [formOpen, setFormOpen] = useState(false);
 
   // 2-second page timer
   useEffect(() => {
@@ -157,30 +154,6 @@ export function Contact() {
                   </div>
                 </motion.a>
 
-                {/* Write to me */}
-                <motion.div
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: 0.25 }}
-                >
-                  <Button
-                    onClick={() => {
-                      setFormOpen(true);
-                      window.dataLayer?.push({ event: "contact_form_opened" });
-                    }}
-                    className="w-full flex items-center gap-4 p-4 h-auto bg-gradient-to-r from-cyan-500 to-blue-500 hover:shadow-lg hover:shadow-cyan-500/50 transition-all cursor-pointer rounded-lg text-white"
-                  >
-                    <div className="p-3 bg-white/10 rounded-lg">
-                      <Mail className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="text-left">
-                      <div className="text-sm text-cyan-100">{t.contact.writeToMe}</div>
-                      <div className="font-medium">{t.contact.formTitle}</div>
-                    </div>
-                  </Button>
-                </motion.div>
-
                 {/* Download / Save as PDF */}
                 <motion.button
                   onClick={() => window.print()}
@@ -188,7 +161,7 @@ export function Contact() {
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: 0.3 }}
+                  transition={{ duration: 0.4, delay: 0.25 }}
                 >
                   <div className="p-3 bg-cyan-500/10 rounded-lg group-hover:bg-cyan-500/20 transition-colors">
                     <Download className="w-6 h-6 text-cyan-400" />
@@ -236,6 +209,12 @@ export function Contact() {
                 </p>
               </div>
               <div className="flex items-center gap-4 text-sm">
+                <a
+                  href="mailto:michal@sagan.dev"
+                  className="hover:text-cyan-400 transition-colors"
+                >
+                  Email
+                </a>
                 <Link
                   href="/cookies"
                   className="hover:text-cyan-400 transition-colors"
@@ -251,8 +230,6 @@ export function Contact() {
           </div>
         </div>
       </div>
-
-      <ContactForm open={formOpen} onOpenChange={setFormOpen} />
     </section>
   );
 }

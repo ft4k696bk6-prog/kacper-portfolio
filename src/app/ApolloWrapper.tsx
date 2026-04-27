@@ -6,6 +6,7 @@ import {
   ApolloClient,
   InMemoryCache,
 } from "@apollo/client-integration-nextjs";
+import { ContactFormProvider } from "@/contexts/ContactFormContext";
 
 function makeClient() {
   const httpLink = new HttpLink({
@@ -24,7 +25,9 @@ function makeClient() {
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
   return (
     <ApolloNextAppProvider makeClient={makeClient}>
-      {children}
+      <ContactFormProvider>
+        {children}
+      </ContactFormProvider>
     </ApolloNextAppProvider>
   );
 }
