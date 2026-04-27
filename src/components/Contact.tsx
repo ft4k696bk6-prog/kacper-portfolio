@@ -214,15 +214,6 @@ export function Contact() {
                 </p>
               </div>
               <div className="flex items-center gap-4 text-sm">
-                <button
-                  onClick={() => {
-                    openForm();
-                    window.dataLayer?.push({ event: "contact_form_opened_from_footer" });
-                  }}
-                  className="hover:text-cyan-400 transition-colors cursor-pointer"
-                >
-                  Email
-                </button>
                 <Link
                   href="/cookies"
                   className="hover:text-cyan-400 transition-colors"
