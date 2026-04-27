@@ -94,18 +94,21 @@ export function Contact() {
                   transition={{ duration: 0.4 }}
                 >
                   {contact ? (
-                    <a
-                      href={contact.mailto}
-                      className="flex items-center gap-4 p-4 bg-slate-800/50 border border-slate-700 rounded-lg hover:border-cyan-500/50 transition-all group"
+                    <button
+                      onClick={() => {
+                        openForm();
+                        window.dataLayer?.push({ event: "contact_form_opened_from_email" });
+                      }}
+                      className="w-full flex items-center gap-4 p-4 bg-slate-800/50 border border-slate-700 rounded-lg hover:border-cyan-500/50 transition-all group cursor-pointer"
                     >
                       <div className="p-3 bg-cyan-500/10 rounded-lg group-hover:bg-cyan-500/20 transition-colors">
                         <Mail className="w-6 h-6 text-cyan-400" />
                       </div>
-                      <div>
+                      <div className="text-left">
                         <div className="text-sm text-slate-400">{t.contact.emailLabel}</div>
                         <div className="text-white">{contact.email}</div>
                       </div>
-                    </a>
+                    </button>
                   ) : (
                     <ContactInfoSkeleton label={t.contact.emailLabel} />
                   )}
