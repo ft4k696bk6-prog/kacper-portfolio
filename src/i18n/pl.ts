@@ -298,6 +298,9 @@ export const pl: Translations = {
     formSuccess: "Wiadomość wysłana pomyślnie.",
     formError: "Nie udało się wysłać wiadomości. Spróbuj ponownie.",
     scheduleTitle: "Umów krótkie spotkanie",
+    scheduleDescription:
+      "Wolisz krótką rozmowę? Wybierz termin bezpośrednio w moim kalendarzu i omówmy Twój projekt, wyzwanie architektoniczne lub pomysł na współpracę.",
+    scheduleSlotInfo: "Typowy czas: 15-20 minut • Europe/Warsaw",
     scheduleFallbackLink: "Otwórz kalendarz w nowej karcie",
   },
   cookies: {

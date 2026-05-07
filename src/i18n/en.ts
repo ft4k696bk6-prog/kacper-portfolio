@@ -296,7 +296,10 @@ export const en = {
     formSuccess: "Message sent successfully.",
     formError: "Failed to send the message. Please try again.",
     scheduleTitle: "Book a short meeting",
-    scheduleFallbackLink: "Open scheduler in a new tab",
+    scheduleDescription:
+      "Prefer a quick call? Pick a slot directly in my calendar and we can discuss your project, architecture challenge, or collaboration idea.",
+    scheduleSlotInfo: "Typical duration: 15-20 minutes • Europe/Warsaw",
+    scheduleFallbackLink: "Open calendar booking",
   },
   cookies: {
     bannerText:

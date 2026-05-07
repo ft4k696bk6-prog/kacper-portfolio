@@ -47,14 +47,15 @@ type SendResult = {
   sendContactMessage: { ok: boolean; message?: string | null };
 };
 
-type CalEmbedFn = ((...args: unknown[]) => void) & {
+type CalGlobal = ((...args: unknown[]) => void) & {
   q?: unknown[][];
-  ns?: Record<string, unknown>;
+  ns?: Record<string, CalGlobal>;
+  loaded?: boolean;
 };
 
 declare global {
   interface Window {
-    Cal?: CalEmbedFn;
+    Cal?: CalGlobal;
   }
 }
 
@@ -65,7 +66,7 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
   const [serverMessage, setServerMessage] = useState<string>("");
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
-  const [calScriptLoaded, setCalScriptLoaded] = useState(false);
+  const [calReady, setCalReady] = useState(false);
   const turnstileRef = useRef<TurnstileInstance>(null);
   const calContainerRef = useRef<HTMLDivElement>(null);
 
@@ -103,48 +104,54 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
     if (typeof window === "undefined") return;
 
     if (!window.Cal) {
-      const calQueue: CalEmbedFn = (...args: unknown[]) => {
-        calQueue.q = calQueue.q ?? [];
-        calQueue.q.push(args);
-      };
-      calQueue.ns = {};
-      window.Cal = calQueue;
+      ((C: Window, A: string, L: string) => {
+        const p = (a: CalGlobal, ar: unknown[]) => {
+          a.q = a.q ?? [];
+          a.q.push(ar);
+        };
+
+        const d = C.document;
+
+        C.Cal = C.Cal || (((...ar: unknown[]) => {
+          const cal = C.Cal as CalGlobal;
+
+          if (!cal.loaded) {
+            cal.ns = {};
+            cal.q = cal.q || [];
+            const script = d.createElement("script");
+            script.src = A;
+            script.async = true;
+            d.head.appendChild(script);
+            cal.loaded = true;
+          }
+
+          if (ar[0] === L) {
+            const api: CalGlobal = ((...inner: unknown[]) => p(api, inner)) as CalGlobal;
+            api.q = api.q || [];
+
+            const namespace = ar[1];
+            if (typeof namespace === "string") {
+              cal.ns = cal.ns || {};
+              cal.ns[namespace] = cal.ns[namespace] || api;
+              p(cal.ns[namespace], ar);
+              p(cal, ["initNamespace", namespace]);
+            } else {
+              p(cal, ar);
+            }
+            return;
+          }
+
+          p(cal, ar);
+        }) as CalGlobal);
+      })(window, "https://cal.sagan.dev/embed/embed.js", "init");
     }
 
-    if (customElements.get("cal-inline")) {
-      setCalScriptLoaded(true);
-      return;
-    }
-
-    const existingScript = document.querySelector<HTMLScriptElement>(
-      'script[data-cal-embed="true"]'
-    );
-
-    if (existingScript) {
-      if (existingScript.dataset.loaded === "true") {
-        setCalScriptLoaded(true);
-        return;
-      }
-
-      const onLoad = () => setCalScriptLoaded(true);
-      existingScript.addEventListener("load", onLoad, { once: true });
-      return () => existingScript.removeEventListener("load", onLoad);
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://cal.sagan.dev/embed/embed.js";
-    script.async = true;
-    script.defer = true;
-    script.dataset.calEmbed = "true";
-    script.onload = () => {
-      script.dataset.loaded = "true";
-      setCalScriptLoaded(true);
-    };
-    document.head.appendChild(script);
+    window.Cal?.("init", "sagan-short", { origin: "https://cal.sagan.dev" });
+    setCalReady(true);
   }, []);
 
   useEffect(() => {
-    if (!open || !calScriptLoaded || !calContainerRef.current) return;
+    if (!open || !calReady || !window.Cal || !calContainerRef.current) return;
 
     const container = calContainerRef.current;
     container.innerHTML = "";
@@ -153,17 +160,17 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
     calInline.setAttribute("data-cal-link", "michal/short");
     calInline.setAttribute("data-cal-origin", "https://cal.sagan.dev");
     calInline.setAttribute("data-theme", "dark");
+    calInline.setAttribute("data-layout", "month_view");
+    calInline.style.display = "block";
     calInline.style.width = "100%";
-    calInline.style.height = "100%";
     calInline.style.minHeight = "650px";
-    calInline.style.overflow = "auto";
 
     container.appendChild(calInline);
 
     return () => {
       container.innerHTML = "";
     };
-  }, [open, calScriptLoaded]);
+  }, [open, calReady]);
 
   async function onSubmit(values: FormValues) {
     if (!turnstileToken) return;
@@ -233,16 +240,22 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
           <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
             <aside className="order-1 lg:order-2 rounded-xl border border-slate-700 bg-slate-800/40 p-4">
               <h3 className="text-xl text-white">{t.contact.scheduleTitle}</h3>
+              <p className="mt-3 text-slate-300 leading-relaxed">
+                {t.contact.scheduleDescription}
+              </p>
+              <div className="mt-5 rounded-lg border border-cyan-500/30 bg-cyan-500/10 p-4">
+                <p className="text-sm text-cyan-100">{t.contact.scheduleSlotInfo}</p>
+              </div>
               <div
                 ref={calContainerRef}
-                className="mt-3 w-full min-h-[650px] rounded-lg overflow-hidden bg-slate-950/70"
+                className="mt-5 w-full min-h-[650px] rounded-lg overflow-hidden bg-slate-950/70"
               />
-              <div className="mt-3 text-xs text-slate-400">
+              <div className="mt-5">
                 <a
                   href="https://cal.sagan.dev/michal/short"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-cyan-400 hover:text-cyan-300 transition-colors"
+                  className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 px-5 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-cyan-500/40"
                 >
                   {t.contact.scheduleFallbackLink}
                 </a>
