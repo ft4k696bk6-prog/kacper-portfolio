@@ -298,7 +298,6 @@ export const en = {
     scheduleTitle: "Book a short meeting",
     scheduleDescription:
       "Prefer a quick call? Pick a slot directly in my calendar and we can discuss your project, architecture challenge, or collaboration idea.",
-    scheduleSlotInfo: "Typical duration: 15-20 minutes • Europe/Warsaw",
     scheduleFallbackLink: "Open calendar booking",
   },
   cookies: {

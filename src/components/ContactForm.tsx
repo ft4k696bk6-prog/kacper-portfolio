@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -28,6 +29,11 @@ import { Send } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { SEND_CONTACT_MESSAGE_MUTATION } from "@/lib/graphql/operations";
 
+const Cal = dynamic(() => import("@calcom/embed-react"), { ssr: false });
+
+const CAL_ORIGIN = "https://cal.sagan.dev";
+const CAL_EMBED_JS_URL = "https://cal.sagan.dev/embed/embed.js";
+
 const formSchema = z.object({
   name: z.string().min(2).max(100),
   email: z.string().email(),
@@ -47,18 +53,6 @@ type SendResult = {
   sendContactMessage: { ok: boolean; message?: string | null };
 };
 
-type CalGlobal = ((...args: unknown[]) => void) & {
-  q?: unknown[][];
-  ns?: Record<string, CalGlobal>;
-  loaded?: boolean;
-};
-
-declare global {
-  interface Window {
-    Cal?: CalGlobal;
-  }
-}
-
 export function ContactForm({ open, onOpenChange }: ContactFormProps) {
   const { t } = useLanguage();
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
@@ -66,9 +60,7 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
   const [serverMessage, setServerMessage] = useState<string>("");
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
-  const [calReady, setCalReady] = useState(false);
   const turnstileRef = useRef<TurnstileInstance>(null);
-  const calContainerRef = useRef<HTMLDivElement>(null);
 
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
@@ -99,78 +91,6 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
   const [sendMessage, { loading }] = useMutation<SendResult>(
     SEND_CONTACT_MESSAGE_MUTATION
   );
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    if (!window.Cal) {
-      ((C: Window, A: string, L: string) => {
-        const p = (a: CalGlobal, ar: unknown[]) => {
-          a.q = a.q ?? [];
-          a.q.push(ar);
-        };
-
-        const d = C.document;
-
-        C.Cal = C.Cal || (((...ar: unknown[]) => {
-          const cal = C.Cal as CalGlobal;
-
-          if (!cal.loaded) {
-            cal.ns = {};
-            cal.q = cal.q || [];
-            const script = d.createElement("script");
-            script.src = A;
-            script.async = true;
-            d.head.appendChild(script);
-            cal.loaded = true;
-          }
-
-          if (ar[0] === L) {
-            const api: CalGlobal = ((...inner: unknown[]) => p(api, inner)) as CalGlobal;
-            api.q = api.q || [];
-
-            const namespace = ar[1];
-            if (typeof namespace === "string") {
-              cal.ns = cal.ns || {};
-              cal.ns[namespace] = cal.ns[namespace] || api;
-              p(cal.ns[namespace], ar);
-              p(cal, ["initNamespace", namespace]);
-            } else {
-              p(cal, ar);
-            }
-            return;
-          }
-
-          p(cal, ar);
-        }) as CalGlobal);
-      })(window, "https://cal.sagan.dev/embed/embed.js", "init");
-    }
-
-    window.Cal?.("init", "sagan-short", { origin: "https://cal.sagan.dev" });
-    setCalReady(true);
-  }, []);
-
-  useEffect(() => {
-    if (!open || !calReady || !window.Cal || !calContainerRef.current) return;
-
-    const container = calContainerRef.current;
-    container.innerHTML = "";
-
-    const calInline = document.createElement("cal-inline");
-    calInline.setAttribute("data-cal-link", "michal/short");
-    calInline.setAttribute("data-cal-origin", "https://cal.sagan.dev");
-    calInline.setAttribute("data-theme", "dark");
-    calInline.setAttribute("data-layout", "month_view");
-    calInline.style.display = "block";
-    calInline.style.width = "100%";
-    calInline.style.minHeight = "650px";
-
-    container.appendChild(calInline);
-
-    return () => {
-      container.innerHTML = "";
-    };
-  }, [open, calReady]);
 
   async function onSubmit(values: FormValues) {
     if (!turnstileToken) return;
@@ -243,13 +163,16 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
               <p className="mt-3 text-slate-300 leading-relaxed">
                 {t.contact.scheduleDescription}
               </p>
-              <div className="mt-5 rounded-lg border border-cyan-500/30 bg-cyan-500/10 p-4">
-                <p className="text-sm text-cyan-100">{t.contact.scheduleSlotInfo}</p>
+              <div className="mt-5 rounded-lg overflow-hidden">
+                {open && (
+                  <Cal
+                    calLink="michal/short"
+                    calOrigin={CAL_ORIGIN}
+                    embedJsUrl={CAL_EMBED_JS_URL}
+                    style={{ width: "100%", height: "100%", overflow: "scroll" }}
+                  />
+                )}
               </div>
-              <div
-                ref={calContainerRef}
-                className="mt-5 w-full min-h-[650px] rounded-lg overflow-hidden bg-slate-950/70"
-              />
               <div className="mt-5">
                 <a
                   href="https://cal.sagan.dev/michal/short"
