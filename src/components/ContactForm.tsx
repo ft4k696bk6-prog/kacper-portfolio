@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
+import Script from "next/script";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -54,7 +55,9 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
   const [serverMessage, setServerMessage] = useState<string>("");
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [calScriptLoaded, setCalScriptLoaded] = useState(false);
   const turnstileRef = useRef<TurnstileInstance>(null);
+  const calContainerRef = useRef<HTMLDivElement>(null);
 
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
@@ -85,6 +88,28 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
   const [sendMessage, { loading }] = useMutation<SendResult>(
     SEND_CONTACT_MESSAGE_MUTATION
   );
+
+  useEffect(() => {
+    if (!open || !calScriptLoaded || !calContainerRef.current) return;
+
+    const container = calContainerRef.current;
+    container.innerHTML = "";
+
+    const calInline = document.createElement("cal-inline");
+    calInline.setAttribute("data-cal-link", "michal/short");
+    calInline.setAttribute("data-cal-origin", "https://cal.sagan.dev");
+    calInline.setAttribute("data-theme", "dark");
+    calInline.style.width = "100%";
+    calInline.style.height = "100%";
+    calInline.style.minHeight = "650px";
+    calInline.style.overflow = "auto";
+
+    container.appendChild(calInline);
+
+    return () => {
+      container.innerHTML = "";
+    };
+  }, [open, calScriptLoaded]);
 
   async function onSubmit(values: FormValues) {
     if (!turnstileToken) return;
@@ -145,24 +170,31 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
 
   return (
     <>
-      <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogContent className="sm:max-w-2xl bg-slate-900 border-slate-700 text-white">
-        <DialogHeader>
-          <DialogTitle className="text-xl text-white">
-            {t.contact.formTitle}
-          </DialogTitle>
-          <p className="text-sm text-slate-400 mt-2">
-            Or reach me at{" "}
-            <a
-              href="mailto:michal@sagan.dev"
-              className="text-cyan-400 hover:text-cyan-300 transition-colors"
-            >
-              michal@sagan.dev
-            </a>
-          </p>
-        </DialogHeader>
+      <Script
+        src="https://cal.sagan.dev/embed/embed.js"
+        strategy="lazyOnload"
+        onLoad={() => setCalScriptLoaded(true)}
+      />
 
-        <Form {...form}>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
+        <DialogContent className="w-[95vw] max-w-6xl bg-slate-900 border-slate-700 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-xl text-white">
+              {t.contact.formTitle}
+            </DialogTitle>
+            <p className="text-sm text-slate-400 mt-2">
+              Or reach me at{" "}
+              <a
+                href="mailto:michal@sagan.dev"
+                className="text-cyan-400 hover:text-cyan-300 transition-colors"
+              >
+                michal@sagan.dev
+              </a>
+            </p>
+          </DialogHeader>
+
+          <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+            <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-4"
@@ -293,16 +325,37 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
                 </Button>
               </div>
             </form>
-          </Form>
-      </DialogContent>
-    </Dialog>
+            </Form>
 
-    <TerminalToast
-      visible={toastVisible}
-      onClose={() => setToastVisible(false)}
-      type="success"
-      message={toastMessage}
-    />
+            <aside className="rounded-xl border border-slate-700 bg-slate-800/40 p-3">
+              <div className="mb-2 text-sm text-slate-300">
+                {t.contact.scheduleTitle}
+              </div>
+              <div
+                ref={calContainerRef}
+                className="w-full min-h-[650px] rounded-lg overflow-hidden bg-slate-950/70"
+              />
+              <div className="mt-3 text-xs text-slate-400">
+                <a
+                  href="https://cal.sagan.dev/michal/short"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-cyan-400 hover:text-cyan-300 transition-colors"
+                >
+                  {t.contact.scheduleFallbackLink}
+                </a>
+              </div>
+            </aside>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <TerminalToast
+        visible={toastVisible}
+        onClose={() => setToastVisible(false)}
+        type="success"
+        message={toastMessage}
+      />
     </>
   );
 }

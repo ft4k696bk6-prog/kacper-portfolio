@@ -297,6 +297,8 @@ export const pl: Translations = {
     formSending: "Wysyłanie…",
     formSuccess: "Wiadomość wysłana pomyślnie.",
     formError: "Nie udało się wysłać wiadomości. Spróbuj ponownie.",
+    scheduleTitle: "Umów krótkie spotkanie",
+    scheduleFallbackLink: "Otwórz kalendarz w nowej karcie",
   },
   cookies: {
     bannerText:

@@ -295,6 +295,8 @@ export const en = {
     formSending: "Sending…",
     formSuccess: "Message sent successfully.",
     formError: "Failed to send the message. Please try again.",
+    scheduleTitle: "Book a short meeting",
+    scheduleFallbackLink: "Open scheduler in a new tab",
   },
   cookies: {
     bannerText:
