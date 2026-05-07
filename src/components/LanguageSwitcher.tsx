@@ -3,11 +3,11 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useContactForm } from "@/contexts/ContactFormContext";
 import { motion } from "framer-motion";
-import { Mail } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 
 export function LanguageSwitcher() {
   const { lang, setLang } = useLanguage();
-  const { openForm } = useContactForm();
+  const { openBooking } = useContactForm();
 
   return (
     <motion.div
@@ -38,13 +38,14 @@ export function LanguageSwitcher() {
       </button>
       <button
         onClick={() => {
-          openForm();
-          window.dataLayer?.push({ event: "contact_form_opened_from_header" });
+          openBooking();
+          window.dataLayer?.push({ event: "booking_dialog_opened_from_header" });
         }}
         className="flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium text-slate-400 hover:text-cyan-400 transition-colors"
-        title="Contact"
+        title="Meet"
       >
-        <Mail className="w-4 h-4" />
+        <CalendarDays className="w-4 h-4" />
+        <span>Meet</span>
       </button>
     </motion.div>
   );

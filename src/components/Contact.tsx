@@ -26,7 +26,7 @@ function ContactInfoSkeleton({ label }: { label: string }) {
 
 export function Contact() {
   const { t } = useLanguage();
-  const { openForm } = useContactForm();
+  const { openForm, openBooking } = useContactForm();
   const sectionRef = useRef<HTMLElement>(null);
   const [triggered, setTriggered] = useState(false);
   const [timeReady, setTimeReady] = useState(false);
@@ -122,9 +122,12 @@ export function Contact() {
                   transition={{ duration: 0.4, delay: 0.1 }}
                 >
                   {contact ? (
-                    <a
-                      href={contact.tel}
-                      className="flex items-center gap-4 p-4 bg-slate-800/50 border border-slate-700 rounded-lg hover:border-cyan-500/50 transition-all group"
+                    <button
+                      onClick={() => {
+                        openBooking();
+                        window.dataLayer?.push({ event: "booking_dialog_opened_from_phone" });
+                      }}
+                      className="w-full flex items-center gap-4 p-4 bg-slate-800/50 border border-slate-700 rounded-lg hover:border-cyan-500/50 transition-all group text-left cursor-pointer"
                     >
                       <div className="p-3 bg-cyan-500/10 rounded-lg group-hover:bg-cyan-500/20 transition-colors">
                         <Phone className="w-6 h-6 text-cyan-400" />
@@ -133,7 +136,7 @@ export function Contact() {
                         <div className="text-sm text-slate-400">{t.contact.phoneLabel}</div>
                         <div className="text-white">{contact.phone}</div>
                       </div>
-                    </a>
+                    </button>
                   ) : (
                     <ContactInfoSkeleton label={t.contact.phoneLabel} />
                   )}

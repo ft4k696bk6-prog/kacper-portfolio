@@ -3,7 +3,8 @@ export const en = {
     title: "Software Engineer",
     description:
       "Product Architect specializing in cloud-native integration platforms, GraphQL Federation, and API ecosystems. Transforming complex business requirements into scalable technical solutions.",
-    contactBtn: "Contact",
+    contactBtn: "Write",
+    callBtn: "Call",
   },
   profile: {
     title: "Profile",
@@ -299,6 +300,8 @@ export const en = {
     scheduleDescription:
       "Prefer a quick call? Pick a slot directly in my calendar and we can discuss your project, architecture challenge, or collaboration idea.",
     scheduleFallbackLink: "Open calendar booking",
+    callNowBtn: "Call now",
+    callNowLabel: "Call directly",
   },
   cookies: {
     bannerText:

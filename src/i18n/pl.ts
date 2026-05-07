@@ -5,7 +5,8 @@ export const pl: Translations = {
     title: "Inżynier Oprogramowania",
     description:
       "Architekt Produktu specjalizujący się w cloud-native platformach integracyjnych, GraphQL Federation i ekosystemach API. Przekształcam złożone wymagania biznesowe w skalowalne rozwiązania techniczne.",
-    contactBtn: "Kontakt",
+    contactBtn: "Napisz",
+    callBtn: "Zadzwoń",
   },
   profile: {
     title: "Profil",
@@ -301,6 +302,8 @@ export const pl: Translations = {
     scheduleDescription:
       "Wolisz krótką rozmowę? Wybierz termin bezpośrednio w moim kalendarzu i omówmy Twój projekt, wyzwanie architektoniczne lub pomysł na współpracę.",
     scheduleFallbackLink: "Otwórz kalendarz w nowej karcie",
+    callNowBtn: "Zadzwoń teraz",
+    callNowLabel: "Zadzwoń bezpośrednio",
   },
   cookies: {
     bannerText:

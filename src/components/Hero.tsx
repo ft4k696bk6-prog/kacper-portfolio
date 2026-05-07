@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { Mail, Linkedin, ChevronDown } from "lucide-react";
+import { Mail, Linkedin, ChevronDown, PhoneCall } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useContactForm } from "@/contexts/ContactFormContext";
 
 interface HeroProps {
   onOpenForm?: () => void;
@@ -21,6 +22,7 @@ const fadeUp = {
 
 export function Hero({ onOpenForm }: HeroProps) {
   const { t } = useLanguage();
+  const { openBooking } = useContactForm();
   return (
     <section className="min-h-screen flex relative overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 lg:px-24 flex flex-col justify-center">
@@ -63,6 +65,17 @@ export function Hero({ onOpenForm }: HeroProps) {
               >
                 <Mail className="w-5 h-5" />
                 <span>{t.hero.contactBtn}</span>
+              </button>
+              <button
+                onClick={() => {
+                  openBooking();
+                  window.dataLayer?.push({ event: "booking_dialog_opened_from_hero" });
+                }}
+                className="flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition-all"
+                aria-label={t.contact.scheduleTitle}
+              >
+                <PhoneCall className="w-5 h-5" />
+                <span>{t.hero.callBtn}</span>
               </button>
               <a
                 href="https://linkedin.com/in/michal-sagan"

@@ -9,6 +9,7 @@ import { Awards } from "@/components/Awards";
 import { Recommendations } from "@/components/Recommendations";
 import { Contact } from "@/components/Contact";
 import { ContactForm } from "@/components/ContactForm";
+import { BookingDialog } from "@/components/BookingDialog";
 import { useContactForm } from "@/contexts/ContactFormContext";
 
 const jsonLd = {
@@ -24,7 +25,7 @@ const jsonLd = {
 };
 
 export default function Home() {
-  const { isOpen, openForm, closeForm } = useContactForm();
+  const { isOpen, isBookingOpen, openForm, closeForm, closeBooking } = useContactForm();
 
   return (
     <>
@@ -51,6 +52,7 @@ export default function Home() {
       </div>
 
       <ContactForm open={isOpen} onOpenChange={closeForm} />
+      <BookingDialog open={isBookingOpen} onOpenChange={closeBooking} />
     </>
   );
 }
