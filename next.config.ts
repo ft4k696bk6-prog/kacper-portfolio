@@ -5,14 +5,17 @@ const ContentSecurityPolicy = `
   script-src 'self' 'unsafe-inline' 'unsafe-eval'
     https://www.googletagmanager.com
     https://www.google-analytics.com
+    https://cal.sagan.dev
     https://challenges.cloudflare.com;
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://ui-avatars.com https://media.licdn.com;
   connect-src 'self'
     https://www.google-analytics.com
+    https://region1.google-analytics.com
     https://analytics.google.com
+    https://cal.sagan.dev
     https://challenges.cloudflare.com;
-  frame-src https://challenges.cloudflare.com;
+  frame-src https://challenges.cloudflare.com https://cal.sagan.dev;
   font-src 'self' data:;
   object-src 'none';
   base-uri 'self';

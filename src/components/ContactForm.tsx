@@ -177,29 +177,48 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
       />
 
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogContent className="w-[95vw] max-w-6xl bg-slate-900 border-slate-700 text-white">
-          <DialogHeader>
-            <DialogTitle className="text-xl text-white">
-              {t.contact.formTitle}
-            </DialogTitle>
-            <p className="text-sm text-slate-400 mt-2">
-              Or reach me at{" "}
-              <a
-                href="mailto:michal@sagan.dev"
-                className="text-cyan-400 hover:text-cyan-300 transition-colors"
-              >
-                michal@sagan.dev
-              </a>
-            </p>
+        <DialogContent className="w-[96vw] max-w-[96vw] bg-slate-900 border-slate-700 text-white">
+          <DialogHeader className="sr-only">
+            <DialogTitle>{t.contact.formTitle}</DialogTitle>
           </DialogHeader>
 
           <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
-            <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-4"
-              noValidate
-            >
+            <aside className="order-1 lg:order-2 rounded-xl border border-slate-700 bg-slate-800/40 p-4">
+              <h3 className="text-xl text-white">{t.contact.scheduleTitle}</h3>
+              <div
+                ref={calContainerRef}
+                className="mt-3 w-full min-h-[650px] rounded-lg overflow-hidden bg-slate-950/70"
+              />
+              <div className="mt-3 text-xs text-slate-400">
+                <a
+                  href="https://cal.sagan.dev/michal/short"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-cyan-400 hover:text-cyan-300 transition-colors"
+                >
+                  {t.contact.scheduleFallbackLink}
+                </a>
+              </div>
+            </aside>
+
+            <div className="order-2 lg:order-1 rounded-xl border border-slate-700 bg-slate-800/40 p-4">
+              <h3 className="text-xl text-white">{t.contact.formTitle}</h3>
+              <p className="text-sm text-slate-400 mt-2 mb-4">
+                Or reach me at{" "}
+                <a
+                  href="mailto:michal@sagan.dev"
+                  className="text-cyan-400 hover:text-cyan-300 transition-colors"
+                >
+                  michal@sagan.dev
+                </a>
+              </p>
+
+              <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+                noValidate
+              >
               {/* Honeypot — hidden from real users */}
               <div className="hidden" aria-hidden="true">
                 <FormField
@@ -314,38 +333,19 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
                 </div>
               )}
 
-              <div className="flex justify-start">
-                <Button
-                  type="submit"
-                  disabled={loading || (!!siteKey && !turnstileToken)}
-                  className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:shadow-lg hover:shadow-cyan-500/50 disabled:opacity-50 text-white px-8 py-6 gap-2"
-                >
-                  <Send className="w-4 h-4" />
-                  {loading ? t.contact.formSending : t.contact.formSubmit}
-                </Button>
-              </div>
-            </form>
-            </Form>
-
-            <aside className="rounded-xl border border-slate-700 bg-slate-800/40 p-3">
-              <div className="mb-2 text-sm text-slate-300">
-                {t.contact.scheduleTitle}
-              </div>
-              <div
-                ref={calContainerRef}
-                className="w-full min-h-[650px] rounded-lg overflow-hidden bg-slate-950/70"
-              />
-              <div className="mt-3 text-xs text-slate-400">
-                <a
-                  href="https://cal.sagan.dev/michal/short"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cyan-400 hover:text-cyan-300 transition-colors"
-                >
-                  {t.contact.scheduleFallbackLink}
-                </a>
-              </div>
-            </aside>
+                <div className="flex justify-start">
+                  <Button
+                    type="submit"
+                    disabled={loading || (!!siteKey && !turnstileToken)}
+                    className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:shadow-lg hover:shadow-cyan-500/50 disabled:opacity-50 text-white px-8 py-6 gap-2"
+                  >
+                    <Send className="w-4 h-4" />
+                    {loading ? t.contact.formSending : t.contact.formSubmit}
+                  </Button>
+                </div>
+              </form>
+              </Form>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
