@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect } from "react";
-import Script from "next/script";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -48,6 +47,17 @@ type SendResult = {
   sendContactMessage: { ok: boolean; message?: string | null };
 };
 
+type CalEmbedFn = ((...args: unknown[]) => void) & {
+  q?: unknown[][];
+  ns?: Record<string, unknown>;
+};
+
+declare global {
+  interface Window {
+    Cal?: CalEmbedFn;
+  }
+}
+
 export function ContactForm({ open, onOpenChange }: ContactFormProps) {
   const { t } = useLanguage();
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
@@ -88,6 +98,50 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
   const [sendMessage, { loading }] = useMutation<SendResult>(
     SEND_CONTACT_MESSAGE_MUTATION
   );
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (!window.Cal) {
+      const calQueue: CalEmbedFn = (...args: unknown[]) => {
+        calQueue.q = calQueue.q ?? [];
+        calQueue.q.push(args);
+      };
+      calQueue.ns = {};
+      window.Cal = calQueue;
+    }
+
+    if (customElements.get("cal-inline")) {
+      setCalScriptLoaded(true);
+      return;
+    }
+
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      'script[data-cal-embed="true"]'
+    );
+
+    if (existingScript) {
+      if (existingScript.dataset.loaded === "true") {
+        setCalScriptLoaded(true);
+        return;
+      }
+
+      const onLoad = () => setCalScriptLoaded(true);
+      existingScript.addEventListener("load", onLoad, { once: true });
+      return () => existingScript.removeEventListener("load", onLoad);
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://cal.sagan.dev/embed/embed.js";
+    script.async = true;
+    script.defer = true;
+    script.dataset.calEmbed = "true";
+    script.onload = () => {
+      script.dataset.loaded = "true";
+      setCalScriptLoaded(true);
+    };
+    document.head.appendChild(script);
+  }, []);
 
   useEffect(() => {
     if (!open || !calScriptLoaded || !calContainerRef.current) return;
@@ -170,12 +224,6 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
 
   return (
     <>
-      <Script
-        src="https://cal.sagan.dev/embed/embed.js"
-        strategy="lazyOnload"
-        onLoad={() => setCalScriptLoaded(true)}
-      />
-
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="w-[96vw] max-w-[96vw] bg-slate-900 border-slate-700 text-white">
           <DialogHeader className="sr-only">
@@ -315,6 +363,7 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
                     onExpire={() => setTurnstileToken(null)}
                     onError={() => setTurnstileToken(null)}
                     options={{ theme: "dark" }}
+                    scriptOptions={{ appendTo: "head" }}
                   />
                 </div>
               )}
