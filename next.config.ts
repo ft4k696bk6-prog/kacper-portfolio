@@ -21,6 +21,7 @@ const ContentSecurityPolicy = `
     https://region1.google-analytics.com
     https://analytics.google.com
     https://cal.sagan.dev
+    https://*.contentsquare.net
     https://challenges.cloudflare.com;
   frame-src https://challenges.cloudflare.com https://cal.sagan.dev;
   worker-src 'self' blob:;
