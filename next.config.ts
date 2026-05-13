@@ -6,11 +6,13 @@ const ContentSecurityPolicy = `
     https://www.googletagmanager.com
     https://www.google-analytics.com
     https://cal.sagan.dev
+    https://t.contentsquare.net
     https://challenges.cloudflare.com;
   script-src-elem 'self' 'unsafe-inline' 'unsafe-eval'
     https://www.googletagmanager.com
     https://www.google-analytics.com
     https://cal.sagan.dev
+    https://t.contentsquare.net
     https://challenges.cloudflare.com;
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://ui-avatars.com https://media.licdn.com;
