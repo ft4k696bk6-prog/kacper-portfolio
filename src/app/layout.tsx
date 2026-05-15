@@ -1,62 +1,61 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { CookieBanner } from "@/components/CookieBanner";
-import { PageViewTracker } from "@/components/PageViewTracker";
-import { ApolloWrapper } from "@/app/ApolloWrapper";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sagan.dev"),
+  metadataBase: new URL("https://kacper-bernecki.vercel.app"),
   title: {
-    default: "Michał Sagan — Product Architect",
-    template: "%s | Michał Sagan",
+    default: "Kacper Bernecki — AI-Assisted Web Developer",
+    template: "%s | Kacper Bernecki",
   },
   description:
-    "Product Architect specializing in cloud-native integration platforms, GraphQL Federation, and API ecosystems. Based in Poland.",
+    "Tworzę praktyczne aplikacje webowe, CRM-y, landing page i automatyzacje dla małych firm.",
   keywords: [
-    "Product Architect",
-    "GraphQL Federation",
-    "Cloud Native",
-    "API Design",
-    "Michał Sagan",
-    "Software Architecture",
-    "Integration Platforms",
-    "API Ecosystems",
+    "Kacper Bernecki",
+    "AI-Assisted Web Developer",
+    "Business App Builder",
+    "CRM dla małych firm",
+    "aplikacje webowe",
+    "automatyzacje",
+    "landing page",
+    "React",
+    "TypeScript",
+    "Supabase",
   ],
-  authors: [{ name: "Michał Sagan", url: "https://sagan.dev" }],
-  creator: "Michał Sagan",
+  authors: [{ name: "Kacper Bernecki" }],
+  creator: "Kacper Bernecki",
   openGraph: {
-    title: "Michał Sagan — Product Architect",
+    title: "Kacper Bernecki — AI-Assisted Web Developer",
     description:
-      "Product Architect specializing in cloud-native integration platforms, GraphQL Federation, and API ecosystems.",
-    url: "https://sagan.dev",
-    siteName: "sagan.dev",
+      "I build practical web apps, CRMs, landing pages and automations for small businesses.",
+    url: "https://kacper-bernecki.vercel.app",
+    siteName: "Kacper Bernecki Portfolio",
     type: "website",
-    locale: "en_US",
+    locale: "pl_PL",
+    alternateLocale: "en_US",
     images: [
       {
-        url: "/hero_banner.png",
-        width: 448,
-        height: 600,
-        alt: "Michał Sagan — Product Architect",
+        url: "/images/profile-1.png",
+        width: 1154,
+        height: 1408,
+        alt: "Kacper Bernecki — AI-Assisted Web Developer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Michał Sagan — Product Architect",
+    title: "Kacper Bernecki — AI-Assisted Web Developer",
     description:
-      "Product Architect specializing in cloud-native integration platforms, GraphQL Federation, and API ecosystems.",
-    images: ["/hero_banner.png"],
+      "I build practical web apps, CRMs, landing pages and automations for small businesses.",
+    images: ["/images/profile-1.png"],
   },
   alternates: {
-    canonical: "https://sagan.dev",
+    canonical: "https://kacper-bernecki.vercel.app",
   },
   robots: {
     index: true,
@@ -73,7 +72,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0f172a",
+  themeColor: "#070707",
 };
 
 export default function RootLayout({
@@ -82,49 +81,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)}>
-      <head>
-        {/* Google Consent Mode v2 — must run BEFORE GTM */}
-        <Script
-          id="google-consent-mode"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('consent', 'default', {
-  analytics_storage: 'denied',
-  ad_storage: 'denied',
-  ad_user_data: 'denied',
-  ad_personalization: 'denied',
-  wait_for_update: 500
-});
-            `.trim(),
-          }}
-        />
-        {/* Google Tag Manager */}
-        <Script
-          id="google-tag-manager"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-5PSGWWNM');`,
-          }}
-        />
-        {/* End Google Tag Manager */}
-      </head>
+    <html lang="pl" className={cn("scroll-smooth font-sans", geist.variable)}>
       <body>
-        <ApolloWrapper>
-          <LanguageProvider>
-            <LanguageSwitcher />
-            <CookieBanner />
-            <PageViewTracker />
-            {children}
-          </LanguageProvider>
-        </ApolloWrapper>
+        <LanguageProvider>
+          <LanguageSwitcher />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

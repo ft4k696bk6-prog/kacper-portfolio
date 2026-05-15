@@ -1,315 +1,188 @@
 import type { Translations } from "./en";
 
 export const pl: Translations = {
-  hero: {
-    title: "Inżynier Oprogramowania",
-    description:
-      "Architekt Produktu specjalizujący się w cloud-native platformach integracyjnych, GraphQL Federation i ekosystemach API. Przekształcam złożone wymagania biznesowe w skalowalne rozwiązania techniczne.",
-    contactBtn: "Napisz",
-    callBtn: "Zadzwoń",
+  nav: {
+    home: "Start",
+    about: "O mnie",
+    projects: "Projekty",
+    techStack: "Technologie",
+    contact: "Kontakt",
+    cta: "Skontaktuj się",
+    openMenu: "Otwórz menu",
+    closeMenu: "Zamknij menu",
   },
-  profile: {
-    title: "Profil",
-    bio: "Doświadczony Inżynier Oprogramowania specjalizujący się w cloud-native platformach integracyjnych i ekosystemach API. Głęboka wiedza w zakresie Web Apps, Commerce, GraphQL Federation, CIAM i bezpiecznej komunikacji między serwisami. Praktyczne doświadczenie z Node.js, TypeScript, Azure i AWS. Udokumentowana zdolność przekładania złożonych wymagań biznesowych na skalowalne, dobrze zarządzane rozwiązania techniczne przy efektywnej współpracy z zespołami.",
-    highlights: [
-      {
-        title: "GraphQL Federation",
-        description: "Projektowanie sfederowanych rozwiązań GraphQL w skali enterprise",
-      },
-      {
-        title: "Architektura Chmurowa",
-        description: "Cloud-native platformy integracyjne na Azure i AWS",
-      },
-      {
-        title: "Ekosystemy API",
-        description: "Budowanie skalowalnych, dobrze zarządzanych rozwiązań API",
-      },
-      {
-        title: "CIAM i Bezpieczeństwo",
-        description: "Ekspertyza w OAuth2, OIDC, PKCE, JWT",
-      },
+  hero: {
+    eyebrow: "Praktyczne aplikacje webowe dla małych firm",
+    name: "Kacper Bernecki",
+    title: "AI-Assisted Web Developer & Business App Builder",
+    description:
+      "Tworzę praktyczne aplikacje webowe, CRM-y i automatyzacje dla małych firm. Łączę podejście biznesowe z nowoczesnymi technologiami, żeby budować narzędzia, które realnie porządkują sprzedaż, obsługę klientów i codzienną pracę.",
+    projectsBtn: "Zobacz projekty",
+    contactBtn: "Skontaktuj się",
+    imageAlt: "Profesjonalny portret Kacpra Berneckiego",
+    metrics: [
+      { value: "CRM", label: "Sprzedaż i obsługa leadów" },
+      { value: "AI", label: "Szybsze prototypowanie" },
+      { value: "Web", label: "Responsywne narzędzia firmowe" },
     ],
   },
-  experience: {
-    title: "Historia Zatrudnienia",
+  about: {
+    title: "O mnie",
+    heading: "AI, biznes i webowe narzędzia, które mają działać w praktyce.",
+    paragraphs: [
+      "Zaczynałem od biznesu, sprzedaży i pracy z klientem, dlatego patrzę na aplikacje inaczej niż tylko przez pryzmat kodu. Interesują mnie rozwiązania, które mają konkretne zastosowanie: CRM-y, generatory ofert, dashboardy, automatyzacje i narzędzia, które pomagają firmom szybciej działać.",
+      "Lubię technologię, AI, biznes, samochody i projekty, które można realnie wdrożyć. Nie buduję aplikacji \"dla samego kodu\". Najważniejsze jest dla mnie to, żeby produkt rozwiązywał konkretny problem, był prosty w obsłudze i wyglądał profesjonalnie.",
+      "W projektach biznesowych miałem styczność z obsługą klientów, sprzedażą, finansami, OZE, importem aut i organizacją procesów. To pomaga mi lepiej rozumieć, czego faktycznie potrzebuje mała firma, zanim zacznie się pisać kod.",
+    ],
+    highlights: [
+      {
+        title: "Biznes przede wszystkim",
+        description: "Zaczynam od procesu, sprzedaży i realnego problemu użytkownika.",
+      },
+      {
+        title: "Proste narzędzia",
+        description: "CRM-y, dashboardy i automatyzacje, które mają być użyteczne od pierwszego dnia.",
+      },
+      {
+        title: "Praca wspierana AI",
+        description: "Wykorzystuję nowoczesne narzędzia AI do szybszego prototypowania i analizy problemów.",
+      },
+      {
+        title: "Czysta prezentacja",
+        description: "Produkt powinien być przejrzysty, responsywny i wyglądać profesjonalnie.",
+      },
+    ],
+    imageAlt: "Profesjonalny portret siedzącego Kacpra Berneckiego",
+  },
+  background: {
+    title: "Historia",
+    heading: "Kontekst biznesowy przed decyzjami technologicznymi.",
+    paragraphs: [
+      "Moja droga nie zaczęła się od klasycznego programowania. Pracowałem blisko sprzedaży, klientów i realnych problemów firm. Dzięki temu dobrze rozumiem, że aplikacja ma przede wszystkim działać w praktyce: ma oszczędzać czas, porządkować dane i ułatwiać zarabianie pieniędzy.",
+      "Przy projektach związanych z OZE i firmą re-energy system zajmowałem się również tematami organizacyjnymi oraz technologicznymi: procesami, narzędziami, obsługą danych i szukaniem rozwiązań, które usprawniają codzienną pracę.",
+      "Obecnie rozwijam własne projekty webowe, głównie CRM-y, landing page i aplikacje biznesowe wspierane AI.",
+    ],
+  },
+  services: {
+    title: "Co robię",
+    subtitle: "Praktyczne narzędzia dla małych firm, które potrzebują porządku, szybkości i lepszej obsługi klienta.",
     items: [
       {
-        role: "Product Architect",
-        company: "Heineken",
-        period: "Październik 2024 - Obecnie",
+        title: "CRM-y dla małych firm",
         description:
-          "Definiowanie i zarządzanie architekturą docelową globalnych platform e-commerce dla wielu OpCo. Projektowanie i skalowanie sfederowanej architektury GraphQL, w tym modeli własności subgrafów, granic domenowych i standardów zarządzania.",
-        technologies: ["GraphQL Federation", "Azure", "Node.js", "TypeScript", "CIAM"],
-        highlights: [
-          "Prowadzenie decyzji architektonicznych (KDD/ADR) dla GraphQL Federation",
-          "Projektowanie przepływów CIAM i uwierzytelniania (OAuth2, OIDC, PKCE, JWT)",
-          "Inicjatywy platform engineering i wsparcia deweloperów",
-        ],
+          "Systemy do obsługi leadów, klientów, handlowców, statusów, callbacków, spotkań i historii kontaktu.",
       },
       {
-        role: "Software Architect & Developer",
-        company: "Schneider Electric",
-        period: "Październik 2023 - Październik 2024",
+        title: "Landing page",
         description:
-          "Modelowanie architektury integracji z zewnętrznymi aplikacjami, topologii rozwiązań i bezpieczeństwa. Tworzenie kodu TypeScript dla AWS Lambda z S3, DynamoDB, AWS EventBridge.",
-        technologies: ["AWS", "Node.js", "SvelteKit", "GitHub Actions", "Builder.io"],
-        highlights: [
-          "Wdrożenie architektury web components (CAAS)",
-          "Zarządzanie złożonymi integracjami Builder.io (SAAS)",
-          "Automatyzacja pipeline'ów wdrożeniowych",
-        ],
+          "Nowoczesne strony ofertowe dla usług, lokalnych firm, specjalistów i kampanii reklamowych.",
       },
       {
-        role: "Full-Stack Developer",
-        company: "Hunter Douglas USA",
-        period: "Styczeń 2022 - Wrzesień 2023",
+        title: "Generatory ofert",
         description:
-          "Zaprojektowanie i dostarczenie niestandardowego narzędzia migracji z Magento 1. Integracja silnika cenowego SAP i systemu zarządzania zamówieniami. Budowa Progressive Web App z Magento PWA Studio.",
-        technologies: ["PHP", "AWS", "React", "PWA", "SAP", "Adobe Commerce"],
-        highlights: [
-          "Implementacja narzędzia do migracji danych",
-          "Integracja silnika cenowego SAP",
-          "Optymalizacja wydajności platformy",
-        ],
+          "Narzędzia do tworzenia ofert PDF, kalkulacji, konfiguracji produktów i prezentowania propozycji klientowi.",
       },
       {
-        role: "Adobe Commerce Architect & Developer",
-        company: "ABB (via Accenture)",
-        period: "Luty 2021 - Lipiec 2022",
+        title: "Dashboardy",
         description:
-          "Rola łącząca Architekta i Principal Software Engineer dla platformy Adobe Commerce Cloud B2B. Projektowanie integracji z MuleSoft, SAP, Salesforce i Fastly.",
-        technologies: ["MuleSoft", "PHP", "Adobe Commerce Cloud", "Knockout.js"],
-        highlights: [
-          "Implementacja architektury mikrofrontendowej",
-          "Złożone integracje enterprise",
-          "Optymalizacja wydajności globalnej platformy",
-        ],
+          "Panele z danymi, statystykami, filtrami i przejrzystym widokiem wyników.",
       },
       {
-        role: "Software Architect",
-        company: "JTI Geneva",
-        period: "Maj 2019 - Listopad 2020",
+        title: "Automatyzacje",
         description:
-          "Kierowanie projektowaniem środowiska deweloperskiego i architektury oprogramowania dla wielkoskalowej platformy e-commerce B2C w centrali Japanese Tobacco International.",
-        technologies: ["AEM", "React.js", "Adobe Commerce", "Agile"],
-        highlights: [
-          "Zaprojektowanie architektury headless commerce",
-          "Współpraca z zespołami inżynierskimi Adobe i BuzzBrothers",
-          "Wdrożenie szkoleń i wsparcia dla platformy",
-        ],
+          "Proste automatyzacje procesów: formularze, powiadomienia, statusy, przypomnienia i przepływ danych.",
+      },
+      {
+        title: "AI-assisted development",
+        description:
+          "Wykorzystanie AI do szybszego prototypowania, tworzenia aplikacji, analizowania problemów i usprawniania pracy firm.",
       },
     ],
   },
   projects: {
-    title: "Kluczowe Projekty",
+    title: "Projekty",
+    subtitle: "Aktualne projekty oparte na praktycznym użyciu biznesowym, nauce i szybkim wdrażaniu.",
+    featuresLabel: "Funkcje",
+    techLabel: "Technologie",
+    demoLabel: "Demo",
+    repoLabel: "Repo",
+    linkLabel: "Otwórz projekt",
+    credentialsLabel: "Dane demo",
+    statusLabel: "Status",
+    noteLabel: "Uwaga",
     items: [
       {
-        title: "Globalna GraphQL Federation dla Commerce",
-        company: "Heineken",
-        period: "2024 - Obecnie",
+        title: "B-CRM - CRM dla branży OZE",
         description:
-          "Zaprojektowanie i wdrożenie sfederowanego rozwiązania GraphQL obsługującego wiele OpCo na całym świecie. Opracowanie modeli własności subgrafów, granic domenowych i standardów zarządzania.",
-        technologies: ["GraphQL Federation", "Apollo", "Node.js", "TypeScript", "Azure"],
-        impact: [
-          "Ujednolicona warstwa API dla 15+ rynków",
-          "Redukcja złożoności integracji o 60%",
-          "Poprawa czasów odpowiedzi API o 40%",
+          "Webowy CRM przygotowany dla zespołów sprzedażowych z branży fotowoltaiki i OZE. System pozwala zarządzać leadami, przypisywać je do użytkowników, obsługiwać statusy, dodawać komentarze, planować callbacki i spotkania oraz pracować na kontach o różnych rolach.",
+        features: [
+          "Role: admin, handlowiec, menadżer",
+          "Zarządzanie leadami",
+          "Statusy leadów",
+          "Komentarze i historia kontaktu",
+          "Callbacki i spotkania",
+          "Panel administracyjny",
+          "Konta demo",
+          "Generowanie / obsługa ofert PDF",
         ],
+        technologies: ["React", "TypeScript", "Supabase", "PostgreSQL", "Tailwind CSS", "Vercel"],
+        demoUrl: "https://b-crm-berni.vercel.app/login",
+        repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
+        credentials: ["Admin: demo / demo", "Handlowiec: demo-handlowiec / demo", "Menadżer: demo-menadzer / demo"],
       },
       {
-        title: "Enterprise CIAM Platform",
-        company: "Heineken",
-        period: "2024 - Obecnie",
+        title: "Berni Rush - prosta gra webowa",
         description:
-          "Zaprojektowanie architektury uwierzytelniania i autoryzacji z OAuth2, OIDC, PKCE i JWT dla globalnych platform e-commerce.",
-        technologies: ["OAuth2", "OIDC", "Azure AD", "CIAM", "Security"],
-        impact: [
-          "Zabezpieczenie 50M+ kont użytkowników",
-          "Wdrożenie architektury zero-trust",
-          "Uzyskanie zgodności SOC2",
-        ],
+          "Prosta gra webowa stworzona jako projekt testowy i eksperymentalny. Projekt pozwolił mi przećwiczyć pracę z interaktywnym frontendem, logiką gry, wdrożeniem na Vercel oraz podstawową optymalizacją działania aplikacji w przeglądarce.",
+        note:
+          "Projekt edukacyjny / eksperymentalny, nieprzedstawiany jako dopracowana gra komercyjna.",
+        technologies: ["React", "Vite", "JavaScript or TypeScript", "Vercel"],
+        liveUrl: "https://bernirushdemooo.vercel.app",
       },
       {
-        title: "Web Components as a Service (CAAS)",
-        company: "Schneider Electric",
-        period: "2023 - 2024",
+        title: "Personal Portfolio - strona portfolio",
         description:
-          "Budowa skalowalnej architektury web components z integracją Builder.io, umożliwiającej zespołom marketingowym tworzenie stron bez udziału deweloperów.",
-        technologies: ["Web Components", "Builder.io", "SvelteKit", "AWS Lambda", "DynamoDB"],
-        impact: [
-          "Skrócenie czasu wdrożenia stron z dni do godzin",
-          "Wsparcie dla 30+ użytkowników marketingu",
-          "Wygenerowanie 200+ niestandardowych landing page'y",
-        ],
-      },
-      {
-        title: "Platforma E-commerce PWA",
-        company: "Hunter Douglas USA",
-        period: "2022 - 2023",
-        description:
-          "Dostarczenie Progressive Web App z użyciem Magento PWA Studio z integracją SAP do zarządzania cenami i zamówieniami.",
-        technologies: ["PWA", "React", "Magento", "SAP", "Adobe Commerce"],
-        impact: [
-          "Poprawa konwersji mobilnej o 35%",
-          "Redukcja czasu ładowania strony poniżej 2s",
-          "Integracja silnika cenowego SAP w czasie rzeczywistym",
-        ],
-      },
-      {
-        title: "Platforma B2B Commerce Cloud",
-        company: "ABB",
-        period: "2021 - 2022",
-        description:
-          "Zaprojektowanie platformy enterprise B2B z architekturą mikrofrontendową i złożonymi integracjami MuleSoft, SAP, Salesforce i Fastly CDN.",
-        technologies: ["Adobe Commerce Cloud", "MuleSoft", "Microfrontends", "PHP", "SAP"],
-        impact: [
-          "Obsługa transakcji o wartości $2B+ rocznie",
-          "Zasięg 50+ globalnych rynków",
-          "SLA na poziomie 99.9% dostępności",
-        ],
-      },
-      {
-        title: "Narzędzie Migracji Magento",
-        company: "Hunter Douglas USA",
-        period: "2022",
-        description:
-          "Zaprojektowanie i budowa zautomatyzowanego narzędzia migracji z Magento 1 do Magento 2, obsługującego złożone transformacje danych i migrację logiki biznesowej.",
-        technologies: ["PHP", "MySQL", "AWS", "Data Migration", "ETL"],
-        impact: [
-          "Migracja 500K+ produktów bez strat",
-          "Skrócenie harmonogramu migracji o 70%",
-          "Zero utraty danych podczas migracji",
-        ],
+          "Nowoczesna strona portfolio przygotowana jako osobisty landing page. Prezentuje projekty, doświadczenie, technologie, dane kontaktowe oraz podejście do tworzenia praktycznych aplikacji biznesowych.",
+        technologies: ["React", "TypeScript", "Tailwind CSS", "Vercel", "Responsive Design"],
+        status: "Projekt portfolio",
       },
     ],
   },
   skills: {
-    title: "Umiejętności i Kompetencje",
-    categories: [
-      {
-        category: "Podstawowe Technologie",
-        skills: [
-          { name: "TypeScript & Node.js", level: 95 },
-          { name: "GraphQL", level: 90 },
-          { name: "React.js", level: 85 },
-          { name: "SQL", level: 85 },
-        ],
-      },
-      {
-        category: "Chmura i Infrastruktura",
-        skills: [
-          { name: "Azure", level: 88 },
-          { name: "AWS", level: 85 },
-          { name: "Docker & Kubernetes", level: 80 },
-          { name: "Git", level: 90 },
-        ],
-      },
-      {
-        category: "Architektura i Bezpieczeństwo",
-        skills: [
-          { name: "Projektowanie Techniczne", level: 92 },
-          { name: "CIAM & IAM", level: 88 },
-          { name: "Adobe Commerce", level: 90 },
-          { name: "Zarządzanie API", level: 87 },
-        ],
-      },
-      {
-        category: "Dodatkowe",
-        skills: [
-          { name: "C#", level: 75 },
-          { name: "Python & PyTorch", level: 70 },
-        ],
-      },
-    ],
-    languagesTitle: "Języki",
-    languages: [
-      { name: "Angielski", level: 95 },
-      { name: "Polski", level: 100 },
-    ],
-    hobbiesTitle: "Hobby i Zainteresowania",
-    hobbies: ["Automatyka Domowa", "Druk 3D", "Narciarstwo", "Kolarstwo", "Żeglarstwo", "Squash"],
-    bio: "Entuzjasta technologii z pasją do automatyzacji i aktywności na świeżym powietrzu. Balansowanie między innowacją a przygodą.",
-  },
-  awards: {
-    title: "Wyróżnienia i Nagrody",
+    title: "Technologie",
+    description: "Technologie, z którymi pracuję lub które wykorzystuję w projektach:",
     items: [
-      {
-        title: "Adobe Certified Expert",
-        issuer: "Adobe",
-        date: "2020",
-        description: "Certyfikat Adobe Commerce Cloud Developer",
-      },
-      {
-        title: "Solution Architecture Excellence",
-        issuer: "Heineken",
-        date: "2024",
-        description: "Wyróżnienie za wybitny projekt architektury GraphQL Federation",
-      },
-      {
-        title: "Innovation Award",
-        issuer: "Schneider Electric",
-        date: "2024",
-        description: "Implementacja architektury niestandardowych web components",
-      },
-      {
-        title: "Azure Solutions Architect",
-        issuer: "Microsoft",
-        date: "2023",
-        description: "Certyfikowany Azure Solutions Architect Expert",
-      },
-      {
-        title: "Team Excellence Award",
-        issuer: "ABB",
-        date: "2022",
-        description: "Wybitny wkład w dostarczenie platformy enterprise",
-      },
-      {
-        title: "AWS Certified Developer",
-        issuer: "Amazon Web Services",
-        date: "2022",
-        description: "AWS Certified Developer - Associate",
-      },
+      "React",
+      "TypeScript",
+      "JavaScript",
+      "Tailwind CSS",
+      "Supabase",
+      "PostgreSQL",
+      "Vercel",
+      "GitHub",
+      "AI-assisted development",
+      "PDF generation",
+      "API integrations",
+      "Responsive Design",
     ],
-  },
-  recommendations: {
-    title: "Rekomendacje",
   },
   contact: {
-    title: "Skontaktuj się",
+    title: "Masz pomysł na aplikację, CRM albo landing page?",
     description:
-      "Zawsze jestem otwarty na rozmowy o nowych projektach, kreatywnych pomysłach lub możliwościach współpracy. Zbudujmy razem coś wyjątkowego.",
-    emailLabel: "E-mail",
+      "Napisz do mnie, jeśli potrzebujesz prostego systemu dla firmy, strony ofertowej, automatyzacji albo chcesz sprawdzić, czy dany pomysł da się szybko wdrożyć.",
+    emailLabel: "Email",
     phoneLabel: "Telefon",
+    locationLabel: "Lokalizacja",
+    githubLabel: "GitHub",
     linkedinLabel: "LinkedIn",
-    downloadLabel: "Pobierz / Drukuj",
-    saveLabel: "Zapisz jako PDF",
-    copyright: "© 2026 Michał Sagan. Wszelkie prawa zastrzeżone.",
-    roleAt: "Architekt Produktu w",
-    writeToMe: "Napisz do mnie",
-    loadingContact: "Ładowanie danych kontaktowych…",
-    formTitle: "Wyślij wiadomość",
-    formName: "Imię i nazwisko",
-    formNamePlaceholder: "Jan Kowalski",
-    formEmail: "E-mail",
-    formEmailPlaceholder: "jan@firma.pl",
-    formMessage: "Wiadomość",
-    formMessagePlaceholder: "Cześć, chciałem zapytać o…",
-    formSubmit: "Wyślij wiadomość",
-    formSending: "Wysyłanie…",
-    formSuccess: "Wiadomość wysłana pomyślnie.",
-    formError: "Nie udało się wysłać wiadomości. Spróbuj ponownie.",
-    scheduleTitle: "Umów krótkie spotkanie",
-    scheduleDescription:
-      "Wolisz krótką rozmowę? Wybierz termin bezpośrednio w moim kalendarzu i omówmy Twój projekt, wyzwanie architektoniczne lub pomysł na współpracę.",
-    scheduleFallbackLink: "Otwórz kalendarz w nowej karcie",
-    callNowBtn: "Zadzwoń teraz",
-    callNowLabel: "Zadzwoń bezpośrednio",
-  },
-  cookies: {
-    bannerText:
-      "Używamy plików cookie do analizy ruchu przez Google Analytics i poprawy Twojego doświadczenia. Przeczytaj naszą",
-    policyLink: "Politykę Cookies",
-    accept: "Zaakceptuj wszystkie",
-    reject: "Odrzuć nieobowiązkowe",
+    email: "Kacper.bernecki@gmail.com",
+    phone: "+48 575 109 897",
+    location: "Polska",
+    github: "https://github.com/ft4k696bk6-prog",
+    linkedin: "https://www.linkedin.com/in/casper-bernecki-a8a81537b/?locale=pl",
+    emailCta: "Napisz maila",
+    githubCta: "Zobacz GitHub",
+    linkedinCta: "LinkedIn",
+    copyright: "© 2026 Kacper Bernecki. Wszelkie prawa zastrzeżone.",
   },
 };

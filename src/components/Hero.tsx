@@ -1,129 +1,129 @@
 "use client";
 
 import Image from "next/image";
-import { Mail, Linkedin, ChevronDown, PhoneCall } from "lucide-react";
+import Link from "next/link";
+import { ArrowDown, Mail, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useContactForm } from "@/contexts/ContactFormContext";
-
-interface HeroProps {
-  onOpenForm?: () => void;
-}
 
 const containerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
+  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.15 } },
 };
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" as const },
+  },
 };
 
-export function Hero({ onOpenForm }: HeroProps) {
+export function Hero() {
   const { t } = useLanguage();
-  const { openBooking } = useContactForm();
+
   return (
-    <section className="min-h-screen flex relative overflow-hidden">
-      <div className="container mx-auto px-6 md:px-12 lg:px-24 flex flex-col justify-center">
-        <div className="grid md:grid-cols-2 gap-12 md:items-end min-h-screen">
+    <section id="home" className="relative min-h-screen overflow-hidden pt-28">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(215,180,106,0.16),transparent_34%),radial-gradient(circle_at_85%_25%,rgba(34,83,67,0.24),transparent_32%),linear-gradient(135deg,#020202_0%,#10100f_48%,#050505_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#070707] to-transparent" />
+
+      <div className="relative mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl items-center gap-12 px-5 pb-16 md:px-8 lg:grid-cols-[1.05fr_0.95fr]">
+        <motion.div
+          className="max-w-3xl"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           <motion.div
-            className="order-1 md:order-2 space-y-6 self-center pt-[10%] text-center md:text-left"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+            className="mb-6 inline-flex items-center gap-2 rounded-md border border-[#d7b46a]/30 bg-[#d7b46a]/10 px-3 py-2 text-sm text-[#f5dfae]"
+            variants={fadeUp}
           >
-            <motion.div className="space-y-2" variants={fadeUp}>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl text-white tracking-tight">
-                Michał Sagan
-              </h1>
-              <div className="flex items-center gap-3 justify-center md:justify-start">
-                <div className="h-px bg-gradient-to-r from-cyan-500 to-transparent w-12"></div>
-                <p className="text-xl md:text-2xl text-cyan-400 uppercase tracking-wider">
-                  {t.hero.title}
-                </p>
+            <Sparkles className="h-4 w-4" />
+            {t.hero.eyebrow}
+          </motion.div>
+
+          <motion.h1
+            className="max-w-4xl text-5xl leading-[1.02] text-white sm:text-6xl lg:text-7xl"
+            variants={fadeUp}
+          >
+            {t.hero.name}
+          </motion.h1>
+
+          <motion.p
+            className="mt-5 max-w-2xl text-xl text-[#f5dfae] sm:text-2xl"
+            variants={fadeUp}
+          >
+            {t.hero.title}
+          </motion.p>
+
+          <motion.p
+            className="mt-6 max-w-2xl text-base leading-8 text-zinc-300 sm:text-lg"
+            variants={fadeUp}
+          >
+            {t.hero.description}
+          </motion.p>
+
+          <motion.div className="mt-9 flex flex-col gap-3 sm:flex-row" variants={fadeUp}>
+            <Link
+              href="#projects"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-[#d7b46a] px-6 py-3 text-base text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_16px_38px_rgba(215,180,106,0.26)]"
+            >
+              {t.hero.projectsBtn}
+              <ArrowDown className="h-4 w-4" />
+            </Link>
+            <Link
+              href="#contact"
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/[0.03] px-6 py-3 text-base text-white transition-all hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
+            >
+              <Mail className="h-4 w-4" />
+              {t.hero.contactBtn}
+            </Link>
+          </motion.div>
+
+          <motion.div
+            className="mt-10 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3"
+            variants={fadeUp}
+          >
+            {t.hero.metrics.map((metric) => (
+              <div
+                key={metric.label}
+                className="rounded-md border border-white/10 bg-white/[0.035] p-4 backdrop-blur-sm"
+              >
+                <div className="text-lg text-[#f5dfae]">{metric.value}</div>
+                <div className="mt-1 text-sm leading-5 text-zinc-400">{metric.label}</div>
               </div>
-            </motion.div>
-
-            <motion.p
-              className="text-lg text-slate-300 leading-relaxed max-w-xl"
-              variants={fadeUp}
-            >
-              {t.hero.description}
-            </motion.p>
-
-            <motion.div
-              className="flex gap-4 pt-4 justify-center md:justify-start"
-              variants={fadeUp}
-            >
-              <button
-                onClick={() => {
-                  onOpenForm?.();
-                  window.dataLayer?.push({ event: "contact_form_opened_from_hero" });
-                }}
-                className="flex items-center gap-2 px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-all hover:shadow-lg hover:shadow-cyan-500/50"
-              >
-                <Mail className="w-5 h-5" />
-                <span>{t.hero.contactBtn}</span>
-              </button>
-              <button
-                onClick={() => {
-                  openBooking();
-                  window.dataLayer?.push({ event: "booking_dialog_opened_from_hero" });
-                }}
-                className="flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition-all"
-                aria-label={t.contact.scheduleTitle}
-              >
-                <PhoneCall className="w-5 h-5" />
-                <span>{t.hero.callBtn}</span>
-              </button>
-              <a
-                href="https://linkedin.com/in/michal-sagan"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition-all"
-              >
-                <Linkedin className="w-5 h-5" />
-                <span>LinkedIn</span>
-              </a>
-            </motion.div>
+            ))}
           </motion.div>
+        </motion.div>
 
-          <motion.div
-            className="order-2 md:order-1 flex justify-center items-end pt-[10%]"
-            initial={{ opacity: 0, x: -120 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.9, delay: 0.3, ease: "easeOut" }}
-          >
-            <div className="relative">
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-[70%] bg-gradient-to-t from-cyan-500 via-blue-600 to-transparent blur-3xl opacity-40"></div>
-              <motion.div
-                animate={{ x: [0, 14, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <Image
-                  src="/hero_banner.png"
-                  alt="Michał Sagan"
-                  width={448}
-                  height={600}
-                  priority
-                  className="relative h-screen w-auto object-contain drop-shadow-2xl object-bottom"
-                />
-              </motion.div>
-            </div>
-          </motion.div>
-        </div>
+        <motion.div
+          className="relative mx-auto w-full max-w-[430px] lg:max-w-[520px]"
+          initial={{ opacity: 0, x: 70 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
+        >
+          <div className="absolute -inset-6 rounded-[2rem] bg-gradient-to-br from-[#d7b46a]/20 via-transparent to-[#1f4d3d]/30 blur-2xl" />
+          <div className="relative overflow-hidden rounded-[1rem] border border-[#d7b46a]/25 bg-[#111]/80 shadow-[0_28px_80px_rgba(0,0,0,0.55)]">
+            <Image
+              src="/images/profile-1.png"
+              alt={t.hero.imageAlt}
+              width={1154}
+              height={1408}
+              priority
+              className="aspect-[4/5] w-full object-cover object-[52%_35%]"
+            />
+          </div>
+          <div className="absolute -bottom-6 left-5 right-5 rounded-md border border-white/10 bg-black/70 p-4 backdrop-blur-xl">
+            <p className="text-sm uppercase tracking-[0.26em] text-[#f5dfae]">
+              AI-Assisted
+            </p>
+            <p className="mt-1 text-sm text-zinc-300">
+              Web apps, CRMs, automations
+            </p>
+          </div>
+        </motion.div>
       </div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
-
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <ChevronDown className="w-8 h-8 text-cyan-400" />
-      </motion.div>
     </section>
   );
 }

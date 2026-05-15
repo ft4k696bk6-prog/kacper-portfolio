@@ -1,314 +1,187 @@
 export const en = {
-  hero: {
-    title: "Software Engineer",
-    description:
-      "Product Architect specializing in cloud-native integration platforms, GraphQL Federation, and API ecosystems. Transforming complex business requirements into scalable technical solutions.",
-    contactBtn: "Write",
-    callBtn: "Call",
+  nav: {
+    home: "Home",
+    about: "About",
+    projects: "Projects",
+    techStack: "Tech Stack",
+    contact: "Contact",
+    cta: "Contact Me",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
   },
-  profile: {
-    title: "Profile",
-    bio: "Experienced Software Engineer specializing in cloud-native integration platforms and API ecosystems. Strong expertise in Web Apps, Commerce, GraphQL Federation, CIAM, and secure service-to-service communication, with hands-on experience in Node.js, TypeScript, and Azure/AWS. Proven ability to translate complex business requirements into scalable, well-governed technical solutions while collaborating effectively across teams.",
-    highlights: [
-      {
-        title: "GraphQL Federation",
-        description: "Architecting federated GraphQL solutions at enterprise scale",
-      },
-      {
-        title: "Cloud Architecture",
-        description: "Azure & AWS cloud-native integration platforms",
-      },
-      {
-        title: "API Ecosystems",
-        description: "Building scalable, well-governed API solutions",
-      },
-      {
-        title: "CIAM & Security",
-        description: "OAuth2, OIDC, PKCE, JWT implementation expertise",
-      },
+  hero: {
+    eyebrow: "Practical web apps for small businesses",
+    name: "Kacper Bernecki",
+    title: "AI-Assisted Web Developer & Business App Builder",
+    description:
+      "I build practical web apps, CRMs and automations for small businesses. I combine business thinking with modern technology to create tools that organize sales, customer handling and everyday operations.",
+    projectsBtn: "View Projects",
+    contactBtn: "Contact Me",
+    imageAlt: "Kacper Bernecki professional portrait",
+    metrics: [
+      { value: "CRM", label: "Sales and lead handling" },
+      { value: "AI", label: "Faster prototyping" },
+      { value: "Web", label: "Responsive business tools" },
     ],
   },
-  experience: {
-    title: "Employment History",
+  about: {
+    title: "About",
+    heading: "AI, business and web tools built to work in practice.",
+    paragraphs: [
+      "I started from business, sales and direct client work, so I look at applications from a practical point of view, not only through code. I am interested in tools with real use cases: CRMs, offer generators, dashboards, automations and systems that help companies work faster.",
+      "I like technology, AI, business, cars and projects that can actually be implemented. I do not build apps just for the sake of writing code. For me, the most important thing is that the product solves a clear problem, is easy to use and looks professional.",
+      "Through business projects, I have worked around client service, sales, finance, renewable energy, car import and process organization. This helps me understand what a small company really needs before starting to build software.",
+    ],
+    highlights: [
+      {
+        title: "Business first",
+        description: "I start with the workflow, sales process and real user problem.",
+      },
+      {
+        title: "Simple tools",
+        description: "CRMs, dashboards and automations designed to be useful from day one.",
+      },
+      {
+        title: "AI-assisted workflow",
+        description: "I use modern AI tools to prototype faster and analyze problems better.",
+      },
+      {
+        title: "Clean presentation",
+        description: "Every product should be clear, responsive and professional.",
+      },
+    ],
+    imageAlt: "Kacper Bernecki seated professional portrait",
+  },
+  background: {
+    title: "Background",
+    heading: "Business context before software decisions.",
+    paragraphs: [
+      "My path did not start from traditional software development. I worked close to sales, clients and real business problems. Because of that, I understand that an application should work in practice first: save time, organize data and help the company make money.",
+      "In projects related to renewable energy and re-energy system, I was also involved in organizational and technology-related areas: processes, tools, data handling and finding solutions that improve everyday work.",
+      "Today, I focus on building my own web projects, mainly CRMs, landing pages and AI-assisted business applications.",
+    ],
+  },
+  services: {
+    title: "What I Build",
+    subtitle: "Focused tools for small companies that need order, speed and a more professional customer workflow.",
     items: [
       {
-        role: "Product Architect",
-        company: "Heineken",
-        period: "October 2024 - Present",
+        title: "CRMs for small businesses",
         description:
-          "Defining and governing target architecture for global digital commerce platforms across multiple OpCos. Designing and scaling federated GraphQL architecture, including subgraph ownership models, domain boundaries, and governance standards.",
-        technologies: ["GraphQL Federation", "Azure", "Node.js", "TypeScript", "CIAM"],
-        highlights: [
-          "Leading architectural decision-making (KDDs/ADRs) for GraphQL Federation",
-          "Designing CIAM and authentication flows (OAuth2, OIDC, PKCE, JWT)",
-          "Platform engineering and developer enablement initiatives",
-        ],
+          "Systems for managing leads, clients, sales reps, statuses, callbacks, meetings and contact history.",
       },
       {
-        role: "Software Architect & Developer",
-        company: "Schneider Electric",
-        period: "October 2023 - October 2024",
+        title: "Landing pages",
         description:
-          "Modeling architecture of integrations with external applications, solution topology, and security. Developing TypeScript code for AWS Lambda with S3, DynamoDB, AWS EventBridge.",
-        technologies: ["AWS", "Node.js", "SvelteKit", "GitHub Actions", "Builder.io"],
-        highlights: [
-          "Implemented web components (CAAS) architecture",
-          "Managed complex Builder.io (SAAS) integrations",
-          "Automated deployment pipelines",
-        ],
+          "Modern offer pages for services, local businesses, specialists and advertising campaigns.",
       },
       {
-        role: "Full-Stack Developer",
-        company: "Hunter Douglas USA",
-        period: "January 2022 - September 2023",
+        title: "Offer generators",
         description:
-          "Designed and delivered custom migration tool from Magento 1. Integrated SAP pricing engine and Order Management System. Built Progressive Web App with Magento PWA Studio.",
-        technologies: ["PHP", "AWS", "React", "PWA", "SAP", "Adobe Commerce"],
-        highlights: [
-          "Custom migration tool implementation",
-          "SAP pricing engine integration",
-          "Platform performance optimization",
-        ],
+          "Tools for creating PDF offers, calculations, product configurations and client-ready proposals.",
       },
       {
-        role: "Adobe Commerce Architect & Developer",
-        company: "ABB (via Accenture)",
-        period: "February 2021 - July 2022",
+        title: "Dashboards",
         description:
-          "Hybrid role combining Architect and Principal Software Engineer for Adobe Commerce Cloud B2B platform. Designed integrations across MuleSoft, SAP, Salesforce, and Fastly.",
-        technologies: ["MuleSoft", "PHP", "Adobe Commerce Cloud", "Knockout.js"],
-        highlights: [
-          "Microfrontend architecture implementation",
-          "Complex enterprise integrations",
-          "Global platform performance optimization",
-        ],
+          "Panels with data, statistics, filters and clear business performance views.",
       },
       {
-        role: "Software Architect",
-        company: "JTI Geneva",
-        period: "May 2019 - November 2020",
+        title: "Automations",
         description:
-          "Led design of development environment and software architecture for large-scale B2C eCommerce platform at Japanese Tobacco International HQ.",
-        technologies: ["AEM", "React.js", "Adobe Commerce", "Agile"],
-        highlights: [
-          "Designed headless commerce architecture",
-          "Collaborated with Adobe and BuzzBrothers engineering teams",
-          "Delivered platform enablement and training",
-        ],
+          "Simple process automations: forms, notifications, statuses, reminders and data flow.",
+      },
+      {
+        title: "AI-assisted development",
+        description:
+          "Using AI to prototype faster, build applications, analyze problems and improve business workflows.",
       },
     ],
   },
   projects: {
-    title: "Key Projects",
+    title: "Projects",
+    subtitle: "Current projects built around practical business use cases, learning and fast implementation.",
+    featuresLabel: "Features",
+    techLabel: "Tech",
+    demoLabel: "Demo",
+    repoLabel: "Repository",
+    linkLabel: "Open project",
+    credentialsLabel: "Demo credentials",
+    statusLabel: "Status",
+    noteLabel: "Note",
     items: [
       {
-        title: "Global Commerce GraphQL Federation",
-        company: "Heineken",
-        period: "2024 - Present",
+        title: "B-CRM - CRM for renewable energy sales teams",
         description:
-          "Architected and implemented federated GraphQL solution serving multiple OpCos globally. Designed subgraph ownership models, domain boundaries, and governance standards.",
-        technologies: ["GraphQL Federation", "Apollo", "Node.js", "TypeScript", "Azure"],
-        impact: [
-          "Enabled unified API layer across 15+ markets",
-          "Reduced integration complexity by 60%",
-          "Improved API response times by 40%",
+          "A web-based CRM built for photovoltaic and renewable energy sales teams. The system helps manage leads, assign them to users, handle statuses, add comments, schedule callbacks and meetings, and work with different user roles.",
+        features: [
+          "Roles: admin, sales rep, manager",
+          "Lead management",
+          "Lead statuses",
+          "Comments and contact history",
+          "Callbacks and meetings",
+          "Admin panel",
+          "Demo accounts",
+          "PDF offer handling / generation",
         ],
+        technologies: ["React", "TypeScript", "Supabase", "PostgreSQL", "Tailwind CSS", "Vercel"],
+        demoUrl: "https://b-crm-berni.vercel.app/login",
+        repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
+        credentials: ["Admin: demo / demo", "Sales rep: demo-handlowiec / demo", "Manager: demo-menadzer / demo"],
       },
       {
-        title: "Enterprise CIAM Platform",
-        company: "Heineken",
-        period: "2024 - Present",
+        title: "Berni Rush - simple web game",
         description:
-          "Designed authentication and authorization architecture implementing OAuth2, OIDC, PKCE, and JWT for global commerce platforms.",
-        technologies: ["OAuth2", "OIDC", "Azure AD", "CIAM", "Security"],
-        impact: [
-          "Secured 50M+ user accounts",
-          "Implemented zero-trust architecture",
-          "Achieved SOC2 compliance",
-        ],
+          "A simple browser-based game created as an experimental project. It helped me practice interactive frontend logic, game flow, Vercel deployment and basic browser performance optimization.",
+        note:
+          "Learning and experimental project, not presented as a polished commercial game.",
+        technologies: ["React", "Vite", "JavaScript or TypeScript", "Vercel"],
+        liveUrl: "https://bernirushdemooo.vercel.app",
       },
       {
-        title: "Web Components as a Service (CAAS)",
-        company: "Schneider Electric",
-        period: "2023 - 2024",
+        title: "Personal Portfolio - portfolio website",
         description:
-          "Built scalable web components architecture using Builder.io integration, enabling marketing teams to build pages without developer intervention.",
-        technologies: ["Web Components", "Builder.io", "SvelteKit", "AWS Lambda", "DynamoDB"],
-        impact: [
-          "Reduced page deployment time from days to hours",
-          "Empowered 30+ marketing users",
-          "Generated 200+ custom landing pages",
-        ],
-      },
-      {
-        title: "PWA E-commerce Platform",
-        company: "Hunter Douglas USA",
-        period: "2022 - 2023",
-        description:
-          "Delivered Progressive Web App using Magento PWA Studio with SAP integration for pricing and order management.",
-        technologies: ["PWA", "React", "Magento", "SAP", "Adobe Commerce"],
-        impact: [
-          "Improved mobile conversion by 35%",
-          "Reduced page load time to under 2s",
-          "Integrated real-time SAP pricing engine",
-        ],
-      },
-      {
-        title: "B2B Commerce Cloud Platform",
-        company: "ABB",
-        period: "2021 - 2022",
-        description:
-          "Architected enterprise B2B platform with microfrontend architecture and complex integrations across MuleSoft, SAP, Salesforce, and Fastly CDN.",
-        technologies: ["Adobe Commerce Cloud", "MuleSoft", "Microfrontends", "PHP", "SAP"],
-        impact: [
-          "Processed $2B+ in annual transactions",
-          "Served 50+ global markets",
-          "Achieved 99.9% uptime SLA",
-        ],
-      },
-      {
-        title: "Custom Magento Migration Tool",
-        company: "Hunter Douglas USA",
-        period: "2022",
-        description:
-          "Designed and built automated migration tool from Magento 1 to Magento 2, handling complex data transformations and business logic migration.",
-        technologies: ["PHP", "MySQL", "AWS", "Data Migration", "ETL"],
-        impact: [
-          "Migrated 500K+ products successfully",
-          "Reduced migration timeline by 70%",
-          "Zero data loss during migration",
-        ],
+          "A modern portfolio website built as a personal landing page. It presents projects, background, technologies, contact details and my approach to building practical business applications.",
+        technologies: ["React", "TypeScript", "Tailwind CSS", "Vercel", "Responsive Design"],
+        status: "Portfolio project",
       },
     ],
   },
   skills: {
-    title: "Skills & Expertise",
-    categories: [
-      {
-        category: "Core Technologies",
-        skills: [
-          { name: "TypeScript & Node.js", level: 95 },
-          { name: "GraphQL", level: 90 },
-          { name: "React.js", level: 85 },
-          { name: "SQL", level: 85 },
-        ],
-      },
-      {
-        category: "Cloud & Infrastructure",
-        skills: [
-          { name: "Azure", level: 88 },
-          { name: "AWS", level: 85 },
-          { name: "Docker & Kubernetes", level: 80 },
-          { name: "Git", level: 90 },
-        ],
-      },
-      {
-        category: "Architecture & Security",
-        skills: [
-          { name: "Technical Design", level: 92 },
-          { name: "CIAM & IAM", level: 88 },
-          { name: "Adobe Commerce", level: 90 },
-          { name: "API Governance", level: 87 },
-        ],
-      },
-      {
-        category: "Additional",
-        skills: [
-          { name: "C#", level: 75 },
-          { name: "Python & PyTorch", level: 70 },
-        ],
-      },
-    ],
-    languagesTitle: "Languages",
-    languages: [
-      { name: "English", level: 95 },
-      { name: "Polish", level: 100 },
-    ],
-    hobbiesTitle: "Hobbies & Interests",
-    hobbies: ["Home Automation", "3D Printing", "Skiing", "Biking", "Sailing", "Squash"],
-    bio: "Technology enthusiast with passion for automation and outdoor activities. Balancing innovation with adventure.",
-  },
-  awards: {
-    title: "Honors & Awards",
+    title: "Tech Stack",
+    description: "Technologies I work with or use in my projects:",
     items: [
-      {
-        title: "Adobe Certified Expert",
-        issuer: "Adobe",
-        date: "2020",
-        description: "Adobe Commerce Cloud Developer certification",
-      },
-      {
-        title: "Solution Architecture Excellence",
-        issuer: "Heineken",
-        date: "2024",
-        description: "Recognition for outstanding GraphQL Federation architecture design",
-      },
-      {
-        title: "Innovation Award",
-        issuer: "Schneider Electric",
-        date: "2024",
-        description: "Custom web components architecture implementation",
-      },
-      {
-        title: "Azure Solutions Architect",
-        issuer: "Microsoft",
-        date: "2023",
-        description: "Certified Azure Solutions Architect Expert",
-      },
-      {
-        title: "Team Excellence Award",
-        issuer: "ABB",
-        date: "2022",
-        description: "Outstanding contribution to enterprise platform delivery",
-      },
-      {
-        title: "AWS Certified Developer",
-        issuer: "Amazon Web Services",
-        date: "2022",
-        description: "AWS Certified Developer - Associate",
-      },
+      "React",
+      "TypeScript",
+      "JavaScript",
+      "Tailwind CSS",
+      "Supabase",
+      "PostgreSQL",
+      "Vercel",
+      "GitHub",
+      "AI-assisted development",
+      "PDF generation",
+      "API integrations",
+      "Responsive Design",
     ],
-  },
-  recommendations: {
-    title: "Recommendations",
   },
   contact: {
-    title: "Get In Touch",
+    title: "Have an idea for an app, CRM or landing page?",
     description:
-      "I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. Let's build something great together.",
+      "Contact me if you need a simple business system, an offer page, an automation or want to check whether your idea can be quickly implemented.",
     emailLabel: "Email",
     phoneLabel: "Phone",
+    locationLabel: "Location",
+    githubLabel: "GitHub",
     linkedinLabel: "LinkedIn",
-    downloadLabel: "Download / Print",
-    saveLabel: "Save as PDF",
-    copyright: "© 2026 Michał Sagan. All rights reserved.",
-    roleAt: "Product Architect at",
-    writeToMe: "Write to me",
-    loadingContact: "Loading contact details…",
-    formTitle: "Send a message",
-    formName: "Name",
-    formNamePlaceholder: "John Smith",
-    formEmail: "Email",
-    formEmailPlaceholder: "john@example.com",
-    formMessage: "Message",
-    formMessagePlaceholder: "Hello, I'd like to discuss…",
-    formSubmit: "Send message",
-    formSending: "Sending…",
-    formSuccess: "Message sent successfully.",
-    formError: "Failed to send the message. Please try again.",
-    scheduleTitle: "Book a short meeting",
-    scheduleDescription:
-      "Prefer a quick call? Pick a slot directly in my calendar and we can discuss your project, architecture challenge, or collaboration idea.",
-    scheduleFallbackLink: "Open calendar booking",
-    callNowBtn: "Call now",
-    callNowLabel: "Call directly",
-  },
-  cookies: {
-    bannerText:
-      "We use cookies to analyze site traffic via Google Analytics and improve your experience. Read our",
-    policyLink: "Cookie Policy",
-    accept: "Accept all",
-    reject: "Reject non-essential",
+    email: "Kacper.bernecki@gmail.com",
+    phone: "+48 575 109 897",
+    location: "Poland",
+    github: "https://github.com/ft4k696bk6-prog",
+    linkedin: "https://www.linkedin.com/in/casper-bernecki-a8a81537b/?locale=pl",
+    emailCta: "Send Email",
+    githubCta: "View GitHub",
+    linkedinCta: "LinkedIn",
+    copyright: "© 2026 Kacper Bernecki. All rights reserved.",
   },
 };
 

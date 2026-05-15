@@ -1,96 +1,173 @@
 "use client";
 
-import { ExternalLink, GitBranch, Users, Zap } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { ExternalLink, Github, KeyRound, ListChecks } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-const icons: LucideIcon[] = [GitBranch, Users, Zap, ExternalLink, GitBranch, Zap];
 
 export function Projects() {
   const { t } = useLanguage();
 
   return (
-    <section className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900/50">
-      <div className="container mx-auto">
-        <div className="max-w-6xl mx-auto">
-          <motion.h2
-            className="text-4xl md:text-5xl text-white mb-12"
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
+    <section
+      id="projects"
+      className="relative overflow-hidden border-y border-white/10 bg-[#0c0c0b] px-5 py-24 md:px-8"
+    >
+      <div className="absolute right-0 top-0 h-96 w-96 bg-[#d7b46a]/10 blur-3xl" />
+      <div className="relative mx-auto max-w-7xl">
+        <motion.div
+          className="max-w-3xl"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <p className="text-sm uppercase tracking-[0.28em] text-[#d7b46a]">
             {t.projects.title}
-          </motion.h2>
+          </p>
+          <h2 className="mt-4 text-4xl leading-tight text-white md:text-5xl">
+            {t.projects.subtitle}
+          </h2>
+        </motion.div>
 
-          <motion.div
-            className="grid lg:grid-cols-2 gap-6"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.09 } } }}
-          >
-            {t.projects.items.map((project, index) => {
-              const Icon = icons[index];
-              return (
-              <motion.div
-                key={index}
-                variants={{
-                  hidden: { opacity: 0, y: 36, rotate: -1 },
-                  visible: { opacity: 1, y: 0, rotate: 0, transition: { duration: 0.5, ease: "easeOut" } },
-                }}
-                className="group bg-slate-800/50 border border-slate-700 rounded-xl p-6 hover:border-cyan-500/50 transition-all hover:shadow-lg hover:shadow-cyan-500/10"
-              >
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="p-3 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-lg group-hover:from-cyan-500/30 group-hover:to-blue-500/30 transition-colors">
-                    <Icon className="w-6 h-6 text-cyan-400" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl text-white mb-1">{project.title}</h3>
-                    <div className="flex items-center gap-2 text-sm text-slate-400">
-                      <span>{project.company}</span>
-                      <span>•</span>
-                      <span>{project.period}</span>
-                    </div>
-                  </div>
+        <motion.div
+          className="mt-12 grid gap-5 xl:grid-cols-3"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
+        >
+          {t.projects.items.map((project, index) => (
+            <motion.article
+              key={project.title}
+              variants={{
+                hidden: { opacity: 0, y: 32 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.48, ease: "easeOut" },
+                },
+              }}
+              className={`rounded-md border border-white/10 bg-[#11110f]/90 p-6 transition-all hover:-translate-y-1 hover:border-[#d7b46a]/50 ${
+                index === 0 ? "xl:col-span-1" : ""
+              }`}
+            >
+              <div className="mb-5 flex items-start justify-between gap-4">
+                <div>
+                  <span className="inline-flex rounded-md border border-[#d7b46a]/25 bg-[#d7b46a]/10 px-3 py-1 text-xs uppercase tracking-[0.18em] text-[#f5dfae]">
+                    0{index + 1}
+                  </span>
+                  <h3 className="mt-4 text-2xl leading-tight text-white">
+                    {project.title}
+                  </h3>
                 </div>
+              </div>
 
-                <p className="text-slate-300 mb-4 leading-relaxed">
-                  {project.description}
-                </p>
+              <p className="text-sm leading-7 text-zinc-300">{project.description}</p>
 
-                <div className="mb-4">
-                  <h4 className="text-sm text-cyan-400 uppercase tracking-wider mb-2">
-                    Impact
+              {project.note && (
+                <div className="mt-5 rounded-md border border-[#d7b46a]/20 bg-[#d7b46a]/10 p-4 text-sm leading-6 text-[#f5dfae]">
+                  <span className="text-white">{t.projects.noteLabel}: </span>
+                  {project.note}
+                </div>
+              )}
+
+              {project.features && (
+                <div className="mt-6">
+                  <h4 className="flex items-center gap-2 text-sm uppercase tracking-[0.2em] text-[#d7b46a]">
+                    <ListChecks className="h-4 w-4" />
+                    {t.projects.featuresLabel}
                   </h4>
-                  <ul className="space-y-1">
-                    {project.impact.map((item, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start gap-2 text-sm text-slate-300"
-                      >
-                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-1.5"></div>
-                        <span>{item}</span>
+                  <ul className="mt-3 space-y-2">
+                    {project.features.map((feature) => (
+                      <li key={feature} className="flex gap-2 text-sm leading-6 text-zinc-300">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d7b46a]" />
+                        {feature}
                       </li>
                     ))}
                   </ul>
                 </div>
+              )}
 
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech, i) => (
+              {project.credentials && (
+                <div className="mt-6">
+                  <h4 className="flex items-center gap-2 text-sm uppercase tracking-[0.2em] text-[#d7b46a]">
+                    <KeyRound className="h-4 w-4" />
+                    {t.projects.credentialsLabel}
+                  </h4>
+                  <div className="mt-3 space-y-2">
+                    {project.credentials.map((credential) => (
+                      <p
+                        key={credential}
+                        className="rounded-md border border-white/10 bg-black/30 px-3 py-2 text-sm text-zinc-300"
+                      >
+                        {credential}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-6">
+                <h4 className="text-sm uppercase tracking-[0.2em] text-[#d7b46a]">
+                  {t.projects.techLabel}
+                </h4>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {project.technologies.map((tech) => (
                     <span
-                      key={i}
-                      className="px-2 py-1 bg-slate-700/50 text-cyan-300 rounded text-xs border border-slate-600"
+                      key={tech}
+                      className="rounded-md border border-white/10 bg-white/[0.035] px-3 py-1.5 text-xs text-zinc-300"
                     >
                       {tech}
                     </span>
                   ))}
                 </div>
-              </motion.div>
-            );})}
-          </motion.div>
-        </div>
+              </div>
+
+              {project.status && (
+                <p className="mt-5 text-sm text-zinc-400">
+                  <span className="text-[#f5dfae]">{t.projects.statusLabel}: </span>
+                  {project.status}
+                </p>
+              )}
+
+              <div className="mt-7 flex flex-wrap gap-3">
+                {project.demoUrl && (
+                  <a
+                    href={project.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-md bg-[#d7b46a] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    {t.projects.demoLabel}
+                  </a>
+                )}
+                {project.liveUrl && (
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-md bg-[#d7b46a] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    {t.projects.linkLabel}
+                  </a>
+                )}
+                {project.repoUrl && (
+                  <a
+                    href={project.repoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
+                  >
+                    <Github className="h-4 w-4" />
+                    {t.projects.repoLabel}
+                  </a>
+                )}
+              </div>
+            </motion.article>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

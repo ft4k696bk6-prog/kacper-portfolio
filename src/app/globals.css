@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
@@ -98,12 +97,21 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    background: #070707;
+    color: #f4f4f5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   html {
     font-size: var(--font-size);
     @apply font-sans;
+    scroll-padding-top: 6rem;
+  }
+
+  ::selection {
+    background: rgba(215, 180, 106, 0.35);
+    color: #ffffff;
   }
 
   h1 {
