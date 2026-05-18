@@ -117,17 +117,15 @@ export function Hero() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
         >
-          <div className="absolute -inset-6 rounded-[2rem] bg-gradient-to-br from-[#d7b46a]/20 via-transparent to-[#1f4d3d]/30 blur-2xl" />
-          <div className="relative overflow-hidden rounded-[1rem] border border-[#d7b46a]/25 bg-[#111]/80 shadow-[0_28px_80px_rgba(0,0,0,0.55)]">
-            <Image
-              src="/images/profile-1.png"
-              alt={t.hero.imageAlt}
-              width={1154}
-              height={1408}
-              priority
-              className="aspect-[4/5] w-full object-cover object-[52%_35%]"
-            />
-          </div>
+          <div className="absolute inset-x-6 bottom-0 top-16 rounded-full bg-[#d7b46a]/16 blur-3xl" />
+          <Image
+            src="/images/profile-1-cutout.png"
+            alt={t.hero.imageAlt}
+            width={1122}
+            height={1402}
+            priority
+            className="relative mx-auto h-auto max-h-[70vh] w-auto max-w-full object-contain drop-shadow-[0_30px_70px_rgba(0,0,0,0.55)]"
+          />
           <div className="relative mx-3 mt-4 rounded-md border border-white/10 bg-black/70 p-4 backdrop-blur-xl">
             <p className="text-sm uppercase tracking-[0.26em] text-[#f5dfae]">
               B-CRM · Supabase · Dashboardy

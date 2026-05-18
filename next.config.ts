@@ -2,12 +2,12 @@ import type { NextConfig } from "next";
 
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://challenges.cloudflare.com;
-  script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com;
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://challenges.cloudflare.com https://app.cal.com https://cal.com;
+  script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com https://app.cal.com https://cal.com;
   style-src 'self' 'unsafe-inline';
-  img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com;
-  connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://challenges.cloudflare.com;
-  frame-src https://www.googletagmanager.com https://challenges.cloudflare.com;
+  img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://app.cal.com https://cal.com;
+  connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://challenges.cloudflare.com https://app.cal.com https://cal.com;
+  frame-src https://www.googletagmanager.com https://challenges.cloudflare.com https://app.cal.com https://cal.com;
   font-src 'self' data:;
   object-src 'none';
   base-uri 'self';

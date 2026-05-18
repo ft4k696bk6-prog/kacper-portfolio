@@ -6,15 +6,30 @@ import { Turnstile } from "@marsidev/react-turnstile";
 import { CalendarDays, Github, Linkedin, Loader2, MapPin, Send } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CalInline } from "@/components/CalInline";
 
 type SubmitState = "idle" | "sending" | "success" | "error";
+
+const DEFAULT_CALENDAR_URL = "https://cal.com/kacper-bernecki/schedule-meeting";
+const DEFAULT_CAL_LINK = "kacper-bernecki/schedule-meeting";
+
+function getCalLink(calendarUrl: string) {
+  try {
+    const url = new URL(calendarUrl);
+    const path = url.pathname.split("/").filter(Boolean);
+    return path.length >= 2 ? path.slice(0, 2).join("/") : DEFAULT_CAL_LINK;
+  } catch {
+    return DEFAULT_CAL_LINK;
+  }
+}
 
 export function Contact() {
   const { t } = useLanguage();
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [turnstileToken, setTurnstileToken] = useState("");
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-  const calendarUrl = process.env.NEXT_PUBLIC_CALENDAR_URL;
+  const calendarUrl = process.env.NEXT_PUBLIC_CALENDAR_URL ?? DEFAULT_CALENDAR_URL;
+  const calLink = getCalLink(calendarUrl);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -112,13 +127,8 @@ export function Contact() {
             </a>
           </div>
 
-          {calendarUrl && (
-            <a
-              href={calendarUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 flex items-start gap-4 rounded-md border border-[#d7b46a]/25 bg-[#d7b46a]/10 p-5 transition-colors hover:border-[#d7b46a]/60"
-            >
+          <div className="mt-6 rounded-md border border-[#d7b46a]/25 bg-[#d7b46a]/10 p-5">
+            <div className="flex items-start gap-4">
               <div className="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-[#d7b46a]/15 text-[#f5dfae]">
                 <CalendarDays className="h-5 w-5" />
               </div>
@@ -129,10 +139,20 @@ export function Contact() {
                 <p className="mt-2 text-sm leading-6 text-zinc-300">
                   {t.contact.calendarDescription}
                 </p>
-                <p className="mt-3 text-sm text-white">{t.contact.calendarCta}</p>
+                <a
+                  href={calendarUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex text-sm text-white underline decoration-[#d7b46a]/50 underline-offset-4 transition-colors hover:text-[#f5dfae]"
+                >
+                  {t.contact.calendarCta}
+                </a>
               </div>
-            </a>
-          )}
+            </div>
+            <div className="mt-5 h-[560px] overflow-hidden rounded-md border border-white/10 bg-[#0f0f0f]">
+              <CalInline calLink={calLink} />
+            </div>
+          </div>
         </motion.div>
 
         <motion.div
@@ -240,12 +260,12 @@ export function Contact() {
             </p>
           </form>
 
-          <div className="mt-8 flex justify-center overflow-hidden rounded-md border border-white/10 bg-white/[0.025] px-4 pt-6">
+          <div className="mt-8 flex justify-center overflow-hidden px-4 pt-6">
             <Image
-              src="/images/profile-3.png"
+              src="/images/profile-3-cutout.png"
               alt={t.hero.imageAlt}
-              width={1154}
-              height={1408}
+              width={1024}
+              height={1280}
               className="h-auto max-h-[520px] w-auto max-w-full object-contain object-bottom drop-shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
             />
           </div>

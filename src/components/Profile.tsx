@@ -20,16 +20,14 @@ export function Profile() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.55 }}
         >
-          <div className="absolute -inset-5 rounded-[1.5rem] bg-[#d7b46a]/10 blur-2xl" />
-          <div className="relative overflow-hidden rounded-[0.9rem] border border-white/10 bg-white/[0.03]">
-            <Image
-              src="/images/profile-2.png"
-              alt={t.about.imageAlt}
-              width={1154}
-              height={1408}
-              className="aspect-[4/5] w-full object-cover object-[50%_38%]"
-            />
-          </div>
+          <div className="absolute inset-x-6 bottom-0 top-12 rounded-full bg-[#1f4d3d]/24 blur-3xl" />
+          <Image
+            src="/images/profile-2-cutout.png"
+            alt={t.about.imageAlt}
+            width={1122}
+            height={1402}
+            className="relative mx-auto h-auto max-h-[620px] w-auto max-w-full object-contain drop-shadow-[0_24px_60px_rgba(0,0,0,0.5)]"
+          />
         </motion.div>
 
         <div>

@@ -73,10 +73,10 @@ CONTACT_TO_EMAIL=
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 TURNSTILE_SECRET_KEY=
 NEXT_PUBLIC_GTM_ID=
-NEXT_PUBLIC_CALENDAR_URL=
+NEXT_PUBLIC_CALENDAR_URL=https://cal.com/kacper-bernecki/schedule-meeting
 ```
 
-`NEXT_PUBLIC_GTM_ID` and `NEXT_PUBLIC_CALENDAR_URL` are optional. GTM and the calendar card load only when their variables are set.
+`NEXT_PUBLIC_GTM_ID` is optional. The Cal.com calendar uses `NEXT_PUBLIC_CALENDAR_URL` when provided and falls back to the public Cal.com booking URL.
 
 ## Security notes
 
