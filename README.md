@@ -41,7 +41,7 @@ Screenshots should be added to `docs/screenshots/`. Placeholder image links are 
 - `src/components/` — portfolio sections, UI and GTM/contact components.
 - `src/i18n/` — Polish and English content.
 - `src/contexts/` — language context.
-- `public/` — profile visuals and static assets.
+- `public/images/` — profile visuals and static assets.
 - `docs/` — roadmap, changelog, issue backlog and screenshots folder.
 
 ## Getting started

@@ -242,10 +242,10 @@ export function Contact() {
 
           <div className="mt-8 flex justify-center overflow-hidden rounded-md border border-white/10 bg-white/[0.025] px-4 pt-6">
             <Image
-              src="/footer.png"
+              src="/images/profile-3.png"
               alt={t.hero.imageAlt}
-              width={1425}
-              height={1876}
+              width={1154}
+              height={1408}
               className="h-auto max-h-[520px] w-auto max-w-full object-contain object-bottom drop-shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
             />
           </div>
