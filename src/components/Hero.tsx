@@ -119,14 +119,14 @@ export function Hero() {
         >
           <div className="absolute inset-x-6 bottom-0 top-16 rounded-full bg-[#d7b46a]/16 blur-3xl" />
           <Image
-            src="/images/profile-1-cutout.png"
+            src="/images/profile-3-cutout.png"
             alt={t.hero.imageAlt}
-            width={1122}
-            height={1402}
+            width={1024}
+            height={1280}
             priority
-            className="relative mx-auto h-auto max-h-[70vh] w-auto max-w-full object-contain drop-shadow-[0_30px_70px_rgba(0,0,0,0.55)]"
+            className="relative z-10 mx-auto h-auto max-h-[74vh] w-auto max-w-full object-contain drop-shadow-[0_30px_70px_rgba(0,0,0,0.55)]"
           />
-          <div className="relative mx-3 mt-4 rounded-md border border-white/10 bg-black/70 p-4 backdrop-blur-xl">
+          <div className="relative z-0 mx-3 -mt-12 rounded-md border border-white/10 bg-black/70 p-4 pt-8 backdrop-blur-xl sm:-mt-16">
             <p className="text-sm uppercase tracking-[0.26em] text-[#f5dfae]">
               B-CRM · Supabase · Dashboardy
             </p>

@@ -20,6 +20,7 @@ Screenshots should be added to `docs/screenshots/`. Placeholder image links are 
 - Technology section focused on project stack and usage.
 - Contact form that avoids rendering direct email/phone publicly.
 - Turnstile honeypot/rate-limit contact protection.
+- Custom booking calendar that talks to Cal.com through server routes.
 - Optional Google Tag Manager integration via environment variable.
 - SEO, OpenGraph, Twitter card, sitemap and robots metadata.
 
@@ -73,14 +74,18 @@ CONTACT_TO_EMAIL=
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 TURNSTILE_SECRET_KEY=
 NEXT_PUBLIC_GTM_ID=
-NEXT_PUBLIC_CALENDAR_URL=https://cal.com/kacper-bernecki/schedule-meeting
+CAL_API_KEY=
+CAL_EVENT_TYPE_ID=
+CAL_USERNAME=
+CAL_EVENT_TYPE_SLUG=
+NEXT_PUBLIC_CALENDAR_TIMEZONE=Europe/Warsaw
 ```
 
-`NEXT_PUBLIC_GTM_ID` is optional. The Cal.com calendar uses `NEXT_PUBLIC_CALENDAR_URL` when provided and falls back to the public Cal.com booking URL.
+`NEXT_PUBLIC_GTM_ID` is optional. The booking calendar uses Cal.com API through server routes, so `CAL_API_KEY` must stay server-only and must never be committed or exposed with a `NEXT_PUBLIC_` prefix. Prefer `CAL_EVENT_TYPE_ID`; use `CAL_USERNAME` + `CAL_EVENT_TYPE_SLUG` only as a fallback.
 
 ## Security notes
 
-The contact form avoids rendering direct email and phone details in the page. Bot protection uses a honeypot, simple rate limiting and optional Cloudflare Turnstile verification. `robots.txt` is configured for indexing; it is not treated as a scraping prevention mechanism.
+The contact form avoids rendering direct email and phone details in the page. Bot protection uses a honeypot, simple rate limiting and optional Cloudflare Turnstile verification. Booking requests are sent through server routes so the Cal.com API key is not exposed in the browser. `robots.txt` is configured for indexing; it is not treated as a scraping prevention mechanism.
 
 ## What I learned
 
@@ -96,6 +101,7 @@ The contact form avoids rendering direct email and phone details in the page. Bo
 - Add browser smoke tests for portfolio navigation and contact form states.
 - Add a richer B-CRM architecture diagram.
 - Add analytics events through GTM after the container ID is configured.
+- Add GTM events for booking day/time selection after the container ID is configured.
 - Review Core Web Vitals after deployment.
 
 ## Status

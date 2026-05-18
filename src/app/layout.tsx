@@ -45,9 +45,9 @@ export const metadata: Metadata = {
     alternateLocale: "en_US",
     images: [
       {
-        url: "/images/profile-1-cutout.png",
-        width: 1122,
-        height: 1402,
+        url: "/images/profile-3-cutout.png",
+        width: 1024,
+        height: 1280,
         alt: "Kacper Bernecki — Frontend / Web App Developer",
       },
     ],
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     title: "Kacper Bernecki — Frontend / Web App Developer",
     description:
       "Business web apps in React, TypeScript, Next.js and Supabase: CRMs, dashboards, forms and workflow tools.",
-    images: ["/images/profile-1-cutout.png"],
+    images: ["/images/profile-3-cutout.png"],
   },
   alternates: {
     canonical: siteUrl,

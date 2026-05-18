@@ -24,7 +24,7 @@ const jsonLd = {
     "https://github.com/ft4k696bk6-prog",
     "https://www.linkedin.com/in/kacper-bernecki/",
   ],
-  image: "/images/profile-1-cutout.png",
+  image: "/images/profile-3-cutout.png",
 };
 
 export default function Home() {

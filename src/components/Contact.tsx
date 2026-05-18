@@ -3,33 +3,18 @@
 import { FormEvent, useState } from "react";
 import Image from "next/image";
 import { Turnstile } from "@marsidev/react-turnstile";
-import { CalendarDays, Github, Linkedin, Loader2, MapPin, Send } from "lucide-react";
+import { Github, Linkedin, Loader2, MapPin, Send } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { CalInline } from "@/components/CalInline";
+import { BookingCalendar } from "@/components/BookingCalendar";
 
 type SubmitState = "idle" | "sending" | "success" | "error";
 
-const DEFAULT_CALENDAR_URL = "https://cal.com/kacper-bernecki/schedule-meeting";
-const DEFAULT_CAL_LINK = "kacper-bernecki/schedule-meeting";
-
-function getCalLink(calendarUrl: string) {
-  try {
-    const url = new URL(calendarUrl);
-    const path = url.pathname.split("/").filter(Boolean);
-    return path.length >= 2 ? path.slice(0, 2).join("/") : DEFAULT_CAL_LINK;
-  } catch {
-    return DEFAULT_CAL_LINK;
-  }
-}
-
 export function Contact() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [turnstileToken, setTurnstileToken] = useState("");
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-  const calendarUrl = process.env.NEXT_PUBLIC_CALENDAR_URL ?? DEFAULT_CALENDAR_URL;
-  const calLink = getCalLink(calendarUrl);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -70,7 +55,7 @@ export function Contact() {
       className="relative overflow-hidden border-t border-white/10 bg-[#090908] px-5 py-24 md:px-8"
     >
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#d7b46a]/60 to-transparent" />
-      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.98fr_1.02fr] lg:items-start">
         <motion.div
           initial={{ opacity: 0, y: 22 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -127,31 +112,11 @@ export function Contact() {
             </a>
           </div>
 
-          <div className="mt-6 rounded-md border border-[#d7b46a]/25 bg-[#d7b46a]/10 p-5">
-            <div className="flex items-start gap-4">
-              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-[#d7b46a]/15 text-[#f5dfae]">
-                <CalendarDays className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-sm uppercase tracking-[0.18em] text-[#f5dfae]">
-                  {t.contact.calendarTitle}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-zinc-300">
-                  {t.contact.calendarDescription}
-                </p>
-                <a
-                  href={calendarUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-flex text-sm text-white underline decoration-[#d7b46a]/50 underline-offset-4 transition-colors hover:text-[#f5dfae]"
-                >
-                  {t.contact.calendarCta}
-                </a>
-              </div>
-            </div>
-            <div className="mt-5 h-[560px] overflow-hidden rounded-md border border-white/10 bg-[#0f0f0f]">
-              <CalInline calLink={calLink} />
-            </div>
+          <div className="mt-6">
+            <BookingCalendar
+              copy={t.contact.booking}
+              locale={lang === "pl" ? "pl-PL" : "en-US"}
+            />
           </div>
         </motion.div>
 
@@ -162,6 +127,19 @@ export function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
+          <div className="relative mb-6 hidden overflow-hidden rounded-md border border-white/10 bg-[radial-gradient(circle_at_78%_58%,rgba(215,180,106,0.16),transparent_36%),rgba(255,255,255,0.035)] lg:block">
+            <div className="absolute left-5 top-5 z-10 text-3xl font-medium text-white drop-shadow-[0_10px_28px_rgba(0,0,0,0.6)]">
+              {t.contact.booking.title}
+            </div>
+            <Image
+              src="/images/profile-calendar-lean.png"
+              alt={t.hero.imageAlt}
+              width={942}
+              height={1320}
+              className="relative z-0 mx-auto h-auto max-h-[360px] w-auto max-w-full object-contain object-bottom pt-4 drop-shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
+            />
+          </div>
+
           <form
             onSubmit={handleSubmit}
             className="rounded-md border border-white/10 bg-white/[0.035] p-5 md:p-6"
@@ -259,16 +237,6 @@ export function Contact() {
               {t.contact.privacyNote}
             </p>
           </form>
-
-          <div className="mt-8 flex justify-center overflow-hidden px-4 pt-6">
-            <Image
-              src="/images/profile-3-cutout.png"
-              alt={t.hero.imageAlt}
-              width={1024}
-              height={1280}
-              className="h-auto max-h-[520px] w-auto max-w-full object-contain object-bottom drop-shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
-            />
-          </div>
         </motion.div>
       </div>
 

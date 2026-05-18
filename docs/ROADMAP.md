@@ -9,6 +9,7 @@
 ## Medium term
 
 - Add GTM events for project clicks and contact submissions.
+- Add GTM events for booking day/time selection.
 - Add a visual architecture diagram for B-CRM.
 - Review mobile spacing after live deployment.
 

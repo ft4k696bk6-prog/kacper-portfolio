@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
-import { Brain, BriefcaseBusiness, Gauge, Workflow } from "lucide-react";
+import { Brain, BriefcaseBusiness, Database, Gauge, ShieldCheck, Workflow } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const icons = [BriefcaseBusiness, Workflow, Brain, Gauge];
+const workflowIcons = [Database, Workflow, ShieldCheck, Gauge];
 
 export function Profile() {
   const { t } = useLanguage();
@@ -21,13 +21,28 @@ export function Profile() {
           transition={{ duration: 0.55 }}
         >
           <div className="absolute inset-x-6 bottom-0 top-12 rounded-full bg-[#1f4d3d]/24 blur-3xl" />
-          <Image
-            src="/images/profile-2-cutout.png"
-            alt={t.about.imageAlt}
-            width={1122}
-            height={1402}
-            className="relative mx-auto h-auto max-h-[620px] w-auto max-w-full object-contain drop-shadow-[0_24px_60px_rgba(0,0,0,0.5)]"
-          />
+          <div className="relative rounded-md border border-white/10 bg-white/[0.035] p-5 shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
+            <p className="text-sm uppercase tracking-[0.26em] text-[#f5dfae]">
+              {t.about.workflowTitle}
+            </p>
+            <div className="mt-6 grid gap-3">
+              {t.about.workflowItems.map((item, index) => {
+                const Icon = workflowIcons[index] ?? Workflow;
+                return (
+                  <div
+                    key={item}
+                    className="flex items-center justify-between rounded-md border border-white/10 bg-black/25 px-4 py-3"
+                  >
+                    <span className="text-sm text-zinc-200">{item}</span>
+                    <Icon className="h-4 w-4 text-[#d7b46a]" />
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-6 rounded-md border border-[#d7b46a]/20 bg-[#d7b46a]/10 p-4 text-sm leading-6 text-zinc-300">
+              {t.about.workflowNote}
+            </div>
+          </div>
         </motion.div>
 
         <div>

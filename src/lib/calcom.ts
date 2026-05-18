@@ -1,0 +1,231 @@
+import {
+  DEFAULT_BOOKING_TIME_ZONE,
+  formatSlotTime,
+  getBookingDateStatus,
+  getDateKeyInTimeZone,
+} from "@/lib/booking";
+
+const CAL_API_BASE = "https://api.cal.com/v2";
+const CAL_SLOTS_API_VERSION = "2024-09-04";
+const CAL_BOOKINGS_API_VERSION = "2026-02-25";
+
+type CalSlotValue = string | { start?: string };
+
+type CalSlotsResponse = {
+  status?: string;
+  data?: Record<string, CalSlotValue[]>;
+  message?: string;
+  error?: { message?: string };
+};
+
+type CalBookingResponse = {
+  status?: string;
+  data?: {
+    uid?: string;
+    start?: string;
+  };
+  message?: string;
+  error?: { message?: string };
+};
+
+export type NormalizedSlot = {
+  start: string;
+  label: string;
+};
+
+export type CalEventConfig =
+  | {
+      ok: true;
+      apiKey: string;
+      eventTypeId?: number;
+      eventTypeSlug?: string;
+      username?: string;
+    }
+  | {
+      ok: false;
+      message: string;
+    };
+
+export class CalComError extends Error {
+  constructor(
+    message: string,
+    public readonly status = 502,
+  ) {
+    super(message);
+  }
+}
+
+export function getCalendarTimeZone() {
+  return process.env.NEXT_PUBLIC_CALENDAR_TIMEZONE || DEFAULT_BOOKING_TIME_ZONE;
+}
+
+export function getCalEventConfig(): CalEventConfig {
+  const apiKey = process.env.CAL_API_KEY?.trim();
+  const eventTypeId = process.env.CAL_EVENT_TYPE_ID?.trim();
+  const eventTypeSlug = process.env.CAL_EVENT_TYPE_SLUG?.trim();
+  const username = process.env.CAL_USERNAME?.trim();
+
+  if (!apiKey) {
+    return { ok: false, message: "Booking calendar is not configured." };
+  }
+
+  if (eventTypeId && Number.isFinite(Number(eventTypeId))) {
+    return { ok: true, apiKey, eventTypeId: Number(eventTypeId) };
+  }
+
+  if (eventTypeSlug && username) {
+    return { ok: true, apiKey, eventTypeSlug, username };
+  }
+
+  return { ok: false, message: "Cal.com event type is not configured." };
+}
+
+function applyEventParams(
+  params: URLSearchParams,
+  config: Extract<CalEventConfig, { ok: true }>,
+) {
+  if (config.eventTypeId) {
+    params.set("eventTypeId", String(config.eventTypeId));
+    return;
+  }
+
+  if (config.eventTypeSlug && config.username) {
+    params.set("eventTypeSlug", config.eventTypeSlug);
+    params.set("username", config.username);
+  }
+}
+
+function applyEventBody(
+  body: Record<string, unknown>,
+  config: Extract<CalEventConfig, { ok: true }>,
+) {
+  if (config.eventTypeId) {
+    body.eventTypeId = config.eventTypeId;
+    return;
+  }
+
+  body.eventTypeSlug = config.eventTypeSlug;
+  body.username = config.username;
+}
+
+function getCalHeaders(config: Extract<CalEventConfig, { ok: true }>, version: string) {
+  return {
+    Authorization: `Bearer ${config.apiKey}`,
+    "cal-api-version": version,
+  };
+}
+
+function normalizeCalError(response: CalSlotsResponse | CalBookingResponse) {
+  return response.error?.message || response.message || "Cal.com request failed.";
+}
+
+export async function getAvailableSlots(date: string): Promise<NormalizedSlot[]> {
+  const timeZone = getCalendarTimeZone();
+  const todayKey = getDateKeyInTimeZone(new Date(), timeZone);
+  const status = getBookingDateStatus(date, todayKey);
+
+  if (status.blocked) {
+    return [];
+  }
+
+  const config = getCalEventConfig();
+  if (!config.ok) {
+    throw new CalComError(config.message, 503);
+  }
+
+  const url = new URL(`${CAL_API_BASE}/slots`);
+  url.searchParams.set("start", date);
+  url.searchParams.set("end", date);
+  url.searchParams.set("timeZone", timeZone);
+  applyEventParams(url.searchParams, config);
+
+  const response = await fetch(url, {
+    headers: getCalHeaders(config, CAL_SLOTS_API_VERSION),
+    cache: "no-store",
+  });
+  const body = (await response.json().catch(() => ({}))) as CalSlotsResponse;
+
+  if (!response.ok || body.status === "error") {
+    throw new CalComError(normalizeCalError(body), response.status || 502);
+  }
+
+  const rawSlots = body.data?.[date] ?? [];
+  const now = Date.now();
+
+  return rawSlots
+    .map((slot) => (typeof slot === "string" ? slot : slot.start))
+    .filter((start): start is string => Boolean(start))
+    .filter((start) => Date.parse(start) > now)
+    .map((start) => ({
+      start,
+      label: formatSlotTime(start, timeZone),
+    }));
+}
+
+export async function createBooking({
+  start,
+  name,
+  email,
+  company,
+  message,
+}: {
+  start: string;
+  name: string;
+  email: string;
+  company?: string;
+  message?: string;
+}) {
+  const timeZone = getCalendarTimeZone();
+  const selectedDate = getDateKeyInTimeZone(new Date(start), timeZone);
+  const todayKey = getDateKeyInTimeZone(new Date(), timeZone);
+  const status = getBookingDateStatus(selectedDate, todayKey);
+
+  if (status.blocked) {
+    throw new CalComError("Selected date is unavailable.", 400);
+  }
+
+  if (Date.parse(start) <= Date.now()) {
+    throw new CalComError("Selected time is no longer available.", 400);
+  }
+
+  const config = getCalEventConfig();
+  if (!config.ok) {
+    throw new CalComError(config.message, 503);
+  }
+
+  const bookingStart = new Date(start).toISOString();
+  const body: Record<string, unknown> = {
+    start: bookingStart,
+    attendee: {
+      name,
+      email,
+      timeZone,
+      language: "pl",
+    },
+    metadata: {
+      source: "kacper-portfolio",
+      company: company || undefined,
+      message: message || undefined,
+    },
+  };
+  applyEventBody(body, config);
+
+  const response = await fetch(`${CAL_API_BASE}/bookings`, {
+    method: "POST",
+    headers: {
+      ...getCalHeaders(config, CAL_BOOKINGS_API_VERSION),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  const responseBody = (await response.json().catch(() => ({}))) as CalBookingResponse;
+
+  if (!response.ok || responseBody.status === "error") {
+    throw new CalComError(normalizeCalError(responseBody), response.status || 502);
+  }
+
+  return {
+    uid: responseBody.data?.uid,
+    start: responseBody.data?.start ?? bookingStart,
+  };
+}
