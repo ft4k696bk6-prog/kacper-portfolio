@@ -127,17 +127,19 @@ export function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="relative mb-6 hidden overflow-hidden rounded-md border border-white/10 bg-[radial-gradient(circle_at_78%_58%,rgba(215,180,106,0.16),transparent_36%),rgba(255,255,255,0.035)] lg:block">
-            <div className="absolute left-5 top-5 z-10 text-3xl font-medium text-white drop-shadow-[0_10px_28px_rgba(0,0,0,0.6)]">
-              {t.contact.booking.title}
-            </div>
-            <Image
-              src="/images/profile-calendar-lean.png"
-              alt={t.hero.imageAlt}
-              width={942}
-              height={1320}
-              className="relative z-0 mx-auto h-auto max-h-[360px] w-auto max-w-full object-contain object-bottom pt-4 drop-shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
-            />
+          <div className="relative mb-6 hidden overflow-hidden rounded-md border border-white/10 bg-[radial-gradient(circle_at_50%_70%,rgba(215,180,106,0.12),transparent_40%),rgba(255,255,255,0.035)] lg:block">
+            <motion.div
+              animate={{ x: [-6, 6, -6] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Image
+                src="/images/profile-1-cutout.png"
+                alt={t.hero.imageAlt}
+                width={1122}
+                height={1402}
+                className="relative z-0 mx-auto h-auto max-h-[420px] w-auto max-w-full object-contain object-bottom pt-4 drop-shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
+              />
+            </motion.div>
           </div>
 
           <form

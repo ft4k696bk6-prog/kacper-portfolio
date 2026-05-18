@@ -43,7 +43,7 @@ describe("booking calendar rules", () => {
     });
   });
 
-  it("generates stable day tiles from the current Warsaw date", () => {
+  it("generates available day tiles from the current Warsaw date", () => {
     const days = getBookingDays({
       count: 3,
       now: new Date("2026-05-18T10:00:00.000Z"),
@@ -51,12 +51,23 @@ describe("booking calendar rules", () => {
     });
 
     expect(days.map((day) => day.date)).toEqual([
-      "2026-05-18",
       "2026-05-19",
       "2026-05-20",
+      "2026-05-21",
     ]);
-    expect(days[0].blocked).toBe(true);
-    expect(days[1].blocked).toBe(false);
+    expect(days.every((day) => day.blocked === false)).toBe(true);
+  });
+
+  it("returns twelve available days and skips the travel window", () => {
+    const days = getBookingDays({
+      now: new Date("2026-05-18T10:00:00.000Z"),
+      locale: "pl-PL",
+    });
+
+    expect(days).toHaveLength(12);
+    expect(days.map((day) => day.date)).not.toContain("2026-05-27");
+    expect(days.map((day) => day.date)).not.toContain("2026-06-04");
+    expect(days.every((day) => ![0, 1, 6].includes(getWeekdayIndex(day.date)))).toBe(true);
   });
 
   it("adds days without timezone drift", () => {

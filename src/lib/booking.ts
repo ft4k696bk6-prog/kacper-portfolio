@@ -1,5 +1,5 @@
 export const DEFAULT_BOOKING_TIME_ZONE = "Europe/Warsaw";
-export const BOOKING_DAY_COUNT = 21;
+export const BOOKING_DAY_COUNT = 12;
 export const VACATION_START_DATE = "2026-05-27";
 export const VACATION_END_DATE = "2026-06-04";
 
@@ -98,22 +98,30 @@ export function getBookingDays({
     month: "short",
     timeZone,
   });
+  const days: BookingDay[] = [];
+  let offset = 0;
 
-  return Array.from({ length: count }, (_, index) => {
-    const date = addDays(todayKey, index);
+  while (days.length < count && offset < 120) {
+    const date = addDays(todayKey, offset);
     const status = getBookingDateStatus(date, todayKey);
-    const utcDate = new Date(`${date}T12:00:00.000Z`);
+    offset += 1;
 
-    return {
+    if (status.blocked) {
+      continue;
+    }
+
+    const utcDate = new Date(`${date}T12:00:00.000Z`);
+    days.push({
       date,
       day: date.slice(-2),
       weekday: weekdayFormatter.format(utcDate).replace(".", ""),
       month: monthFormatter.format(utcDate).replace(".", ""),
-      blocked: status.blocked,
-      reason: status.reason,
+      blocked: false,
       today: date === todayKey,
-    };
-  });
+    });
+  }
+
+  return days;
 }
 
 export function formatSlotTime(start: string, timeZone = DEFAULT_BOOKING_TIME_ZONE) {

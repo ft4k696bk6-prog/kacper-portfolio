@@ -112,28 +112,27 @@ export function Hero() {
         </motion.div>
 
         <motion.div
-          className="relative mx-auto w-full max-w-[430px] lg:max-w-[520px]"
+          className="relative mx-auto w-full max-w-[430px] pb-4 lg:max-w-[520px]"
           initial={{ opacity: 0, x: 70 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
         >
           <div className="absolute inset-x-6 bottom-0 top-16 rounded-full bg-[#d7b46a]/16 blur-3xl" />
-          <Image
-            src="/images/profile-3-cutout.png"
-            alt={t.hero.imageAlt}
-            width={1024}
-            height={1280}
-            priority
-            className="relative z-10 mx-auto h-auto max-h-[74vh] w-auto max-w-full object-contain drop-shadow-[0_30px_70px_rgba(0,0,0,0.55)]"
-          />
-          <div className="relative z-0 mx-3 -mt-12 rounded-md border border-white/10 bg-black/70 p-4 pt-8 backdrop-blur-xl sm:-mt-16">
-            <p className="text-sm uppercase tracking-[0.26em] text-[#f5dfae]">
-              B-CRM · Supabase · Dashboardy
-            </p>
-            <p className="mt-1 text-sm text-zinc-300">
-              Practical web apps for business workflows
-            </p>
-          </div>
+          <motion.div
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Image
+              src="/images/profile-3-cutout.png"
+              alt={t.hero.imageAlt}
+              width={1024}
+              height={1280}
+              priority
+              className="relative z-10 mx-auto h-auto max-h-[72vh] w-auto max-w-full object-contain drop-shadow-[0_30px_70px_rgba(0,0,0,0.55)]"
+            />
+          </motion.div>
+          <div className="relative mx-auto mt-2 h-px w-44 bg-gradient-to-r from-transparent via-[#d7b46a] to-transparent shadow-[0_0_22px_rgba(215,180,106,0.5)]" />
+          <div className="relative mx-auto mt-1 h-6 w-56 bg-[#d7b46a]/10 blur-2xl" />
         </motion.div>
       </div>
     </section>

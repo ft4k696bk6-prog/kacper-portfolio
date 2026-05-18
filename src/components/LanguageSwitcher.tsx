@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Mail, Menu, X } from "lucide-react";
+import { CalendarDays, Mail, Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -77,6 +77,13 @@ export function LanguageSwitcher() {
             <Mail className="h-4 w-4" />
             {t.nav.cta}
           </Link>
+          <Link
+            href="#contact"
+            aria-label={t.contact.calendarCta}
+            className="grid h-10 w-10 place-items-center rounded-md border border-[#d7b46a]/40 bg-[#d7b46a]/10 text-[#f5dfae] transition-all hover:-translate-y-0.5 hover:border-[#d7b46a]/70 hover:bg-[#d7b46a]/15"
+          >
+            <CalendarDays className="h-4 w-4" />
+          </Link>
         </div>
 
         <button
@@ -118,6 +125,14 @@ export function LanguageSwitcher() {
               >
                 <Mail className="h-4 w-4" />
                 {t.nav.cta}
+              </Link>
+              <Link
+                href="#contact"
+                onClick={() => setIsOpen(false)}
+                aria-label={t.contact.calendarCta}
+                className="grid h-10 w-10 place-items-center rounded-md border border-[#d7b46a]/40 bg-[#d7b46a]/10 text-[#f5dfae]"
+              >
+                <CalendarDays className="h-4 w-4" />
               </Link>
             </div>
           </div>

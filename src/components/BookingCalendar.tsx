@@ -8,7 +8,6 @@ import {
   DEFAULT_BOOKING_TIME_ZONE,
   formatSlotDate,
   getBookingDays,
-  type BookingDay,
 } from "@/lib/booking";
 
 type BookingState = "idle" | "loading-slots" | "booking" | "success" | "error";
@@ -21,11 +20,9 @@ type Slot = {
 type BookingCopy = {
   title: string;
   description: string;
-  meetLabel: string;
   timezoneLabel: string;
   chooseDayLabel: string;
   chooseTimeLabel: string;
-  unavailableLabel: string;
   noSlotsLabel: string;
   bookingNameLabel: string;
   bookingEmailLabel: string;
@@ -35,23 +32,12 @@ type BookingCopy = {
   bookingSendingLabel: string;
   bookingSuccessLabel: string;
   bookingErrorLabel: string;
-  configErrorLabel: string;
-  blockedWeekendLabel: string;
-  blockedMondayLabel: string;
-  blockedVacationLabel: string;
 };
 
 type BookingCalendarProps = {
   copy: BookingCopy;
   locale: "pl-PL" | "en-US";
 };
-
-function disabledLabel(day: BookingDay, copy: BookingCopy) {
-  if (day.reason === "vacation") return copy.blockedVacationLabel;
-  if (day.reason === "monday") return copy.blockedMondayLabel;
-  if (day.reason === "weekend") return copy.blockedWeekendLabel;
-  return copy.unavailableLabel;
-}
 
 export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
   const [selectedDate, setSelectedDate] = useState("");
@@ -64,9 +50,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
   const timeZone = process.env.NEXT_PUBLIC_CALENDAR_TIMEZONE || DEFAULT_BOOKING_TIME_ZONE;
   const days = useMemo(() => getBookingDays({ locale, timeZone }), [locale, timeZone]);
 
-  async function selectDay(day: BookingDay) {
-    if (day.blocked) return;
-
+  async function selectDay(day: { date: string }) {
     setSelectedDate(day.date);
     setSelectedSlot(null);
     setSlots([]);
@@ -81,10 +65,14 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
       };
 
       if (!response.ok) {
+        if (response.status === 503) {
+          setState("idle");
+          setSlots([]);
+          return;
+        }
+
         throw new Error(
-          response.status === 503
-            ? copy.configErrorLabel
-            : payload.message || copy.bookingErrorLabel,
+          payload.message || copy.bookingErrorLabel,
         );
       }
 
@@ -123,11 +111,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
       const payload = (await response.json().catch(() => ({}))) as { message?: string };
 
       if (!response.ok) {
-        throw new Error(
-          response.status === 503
-            ? copy.configErrorLabel
-            : payload.message || copy.bookingErrorLabel,
-        );
+        throw new Error(payload.message || copy.bookingErrorLabel);
       }
 
       form.reset();
@@ -172,21 +156,13 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
             <button
               key={day.date}
               type="button"
-              disabled={day.blocked}
               onClick={() => void selectDay(day)}
-              aria-label={
-                day.blocked
-                  ? `${day.date}: ${disabledLabel(day, copy)}`
-                  : `${copy.chooseDayLabel}: ${day.date}`
-              }
+              aria-label={`${copy.chooseDayLabel}: ${day.date}`}
               className={[
                 "min-h-[74px] rounded-md border p-2 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7b46a]/70",
                 selectedDate === day.date
                   ? "border-[#d7b46a] bg-[#d7b46a]/18 text-white shadow-[0_14px_34px_rgba(215,180,106,0.12)]"
                   : "border-white/10 bg-black/20 text-zinc-200 hover:border-[#d7b46a]/45 hover:bg-white/[0.055]",
-                day.blocked
-                  ? "cursor-not-allowed border-white/5 bg-white/[0.025] text-zinc-600 hover:border-white/5 hover:bg-white/[0.025]"
-                  : "",
               ].join(" ")}
             >
               <span className="block text-[0.68rem] uppercase tracking-[0.16em]">
