@@ -83,11 +83,11 @@ CAL_EVENT_TYPE_SLUG=
 NEXT_PUBLIC_CALENDAR_TIMEZONE=Europe/Warsaw
 ```
 
-`NEXT_PUBLIC_GTM_ID` is optional. The booking calendar uses Cal.com API through server routes, so `CAL_API_KEY` must stay server-only and must never be committed or exposed with a `NEXT_PUBLIC_` prefix. Prefer `CAL_EVENT_TYPE_ID`; use `CAL_USERNAME` + `CAL_EVENT_TYPE_SLUG` only as a fallback. Direct contact details use server-only `CONTACT_REVEAL_EMAIL` and `CONTACT_REVEAL_PHONE`.
+`NEXT_PUBLIC_GTM_ID` is optional. The booking calendar uses Cal.com API through server routes, so `CAL_API_KEY` must stay server-only and must never be committed or exposed with a `NEXT_PUBLIC_` prefix. Prefer `CAL_EVENT_TYPE_ID`; use `CAL_USERNAME` + `CAL_EVENT_TYPE_SLUG` only as a fallback. Direct contact details use server-only `CONTACT_REVEAL_EMAIL` and `CONTACT_REVEAL_PHONE`; email falls back to `CONTACT_TO_EMAIL` when `CONTACT_REVEAL_EMAIL` is not set.
 
 ## Security notes
 
-The contact form and contact reveal flow avoid rendering direct email and phone details in the initial page HTML. Bot protection uses a honeypot, simple rate limiting and optional Cloudflare Turnstile verification. Booking requests are sent through server routes so the Cal.com API key is not exposed in the browser. `robots.txt` is configured for indexing; it is not treated as a scraping prevention mechanism.
+The contact form and contact reveal flow avoid rendering direct email and phone details in the initial page HTML. Bot protection uses a honeypot, simple rate limiting and Cloudflare Turnstile verification for direct contact reveal. Booking requests are sent through server routes so the Cal.com API key is not exposed in the browser. `robots.txt` is configured for indexing; it is not treated as a scraping prevention mechanism.
 
 ## What I learned
 

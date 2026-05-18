@@ -32,8 +32,7 @@ function isRateLimited(ip: string) {
 
 async function verifyTurnstile(token: string, ip: string) {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return true;
-  if (!token) return false;
+  if (!secret || !token) return false;
 
   const formData = new FormData();
   formData.append("secret", secret);
@@ -51,7 +50,7 @@ async function verifyTurnstile(token: string, ip: string) {
 
 function getContactValue(type: "email" | "phone") {
   return type === "email"
-    ? process.env.CONTACT_REVEAL_EMAIL?.trim()
+    ? process.env.CONTACT_REVEAL_EMAIL?.trim() || process.env.CONTACT_TO_EMAIL?.trim()
     : process.env.CONTACT_REVEAL_PHONE?.trim();
 }
 
