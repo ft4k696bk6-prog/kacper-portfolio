@@ -20,4 +20,13 @@ describe("portfolio content", () => {
     expect(content).not.toMatch(new RegExp(["pro", "cent"].join(""), "i"));
     expect(content).not.toMatch(new RegExp(["skill", " bars"].join(""), "i"));
   });
+
+  it("does not expose old calendar and profile helper copy", () => {
+    const content = JSON.stringify({ en, pl });
+
+    expect(content).not.toContain("Choose a day, then a time");
+    expect(content).not.toContain("No free times");
+    expect(content).not.toContain("HOW I APPROACH WEB APPS");
+    expect(content).not.toContain("Jak podchodzę do aplikacji");
+  });
 });

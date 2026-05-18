@@ -95,20 +95,6 @@ export function Hero() {
             </Link>
           </motion.div>
 
-          <motion.div
-            className="mt-10 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3"
-            variants={fadeUp}
-          >
-            {t.hero.metrics.map((metric) => (
-              <div
-                key={metric.label}
-                className="rounded-md border border-white/10 bg-white/[0.035] p-4 backdrop-blur-sm"
-              >
-                <div className="text-lg text-[#f5dfae]">{metric.value}</div>
-                <div className="mt-1 text-sm leading-5 text-zinc-400">{metric.label}</div>
-              </div>
-            ))}
-          </motion.div>
         </motion.div>
 
         <motion.div

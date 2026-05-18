@@ -23,11 +23,6 @@ export const pl: Translations = {
     bcrmBtn: "Sprawdź B-CRM",
     contactBtn: "Kontakt",
     imageAlt: "Profesjonalny portret Kacpra Berneckiego",
-    metrics: [
-      { value: "CRM", label: "Lead management i proces sprzedaży" },
-      { value: "Dane", label: "Formularze, dashboardy i baza danych" },
-      { value: "Deploy", label: "Aplikacje webowe wdrażane na Vercel" },
-    ],
   },
   about: {
     title: "O mnie",
@@ -39,27 +34,21 @@ export const pl: Translations = {
     ],
     highlights: [
       {
-        title: "Aplikacje biznesowe",
+        title: "Ekrany CRM i workflow",
         description: "CRM, dashboardy, formularze, panele admina i narzędzia workflow.",
       },
       {
-        title: "React / TypeScript",
+        title: "Formularze i typowany UI",
         description: "Komponenty UI, logika typowana, routing, stan i formularze.",
       },
       {
-        title: "Supabase / PostgreSQL",
+        title: "Role i dostęp",
         description: "Auth, role, dane leadów, historia zmian i widoki z bazy.",
       },
       {
-        title: "Deploy i iteracja",
+        title: "Baza danych i deploy",
         description: "Deploy na Vercel, README/docs, CI i roadmapy projektów.",
       },
-    ],
-    focusTitle: "Jak podchodzę do aplikacji",
-    focusItems: [
-      "Jasny podział widoków, danych i akcji użytkownika.",
-      "Formularze, statusy i workflow oparte o realny proces.",
-      "Deploy, dokumentacja i iteracja zamiast dekoracyjnych demo.",
     ],
     imageAlt: "Profesjonalny portret siedzącego Kacpra Berneckiego",
   },
@@ -289,19 +278,16 @@ export const pl: Translations = {
     successMessage: "Dzięki. Wiadomość została wysłana.",
     errorMessage: "Nie udało się wysłać wiadomości. Spróbuj ponownie później.",
     privacyNote:
-      "Adres email służy wyłącznie do odpowiedzi na wiadomość. Bezpośrednie dane kontaktowe nie są renderowane publicznie na stronie.",
+      "Adres email służy wyłącznie do odpowiedzi na wiadomość. Bezpośrednie dane kontaktowe są odsłaniane dopiero po weryfikacji człowieka.",
     calendarTitle: "Kalendarz",
     calendarDescription:
       "Jeśli wolisz rozmowę zamiast formularza, wybierz termin w kalendarzu.",
     calendarCta: "Umów rozmowę",
     booking: {
       title: "Poznajmy się",
-      description:
-        "Wybierz dzień, potem godzinę. Rezerwacja zostaje zapisana bez przechodzenia na zewnętrzną stronę.",
       timezoneLabel: "Europe/Warsaw",
       chooseDayLabel: "Wybierz dzień",
       chooseTimeLabel: "Wybierz godzinę",
-      noSlotsLabel: "Brak wolnych godzin w tym dniu. Wybierz inny termin albo napisz przez formularz.",
       bookingNameLabel: "Imię i nazwisko",
       bookingEmailLabel: "Email",
       bookingCompanyLabel: "Firma lub kontekst",
@@ -310,6 +296,16 @@ export const pl: Translations = {
       bookingSendingLabel: "Sprawdzanie...",
       bookingSuccessLabel: "Termin został zarezerwowany. Potwierdzenie powinno przyjść na email.",
       bookingErrorLabel: "Nie udało się zarezerwować terminu. Spróbuj ponownie albo użyj formularza.",
+    },
+    reveal: {
+      title: "Bezpośredni kontakt",
+      description: "Email i telefon są dostępne po krótkiej weryfikacji człowieka.",
+      emailButton: "Kliknij, aby odsłonić email",
+      phoneButton: "Kliknij, aby odsłonić telefon",
+      emailLabel: "Email",
+      phoneLabel: "Telefon",
+      humanCheckLabel: "Weryfikacja człowieka",
+      errorMessage: "Nie udało się odsłonić danych. Użyj formularza kontaktowego.",
     },
     locationLabel: "Lokalizacja",
     githubLabel: "GitHub",

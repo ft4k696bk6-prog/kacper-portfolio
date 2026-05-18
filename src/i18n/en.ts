@@ -21,11 +21,6 @@ export const en = {
     bcrmBtn: "Check B-CRM",
     contactBtn: "Contact",
     imageAlt: "Kacper Bernecki professional portrait",
-    metrics: [
-      { value: "CRM", label: "Lead management and sales workflow" },
-      { value: "Data", label: "Forms, dashboards and database work" },
-      { value: "Deploy", label: "Web apps shipped on Vercel" },
-    ],
   },
   about: {
     title: "About",
@@ -37,27 +32,21 @@ export const en = {
     ],
     highlights: [
       {
-        title: "Business apps",
+        title: "CRM and workflow screens",
         description: "CRM, dashboards, forms, admin panels and workflow tools.",
       },
       {
-        title: "React / TypeScript",
+        title: "Forms and typed UI",
         description: "Component UI, typed logic, routing, state and form flows.",
       },
       {
-        title: "Supabase / PostgreSQL",
+        title: "Roles and access",
         description: "Auth, roles, lead data, history and database-backed screens.",
       },
       {
-        title: "Deploy and iteration",
+        title: "Database and deployment",
         description: "Vercel deployments, README/docs, CI and project roadmaps.",
       },
-    ],
-    focusTitle: "How I approach web apps",
-    focusItems: [
-      "Clear separation of views, data and user actions.",
-      "Forms, statuses and workflows built around the real process.",
-      "Deployment, documentation and iteration instead of decorative demos.",
     ],
     imageAlt: "Kacper Bernecki seated professional portrait",
   },
@@ -287,19 +276,16 @@ export const en = {
     successMessage: "Thanks. Your message has been sent.",
     errorMessage: "The message could not be sent. Try again later.",
     privacyNote:
-      "Your email address is used only to reply to this message. Direct contact details are not rendered publicly on the page.",
+      "Your email address is used only to reply to this message. Direct contact details are revealed only after a human check.",
     calendarTitle: "Calendar",
     calendarDescription:
       "If you prefer a call instead of the form, choose a time in the calendar.",
     calendarCta: "Book a call",
     booking: {
       title: "Let's meet",
-      description:
-        "Choose a day, then a time. The booking is created here without sending you to an external page.",
       timezoneLabel: "Europe/Warsaw",
       chooseDayLabel: "Choose a day",
       chooseTimeLabel: "Choose a time",
-      noSlotsLabel: "No free times on this day. Choose another date or use the contact form.",
       bookingNameLabel: "Name",
       bookingEmailLabel: "Email",
       bookingCompanyLabel: "Company or context",
@@ -308,6 +294,16 @@ export const en = {
       bookingSendingLabel: "Checking...",
       bookingSuccessLabel: "The time has been booked. Confirmation should arrive by email.",
       bookingErrorLabel: "The time could not be booked. Try again or use the contact form.",
+    },
+    reveal: {
+      title: "Direct contact",
+      description: "Email and phone are available after a quick human check.",
+      emailButton: "Click to reveal email",
+      phoneButton: "Click to reveal phone",
+      emailLabel: "Email",
+      phoneLabel: "Phone",
+      humanCheckLabel: "Human check",
+      errorMessage: "Contact details could not be revealed. Use the form instead.",
     },
     locationLabel: "Location",
     githubLabel: "GitHub",

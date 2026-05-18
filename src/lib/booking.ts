@@ -18,6 +18,18 @@ export type BookingDay = {
   today: boolean;
 };
 
+export type BookingCandidateOptions = {
+  horizonDays?: number;
+  now?: Date;
+  timeZone?: string;
+};
+
+export type BookingDayFormatOptions = {
+  locale?: string;
+  now?: Date;
+  timeZone?: string;
+};
+
 function pad(value: number) {
   return String(value).padStart(2, "0");
 }
@@ -53,6 +65,26 @@ export function getWeekdayIndex(dateKey: string) {
   return new Date(Date.UTC(year, month - 1, day, 12)).getUTCDay();
 }
 
+export function getBookingCandidateDates({
+  horizonDays = 120,
+  now = new Date(),
+  timeZone = DEFAULT_BOOKING_TIME_ZONE,
+}: BookingCandidateOptions = {}) {
+  const todayKey = getDateKeyInTimeZone(now, timeZone);
+  const dates: string[] = [];
+
+  for (let offset = 0; offset < horizonDays; offset += 1) {
+    const date = addDays(todayKey, offset);
+    const status = getBookingDateStatus(date, todayKey);
+
+    if (!status.blocked) {
+      dates.push(date);
+    }
+  }
+
+  return dates;
+}
+
 export function getBookingDateStatus(
   dateKey: string,
   todayKey = getDateKeyInTimeZone(new Date()),
@@ -78,6 +110,37 @@ export function getBookingDateStatus(
   return { blocked: false };
 }
 
+export function formatBookingDay(
+  date: string,
+  {
+    locale = "pl-PL",
+    now = new Date(),
+    timeZone = DEFAULT_BOOKING_TIME_ZONE,
+  }: BookingDayFormatOptions = {},
+): BookingDay {
+  const todayKey = getDateKeyInTimeZone(now, timeZone);
+  const status = getBookingDateStatus(date, todayKey);
+  const weekdayFormatter = new Intl.DateTimeFormat(locale, {
+    weekday: "short",
+    timeZone,
+  });
+  const monthFormatter = new Intl.DateTimeFormat(locale, {
+    month: "short",
+    timeZone,
+  });
+  const utcDate = new Date(`${date}T12:00:00.000Z`);
+
+  return {
+    date,
+    day: date.slice(-2),
+    weekday: weekdayFormatter.format(utcDate).replace(".", ""),
+    month: monthFormatter.format(utcDate).replace(".", ""),
+    blocked: status.blocked,
+    reason: status.reason,
+    today: date === todayKey,
+  };
+}
+
 export function getBookingDays({
   count = BOOKING_DAY_COUNT,
   now = new Date(),
@@ -89,39 +152,9 @@ export function getBookingDays({
   locale?: string;
   timeZone?: string;
 } = {}): BookingDay[] {
-  const todayKey = getDateKeyInTimeZone(now, timeZone);
-  const weekdayFormatter = new Intl.DateTimeFormat(locale, {
-    weekday: "short",
-    timeZone,
-  });
-  const monthFormatter = new Intl.DateTimeFormat(locale, {
-    month: "short",
-    timeZone,
-  });
-  const days: BookingDay[] = [];
-  let offset = 0;
-
-  while (days.length < count && offset < 120) {
-    const date = addDays(todayKey, offset);
-    const status = getBookingDateStatus(date, todayKey);
-    offset += 1;
-
-    if (status.blocked) {
-      continue;
-    }
-
-    const utcDate = new Date(`${date}T12:00:00.000Z`);
-    days.push({
-      date,
-      day: date.slice(-2),
-      weekday: weekdayFormatter.format(utcDate).replace(".", ""),
-      month: monthFormatter.format(utcDate).replace(".", ""),
-      blocked: false,
-      today: date === todayKey,
-    });
-  }
-
-  return days;
+  return getBookingCandidateDates({ now, timeZone })
+    .slice(0, count)
+    .map((date) => formatBookingDay(date, { locale, now, timeZone }));
 }
 
 export function formatSlotTime(start: string, timeZone = DEFAULT_BOOKING_TIME_ZONE) {

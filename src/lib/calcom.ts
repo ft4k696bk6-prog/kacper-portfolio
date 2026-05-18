@@ -1,6 +1,10 @@
 import {
   DEFAULT_BOOKING_TIME_ZONE,
+  BOOKING_DAY_COUNT,
+  addDays,
+  formatBookingDay,
   formatSlotTime,
+  getBookingCandidateDates,
   getBookingDateStatus,
   getDateKeyInTimeZone,
 } from "@/lib/booking";
@@ -31,6 +35,10 @@ type CalBookingResponse = {
 export type NormalizedSlot = {
   start: string;
   label: string;
+};
+
+export type AvailableBookingDay = ReturnType<typeof formatBookingDay> & {
+  slotCount: number;
 };
 
 export type CalEventConfig =
@@ -119,27 +127,48 @@ function normalizeCalError(response: CalSlotsResponse | CalBookingResponse) {
   return response.error?.message || response.message || "Cal.com request failed.";
 }
 
-export async function getAvailableSlots(date: string): Promise<NormalizedSlot[]> {
+function normalizeSlots(rawSlots: CalSlotValue[] | undefined, timeZone: string) {
+  const now = Date.now();
+
+  return (rawSlots ?? [])
+    .map((slot) => (typeof slot === "string" ? slot : slot.start))
+    .filter((start): start is string => Boolean(start))
+    .filter((start) => Date.parse(start) > now)
+    .map((start) => ({
+      start,
+      label: formatSlotTime(start, timeZone),
+    }));
+}
+
+function getSlotsUrl({
+  start,
+  end,
+  config,
+  timeZone,
+}: {
+  start: string;
+  end: string;
+  config: Extract<CalEventConfig, { ok: true }>;
+  timeZone: string;
+}) {
+  const url = new URL(`${CAL_API_BASE}/slots`);
+  url.searchParams.set("start", start);
+  url.searchParams.set("end", end);
+  url.searchParams.set("timeZone", timeZone);
+  url.searchParams.set("duration", "30");
+  applyEventParams(url.searchParams, config);
+  return url;
+}
+
+async function fetchSlotsRange(start: string, end: string) {
   const timeZone = getCalendarTimeZone();
-  const todayKey = getDateKeyInTimeZone(new Date(), timeZone);
-  const status = getBookingDateStatus(date, todayKey);
-
-  if (status.blocked) {
-    return [];
-  }
-
   const config = getCalEventConfig();
+
   if (!config.ok) {
     throw new CalComError(config.message, 503);
   }
 
-  const url = new URL(`${CAL_API_BASE}/slots`);
-  url.searchParams.set("start", date);
-  url.searchParams.set("end", date);
-  url.searchParams.set("timeZone", timeZone);
-  applyEventParams(url.searchParams, config);
-
-  const response = await fetch(url, {
+  const response = await fetch(getSlotsUrl({ start, end, config, timeZone }), {
     headers: getCalHeaders(config, CAL_SLOTS_API_VERSION),
     cache: "no-store",
   });
@@ -149,17 +178,58 @@ export async function getAvailableSlots(date: string): Promise<NormalizedSlot[]>
     throw new CalComError(normalizeCalError(body), response.status || 502);
   }
 
-  const rawSlots = body.data?.[date] ?? [];
-  const now = Date.now();
+  return body.data ?? {};
+}
 
-  return rawSlots
-    .map((slot) => (typeof slot === "string" ? slot : slot.start))
-    .filter((start): start is string => Boolean(start))
-    .filter((start) => Date.parse(start) > now)
-    .map((start) => ({
-      start,
-      label: formatSlotTime(start, timeZone),
-    }));
+export async function getAvailableSlots(date: string): Promise<NormalizedSlot[]> {
+  const timeZone = getCalendarTimeZone();
+  const todayKey = getDateKeyInTimeZone(new Date(), timeZone);
+  const status = getBookingDateStatus(date, todayKey);
+
+  if (status.blocked) {
+    return [];
+  }
+
+  const data = await fetchSlotsRange(date, date);
+  return normalizeSlots(data[date], timeZone);
+}
+
+export async function getAvailableBookingDays({
+  count = BOOKING_DAY_COUNT,
+  horizonDays = 120,
+  locale = "pl-PL",
+  now = new Date(),
+}: {
+  count?: number;
+  horizonDays?: number;
+  locale?: string;
+  now?: Date;
+} = {}): Promise<AvailableBookingDay[]> {
+  const timeZone = getCalendarTimeZone();
+  const todayKey = getDateKeyInTimeZone(now, timeZone);
+  const rangeEnd = addDays(todayKey, horizonDays);
+  const data = await fetchSlotsRange(todayKey, rangeEnd);
+  const candidateDates = getBookingCandidateDates({ horizonDays, now, timeZone });
+  const days: AvailableBookingDay[] = [];
+
+  for (const date of candidateDates) {
+    const slots = normalizeSlots(data[date], timeZone);
+
+    if (slots.length === 0) {
+      continue;
+    }
+
+    days.push({
+      ...formatBookingDay(date, { locale, now, timeZone }),
+      slotCount: slots.length,
+    });
+
+    if (days.length >= count) {
+      break;
+    }
+  }
+
+  return days;
 }
 
 export async function createBooking({

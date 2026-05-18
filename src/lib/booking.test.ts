@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   addDays,
+  getBookingCandidateDates,
   getBookingDateStatus,
   getBookingDays,
   getWeekdayIndex,
@@ -68,6 +69,21 @@ describe("booking calendar rules", () => {
     expect(days.map((day) => day.date)).not.toContain("2026-05-27");
     expect(days.map((day) => day.date)).not.toContain("2026-06-04");
     expect(days.every((day) => ![0, 1, 6].includes(getWeekdayIndex(day.date)))).toBe(true);
+  });
+
+  it("generates rule-available candidate dates for server-side Cal.com filtering", () => {
+    const dates = getBookingCandidateDates({
+      now: new Date("2026-05-18T10:00:00.000Z"),
+      horizonDays: 18,
+    });
+
+    expect(dates).toEqual([
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-26",
+    ]);
   });
 
   it("adds days without timezone drift", () => {
