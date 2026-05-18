@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import Image from "next/image";
 import { Turnstile } from "@marsidev/react-turnstile";
-import { Github, Linkedin, Loader2, MapPin, Send } from "lucide-react";
+import { CalendarDays, Github, Linkedin, Loader2, MapPin, Send } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -14,6 +14,7 @@ export function Contact() {
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [turnstileToken, setTurnstileToken] = useState("");
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const calendarUrl = process.env.NEXT_PUBLIC_CALENDAR_URL;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -110,6 +111,28 @@ export function Contact() {
               </div>
             </a>
           </div>
+
+          {calendarUrl && (
+            <a
+              href={calendarUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 flex items-start gap-4 rounded-md border border-[#d7b46a]/25 bg-[#d7b46a]/10 p-5 transition-colors hover:border-[#d7b46a]/60"
+            >
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-[#d7b46a]/15 text-[#f5dfae]">
+                <CalendarDays className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-sm uppercase tracking-[0.18em] text-[#f5dfae]">
+                  {t.contact.calendarTitle}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-zinc-300">
+                  {t.contact.calendarDescription}
+                </p>
+                <p className="mt-3 text-sm text-white">{t.contact.calendarCta}</p>
+              </div>
+            </a>
+          )}
         </motion.div>
 
         <motion.div
@@ -217,13 +240,13 @@ export function Contact() {
             </p>
           </form>
 
-          <div className="mt-6 overflow-hidden rounded-md border border-white/10 bg-white/[0.03]">
+          <div className="mt-8 flex justify-center overflow-hidden rounded-md border border-white/10 bg-white/[0.025] px-4 pt-6">
             <Image
-              src="/images/profile-3.png"
+              src="/footer.png"
               alt={t.hero.imageAlt}
-              width={1154}
-              height={1408}
-              className="aspect-[16/9] w-full object-cover object-[50%_32%]"
+              width={1425}
+              height={1876}
+              className="h-auto max-h-[520px] w-auto max-w-full object-contain object-bottom drop-shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
             />
           </div>
         </motion.div>

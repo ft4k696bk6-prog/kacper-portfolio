@@ -236,7 +236,7 @@ export const pl: Translations = {
   },
   skills: {
     title: "Technologie użyte w projektach",
-    description: "Bez procentowych pasków. To technologie realnie użyte w projektach portfolio.",
+    description: "Stack z projektów i publicznych demo.",
     items: [
       {
         title: "React / TypeScript",
@@ -264,9 +264,9 @@ export const pl: Translations = {
           "Użyte do deployu portfolio, B-CRM i publicznych demo aplikacji.",
       },
       {
-        title: "OpenAI API / AI workflow",
+        title: "OpenAI API",
         description:
-          "Używane jako narzędzie pomocnicze do prototypowania, debugowania, automatyzacji oraz wybranych funkcji aplikacji. AI nie jest przedstawiane jako zamiennik kompetencji programistycznych.",
+          "Używane pomocniczo przy prototypowaniu, debugowaniu, automatyzacji oraz wybranych funkcjach aplikacji. AI nie jest przedstawiane jako zamiennik kompetencji programistycznych.",
       },
     ],
   },
@@ -284,6 +284,10 @@ export const pl: Translations = {
     errorMessage: "Nie udało się wysłać wiadomości. Spróbuj ponownie później.",
     privacyNote:
       "Adres email służy wyłącznie do odpowiedzi na wiadomość. Bezpośrednie dane kontaktowe nie są renderowane publicznie na stronie.",
+    calendarTitle: "Kalendarz",
+    calendarDescription:
+      "Jeśli wolisz rozmowę zamiast formularza, wybierz termin w kalendarzu.",
+    calendarCta: "Umów rozmowę",
     locationLabel: "Lokalizacja",
     githubLabel: "GitHub",
     linkedinLabel: "LinkedIn",
