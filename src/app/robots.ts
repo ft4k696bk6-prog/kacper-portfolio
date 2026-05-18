@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://kacper-bernecki.vercel.app/sitemap.xml",
+    sitemap: "https://kacper-portfolio.vercel.app/sitemap.xml",
   };
 }

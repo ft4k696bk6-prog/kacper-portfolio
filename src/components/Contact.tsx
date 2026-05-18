@@ -1,22 +1,52 @@
 "use client";
 
+import { FormEvent, useState } from "react";
 import Image from "next/image";
-import { Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { Github, Linkedin, Loader2, MapPin, Send } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+type SubmitState = "idle" | "sending" | "success" | "error";
+
 export function Contact() {
   const { t } = useLanguage();
-  const mailHref = `mailto:${t.contact.email}`;
-  const phoneHref = `tel:${t.contact.phone.replace(/\s/g, "")}`;
+  const [submitState, setSubmitState] = useState<SubmitState>("idle");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
-  const contactRows = [
-    { label: t.contact.emailLabel, value: t.contact.email, href: mailHref, icon: Mail },
-    { label: t.contact.phoneLabel, value: t.contact.phone, href: phoneHref, icon: Phone },
-    { label: t.contact.locationLabel, value: t.contact.location, icon: MapPin },
-    { label: t.contact.githubLabel, value: "ft4k696bk6-prog", href: t.contact.github, icon: Github },
-    { label: t.contact.linkedinLabel, value: "casper-bernecki", href: t.contact.linkedin, icon: Linkedin },
-  ];
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitState("sending");
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          email: formData.get("email"),
+          company: formData.get("company"),
+          message: formData.get("message"),
+          website: formData.get("website"),
+          turnstileToken,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Contact request failed");
+      }
+
+      form.reset();
+      setTurnstileToken("");
+      setSubmitState("success");
+    } catch {
+      setSubmitState("error");
+    }
+  }
 
   return (
     <section
@@ -24,7 +54,7 @@ export function Contact() {
       className="relative overflow-hidden border-t border-white/10 bg-[#090908] px-5 py-24 md:px-8"
     >
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#d7b46a]/60 to-transparent" />
-      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
         <motion.div
           initial={{ opacity: 0, y: 22 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -41,82 +71,159 @@ export function Contact() {
             {t.contact.description}
           </p>
 
-          <div className="mt-9 grid gap-3 sm:grid-cols-2">
-            {contactRows.map((row) => {
-              const Icon = row.icon;
-              const content = (
-                <div className="flex min-h-20 items-center gap-4 rounded-md border border-white/10 bg-white/[0.035] p-4 transition-colors hover:border-[#d7b46a]/45">
-                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-[#d7b46a]/10 text-[#f5dfae]">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">
-                      {row.label}
-                    </p>
-                    <p className="mt-1 break-words text-sm text-zinc-100">{row.value}</p>
-                  </div>
-                </div>
-              );
-
-              return row.href ? (
-                <a
-                  key={row.label}
-                  href={row.href}
-                  target={row.href.startsWith("http") ? "_blank" : undefined}
-                  rel={row.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                >
-                  {content}
-                </a>
-              ) : (
-                <div key={row.label}>{content}</div>
-              );
-            })}
-          </div>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a
-              href={mailHref}
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-[#d7b46a] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5"
-            >
-              <Mail className="h-4 w-4" />
-              {t.contact.emailCta}
-            </a>
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            <div className="flex items-center gap-3 rounded-md border border-white/10 bg-white/[0.035] p-4">
+              <MapPin className="h-5 w-5 text-[#d7b46a]" />
+              <div>
+                <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">
+                  {t.contact.locationLabel}
+                </p>
+                <p className="mt-1 text-sm text-zinc-100">{t.contact.location}</p>
+              </div>
+            </div>
             <a
               href={t.contact.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-5 py-3 text-sm text-white transition-colors hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
+              className="flex items-center gap-3 rounded-md border border-white/10 bg-white/[0.035] p-4 transition-colors hover:border-[#d7b46a]/45"
             >
-              <Github className="h-4 w-4" />
-              {t.contact.githubCta}
+              <Github className="h-5 w-5 text-[#d7b46a]" />
+              <div>
+                <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">
+                  {t.contact.githubLabel}
+                </p>
+                <p className="mt-1 text-sm text-zinc-100">ft4k696bk6-prog</p>
+              </div>
             </a>
             <a
               href={t.contact.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-5 py-3 text-sm text-white transition-colors hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
+              className="flex items-center gap-3 rounded-md border border-white/10 bg-white/[0.035] p-4 transition-colors hover:border-[#d7b46a]/45"
             >
-              <Linkedin className="h-4 w-4" />
-              {t.contact.linkedinCta}
+              <Linkedin className="h-5 w-5 text-[#d7b46a]" />
+              <div>
+                <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">
+                  {t.contact.linkedinLabel}
+                </p>
+                <p className="mt-1 text-sm text-zinc-100">kacper-bernecki</p>
+              </div>
             </a>
           </div>
         </motion.div>
 
         <motion.div
-          className="relative mx-auto w-full max-w-md"
+          className="relative"
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="absolute -inset-6 rounded-[1.5rem] bg-gradient-to-br from-[#d7b46a]/15 to-[#1f4d3d]/25 blur-2xl" />
-          <div className="relative overflow-hidden rounded-[0.9rem] border border-white/10 bg-white/[0.03]">
+          <form
+            onSubmit={handleSubmit}
+            className="rounded-md border border-white/10 bg-white/[0.035] p-5 md:p-6"
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="grid gap-2 text-sm text-zinc-200">
+                {t.contact.nameLabel}
+                <input
+                  name="name"
+                  required
+                  minLength={2}
+                  className="rounded-md border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-[#d7b46a]/70"
+                />
+              </label>
+              <label className="grid gap-2 text-sm text-zinc-200">
+                {t.contact.emailLabel}
+                <input
+                  name="email"
+                  required
+                  type="email"
+                  className="rounded-md border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-[#d7b46a]/70"
+                />
+              </label>
+            </div>
+
+            <label className="mt-4 grid gap-2 text-sm text-zinc-200">
+              {t.contact.companyLabel}
+              <input
+                name="company"
+                className="rounded-md border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-[#d7b46a]/70"
+              />
+            </label>
+
+            <label className="mt-4 grid gap-2 text-sm text-zinc-200">
+              {t.contact.messageLabel}
+              <textarea
+                name="message"
+                required
+                minLength={20}
+                rows={6}
+                className="resize-none rounded-md border border-white/10 bg-black/30 px-3 py-3 text-sm leading-7 text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-[#d7b46a]/70"
+              />
+            </label>
+
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              className="hidden"
+              aria-hidden="true"
+            />
+
+            {turnstileSiteKey && (
+              <div className="mt-5">
+                <Turnstile
+                  siteKey={turnstileSiteKey}
+                  onSuccess={setTurnstileToken}
+                  onExpire={() => setTurnstileToken("")}
+                  options={{ theme: "dark" }}
+                />
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={submitState === "sending"}
+              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#d7b46a] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {submitState === "sending" ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  {t.contact.sendingLabel}
+                </>
+              ) : (
+                <>
+                  <Send className="h-4 w-4" />
+                  {t.contact.submitLabel}
+                </>
+              )}
+            </button>
+
+            {submitState === "success" && (
+              <p className="mt-4 rounded-md border border-emerald-400/20 bg-emerald-400/10 p-3 text-sm text-emerald-100">
+                {t.contact.successMessage}
+              </p>
+            )}
+            {submitState === "error" && (
+              <p className="mt-4 rounded-md border border-red-400/20 bg-red-400/10 p-3 text-sm text-red-100">
+                {t.contact.errorMessage}
+              </p>
+            )}
+
+            <p className="mt-5 text-xs leading-6 text-zinc-500">
+              {t.contact.privacyNote}
+            </p>
+          </form>
+
+          <div className="mt-6 overflow-hidden rounded-md border border-white/10 bg-white/[0.03]">
             <Image
               src="/images/profile-3.png"
               alt={t.hero.imageAlt}
               width={1154}
               height={1408}
-              className="aspect-[4/5] w-full object-cover object-[50%_35%]"
+              className="aspect-[16/9] w-full object-cover object-[50%_32%]"
             />
           </div>
         </motion.div>
