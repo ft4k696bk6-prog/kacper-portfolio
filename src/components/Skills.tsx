@@ -20,13 +20,13 @@ export function Skills() {
           <p className="text-sm uppercase tracking-[0.28em] text-[#d7b46a]">
             {t.skills.title}
           </p>
-          <h2 className="mt-4 text-4xl leading-tight text-white md:text-5xl">
+          <h2 className="mt-4 max-w-4xl text-4xl leading-tight text-white md:text-5xl">
             {t.skills.description}
           </h2>
         </motion.div>
 
         <motion.div
-          className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          className="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -34,7 +34,7 @@ export function Skills() {
         >
           {t.skills.items.map((skill) => (
             <motion.div
-              key={skill}
+              key={skill.title}
               variants={{
                 hidden: { opacity: 0, y: 18 },
                 visible: {
@@ -43,10 +43,13 @@ export function Skills() {
                   transition: { duration: 0.35, ease: "easeOut" },
                 },
               }}
-              className="flex min-h-16 items-center gap-3 rounded-md border border-white/10 bg-white/[0.035] px-4 py-4 text-zinc-200 transition-colors hover:border-[#d7b46a]/45 hover:text-white"
+              className="min-h-40 rounded-md border border-white/10 bg-white/[0.035] p-5 text-zinc-200 transition-colors hover:border-[#d7b46a]/45 hover:text-white"
             >
-              <CheckCircle2 className="h-5 w-5 shrink-0 text-[#d7b46a]" />
-              <span className="text-sm">{skill}</span>
+              <div className="mb-4 flex items-center gap-3">
+                <CheckCircle2 className="h-5 w-5 shrink-0 text-[#d7b46a]" />
+                <h3 className="text-lg text-white">{skill.title}</h3>
+              </div>
+              <p className="text-sm leading-7 text-zinc-400">{skill.description}</p>
             </motion.div>
           ))}
         </motion.div>

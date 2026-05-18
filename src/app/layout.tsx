@@ -2,38 +2,43 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { GoogleTagManager } from "@/components/GoogleTagManager";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const siteUrl = "https://kacper-portfolio.vercel.app";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://kacper-bernecki.vercel.app"),
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "Kacper Bernecki — AI-Assisted Web Developer",
+    default: "Kacper Bernecki — Frontend / Web App Developer",
     template: "%s | Kacper Bernecki",
   },
   description:
-    "Tworzę praktyczne aplikacje webowe, CRM-y, landing page i automatyzacje dla małych firm.",
+    "Tworzę aplikacje biznesowe w React, TypeScript, Next.js i Supabase: CRM-y, dashboardy, formularze i narzędzia do obsługi procesów firmowych.",
   keywords: [
     "Kacper Bernecki",
-    "AI-Assisted Web Developer",
-    "Business App Builder",
-    "CRM dla małych firm",
-    "aplikacje webowe",
-    "automatyzacje",
-    "landing page",
+    "Frontend Developer",
+    "Web App Developer",
+    "React Developer",
+    "TypeScript Developer",
+    "Next.js Developer",
+    "Supabase",
+    "CRM",
+    "dashboardy",
+    "aplikacje biznesowe",
+    "formularze",
     "React",
     "TypeScript",
-    "Supabase",
   ],
   authors: [{ name: "Kacper Bernecki" }],
   creator: "Kacper Bernecki",
   openGraph: {
-    title: "Kacper Bernecki — AI-Assisted Web Developer",
+    title: "Kacper Bernecki — Frontend / Web App Developer",
     description:
-      "I build practical web apps, CRMs, landing pages and automations for small businesses.",
-    url: "https://kacper-bernecki.vercel.app",
+      "Business web apps in React, TypeScript, Next.js and Supabase: CRMs, dashboards, forms and workflow tools.",
+    url: siteUrl,
     siteName: "Kacper Bernecki Portfolio",
     type: "website",
     locale: "pl_PL",
@@ -43,19 +48,19 @@ export const metadata: Metadata = {
         url: "/images/profile-1.png",
         width: 1154,
         height: 1408,
-        alt: "Kacper Bernecki — AI-Assisted Web Developer",
+        alt: "Kacper Bernecki — Frontend / Web App Developer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kacper Bernecki — AI-Assisted Web Developer",
+    title: "Kacper Bernecki — Frontend / Web App Developer",
     description:
-      "I build practical web apps, CRMs, landing pages and automations for small businesses.",
+      "Business web apps in React, TypeScript, Next.js and Supabase: CRMs, dashboards, forms and workflow tools.",
     images: ["/images/profile-1.png"],
   },
   alternates: {
-    canonical: "https://kacper-bernecki.vercel.app",
+    canonical: siteUrl,
   },
   robots: {
     index: true,
@@ -83,6 +88,7 @@ export default function RootLayout({
   return (
     <html lang="pl" className={cn("scroll-smooth font-sans", geist.variable)}>
       <body>
+        <GoogleTagManager />
         <LanguageProvider>
           <LanguageSwitcher />
           {children}

@@ -7,23 +7,22 @@ import { Services } from "@/components/Services";
 import { Projects } from "@/components/Projects";
 import { Skills } from "@/components/Skills";
 import { Contact } from "@/components/Contact";
+import { TechnicalAudience } from "@/components/TechnicalAudience";
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Kacper Bernecki",
-  jobTitle: "AI-Assisted Web Developer & Business App Builder",
+  jobTitle: "Frontend / Web App Developer",
   description:
-    "I build practical web apps, CRMs, landing pages and automations for small businesses.",
-  email: "mailto:Kacper.bernecki@gmail.com",
-  telephone: "+48 575 109 897",
+    "I build business web applications in React, TypeScript, Next.js and Supabase: CRMs, dashboards, forms and workflow tools.",
   address: {
     "@type": "PostalAddress",
     addressCountry: "PL",
   },
   sameAs: [
     "https://github.com/ft4k696bk6-prog",
-    "https://www.linkedin.com/in/casper-bernecki-a8a81537b/?locale=pl",
+    "https://www.linkedin.com/in/kacper-bernecki/",
   ],
   image: "/images/profile-1.png",
 };
@@ -40,6 +39,7 @@ export default function Home() {
         <Profile />
         <Experience />
         <Services />
+        <TechnicalAudience />
         <Projects />
         <Skills />
         <Contact />

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, Mail, Sparkles } from "lucide-react";
+import { ArrowDown, BriefcaseBusiness, Mail, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -64,6 +64,13 @@ export function Hero() {
             {t.hero.description}
           </motion.p>
 
+          <motion.p
+            className="mt-4 max-w-2xl text-base leading-8 text-zinc-400"
+            variants={fadeUp}
+          >
+            {t.hero.secondary}
+          </motion.p>
+
           <motion.div className="mt-9 flex flex-col gap-3 sm:flex-row" variants={fadeUp}>
             <Link
               href="#projects"
@@ -71,6 +78,13 @@ export function Hero() {
             >
               {t.hero.projectsBtn}
               <ArrowDown className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/b-crm-case-study"
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-[#d7b46a]/50 bg-[#d7b46a]/10 px-6 py-3 text-base text-[#f5dfae] transition-all hover:-translate-y-0.5 hover:border-[#d7b46a]"
+            >
+              <BriefcaseBusiness className="h-4 w-4" />
+              {t.hero.bcrmBtn}
             </Link>
             <Link
               href="#contact"
@@ -116,10 +130,10 @@ export function Hero() {
           </div>
           <div className="absolute -bottom-6 left-5 right-5 rounded-md border border-white/10 bg-black/70 p-4 backdrop-blur-xl">
             <p className="text-sm uppercase tracking-[0.26em] text-[#f5dfae]">
-              AI-Assisted
+              B-CRM · Supabase · Dashboardy
             </p>
             <p className="mt-1 text-sm text-zinc-300">
-              Web apps, CRMs, automations
+              Practical web apps for business workflows
             </p>
           </div>
         </motion.div>
