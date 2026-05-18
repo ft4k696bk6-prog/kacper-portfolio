@@ -234,7 +234,7 @@ export const en = {
   },
   skills: {
     title: "Technologies used in projects",
-    description: "No percentage bars. These are the technologies used in real portfolio projects.",
+    description: "Stack used across projects and public demos.",
     items: [
       {
         title: "React / TypeScript",
@@ -262,7 +262,7 @@ export const en = {
           "Used to deploy the portfolio, B-CRM and supporting public app demos.",
       },
       {
-        title: "OpenAI API / AI workflow",
+        title: "OpenAI API",
         description:
           "Used as a supporting tool for prototyping, debugging, automation and selected app features. AI is not presented as a replacement for software engineering skills.",
       },
@@ -282,6 +282,10 @@ export const en = {
     errorMessage: "The message could not be sent. Try again later.",
     privacyNote:
       "Your email address is used only to reply to this message. Direct contact details are not rendered publicly on the page.",
+    calendarTitle: "Calendar",
+    calendarDescription:
+      "If you prefer a call instead of the form, choose a time in the calendar.",
+    calendarCta: "Book a call",
     locationLabel: "Location",
     githubLabel: "GitHub",
     linkedinLabel: "LinkedIn",

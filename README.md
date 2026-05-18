@@ -17,7 +17,7 @@ Screenshots should be added to `docs/screenshots/`. Placeholder image links are 
 - B-CRM-first project presentation.
 - Technical reviewer section for companies and recruiters.
 - B-CRM case study page.
-- Technology section without percentage skill bars.
+- Technology section focused on project stack and usage.
 - Contact form that avoids rendering direct email/phone publicly.
 - Turnstile honeypot/rate-limit contact protection.
 - Optional Google Tag Manager integration via environment variable.
@@ -41,7 +41,7 @@ Screenshots should be added to `docs/screenshots/`. Placeholder image links are 
 - `src/components/` — portfolio sections, UI and GTM/contact components.
 - `src/i18n/` — Polish and English content.
 - `src/contexts/` — language context.
-- `public/images/` — profile images.
+- `public/` — profile visuals and static assets.
 - `docs/` — roadmap, changelog, issue backlog and screenshots folder.
 
 ## Getting started
@@ -73,9 +73,10 @@ CONTACT_TO_EMAIL=
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 TURNSTILE_SECRET_KEY=
 NEXT_PUBLIC_GTM_ID=
+NEXT_PUBLIC_CALENDAR_URL=
 ```
 
-`NEXT_PUBLIC_GTM_ID` is optional. GTM loads only when the variable is set.
+`NEXT_PUBLIC_GTM_ID` and `NEXT_PUBLIC_CALENDAR_URL` are optional. GTM and the calendar card load only when their variables are set.
 
 ## Security notes
 

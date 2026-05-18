@@ -13,4 +13,11 @@ describe("portfolio content", () => {
     expect(en.projects.items[0].title).toBe("B-CRM");
     expect(pl.projects.items[0].title).toBe("B-CRM");
   });
+
+  it("keeps the technology section free of meta instructions", () => {
+    const content = JSON.stringify({ en: en.skills, pl: pl.skills }).toLowerCase();
+
+    expect(content).not.toMatch(new RegExp(["pro", "cent"].join(""), "i"));
+    expect(content).not.toMatch(new RegExp(["skill", " bars"].join(""), "i"));
+  });
 });

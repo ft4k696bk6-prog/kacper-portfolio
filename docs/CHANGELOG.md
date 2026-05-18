@@ -4,6 +4,6 @@
 
 - Repositioned portfolio as Frontend / Web App Developer.
 - Added B-CRM-first project structure and case study page.
-- Replaced skill percentages with technologies used in projects.
+- Updated the technology section to focus on project stack and usage.
 - Added protected contact form and optional GTM integration.
 - Added README, docs, CI and content tests.
