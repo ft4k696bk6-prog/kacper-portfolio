@@ -19,7 +19,7 @@ export function Contact() {
       <div className="mx-auto flex min-h-[calc(100svh-5rem)] max-w-7xl flex-col justify-between gap-6">
         <div className="grid flex-1 gap-6 xl:grid-cols-[0.76fr_1.24fr] xl:items-center">
           <motion.div
-            className="relative order-last min-h-[360px] overflow-hidden xl:order-first xl:min-h-[560px]"
+            className="relative hidden overflow-hidden xl:order-first xl:block xl:min-h-[560px]"
             initial={{ opacity: 0, x: -44 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -36,7 +36,7 @@ export function Contact() {
                 width={1122}
                 height={1402}
                 sizes="(min-width: 1280px) 34vw, (min-width: 768px) 50vw, 86vw"
-                className="mx-auto h-auto max-h-[520px] w-auto max-w-full object-contain object-bottom drop-shadow-[0_28px_70px_rgba(0,0,0,0.48)] xl:max-h-[600px]"
+                className="mx-auto h-auto max-h-[600px] w-auto max-w-full object-contain object-bottom drop-shadow-[0_28px_70px_rgba(0,0,0,0.48)]"
               />
             </motion.div>
 
