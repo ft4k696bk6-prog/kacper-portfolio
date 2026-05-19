@@ -26,7 +26,7 @@ export function Contact() {
             transition={{ duration: 0.6 }}
           >
             <motion.div
-              className="absolute inset-x-0 bottom-0"
+              className="absolute inset-x-0 bottom-3"
               animate={{ x: [-7, 7, -7] }}
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
             >
