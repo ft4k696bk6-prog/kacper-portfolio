@@ -284,10 +284,12 @@ export const pl: Translations = {
       "Jeśli wolisz rozmowę zamiast formularza, wybierz termin w kalendarzu.",
     calendarCta: "Umów rozmowę",
     booking: {
-      title: "Poznajmy się",
+      title: "Kalendarz",
       timezoneLabel: "Europe/Warsaw",
       chooseDayLabel: "Wybierz dzień",
       chooseTimeLabel: "Wybierz godzinę",
+      backToDaysLabel: "Wróć do dni",
+      selectedDayLabel: "Wybrany dzień",
       bookingNameLabel: "Imię i nazwisko",
       bookingEmailLabel: "Email",
       bookingCompanyLabel: "Firma lub kontekst",

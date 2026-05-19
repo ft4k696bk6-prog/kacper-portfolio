@@ -53,56 +53,52 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden border-t border-white/10 bg-[#090908] px-5 py-14 md:px-8 lg:min-h-[calc(100svh-5rem)] lg:py-16"
+      className="relative overflow-hidden border-t border-white/10 bg-[#090908] px-5 py-8 md:px-8 lg:min-h-[100svh] lg:py-10"
     >
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#d7b46a]/60 to-transparent" />
-      <div className="mx-auto grid max-w-7xl gap-8 xl:grid-cols-[0.86fr_1.14fr] xl:items-center">
-        <motion.div
-          className="relative min-h-[420px] overflow-hidden rounded-md border border-white/10 bg-[radial-gradient(circle_at_44%_22%,rgba(215,180,106,0.18),transparent_30%),linear-gradient(145deg,rgba(255,255,255,0.065),rgba(255,255,255,0.025))]"
-          initial={{ opacity: 0, x: -44 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="absolute left-6 top-6 z-20 rounded-[1.35rem] rounded-bl-md border border-white/20 bg-white/90 px-4 py-2.5 text-sm text-zinc-950 shadow-[0_18px_44px_rgba(0,0,0,0.28)] backdrop-blur">
-            {t.contact.booking.title}
-            <span className="absolute -bottom-2 left-5 h-4 w-4 rotate-45 border-b border-r border-white/20 bg-white/90" />
-          </div>
-
+      <div className="mx-auto flex min-h-[calc(100svh-5rem)] max-w-7xl flex-col justify-between gap-6">
+        <div className="grid flex-1 gap-6 xl:grid-cols-[0.74fr_1.26fr] xl:items-end">
           <motion.div
-            className="absolute inset-x-0 bottom-0 z-10"
-            animate={{ x: [-7, 7, -7] }}
-            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+            className="relative order-last min-h-[360px] overflow-hidden xl:order-first xl:min-h-[620px]"
+            initial={{ opacity: 0, x: -44 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
-            <Image
-              src="/images/profile-1-cutout.png"
-              alt={t.hero.imageAlt}
-              width={1122}
-              height={1402}
-              className="mx-auto h-auto max-h-[560px] w-auto max-w-full object-contain object-bottom pt-8 drop-shadow-[0_28px_70px_rgba(0,0,0,0.48)]"
-            />
+            <motion.div
+              className="absolute inset-x-0 bottom-0"
+              animate={{ x: [-7, 7, -7] }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Image
+                src="/images/profile-1-cutout.png"
+                alt={t.hero.imageAlt}
+                width={1122}
+                height={1402}
+                className="mx-auto h-auto max-h-[560px] w-auto max-w-full object-contain object-bottom drop-shadow-[0_28px_70px_rgba(0,0,0,0.48)] xl:max-h-[640px]"
+              />
+            </motion.div>
+
+            <div className="absolute inset-x-10 bottom-3 h-px bg-gradient-to-r from-transparent via-[#d7b46a]/75 to-transparent shadow-[0_0_26px_rgba(215,180,106,0.42)]" />
           </motion.div>
 
-          <div className="absolute inset-x-8 bottom-5 z-0 h-px bg-gradient-to-r from-transparent via-[#d7b46a]/80 to-transparent shadow-[0_0_28px_rgba(215,180,106,0.45)]" />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55 }}
-        >
-          <div className="max-w-3xl">
-            <p className="text-sm uppercase tracking-[0.28em] text-[#d7b46a]">
-              {t.nav.contact}
-            </p>
-            <h2 className="mt-4 text-4xl leading-tight text-white md:text-5xl">
-              {t.contact.title}
-            </h2>
-            <p className="mt-5 text-base leading-8 text-zinc-300">
-              {t.contact.description}
-            </p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55 }}
+          >
+            <div className="max-w-3xl">
+              <p className="text-sm uppercase tracking-[0.28em] text-[#d7b46a]">
+                {t.nav.contact}
+              </p>
+              <h2 className="mt-4 text-4xl leading-tight text-white md:text-5xl">
+                {t.contact.title}
+              </h2>
+              <p className="mt-5 text-base leading-8 text-zinc-300">
+                {t.contact.description}
+              </p>
+            </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <span className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300">
@@ -129,7 +125,7 @@ export function Contact() {
             </a>
           </div>
 
-          <div className="mt-6 grid gap-5">
+          <div className="mt-5 grid gap-4">
             <BookingCalendar
               copy={t.contact.booking}
               locale={lang === "pl" ? "pl-PL" : "en-US"}
@@ -138,7 +134,7 @@ export function Contact() {
 
             <form
               onSubmit={handleSubmit}
-              className="rounded-md border border-white/10 bg-white/[0.035] p-5 md:p-6"
+              className="rounded-md border border-white/10 bg-white/[0.035] p-5"
             >
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="grid gap-2 text-sm text-zinc-200">
@@ -234,11 +230,12 @@ export function Contact() {
               </p>
             </form>
           </div>
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
 
-      <div className="mx-auto mt-8 max-w-7xl border-t border-white/10 pt-5 text-sm text-zinc-500">
-        {t.contact.copyright}
+        <div className="border-t border-white/10 pt-5 text-sm text-zinc-500">
+          {t.contact.copyright}
+        </div>
       </div>
     </section>
   );

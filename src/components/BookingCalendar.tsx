@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
-import { CalendarDays, Check, Clock3, Loader2 } from "lucide-react";
+import { ArrowLeft, CalendarDays, Check, Clock3, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import {
   DEFAULT_BOOKING_TIME_ZONE,
@@ -29,6 +29,8 @@ type BookingCopy = {
   timezoneLabel: string;
   chooseDayLabel: string;
   chooseTimeLabel: string;
+  backToDaysLabel: string;
+  selectedDayLabel: string;
   bookingNameLabel: string;
   bookingEmailLabel: string;
   bookingCompanyLabel: string;
@@ -54,6 +56,9 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
   const [turnstileToken, setTurnstileToken] = useState("");
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const timeZone = process.env.NEXT_PUBLIC_CALENDAR_TIMEZONE || DEFAULT_BOOKING_TIME_ZONE;
+  const selectedDayLabel = selectedDate
+    ? formatSlotDate(`${selectedDate}T12:00:00.000Z`, timeZone, locale)
+    : "";
 
   useEffect(() => {
     const controller = new AbortController();
@@ -129,6 +134,15 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
     }
   }
 
+  function backToDays() {
+    setSelectedDate("");
+    setSelectedSlot(null);
+    setSlots([]);
+    setMessage("");
+    setState("idle");
+    setTurnstileToken("");
+  }
+
   async function handleBooking(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!selectedSlot) return;
@@ -192,91 +206,107 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
       </div>
 
       <div className="mt-5">
-        <div className="mb-3 text-xs uppercase tracking-[0.18em] text-zinc-500">
-          {copy.chooseDayLabel}
-        </div>
-
         {state === "loading-days" ? (
-          <div className="grid grid-cols-4 gap-2">
-            {Array.from({ length: 12 }).map((_, index) => (
-              <div
-                key={index}
-                className="min-h-[76px] animate-pulse rounded-md border border-white/10 bg-white/[0.04]"
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-4 gap-2">
-            {days.map((day) => {
-              const formattedDay = formatBookingDay(day.date, { locale, timeZone });
-
-              return (
-                <button
-                  key={day.date}
-                  type="button"
-                  onClick={() => void selectDay(day)}
-                  aria-label={`${copy.chooseDayLabel}: ${day.date}`}
-                  className={[
-                    "min-h-[76px] rounded-md border p-2 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7b46a]/70",
-                    selectedDate === day.date
-                      ? "border-[#d7b46a] bg-[#d7b46a]/18 text-white shadow-[0_14px_34px_rgba(215,180,106,0.12)]"
-                      : "border-white/10 bg-black/20 text-zinc-200 hover:border-[#d7b46a]/45 hover:bg-white/[0.055]",
-                  ].join(" ")}
-                >
-                  <span className="block text-[0.65rem] uppercase tracking-[0.14em]">
-                    {formattedDay.weekday}
-                  </span>
-                  <span className="mt-1 block text-xl leading-none">{formattedDay.day}</span>
-                  <span className="mt-1 block text-[0.65rem] uppercase tracking-[0.11em] text-zinc-500">
-                    {formattedDay.month}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-      {selectedDate && (
-        <div className="mt-6">
-          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-zinc-500">
-              <Clock3 className="h-4 w-4 text-[#d7b46a]" />
-              {copy.chooseTimeLabel}
+          <>
+            <div className="mb-3 text-xs uppercase tracking-[0.18em] text-zinc-500">
+              {copy.chooseDayLabel}
             </div>
-            <p className="text-xs text-zinc-500">{copy.timezoneLabel}</p>
-          </div>
-
-          {state === "loading-slots" ? (
-            <div className="flex min-h-[84px] items-center justify-center rounded-md border border-white/10 bg-black/20 text-sm text-zinc-400">
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {copy.bookingSendingLabel}
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-              {slots.map((slot) => (
-                <button
-                  key={slot.start}
-                  type="button"
-                  onClick={() => {
-                    setSelectedSlot(slot);
-                    setMessage("");
-                    setState("idle");
-                  }}
-                  className={[
-                    "rounded-md border px-3 py-3 text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7b46a]/70",
-                    selectedSlot?.start === slot.start
-                      ? "border-[#d7b46a] bg-[#d7b46a] text-black"
-                      : "border-white/10 bg-black/20 text-zinc-100 hover:border-[#d7b46a]/45",
-                  ].join(" ")}
-                >
-                  {slot.label}
-                </button>
+            <div className="grid grid-cols-4 gap-2">
+              {Array.from({ length: 12 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="min-h-[76px] animate-pulse rounded-md border border-white/10 bg-white/[0.04]"
+                />
               ))}
             </div>
-          )}
-        </div>
-      )}
+          </>
+        ) : !selectedDate ? (
+          <>
+            <div className="mb-3 text-xs uppercase tracking-[0.18em] text-zinc-500">
+              {copy.chooseDayLabel}
+            </div>
+            <div className="grid grid-cols-4 gap-2">
+              {days.map((day) => {
+                const formattedDay = formatBookingDay(day.date, { locale, timeZone });
+
+                return (
+                  <button
+                    key={day.date}
+                    type="button"
+                    onClick={() => void selectDay(day)}
+                    aria-label={`${copy.chooseDayLabel}: ${day.date}`}
+                    className="min-h-[76px] rounded-md border border-white/10 bg-black/20 p-2 text-left text-zinc-200 transition-all hover:border-[#d7b46a]/45 hover:bg-white/[0.055] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7b46a]/70"
+                  >
+                    <span className="block text-[0.65rem] uppercase tracking-[0.14em]">
+                      {formattedDay.weekday}
+                    </span>
+                    <span className="mt-1 block text-xl leading-none">{formattedDay.day}</span>
+                    <span className="mt-1 block text-[0.65rem] uppercase tracking-[0.11em] text-zinc-500">
+                      {formattedDay.month}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-md border border-white/10 bg-black/20 p-3">
+              <div>
+                <p className="text-[0.65rem] uppercase tracking-[0.18em] text-zinc-500">
+                  {copy.selectedDayLabel}
+                </p>
+                <p className="mt-1 text-base text-white">{selectedDayLabel}</p>
+              </div>
+              <button
+                type="button"
+                onClick={backToDays}
+                className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-zinc-200 transition-colors hover:border-[#d7b46a]/45 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7b46a]/70"
+              >
+                <ArrowLeft className="h-4 w-4 text-[#d7b46a]" />
+                {copy.backToDaysLabel}
+              </button>
+            </div>
+
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-zinc-500">
+                <Clock3 className="h-4 w-4 text-[#d7b46a]" />
+                {copy.chooseTimeLabel}
+              </div>
+              <p className="text-xs text-zinc-500">{copy.timezoneLabel}</p>
+            </div>
+
+            {state === "loading-slots" ? (
+              <div className="flex min-h-[120px] items-center justify-center rounded-md border border-white/10 bg-black/20 text-sm text-zinc-400">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {copy.bookingSendingLabel}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {slots.map((slot) => (
+                  <button
+                    key={slot.start}
+                    type="button"
+                    onClick={() => {
+                      setSelectedSlot(slot);
+                      setMessage("");
+                      setState("idle");
+                    }}
+                    className={[
+                      "rounded-md border px-3 py-3 text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7b46a]/70",
+                      selectedSlot?.start === slot.start
+                        ? "border-[#d7b46a] bg-[#d7b46a] text-black"
+                        : "border-white/10 bg-black/20 text-zinc-100 hover:border-[#d7b46a]/45",
+                    ].join(" ")}
+                  >
+                    {slot.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
 
       {selectedSlot && state !== "success" && (
         <form onSubmit={handleBooking} className="mt-6 rounded-md border border-white/10 bg-black/20 p-4">

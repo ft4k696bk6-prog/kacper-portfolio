@@ -28,5 +28,8 @@ describe("portfolio content", () => {
     expect(content).not.toContain("No free times");
     expect(content).not.toContain("HOW I APPROACH WEB APPS");
     expect(content).not.toContain("Jak podchodzę do aplikacji");
+    expect(content).not.toContain("Let's meet");
+    expect(content).not.toContain("Poznajmy się");
+    expect(content).not.toContain("Contact details could not be revealed");
   });
 });

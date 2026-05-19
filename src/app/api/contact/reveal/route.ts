@@ -48,6 +48,13 @@ async function verifyTurnstile(token: string, ip: string) {
   return Boolean(result.success);
 }
 
+function shouldRequireTurnstile() {
+  return Boolean(
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim() &&
+      process.env.TURNSTILE_SECRET_KEY?.trim(),
+  );
+}
+
 function getContactValue(type: "email" | "phone") {
   return type === "email"
     ? process.env.CONTACT_REVEAL_EMAIL?.trim() || process.env.CONTACT_TO_EMAIL?.trim()
@@ -71,8 +78,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  const isHuman = await verifyTurnstile(payload.turnstileToken, ip);
-  if (!isHuman) {
+  if (shouldRequireTurnstile() && !(await verifyTurnstile(payload.turnstileToken, ip))) {
     return NextResponse.json({ message: "Bot check failed." }, { status: 403 });
   }
 
