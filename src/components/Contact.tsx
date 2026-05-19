@@ -35,6 +35,7 @@ export function Contact() {
                 alt={t.hero.imageAlt}
                 width={1122}
                 height={1402}
+                sizes="(min-width: 1280px) 34vw, (min-width: 768px) 50vw, 86vw"
                 className="mx-auto h-auto max-h-[520px] w-auto max-w-full object-contain object-bottom drop-shadow-[0_28px_70px_rgba(0,0,0,0.48)] xl:max-h-[600px]"
               />
             </motion.div>

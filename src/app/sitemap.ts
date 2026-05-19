@@ -4,10 +4,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = "https://kacper-portfolio.vercel.app";
   const caseStudySlugs = [
     "b-crm",
-    "berninutri",
-    "kalkulator-leasingu",
     "berni-rush",
     "portfolio",
+    "unreal-gameplay-prototype",
+    "berninutri",
+    "kalkulator-leasingu",
   ];
 
   return [

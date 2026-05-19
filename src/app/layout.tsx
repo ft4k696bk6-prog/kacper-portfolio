@@ -5,7 +5,6 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LanguageMetadataSync } from "@/components/LanguageMetadataSync";
 import { GoogleTagManager } from "@/components/GoogleTagManager";
 import { Geist } from "next/font/google";
-import { cn } from "@/lib/utils";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const siteUrl = "https://kacper-portfolio.vercel.app";
@@ -87,7 +86,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pl" className={cn("scroll-smooth font-sans", geist.variable)}>
+    <html lang="pl" className={`scroll-smooth font-sans ${geist.variable}`}>
       <body>
         <GoogleTagManager />
         <LanguageProvider>

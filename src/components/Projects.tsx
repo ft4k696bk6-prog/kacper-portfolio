@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, ExternalLink, Github, KeyRound, ListChecks } from "lucide-react";
 import { motion } from "framer-motion";
@@ -63,6 +64,23 @@ export function Projects() {
                     </h3>
                   </div>
                 </div>
+
+                {"image" in project && project.image && (
+                  <div className="mb-5 overflow-hidden rounded-md border border-white/10 bg-black/25">
+                    <Image
+                      src={project.image.src}
+                      alt={project.image.alt}
+                      width={1600}
+                      height={900}
+                      sizes={
+                        index === 0
+                          ? "(min-width: 1280px) 42vw, (min-width: 768px) 88vw, 100vw"
+                          : "(min-width: 1280px) 28vw, (min-width: 768px) 44vw, 100vw"
+                      }
+                      className="aspect-[16/9] h-auto w-full object-cover"
+                    />
+                  </div>
+                )}
 
                 <div className="rounded-md border border-white/10 bg-black/25 p-4">
                   <p className="text-xs uppercase tracking-[0.2em] text-[#d7b46a]">

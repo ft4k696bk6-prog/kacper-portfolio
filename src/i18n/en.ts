@@ -160,6 +160,80 @@ export const en = {
         repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
         caseStudyUrl: "/case-studies/b-crm",
         credentials: ["Demo accounts are available on the login screen."],
+        image: {
+          src: "/images/projects/bcrm-login.jpg",
+          alt: "B-CRM login and demo account screen",
+        },
+      },
+      {
+        title: "Berni Rush",
+        problem:
+          "A browser game project needs fast interaction, clear state handling and a playable loop rather than business workflow screens.",
+        description:
+          "Playable 3D arena game prototype built to practice real-time interaction, state management and browser deployment.",
+        features: [
+          "3D arena gameplay",
+          "Keyboard and touch controls",
+          "Playable classes and skins",
+          "Enemy waves and boss encounters",
+          "Upgrades, pickups and saved progress",
+        ],
+        technologies: ["React", "TypeScript", "Vite", "Three.js", "Zustand", "Vercel"],
+        status: "Playable prototype / Side project",
+        demoUrl: "https://bernirushdemooo.vercel.app",
+        repoUrl: "https://github.com/ft4k696bk6-prog/Berni-rush-demoo",
+        caseStudyUrl: "/case-studies/berni-rush",
+        image: {
+          src: "/images/projects/berni-rush.jpg",
+          alt: "Berni Rush browser game preview",
+        },
+      },
+      {
+        title: "Portfolio",
+        problem:
+          "A technical portfolio should help reviewers understand the strongest project quickly without entry-level positioning or vague marketing.",
+        description:
+          "Personal developer site focused on business web applications, project evidence, bilingual case studies and direct contact.",
+        features: [
+          "B-CRM-first project structure",
+          "Technical reviewer section",
+          "Bilingual case studies",
+          "Custom Cal.com booking flow",
+          "Protected email and phone reveal",
+          "SEO, OpenGraph and GTM-ready metadata",
+        ],
+        technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Cal.com API", "Turnstile", "Vercel"],
+        status: "Active development",
+        demoUrl: "https://kacper-portfolio.vercel.app",
+        repoUrl: "https://github.com/ft4k696bk6-prog/kacper-portfolio",
+        caseStudyUrl: "/case-studies/portfolio",
+        image: {
+          src: "/images/projects/portfolio-home.jpg",
+          alt: "Portfolio homepage preview",
+        },
+      },
+      {
+        title: "Unreal Engine Gameplay Prototype",
+        problem:
+          "A gameplay prototype needs interaction systems, mission structure and environment blockout before it can become a full game.",
+        description:
+          "Local Unreal Engine 5 prototype focused on gameplay systems, driving, contracts, UI/HUD and open-world environment exploration.",
+        features: [
+          "Driving systems",
+          "Mission and contract mechanics",
+          "UI/HUD systems",
+          "Open-world environment blockout",
+          "Gameplay interaction systems",
+          "Performance and gameplay experimentation",
+        ],
+        technologies: ["Unreal Engine 5", "Blueprint System", "Game Design", "UI Systems", "Open-world prototyping"],
+        status: "Local prototype / Experimental",
+        caseStudyUrl: "/case-studies/unreal-gameplay-prototype",
+        note: "Local prototype only: no public demo or repository.",
+        image: {
+          src: "/images/projects/unreal-gameplay.jpg",
+          alt: "Unreal Engine gameplay prototype HUD screenshot",
+        },
       },
       {
         title: "BerniNutri",
@@ -180,6 +254,10 @@ export const en = {
         demoUrl: "https://berninutri-portfolio.vercel.app",
         repoUrl: "https://github.com/ft4k696bk6-prog/berninutri-portfolio",
         caseStudyUrl: "/case-studies/berninutri",
+        image: {
+          src: "/images/projects/berninutri-live.jpg",
+          alt: "BerniNutri mobile dashboard preview",
+        },
       },
       {
         title: "Kalkulator leasingu",
@@ -200,45 +278,10 @@ export const en = {
         demoUrl: "https://kalkulator-leasingu-1-desktop.vercel.app",
         repoUrl: "https://github.com/ft4k696bk6-prog/kalkulator.leasingu-1",
         caseStudyUrl: "/case-studies/kalkulator-leasingu",
-      },
-      {
-        title: "Berni Rush",
-        problem:
-          "A browser game project needs fast interaction, clear state handling and a playable loop rather than business workflow screens.",
-        description:
-          "Playable 3D arena game prototype built to practice real-time interaction, state management and browser deployment.",
-        features: [
-          "3D arena gameplay",
-          "Keyboard and touch controls",
-          "Playable classes and skins",
-          "Enemy waves and boss encounters",
-          "Upgrades, pickups and saved progress",
-        ],
-        technologies: ["React", "TypeScript", "Vite", "Three.js", "Zustand", "Vercel"],
-        status: "Playable prototype / Side project",
-        demoUrl: "https://bernirushdemooo.vercel.app",
-        repoUrl: "https://github.com/ft4k696bk6-prog/Berni-rush-demoo",
-        caseStudyUrl: "/case-studies/berni-rush",
-      },
-      {
-        title: "Portfolio",
-        problem:
-          "A technical portfolio should help reviewers understand the strongest project quickly without entry-level positioning or vague marketing.",
-        description:
-          "Personal developer site focused on business web applications, project evidence, bilingual case studies and direct contact.",
-        features: [
-          "B-CRM-first project structure",
-          "Technical reviewer section",
-          "Bilingual case studies",
-          "Custom Cal.com booking flow",
-          "Protected email and phone reveal",
-          "SEO and OpenGraph metadata",
-        ],
-        technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Cal.com API", "Turnstile", "Vercel"],
-        status: "Active development",
-        demoUrl: "https://kacper-portfolio.vercel.app",
-        repoUrl: "https://github.com/ft4k696bk6-prog/kacper-portfolio",
-        caseStudyUrl: "/case-studies/portfolio",
+        image: {
+          src: "/images/projects/leasing-calculator.jpg",
+          alt: "Leasing calculator business tool preview",
+        },
       },
     ],
   },
@@ -303,8 +346,6 @@ export const en = {
       bookingErrorLabel: "The time could not be booked. Try again later.",
     },
     reveal: {
-      title: "Direct contact",
-      description: "Email and phone are available after a quick human check.",
       emailButton: "Click to reveal email",
       phoneButton: "Click to reveal phone",
       emailLabel: "Email",

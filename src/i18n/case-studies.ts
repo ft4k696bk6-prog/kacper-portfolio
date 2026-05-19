@@ -4,8 +4,9 @@ export type CaseStudyItem = {
   subtitle: string;
   summary: string;
   status: string;
-  liveUrl: string;
-  repoUrl: string;
+  liveUrl?: string;
+  repoUrl?: string;
+  images?: Array<{ src: string; alt: string }>;
   problem: string;
   goal: string;
   roles: Array<{ name: string; description: string }>;
@@ -69,6 +70,12 @@ export const enCaseStudies: CaseStudiesContent = {
       status: "Production-like CRM demo",
       liveUrl: "https://b-crm-berni.vercel.app/login",
       repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
+      images: [
+        {
+          src: "/images/projects/bcrm-login.jpg",
+          alt: "B-CRM login and demo account screen",
+        },
+      ],
       problem:
         "Sales and operations teams need one place for lead ownership, statuses, callbacks, meetings, files, comments and post-contract execution.",
       goal:
@@ -130,6 +137,12 @@ export const enCaseStudies: CaseStudiesContent = {
       status: "Prototype",
       liveUrl: "https://berninutri-portfolio.vercel.app",
       repoUrl: "https://github.com/ft4k696bk6-prog/berninutri-portfolio",
+      images: [
+        {
+          src: "/images/projects/berninutri-live.jpg",
+          alt: "BerniNutri mobile dashboard preview",
+        },
+      ],
       problem:
         "Food analysis from a photo can be useful, but AI estimates may be incomplete or inaccurate and need a clear review flow.",
       goal:
@@ -173,6 +186,12 @@ export const enCaseStudies: CaseStudiesContent = {
       status: "Production-like business tool demo",
       liveUrl: "https://kalkulator-leasingu-1-desktop.vercel.app",
       repoUrl: "https://github.com/ft4k696bk6-prog/kalkulator.leasingu-1",
+      images: [
+        {
+          src: "/images/projects/leasing-calculator.jpg",
+          alt: "Leasing calculator business tool preview",
+        },
+      ],
       problem:
         "Business users often need a fast leasing cost estimate before they are ready for a formal financial offer.",
       goal:
@@ -215,6 +234,12 @@ export const enCaseStudies: CaseStudiesContent = {
       status: "Playable prototype / Side project",
       liveUrl: "https://bernirushdemooo.vercel.app",
       repoUrl: "https://github.com/ft4k696bk6-prog/Berni-rush-demoo",
+      images: [
+        {
+          src: "/images/projects/berni-rush.jpg",
+          alt: "Berni Rush browser game preview",
+        },
+      ],
       problem:
         "A browser game needs fast interaction, clear state handling and a playable loop rather than static screens.",
       goal:
@@ -249,6 +274,58 @@ export const enCaseStudies: CaseStudiesContent = {
         "This is a playable prototype and side project. It is not presented as a finished commercial game.",
     },
     {
+      slug: "unreal-gameplay-prototype",
+      title: "Unreal Engine Gameplay Prototype — local gameplay systems demo",
+      subtitle:
+        "Experimental Unreal Engine 5 project focused on driving, contracts, HUD, environment blockout and gameplay interactions.",
+      summary:
+        "The Unreal prototype shows game production thinking outside the web stack: systems, UI, open-world blockout and iteration.",
+      status: "Local prototype / Experimental",
+      images: [
+        {
+          src: "/images/projects/unreal-gameplay.jpg",
+          alt: "Unreal Engine gameplay prototype HUD screenshot",
+        },
+        {
+          src: "/images/projects/unreal-editor.jpg",
+          alt: "Unreal Engine editor blockout screenshot",
+        },
+      ],
+      problem:
+        "A gameplay prototype needs a playable loop, spatial blockout, HUD feedback and mission mechanics before visual polish or a public build make sense.",
+      goal:
+        "Prototype a small open-world gameplay flow with driving, contract markers, HUD information and interaction systems in Unreal Engine 5.",
+      roles: [],
+      features: [
+        "Driving systems and vehicle-oriented camera work.",
+        "Mission and contract mechanics around in-world markers.",
+        "HUD elements for tasks, compass, radar, life and ammunition.",
+        "Open-world blockout with roads, city-like volumes and lighting tests.",
+        "Gameplay interaction systems for objectives and player feedback.",
+        "Performance and gameplay experimentation inside the editor and playable preview.",
+      ],
+      stack: ["Unreal Engine 5", "Blueprint System", "Game Design", "UI Systems", "Open-world prototyping"],
+      decisions: [
+        "The project stays local because it is an early gameplay prototype, not a packaged public release.",
+        "Blockout-first production keeps attention on scale, navigation and mission flow before art polish.",
+        "HUD and objective feedback are tested early so gameplay direction is readable while driving.",
+      ],
+      learned: [
+        "Planning gameplay through systems instead of isolated visuals.",
+        "Working with Unreal editor workflows, scene organization and playable preview loops.",
+        "Designing HUD feedback for movement, objectives and player orientation.",
+        "Separating prototype validation from final art, polish and packaging.",
+      ],
+      next: [
+        "Package a small playable build when the loop is stable enough to share.",
+        "Refine vehicle handling, objective triggers and mission pacing.",
+        "Add clearer onboarding and audio/visual feedback.",
+        "Document the Blueprint structure before expanding the prototype.",
+      ],
+      limitations:
+        "This is a local experimental prototype. It has no public demo or repository and is included as a technical/gameplay preview, not a finished game.",
+    },
+    {
       slug: "portfolio",
       title: "Portfolio — developer site for business web apps",
       subtitle:
@@ -258,6 +335,12 @@ export const enCaseStudies: CaseStudiesContent = {
       status: "Active development",
       liveUrl: "https://kacper-portfolio.vercel.app",
       repoUrl: "https://github.com/ft4k696bk6-prog/kacper-portfolio",
+      images: [
+        {
+          src: "/images/projects/portfolio-home.jpg",
+          alt: "Portfolio homepage preview",
+        },
+      ],
       problem:
         "A technical portfolio should help reviewers understand the strongest project quickly without vague marketing or entry-level positioning.",
       goal:
@@ -274,7 +357,7 @@ export const enCaseStudies: CaseStudiesContent = {
       stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Turnstile", "Cal.com API", "Vercel", "Vitest"],
       decisions: [
         "The site focuses on business web apps instead of broad freelancing copy.",
-        "Direct contact details are revealed through a server route instead of rendered in the initial HTML.",
+        "Email and phone details are revealed through a server route instead of rendered in the initial HTML.",
         "Booking uses a custom UI and server-side Cal.com API calls instead of an external embed.",
       ],
       learned: [
@@ -283,7 +366,7 @@ export const enCaseStudies: CaseStudiesContent = {
         "Keeping contact and booking flows practical without exposing API keys.",
       ],
       next: [
-        "Add real screenshots for every project.",
+        "Expand project screenshots into a fuller gallery where it helps technical review.",
         "Add browser smoke tests for navigation, booking and contact reveal.",
         "Add analytics events through GTM after final container configuration.",
         "Review Core Web Vitals after design changes.",
@@ -324,6 +407,12 @@ export const plCaseStudies: CaseStudiesContent = {
       status: "Production-like CRM demo",
       liveUrl: "https://b-crm-berni.vercel.app/login",
       repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
+      images: [
+        {
+          src: "/images/projects/bcrm-login.jpg",
+          alt: "Ekran logowania i kont demo B-CRM",
+        },
+      ],
       problem:
         "Zespoły sprzedażowe i operacyjne potrzebują jednego miejsca na właściciela leada, statusy, callbacki, spotkania, pliki, komentarze i realizację po podpisaniu umowy.",
       goal:
@@ -385,6 +474,12 @@ export const plCaseStudies: CaseStudiesContent = {
       status: "Prototype",
       liveUrl: "https://berninutri-portfolio.vercel.app",
       repoUrl: "https://github.com/ft4k696bk6-prog/berninutri-portfolio",
+      images: [
+        {
+          src: "/images/projects/berninutri-live.jpg",
+          alt: "Preview mobilnego dashboardu BerniNutri",
+        },
+      ],
       problem:
         "Analiza jedzenia ze zdjęcia może pomagać, ale estymacje AI bywają niepełne lub niedokładne i wymagają jasnego przepływu review.",
       goal:
@@ -428,6 +523,12 @@ export const plCaseStudies: CaseStudiesContent = {
       status: "Production-like business tool demo",
       liveUrl: "https://kalkulator-leasingu-1-desktop.vercel.app",
       repoUrl: "https://github.com/ft4k696bk6-prog/kalkulator.leasingu-1",
+      images: [
+        {
+          src: "/images/projects/leasing-calculator.jpg",
+          alt: "Preview kalkulatora leasingu",
+        },
+      ],
       problem:
         "Użytkownicy biznesowi często potrzebują szybkiej estymacji kosztu leasingu zanim przejdą do formalnej oferty finansowej.",
       goal:
@@ -470,6 +571,12 @@ export const plCaseStudies: CaseStudiesContent = {
       status: "Playable prototype / Side project",
       liveUrl: "https://bernirushdemooo.vercel.app",
       repoUrl: "https://github.com/ft4k696bk6-prog/Berni-rush-demoo",
+      images: [
+        {
+          src: "/images/projects/berni-rush.jpg",
+          alt: "Preview gry Berni Rush w przeglądarce",
+        },
+      ],
       problem:
         "Gra webowa wymaga szybkiej interakcji, jasnego zarządzania stanem i grywalnej pętli, a nie statycznych ekranów.",
       goal:
@@ -504,6 +611,58 @@ export const plCaseStudies: CaseStudiesContent = {
         "To grywalny prototyp i side project. Nie jest przedstawiany jako skończona gra komercyjna.",
     },
     {
+      slug: "unreal-gameplay-prototype",
+      title: "Unreal Engine Gameplay Prototype — lokalne demo systemów gameplayu",
+      subtitle:
+        "Eksperymentalny projekt Unreal Engine 5 skupiony na jeździe, kontraktach, HUD, blockoucie świata i interakcjach gameplayowych.",
+      summary:
+        "Prototyp Unreal pokazuje myślenie produkcyjne poza web stackiem: systemy, UI, blockout open-world i iterację.",
+      status: "Local prototype / Experimental",
+      images: [
+        {
+          src: "/images/projects/unreal-gameplay.jpg",
+          alt: "Screenshot HUD z prototypu gameplayu w Unreal Engine",
+        },
+        {
+          src: "/images/projects/unreal-editor.jpg",
+          alt: "Screenshot blockoutu w edytorze Unreal Engine",
+        },
+      ],
+      problem:
+        "Prototyp gameplayu potrzebuje grywalnej pętli, blockoutu przestrzeni, feedbacku HUD i mechaniki misji zanim ma sens dopracowanie wizualne albo publiczny build.",
+      goal:
+        "Przygotować mały flow open-world z jazdą, markerami kontraktów, informacjami HUD i systemami interakcji w Unreal Engine 5.",
+      roles: [],
+      features: [
+        "System jazdy i kamera pod ruch pojazdu.",
+        "Mechanika misji i kontraktów wokół markerów w świecie.",
+        "Elementy HUD: zadania, kompas, radar, życie i amunicja.",
+        "Blockout open-world z drogami, bryłami miasta i testami oświetlenia.",
+        "Systemy interakcji gameplayowych dla celów i feedbacku gracza.",
+        "Eksperymenty wydajnościowe i gameplayowe w edytorze oraz trybie playable preview.",
+      ],
+      stack: ["Unreal Engine 5", "Blueprint System", "Game Design", "UI Systems", "Open-world prototyping"],
+      decisions: [
+        "Projekt zostaje lokalny, bo to wczesny prototyp gameplayu, a nie spakowany publiczny release.",
+        "Podejście blockout-first kieruje uwagę na skalę, nawigację i flow misji przed finalnym artem.",
+        "HUD i feedback celu są testowane wcześnie, żeby kierunek gameplayu był czytelny podczas jazdy.",
+      ],
+      learned: [
+        "Planowania gameplayu przez systemy, nie pojedyncze wizualne sceny.",
+        "Pracy z workflow edytora Unreal, organizacją sceny i pętlą playable preview.",
+        "Projektowania feedbacku HUD dla ruchu, celów i orientacji gracza.",
+        "Oddzielania walidacji prototypu od finalnego artu, polishu i pakowania gry.",
+      ],
+      next: [
+        "Spakować mały playable build, gdy pętla będzie wystarczająco stabilna do pokazania.",
+        "Dopracować handling pojazdu, triggery celów i tempo misji.",
+        "Dodać czytelniejszy onboarding oraz feedback audio/wizualny.",
+        "Opisać strukturę Blueprintów przed rozbudową prototypu.",
+      ],
+      limitations:
+        "To lokalny prototyp eksperymentalny. Nie ma publicznego demo ani repozytorium i jest pokazany jako preview techniczne/gameplayowe, nie skończona gra.",
+    },
+    {
       slug: "portfolio",
       title: "Portfolio — strona developera od aplikacji biznesowych",
       subtitle:
@@ -513,6 +672,12 @@ export const plCaseStudies: CaseStudiesContent = {
       status: "Active development",
       liveUrl: "https://kacper-portfolio.vercel.app",
       repoUrl: "https://github.com/ft4k696bk6-prog/kacper-portfolio",
+      images: [
+        {
+          src: "/images/projects/portfolio-home.jpg",
+          alt: "Preview strony portfolio",
+        },
+      ],
       problem:
         "Portfolio techniczne powinno szybko pokazać najmocniejszy projekt bez ogólnikowego marketingu i bez pozycjonowania wejściowego.",
       goal:
@@ -538,7 +703,7 @@ export const plCaseStudies: CaseStudiesContent = {
         "Utrzymania praktycznego kontaktu i rezerwacji bez ujawniania kluczy API.",
       ],
       next: [
-        "Dodać realne screenshoty każdego projektu.",
+        "Rozbudować screenshoty projektów w pełniejszą galerię tam, gdzie pomaga to w review technicznym.",
         "Dodać testy przeglądarkowe dla nawigacji, rezerwacji i odsłaniania kontaktu.",
         "Dodać eventy analytics przez GTM po finalnej konfiguracji kontenera.",
         "Sprawdzić Core Web Vitals po zmianach layoutu.",

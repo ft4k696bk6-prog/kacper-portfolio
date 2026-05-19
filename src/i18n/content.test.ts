@@ -9,9 +9,23 @@ describe("portfolio content", () => {
     expect(content).not.toMatch(new RegExp(["ju", "nior"].join(""), "i"));
   });
 
-  it("keeps B-CRM as the first project", () => {
-    expect(en.projects.items[0].title).toBe("B-CRM");
-    expect(pl.projects.items[0].title).toBe("B-CRM");
+  it("keeps the requested project order", () => {
+    expect(en.projects.items.map((item) => item.title)).toEqual([
+      "B-CRM",
+      "Berni Rush",
+      "Portfolio",
+      "Unreal Engine Gameplay Prototype",
+      "BerniNutri",
+      "Kalkulator leasingu",
+    ]);
+    expect(pl.projects.items.map((item) => item.title)).toEqual([
+      "B-CRM",
+      "Berni Rush",
+      "Portfolio",
+      "Unreal Engine Gameplay Prototype",
+      "BerniNutri",
+      "Kalkulator leasingu",
+    ]);
   });
 
   it("keeps the technology section free of meta instructions", () => {
@@ -42,6 +56,22 @@ describe("portfolio content", () => {
         expect(caseStudySlugs.has(project.caseStudyUrl.replace("/case-studies/", ""))).toBe(true);
       }
     }
+  });
+
+  it("includes the Unreal prototype case study in both languages", () => {
+    const enUnreal = en.caseStudies.items.find(
+      (item) => item.slug === "unreal-gameplay-prototype",
+    );
+    const plUnreal = pl.caseStudies.items.find(
+      (item) => item.slug === "unreal-gameplay-prototype",
+    );
+
+    expect(enUnreal?.status).toBe("Local prototype / Experimental");
+    expect(plUnreal?.status).toBe("Local prototype / Experimental");
+    expect(enUnreal?.images?.length).toBeGreaterThanOrEqual(2);
+    expect(plUnreal?.images?.length).toBeGreaterThanOrEqual(2);
+    expect(enUnreal?.liveUrl).toBeUndefined();
+    expect(enUnreal?.repoUrl).toBeUndefined();
   });
 
   it("keeps case study section labels localized", () => {
@@ -87,5 +117,9 @@ describe("portfolio content", () => {
     expect(content).not.toContain(["Use", "the", "form"].join(" "));
     expect(content).not.toContain(["Użyj", "formularza"].join(" "));
     expect(content).not.toContain("Resend");
+    expect(content).not.toContain("Direct contact");
+    expect(content).not.toContain("Bezpośredni kontakt");
+    expect(content).not.toContain("Email and phone are available");
+    expect(content).not.toContain("Email i telefon są dostępne");
   });
 });

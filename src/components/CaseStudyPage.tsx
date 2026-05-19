@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -56,26 +57,59 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href={study.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-md bg-[#d7b46a] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5"
-            >
-              <ExternalLink className="h-4 w-4" />
-              {t.caseStudies.liveDemoLabel}
-            </a>
-            <a
-              href={study.repoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-md border border-white/15 px-5 py-3 text-sm text-white transition-colors hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
-            >
-              <Github className="h-4 w-4" />
-              {t.caseStudies.repoLabel}
-            </a>
+            {study.liveUrl && (
+              <a
+                href={study.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md bg-[#d7b46a] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5"
+              >
+                <ExternalLink className="h-4 w-4" />
+                {t.caseStudies.liveDemoLabel}
+              </a>
+            )}
+            {study.repoUrl && (
+              <a
+                href={study.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-5 py-3 text-sm text-white transition-colors hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
+              >
+                <Github className="h-4 w-4" />
+                {t.caseStudies.repoLabel}
+              </a>
+            )}
           </div>
         </section>
+
+        {study.images && study.images.length > 0 && (
+          <section
+            className={[
+              "mb-8 grid gap-4",
+              study.images.length > 1 ? "lg:grid-cols-2" : "",
+            ].join(" ")}
+          >
+            {study.images.map((image) => (
+              <div
+                key={image.src}
+                className="overflow-hidden rounded-md border border-white/10 bg-white/[0.035]"
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={1600}
+                  height={900}
+                  sizes={
+                    study.images && study.images.length > 1
+                      ? "(min-width: 1024px) 44vw, 100vw"
+                      : "(min-width: 1024px) 72vw, 100vw"
+                  }
+                  className="aspect-[16/9] h-auto w-full object-cover"
+                />
+              </div>
+            ))}
+          </section>
+        )}
 
         <section className="grid gap-4 md:grid-cols-3">
           <SummaryCard title={t.caseStudies.sections.problem} body={study.problem} />

@@ -8,8 +8,6 @@ import { Eye, Loader2, Mail, Phone } from "lucide-react";
 type RevealTarget = "email" | "phone";
 
 type RevealCopy = {
-  title: string;
-  description: string;
   emailButton: string;
   phoneButton: string;
   emailLabel: string;
@@ -82,15 +80,7 @@ export function ContactReveal({ copy }: ContactRevealProps) {
 
   return (
     <div className="rounded-md border border-white/10 bg-white/[0.035] p-4 md:p-5">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h3 className="text-lg text-white">{copy.title}</h3>
-          <p className="mt-2 text-sm leading-6 text-zinc-400">{copy.description}</p>
-        </div>
-        <Eye className="mt-1 h-5 w-5 shrink-0 text-[#d7b46a]" />
-      </div>
-
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-3 sm:grid-cols-2">
         <RevealButton
           icon={<Mail className="h-4 w-4" />}
           label={copy.emailLabel}
