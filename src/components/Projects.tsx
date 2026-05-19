@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { BookOpen, ExternalLink, Github, KeyRound, ListChecks } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -153,13 +154,13 @@ export function Projects() {
                     </a>
                   )}
                   {project.caseStudyUrl && (
-                    <a
+                    <Link
                       href={project.caseStudyUrl}
                       className="inline-flex items-center gap-2 rounded-md border border-[#d7b46a]/50 bg-[#d7b46a]/10 px-4 py-2 text-sm text-[#f5dfae] transition-colors hover:border-[#d7b46a]"
                     >
                       <BookOpen className="h-4 w-4" />
                       {t.projects.caseStudyLabel}
-                    </a>
+                    </Link>
                   )}
                   {project.repoUrl && (
                     <a

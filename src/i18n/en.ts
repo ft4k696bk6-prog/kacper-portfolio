@@ -1,3 +1,5 @@
+import { enCaseStudies } from "./case-studies";
+
 export const en = {
   nav: {
     home: "Home",
@@ -8,6 +10,11 @@ export const en = {
     cta: "Contact",
     openMenu: "Open menu",
     closeMenu: "Close menu",
+  },
+  meta: {
+    homeTitle: "Kacper Bernecki — Frontend / Web App Developer",
+    homeDescription:
+      "I build business web applications with React, TypeScript, Next.js and Supabase: CRMs, dashboards, forms and workflow tools.",
   },
   hero: {
     eyebrow: "Business web applications",
@@ -55,7 +62,7 @@ export const en = {
     heading: "Business workflow first, technology second.",
     paragraphs: [
       "Before writing code, I look at the process: who uses the app, what data they need, what changes status, and where the next action should be visible.",
-      "That approach is visible in B-CRM: admin, manager and sales views; lead statuses; callbacks; meetings; comments; history; and database-backed access rules.",
+      "That approach is visible in B-CRM: role-aware sales and operations views, lead statuses, callbacks, meetings, comments, history and database-backed access rules.",
       "The portfolio is organized around practical projects that can be inspected through live demos, repositories and case studies.",
     ],
   },
@@ -81,7 +88,7 @@ export const en = {
       {
         title: "Role-based access",
         description:
-          "Different views and permissions for admin, manager, sales and support roles.",
+          "Different views and permissions for sales, management, finance, accounting, logistics and installation roles.",
       },
       {
         title: "API and database work",
@@ -99,14 +106,16 @@ export const en = {
     title: "For companies and technical reviewers",
     subtitle: "Start with B-CRM if you want the fastest read on my web app skills.",
     bestProject: "Best project to review: B-CRM",
+    stackLabel: "Stack",
     stack: "React, TypeScript, Next.js, Supabase, PostgreSQL, Tailwind CSS, Vercel",
     showsLabel: "What the project shows",
     shows: [
       "Supabase authentication and protected app screens",
-      "User roles and permission rules for admin, manager and sales users",
+      "User roles and permission rules for owner, admin, manager, sales and operational users",
       "Lead management with statuses, comments, callbacks and meetings",
-      "Change history and activity-oriented CRM screens",
+      "Manager hierarchy, change history and activity-oriented CRM screens",
       "Dashboards, filters, forms and database-backed workflows",
+      "Finance, accounting, logistics and installation realization flow",
       "Deployment of a production-like web app demo on Vercel",
     ],
     links: {
@@ -138,17 +147,18 @@ export const en = {
           "Production-like CRM demo for lead management and sales workflow, built with role-based screens and Supabase-backed data.",
         features: [
           "Login and demo accounts",
-          "Roles: admin, manager, sales representative",
+          "Roles: owner, admin, manager, sales, finance, viewer, accounting, logistics, installer",
           "Lead statuses, comments and history",
           "Callbacks, meetings and calendar views",
-          "Admin panel and team management",
-          "CSV import/export and PDF offer flow",
+          "Admin panel, team management and manager hierarchy",
+          "Realization tutorial: finance, accounting, logistics and installation",
+          "CSV import/export, PDF offer flow and KSeF demo payload",
         ],
         technologies: ["React", "TypeScript", "Next.js", "Supabase", "PostgreSQL", "Tailwind CSS", "Vercel"],
         status: "Production-like CRM demo",
         demoUrl: "https://b-crm-berni.vercel.app/login",
         repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
-        caseStudyUrl: "/b-crm-case-study",
+        caseStudyUrl: "/case-studies/b-crm",
         credentials: ["Demo accounts are available on the login screen."],
       },
       {
@@ -169,6 +179,7 @@ export const en = {
         status: "Prototype",
         demoUrl: "https://berninutri-portfolio.vercel.app",
         repoUrl: "https://github.com/ft4k696bk6-prog/berninutri-portfolio",
+        caseStudyUrl: "/case-studies/berninutri",
       },
       {
         title: "Kalkulator leasingu",
@@ -188,6 +199,7 @@ export const en = {
         status: "Production-like business tool demo",
         demoUrl: "https://kalkulator-leasingu-1-desktop.vercel.app",
         repoUrl: "https://github.com/ft4k696bk6-prog/kalkulator.leasingu-1",
+        caseStudyUrl: "/case-studies/kalkulator-leasingu",
       },
       {
         title: "Berni Rush",
@@ -206,24 +218,27 @@ export const en = {
         status: "Playable prototype / Side project",
         demoUrl: "https://bernirushdemooo.vercel.app",
         repoUrl: "https://github.com/ft4k696bk6-prog/Berni-rush-demoo",
+        caseStudyUrl: "/case-studies/berni-rush",
       },
       {
         title: "Portfolio",
         problem:
           "A technical portfolio should help reviewers understand the strongest project quickly without entry-level positioning or vague marketing.",
         description:
-          "Personal developer site focused on business web applications, project evidence, case studies and contact flow.",
+          "Personal developer site focused on business web applications, project evidence, bilingual case studies and direct contact.",
         features: [
           "B-CRM-first project structure",
           "Technical reviewer section",
-          "Case study page",
-          "Protected contact form",
+          "Bilingual case studies",
+          "Custom Cal.com booking flow",
+          "Protected email and phone reveal",
           "SEO and OpenGraph metadata",
         ],
-        technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Resend", "Turnstile", "Vercel"],
+        technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Cal.com API", "Turnstile", "Vercel"],
         status: "Active development",
         demoUrl: "https://kacper-portfolio.vercel.app",
         repoUrl: "https://github.com/ft4k696bk6-prog/kacper-portfolio",
+        caseStudyUrl: "/case-studies/portfolio",
       },
     ],
   },
@@ -266,20 +281,10 @@ export const en = {
   contact: {
     title: "Talk about a web app, CRM or frontend role",
     description:
-      "Use the form for project discussions, technical review, collaboration or web app / frontend opportunities.",
-    nameLabel: "Name",
-    emailLabel: "Email",
-    companyLabel: "Company or context",
-    messageLabel: "Message",
-    submitLabel: "Send message",
-    sendingLabel: "Sending...",
-    successMessage: "Thanks. Your message has been sent.",
-    errorMessage: "The message could not be sent. Try again later.",
-    privacyNote:
-      "Your email address is used only to reply to this message. Direct contact details are revealed only after a human check.",
+      "Book a short call or reveal direct contact details after a quick human check.",
     calendarTitle: "Calendar",
     calendarDescription:
-      "If you prefer a call instead of the form, choose a time in the calendar.",
+      "Choose a meeting time in the calendar.",
     calendarCta: "Book a call",
     booking: {
       title: "Calendar",
@@ -295,7 +300,7 @@ export const en = {
       bookingSubmitLabel: "Book this time",
       bookingSendingLabel: "Checking...",
       bookingSuccessLabel: "The time has been booked. Confirmation should arrive by email.",
-      bookingErrorLabel: "The time could not be booked. Try again or use the contact form.",
+      bookingErrorLabel: "The time could not be booked. Try again later.",
     },
     reveal: {
       title: "Direct contact",
@@ -317,6 +322,7 @@ export const en = {
     linkedinCta: "LinkedIn",
     copyright: "© 2026 Kacper Bernecki. All rights reserved.",
   },
+  caseStudies: enCaseStudies,
 };
 
 export type Translations = typeof en;

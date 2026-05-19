@@ -1,54 +1,14 @@
 "use client";
 
-import { FormEvent, useState } from "react";
 import Image from "next/image";
-import { Turnstile } from "@marsidev/react-turnstile";
-import { Github, Linkedin, Loader2, MapPin, Send } from "lucide-react";
+import { Github, Linkedin, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { BookingCalendar } from "@/components/BookingCalendar";
 import { ContactReveal } from "@/components/ContactReveal";
 
-type SubmitState = "idle" | "sending" | "success" | "error";
-
 export function Contact() {
   const { lang, t } = useLanguage();
-  const [submitState, setSubmitState] = useState<SubmitState>("idle");
-  const [turnstileToken, setTurnstileToken] = useState("");
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSubmitState("sending");
-
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.get("name"),
-          email: formData.get("email"),
-          company: formData.get("company"),
-          message: formData.get("message"),
-          website: formData.get("website"),
-          turnstileToken,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Contact request failed");
-      }
-
-      form.reset();
-      setTurnstileToken("");
-      setSubmitState("success");
-    } catch {
-      setSubmitState("error");
-    }
-  }
 
   return (
     <section
@@ -57,9 +17,9 @@ export function Contact() {
     >
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#d7b46a]/60 to-transparent" />
       <div className="mx-auto flex min-h-[calc(100svh-5rem)] max-w-7xl flex-col justify-between gap-6">
-        <div className="grid flex-1 gap-6 xl:grid-cols-[0.74fr_1.26fr] xl:items-end">
+        <div className="grid flex-1 gap-6 xl:grid-cols-[0.76fr_1.24fr] xl:items-center">
           <motion.div
-            className="relative order-last min-h-[360px] overflow-hidden xl:order-first xl:min-h-[620px]"
+            className="relative order-last min-h-[360px] overflow-hidden xl:order-first xl:min-h-[560px]"
             initial={{ opacity: 0, x: -44 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -75,7 +35,7 @@ export function Contact() {
                 alt={t.hero.imageAlt}
                 width={1122}
                 height={1402}
-                className="mx-auto h-auto max-h-[560px] w-auto max-w-full object-contain object-bottom drop-shadow-[0_28px_70px_rgba(0,0,0,0.48)] xl:max-h-[640px]"
+                className="mx-auto h-auto max-h-[520px] w-auto max-w-full object-contain object-bottom drop-shadow-[0_28px_70px_rgba(0,0,0,0.48)] xl:max-h-[600px]"
               />
             </motion.div>
 
@@ -100,136 +60,38 @@ export function Contact() {
               </p>
             </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
-            <span className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300">
-              <MapPin className="h-4 w-4 text-[#d7b46a]" />
-              {t.contact.location}
-            </span>
-            <a
-              href={t.contact.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 transition-colors hover:border-[#d7b46a]/45 hover:text-white"
-            >
-              <Github className="h-4 w-4 text-[#d7b46a]" />
-              {t.contact.githubCta}
-            </a>
-            <a
-              href={t.contact.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 transition-colors hover:border-[#d7b46a]/45 hover:text-white"
-            >
-              <Linkedin className="h-4 w-4 text-[#d7b46a]" />
-              {t.contact.linkedinCta}
-            </a>
-          </div>
-
-          <div className="mt-5 grid gap-4">
-            <BookingCalendar
-              copy={t.contact.booking}
-              locale={lang === "pl" ? "pl-PL" : "en-US"}
-            />
-            <ContactReveal copy={t.contact.reveal} />
-
-            <form
-              onSubmit={handleSubmit}
-              className="rounded-md border border-white/10 bg-white/[0.035] p-5"
-            >
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="grid gap-2 text-sm text-zinc-200">
-                  {t.contact.nameLabel}
-                  <input
-                    name="name"
-                    required
-                    minLength={2}
-                    className="rounded-md border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-[#d7b46a]/70"
-                  />
-                </label>
-                <label className="grid gap-2 text-sm text-zinc-200">
-                  {t.contact.emailLabel}
-                  <input
-                    name="email"
-                    required
-                    type="email"
-                    className="rounded-md border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-[#d7b46a]/70"
-                  />
-                </label>
-              </div>
-
-              <label className="mt-4 grid gap-2 text-sm text-zinc-200">
-                {t.contact.companyLabel}
-                <input
-                  name="company"
-                  className="rounded-md border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-[#d7b46a]/70"
-                />
-              </label>
-
-              <label className="mt-4 grid gap-2 text-sm text-zinc-200">
-                {t.contact.messageLabel}
-                <textarea
-                  name="message"
-                  required
-                  minLength={20}
-                  rows={5}
-                  className="resize-none rounded-md border border-white/10 bg-black/30 px-3 py-3 text-sm leading-7 text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-[#d7b46a]/70"
-                />
-              </label>
-
-              <input
-                type="text"
-                name="website"
-                tabIndex={-1}
-                autoComplete="off"
-                className="hidden"
-                aria-hidden="true"
-              />
-
-              {turnstileSiteKey && (
-                <div className="mt-5">
-                  <Turnstile
-                    siteKey={turnstileSiteKey}
-                    onSuccess={setTurnstileToken}
-                    onExpire={() => setTurnstileToken("")}
-                    options={{ theme: "dark" }}
-                  />
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={submitState === "sending"}
-                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#d7b46a] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+            <div className="mt-6 flex flex-wrap gap-3">
+              <span className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300">
+                <MapPin className="h-4 w-4 text-[#d7b46a]" />
+                {t.contact.location}
+              </span>
+              <a
+                href={t.contact.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 transition-colors hover:border-[#d7b46a]/45 hover:text-white"
               >
-                {submitState === "sending" ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    {t.contact.sendingLabel}
-                  </>
-                ) : (
-                  <>
-                    <Send className="h-4 w-4" />
-                    {t.contact.submitLabel}
-                  </>
-                )}
-              </button>
+                <Github className="h-4 w-4 text-[#d7b46a]" />
+                {t.contact.githubCta}
+              </a>
+              <a
+                href={t.contact.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 transition-colors hover:border-[#d7b46a]/45 hover:text-white"
+              >
+                <Linkedin className="h-4 w-4 text-[#d7b46a]" />
+                {t.contact.linkedinCta}
+              </a>
+            </div>
 
-              {submitState === "success" && (
-                <p className="mt-4 rounded-md border border-emerald-400/20 bg-emerald-400/10 p-3 text-sm text-emerald-100">
-                  {t.contact.successMessage}
-                </p>
-              )}
-              {submitState === "error" && (
-                <p className="mt-4 rounded-md border border-red-400/20 bg-red-400/10 p-3 text-sm text-red-100">
-                  {t.contact.errorMessage}
-                </p>
-              )}
-
-              <p className="mt-5 text-xs leading-6 text-zinc-500">
-                {t.contact.privacyNote}
-              </p>
-            </form>
-          </div>
+            <div className="mt-5 grid gap-4">
+              <BookingCalendar
+                copy={t.contact.booking}
+                locale={lang === "pl" ? "pl-PL" : "en-US"}
+              />
+              <ContactReveal copy={t.contact.reveal} />
+            </div>
           </motion.div>
         </div>
 

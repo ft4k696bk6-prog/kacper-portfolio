@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { LanguageMetadataSync } from "@/components/LanguageMetadataSync";
 import { GoogleTagManager } from "@/components/GoogleTagManager";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -90,6 +91,7 @@ export default function RootLayout({
       <body>
         <GoogleTagManager />
         <LanguageProvider>
+          <LanguageMetadataSync />
           <LanguageSwitcher />
           {children}
         </LanguageProvider>

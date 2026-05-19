@@ -1,4 +1,5 @@
 import type { Translations } from "./en";
+import { plCaseStudies } from "./case-studies";
 
 export const pl: Translations = {
   nav: {
@@ -10,6 +11,11 @@ export const pl: Translations = {
     cta: "Kontakt",
     openMenu: "Otwórz menu",
     closeMenu: "Zamknij menu",
+  },
+  meta: {
+    homeTitle: "Kacper Bernecki — Frontend / Web App Developer",
+    homeDescription:
+      "Tworzę aplikacje biznesowe w React, TypeScript, Next.js i Supabase: CRM-y, dashboardy, formularze i narzędzia workflow.",
   },
   hero: {
     eyebrow: "Aplikacje webowe dla biznesu",
@@ -57,7 +63,7 @@ export const pl: Translations = {
     heading: "Najpierw workflow biznesowy, potem technologia.",
     paragraphs: [
       "Przed pisaniem kodu patrzę na proces: kto używa aplikacji, jakich danych potrzebuje, co zmienia status i gdzie ma być widoczna kolejna akcja.",
-      "To podejście widać w B-CRM: widoki admina, menadżera i handlowca; statusy leadów; callbacki; spotkania; komentarze; historia oraz reguły dostępu oparte o bazę.",
+      "To podejście widać w B-CRM: widoki sprzedażowe i operacyjne zależne od ról, statusy leadów, callbacki, spotkania, komentarze, historia oraz reguły dostępu oparte o bazę.",
       "Portfolio prowadzi przez projekty, które można sprawdzić przez live demo, repozytoria i case study.",
     ],
   },
@@ -83,7 +89,7 @@ export const pl: Translations = {
       {
         title: "Role użytkowników",
         description:
-          "Różne widoki i uprawnienia dla admina, menadżera, handlowca oraz ról wspierających.",
+          "Różne widoki i uprawnienia dla sprzedaży, zarządzania, finansów, księgowości, logistyki i montażu.",
       },
       {
         title: "API i baza danych",
@@ -101,20 +107,22 @@ export const pl: Translations = {
     title: "Dla firm i osób technicznych",
     subtitle: "Jeśli chcesz szybko ocenić moje umiejętności web app, zacznij od B-CRM.",
     bestProject: "Najlepszy projekt do sprawdzenia: B-CRM",
+    stackLabel: "Stack",
     stack: "React, TypeScript, Next.js, Supabase, PostgreSQL, Tailwind CSS, Vercel",
     showsLabel: "Co pokazuje projekt",
     shows: [
       "Autoryzację Supabase i chronione ekrany aplikacji",
-      "Role i uprawnienia dla admina, menadżera i handlowca",
+      "Role i uprawnienia dla właściciela, admina, menadżera, handlowca i ról operacyjnych",
       "Zarządzanie leadami ze statusami, komentarzami, callbackami i spotkaniami",
-      "Historię zmian i ekrany CRM oparte o aktywności",
+      "Hierarchię menadżerską, historię zmian i ekrany CRM oparte o aktywności",
       "Dashboardy, filtry, formularze i workflow oparte o bazę danych",
+      "Proces realizacji z finansami, księgowością, logistyką i montażem",
       "Deploy production-like web app demo na Vercel",
     ],
     links: {
       demo: "Live demo",
-      repo: "GitHub repo",
-      caseStudy: "Case study",
+      repo: "Repozytorium GitHub",
+      caseStudy: "Studium przypadku",
       contact: "Kontakt",
     },
   },
@@ -125,7 +133,7 @@ export const pl: Translations = {
     techLabel: "Stack",
     demoLabel: "Live demo",
     repoLabel: "GitHub",
-    caseStudyLabel: "Case study",
+    caseStudyLabel: "Studium przypadku",
     linkLabel: "Otwórz projekt",
     credentialsLabel: "Dane demo",
     statusLabel: "Status",
@@ -140,17 +148,18 @@ export const pl: Translations = {
           "Production-like CRM demo do obsługi lead management i procesu sprzedaży, z widokami opartymi o role i dane w Supabase.",
         features: [
           "Logowanie i konta demo",
-          "Role: admin, menadżer, handlowiec",
+          "Role: właściciel, admin, menadżer, handlowiec, finanse, podgląd, księgowość, logistyka, monter",
           "Statusy leadów, komentarze i historia",
           "Callbacki, spotkania i widok kalendarza",
-          "Panel admina i zarządzanie zespołem",
-          "Import/eksport CSV oraz flow ofert PDF",
+          "Panel admina, zarządzanie zespołem i hierarchia menadżerska",
+          "Samouczek realizacji: finanse, księgowość, logistyka i montaż",
+          "Import/eksport CSV, flow ofert PDF i demo payload KSeF",
         ],
         technologies: ["React", "TypeScript", "Next.js", "Supabase", "PostgreSQL", "Tailwind CSS", "Vercel"],
         status: "Production-like CRM demo",
         demoUrl: "https://b-crm-berni.vercel.app/login",
         repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
-        caseStudyUrl: "/b-crm-case-study",
+        caseStudyUrl: "/case-studies/b-crm",
         credentials: ["Konta demo są dostępne na ekranie logowania."],
       },
       {
@@ -171,6 +180,7 @@ export const pl: Translations = {
         status: "Prototype",
         demoUrl: "https://berninutri-portfolio.vercel.app",
         repoUrl: "https://github.com/ft4k696bk6-prog/berninutri-portfolio",
+        caseStudyUrl: "/case-studies/berninutri",
       },
       {
         title: "Kalkulator leasingu",
@@ -190,6 +200,7 @@ export const pl: Translations = {
         status: "Production-like business tool demo",
         demoUrl: "https://kalkulator-leasingu-1-desktop.vercel.app",
         repoUrl: "https://github.com/ft4k696bk6-prog/kalkulator.leasingu-1",
+        caseStudyUrl: "/case-studies/kalkulator-leasingu",
       },
       {
         title: "Berni Rush",
@@ -208,24 +219,27 @@ export const pl: Translations = {
         status: "Playable prototype / Side project",
         demoUrl: "https://bernirushdemooo.vercel.app",
         repoUrl: "https://github.com/ft4k696bk6-prog/Berni-rush-demoo",
+        caseStudyUrl: "/case-studies/berni-rush",
       },
       {
         title: "Portfolio",
         problem:
           "Portfolio techniczne powinno szybko pokazać najmocniejszy projekt bez pozycjonowania jako osoba początkująca i bez ogólnikowego marketingu.",
         description:
-          "Osobista strona developera skupiona na aplikacjach biznesowych, projektach, case study i bezpiecznym formularzu kontaktowym.",
+          "Osobista strona developera skupiona na aplikacjach biznesowych, projektach, dwujęzycznych studiach przypadku i bezpośrednim kontakcie.",
         features: [
           "Struktura projektów z B-CRM jako priorytetem",
           "Sekcja dla osób technicznych",
-          "Case study",
-          "Formularz kontaktowy z zabezpieczeniami",
+          "Dwujęzyczne studia przypadku",
+          "Własny kalendarz przez Cal.com",
+          "Chronione odsłanianie emaila i telefonu",
           "SEO i OpenGraph metadata",
         ],
-        technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Resend", "Turnstile", "Vercel"],
+        technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Cal.com API", "Turnstile", "Vercel"],
         status: "Active development",
         demoUrl: "https://kacper-portfolio.vercel.app",
         repoUrl: "https://github.com/ft4k696bk6-prog/kacper-portfolio",
+        caseStudyUrl: "/case-studies/portfolio",
       },
     ],
   },
@@ -268,20 +282,10 @@ export const pl: Translations = {
   contact: {
     title: "Porozmawiajmy o aplikacji webowej, CRM-ie albo roli frontend",
     description:
-      "Użyj formularza w sprawie projektu, review technicznego, współpracy albo roli web app / frontend.",
-    nameLabel: "Imię i nazwisko",
-    emailLabel: "Email",
-    companyLabel: "Firma lub kontekst",
-    messageLabel: "Wiadomość",
-    submitLabel: "Wyślij wiadomość",
-    sendingLabel: "Wysyłanie...",
-    successMessage: "Dzięki. Wiadomość została wysłana.",
-    errorMessage: "Nie udało się wysłać wiadomości. Spróbuj ponownie później.",
-    privacyNote:
-      "Adres email służy wyłącznie do odpowiedzi na wiadomość. Bezpośrednie dane kontaktowe są odsłaniane dopiero po weryfikacji człowieka.",
+      "Umów krótką rozmowę albo odsłoń bezpośredni kontakt po szybkiej weryfikacji człowieka.",
     calendarTitle: "Kalendarz",
     calendarDescription:
-      "Jeśli wolisz rozmowę zamiast formularza, wybierz termin w kalendarzu.",
+      "Wybierz termin rozmowy w kalendarzu.",
     calendarCta: "Umów rozmowę",
     booking: {
       title: "Kalendarz",
@@ -297,7 +301,7 @@ export const pl: Translations = {
       bookingSubmitLabel: "Zarezerwuj termin",
       bookingSendingLabel: "Sprawdzanie...",
       bookingSuccessLabel: "Termin został zarezerwowany. Potwierdzenie powinno przyjść na email.",
-      bookingErrorLabel: "Nie udało się zarezerwować terminu. Spróbuj ponownie albo użyj formularza.",
+      bookingErrorLabel: "Nie udało się zarezerwować terminu. Spróbuj ponownie później.",
     },
     reveal: {
       title: "Bezpośredni kontakt",
@@ -307,7 +311,7 @@ export const pl: Translations = {
       emailLabel: "Email",
       phoneLabel: "Telefon",
       humanCheckLabel: "Weryfikacja człowieka",
-      errorMessage: "Nie udało się odsłonić danych. Użyj formularza kontaktowego.",
+      errorMessage: "Nie udało się odsłonić danych kontaktowych. Spróbuj ponownie później.",
     },
     locationLabel: "Lokalizacja",
     githubLabel: "GitHub",
@@ -319,4 +323,5 @@ export const pl: Translations = {
     linkedinCta: "LinkedIn",
     copyright: "© 2026 Kacper Bernecki. Wszelkie prawa zastrzeżone.",
   },
+  caseStudies: plCaseStudies,
 };

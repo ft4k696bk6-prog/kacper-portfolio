@@ -16,10 +16,10 @@ Screenshots should be added to `docs/screenshots/`. Placeholder image links are 
 
 - B-CRM-first project presentation.
 - Technical reviewer section for companies and recruiters.
-- B-CRM case study page.
+- Bilingual case studies for all portfolio projects.
 - Technology section focused on project stack and usage.
-- Contact form that avoids rendering direct email/phone publicly.
-- Turnstile honeypot/rate-limit contact protection.
+- Direct email/phone reveal without rendering contact details in the initial HTML.
+- Turnstile fallback, honeypot and rate-limit protection for contact reveal.
 - Custom booking calendar that talks to Cal.com through server routes.
 - Optional Google Tag Manager integration via environment variable.
 - SEO, OpenGraph, Twitter card, sitemap and robots metadata.
@@ -31,8 +31,8 @@ Screenshots should be added to `docs/screenshots/`. Placeholder image links are 
 - TypeScript
 - Tailwind CSS
 - Framer Motion
-- Resend
 - Cloudflare Turnstile
+- Cal.com API
 - Vercel
 - Vitest
 
@@ -69,7 +69,6 @@ Create `.env.local` from `.env.example`.
 
 ```bash
 NEXT_PUBLIC_SITE_URL=
-RESEND_API_KEY=
 CONTACT_TO_EMAIL=
 CONTACT_REVEAL_EMAIL=
 CONTACT_REVEAL_PHONE=
@@ -87,20 +86,20 @@ NEXT_PUBLIC_CALENDAR_TIMEZONE=Europe/Warsaw
 
 ## Security notes
 
-The contact form and contact reveal flow avoid rendering direct email and phone details in the initial page HTML. Bot protection uses a honeypot, simple rate limiting and Cloudflare Turnstile verification for direct contact reveal. Booking requests are sent through server routes so the Cal.com API key is not exposed in the browser. `robots.txt` is configured for indexing; it is not treated as a scraping prevention mechanism.
+The contact reveal flow avoids rendering direct email and phone details in the initial page HTML. Bot protection uses a honeypot, simple rate limiting and Cloudflare Turnstile verification when configured. Booking requests are sent through server routes so the Cal.com API key is not exposed in the browser. `robots.txt` is configured for indexing; it is not treated as a scraping prevention mechanism.
 
 ## What I learned
 
 - Positioning a portfolio around evidence and technical specificity.
-- Building a contact flow with server-side email delivery.
+- Building contact reveal and booking flows through server routes.
 - Keeping public contact details out of rendered markup.
-- Structuring project cards around problem, real features, stack and status.
+- Structuring project cards and case studies around problem, real features, stack and status.
 - Managing SEO and OpenGraph metadata in Next.js.
 
 ## Roadmap
 
 - Add real screenshots for every project.
-- Add browser smoke tests for portfolio navigation and contact form states.
+- Add browser smoke tests for portfolio navigation, booking and contact reveal states.
 - Add a richer B-CRM architecture diagram.
 - Add analytics events through GTM after the container ID is configured.
 - Add GTM events for booking day/time selection after the container ID is configured.

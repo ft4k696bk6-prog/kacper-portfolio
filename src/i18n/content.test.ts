@@ -28,8 +28,64 @@ describe("portfolio content", () => {
     expect(content).not.toContain("No free times");
     expect(content).not.toContain("HOW I APPROACH WEB APPS");
     expect(content).not.toContain("Jak podchodzę do aplikacji");
-    expect(content).not.toContain("Let's meet");
-    expect(content).not.toContain("Poznajmy się");
+    expect(content).not.toContain(["Let's", "meet"].join(" "));
+    expect(content).not.toContain(["Poznajmy", "się"].join(" "));
     expect(content).not.toContain("Contact details could not be revealed");
+  });
+
+  it("adds case study links for every project in both languages", () => {
+    for (const locale of [en, pl]) {
+      const caseStudySlugs = new Set(locale.caseStudies.items.map((item) => item.slug));
+
+      for (const project of locale.projects.items) {
+        expect(project.caseStudyUrl).toMatch(/^\/case-studies\//);
+        expect(caseStudySlugs.has(project.caseStudyUrl.replace("/case-studies/", ""))).toBe(true);
+      }
+    }
+  });
+
+  it("keeps case study section labels localized", () => {
+    const enCaseStudies = JSON.stringify(en.caseStudies);
+    const plCaseStudies = JSON.stringify(pl.caseStudies);
+
+    expect(enCaseStudies).not.toContain("Cel projektu");
+    expect(enCaseStudies).not.toContain("Użytkownicy i role");
+    expect(enCaseStudies).not.toContain("Najważniejsze funkcje");
+    expect(plCaseStudies).not.toContain("Goal");
+    expect(plCaseStudies).not.toContain("Users and roles");
+    expect(plCaseStudies).not.toContain("Key features");
+  });
+
+  it("updates B-CRM case study with current roles and tutorial context", () => {
+    const enBcrm = en.caseStudies.items.find((item) => item.slug === "b-crm");
+    const plBcrm = pl.caseStudies.items.find((item) => item.slug === "b-crm");
+
+    expect(enBcrm?.roles.map((role) => role.name)).toEqual(
+      expect.arrayContaining([
+        "Owner",
+        "Admin",
+        "Manager",
+        "Sales representative",
+        "Finance",
+        "Viewer",
+        "Accounting",
+        "Logistics",
+        "Installer",
+      ]),
+    );
+    expect(JSON.stringify(enBcrm)).toContain("Safe demo tutorial");
+    expect(JSON.stringify(enBcrm)).toContain("KSeF");
+    expect(JSON.stringify(plBcrm)).toContain("samouczek");
+    expect(JSON.stringify(plBcrm)).toContain("KSeF");
+  });
+
+  it("removes the old message form copy from contact content", () => {
+    const content = JSON.stringify({ en: en.contact, pl: pl.contact });
+
+    expect(content).not.toContain(["Send", "message"].join(" "));
+    expect(content).not.toContain(["Wyślij", "wiadomość"].join(" "));
+    expect(content).not.toContain(["Use", "the", "form"].join(" "));
+    expect(content).not.toContain(["Użyj", "formularza"].join(" "));
+    expect(content).not.toContain("Resend");
   });
 });

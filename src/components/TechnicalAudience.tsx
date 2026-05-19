@@ -34,7 +34,7 @@ export function TechnicalAudience() {
             <div className="mt-6 rounded-md border border-[#d7b46a]/25 bg-[#d7b46a]/10 p-4">
               <div className="flex items-center gap-2 text-sm uppercase tracking-[0.18em] text-[#f5dfae]">
                 <Database className="h-4 w-4" />
-                Stack
+                {t.technicalAudience.stackLabel}
               </div>
               <p className="mt-3 text-sm leading-7 text-zinc-200">
                 {t.technicalAudience.stack}
@@ -78,7 +78,7 @@ export function TechnicalAudience() {
                 {t.technicalAudience.links.repo}
               </a>
               <Link
-                href="/b-crm-case-study"
+                href="/case-studies/b-crm"
                 className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
               >
                 {t.technicalAudience.links.caseStudy}
