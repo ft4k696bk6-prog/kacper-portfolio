@@ -275,7 +275,7 @@ export const en = {
         ],
         technologies: ["React", "TypeScript", "Vite", "Hono", "Drizzle", "Bun", "Vercel"],
         status: "Production-like business tool demo",
-        demoUrl: "https://kalkulator-leasingu-1-desktop.vercel.app",
+        demoUrl: "https://kalkulatorleasingu-7484-main.vercel.app",
         repoUrl: "https://github.com/ft4k696bk6-prog/kalkulator.leasingu-1",
         caseStudyUrl: "/case-studies/kalkulator-leasingu",
         image: {

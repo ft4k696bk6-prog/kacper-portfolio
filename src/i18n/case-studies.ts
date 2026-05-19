@@ -184,7 +184,7 @@ export const enCaseStudies: CaseStudiesContent = {
       summary:
         "The leasing calculator separates calculation logic from UI and presents simplified business estimates responsibly.",
       status: "Production-like business tool demo",
-      liveUrl: "https://kalkulator-leasingu-1-desktop.vercel.app",
+      liveUrl: "https://kalkulatorleasingu-7484-main.vercel.app",
       repoUrl: "https://github.com/ft4k696bk6-prog/kalkulator.leasingu-1",
       images: [
         {
@@ -521,7 +521,7 @@ export const plCaseStudies: CaseStudiesContent = {
       summary:
         "Kalkulator leasingu oddziela logikę obliczeń od UI i odpowiedzialnie pokazuje uproszczone estymacje biznesowe.",
       status: "Production-like business tool demo",
-      liveUrl: "https://kalkulator-leasingu-1-desktop.vercel.app",
+      liveUrl: "https://kalkulatorleasingu-7484-main.vercel.app",
       repoUrl: "https://github.com/ft4k696bk6-prog/kalkulator.leasingu-1",
       images: [
         {
