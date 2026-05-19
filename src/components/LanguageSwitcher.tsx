@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CalendarDays, Mail, Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
@@ -43,7 +42,7 @@ export function LanguageSwitcher() {
       transition={{ duration: 0.45, ease: "easeOut" }}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 md:px-8">
-        <Link
+        <a
           href={anchorHref("#home")}
           className="group flex items-center gap-3"
           onClick={() => setIsOpen(false)}
@@ -54,17 +53,17 @@ export function LanguageSwitcher() {
           <span className="hidden text-sm uppercase tracking-[0.28em] text-zinc-300 transition-colors group-hover:text-white sm:inline">
             Kacper Bernecki
           </span>
-        </Link>
+        </a>
 
         <nav className="hidden items-center gap-1 lg:flex">
           {navItems.map((item) => (
-            <Link
+            <a
               key={item.href}
               href={anchorHref(item.href)}
               className="rounded-md px-4 py-2 text-sm text-zinc-300 transition-colors hover:bg-white/5 hover:text-[#f5dfae]"
             >
               {t.nav[item.key]}
-            </Link>
+            </a>
           ))}
         </nav>
 
@@ -73,20 +72,20 @@ export function LanguageSwitcher() {
             {languageButton("pl", "PL")}
             {languageButton("en", "ENG")}
           </div>
-          <Link
+          <a
             href={anchorHref("#contact")}
             className="inline-flex items-center gap-2 rounded-md border border-[#d7b46a]/50 bg-[#d7b46a] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(215,180,106,0.25)]"
           >
             <Mail className="h-4 w-4" />
             {t.nav.cta}
-          </Link>
-          <Link
+          </a>
+          <a
             href={anchorHref("#contact")}
             aria-label={t.contact.calendarCta}
             className="grid h-10 w-10 place-items-center rounded-md border border-[#d7b46a]/40 bg-[#d7b46a]/10 text-[#f5dfae] transition-all hover:-translate-y-0.5 hover:border-[#d7b46a]/70 hover:bg-[#d7b46a]/15"
           >
             <CalendarDays className="h-4 w-4" />
-          </Link>
+          </a>
         </div>
 
         <button
@@ -107,36 +106,36 @@ export function LanguageSwitcher() {
         >
           <div className="mx-auto flex max-w-7xl flex-col gap-2">
             {navItems.map((item) => (
-              <Link
+              <a
                 key={item.href}
                 href={anchorHref(item.href)}
                 className="rounded-md px-3 py-3 text-base text-zinc-200 hover:bg-white/5"
                 onClick={() => setIsOpen(false)}
               >
                 {t.nav[item.key]}
-              </Link>
+              </a>
             ))}
             <div className="mt-3 flex items-center justify-between gap-3">
               <div className="flex rounded-md border border-white/10 bg-white/[0.03] p-1">
                 {languageButton("pl", "PL")}
                 {languageButton("en", "ENG")}
               </div>
-              <Link
+              <a
                 href={anchorHref("#contact")}
                 onClick={() => setIsOpen(false)}
                 className="inline-flex items-center gap-2 rounded-md bg-[#d7b46a] px-4 py-2 text-sm text-black"
               >
                 <Mail className="h-4 w-4" />
                 {t.nav.cta}
-              </Link>
-              <Link
+              </a>
+              <a
                 href={anchorHref("#contact")}
                 onClick={() => setIsOpen(false)}
                 aria-label={t.contact.calendarCta}
                 className="grid h-10 w-10 place-items-center rounded-md border border-[#d7b46a]/40 bg-[#d7b46a]/10 text-[#f5dfae]"
               >
                 <CalendarDays className="h-4 w-4" />
-              </Link>
+              </a>
             </div>
           </div>
         </motion.div>

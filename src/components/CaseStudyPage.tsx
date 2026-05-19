@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -32,7 +31,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
     return (
       <main className="min-h-screen bg-[#070707] px-5 py-32 text-white md:px-8">
         <div className="mx-auto max-w-4xl">
-          <BackLink label={t.caseStudies.backLabel} />
+          <BackLink label={t.caseStudies.projectsBackLabel} />
           <h1 className="mt-10 text-4xl md:text-5xl">{t.caseStudies.notFoundTitle}</h1>
           <p className="mt-4 text-zinc-300">{t.caseStudies.notFoundDescription}</p>
         </div>
@@ -43,7 +42,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
   return (
     <main className="min-h-screen bg-[#070707] px-5 py-28 text-white md:px-8">
       <div className="mx-auto max-w-6xl">
-        <BackLink label={t.caseStudies.backLabel} />
+        <BackLink label={t.caseStudies.projectsBackLabel} />
 
         <section className="py-12">
           <p className="text-sm uppercase tracking-[0.28em] text-[#d7b46a]">
@@ -125,6 +124,10 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
           <h2 className="text-2xl text-white">{t.caseStudies.sections.limitations}</h2>
           <p className="mt-4 text-sm leading-7 text-zinc-200">{study.limitations}</p>
         </section>
+
+        <div className="mt-8">
+          <BackLink label={t.caseStudies.projectsBackLabel} />
+        </div>
       </div>
     </main>
   );
@@ -132,13 +135,16 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
 
 function BackLink({ label }: { label: string }) {
   return (
-    <Link
-      href="/#projects"
-      className="inline-flex items-center gap-2 rounded-md border border-white/10 px-4 py-2 text-sm text-zinc-300 transition-colors hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
+    <button
+      type="button"
+      onClick={() => {
+        window.location.assign("/#projects");
+      }}
+      className="inline-flex items-center gap-2 rounded-md bg-[#d7b46a] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(215,180,106,0.22)]"
     >
       <ArrowLeft className="h-4 w-4" />
       {label}
-    </Link>
+    </button>
   );
 }
 

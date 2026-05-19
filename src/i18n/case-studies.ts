@@ -19,6 +19,7 @@ export type CaseStudyItem = {
 
 export type CaseStudiesContent = {
   backLabel: string;
+  projectsBackLabel: string;
   eyebrow: string;
   liveDemoLabel: string;
   repoLabel: string;
@@ -40,6 +41,7 @@ export type CaseStudiesContent = {
 
 export const enCaseStudies: CaseStudiesContent = {
   backLabel: "Back to portfolio",
+  projectsBackLabel: "Back to projects",
   eyebrow: "Case study",
   liveDemoLabel: "Live demo",
   repoLabel: "GitHub",
@@ -294,6 +296,7 @@ export const enCaseStudies: CaseStudiesContent = {
 
 export const plCaseStudies: CaseStudiesContent = {
   backLabel: "Wróć do portfolio",
+  projectsBackLabel: "Wróć do projektów",
   eyebrow: "Studium przypadku",
   liveDemoLabel: "Demo",
   repoLabel: "GitHub",
