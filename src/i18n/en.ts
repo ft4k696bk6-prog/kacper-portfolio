@@ -184,7 +184,7 @@ export const en = {
         repoUrl: "https://github.com/ft4k696bk6-prog/Berni-rush-demoo",
         caseStudyUrl: "/case-studies/berni-rush",
         image: {
-          src: "/images/projects/berni-rush.jpg",
+          src: "/images/projects/berni-rush-gameplay.jpg",
           alt: "Berni Rush browser game preview",
         },
       },
@@ -279,7 +279,7 @@ export const en = {
         repoUrl: "https://github.com/ft4k696bk6-prog/kalkulator.leasingu-1",
         caseStudyUrl: "/case-studies/kalkulator-leasingu",
         image: {
-          src: "/images/projects/leasing-calculator.jpg",
+          src: "/images/projects/leasing-calculator-app.jpg",
           alt: "Leasing calculator business tool preview",
         },
       },
