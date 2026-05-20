@@ -17,7 +17,7 @@ describe("portfolio content", () => {
       "Portfolio",
       "Unreal Engine Gameplay Prototype",
       "BerniNutri",
-      "Kalkulator leasingu",
+      "Leasing Calculator",
     ]);
     expect(pl.projects.items.map((item) => item.title)).toEqual([
       "B-CRM",
@@ -94,6 +94,15 @@ describe("portfolio content", () => {
   it("defaults the translated content to ENG before a saved language is selected", () => {
     expect(en.meta.homeTitle).toContain("Frontend / Web App Developer");
     expect(en.nav.interactive).toBe("Interactive portfolio");
+  });
+
+  it("keeps the leasing calculator title localized", () => {
+    expect(en.projects.items.map((item) => item.title)).toContain("Leasing Calculator");
+    expect(en.projects.items.map((item) => item.title)).not.toContain("Kalkulator leasingu");
+    expect(en.caseStudies.items.find((item) => item.slug === "kalkulator-leasingu")?.title).toContain(
+      "Leasing Calculator",
+    );
+    expect(pl.projects.items.map((item) => item.title)).toContain("Kalkulator leasingu");
   });
 
   it("uses cookie settings copy instead of analytics-only consent copy", () => {

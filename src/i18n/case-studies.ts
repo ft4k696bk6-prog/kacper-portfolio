@@ -234,7 +234,7 @@ export const enCaseStudies: CaseStudiesContent = {
     },
     {
       slug: "kalkulator-leasingu",
-      title: "Kalkulator leasingu — business leasing estimate tool",
+      title: "Leasing Calculator — business leasing estimate tool",
       subtitle:
         "Business calculator demo for quick indicative leasing cost estimates before a finance offer conversation.",
       summary:

@@ -285,7 +285,7 @@ export const en = {
         },
       },
       {
-        title: "Kalkulator leasingu",
+        title: "Leasing Calculator",
         problem:
           "Business users often need a quick leasing cost estimate before moving to a financial offer conversation.",
         description:
