@@ -13,13 +13,23 @@ const CAL_API_BASE = "https://api.cal.com/v2";
 const CAL_SLOTS_API_VERSION = "2024-09-04";
 const CAL_BOOKINGS_API_VERSION = "2026-02-25";
 
-type CalSlotValue = string | { start?: string };
+type CalSlotValue = string | { start?: string; time?: string };
 
 type CalSlotsResponse = {
   status?: string;
   data?: Record<string, CalSlotValue[]>;
   message?: string;
   error?: { message?: string };
+};
+
+type CalPublicScheduleResponse = {
+  result?: {
+    data?: {
+      json?: {
+        slots?: Record<string, CalSlotValue[]>;
+      };
+    };
+  };
 };
 
 type CalBookingResponse = {
@@ -44,7 +54,7 @@ export type AvailableBookingDay = ReturnType<typeof formatBookingDay> & {
 export type CalEventConfig =
   | {
       ok: true;
-      apiKey: string;
+      apiKey?: string;
       eventTypeId?: number;
       eventTypeSlug?: string;
       username?: string;
@@ -73,11 +83,11 @@ export function getCalEventConfig(): CalEventConfig {
   const eventTypeSlug = process.env.CAL_EVENT_TYPE_SLUG?.trim();
   const username = process.env.CAL_USERNAME?.trim();
 
-  if (!apiKey) {
-    return { ok: false, message: "Booking calendar is not configured." };
-  }
-
   if (eventTypeId && Number.isFinite(Number(eventTypeId))) {
+    if (!apiKey) {
+      return { ok: false, message: "Booking calendar API key is not configured." };
+    }
+
     return { ok: true, apiKey, eventTypeId: Number(eventTypeId) };
   }
 
@@ -117,10 +127,15 @@ function applyEventBody(
 }
 
 function getCalHeaders(config: Extract<CalEventConfig, { ok: true }>, version: string) {
-  return {
-    Authorization: `Bearer ${config.apiKey}`,
+  const headers: Record<string, string> = {
     "cal-api-version": version,
   };
+
+  if (config.apiKey) {
+    headers.Authorization = `Bearer ${config.apiKey}`;
+  }
+
+  return headers;
 }
 
 function normalizeCalError(response: CalSlotsResponse | CalBookingResponse) {
@@ -131,13 +146,92 @@ function normalizeSlots(rawSlots: CalSlotValue[] | undefined, timeZone: string) 
   const now = Date.now();
 
   return (rawSlots ?? [])
-    .map((slot) => (typeof slot === "string" ? slot : slot.start))
+    .map((slot) => (typeof slot === "string" ? slot : slot.start || slot.time))
     .filter((start): start is string => Boolean(start))
     .filter((start) => Date.parse(start) > now)
     .map((start) => ({
       start,
       label: formatSlotTime(start, timeZone),
     }));
+}
+
+function toUtcDayStart(date: string) {
+  return new Date(`${date}T00:00:00.000Z`).toISOString();
+}
+
+function toUtcDayEnd(date: string) {
+  return new Date(`${date}T23:59:59.999Z`).toISOString();
+}
+
+function getPublicScheduleUrl({
+  start,
+  end,
+  config,
+  timeZone,
+}: {
+  start: string;
+  end: string;
+  config: Extract<CalEventConfig, { ok: true }>;
+  timeZone: string;
+}) {
+  if (!config.eventTypeSlug || !config.username) {
+    throw new CalComError("Public Cal.com schedule requires username and event slug.", 503);
+  }
+
+  const input = {
+    json: {
+      isTeamEvent: false,
+      usernameList: [config.username],
+      eventTypeSlug: config.eventTypeSlug,
+      startTime: toUtcDayStart(start),
+      endTime: toUtcDayEnd(end),
+      timeZone,
+      duration: null,
+      rescheduleUid: null,
+      orgSlug: null,
+      teamMemberEmail: null,
+      routedTeamMemberIds: null,
+      skipContactOwner: false,
+      routingFormResponseId: null,
+      email: null,
+      embedConnectVersion: "0",
+      _isDryRun: false,
+      _bookerCorrelationId: "kacper-portfolio",
+    },
+    meta: {
+      values: {
+        duration: ["undefined"],
+        orgSlug: ["undefined"],
+        teamMemberEmail: ["undefined"],
+        routingFormResponseId: ["undefined"],
+      },
+    },
+  };
+  const url = new URL("https://cal.com/api/trpc/slots/getSchedule");
+  url.searchParams.set("input", JSON.stringify(input));
+  return url;
+}
+
+async function fetchPublicSlotsRange(
+  start: string,
+  end: string,
+  config: Extract<CalEventConfig, { ok: true }>,
+) {
+  const timeZone = getCalendarTimeZone();
+  const response = await fetch(getPublicScheduleUrl({ start, end, config, timeZone }), {
+    headers: {
+      Accept: "application/json",
+      "User-Agent": "kacper-portfolio",
+    },
+    cache: "no-store",
+  });
+  const body = (await response.json().catch(() => ({}))) as CalPublicScheduleResponse;
+
+  if (!response.ok) {
+    throw new CalComError("Public Cal.com schedule request failed.", response.status || 502);
+  }
+
+  return body.result?.data?.json?.slots ?? {};
 }
 
 function getSlotsUrl({
@@ -168,6 +262,10 @@ async function fetchSlotsRange(start: string, end: string) {
     throw new CalComError(config.message, 503);
   }
 
+  if (!config.apiKey) {
+    return fetchPublicSlotsRange(start, end, config);
+  }
+
   const response = await fetch(getSlotsUrl({ start, end, config, timeZone }), {
     headers: getCalHeaders(config, CAL_SLOTS_API_VERSION),
     cache: "no-store",
@@ -175,6 +273,10 @@ async function fetchSlotsRange(start: string, end: string) {
   const body = (await response.json().catch(() => ({}))) as CalSlotsResponse;
 
   if (!response.ok || body.status === "error") {
+    if (config.eventTypeSlug && config.username) {
+      return fetchPublicSlotsRange(start, end, config);
+    }
+
     throw new CalComError(normalizeCalError(body), response.status || 502);
   }
 
@@ -283,7 +385,9 @@ export async function createBooking({
   const response = await fetch(`${CAL_API_BASE}/bookings`, {
     method: "POST",
     headers: {
-      ...getCalHeaders(config, CAL_BOOKINGS_API_VERSION),
+      ...(config.eventTypeId
+        ? getCalHeaders(config, CAL_BOOKINGS_API_VERSION)
+        : { "cal-api-version": CAL_BOOKINGS_API_VERSION }),
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
