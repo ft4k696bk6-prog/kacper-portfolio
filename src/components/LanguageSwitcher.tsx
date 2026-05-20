@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { CalendarDays, Mail, Menu, X } from "lucide-react";
+import { CalendarDays, Laptop, Mail, Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -73,6 +73,15 @@ export function LanguageSwitcher() {
             {languageButton("en", "ENG")}
           </div>
           <a
+            href="https://kacper-bernecki.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/[0.03] px-4 py-2 text-sm text-zinc-100 transition-all hover:-translate-y-0.5 hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
+          >
+            <Laptop className="h-4 w-4 text-[#d7b46a]" />
+            {t.nav.interactive}
+          </a>
+          <a
             href={anchorHref("#contact")}
             className="inline-flex items-center gap-2 rounded-md border border-[#d7b46a]/50 bg-[#d7b46a] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(215,180,106,0.25)]"
           >
@@ -88,13 +97,28 @@ export function LanguageSwitcher() {
           </a>
         </div>
 
-        <button
-          onClick={() => setIsOpen((open) => !open)}
-          className="grid h-11 w-11 place-items-center rounded-md border border-white/10 bg-white/[0.03] text-zinc-200 lg:hidden"
-          aria-label={isOpen ? t.nav.closeMenu : t.nav.openMenu}
-        >
-          {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex rounded-md border border-[#d7b46a]/35 bg-white/[0.04] p-1">
+            {languageButton("pl", "PL")}
+            {languageButton("en", "ENG")}
+          </div>
+          <a
+            href="https://kacper-bernecki.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t.nav.interactive}
+            className="grid h-11 w-11 place-items-center rounded-md border border-[#d7b46a]/40 bg-[#d7b46a]/10 text-[#f5dfae]"
+          >
+            <Laptop className="h-5 w-5" />
+          </a>
+          <button
+            onClick={() => setIsOpen((open) => !open)}
+            className="grid h-11 w-11 place-items-center rounded-md border border-white/10 bg-white/[0.03] text-zinc-200"
+            aria-label={isOpen ? t.nav.closeMenu : t.nav.openMenu}
+          >
+            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {isOpen && (
@@ -116,10 +140,6 @@ export function LanguageSwitcher() {
               </a>
             ))}
             <div className="mt-3 flex items-center justify-between gap-3">
-              <div className="flex rounded-md border border-white/10 bg-white/[0.03] p-1">
-                {languageButton("pl", "PL")}
-                {languageButton("en", "ENG")}
-              </div>
               <a
                 href={anchorHref("#contact")}
                 onClick={() => setIsOpen(false)}

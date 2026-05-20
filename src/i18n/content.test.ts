@@ -12,6 +12,7 @@ describe("portfolio content", () => {
   it("keeps the requested project order", () => {
     expect(en.projects.items.map((item) => item.title)).toEqual([
       "B-CRM",
+      "Interactive MacBook Portfolio",
       "Berni Rush",
       "Portfolio",
       "Unreal Engine Gameplay Prototype",
@@ -20,6 +21,7 @@ describe("portfolio content", () => {
     ]);
     expect(pl.projects.items.map((item) => item.title)).toEqual([
       "B-CRM",
+      "Interactive MacBook Portfolio",
       "Berni Rush",
       "Portfolio",
       "Unreal Engine Gameplay Prototype",
@@ -72,6 +74,26 @@ describe("portfolio content", () => {
     expect(plUnreal?.images?.length).toBeGreaterThanOrEqual(2);
     expect(enUnreal?.liveUrl).toBeUndefined();
     expect(enUnreal?.repoUrl).toBeUndefined();
+  });
+
+  it("includes the interactive portfolio case study in both languages", () => {
+    const enInteractive = en.caseStudies.items.find(
+      (item) => item.slug === "interactive-portfolio",
+    );
+    const plInteractive = pl.caseStudies.items.find(
+      (item) => item.slug === "interactive-portfolio",
+    );
+
+    expect(enInteractive?.status).toBe("Experimental interactive portfolio");
+    expect(plInteractive?.status).toBe("Experimental interactive portfolio");
+    expect(enInteractive?.liveUrl).toBe("https://kacper-bernecki.vercel.app");
+    expect(enInteractive?.images?.length).toBeGreaterThanOrEqual(2);
+    expect(plInteractive?.images?.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("defaults the translated content to ENG before a saved language is selected", () => {
+    expect(en.meta.homeTitle).toContain("Frontend / Web App Developer");
+    expect(en.nav.interactive).toBe("Interactive portfolio");
   });
 
   it("keeps case study section labels localized", () => {

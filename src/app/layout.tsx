@@ -3,10 +3,8 @@ import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LanguageMetadataSync } from "@/components/LanguageMetadataSync";
-import { GoogleTagManager } from "@/components/GoogleTagManager";
-import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { AnalyticsConsent } from "@/components/AnalyticsConsent";
 import { Geist } from "next/font/google";
-import { Suspense } from "react";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const siteUrl = "https://kacper-portfolio.vercel.app";
@@ -18,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | Kacper Bernecki",
   },
   description:
-    "Tworzę aplikacje biznesowe w React, TypeScript, Next.js i Supabase: CRM-y, dashboardy, formularze i narzędzia do obsługi procesów firmowych.",
+    "I build business web applications in React, TypeScript, Next.js and Supabase: CRMs, dashboards, forms and workflow tools.",
   keywords: [
     "Kacper Bernecki",
     "Frontend Developer",
@@ -43,8 +41,8 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: "Kacper Bernecki Portfolio",
     type: "website",
-    locale: "pl_PL",
-    alternateLocale: "en_US",
+    locale: "en_US",
+    alternateLocale: "pl_PL",
     images: [
       {
         url: "/images/profile-3-cutout.png",
@@ -63,6 +61,11 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: siteUrl,
+  },
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/apple-touch-icon.svg", type: "image/svg+xml" }],
   },
   robots: {
     index: true,
@@ -88,13 +91,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pl" className={`scroll-smooth font-sans ${geist.variable}`}>
+    <html lang="en" className={`scroll-smooth font-sans ${geist.variable}`}>
       <body>
-        <GoogleTagManager />
-        <Suspense fallback={null}>
-          <GoogleAnalytics />
-        </Suspense>
         <LanguageProvider>
+          <AnalyticsConsent />
           <LanguageMetadataSync />
           <LanguageSwitcher />
           {children}

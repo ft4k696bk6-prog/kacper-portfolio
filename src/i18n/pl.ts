@@ -11,6 +11,7 @@ export const pl: Translations = {
     cta: "Kontakt",
     openMenu: "Otwórz menu",
     closeMenu: "Zamknij menu",
+    interactive: "Interaktywne portfolio",
   },
   meta: {
     homeTitle: "Kacper Bernecki — Frontend / Web App Developer",
@@ -162,8 +163,32 @@ export const pl: Translations = {
         caseStudyUrl: "/case-studies/b-crm",
         credentials: ["Konta demo są dostępne na ekranie logowania."],
         image: {
-          src: "/images/projects/bcrm-login.jpg",
-          alt: "Ekran logowania i kont demo B-CRM",
+          src: "/images/projects/bcrm-admin-dashboard.jpg",
+          alt: "Preview dashboardu admina i workflow demo B-CRM",
+        },
+      },
+      {
+        title: "Interactive MacBook Portfolio",
+        problem:
+          "Interaktywne portfolio powinno być angażujące, ale nie zastępować czytelnych dowodów technicznych z głównej strony.",
+        description:
+          "Eksperymentalne portfolio w stylu MacBooka z filmowym intro, pulpitem, oknami projektów, skrótami kontaktowymi i mini grami.",
+        features: [
+          "Intro MacBooka uruchamiane kliknięciem",
+          "Interaktywny pulpit z dockiem i oknami aplikacji",
+          "Panele projektów, o mnie, umiejętności, kontaktu i kalendarza",
+          "Komendy terminala i szybkie akcje",
+          "Mini gry oraz skrót do Berni Rush",
+          "Przełącznik języka ENG/PL",
+        ],
+        technologies: ["React", "TypeScript", "Vite", "CSS", "lucide-react", "Vercel"],
+        status: "Experimental interactive portfolio",
+        demoUrl: "https://kacper-bernecki.vercel.app",
+        repoUrl: "https://github.com/ft4k696bk6-prog/Kacper-Bernecki",
+        caseStudyUrl: "/case-studies/interactive-portfolio",
+        image: {
+          src: "/images/projects/interactive-portfolio-desktop.jpg",
+          alt: "Preview interaktywnego portfolio w stylu MacBooka",
         },
       },
       {
@@ -325,7 +350,7 @@ export const pl: Translations = {
   contact: {
     title: "Porozmawiajmy o aplikacji webowej, CRM-ie albo roli frontend",
     description:
-      "Umów krótką rozmowę albo odsłoń bezpośredni kontakt po szybkiej weryfikacji człowieka.",
+      "Umów krótką rozmowę albo odsłoń email i telefon po szybkiej weryfikacji człowieka.",
     calendarTitle: "Kalendarz",
     calendarDescription:
       "Wybierz termin rozmowy w kalendarzu.",
@@ -363,6 +388,14 @@ export const pl: Translations = {
     githubCta: "Zobacz GitHub",
     linkedinCta: "LinkedIn",
     copyright: "© 2026 Kacper Bernecki. Wszelkie prawa zastrzeżone.",
+  },
+  consent: {
+    title: "Zgoda na analytics",
+    description:
+      "Google Analytics i Google Tag Manager uruchamiam dopiero po Twojej zgodzie, żeby sprawdzać wejścia, kraje, urządzenia i zaangażowanie na stronie.",
+    accept: "Akceptuję analytics",
+    reject: "Odrzuć",
+    settings: "Ustawienia cookies",
   },
   caseStudies: plCaseStudies,
 };

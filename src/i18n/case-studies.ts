@@ -72,8 +72,12 @@ export const enCaseStudies: CaseStudiesContent = {
       repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
       images: [
         {
-          src: "/images/projects/bcrm-login.jpg",
-          alt: "B-CRM login and demo account screen",
+          src: "/images/projects/bcrm-admin-dashboard.jpg",
+          alt: "B-CRM admin dashboard and demo workflow preview",
+        },
+        {
+          src: "/images/projects/bcrm-realization-tutorial.jpg",
+          alt: "B-CRM realization tutorial and operations workflow preview",
         },
       ],
       problem:
@@ -126,6 +130,58 @@ export const enCaseStudies: CaseStudiesContent = {
       ],
       limitations:
         "B-CRM is a portfolio demo with production-like patterns. It still needs broader e2e coverage, monitoring, security review and UX hardening before real production use.",
+    },
+    {
+      slug: "interactive-portfolio",
+      title: "Interactive MacBook Portfolio — cinematic desktop-style portfolio",
+      subtitle:
+        "Experimental interactive portfolio with a MacBook intro, desktop panels, project links, terminal commands and small game panels.",
+      summary:
+        "The interactive portfolio is a secondary experience that presents the same developer profile through a playful MacBook-style UI.",
+      status: "Experimental interactive portfolio",
+      liveUrl: "https://kacper-bernecki.vercel.app",
+      repoUrl: "https://github.com/ft4k696bk6-prog/Kacper-Bernecki",
+      images: [
+        {
+          src: "/images/projects/interactive-portfolio-start.jpg",
+          alt: "Interactive MacBook portfolio start screen",
+        },
+        {
+          src: "/images/projects/interactive-portfolio-desktop.jpg",
+          alt: "Interactive MacBook portfolio desktop preview",
+        },
+      ],
+      problem:
+        "A playful portfolio can help a visitor remember the work, but it must stay honest and not replace the clearer project evidence in the main portfolio.",
+      goal:
+        "Build a secondary interactive experience that links back to the main portfolio while demonstrating UI polish, animation timing and browser interaction.",
+      roles: [],
+      features: [
+        "Click-to-start cinematic MacBook intro with inactivity fallback.",
+        "Desktop-style UI with dock, app windows and quick links.",
+        "About, projects, skills, contact, calendar and games panels.",
+        "Terminal commands for opening panels and external links.",
+        "Berni Rush embed plus small browser games.",
+        "ENG/PL language switch across the MacBook experience.",
+      ],
+      stack: ["React", "TypeScript", "Vite", "CSS", "lucide-react", "Vercel"],
+      decisions: [
+        "The project is positioned as an experimental interactive portfolio, not the main technical proof.",
+        "The intro uses pre-rendered video assets so the scene stays smooth in the browser.",
+        "The desktop UI keeps external links explicit and opens the main portfolio for serious review.",
+      ],
+      learned: [
+        "Timing UI overlays with video-based transitions.",
+        "Building a desktop-like interaction model in React.",
+        "Balancing playful presentation with professional project positioning.",
+      ],
+      next: [
+        "Add more browser smoke checks for intro, dock actions and language switching.",
+        "Keep project data synchronized with the main portfolio.",
+        "Reduce video payload where possible without hurting the effect.",
+      ],
+      limitations:
+        "This is a secondary experimental portfolio. It is intentionally more playful than the main business web app portfolio and should be reviewed as an interactive UI project.",
     },
     {
       slug: "berninutri",
@@ -409,8 +465,12 @@ export const plCaseStudies: CaseStudiesContent = {
       repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
       images: [
         {
-          src: "/images/projects/bcrm-login.jpg",
-          alt: "Ekran logowania i kont demo B-CRM",
+          src: "/images/projects/bcrm-admin-dashboard.jpg",
+          alt: "Preview dashboardu admina i workflow demo B-CRM",
+        },
+        {
+          src: "/images/projects/bcrm-realization-tutorial.jpg",
+          alt: "Preview samouczka realizacji i workflow operacyjnego B-CRM",
         },
       ],
       problem:
@@ -463,6 +523,58 @@ export const plCaseStudies: CaseStudiesContent = {
       ],
       limitations:
         "B-CRM jest demo portfolio z wzorcami production-like. Przed realnym użyciem produkcyjnym wymaga szerszych testów e2e, monitoringu, przeglądu bezpieczeństwa i dopracowania UX.",
+    },
+    {
+      slug: "interactive-portfolio",
+      title: "Interactive MacBook Portfolio — filmowe portfolio w stylu pulpitu",
+      subtitle:
+        "Eksperymentalne portfolio interaktywne z intro MacBooka, panelami pulpitu, linkami do projektów, terminalem i małymi grami.",
+      summary:
+        "Interaktywne portfolio jest dodatkowym doświadczeniem, które pokazuje ten sam profil developera w bardziej angażującym UI w stylu MacBooka.",
+      status: "Experimental interactive portfolio",
+      liveUrl: "https://kacper-bernecki.vercel.app",
+      repoUrl: "https://github.com/ft4k696bk6-prog/Kacper-Bernecki",
+      images: [
+        {
+          src: "/images/projects/interactive-portfolio-start.jpg",
+          alt: "Ekran startowy interaktywnego portfolio MacBook",
+        },
+        {
+          src: "/images/projects/interactive-portfolio-desktop.jpg",
+          alt: "Preview pulpitu interaktywnego portfolio MacBook",
+        },
+      ],
+      problem:
+        "Efektowne portfolio może pomóc zapamiętać projekt, ale nie powinno zastępować konkretnych dowodów technicznych z głównej strony.",
+      goal:
+        "Zbudować dodatkowe doświadczenie interaktywne, które odsyła do głównego portfolio i pokazuje dopracowanie UI, timing animacji oraz interakcję w przeglądarce.",
+      roles: [],
+      features: [
+        "Filmowe intro MacBooka uruchamiane kliknięciem z fallbackiem po bezczynności.",
+        "UI w stylu pulpitu z dockiem, oknami aplikacji i szybkimi linkami.",
+        "Panele: o mnie, projekty, umiejętności, kontakt, kalendarz i gry.",
+        "Komendy terminala do otwierania paneli i linków zewnętrznych.",
+        "Embed Berni Rush oraz małe gry przeglądarkowe.",
+        "Przełącznik ENG/PL w całym doświadczeniu MacBooka.",
+      ],
+      stack: ["React", "TypeScript", "Vite", "CSS", "lucide-react", "Vercel"],
+      decisions: [
+        "Projekt jest opisany jako eksperymentalne portfolio interaktywne, a nie główny dowód techniczny.",
+        "Intro używa prerenderowanych materiałów wideo, żeby scena była płynna w przeglądarce.",
+        "Pulpit zachowuje jawne linki zewnętrzne i prowadzi do głównego portfolio przy poważniejszym review.",
+      ],
+      learned: [
+        "Synchronizacji overlayów UI z przejściami opartymi o wideo.",
+        "Budowy desktopowego modelu interakcji w React.",
+        "Balansu między zabawną prezentacją a profesjonalnym pozycjonowaniem projektów.",
+      ],
+      next: [
+        "Dodać więcej testów przeglądarkowych dla intro, docka i zmiany języka.",
+        "Utrzymywać dane projektów spójne z głównym portfolio.",
+        "Zmniejszyć wagę wideo tam, gdzie nie popsuje to efektu.",
+      ],
+      limitations:
+        "To dodatkowe portfolio eksperymentalne. Celowo jest bardziej interaktywne niż główna strona o aplikacjach biznesowych i powinno być oceniane jako projekt UI.",
     },
     {
       slug: "berninutri",

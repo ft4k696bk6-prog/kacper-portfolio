@@ -10,6 +10,7 @@ export const en = {
     cta: "Contact",
     openMenu: "Open menu",
     closeMenu: "Close menu",
+    interactive: "Interactive portfolio",
   },
   meta: {
     homeTitle: "Kacper Bernecki — Frontend / Web App Developer",
@@ -161,8 +162,32 @@ export const en = {
         caseStudyUrl: "/case-studies/b-crm",
         credentials: ["Demo accounts are available on the login screen."],
         image: {
-          src: "/images/projects/bcrm-login.jpg",
-          alt: "B-CRM login and demo account screen",
+          src: "/images/projects/bcrm-admin-dashboard.jpg",
+          alt: "B-CRM admin dashboard and demo workflow preview",
+        },
+      },
+      {
+        title: "Interactive MacBook Portfolio",
+        problem:
+          "An interactive portfolio needs to stay playful without replacing the clearer technical evidence of the main site.",
+        description:
+          "Experimental MacBook-style portfolio with a cinematic intro, desktop panels, project links, contact shortcuts and mini games.",
+        features: [
+          "Click-to-start MacBook intro",
+          "Interactive desktop with dock and app windows",
+          "Project, about, skills, contact and calendar panels",
+          "Terminal commands and quick actions",
+          "Embedded browser games and Berni Rush shortcut",
+          "ENG/PL language switch",
+        ],
+        technologies: ["React", "TypeScript", "Vite", "CSS", "lucide-react", "Vercel"],
+        status: "Experimental interactive portfolio",
+        demoUrl: "https://kacper-bernecki.vercel.app",
+        repoUrl: "https://github.com/ft4k696bk6-prog/Kacper-Bernecki",
+        caseStudyUrl: "/case-studies/interactive-portfolio",
+        image: {
+          src: "/images/projects/interactive-portfolio-desktop.jpg",
+          alt: "Interactive MacBook portfolio desktop preview",
         },
       },
       {
@@ -193,7 +218,7 @@ export const en = {
         problem:
           "A technical portfolio should help reviewers understand the strongest project quickly without entry-level positioning or vague marketing.",
         description:
-          "Personal developer site focused on business web applications, project evidence, bilingual case studies and direct contact.",
+          "Personal developer site focused on business web applications, project evidence, bilingual case studies and protected email/phone reveal.",
         features: [
           "B-CRM-first project structure",
           "Technical reviewer section",
@@ -324,7 +349,7 @@ export const en = {
   contact: {
     title: "Talk about a web app, CRM or frontend role",
     description:
-      "Book a short call or reveal direct contact details after a quick human check.",
+      "Book a short call or reveal email and phone after a quick human check.",
     calendarTitle: "Calendar",
     calendarDescription:
       "Choose a meeting time in the calendar.",
@@ -362,6 +387,14 @@ export const en = {
     githubCta: "View GitHub",
     linkedinCta: "LinkedIn",
     copyright: "© 2026 Kacper Bernecki. All rights reserved.",
+  },
+  consent: {
+    title: "Analytics consent",
+    description:
+      "I use Google Analytics and Google Tag Manager only after your consent to understand visits, countries, devices and page engagement.",
+    accept: "Accept analytics",
+    reject: "Reject",
+    settings: "Cookie settings",
   },
   caseStudies: enCaseStudies,
 };
