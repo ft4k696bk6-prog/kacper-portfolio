@@ -1,7 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
-import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { useEffect, useState } from "react";
 import { GoogleTagManager } from "@/components/GoogleTagManager";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
@@ -41,9 +40,6 @@ export function AnalyticsConsent() {
       {analyticsEnabled ? (
         <>
           <GoogleTagManager />
-          <Suspense fallback={null}>
-            <GoogleAnalytics />
-          </Suspense>
         </>
       ) : null}
 
