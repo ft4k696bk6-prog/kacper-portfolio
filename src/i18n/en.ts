@@ -31,22 +31,11 @@ export const en = {
     imageAlt: "Kacper Bernecki professional portrait",
   },
   choose: {
-    eyebrow: "Choose experience",
-    title: "Pick the portfolio view that fits your context.",
-    description:
-      "Open the static portfolio for fast technical review, or use the interactive MacBook version for a more visual presentation.",
-    businessTitle: "Static business portfolio",
-    businessDescription:
-      "Projects, case studies, B-CRM, stack, contact and booking in a clean recruiter-friendly format.",
-    businessCta: "Open static portfolio",
-    interactiveTitle: "Interactive MacBook portfolio",
-    interactiveDescription:
-      "A desktop-style interactive experience with apps, projects, terminal, games and contact shortcuts.",
-    interactiveCta: "Open interactive portfolio",
-    projectsCta: "Go to projects",
-    contactCta: "Contact",
-    businessImageAlt: "Static portfolio project section preview",
-    interactiveImageAlt: "Interactive MacBook portfolio preview",
+    title: "Which portfolio do you want to choose?",
+    staticLabel: "Static",
+    interactiveLabel: "Interactive",
+    contactCta: "Contact me",
+    imageAlt: "Kacper Bernecki presenting portfolio choice",
   },
   about: {
     title: "About",

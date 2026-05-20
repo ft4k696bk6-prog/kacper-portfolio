@@ -97,10 +97,10 @@ describe("portfolio content", () => {
   });
 
   it("keeps choose page copy available in both languages", () => {
-    expect(en.choose.businessTitle).toBe("Static business portfolio");
-    expect(en.choose.interactiveTitle).toBe("Interactive MacBook portfolio");
-    expect(pl.choose.businessTitle).toBe("Statyczne portfolio biznesowe");
-    expect(pl.choose.interactiveTitle).toBe("Interaktywne portfolio MacBook");
+    expect(en.choose.title).toBe("Which portfolio do you want to choose?");
+    expect(en.choose.staticLabel).toBe("Static");
+    expect(en.choose.interactiveLabel).toBe("Interactive");
+    expect(pl.choose.staticLabel).toBe("Statyczne");
   });
 
   it("keeps the leasing calculator title localized", () => {
