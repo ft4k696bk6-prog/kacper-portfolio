@@ -31,6 +31,24 @@ export const pl: Translations = {
     contactBtn: "Kontakt",
     imageAlt: "Profesjonalny portret Kacpra Berneckiego",
   },
+  choose: {
+    eyebrow: "Wybierz widok",
+    title: "Wybierz wersję portfolio pod swój kontekst.",
+    description:
+      "Otwórz statyczne portfolio do szybkiej oceny technicznej albo interaktywną wersję MacBook do bardziej wizualnej prezentacji.",
+    businessTitle: "Statyczne portfolio biznesowe",
+    businessDescription:
+      "Projekty, case studies, B-CRM, stack, kontakt i rezerwacja rozmowy w czystym formacie dla rekrutera lub firmy.",
+    businessCta: "Otwórz statyczne portfolio",
+    interactiveTitle: "Interaktywne portfolio MacBook",
+    interactiveDescription:
+      "Interaktywny pulpit z aplikacjami, projektami, terminalem, grami i skrótami kontaktowymi.",
+    interactiveCta: "Otwórz interaktywne portfolio",
+    projectsCta: "Przejdź do projektów",
+    contactCta: "Kontakt",
+    businessImageAlt: "Preview sekcji projektów statycznego portfolio",
+    interactiveImageAlt: "Preview interaktywnego portfolio MacBook",
+  },
   about: {
     title: "O mnie",
     heading: "Buduję praktyczne aplikacje webowe dla procesów biznesowych.",

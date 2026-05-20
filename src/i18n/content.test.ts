@@ -96,6 +96,13 @@ describe("portfolio content", () => {
     expect(en.nav.interactive).toBe("Interactive portfolio");
   });
 
+  it("keeps choose page copy available in both languages", () => {
+    expect(en.choose.businessTitle).toBe("Static business portfolio");
+    expect(en.choose.interactiveTitle).toBe("Interactive MacBook portfolio");
+    expect(pl.choose.businessTitle).toBe("Statyczne portfolio biznesowe");
+    expect(pl.choose.interactiveTitle).toBe("Interaktywne portfolio MacBook");
+  });
+
   it("keeps the leasing calculator title localized", () => {
     expect(en.projects.items.map((item) => item.title)).toContain("Leasing Calculator");
     expect(en.projects.items.map((item) => item.title)).not.toContain("Kalkulator leasingu");

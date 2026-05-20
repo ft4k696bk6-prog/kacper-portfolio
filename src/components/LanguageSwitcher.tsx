@@ -18,7 +18,7 @@ export function LanguageSwitcher() {
   const { lang, setLang, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const anchorHref = (hash: string) => (pathname === "/" ? hash : `/${hash}`);
+  const anchorHref = (hash: string) => (pathname === "/static" ? hash : `/static${hash}`);
 
   const languageButton = (value: "pl" | "en", label: string) => (
     <button

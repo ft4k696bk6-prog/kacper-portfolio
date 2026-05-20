@@ -19,6 +19,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 1,
     },
+    {
+      url: `${siteUrl}/static`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 1,
+    },
     ...caseStudySlugs.map((slug) => ({
       url: `${siteUrl}/case-studies/${slug}`,
       lastModified: new Date(),

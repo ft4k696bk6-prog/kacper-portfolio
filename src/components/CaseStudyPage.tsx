@@ -172,7 +172,7 @@ function BackLink({ label }: { label: string }) {
     <button
       type="button"
       onClick={() => {
-        window.location.assign("/#projects");
+        window.location.assign("/static#projects");
       }}
       className="inline-flex items-center gap-2 rounded-md bg-[#d7b46a] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(215,180,106,0.22)]"
     >
