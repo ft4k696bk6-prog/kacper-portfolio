@@ -2,12 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { BookOpen, ExternalLink, Github, KeyRound, ListChecks } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+function isInteractiveTarget(target: EventTarget | null) {
+  return target instanceof HTMLElement && Boolean(target.closest("a, button, input, textarea, select, [role='button']"));
+}
+
 export function Projects() {
   const { t } = useLanguage();
+  const router = useRouter();
 
   return (
     <section
@@ -41,6 +47,29 @@ export function Projects() {
           {t.projects.items.map((project, index) => (
             <motion.article
               key={project.title}
+              role={project.caseStudyUrl ? "link" : undefined}
+              tabIndex={project.caseStudyUrl ? 0 : undefined}
+              aria-label={
+                project.caseStudyUrl ? `${t.projects.caseStudyLabel}: ${project.title}` : undefined
+              }
+              data-case-study-card={project.caseStudyUrl ?? undefined}
+              onClick={(event) => {
+                if (!project.caseStudyUrl || isInteractiveTarget(event.target)) {
+                  return;
+                }
+
+                router.push(project.caseStudyUrl);
+              }}
+              onKeyDown={(event) => {
+                if (!project.caseStudyUrl || isInteractiveTarget(event.target)) {
+                  return;
+                }
+
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  router.push(project.caseStudyUrl);
+                }
+              }}
               variants={{
                 hidden: { opacity: 0, y: 32 },
                 visible: {
@@ -49,7 +78,9 @@ export function Projects() {
                   transition: { duration: 0.48, ease: "easeOut" },
                 },
               }}
-              className={`rounded-md border border-white/10 bg-[#11110f]/90 p-6 transition-all hover:-translate-y-1 hover:border-[#d7b46a]/50 ${
+              className={`rounded-md border border-white/10 bg-[#11110f]/90 p-6 transition-all hover:-translate-y-1 hover:border-[#d7b46a]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7b46a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0c0c0b] ${
+                project.caseStudyUrl ? "cursor-pointer" : ""
+              } ${
                 index === 0 ? "xl:col-span-2 xl:grid xl:grid-cols-[1fr_0.9fr] xl:gap-8" : ""
               }`}
             >
