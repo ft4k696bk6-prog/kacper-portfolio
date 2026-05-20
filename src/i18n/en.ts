@@ -389,11 +389,11 @@ export const en = {
     copyright: "© 2026 Kacper Bernecki. All rights reserved.",
   },
   consent: {
-    title: "Analytics consent",
+    title: "Cookie settings",
     description:
-      "I use Google Analytics and Google Tag Manager only after your consent to understand visits, countries, devices and page engagement.",
-    accept: "Accept analytics",
-    reject: "Reject",
+      "I use small site settings to remember your language choice and keep the portfolio working smoothly. Optional visit measurement runs only after you accept.",
+    accept: "Accept cookies",
+    reject: "Reject optional cookies",
     settings: "Cookie settings",
   },
   caseStudies: enCaseStudies,

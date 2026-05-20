@@ -390,11 +390,11 @@ export const pl: Translations = {
     copyright: "© 2026 Kacper Bernecki. Wszelkie prawa zastrzeżone.",
   },
   consent: {
-    title: "Zgoda na analytics",
+    title: "Ustawienia cookies",
     description:
-      "Google Analytics i Google Tag Manager uruchamiam dopiero po Twojej zgodzie, żeby sprawdzać wejścia, kraje, urządzenia i zaangażowanie na stronie.",
-    accept: "Akceptuję analytics",
-    reject: "Odrzuć",
+      "Używam małych ustawień strony, żeby zapamiętać wybrany język i utrzymać portfolio w dobrym działaniu. Opcjonalny pomiar odwiedzin działa dopiero po akceptacji.",
+    accept: "Akceptuję cookies",
+    reject: "Odrzuć opcjonalne cookies",
     settings: "Ustawienia cookies",
   },
   caseStudies: plCaseStudies,

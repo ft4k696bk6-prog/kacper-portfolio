@@ -96,6 +96,13 @@ describe("portfolio content", () => {
     expect(en.nav.interactive).toBe("Interactive portfolio");
   });
 
+  it("uses cookie settings copy instead of analytics-only consent copy", () => {
+    expect(en.consent.title).toBe("Cookie settings");
+    expect(en.consent.accept).toBe("Accept cookies");
+    expect(pl.consent.title).toBe("Ustawienia cookies");
+    expect(pl.consent.accept).toBe("Akceptuję cookies");
+  });
+
   it("keeps case study section labels localized", () => {
     const enCaseStudies = JSON.stringify(en.caseStudies);
     const plCaseStudies = JSON.stringify(pl.caseStudies);

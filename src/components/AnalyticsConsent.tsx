@@ -4,24 +4,33 @@ import { Suspense, useEffect, useState } from "react";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { GoogleTagManager } from "@/components/GoogleTagManager";
 import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  COOKIE_CONSENT_KEY,
+  LANGUAGE_STORAGE_KEY,
+  LEGACY_ANALYTICS_CONSENT_KEY,
+} from "@/lib/preferences";
 
 type ConsentState = "accepted" | "rejected" | null;
 
-const CONSENT_KEY = "analytics-consent";
-
 export function AnalyticsConsent() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const [consent, setConsent] = useState<ConsentState>(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem(CONSENT_KEY);
+    localStorage.removeItem(LEGACY_ANALYTICS_CONSENT_KEY);
+    const stored = localStorage.getItem(COOKIE_CONSENT_KEY);
     setConsent(stored === "accepted" || stored === "rejected" ? stored : null);
     setLoaded(true);
   }, []);
 
   function choose(next: Exclude<ConsentState, null>) {
-    localStorage.setItem(CONSENT_KEY, next);
+    localStorage.setItem(COOKIE_CONSENT_KEY, next);
+    if (next === "accepted") {
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+    } else {
+      localStorage.removeItem(LANGUAGE_STORAGE_KEY);
+    }
     setConsent(next);
   }
 
