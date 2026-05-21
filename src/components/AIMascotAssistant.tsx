@@ -19,6 +19,7 @@ import { AIMascotCanvas } from "@/components/AIMascotCanvas";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { DEFAULT_BOOKING_TIME_ZONE, formatSlotDate } from "@/lib/booking";
 import type { AvailableBookingDay } from "@/lib/calcom";
+import { COOKIE_CONSENT_EVENT, COOKIE_CONSENT_KEY, type CookieConsentState } from "@/lib/preferences";
 
 type ChatMessage = {
   id: string;
@@ -148,6 +149,7 @@ export function AIMascotAssistant() {
   const [mounted, setMounted] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
+  const [cookieBannerVisible, setCookieBannerVisible] = useState(false);
   const [nudgeVisible, setNudgeVisible] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     createMessage("assistant", t.aiMascot.initialMessage),
@@ -172,20 +174,54 @@ export function AIMascotAssistant() {
   const locale = lang === "pl" ? "pl-PL" : "en-US";
   const timeZone = process.env.NEXT_PUBLIC_CALENDAR_TIMEZONE || DEFAULT_BOOKING_TIME_ZONE;
   const mascotMood = listening ? "listening" : loading ? "thinking" : speaking ? "speaking" : "idle";
+  const mascotPositionClass = cookieBannerVisible
+    ? "bottom-[14.5rem] right-4 md:bottom-8 md:right-8"
+    : "bottom-5 right-4 md:bottom-8 md:right-8";
+  const restorePositionClass = cookieBannerVisible
+    ? "bottom-[14.5rem] right-4 md:bottom-4"
+    : "bottom-4 right-4";
+  const chatPositionClass = cookieBannerVisible
+    ? "bottom-[16rem] right-4 max-h-[calc(100vh-17.5rem)] md:bottom-40 md:right-8 md:max-h-[calc(100vh-9rem)]"
+    : "bottom-32 right-4 max-h-[calc(100vh-9rem)] md:bottom-40 md:right-8";
 
   useEffect(() => {
     setMounted(true);
     const hiddenUntil = Number(localStorage.getItem(HIDDEN_UNTIL_KEY) || 0);
     setHidden(Number.isFinite(hiddenUntil) && hiddenUntil > Date.now());
+    syncCookieBannerVisibility();
     setVoiceSupported(Boolean(window.SpeechRecognition || window.webkitSpeechRecognition));
 
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const syncMotion = () => setReducedMotion(mediaQuery.matches);
+    const handleConsentChange = (event: Event) => {
+      const nextConsent = (event as CustomEvent<{ consent?: CookieConsentState | null }>).detail?.consent;
+
+      if (nextConsent === null) {
+        setCookieBannerVisible(true);
+        return;
+      }
+
+      syncCookieBannerVisibility();
+    };
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === COOKIE_CONSENT_KEY) {
+        syncCookieBannerVisibility();
+      }
+    };
+    function syncCookieBannerVisibility() {
+      const stored = localStorage.getItem(COOKIE_CONSENT_KEY);
+      setCookieBannerVisible(stored !== "accepted" && stored !== "rejected");
+    }
+
     syncMotion();
     mediaQuery.addEventListener("change", syncMotion);
+    window.addEventListener(COOKIE_CONSENT_EVENT, handleConsentChange);
+    window.addEventListener("storage", handleStorage);
 
     return () => {
       mediaQuery.removeEventListener("change", syncMotion);
+      window.removeEventListener(COOKIE_CONSENT_EVENT, handleConsentChange);
+      window.removeEventListener("storage", handleStorage);
     };
   }, []);
 
@@ -545,7 +581,7 @@ export function AIMascotAssistant() {
           <motion.button
             type="button"
             onClick={restoreMascot}
-            className="fixed bottom-4 right-4 z-[70] inline-flex items-center gap-2 rounded-full border border-[#d7b46a]/40 bg-[#11110f]/90 px-4 py-3 text-sm text-[#f5dfae] shadow-[0_18px_55px_rgba(0,0,0,0.45)] backdrop-blur-xl transition hover:border-[#d7b46a]/70"
+            className={`fixed z-[75] inline-flex items-center gap-2 rounded-full border border-[#d7b46a]/40 bg-[#11110f]/90 px-4 py-3 text-sm text-[#f5dfae] shadow-[0_18px_55px_rgba(0,0,0,0.45)] backdrop-blur-xl transition hover:border-[#d7b46a]/70 ${restorePositionClass}`}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 16 }}
@@ -559,7 +595,7 @@ export function AIMascotAssistant() {
       <AnimatePresence>
         {!hidden ? (
           <motion.div
-            className="fixed bottom-5 right-4 z-[68] md:bottom-8 md:right-8"
+            className={`fixed z-[75] ${mascotPositionClass}`}
             initial={{ opacity: 0, scale: 0.78, y: 24 }}
             animate={{
               opacity: 1,
@@ -595,6 +631,7 @@ export function AIMascotAssistant() {
                 type="button"
                 onClick={() => openChat()}
                 aria-label={t.aiMascot.openLabel}
+                data-testid="ai-mascot-open"
                 className="group relative h-24 w-24 rounded-full outline-none transition focus-visible:ring-2 focus-visible:ring-[#d7b46a]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-32 md:w-32"
               >
                 <span className="absolute inset-3 rounded-full bg-[#d7b46a]/20 blur-2xl transition group-hover:bg-[#d7b46a]/35" />
@@ -613,7 +650,7 @@ export function AIMascotAssistant() {
           <motion.aside
             role="dialog"
             aria-label={t.aiMascot.chatTitle}
-            className="fixed bottom-32 right-4 z-[80] flex max-h-[calc(100vh-9rem)] w-[min(28rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-[1.6rem] border border-[#d7b46a]/30 bg-[#0e0e0d]/95 shadow-[0_30px_100px_rgba(0,0,0,0.58)] backdrop-blur-2xl md:bottom-40 md:right-8"
+            className={`fixed z-[90] flex w-[min(28rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-[1.6rem] border border-[#d7b46a]/30 bg-[#0e0e0d]/95 shadow-[0_30px_100px_rgba(0,0,0,0.58)] backdrop-blur-2xl ${chatPositionClass}`}
             initial={{ opacity: 0, y: 24, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
