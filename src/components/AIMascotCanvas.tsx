@@ -53,8 +53,8 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
         renderer.setClearColor(0x000000, 0);
 
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
-        camera.position.set(0, 0.12, 7);
+        const camera = new THREE.PerspectiveCamera(31, 1, 0.1, 100);
+        camera.position.set(0, 0.16, 5.6);
 
         const root = new THREE.Group();
         scene.add(root);
@@ -202,14 +202,14 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
           const size = new THREE.Vector3();
           box.getSize(size);
           const largestSide = Math.max(size.x, size.y, size.z) || 1;
-          const scale = 2.35 / largestSide;
+          const scale = 2.9 / largestSide;
           model.scale.setScalar(scale);
 
           const framedBox = new THREE.Box3().setFromObject(model);
           const center = new THREE.Vector3();
           framedBox.getCenter(center);
           model.position.sub(center);
-          model.position.y -= 0.08;
+          model.position.y -= 0.14;
           model.rotation.y = Math.PI;
           return scale;
         }
