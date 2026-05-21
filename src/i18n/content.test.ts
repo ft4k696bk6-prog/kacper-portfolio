@@ -125,11 +125,11 @@ describe("portfolio content", () => {
     expect(en.aiMascot.dictationReadyLabel).toBe("Mini chat ready");
     expect(pl.aiMascot.dictationReadyLabel).toBe("Mini czat gotowy");
     expect(en.aiMascot.quickActions).toMatchObject({
-      book: "Book a call",
+      book: "Find a slot",
       code: "Help with code",
     });
     expect(pl.aiMascot.quickActions).toMatchObject({
-      book: "Umów rozmowę",
+      book: "Znajdź termin",
       code: "Pomoc z kodem",
     });
     expect(en.aiMascot.booking.submit).toBe("Book this time");

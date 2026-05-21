@@ -162,7 +162,7 @@ export const pl: Translations = {
     quickActions: {
       projects: "Pokaż projekty",
       bcrm: "Otwórz B-CRM",
-      book: "Umów rozmowę",
+      book: "Znajdź termin",
       contact: "Kontakt",
       code: "Pomoc z kodem",
     },
@@ -170,7 +170,7 @@ export const pl: Translations = {
       projects: "Jasne, pokazuję projekty. B-CRM idzie pierwszy, jak trzeba.",
       bcrm: "Otwieram case study B-CRM. To główny dowód techniczny.",
       contact: "Przenoszę do kontaktu. Tam jest kalendarz, email i telefon.",
-      book: "Umówmy krótką rozmowę tutaj, bez przerzucania na zewnętrzną stronę.",
+      book: "Otwieram dostępne terminy tutaj, bez przerzucania na zewnętrzną stronę.",
     },
     codePrompt:
       "Mam problem z frontendem/kodem. Wkleję najmniejszy potrzebny fragment bez sekretów.",
@@ -410,11 +410,11 @@ export const pl: Translations = {
   contact: {
     title: "Porozmawiajmy o aplikacji webowej, CRM-ie albo roli frontend",
     description:
-      "Umów krótką rozmowę albo odsłoń email i telefon po szybkiej weryfikacji człowieka.",
+      "Znajdź dostępny termin albo odsłoń email i telefon po szybkiej weryfikacji człowieka.",
     calendarTitle: "Kalendarz",
     calendarDescription:
-      "Wybierz termin rozmowy w kalendarzu.",
-    calendarCta: "Umów rozmowę",
+      "Wybierz termin w kalendarzu.",
+    calendarCta: "Znajdź termin",
     booking: {
       title: "Kalendarz",
       timezoneLabel: "Europe/Warsaw",
