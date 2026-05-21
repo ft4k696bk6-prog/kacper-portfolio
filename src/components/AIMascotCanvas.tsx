@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Material, Mesh, Object3D } from "three";
 
-type MascotMood = "idle" | "listening" | "thinking" | "speaking";
+type MascotMood = "idle" | "walking" | "curious" | "joking" | "listening" | "thinking";
 
 type AIMascotCanvasProps = {
   mood: MascotMood;
@@ -179,6 +179,8 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
 
         let loadedModel: Object3D | null = null;
         let loadedModelBaseScale = 1;
+        let loadedModelBaseX = 0;
+        let loadedModelBaseY = 0;
         let mixer: { update: (delta: number) => void } | null = null;
 
         function disposeMaterial(material: Material | Material[]) {
@@ -237,6 +239,8 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
 
             const model = gltf.scene;
             loadedModelBaseScale = prepareModel(model);
+            loadedModelBaseX = model.position.x;
+            loadedModelBaseY = model.position.y;
             fallbackGroup.visible = false;
             root.add(model);
             loadedModel = model;
@@ -274,12 +278,25 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
           const elapsed = clock.elapsedTime;
           const currentMood = moodRef.current;
           const motionOff = reducedMotionRef.current || document.hidden;
-          const breath = motionOff ? 0 : Math.sin(elapsed * 1.6) * 0.055;
-          const curiousTilt = motionOff ? 0 : Math.sin(elapsed * 0.9) * 0.11;
+          const isWalking = currentMood === "walking";
+          const isCurious = currentMood === "curious";
+          const isJoking = currentMood === "joking";
+          const breath = motionOff ? 0 : Math.sin(elapsed * 1.8) * 0.065;
+          const stepLift = !motionOff && isWalking ? Math.abs(Math.sin(elapsed * 7.5)) * 0.085 : 0;
+          const curiousTilt = motionOff
+            ? 0
+            : isCurious
+              ? 0.18 + Math.sin(elapsed * 1.8) * 0.08
+              : Math.sin(elapsed * 0.9) * 0.11;
 
-          root.position.y = breath;
+          root.position.x = !motionOff && isWalking ? Math.sin(elapsed * 7.5) * 0.035 : 0;
+          root.position.y = breath + stepLift + (!motionOff && isJoking ? Math.sin(elapsed * 5.5) * 0.025 : 0);
           root.rotation.y = curiousTilt;
-          root.rotation.z = motionOff ? 0 : Math.sin(elapsed * 0.7) * 0.035;
+          root.rotation.z = motionOff
+            ? 0
+            : isWalking
+              ? Math.sin(elapsed * 7.5) * 0.045
+              : Math.sin(elapsed * 0.7) * 0.035;
 
           if (!loadedModel) {
             leftArm.rotation.z = -0.42 + (motionOff ? 0 : Math.sin(elapsed * 2.2) * 0.1);
@@ -292,7 +309,7 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
               ? 1 + Math.sin(elapsed * 8) * 0.2
               : currentMood === "listening"
                 ? 1.18
-                : currentMood === "speaking"
+                : currentMood === "joking"
                   ? 1 + Math.sin(elapsed * 12) * 0.12
                   : 1;
           leftEye.scale.setScalar(pulse);
@@ -301,7 +318,17 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
 
           if (loadedModel) {
             const thinkingPulse = currentMood === "thinking" ? 1 + Math.sin(elapsed * 5) * 0.018 : 1;
-            loadedModel.rotation.y = MODEL_FRONT_ROTATION + (motionOff ? 0 : Math.sin(elapsed * 0.8) * 0.16);
+            const walkLean = !motionOff && isWalking ? Math.sin(elapsed * 7.5) * 0.1 : 0;
+            loadedModel.position.x = loadedModelBaseX + (!motionOff && isWalking ? Math.sin(elapsed * 7.5) * 0.035 : 0);
+            loadedModel.position.y =
+              loadedModelBaseY +
+              (!motionOff && isWalking ? Math.abs(Math.sin(elapsed * 7.5)) * 0.08 : 0) +
+              (!motionOff && isJoking ? Math.sin(elapsed * 5.5) * 0.045 : 0);
+            loadedModel.rotation.y =
+              MODEL_FRONT_ROTATION +
+              (motionOff ? 0 : Math.sin(elapsed * 0.8) * (isCurious ? 0.24 : 0.16)) +
+              walkLean;
+            loadedModel.rotation.z = !motionOff && isWalking ? Math.sin(elapsed * 7.5) * 0.035 : 0;
             loadedModel.scale.setScalar(loadedModelBaseScale * thinkingPulse);
           }
 

@@ -1,22 +1,9 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { type CSSProperties, type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  Bot,
-  CalendarDays,
-  Eye,
-  Loader2,
-  Mic,
-  MicOff,
-  PhoneCall,
-  RotateCcw,
-  Send,
-  Volume2,
-  VolumeX,
-  X,
-} from "lucide-react";
+import { Bot, CalendarDays, Eye, Loader2, Mic, MicOff, RotateCcw, Send, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AIMascotCanvas } from "@/components/AIMascotCanvas";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -57,6 +44,17 @@ type BookingState = {
 };
 
 type LocalAction = "projects" | "bcrm" | "book" | "contact";
+type MascotMood = "idle" | "walking" | "curious" | "joking" | "listening" | "thinking";
+
+type MascotBehaviorState = {
+  spotIndex: number;
+  mood: MascotMood;
+};
+
+type MascotSpot = {
+  x: number;
+  y: number;
+};
 
 type SpeechRecognitionLike = {
   lang: string;
@@ -96,9 +94,25 @@ const HIDE_DURATION_MS = 48 * 60 * 60 * 1000;
 const HIDDEN_UNTIL_KEY = "ai-mascot-hidden-until";
 const GREETED_KEY = "ai-mascot-greeted";
 const NUDGE_COOLDOWN_KEY = "ai-mascot-nudge-last-at";
-const NUDGE_COOLDOWN_MS = 20 * 60 * 1000;
-const OPEN_NUDGE_DELAY_MS = 3600;
-const IDLE_NUDGE_DELAY_MS = 60 * 1000;
+const NUDGE_COOLDOWN_MS = 24 * 1000;
+const LINE_COOLDOWN_MS = 12 * 1000;
+const OPEN_NUDGE_DELAY_MS = 2200;
+const IDLE_NUDGE_DELAY_MS = 28 * 1000;
+const WALK_INTERVAL_MS = 9000;
+
+const DESKTOP_MASCOT_SPOTS: MascotSpot[] = [
+  { x: 86, y: 72 },
+  { x: 15, y: 66 },
+  { x: 82, y: 38 },
+  { x: 18, y: 46 },
+];
+
+const MOBILE_MASCOT_SPOTS: MascotSpot[] = [
+  { x: 78, y: 74 },
+  { x: 24, y: 72 },
+  { x: 76, y: 52 },
+  { x: 24, y: 54 },
+];
 
 function createMessage(role: ChatMessage["role"], content: string): ChatMessage {
   return {
@@ -161,14 +175,24 @@ function getAssistantRuntimeCopy(lang: "en" | "pl") {
     return {
       retryLabel: "Ponow odpowiedz",
       openerNudges: [
-        "Moge strescic B-CRM, pokazac projekty albo pomoc z kodem. Bez cyrku, konkretnie.",
-        "Potrzebujesz szybkiej sciezki po portfolio? Ja znam skroty.",
-        "Chcesz wiedziec, co Kacper dowozi biznesowo? Zacznijmy od B-CRM.",
+        "Ej, tu zywy przewodnik. Pokazac B-CRM czy od razu wejsc w konkrety?",
+        "Chodze po tej stronie i pilnuje, zeby nikt nie zgubil najlepszego projektu.",
+        "Mozesz mnie zapytac o stack, projekty albo kod. Ja nie gryze, najwyzej poprawie UX.",
       ],
       idleNudges: [
-        "Jesli chcesz, moge porownac projekty albo wskazac najlepszy dowod techniczny.",
-        "Moge tez otworzyc kontakt albo umowic rozmowe. Spokojnie, nie bede klikal bez prosby.",
-        "Dobry nastepny krok: zapytaj o stack, role w B-CRM albo wartosc biznesowa.",
+        "Moge porownac projekty albo wskazac najlepszy dowod techniczny.",
+        "Dobry nastepny ruch: B-CRM. Tam jest najwiecej miesa.",
+        "Jak chcesz, moge zrobic szybka trase po portfolio. Bez przewodnickiego tonu z muzeum.",
+      ],
+      movementNudges: [
+        "Patrol portfolio trwa. Podejrzanie duzo Reacta, ale w dobrym sensie.",
+        "O, tu warto kliknac projekty. Ja tylko subtelnie macham neonowym drogowskazem.",
+        "Przechadzam sie, bo statyczny chatbot to juz troche muzeum internetu.",
+      ],
+      hoverNudges: [
+        "Tak, zyje. Prawie. Zapytaj o B-CRM albo kod.",
+        "Kliknij mnie, a otworze mini wejscie. Bez wielkiego okna, obiecuje.",
+        "Masz pytanie techniczne? Dawaj najmniejszy fragment, bez sekretow.",
       ],
     };
   }
@@ -176,14 +200,24 @@ function getAssistantRuntimeCopy(lang: "en" | "pl") {
   return {
     retryLabel: "Retry answer",
     openerNudges: [
-      "I can summarize B-CRM, point to projects, or help with code. Crisp, no confetti.",
-      "Need the fastest route through the portfolio? I know the shortcuts.",
-      "Want the business-value version of Kacper's work? B-CRM is a good first stop.",
+      "Hey, living guide here. Want B-CRM first, or should we go straight to the useful bits?",
+      "I wander around this page so nobody misses the strongest project.",
+      "Ask me about the stack, projects or code. I do not bite. I may judge bad UX a little.",
     ],
     idleNudges: [
-      "I can compare projects or point you to the strongest technical proof.",
-      "I can also open contact or help book a call. Calmly, only when asked.",
-      "Good next step: ask about the stack, B-CRM roles, or business value.",
+      "I can compare projects or point to the strongest technical proof.",
+      "Good next move: B-CRM. That is where the useful evidence lives.",
+      "I can give you a fast route through the portfolio. No museum-guide monologue.",
+    ],
+    movementNudges: [
+      "Portfolio patrol continues. Suspicious amount of React, but in a good way.",
+      "Projects are worth a click. I am only waving a tasteful little sign.",
+      "I move because static chat bubbles are basically internet furniture.",
+    ],
+    hoverNudges: [
+      "Yep, alive. Almost. Ask me about B-CRM or code.",
+      "Click me and I will open the tiny input. No giant chat wall.",
+      "Technical question? Paste the smallest snippet, no secrets.",
     ],
   };
 }
@@ -207,6 +241,7 @@ export function AIMascotAssistant() {
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const [cookieBannerVisible, setCookieBannerVisible] = useState(false);
+  const [isCompactViewport, setIsCompactViewport] = useState(false);
   const [nudgeVisible, setNudgeVisible] = useState(false);
   const [nudgeText, setNudgeText] = useState(t.aiMascot.greeting);
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -217,12 +252,10 @@ export function AIMascotAssistant() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [lastFailedQuestion, setLastFailedQuestion] = useState("");
-  const [voiceSupported, setVoiceSupported] = useState(false);
-  const [voiceMode, setVoiceMode] = useState(false);
-  const [voiceMuted, setVoiceMuted] = useState(false);
+  const [dictationSupported, setDictationSupported] = useState(false);
   const [listening, setListening] = useState(false);
-  const [speaking, setSpeaking] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [behavior, setBehavior] = useState<MascotBehaviorState>({ spotIndex: 0, mood: "idle" });
   const [booking, setBooking] = useState<BookingState>(defaultBookingState);
   const [bookingName, setBookingName] = useState("");
   const [bookingEmail, setBookingEmail] = useState("");
@@ -231,44 +264,62 @@ export function AIMascotAssistant() {
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
-  const voiceModeRef = useRef(false);
-  const voiceMutedRef = useRef(false);
+  const lastLineAtRef = useRef(0);
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const locale = lang === "pl" ? "pl-PL" : "en-US";
   const timeZone = process.env.NEXT_PUBLIC_CALENDAR_TIMEZONE || DEFAULT_BOOKING_TIME_ZONE;
-  const mascotMood = listening ? "listening" : loading ? "thinking" : speaking ? "speaking" : "idle";
-  const voiceStatusLabel = !voiceSupported
-    ? t.aiMascot.voiceUnavailableLabel
-    : voiceMode
-      ? listening
-        ? t.aiMascot.voiceListeningLabel
-        : speaking
-          ? t.aiMascot.voiceSpeakingLabel
-          : loading
-            ? t.aiMascot.voiceThinkingLabel
-            : voiceMuted
-              ? t.aiMascot.voiceMutedLabel
-              : t.aiMascot.voiceReadyLabel
-      : t.aiMascot.voiceIdleLabel;
-  const mascotPositionClass = cookieBannerVisible
-    ? "bottom-[14.5rem] right-4 md:bottom-8 md:right-8"
-    : "bottom-5 right-4 md:bottom-8 md:right-8";
+  const activeSpots = useMemo(
+    () => (isCompactViewport ? MOBILE_MASCOT_SPOTS : DESKTOP_MASCOT_SPOTS),
+    [isCompactViewport],
+  );
+  const currentSpot = activeSpots[behavior.spotIndex % activeSpots.length] ?? activeSpots[0]!;
+  const safeSpotY = cookieBannerVisible ? Math.min(currentSpot.y, isCompactViewport ? 52 : 60) : currentSpot.y;
+  const mascotStyle: CSSProperties = { left: `${currentSpot.x}%`, top: `${safeSpotY}%` };
   const restorePositionClass = cookieBannerVisible
     ? "bottom-[14.5rem] right-4 md:bottom-4"
     : "bottom-4 right-4";
-  const chatPositionClass = cookieBannerVisible
-    ? "bottom-[16rem] right-4 max-h-[calc(100vh-17.5rem)] md:bottom-40 md:right-8 md:max-h-[calc(100vh-9rem)]"
-    : "bottom-32 right-4 max-h-[calc(100vh-9rem)] md:bottom-40 md:right-8";
+  const companionPanelPositionClass = isCompactViewport
+    ? "bottom-[6.6rem] left-1/2 w-[min(23rem,calc(100vw-1rem))] -translate-x-1/2"
+    : currentSpot.x > 50
+      ? "right-[calc(100%+0.85rem)] top-1/2 w-[23rem] -translate-y-1/2"
+      : "left-[calc(100%+0.85rem)] top-1/2 w-[23rem] -translate-y-1/2";
+  const nudgePositionClass = isCompactViewport
+    ? "bottom-[6.8rem] left-1/2 w-[min(18rem,calc(100vw-1rem))] -translate-x-1/2"
+    : currentSpot.x > 50
+      ? "right-[calc(100%+0.65rem)] top-1/2 w-64 -translate-y-1/2"
+      : "left-[calc(100%+0.65rem)] top-1/2 w-64 -translate-y-1/2";
+  const mascotMood: MascotMood = listening ? "listening" : loading ? "thinking" : behavior.mood;
+  const assistantStatusLabel = listening
+    ? t.aiMascot.dictationListeningLabel
+    : loading
+      ? t.aiMascot.thinkingLabel
+      : t.aiMascot.dictationReadyLabel;
+  const showCompanionLine = useCallback(
+    (lines: string[], fallback: string, mood: MascotMood = "joking") => {
+      if (open) return;
+      const now = Date.now();
+      if (now - lastLineAtRef.current < LINE_COOLDOWN_MS) return;
+
+      lastLineAtRef.current = now;
+      setNudgeText(pickRandom(lines, fallback));
+      setNudgeVisible(true);
+      setBehavior((current) => ({ ...current, mood }));
+      window.setTimeout(() => setNudgeVisible(false), 6200);
+    },
+    [open],
+  );
 
   useEffect(() => {
     setMounted(true);
     const hiddenUntil = Number(localStorage.getItem(HIDDEN_UNTIL_KEY) || 0);
     setHidden(Number.isFinite(hiddenUntil) && hiddenUntil > Date.now());
     syncCookieBannerVisibility();
-    setVoiceSupported(Boolean(window.SpeechRecognition || window.webkitSpeechRecognition));
+    setDictationSupported(Boolean(window.SpeechRecognition || window.webkitSpeechRecognition));
 
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const syncMotion = () => setReducedMotion(mediaQuery.matches);
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const compactQuery = window.matchMedia("(max-width: 767px)");
+    const syncMotion = () => setReducedMotion(motionQuery.matches);
+    const syncCompactViewport = () => setIsCompactViewport(compactQuery.matches);
     const handleConsentChange = (event: Event) => {
       const nextConsent = (event as CustomEvent<{ consent?: CookieConsentState | null }>).detail?.consent;
 
@@ -290,28 +341,19 @@ export function AIMascotAssistant() {
     }
 
     syncMotion();
-    mediaQuery.addEventListener("change", syncMotion);
+    syncCompactViewport();
+    motionQuery.addEventListener("change", syncMotion);
+    compactQuery.addEventListener("change", syncCompactViewport);
     window.addEventListener(COOKIE_CONSENT_EVENT, handleConsentChange);
     window.addEventListener("storage", handleStorage);
 
     return () => {
-      mediaQuery.removeEventListener("change", syncMotion);
+      motionQuery.removeEventListener("change", syncMotion);
+      compactQuery.removeEventListener("change", syncCompactViewport);
       window.removeEventListener(COOKIE_CONSENT_EVENT, handleConsentChange);
       window.removeEventListener("storage", handleStorage);
     };
   }, []);
-
-  useEffect(() => {
-    voiceModeRef.current = voiceMode;
-  }, [voiceMode]);
-
-  useEffect(() => {
-    voiceMutedRef.current = voiceMuted;
-    if (voiceMuted && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      setSpeaking(false);
-    }
-  }, [voiceMuted]);
 
   useEffect(() => {
     setMessages((current) =>
@@ -331,11 +373,12 @@ export function AIMascotAssistant() {
       if (!canShowTimedNudge()) return;
       setNudgeText(pickRandom(assistantRuntimeCopy.openerNudges, t.aiMascot.greeting));
       setNudgeVisible(true);
+      setBehavior((current) => ({ ...current, mood: "curious" }));
       markTimedNudgeShown(true);
     }, OPEN_NUDGE_DELAY_MS);
     const hideTimer = window.setTimeout(
       () => setNudgeVisible(false),
-      OPEN_NUDGE_DELAY_MS + 12000,
+      OPEN_NUDGE_DELAY_MS + 9000,
     );
 
     return () => {
@@ -345,17 +388,62 @@ export function AIMascotAssistant() {
   }, [assistantRuntimeCopy, hidden, mounted, open, t.aiMascot.greeting]);
 
   useEffect(() => {
-    if (!mounted || hidden || !open || loading || listening || booking.step !== "idle") return;
+    if (!mounted || hidden || loading || listening || booking.step !== "idle") return;
 
     const idleTimer = window.setTimeout(() => {
       if (!canShowTimedNudge()) return;
       const idleMessage = pickRandom(assistantRuntimeCopy.idleNudges, t.aiMascot.greeting);
-      setMessages((current) => [...current, createMessage("assistant", idleMessage)]);
+      if (open) {
+        setMessages((current) => [...current, createMessage("assistant", idleMessage)]);
+      } else {
+        setNudgeText(idleMessage);
+        setNudgeVisible(true);
+        window.setTimeout(() => setNudgeVisible(false), 7200);
+      }
+      setBehavior((current) => ({ ...current, mood: "joking" }));
       markTimedNudgeShown();
     }, IDLE_NUDGE_DELAY_MS);
 
     return () => window.clearTimeout(idleTimer);
-  }, [assistantRuntimeCopy, booking.step, hidden, listening, loading, messages.length, mounted, open, t.aiMascot.greeting]);
+  }, [
+    assistantRuntimeCopy,
+    booking.step,
+    hidden,
+    listening,
+    loading,
+    messages.length,
+    mounted,
+    open,
+    t.aiMascot.greeting,
+  ]);
+
+  useEffect(() => {
+    if (!mounted || hidden || reducedMotion) return;
+
+    const walkTimer = window.setInterval(() => {
+      if (open || listening || loading || booking.step !== "idle") return;
+      setBehavior((current) => ({
+        spotIndex: (current.spotIndex + 1) % activeSpots.length,
+        mood: "walking",
+      }));
+      showCompanionLine(assistantRuntimeCopy.movementNudges, t.aiMascot.greeting, "walking");
+      window.setTimeout(() => setBehavior((current) => ({ ...current, mood: "idle" })), 2600);
+    }, WALK_INTERVAL_MS);
+
+    return () => window.clearInterval(walkTimer);
+  }, [
+    activeSpots.length,
+    assistantRuntimeCopy,
+    booking.step,
+    hidden,
+    listening,
+    loading,
+    mounted,
+    open,
+    reducedMotion,
+    showCompanionLine,
+    t.aiMascot.greeting,
+  ]);
 
   useEffect(() => {
     scrollAreaRef.current?.scrollTo({
@@ -368,6 +456,7 @@ export function AIMascotAssistant() {
     setHidden(false);
     setNudgeVisible(false);
     setOpen(true);
+    setBehavior((current) => ({ ...current, mood: "curious" }));
     if (prefill) {
       setInput(prefill);
     }
@@ -385,6 +474,7 @@ export function AIMascotAssistant() {
     localStorage.removeItem(HIDDEN_UNTIL_KEY);
     setHidden(false);
     setOpen(true);
+    setBehavior((current) => ({ ...current, mood: "curious" }));
     window.setTimeout(() => inputRef.current?.focus(), 80);
   }
 
@@ -400,42 +490,7 @@ export function AIMascotAssistant() {
     history.replaceState(null, "", hash);
   }
 
-  function resumeVoiceLoop() {
-    if (!voiceModeRef.current || !voiceSupported) return;
-    window.setTimeout(() => {
-      if (voiceModeRef.current && !loading && !listening && !speaking) {
-        startVoiceInput();
-      }
-    }, 420);
-  }
-
-  function speakAnswer(answer: string, options: { resumeListening?: boolean } = {}) {
-    if (!("speechSynthesis" in window) || voiceMutedRef.current) {
-      if (options.resumeListening) resumeVoiceLoop();
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(answer);
-    utterance.lang = lang === "pl" ? "pl-PL" : "en-US";
-    utterance.rate = 1.02;
-    utterance.pitch = 1.04;
-    utterance.onstart = () => setSpeaking(true);
-    utterance.onend = () => {
-      setSpeaking(false);
-      if (options.resumeListening) resumeVoiceLoop();
-    };
-    utterance.onerror = () => {
-      setSpeaking(false);
-      if (options.resumeListening) resumeVoiceLoop();
-    };
-    window.speechSynthesis.speak(utterance);
-  }
-
-  async function sendMessage(
-    nextInput?: string,
-    options: { speak?: boolean; retry?: boolean } = {},
-  ) {
+  async function sendMessage(nextInput?: string, options: { retry?: boolean } = {}) {
     const question = (nextInput ?? input).trim();
     if (!question || loading) return;
 
@@ -445,6 +500,7 @@ export function AIMascotAssistant() {
     setInput("");
     setError("");
     setLastFailedQuestion("");
+    setBehavior((current) => ({ ...current, mood: localAction ? "curious" : "thinking" }));
 
     if (localAction && !options.retry) {
       window.setTimeout(() => handleQuickAction(localAction), 0);
@@ -471,29 +527,24 @@ export function AIMascotAssistant() {
         throw new Error(result?.message || t.aiMascot.errorMessage);
       }
 
-      const answer = result.answer ?? "";
-      setMessages((current) => [...current, createMessage("assistant", answer)]);
-      const shouldContinueVoice = voiceModeRef.current && !options.retry;
-      if ((options.speak || shouldContinueVoice) && answer) {
-        speakAnswer(answer, { resumeListening: shouldContinueVoice });
-      } else if (shouldContinueVoice) {
-        resumeVoiceLoop();
-      }
+      setMessages((current) => [...current, createMessage("assistant", result.answer ?? "")]);
+      setBehavior((current) => ({ ...current, mood: "joking" }));
     } catch (caughtError) {
       setLastFailedQuestion(question);
       setError(caughtError instanceof Error ? caughtError.message : t.aiMascot.errorMessage);
+      setBehavior((current) => ({ ...current, mood: "curious" }));
     } finally {
       setLoading(false);
       inputRef.current?.focus();
     }
   }
 
-  function startVoiceInput() {
-    if (!voiceSupported || listening || loading || speaking) return;
+  function startDictation() {
+    if (!dictationSupported || listening || loading) return;
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      setError(t.aiMascot.voiceUnsupported);
+      setError(t.aiMascot.dictationUnsupported);
       return;
     }
 
@@ -504,6 +555,7 @@ export function AIMascotAssistant() {
     recognition.interimResults = true;
     setError("");
     setListening(true);
+    setBehavior((current) => ({ ...current, mood: "listening" }));
 
     recognition.onresult = (event) => {
       let transcript = "";
@@ -521,62 +573,35 @@ export function AIMascotAssistant() {
 
       const cleanFinal = finalTranscript.trim();
       if (cleanFinal) {
+        setInput(cleanFinal);
         recognition.stop();
-        void sendMessage(cleanFinal, { speak: voiceModeRef.current || !voiceMutedRef.current });
+        window.setTimeout(() => inputRef.current?.focus(), 80);
       }
     };
 
     recognition.onerror = () => {
       setListening(false);
-      setError(t.aiMascot.voicePermissionError);
+      setError(t.aiMascot.dictationPermissionError);
+      setBehavior((current) => ({ ...current, mood: "curious" }));
     };
-    recognition.onend = () => setListening(false);
+    recognition.onend = () => {
+      setListening(false);
+      setBehavior((current) => ({ ...current, mood: "idle" }));
+    };
 
     try {
       recognition.start();
     } catch {
       setListening(false);
-      setError(t.aiMascot.voicePermissionError);
+      setError(t.aiMascot.dictationPermissionError);
+      setBehavior((current) => ({ ...current, mood: "curious" }));
     }
   }
 
-  function stopVoiceInput() {
+  function stopDictation() {
     recognitionRef.current?.stop();
     setListening(false);
-  }
-
-  function startVoiceCall() {
-    if (!voiceSupported) {
-      setError(t.aiMascot.voiceUnsupported);
-      return;
-    }
-
-    openChat();
-    setVoiceMode(true);
-    voiceModeRef.current = true;
-    setVoiceMuted(false);
-    voiceMutedRef.current = false;
-    setError("");
-    setMessages((current) =>
-      current.some((message) => message.content === t.aiMascot.voiceCallIntro)
-        ? current
-        : [...current, createMessage("assistant", t.aiMascot.voiceCallIntro)],
-    );
-    window.setTimeout(() => startVoiceInput(), 180);
-  }
-
-  function endVoiceCall() {
-    setVoiceMode(false);
-    voiceModeRef.current = false;
-    stopVoiceInput();
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-    }
-    setSpeaking(false);
-  }
-
-  function toggleVoiceMute() {
-    setVoiceMuted((current) => !current);
+    setBehavior((current) => ({ ...current, mood: "idle" }));
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -586,6 +611,7 @@ export function AIMascotAssistant() {
 
   function handleQuickAction(action: "projects" | "bcrm" | "book" | "contact" | "code") {
     setError("");
+    setBehavior((current) => ({ ...current, mood: "joking" }));
 
     if (action === "projects") {
       setMessages((current) => [...current, createMessage("assistant", t.aiMascot.actionReplies.projects)]);
@@ -733,6 +759,12 @@ export function AIMascotAssistant() {
     }
   }
 
+  function handleMascotInterest() {
+    if (loading || listening) return;
+    setBehavior((current) => ({ ...current, mood: "curious" }));
+    showCompanionLine(assistantRuntimeCopy.hoverNudges, t.aiMascot.greeting, "curious");
+  }
+
   const quickActions = useMemo(
     () => [
       { key: "projects" as const, label: t.aiMascot.quickActions.projects },
@@ -765,305 +797,232 @@ export function AIMascotAssistant() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {!hidden && !open ? (
+        {!hidden ? (
           <motion.div
-            className={`fixed z-[75] ${mascotPositionClass}`}
-            initial={{ opacity: 0, scale: 0.78, y: 24 }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              x: reducedMotion ? 0 : [0, -18, 12, -8, 0],
-              y: reducedMotion ? 0 : [0, -28, -8, -18, 0],
-            }}
-            exit={{
-              opacity: 0,
-              scale: 0.82,
-              y: 20,
-              transition: {
-                opacity: { duration: 0.18 },
-                scale: { duration: 0.18 },
-                y: { duration: 0.18 },
-              },
-            }}
+            className="fixed z-[75]"
+            style={mascotStyle}
+            initial={{ opacity: 0, scale: 0.82 }}
+            animate={{ left: mascotStyle.left, top: mascotStyle.top, opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.82 }}
             transition={{
-              opacity: { duration: 0.25 },
-              scale: { duration: 0.25 },
-              x: { duration: 18, repeat: Infinity, ease: "easeInOut" },
-              y: { duration: 18, repeat: Infinity, ease: "easeInOut" },
+              left: { duration: reducedMotion ? 0 : 1.15, ease: "easeInOut" },
+              top: { duration: reducedMotion ? 0 : 1.15, ease: "easeInOut" },
+              opacity: { duration: 0.22 },
+              scale: { duration: 0.22 },
             }}
           >
-            <div className="relative">
+            <div className="relative -translate-x-1/2 -translate-y-1/2">
               <AnimatePresence>
                 {nudgeVisible && !open ? (
                   <motion.button
                     type="button"
                     onClick={() => openChat()}
-                    className="absolute bottom-[7.2rem] right-0 w-[min(17rem,calc(100vw-2rem))] rounded-xl border border-white/10 bg-[#0a0a0a]/95 px-4 py-3 text-left text-sm leading-6 text-zinc-100 shadow-[0_20px_70px_rgba(0,0,0,0.46)] backdrop-blur-xl md:bottom-[9.8rem]"
-                    initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                    aria-live="polite"
+                    className={`absolute z-20 rounded-2xl border border-white/10 bg-[#090909]/95 px-4 py-3 text-left text-sm leading-6 text-zinc-100 shadow-[0_22px_70px_rgba(0,0,0,0.48)] backdrop-blur-2xl ${nudgePositionClass}`}
+                    initial={{ opacity: 0, y: 10, scale: 0.96 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 12, scale: 0.96 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.96 }}
                   >
                     {nudgeText}
                   </motion.button>
                 ) : null}
               </AnimatePresence>
 
-              <button
+              <AnimatePresence>
+                {open ? (
+                  <motion.aside
+                    role="dialog"
+                    aria-label={t.aiMascot.chatTitle}
+                    className={`absolute z-30 flex max-h-[min(29rem,calc(100vh-1rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/95 shadow-[0_28px_90px_rgba(0,0,0,0.58)] backdrop-blur-2xl ${companionPanelPositionClass}`}
+                    initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 12, scale: 0.96 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="flex items-start justify-between gap-3 border-b border-white/[0.07] px-4 py-3">
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium text-white">{t.aiMascot.chatTitle}</p>
+                        <p className="mt-0.5 text-xs text-zinc-400">{assistantStatusLabel}</p>
+                        <p className="mt-1 text-[0.66rem] uppercase tracking-[0.18em] text-[#d7b46a]/80">
+                          {t.aiMascot.personaLabel}
+                        </p>
+                      </div>
+                      <div className="flex shrink-0 items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={hideMascot}
+                          aria-label={t.aiMascot.hideLabel}
+                          className="grid h-8 w-8 place-items-center rounded-full text-zinc-400 transition hover:bg-white/[0.08] hover:text-[#f5dfae]"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setOpen(false)}
+                          aria-label={t.aiMascot.closeLabel}
+                          className="grid h-8 w-8 place-items-center rounded-full text-zinc-400 transition hover:bg-white/[0.08] hover:text-white"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div
+                      ref={scrollAreaRef}
+                      aria-live="polite"
+                      className="max-h-56 flex-1 space-y-2 overflow-y-auto px-4 py-3"
+                    >
+                      {messages.slice(booking.step === "idle" ? -5 : -3).map((message) => (
+                        <div
+                          key={message.id}
+                          className={`max-w-[92%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-sm leading-6 ${
+                            message.role === "user"
+                              ? "ml-auto rounded-br-md bg-[#d7b46a] text-black shadow-[0_10px_28px_rgba(215,180,106,0.16)]"
+                              : "rounded-bl-md border border-white/[0.08] bg-white/[0.045] text-zinc-100"
+                          }`}
+                        >
+                          {message.content}
+                        </div>
+                      ))}
+
+                      {loading ? (
+                        <div
+                          role="status"
+                          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.055] px-4 py-3 text-sm text-zinc-300"
+                        >
+                          <Loader2 className="h-4 w-4 animate-spin text-[#d7b46a]" />
+                          {t.aiMascot.thinkingLabel}
+                        </div>
+                      ) : null}
+
+                      {booking.step !== "idle" ? renderBookingPanel() : null}
+
+                      {error ? (
+                        <div
+                          role="alert"
+                          className="rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-100"
+                        >
+                          <p>{error}</p>
+                          {lastFailedQuestion ? (
+                            <button
+                              type="button"
+                              onClick={() => void sendMessage(lastFailedQuestion, { retry: true })}
+                              disabled={loading}
+                              className="mt-3 inline-flex items-center gap-2 rounded-full border border-red-200/25 px-3 py-2 text-xs text-red-50 transition hover:border-red-100/50 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                              <RotateCcw className="h-3.5 w-3.5" />
+                              {assistantRuntimeCopy.retryLabel}
+                            </button>
+                          ) : null}
+                        </div>
+                      ) : null}
+                    </div>
+
+                    <div className="border-t border-white/[0.07] bg-black/18 px-3.5 py-3">
+                      <div className="mb-3 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {quickActions.map((action) => (
+                          <button
+                            key={action.key}
+                            type="button"
+                            onClick={() => handleQuickAction(action.key)}
+                            className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-zinc-200 transition hover:border-[#d7b46a]/45 hover:text-[#f5dfae]"
+                          >
+                            {action.label}
+                          </button>
+                        ))}
+                      </div>
+
+                      <form onSubmit={handleSubmit}>
+                        <label htmlFor="ai-mascot-message" className="sr-only">
+                          {t.aiMascot.inputLabel}
+                        </label>
+                        <input
+                          type="text"
+                          value={website}
+                          onChange={(event) => setWebsite(event.target.value)}
+                          tabIndex={-1}
+                          autoComplete="off"
+                          className="hidden"
+                          aria-hidden="true"
+                        />
+                        <div className="flex items-end gap-2 rounded-2xl border border-white/[0.09] bg-black/35 p-2">
+                          <textarea
+                            ref={inputRef}
+                            id="ai-mascot-message"
+                            value={input}
+                            onChange={(event) => setInput(event.target.value)}
+                            onKeyDown={(event) => {
+                              if (event.key === "Enter" && !event.shiftKey) {
+                                event.preventDefault();
+                                void sendMessage();
+                              }
+                            }}
+                            placeholder={dictationSupported ? t.aiMascot.placeholderDictation : t.aiMascot.placeholder}
+                            rows={1}
+                            maxLength={1400}
+                            className="max-h-28 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-6 text-white outline-none placeholder:text-zinc-500"
+                          />
+                          {dictationSupported ? (
+                            <button
+                              type="button"
+                              onClick={listening ? stopDictation : startDictation}
+                              aria-label={listening ? t.aiMascot.stopMicLabel : t.aiMascot.micLabel}
+                              className={`grid h-10 w-10 shrink-0 place-items-center rounded-full transition ${
+                                listening
+                                  ? "bg-red-400/20 text-red-100"
+                                  : "bg-white/[0.06] text-zinc-200 hover:bg-white/[0.1]"
+                              }`}
+                            >
+                              {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                            </button>
+                          ) : null}
+                          <button
+                            type="submit"
+                            disabled={loading || !input.trim()}
+                            aria-label={t.aiMascot.sendLabel}
+                            className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#d7b46a] text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
+                          >
+                            <Send className="h-4 w-4" />
+                          </button>
+                        </div>
+                        <p className="mt-2 text-xs leading-5 text-zinc-500">
+                          {dictationSupported ? t.aiMascot.dictationHint : t.aiMascot.dictationUnsupported}
+                        </p>
+                      </form>
+                    </div>
+                  </motion.aside>
+                ) : null}
+              </AnimatePresence>
+
+              <motion.button
                 type="button"
                 onClick={() => openChat()}
+                onMouseEnter={handleMascotInterest}
+                onFocus={handleMascotInterest}
                 aria-label={t.aiMascot.openLabel}
                 data-testid="ai-mascot-open"
-                className="group relative h-28 w-28 rounded-full outline-none transition focus-visible:ring-2 focus-visible:ring-[#d7b46a]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-40 md:w-40"
+                className="group relative h-24 w-24 rounded-full outline-none transition focus-visible:ring-2 focus-visible:ring-[#d7b46a]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-36 md:w-36"
+                animate={
+                  reducedMotion
+                    ? undefined
+                    : {
+                        y: mascotMood === "walking" ? [0, -8, 0, -5, 0] : [0, -5, 0],
+                        rotate: mascotMood === "curious" ? [0, -4, 3, 0] : 0,
+                      }
+                }
+                transition={{
+                  y: { duration: mascotMood === "walking" ? 1.2 : 3.8, repeat: Infinity, ease: "easeInOut" },
+                  rotate: { duration: 1.4, ease: "easeInOut" },
+                }}
               >
                 <span className="absolute inset-2 rounded-full bg-[#d7b46a]/16 blur-2xl transition group-hover:bg-[#d7b46a]/28" />
                 <span className="absolute inset-0 rounded-full border border-white/10 bg-black/20 shadow-[0_22px_80px_rgba(0,0,0,0.48)] backdrop-blur-sm" />
                 <span className="relative block h-full w-full">
                   <AIMascotCanvas mood={mascotMood} reducedMotion={reducedMotion} />
                 </span>
-              </button>
+              </motion.button>
             </div>
           </motion.div>
-        ) : null}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {open && !hidden ? (
-          <motion.aside
-            role="dialog"
-            aria-label={t.aiMascot.chatTitle}
-            className={`fixed z-[90] flex w-[min(26.5rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#080808]/94 shadow-[0_30px_100px_rgba(0,0,0,0.6)] backdrop-blur-2xl ${chatPositionClass}`}
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 24, scale: 0.96 }}
-            transition={{ duration: 0.22 }}
-          >
-            <div className="border-b border-white/[0.07] bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.012))] px-4 pb-3 pt-4">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-3">
-                  <div className="relative h-16 w-16 shrink-0 rounded-2xl border border-white/10 bg-black/25 shadow-[0_14px_45px_rgba(0,0,0,0.35)]">
-                    <AIMascotCanvas mood={mascotMood} reducedMotion={reducedMotion} />
-                    <span
-                      className={`absolute bottom-1.5 right-1.5 h-2.5 w-2.5 rounded-full border border-black ${
-                        listening
-                          ? "bg-emerald-300"
-                          : speaking
-                            ? "bg-[#d7b46a]"
-                            : loading
-                              ? "bg-sky-300"
-                              : "bg-zinc-500"
-                      }`}
-                    />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-white">{t.aiMascot.chatTitle}</p>
-                    <p className="mt-0.5 text-xs text-zinc-400">{voiceStatusLabel}</p>
-                    <p className="mt-1 text-[0.68rem] uppercase tracking-[0.18em] text-[#d7b46a]/80">
-                      {t.aiMascot.personaLabel}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1">
-                  <button
-                    type="button"
-                    onClick={voiceMode ? endVoiceCall : startVoiceCall}
-                    aria-label={voiceMode ? t.aiMascot.endCallLabel : t.aiMascot.voiceCallLabel}
-                    className={`grid h-9 w-9 place-items-center rounded-full transition ${
-                      voiceMode
-                        ? "bg-[#d7b46a] text-black"
-                        : "text-zinc-300 hover:bg-white/[0.08] hover:text-[#f5dfae]"
-                    }`}
-                  >
-                    <PhoneCall className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={hideMascot}
-                    aria-label={t.aiMascot.hideLabel}
-                    className="grid h-9 w-9 place-items-center rounded-full text-zinc-400 transition hover:bg-white/[0.08] hover:text-[#f5dfae]"
-                  >
-                    <Eye className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setOpen(false)}
-                    aria-label={t.aiMascot.closeLabel}
-                    className="grid h-9 w-9 place-items-center rounded-full text-zinc-400 transition hover:bg-white/[0.08] hover:text-white"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div
-              ref={scrollAreaRef}
-              aria-live="polite"
-              className="flex-1 space-y-3 overflow-y-auto px-4 py-4"
-            >
-              {messages.slice(-8).map((message) => (
-                <div
-                  key={message.id}
-                  className={`max-w-[88%] whitespace-pre-line rounded-2xl px-4 py-3 text-sm leading-6 ${
-                    message.role === "user"
-                      ? "ml-auto rounded-br-md bg-[#d7b46a] text-black shadow-[0_10px_28px_rgba(215,180,106,0.16)]"
-                      : "rounded-bl-md border border-white/[0.08] bg-white/[0.045] text-zinc-100"
-                  }`}
-                >
-                  {message.content}
-                </div>
-              ))}
-
-              {loading ? (
-                <div
-                  role="status"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.055] px-4 py-3 text-sm text-zinc-300"
-                >
-                  <Loader2 className="h-4 w-4 animate-spin text-[#d7b46a]" />
-                  {t.aiMascot.thinkingLabel}
-                </div>
-              ) : null}
-
-              {booking.step !== "idle" ? renderBookingPanel() : null}
-
-              {error ? (
-                <div
-                  role="alert"
-                  className="rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-100"
-                >
-                  <p>{error}</p>
-                  {lastFailedQuestion ? (
-                    <button
-                      type="button"
-                      onClick={() => void sendMessage(lastFailedQuestion, { retry: true })}
-                      disabled={loading}
-                      className="mt-3 inline-flex items-center gap-2 rounded-full border border-red-200/25 px-3 py-2 text-xs text-red-50 transition hover:border-red-100/50 disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      <RotateCcw className="h-3.5 w-3.5" />
-                      {assistantRuntimeCopy.retryLabel}
-                    </button>
-                  ) : null}
-                </div>
-              ) : null}
-            </div>
-
-            <div className="border-t border-white/[0.07] bg-black/18 px-4 py-3">
-              <div className="mb-3 flex items-center justify-between gap-2 rounded-full border border-white/[0.08] bg-white/[0.025] px-3 py-2 text-xs text-zinc-400">
-                <span className="flex min-w-0 items-center gap-2">
-                  <span
-                    className={`h-1.5 w-1.5 rounded-full ${
-                      voiceMode ? "bg-emerald-300" : voiceSupported ? "bg-[#d7b46a]" : "bg-zinc-600"
-                    }`}
-                  />
-                  <span className="truncate">{voiceStatusLabel}</span>
-                </span>
-                <span className="flex shrink-0 items-center gap-1">
-                  <button
-                    type="button"
-                    onClick={voiceMode ? endVoiceCall : startVoiceCall}
-                    className={`inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs transition ${
-                      voiceMode
-                        ? "bg-[#d7b46a] text-black"
-                        : "bg-white/[0.06] text-zinc-100 hover:bg-white/[0.1]"
-                    }`}
-                  >
-                    <PhoneCall className="h-3.5 w-3.5" />
-                    {voiceMode ? t.aiMascot.endCallLabel : t.aiMascot.voiceCallLabel}
-                  </button>
-                  {voiceMode ? (
-                    <button
-                      type="button"
-                      onClick={toggleVoiceMute}
-                      aria-label={voiceMuted ? t.aiMascot.unmuteLabel : t.aiMascot.muteLabel}
-                      className="grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] text-zinc-200 transition hover:bg-white/[0.1]"
-                    >
-                      {voiceMuted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
-                    </button>
-                  ) : null}
-                </span>
-              </div>
-              <div className="mb-3 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {quickActions.map((action) => (
-                  <button
-                    key={action.key}
-                    type="button"
-                    onClick={() => handleQuickAction(action.key)}
-                    className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-zinc-200 transition hover:border-[#d7b46a]/45 hover:text-[#f5dfae]"
-                  >
-                    {action.label}
-                  </button>
-                ))}
-              </div>
-
-              <form onSubmit={handleSubmit}>
-                <label htmlFor="ai-mascot-message" className="sr-only">
-                  {t.aiMascot.inputLabel}
-                </label>
-                <input
-                  type="text"
-                  value={website}
-                  onChange={(event) => setWebsite(event.target.value)}
-                  tabIndex={-1}
-                  autoComplete="off"
-                  className="hidden"
-                  aria-hidden="true"
-                />
-                <div className="flex items-end gap-2 rounded-2xl border border-white/[0.09] bg-black/35 p-2">
-                  <textarea
-                    ref={inputRef}
-                    id="ai-mascot-message"
-                    value={input}
-                    onChange={(event) => setInput(event.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" && !event.shiftKey) {
-                        event.preventDefault();
-                        void sendMessage();
-                      }
-                    }}
-                    placeholder={voiceSupported ? t.aiMascot.placeholderVoice : t.aiMascot.placeholder}
-                    rows={1}
-                    maxLength={1400}
-                    className="max-h-32 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-6 text-white outline-none placeholder:text-zinc-500"
-                  />
-                  {voiceSupported ? (
-                    <button
-                      type="button"
-                      onClick={listening ? stopVoiceInput : startVoiceInput}
-                      aria-label={listening ? t.aiMascot.stopMicLabel : t.aiMascot.micLabel}
-                      className={`grid h-10 w-10 shrink-0 place-items-center rounded-full transition ${
-                        listening
-                          ? "bg-red-400/20 text-red-100"
-                          : voiceMode
-                            ? "bg-emerald-300/15 text-emerald-100 hover:bg-emerald-300/20"
-                            : "bg-white/[0.06] text-zinc-200 hover:bg-white/[0.1]"
-                      }`}
-                    >
-                      {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-                    </button>
-                  ) : null}
-                  <button
-                    type="submit"
-                    disabled={loading || !input.trim()}
-                    aria-label={t.aiMascot.sendLabel}
-                    className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#d7b46a] text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
-                  >
-                    <Send className="h-4 w-4" />
-                  </button>
-                </div>
-                <p className="mt-2 flex items-center gap-2 text-xs text-zinc-500">
-                  {voiceMuted ? (
-                    <VolumeX className="h-3.5 w-3.5 text-zinc-500" />
-                  ) : (
-                    <Volume2 className="h-3.5 w-3.5 text-[#d7b46a]" />
-                  )}
-                  {voiceSupported
-                    ? voiceMode
-                      ? t.aiMascot.voiceCallHint
-                      : t.aiMascot.voiceHint
-                    : t.aiMascot.voiceUnsupported}
-                </p>
-              </form>
-            </div>
-          </motion.aside>
         ) : null}
       </AnimatePresence>
     </>
