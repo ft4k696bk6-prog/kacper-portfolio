@@ -972,7 +972,7 @@ export function AIMascotAssistant() {
                   ) : null}
                 </span>
               </div>
-              <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+              <div className="mb-3 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {quickActions.map((action) => (
                   <button
                     key={action.key}
