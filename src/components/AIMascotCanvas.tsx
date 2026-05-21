@@ -34,11 +34,12 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
       const THREE = await import("three");
       const activeCanvas = canvasRef.current;
       if (disposed || !activeCanvas) return;
+      const canvasElement: HTMLCanvasElement = activeCanvas;
 
       const renderer = new THREE.WebGLRenderer({
         alpha: true,
         antialias: true,
-        canvas: activeCanvas,
+        canvas: canvasElement,
         powerPreference: "low-power",
       });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
@@ -165,7 +166,7 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
       scene.add(new THREE.AmbientLight(0xffffff, 1.05));
 
       function resize() {
-        const rect = activeCanvas.getBoundingClientRect();
+        const rect = canvasElement.getBoundingClientRect();
         const size = Math.max(1, Math.floor(Math.min(rect.width, rect.height)));
         renderer.setSize(size, size, false);
         camera.aspect = 1;
@@ -173,7 +174,7 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
       }
 
       const resizeObserver = new ResizeObserver(resize);
-      resizeObserver.observe(activeCanvas);
+      resizeObserver.observe(canvasElement);
       resize();
 
       const clock = new THREE.Clock();
