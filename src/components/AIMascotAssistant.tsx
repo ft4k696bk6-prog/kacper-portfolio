@@ -765,7 +765,7 @@ export function AIMascotAssistant() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {!hidden ? (
+        {!hidden && !open ? (
           <motion.div
             className={`fixed z-[75] ${mascotPositionClass}`}
             initial={{ opacity: 0, scale: 0.78, y: 24 }}
