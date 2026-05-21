@@ -161,7 +161,7 @@ export const en = {
     quickActions: {
       projects: "Show projects",
       bcrm: "Open B-CRM",
-      book: "Book a call",
+      book: "Find a slot",
       contact: "Contact",
       code: "Help with code",
     },
@@ -169,7 +169,7 @@ export const en = {
       projects: "Sure, opening the projects. B-CRM goes first, as it should.",
       bcrm: "Opening the B-CRM case study. This is the main technical proof.",
       contact: "Jumping to contact. Calendar, email and phone are there.",
-      book: "Let us book a short call here, without sending you to another page.",
+      book: "Opening the available slots here, without sending you to another page.",
     },
     codePrompt:
       "I have a frontend/code problem. I will paste the smallest relevant snippet without secrets.",
@@ -409,11 +409,11 @@ export const en = {
   contact: {
     title: "Talk about a web app, CRM or frontend role",
     description:
-      "Book a short call or reveal email and phone after a quick human check.",
+      "Find an available slot or reveal email and phone after a quick human check.",
     calendarTitle: "Calendar",
     calendarDescription:
       "Choose a meeting time in the calendar.",
-    calendarCta: "Book a call",
+    calendarCta: "Find a slot",
     booking: {
       title: "Calendar",
       timezoneLabel: "Europe/Warsaw",
