@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   AI_CONSULTANT_LIMITS,
   buildAiConsultantSystemPrompt,
+  buildConfiguredFallbackAnswer,
   getNvidiaApiBaseUrl,
   getNvidiaApiKey,
   getNvidiaModel,
@@ -95,17 +96,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, answer: "" });
   }
 
-  const apiKey = getNvidiaApiKey();
-  if (!apiKey) {
-    return NextResponse.json(
-      { message: "AI assistant is not configured yet." },
-      { status: 503 },
-    );
-  }
-
   const messages = sanitizeAiMessages(payload.messages);
   if (!messages.length) {
     return NextResponse.json({ message: "Question is empty." }, { status: 400 });
+  }
+
+  const apiKey = getNvidiaApiKey();
+  if (!apiKey) {
+    return NextResponse.json({
+      ok: true,
+      answer: buildConfiguredFallbackAnswer(messages, payload.language),
+      configured: false,
+      fallback: true,
+    });
   }
 
   const response = await fetch(`${getNvidiaApiBaseUrl()}/chat/completions`, {
@@ -140,5 +143,5 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: "AI assistant returned an empty answer." }, { status: 502 });
   }
 
-  return NextResponse.json({ ok: true, answer });
+  return NextResponse.json({ ok: true, answer, configured: true });
 }
