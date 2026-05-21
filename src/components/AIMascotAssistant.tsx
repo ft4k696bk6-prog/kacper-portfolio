@@ -3,7 +3,7 @@
 import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { usePathname, useRouter } from "next/navigation";
-import { CalendarDays, Eye, Loader2, MessageCircle, Mic, MicOff, RotateCcw, Send, Sparkles, X } from "lucide-react";
+import { CalendarDays, Eye, Loader2, MessageCircle, Mic, MicOff, RotateCcw, Send, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { DEFAULT_BOOKING_TIME_ZONE, formatSlotDate } from "@/lib/booking";
@@ -250,8 +250,11 @@ export function AIMascotAssistant() {
     ? "bottom-[14.5rem] right-4 md:bottom-4"
     : "bottom-4 right-4";
   const companionPanelPositionClass = isCompactViewport
-    ? "bottom-[calc(100%+0.8rem)] right-0 w-[min(22rem,calc(100vw-1.5rem))]"
-    : "bottom-[calc(100%+0.9rem)] right-0 w-[23rem]";
+    ? "bottom-[calc(100%+0.8rem)] right-0 w-[min(26rem,calc(100vw-1.5rem))]"
+    : "bottom-[calc(100%+0.9rem)] right-0 w-[28rem]";
+  const companionPanelSizeClass = isCompactViewport
+    ? "h-[min(22rem,calc(100vh-19rem))]"
+    : "h-[min(34rem,calc(100vh-7rem))]";
   const nudgePositionClass = isCompactViewport
     ? "bottom-[calc(100%+0.75rem)] right-0 w-[min(18rem,calc(100vw-1.5rem))]"
     : "bottom-[calc(100%+0.85rem)] right-0 w-72";
@@ -766,7 +769,7 @@ export function AIMascotAssistant() {
                   <motion.aside
                     role="dialog"
                     aria-label={t.aiMascot.chatTitle}
-                    className={`absolute z-30 flex max-h-[min(29rem,calc(100vh-1rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/95 shadow-[0_28px_90px_rgba(0,0,0,0.58)] backdrop-blur-2xl ${companionPanelPositionClass}`}
+                    className={`absolute z-30 flex max-h-[min(36rem,calc(100vh-1rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/95 shadow-[0_28px_90px_rgba(0,0,0,0.58)] backdrop-blur-2xl ${companionPanelPositionClass} ${companionPanelSizeClass}`}
                     initial={{ opacity: 0, y: 12, scale: 0.96 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 12, scale: 0.96 }}
@@ -803,7 +806,7 @@ export function AIMascotAssistant() {
                     <div
                       ref={scrollAreaRef}
                       aria-live="polite"
-                      className="max-h-56 flex-1 space-y-2 overflow-y-auto px-4 py-3"
+                      className="max-h-80 flex-1 space-y-2 overflow-y-auto px-4 py-3"
                     >
                       {messages.slice(booking.step === "idle" ? -5 : -3).map((message) => (
                         <div
@@ -934,7 +937,7 @@ export function AIMascotAssistant() {
                 onFocus={handleMascotInterest}
                 aria-label={t.aiMascot.openLabel}
                 data-testid="ai-mascot-open"
-                className="group relative grid h-16 w-16 place-items-center rounded-[1.35rem] border border-[#f5dfae]/45 bg-[#d7b46a] text-black shadow-[0_18px_58px_rgba(0,0,0,0.48)] outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#d7b46a]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-20 md:w-20 after:absolute after:-bottom-1 after:right-4 after:h-4 after:w-4 after:rotate-45 after:rounded-[0.18rem] after:bg-[#d7b46a] after:shadow-[8px_8px_30px_rgba(0,0,0,0.2)]"
+                className="group relative grid h-14 w-14 place-items-center rounded-2xl border border-[#f5dfae]/40 bg-[#d7b46a] text-black shadow-[0_14px_42px_rgba(0,0,0,0.45)] outline-none transition hover:-translate-y-0.5 hover:border-[#f5dfae]/70 hover:shadow-[0_18px_46px_rgba(215,180,106,0.22)] focus-visible:ring-2 focus-visible:ring-[#d7b46a]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-16 md:w-16"
                 animate={
                   reducedMotion
                     ? undefined
@@ -948,11 +951,10 @@ export function AIMascotAssistant() {
                   rotate: { duration: 1.4, ease: "easeInOut" },
                 }}
               >
-                <span className="absolute -inset-2 rounded-[1.65rem] bg-[#d7b46a]/20 blur-xl transition group-hover:bg-[#d7b46a]/32" />
-                <span className="absolute inset-0 rounded-[1.35rem] bg-gradient-to-br from-[#f5dfae] via-[#d7b46a] to-[#9c7732]" />
-                <span className="relative z-10 grid h-10 w-10 place-items-center rounded-2xl bg-black/15 text-black shadow-inner md:h-12 md:w-12">
-                  <MessageCircle className="h-6 w-6 md:h-7 md:w-7" />
-                  <Sparkles className="absolute -right-1 -top-1 h-4 w-4 text-white" />
+                <span className="absolute -inset-1.5 rounded-[1.35rem] bg-[#d7b46a]/20 blur-lg transition group-hover:bg-[#d7b46a]/30" />
+                <span className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#f7e5b5] via-[#d7b46a] to-[#ad863c]" />
+                <span className="relative z-10 grid h-9 w-9 place-items-center rounded-xl bg-black/12 text-black shadow-inner md:h-10 md:w-10">
+                  <MessageCircle className="h-5 w-5 md:h-6 md:w-6" />
                 </span>
               </motion.button>
             </div>
