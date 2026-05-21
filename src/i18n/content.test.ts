@@ -119,11 +119,11 @@ describe("portfolio content", () => {
     expect(pl.consent.accept).toBe("Akceptuję cookies");
   });
 
-  it("has localized global AI mascot copy for chat, voice, booking and code help", () => {
+  it("has localized global AI mascot copy for chat, dictation, booking and code help", () => {
     expect(en.aiMascot.chatSubtitle).toBe("Portfolio, code and quick actions");
     expect(pl.aiMascot.chatSubtitle).toBe("Portfolio, kod i szybkie akcje");
-    expect(en.aiMascot.voiceCallLabel).toBe("Call");
-    expect(pl.aiMascot.voiceCallLabel).toBe("Dzwoń");
+    expect(en.aiMascot.dictationReadyLabel).toBe("Mini chat ready");
+    expect(pl.aiMascot.dictationReadyLabel).toBe("Mini czat gotowy");
     expect(en.aiMascot.quickActions).toMatchObject({
       book: "Book a call",
       code: "Help with code",
