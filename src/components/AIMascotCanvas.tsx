@@ -12,6 +12,7 @@ type AIMascotCanvasProps = {
 
 const ASSISTANT_MODEL_PATH =
   process.env.NEXT_PUBLIC_AI_ASSISTANT_MODEL_PATH?.trim() || "/models/ai-assistant.glb";
+const MODEL_FRONT_ROTATION = Math.PI * 1.5;
 
 export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -210,7 +211,7 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
           framedBox.getCenter(center);
           model.position.sub(center);
           model.position.y -= 0.14;
-          model.rotation.y = Math.PI;
+          model.rotation.y = MODEL_FRONT_ROTATION;
           return scale;
         }
 
@@ -299,7 +300,7 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
 
           if (loadedModel) {
             const thinkingPulse = currentMood === "thinking" ? 1 + Math.sin(elapsed * 5) * 0.018 : 1;
-            loadedModel.rotation.y = Math.PI + (motionOff ? 0 : Math.sin(elapsed * 0.8) * 0.16);
+            loadedModel.rotation.y = MODEL_FRONT_ROTATION + (motionOff ? 0 : Math.sin(elapsed * 0.8) * 0.16);
             loadedModel.scale.setScalar(loadedModelBaseScale * thinkingPulse);
           }
 
