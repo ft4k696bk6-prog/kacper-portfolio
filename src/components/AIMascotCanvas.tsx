@@ -176,6 +176,7 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
         scene.add(new THREE.AmbientLight(0xffffff, 1.05));
 
         let loadedModel: Object3D | null = null;
+        let loadedModelBaseScale = 1;
         let mixer: { update: (delta: number) => void } | null = null;
 
         function disposeMaterial(material: Material | Material[]) {
@@ -210,6 +211,7 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
           model.position.sub(center);
           model.position.y -= 0.08;
           model.rotation.y = Math.PI;
+          return scale;
         }
 
         function prepareModel(model: Object3D) {
@@ -222,7 +224,7 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
             }
           });
 
-          frameModel(model);
+          return frameModel(model);
         }
 
         const loader = new GLTFLoader();
@@ -232,7 +234,7 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
             if (disposed) return;
 
             const model = gltf.scene;
-            prepareModel(model);
+            loadedModelBaseScale = prepareModel(model);
             fallbackGroup.visible = false;
             root.add(model);
             loadedModel = model;
@@ -266,8 +268,8 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
         function animate() {
           if (disposed) return;
 
-          const elapsed = clock.getElapsedTime();
           const delta = clock.getDelta();
+          const elapsed = clock.elapsedTime;
           const currentMood = moodRef.current;
           const motionOff = reducedMotionRef.current || document.hidden;
           const breath = motionOff ? 0 : Math.sin(elapsed * 1.6) * 0.055;
@@ -296,10 +298,9 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
           antennaTip.scale.setScalar(currentMood === "listening" ? 1.3 : 1);
 
           if (loadedModel) {
+            const thinkingPulse = currentMood === "thinking" ? 1 + Math.sin(elapsed * 5) * 0.018 : 1;
             loadedModel.rotation.y = Math.PI + (motionOff ? 0 : Math.sin(elapsed * 0.8) * 0.16);
-            loadedModel.scale.multiplyScalar(
-              currentMood === "thinking" ? 1 + Math.sin(elapsed * 5) * 0.0015 : 1,
-            );
+            loadedModel.scale.setScalar(loadedModelBaseScale * thinkingPulse);
           }
 
           mixer?.update(delta);
