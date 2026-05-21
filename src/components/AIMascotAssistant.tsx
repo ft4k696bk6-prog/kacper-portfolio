@@ -275,16 +275,22 @@ export function AIMascotAssistant() {
   const currentSpot = activeSpots[behavior.spotIndex % activeSpots.length] ?? activeSpots[0]!;
   const safeSpotY = cookieBannerVisible ? Math.min(currentSpot.y, isCompactViewport ? 52 : 60) : currentSpot.y;
   const mascotStyle: CSSProperties = { left: `${currentSpot.x}%`, top: `${safeSpotY}%` };
+  const compactOverlayStyle: CSSProperties | undefined = isCompactViewport
+    ? {
+        left: `calc(50% + ${50 - currentSpot.x}vw)`,
+        top: `calc(8.5rem - ${safeSpotY}vh)`,
+      }
+    : undefined;
   const restorePositionClass = cookieBannerVisible
     ? "bottom-[14.5rem] right-4 md:bottom-4"
     : "bottom-4 right-4";
   const companionPanelPositionClass = isCompactViewport
-    ? "bottom-[6.6rem] left-1/2 w-[min(23rem,calc(100vw-1rem))] -translate-x-1/2"
+    ? "left-1/2 top-0 w-[min(22rem,calc(100vw-1.5rem))] -translate-x-1/2"
     : currentSpot.x > 50
       ? "right-[calc(100%+0.85rem)] top-1/2 w-[23rem] -translate-y-1/2"
       : "left-[calc(100%+0.85rem)] top-1/2 w-[23rem] -translate-y-1/2";
   const nudgePositionClass = isCompactViewport
-    ? "bottom-[6.8rem] left-1/2 w-[min(18rem,calc(100vw-1rem))] -translate-x-1/2"
+    ? "left-1/2 top-0 w-[min(17rem,calc(100vw-1.5rem))] -translate-x-1/2"
     : currentSpot.x > 50
       ? "right-[calc(100%+0.65rem)] top-1/2 w-64 -translate-y-1/2"
       : "left-[calc(100%+0.65rem)] top-1/2 w-64 -translate-y-1/2";
@@ -819,6 +825,7 @@ export function AIMascotAssistant() {
                     onClick={() => openChat()}
                     aria-live="polite"
                     className={`absolute z-20 rounded-2xl border border-white/10 bg-[#090909]/95 px-4 py-3 text-left text-sm leading-6 text-zinc-100 shadow-[0_22px_70px_rgba(0,0,0,0.48)] backdrop-blur-2xl ${nudgePositionClass}`}
+                    style={compactOverlayStyle}
                     initial={{ opacity: 0, y: 10, scale: 0.96 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.96 }}
@@ -834,6 +841,7 @@ export function AIMascotAssistant() {
                     role="dialog"
                     aria-label={t.aiMascot.chatTitle}
                     className={`absolute z-30 flex max-h-[min(29rem,calc(100vh-1rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/95 shadow-[0_28px_90px_rgba(0,0,0,0.58)] backdrop-blur-2xl ${companionPanelPositionClass}`}
+                    style={compactOverlayStyle}
                     initial={{ opacity: 0, y: 12, scale: 0.96 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 12, scale: 0.96 }}
