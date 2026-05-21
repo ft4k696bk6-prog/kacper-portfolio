@@ -10,6 +10,7 @@ import {
   Loader2,
   Mic,
   MicOff,
+  RotateCcw,
   Send,
   Volume2,
   X,
@@ -92,6 +93,10 @@ declare global {
 const HIDE_DURATION_MS = 48 * 60 * 60 * 1000;
 const HIDDEN_UNTIL_KEY = "ai-mascot-hidden-until";
 const GREETED_KEY = "ai-mascot-greeted";
+const NUDGE_COOLDOWN_KEY = "ai-mascot-nudge-last-at";
+const NUDGE_COOLDOWN_MS = 20 * 60 * 1000;
+const OPEN_NUDGE_DELAY_MS = 3600;
+const IDLE_NUDGE_DELAY_MS = 60 * 1000;
 
 function createMessage(role: ChatMessage["role"], content: string): ChatMessage {
   return {
@@ -132,6 +137,55 @@ function detectLocalAction(question: string): LocalAction | null {
   return null;
 }
 
+function pickRandom(items: string[], fallback: string) {
+  if (!items.length) return fallback;
+  return items[Math.floor(Math.random() * items.length)] || fallback;
+}
+
+function canShowTimedNudge() {
+  const lastShownAt = Number(localStorage.getItem(NUDGE_COOLDOWN_KEY) || 0);
+  return !Number.isFinite(lastShownAt) || Date.now() - lastShownAt > NUDGE_COOLDOWN_MS;
+}
+
+function markTimedNudgeShown(markSession = false) {
+  localStorage.setItem(NUDGE_COOLDOWN_KEY, String(Date.now()));
+  if (markSession) {
+    sessionStorage.setItem(GREETED_KEY, "true");
+  }
+}
+
+function getAssistantRuntimeCopy(lang: "en" | "pl") {
+  if (lang === "pl") {
+    return {
+      retryLabel: "Ponow odpowiedz",
+      openerNudges: [
+        "Moge strescic B-CRM, pokazac projekty albo pomoc z kodem. Bez cyrku, konkretnie.",
+        "Potrzebujesz szybkiej sciezki po portfolio? Ja znam skroty.",
+        "Chcesz wiedziec, co Kacper dowozi biznesowo? Zacznijmy od B-CRM.",
+      ],
+      idleNudges: [
+        "Jesli chcesz, moge porownac projekty albo wskazac najlepszy dowod techniczny.",
+        "Moge tez otworzyc kontakt albo umowic rozmowe. Spokojnie, nie bede klikal bez prosby.",
+        "Dobry nastepny krok: zapytaj o stack, role w B-CRM albo wartosc biznesowa.",
+      ],
+    };
+  }
+
+  return {
+    retryLabel: "Retry answer",
+    openerNudges: [
+      "I can summarize B-CRM, point to projects, or help with code. Crisp, no confetti.",
+      "Need the fastest route through the portfolio? I know the shortcuts.",
+      "Want the business-value version of Kacper's work? B-CRM is a good first stop.",
+    ],
+    idleNudges: [
+      "I can compare projects or point you to the strongest technical proof.",
+      "I can also open contact or help book a call. Calmly, only when asked.",
+      "Good next step: ask about the stack, B-CRM roles, or business value.",
+    ],
+  };
+}
+
 const defaultBookingState: BookingState = {
   step: "idle",
   days: [],
@@ -144,6 +198,7 @@ const defaultBookingState: BookingState = {
 
 export function AIMascotAssistant() {
   const { lang, t } = useLanguage();
+  const assistantRuntimeCopy = useMemo(() => getAssistantRuntimeCopy(lang), [lang]);
   const router = useRouter();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
@@ -151,6 +206,7 @@ export function AIMascotAssistant() {
   const [open, setOpen] = useState(false);
   const [cookieBannerVisible, setCookieBannerVisible] = useState(false);
   const [nudgeVisible, setNudgeVisible] = useState(false);
+  const [nudgeText, setNudgeText] = useState(t.aiMascot.greeting);
   const [messages, setMessages] = useState<ChatMessage[]>([
     createMessage("assistant", t.aiMascot.initialMessage),
   ]);
@@ -158,6 +214,7 @@ export function AIMascotAssistant() {
   const [website, setWebsite] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [lastFailedQuestion, setLastFailedQuestion] = useState("");
   const [voiceSupported, setVoiceSupported] = useState(false);
   const [listening, setListening] = useState(false);
   const [speaking, setSpeaking] = useState(false);
@@ -231,22 +288,43 @@ export function AIMascotAssistant() {
         ? [createMessage("assistant", t.aiMascot.initialMessage)]
         : current,
     );
-  }, [t.aiMascot.initialMessage]);
+    setNudgeText(t.aiMascot.greeting);
+  }, [t.aiMascot.greeting, t.aiMascot.initialMessage]);
 
   useEffect(() => {
-    if (!mounted || hidden || open || sessionStorage.getItem(GREETED_KEY)) return;
+    if (!mounted || hidden || open || sessionStorage.getItem(GREETED_KEY) || !canShowTimedNudge()) {
+      return;
+    }
 
     const showTimer = window.setTimeout(() => {
+      if (!canShowTimedNudge()) return;
+      setNudgeText(pickRandom(assistantRuntimeCopy.openerNudges, t.aiMascot.greeting));
       setNudgeVisible(true);
-      sessionStorage.setItem(GREETED_KEY, "true");
-    }, 3600);
-    const hideTimer = window.setTimeout(() => setNudgeVisible(false), 12000);
+      markTimedNudgeShown(true);
+    }, OPEN_NUDGE_DELAY_MS);
+    const hideTimer = window.setTimeout(
+      () => setNudgeVisible(false),
+      OPEN_NUDGE_DELAY_MS + 12000,
+    );
 
     return () => {
       window.clearTimeout(showTimer);
       window.clearTimeout(hideTimer);
     };
-  }, [hidden, mounted, open]);
+  }, [assistantRuntimeCopy, hidden, mounted, open, t.aiMascot.greeting]);
+
+  useEffect(() => {
+    if (!mounted || hidden || !open || loading || listening || booking.step !== "idle") return;
+
+    const idleTimer = window.setTimeout(() => {
+      if (!canShowTimedNudge()) return;
+      const idleMessage = pickRandom(assistantRuntimeCopy.idleNudges, t.aiMascot.greeting);
+      setMessages((current) => [...current, createMessage("assistant", idleMessage)]);
+      markTimedNudgeShown();
+    }, IDLE_NUDGE_DELAY_MS);
+
+    return () => window.clearTimeout(idleTimer);
+  }, [assistantRuntimeCopy, booking.step, hidden, listening, loading, messages.length, mounted, open, t.aiMascot.greeting]);
 
   useEffect(() => {
     scrollAreaRef.current?.scrollTo({
@@ -305,17 +383,21 @@ export function AIMascotAssistant() {
     window.speechSynthesis.speak(utterance);
   }
 
-  async function sendMessage(nextInput?: string, options: { speak?: boolean } = {}) {
+  async function sendMessage(
+    nextInput?: string,
+    options: { speak?: boolean; retry?: boolean } = {},
+  ) {
     const question = (nextInput ?? input).trim();
     if (!question || loading) return;
 
-    const nextMessages = [...messages, createMessage("user", question)];
+    const nextMessages = options.retry ? messages : [...messages, createMessage("user", question)];
     const localAction = detectLocalAction(question);
     setMessages(nextMessages);
     setInput("");
     setError("");
+    setLastFailedQuestion("");
 
-    if (localAction) {
+    if (localAction && !options.retry) {
       window.setTimeout(() => handleQuickAction(localAction), 0);
       return;
     }
@@ -345,8 +427,7 @@ export function AIMascotAssistant() {
         speakAnswer(result.answer);
       }
     } catch (caughtError) {
-      setMessages((current) => current.slice(0, -1));
-      setInput(question);
+      setLastFailedQuestion(question);
       setError(caughtError instanceof Error ? caughtError.message : t.aiMascot.errorMessage);
     } finally {
       setLoading(false);
@@ -622,7 +703,7 @@ export function AIMascotAssistant() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 12, scale: 0.96 }}
                   >
-                    {t.aiMascot.greeting}
+                    {nudgeText}
                   </motion.button>
                 ) : null}
               </AnimatePresence>
@@ -686,7 +767,11 @@ export function AIMascotAssistant() {
               </div>
             </div>
 
-            <div ref={scrollAreaRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+            <div
+              ref={scrollAreaRef}
+              aria-live="polite"
+              className="flex-1 space-y-3 overflow-y-auto px-4 py-4"
+            >
               {messages.slice(-8).map((message) => (
                 <div
                   key={message.id}
@@ -701,7 +786,10 @@ export function AIMascotAssistant() {
               ))}
 
               {loading ? (
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.055] px-4 py-3 text-sm text-zinc-300">
+                <div
+                  role="status"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.055] px-4 py-3 text-sm text-zinc-300"
+                >
                   <Loader2 className="h-4 w-4 animate-spin text-[#d7b46a]" />
                   {t.aiMascot.thinkingLabel}
                 </div>
@@ -710,9 +798,23 @@ export function AIMascotAssistant() {
               {booking.step !== "idle" ? renderBookingPanel() : null}
 
               {error ? (
-                <p className="rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-100">
-                  {error}
-                </p>
+                <div
+                  role="alert"
+                  className="rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-100"
+                >
+                  <p>{error}</p>
+                  {lastFailedQuestion ? (
+                    <button
+                      type="button"
+                      onClick={() => void sendMessage(lastFailedQuestion, { retry: true })}
+                      disabled={loading}
+                      className="mt-3 inline-flex items-center gap-2 rounded-full border border-red-200/25 px-3 py-2 text-xs text-red-50 transition hover:border-red-100/50 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      {assistantRuntimeCopy.retryLabel}
+                    </button>
+                  ) : null}
+                </div>
               ) : null}
             </div>
 
