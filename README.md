@@ -21,6 +21,7 @@ Screenshots should be added to `docs/screenshots/`. Placeholder image links are 
 - Direct email/phone reveal without rendering contact details in the initial HTML.
 - Turnstile fallback, honeypot and rate-limit protection for contact reveal.
 - Custom booking calendar that talks to Cal.com through server routes.
+- NVIDIA/NIM-backed AI consultant through a server route.
 - Optional Google Tag Manager integration via environment variable.
 - SEO, OpenGraph, Twitter card, sitemap and robots metadata.
 
@@ -33,6 +34,7 @@ Screenshots should be added to `docs/screenshots/`. Placeholder image links are 
 - Framer Motion
 - Cloudflare Turnstile
 - Cal.com API
+- NVIDIA NIM API
 - Vercel
 - Vitest
 
@@ -75,6 +77,10 @@ CONTACT_REVEAL_PHONE=
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 TURNSTILE_SECRET_KEY=
 NEXT_PUBLIC_GTM_ID=
+NEXT_PUBLIC_GA_MEASUREMENT_ID=
+NVIDIA_API_KEY=
+NVIDIA_API_BASE_URL=https://integrate.api.nvidia.com/v1
+NVIDIA_MODEL=meta/llama-3.1-70b-instruct
 CAL_API_KEY=
 CAL_EVENT_TYPE_ID=
 CAL_USERNAME=
@@ -82,11 +88,11 @@ CAL_EVENT_TYPE_SLUG=
 NEXT_PUBLIC_CALENDAR_TIMEZONE=Europe/Warsaw
 ```
 
-`NEXT_PUBLIC_GTM_ID` is optional. The booking calendar uses Cal.com API through server routes, so `CAL_API_KEY` must stay server-only and must never be committed or exposed with a `NEXT_PUBLIC_` prefix. Prefer `CAL_EVENT_TYPE_ID`; use `CAL_USERNAME` + `CAL_EVENT_TYPE_SLUG` only as a fallback. Direct contact details use server-only `CONTACT_REVEAL_EMAIL` and `CONTACT_REVEAL_PHONE`; email falls back to `CONTACT_TO_EMAIL` when `CONTACT_REVEAL_EMAIL` is not set.
+`NEXT_PUBLIC_GTM_ID` and `NEXT_PUBLIC_GA_MEASUREMENT_ID` are optional. The AI consultant uses NVIDIA/NIM through a server route, so `NVIDIA_API_KEY` must stay server-only and must never be committed or exposed with a `NEXT_PUBLIC_` prefix. The booking calendar uses Cal.com API through server routes, so `CAL_API_KEY` must also stay server-only. Prefer `CAL_EVENT_TYPE_ID`; use `CAL_USERNAME` + `CAL_EVENT_TYPE_SLUG` only as a fallback. Direct contact details use server-only `CONTACT_REVEAL_EMAIL` and `CONTACT_REVEAL_PHONE`; email falls back to `CONTACT_TO_EMAIL` when `CONTACT_REVEAL_EMAIL` is not set.
 
 ## Security notes
 
-The contact reveal flow avoids rendering direct email and phone details in the initial page HTML. Bot protection uses a honeypot, simple rate limiting and Cloudflare Turnstile verification when configured. Booking requests are sent through server routes so the Cal.com API key is not exposed in the browser. `robots.txt` is configured for indexing; it is not treated as a scraping prevention mechanism.
+The contact reveal flow avoids rendering direct email and phone details in the initial page HTML. Bot protection uses a honeypot, simple rate limiting and Cloudflare Turnstile verification when configured. Booking and AI consultant requests are sent through server routes so Cal.com and NVIDIA API keys are not exposed in the browser. `robots.txt` is configured for indexing; it is not treated as a scraping prevention mechanism.
 
 ## What I learned
 

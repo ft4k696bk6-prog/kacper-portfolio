@@ -134,6 +134,27 @@ export const pl: Translations = {
       contact: "Kontakt",
     },
   },
+  aiConsultant: {
+    eyebrow: "Konsultant AI",
+    title: "Zapytaj o projekty, stack albo dopasowanie.",
+    description:
+      "Mały asystent oparty o NVIDIA może podsumować portfolio, porównać projekty i wskazać najmocniejsze dowody techniczne bez wychodzenia ze strony.",
+    panelTitle: "Asystent portfolio",
+    panelSubtitle: "Odpowiedzi bazują na projektach i case studies z tej strony.",
+    initialMessage:
+      "Zapytaj mnie o B-CRM, stack technologiczny, zakres projektów albo które case study sprawdzić jako pierwsze.",
+    prompts: [
+      "Dlaczego B-CRM jest najmocniejszym projektem?",
+      "Które projekty pokazują doświadczenie w aplikacjach biznesowych?",
+      "Co osoba techniczna powinna sprawdzić jako pierwsze?",
+      "Podsumuj stack Kacpra w 5 punktach.",
+    ],
+    inputLabel: "Pytanie do konsultanta AI",
+    placeholder: "Zapytaj o B-CRM, stack, case studies albo współpracę...",
+    sendLabel: "Zapytaj",
+    loadingLabel: "Myślę...",
+    errorMessage: "Konsultant AI jest teraz niedostępny. Spróbuj ponownie później.",
+  },
   projects: {
     title: "Projekty",
     subtitle: "Skupiony zestaw aplikacji biznesowych i projektów wspierających. B-CRM jest głównym dowodem technicznym.",

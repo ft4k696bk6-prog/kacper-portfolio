@@ -133,6 +133,27 @@ export const en = {
       contact: "Contact",
     },
   },
+  aiConsultant: {
+    eyebrow: "AI consultant",
+    title: "Ask about the projects, stack or fit.",
+    description:
+      "A small NVIDIA-powered assistant can summarize the portfolio, compare projects and point you to the strongest evidence without leaving the page.",
+    panelTitle: "Portfolio assistant",
+    panelSubtitle: "Answers are based on the projects and case studies on this site.",
+    initialMessage:
+      "Ask me about B-CRM, the tech stack, project scope or which case study to review first.",
+    prompts: [
+      "Why is B-CRM the strongest project?",
+      "Which projects show business app experience?",
+      "What should a technical recruiter review first?",
+      "Summarize Kacper's stack in 5 bullets.",
+    ],
+    inputLabel: "Question for the AI consultant",
+    placeholder: "Ask about B-CRM, stack, case studies or collaboration...",
+    sendLabel: "Ask",
+    loadingLabel: "Thinking...",
+    errorMessage: "The AI consultant is not available right now. Try again later.",
+  },
   projects: {
     title: "Projects",
     subtitle: "A focused set of business apps and supporting web projects. B-CRM is the main technical proof.",

@@ -8,6 +8,7 @@ import { Projects } from "@/components/Projects";
 import { Skills } from "@/components/Skills";
 import { Contact } from "@/components/Contact";
 import { TechnicalAudience } from "@/components/TechnicalAudience";
+import { AIConsultant } from "@/components/AIConsultant";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -40,6 +41,7 @@ export function StaticPortfolio() {
         <Experience />
         <Services />
         <TechnicalAudience />
+        <AIConsultant />
         <Projects />
         <Skills />
         <Contact />
@@ -47,4 +49,3 @@ export function StaticPortfolio() {
     </>
   );
 }
-
