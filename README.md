@@ -2,7 +2,7 @@
 
 Professional portfolio for a Frontend / Web App Developer focused on business web applications: CRMs, dashboards, forms, admin panels, workflow tools and API integrations.
 
-PL: Portfolio prezentuje projekty web app bez pozycjonowania jako osoba początkująca, z B-CRM jako głównym projektem technicznym.
+PL: Portfolio prezentuje projekty web app bez pozycjonowania jako osoba poczatkujaca, z B-CRM jako glownym projektem technicznym.
 
 ## Live demo
 
@@ -21,7 +21,8 @@ Screenshots should be added to `docs/screenshots/`. Placeholder image links are 
 - Direct email/phone reveal without rendering contact details in the initial HTML.
 - Turnstile fallback, honeypot and rate-limit protection for contact reveal.
 - Custom booking calendar that talks to Cal.com through server routes.
-- NVIDIA/NIM-backed AI consultant through a server route.
+- Conversational AI assistant with text input, optional speech input, retry/error states and portfolio-focused fallback replies.
+- Three.js assistant character slot loading `/models/ai-assistant.glb` with a nonblank procedural fallback.
 - Optional Google Tag Manager integration via environment variable.
 - SEO, OpenGraph, Twitter card, sitemap and robots metadata.
 
@@ -32,6 +33,7 @@ Screenshots should be added to `docs/screenshots/`. Placeholder image links are 
 - TypeScript
 - Tailwind CSS
 - Framer Motion
+- Three.js
 - Cloudflare Turnstile
 - Cal.com API
 - NVIDIA NIM API
@@ -40,12 +42,13 @@ Screenshots should be added to `docs/screenshots/`. Placeholder image links are 
 
 ## Project structure
 
-- `src/app/` — App Router pages, metadata, API routes, sitemap and robots.
-- `src/components/` — portfolio sections, UI and GTM/contact components.
-- `src/i18n/` — Polish and English content.
-- `src/contexts/` — language context.
-- `public/images/` — profile visuals and static assets.
-- `docs/` — roadmap, changelog, issue backlog and screenshots folder.
+- `src/app/` -- App Router pages, metadata, API routes, sitemap and robots.
+- `src/components/` -- portfolio sections, UI and GTM/contact components.
+- `src/i18n/` -- Polish and English content.
+- `src/contexts/` -- language context.
+- `public/images/` -- profile visuals and static assets.
+- `public/models/` -- optional GLB assets for the AI assistant character.
+- `docs/` -- roadmap, changelog, issue backlog and screenshots folder.
 
 ## Getting started
 
@@ -81,6 +84,7 @@ NEXT_PUBLIC_GA_MEASUREMENT_ID=
 NVIDIA_API_KEY=
 NVIDIA_API_BASE_URL=https://integrate.api.nvidia.com/v1
 NVIDIA_MODEL=meta/llama-3.1-70b-instruct
+NEXT_PUBLIC_AI_ASSISTANT_MODEL_PATH=/models/ai-assistant.glb
 CAL_API_KEY=
 CAL_EVENT_TYPE_ID=
 CAL_USERNAME=
@@ -88,7 +92,11 @@ CAL_EVENT_TYPE_SLUG=
 NEXT_PUBLIC_CALENDAR_TIMEZONE=Europe/Warsaw
 ```
 
-`NEXT_PUBLIC_GTM_ID` and `NEXT_PUBLIC_GA_MEASUREMENT_ID` are optional. The AI consultant uses NVIDIA/NIM through a server route, so `NVIDIA_API_KEY` must stay server-only and must never be committed or exposed with a `NEXT_PUBLIC_` prefix. The booking calendar uses Cal.com API through server routes, so `CAL_API_KEY` must also stay server-only. Prefer `CAL_EVENT_TYPE_ID`; use `CAL_USERNAME` + `CAL_EVENT_TYPE_SLUG` only as a fallback. Direct contact details use server-only `CONTACT_REVEAL_EMAIL` and `CONTACT_REVEAL_PHONE`; email falls back to `CONTACT_TO_EMAIL` when `CONTACT_REVEAL_EMAIL` is not set.
+`NEXT_PUBLIC_GTM_ID` and `NEXT_PUBLIC_GA_MEASUREMENT_ID` are optional. The AI consultant uses NVIDIA/NIM through a server route, so `NVIDIA_API_KEY` must stay server-only and must never be committed or exposed with a `NEXT_PUBLIC_` prefix. If `NVIDIA_API_KEY` is not set, the assistant still returns local portfolio-focused fallback answers instead of failing. The booking calendar uses Cal.com API through server routes, so `CAL_API_KEY` must also stay server-only. Prefer `CAL_EVENT_TYPE_ID`; use `CAL_USERNAME` + `CAL_EVENT_TYPE_SLUG` only as a fallback. Direct contact details use server-only `CONTACT_REVEAL_EMAIL` and `CONTACT_REVEAL_PHONE`; email falls back to `CONTACT_TO_EMAIL` when `CONTACT_REVEAL_EMAIL` is not set.
+
+## AI assistant model asset
+
+The Three.js assistant tries to load `NEXT_PUBLIC_AI_ASSISTANT_MODEL_PATH`, defaulting to `/models/ai-assistant.glb`. Add the user-provided GLB at `public/models/ai-assistant.glb`. If the asset is missing or cannot load, the assistant renders the built-in procedural character instead of a blank canvas.
 
 ## Security notes
 
