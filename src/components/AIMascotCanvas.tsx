@@ -93,6 +93,7 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
         });
 
         const fallbackGroup = new THREE.Group();
+        fallbackGroup.visible = false;
         root.add(fallbackGroup);
 
         const body = new THREE.Mesh(new THREE.SphereGeometry(1.03, 48, 32), gold);
@@ -248,7 +249,7 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
           },
           undefined,
           () => {
-            fallbackGroup.visible = true;
+            if (!disposed) setRenderDomFallback(true);
           },
         );
 
