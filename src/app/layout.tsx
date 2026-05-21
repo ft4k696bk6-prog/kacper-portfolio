@@ -4,6 +4,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LanguageMetadataSync } from "@/components/LanguageMetadataSync";
 import { AnalyticsConsent } from "@/components/AnalyticsConsent";
+import { AIMascotAssistant } from "@/components/AIMascotAssistant";
 import { Geist } from "next/font/google";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -98,6 +99,7 @@ export default function RootLayout({
           <LanguageMetadataSync />
           <LanguageSwitcher />
           {children}
+          <AIMascotAssistant />
         </LanguageProvider>
       </body>
     </html>

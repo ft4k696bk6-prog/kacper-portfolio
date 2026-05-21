@@ -119,6 +119,23 @@ describe("portfolio content", () => {
     expect(pl.consent.accept).toBe("Akceptuję cookies");
   });
 
+  it("has localized global AI mascot copy for chat, voice, booking and code help", () => {
+    expect(en.aiMascot.chatSubtitle).toBe("Write or speak");
+    expect(pl.aiMascot.chatSubtitle).toBe("Napisz albo powiedz");
+    expect(en.aiMascot.quickActions).toMatchObject({
+      book: "Book a call",
+      code: "Help with code",
+    });
+    expect(pl.aiMascot.quickActions).toMatchObject({
+      book: "Umów rozmowę",
+      code: "Pomoc z kodem",
+    });
+    expect(en.aiMascot.booking.submit).toBe("Book this time");
+    expect(pl.aiMascot.booking.submit).toBe("Zarezerwuj termin");
+    expect(en.aiMascot.codePrompt.toLowerCase()).toContain("without secrets");
+    expect(pl.aiMascot.codePrompt.toLowerCase()).toContain("bez sekretów");
+  });
+
   it("keeps case study section labels localized", () => {
     const enCaseStudies = JSON.stringify(en.caseStudies);
     const plCaseStudies = JSON.stringify(pl.caseStudies);

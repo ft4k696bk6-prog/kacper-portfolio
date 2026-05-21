@@ -82,12 +82,12 @@ export async function POST(request: NextRequest) {
   const ip = clientIp(request);
 
   if (isRateLimited(ip)) {
-    return NextResponse.json({ message: "Too many AI consultant requests." }, { status: 429 });
+    return NextResponse.json({ message: "Too many AI assistant requests." }, { status: 429 });
   }
 
   const parsed = consultantSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
-    return NextResponse.json({ message: "Invalid AI consultant request." }, { status: 400 });
+    return NextResponse.json({ message: "Invalid AI assistant request." }, { status: 400 });
   }
 
   const payload = parsed.data;
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
   const apiKey = getNvidiaApiKey();
   if (!apiKey) {
     return NextResponse.json(
-      { message: "AI consultant is not configured yet." },
+      { message: "AI assistant is not configured yet." },
       { status: 503 },
     );
   }
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
 
   const answer = normalizeNvidiaContent(result.choices?.[0]?.message?.content);
   if (!answer) {
-    return NextResponse.json({ message: "AI consultant returned an empty answer." }, { status: 502 });
+    return NextResponse.json({ message: "AI assistant returned an empty answer." }, { status: 502 });
   }
 
   return NextResponse.json({ ok: true, answer });
