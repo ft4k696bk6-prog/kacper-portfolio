@@ -85,6 +85,76 @@ ${PORTFOLIO_CONTEXT}
 `;
 }
 
+function latestUserContent(messages: AiConsultantMessage[]) {
+  return [...messages].reverse().find((message) => message.role === "user")?.content.trim() || "";
+}
+
+function normalizeForIntent(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function hasAny(value: string, terms: string[]) {
+  return terms.some((term) => value.includes(term));
+}
+
+export function buildConfiguredFallbackAnswer(
+  messages: AiConsultantMessage[],
+  language: "en" | "pl",
+) {
+  const latestQuestion = latestUserContent(messages);
+  const normalizedQuestion = normalizeForIntent(latestQuestion);
+  const isPolish = language === "pl";
+
+  if (!latestQuestion) {
+    return isPolish
+      ? "Jestem gotowy. Zapytaj o B-CRM, stack, projekty albo kontakt, a ja poprowadze bez lania wody."
+      : "Ready when you are. Ask about B-CRM, the stack, projects or contact, and I will keep it crisp.";
+  }
+
+  if (hasAny(normalizedQuestion, ["b-crm", "b crm", "crm", "lead", "sales", "sprzedaz"])) {
+    return isPolish
+      ? "B-CRM to najmocniejszy projekt do sprawdzenia: production-like CRM z rolami, statusami leadow, komentarzami, historia zmian, callbackami, spotkaniami, panelami operacyjnymi i danymi w Supabase/PostgreSQL. Najlepiej pokazuje, ze Kacper mysli procesem biznesowym, nie tylko ladnym ekranem. Mogę tez wskazac konkretnie role, workflow albo stack."
+      : "B-CRM is the strongest project to review: a production-like CRM with roles, lead statuses, comments, history, callbacks, meetings, operational panels and Supabase/PostgreSQL-backed data. It shows Kacper thinking in business workflow, not just nice screens. I can also point you to the roles, workflow or stack next.";
+  }
+
+  if (hasAny(normalizedQuestion, ["project", "projects", "portfolio", "projek", "realizac"])) {
+    return isPolish
+      ? "Najkrocej: B-CRM jest glownym dowodem technicznym, Portfolio pokazuje Next.js i dopracowane case studies, Berni Rush pokazuje Three.js/game loop, a BerniNutri i kalkulator leasingu pokazuja prototypy narzedzi biznesowych. Dobry przeglad? Najpierw B-CRM, potem case study Portfolio, potem poboczne eksperymenty."
+      : "Short version: B-CRM is the main technical proof, Portfolio shows Next.js and polished case studies, Berni Rush shows Three.js/game-loop work, and BerniNutri plus the leasing calculator show business-tool prototypes. Best review path: B-CRM first, then the Portfolio case study, then the side experiments.";
+  }
+
+  if (hasAny(normalizedQuestion, ["stack", "tech", "technolog", "typescript", "react", "next", "supabase"])) {
+    return isPolish
+      ? "Glowny stack Kacpra to React, TypeScript, Next.js, Supabase/PostgreSQL, Tailwind CSS i Vercel. W praktyce uzywa go do CRM-ow, dashboardow, formularzy, route handlerow, autoryzacji, rol i integracji API. To jest bardziej warsztat web app niz wizytowka z animacjami."
+      : "Kacper's core stack is React, TypeScript, Next.js, Supabase/PostgreSQL, Tailwind CSS and Vercel. In practice he uses it for CRMs, dashboards, forms, route handlers, auth, roles and API integrations. More web-app workshop than animated business card.";
+  }
+
+  if (hasAny(normalizedQuestion, ["contact", "kontakt", "email", "phone", "telefon", "book", "call", "meeting", "spotkanie", "rozmow"])) {
+    return isPolish
+      ? "Kontakt najlepiej zalatwic przez sekcje kontaktu na stronie: jest tam kalendarz rozmowy oraz chronione odsłoniecie emaila/telefonu. Nie wymyslam prywatnych danych, bo to slaby sport i jeszcze gorszy UX."
+      : "The best route is the contact section on the page: it has calendar booking plus protected email/phone reveal. I will not invent private contact details, because that is bad sport and worse UX.";
+  }
+
+  if (hasAny(normalizedQuestion, ["code", "bug", "debug", "frontend", "typescript", "kod", "blad", "błąd"])) {
+    return isPolish
+      ? "Moge pomoc z kodem, szczegolnie React/TypeScript/Next.js, formularze, dashboardy, API i Supabase. Wklej najmniejszy fragment problemu bez sekretow, tokenow, kluczy API ani danych klientow, a przejde po nim konkretnie."
+      : "I can help with code, especially React/TypeScript/Next.js, forms, dashboards, APIs and Supabase. Paste the smallest relevant snippet without secrets, tokens, API keys or customer data, and I will go through it directly.";
+  }
+
+  if (hasAny(normalizedQuestion, ["what can", "co potrafi", "umie", "fit", "hire", "value", "wartosc"])) {
+    return isPolish
+      ? "Kacper potrafi budowac praktyczne aplikacje webowe dla procesow biznesowych: CRM-y, dashboardy, formularze, role uzytkownikow, dane w Supabase/PostgreSQL i integracje API. Najwieksza wartosc jest w przekladaniu procesu firmy na czytelne ekrany i flow, a nie w samym klikaniu komponentow."
+      : "Kacper builds practical web apps for business processes: CRMs, dashboards, forms, user roles, Supabase/PostgreSQL data and API integrations. The value is translating company workflow into clear screens and flows, not just assembling components.";
+  }
+
+  return isPolish
+    ? "Na bazie portfolio: Kacper skupia sie na aplikacjach biznesowych w React/TypeScript/Next.js: CRM, dashboardy, formularze, role, dane i integracje. Jesli chcesz szybki dowod techniczny, zapytaj o B-CRM. Jesli chcesz decyzje biznesowa, zapytaj, ktory projekt najlepiej pasuje do Twojego przypadku."
+    : "Based on the portfolio: Kacper focuses on business web apps in React/TypeScript/Next.js: CRMs, dashboards, forms, roles, data and integrations. If you want quick technical proof, ask about B-CRM. If you want a business-fit answer, ask which project maps best to your case.";
+}
+
 export function sanitizeAiMessages(messages: AiConsultantMessage[]) {
   return messages
     .slice(-AI_CONSULTANT_LIMITS.maxMessages)
