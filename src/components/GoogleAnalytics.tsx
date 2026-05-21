@@ -12,7 +12,7 @@ declare global {
 }
 
 export function GoogleAnalytics() {
-  const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+  const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-9T1ZPCK96T";
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
