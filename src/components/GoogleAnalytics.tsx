@@ -17,16 +17,30 @@ export function GoogleAnalytics() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (!measurementId || typeof window.gtag !== "function") return;
+    if (!measurementId) return;
 
     const queryString = searchParams.toString();
     const pagePath = queryString ? `${pathname}?${queryString}` : pathname;
+    let retry: ReturnType<typeof setTimeout> | undefined;
 
-    window.gtag("event", "page_view", {
-      page_title: document.title,
-      page_location: window.location.href,
-      page_path: pagePath,
-    });
+    function sendPageView() {
+      if (typeof window.gtag !== "function") {
+        retry = setTimeout(sendPageView, 100);
+        return;
+      }
+
+      window.gtag("event", "page_view", {
+        page_title: document.title,
+        page_location: window.location.href,
+        page_path: pagePath,
+      });
+    }
+
+    sendPageView();
+
+    return () => {
+      if (retry) clearTimeout(retry);
+    };
   }, [measurementId, pathname, searchParams]);
 
   if (!measurementId) return null;
