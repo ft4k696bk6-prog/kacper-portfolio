@@ -1,11 +1,10 @@
 "use client";
 
-import { type CSSProperties, type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { usePathname, useRouter } from "next/navigation";
-import { Bot, CalendarDays, Eye, Loader2, Mic, MicOff, RotateCcw, Send, X } from "lucide-react";
+import { CalendarDays, Eye, Loader2, MessageCircle, Mic, MicOff, RotateCcw, Send, Sparkles, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AIMascotCanvas } from "@/components/AIMascotCanvas";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { DEFAULT_BOOKING_TIME_ZONE, formatSlotDate } from "@/lib/booking";
 import type { AvailableBookingDay } from "@/lib/calcom";
@@ -47,13 +46,7 @@ type LocalAction = "projects" | "bcrm" | "book" | "contact";
 type MascotMood = "idle" | "walking" | "curious" | "joking" | "listening" | "thinking";
 
 type MascotBehaviorState = {
-  spotIndex: number;
   mood: MascotMood;
-};
-
-type MascotSpot = {
-  x: number;
-  y: number;
 };
 
 type SpeechRecognitionLike = {
@@ -98,21 +91,6 @@ const NUDGE_COOLDOWN_MS = 24 * 1000;
 const LINE_COOLDOWN_MS = 12 * 1000;
 const OPEN_NUDGE_DELAY_MS = 2200;
 const IDLE_NUDGE_DELAY_MS = 28 * 1000;
-const WALK_INTERVAL_MS = 9000;
-
-const DESKTOP_MASCOT_SPOTS: MascotSpot[] = [
-  { x: 86, y: 72 },
-  { x: 15, y: 66 },
-  { x: 82, y: 38 },
-  { x: 18, y: 46 },
-];
-
-const MOBILE_MASCOT_SPOTS: MascotSpot[] = [
-  { x: 78, y: 74 },
-  { x: 24, y: 72 },
-  { x: 76, y: 52 },
-  { x: 24, y: 54 },
-];
 
 function createMessage(role: ChatMessage["role"], content: string): ChatMessage {
   return {
@@ -255,7 +233,7 @@ export function AIMascotAssistant() {
   const [dictationSupported, setDictationSupported] = useState(false);
   const [listening, setListening] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [behavior, setBehavior] = useState<MascotBehaviorState>({ spotIndex: 0, mood: "idle" });
+  const [behavior, setBehavior] = useState<MascotBehaviorState>({ mood: "idle" });
   const [booking, setBooking] = useState<BookingState>(defaultBookingState);
   const [bookingName, setBookingName] = useState("");
   const [bookingEmail, setBookingEmail] = useState("");
@@ -268,32 +246,15 @@ export function AIMascotAssistant() {
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const locale = lang === "pl" ? "pl-PL" : "en-US";
   const timeZone = process.env.NEXT_PUBLIC_CALENDAR_TIMEZONE || DEFAULT_BOOKING_TIME_ZONE;
-  const activeSpots = useMemo(
-    () => (isCompactViewport ? MOBILE_MASCOT_SPOTS : DESKTOP_MASCOT_SPOTS),
-    [isCompactViewport],
-  );
-  const currentSpot = activeSpots[behavior.spotIndex % activeSpots.length] ?? activeSpots[0]!;
-  const safeSpotY = cookieBannerVisible ? Math.min(currentSpot.y, isCompactViewport ? 52 : 60) : currentSpot.y;
-  const mascotStyle: CSSProperties = { left: `${currentSpot.x}%`, top: `${safeSpotY}%` };
-  const compactOverlayStyle: CSSProperties | undefined = isCompactViewport
-    ? {
-        left: `calc(50% + ${50 - currentSpot.x}vw)`,
-        top: `calc(8.5rem - ${safeSpotY}vh)`,
-      }
-    : undefined;
   const restorePositionClass = cookieBannerVisible
     ? "bottom-[14.5rem] right-4 md:bottom-4"
     : "bottom-4 right-4";
   const companionPanelPositionClass = isCompactViewport
-    ? "left-1/2 top-0 w-[min(22rem,calc(100vw-1.5rem))] -translate-x-1/2"
-    : currentSpot.x > 50
-      ? "right-[calc(100%+0.85rem)] top-1/2 w-[23rem] -translate-y-1/2"
-      : "left-[calc(100%+0.85rem)] top-1/2 w-[23rem] -translate-y-1/2";
+    ? "bottom-[calc(100%+0.8rem)] right-0 w-[min(22rem,calc(100vw-1.5rem))]"
+    : "bottom-[calc(100%+0.9rem)] right-0 w-[23rem]";
   const nudgePositionClass = isCompactViewport
-    ? "left-1/2 top-0 w-[min(17rem,calc(100vw-1.5rem))] -translate-x-1/2"
-    : currentSpot.x > 50
-      ? "right-[calc(100%+0.65rem)] top-1/2 w-64 -translate-y-1/2"
-      : "left-[calc(100%+0.65rem)] top-1/2 w-64 -translate-y-1/2";
+    ? "bottom-[calc(100%+0.75rem)] right-0 w-[min(18rem,calc(100vw-1.5rem))]"
+    : "bottom-[calc(100%+0.85rem)] right-0 w-72";
   const mascotMood: MascotMood = listening ? "listening" : loading ? "thinking" : behavior.mood;
   const assistantStatusLabel = listening
     ? t.aiMascot.dictationListeningLabel
@@ -309,7 +270,7 @@ export function AIMascotAssistant() {
       lastLineAtRef.current = now;
       setNudgeText(pickRandom(lines, fallback));
       setNudgeVisible(true);
-      setBehavior((current) => ({ ...current, mood }));
+      setBehavior({ mood });
       window.setTimeout(() => setNudgeVisible(false), 6200);
     },
     [open],
@@ -379,7 +340,7 @@ export function AIMascotAssistant() {
       if (!canShowTimedNudge()) return;
       setNudgeText(pickRandom(assistantRuntimeCopy.openerNudges, t.aiMascot.greeting));
       setNudgeVisible(true);
-      setBehavior((current) => ({ ...current, mood: "curious" }));
+      setBehavior({ mood: "curious" });
       markTimedNudgeShown(true);
     }, OPEN_NUDGE_DELAY_MS);
     const hideTimer = window.setTimeout(
@@ -406,7 +367,7 @@ export function AIMascotAssistant() {
         setNudgeVisible(true);
         window.setTimeout(() => setNudgeVisible(false), 7200);
       }
-      setBehavior((current) => ({ ...current, mood: "joking" }));
+      setBehavior({ mood: "joking" });
       markTimedNudgeShown();
     }, IDLE_NUDGE_DELAY_MS);
 
@@ -424,34 +385,6 @@ export function AIMascotAssistant() {
   ]);
 
   useEffect(() => {
-    if (!mounted || hidden || reducedMotion) return;
-
-    const walkTimer = window.setInterval(() => {
-      if (open || listening || loading || booking.step !== "idle") return;
-      setBehavior((current) => ({
-        spotIndex: (current.spotIndex + 1) % activeSpots.length,
-        mood: "walking",
-      }));
-      showCompanionLine(assistantRuntimeCopy.movementNudges, t.aiMascot.greeting, "walking");
-      window.setTimeout(() => setBehavior((current) => ({ ...current, mood: "idle" })), 2600);
-    }, WALK_INTERVAL_MS);
-
-    return () => window.clearInterval(walkTimer);
-  }, [
-    activeSpots.length,
-    assistantRuntimeCopy,
-    booking.step,
-    hidden,
-    listening,
-    loading,
-    mounted,
-    open,
-    reducedMotion,
-    showCompanionLine,
-    t.aiMascot.greeting,
-  ]);
-
-  useEffect(() => {
     scrollAreaRef.current?.scrollTo({
       top: scrollAreaRef.current.scrollHeight,
       behavior: "smooth",
@@ -462,7 +395,7 @@ export function AIMascotAssistant() {
     setHidden(false);
     setNudgeVisible(false);
     setOpen(true);
-    setBehavior((current) => ({ ...current, mood: "curious" }));
+    setBehavior({ mood: "curious" });
     if (prefill) {
       setInput(prefill);
     }
@@ -480,7 +413,7 @@ export function AIMascotAssistant() {
     localStorage.removeItem(HIDDEN_UNTIL_KEY);
     setHidden(false);
     setOpen(true);
-    setBehavior((current) => ({ ...current, mood: "curious" }));
+    setBehavior({ mood: "curious" });
     window.setTimeout(() => inputRef.current?.focus(), 80);
   }
 
@@ -506,7 +439,7 @@ export function AIMascotAssistant() {
     setInput("");
     setError("");
     setLastFailedQuestion("");
-    setBehavior((current) => ({ ...current, mood: localAction ? "curious" : "thinking" }));
+    setBehavior({ mood: localAction ? "curious" : "thinking" });
 
     if (localAction && !options.retry) {
       window.setTimeout(() => handleQuickAction(localAction), 0);
@@ -767,7 +700,7 @@ export function AIMascotAssistant() {
 
   function handleMascotInterest() {
     if (loading || listening) return;
-    setBehavior((current) => ({ ...current, mood: "curious" }));
+    setBehavior({ mood: "curious" });
     showCompanionLine(assistantRuntimeCopy.hoverNudges, t.aiMascot.greeting, "curious");
   }
 
@@ -796,7 +729,7 @@ export function AIMascotAssistant() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 16 }}
           >
-            <Bot className="h-4 w-4" />
+            <MessageCircle className="h-4 w-4" />
             {t.aiMascot.restoreLabel}
           </motion.button>
         ) : null}
@@ -805,19 +738,13 @@ export function AIMascotAssistant() {
       <AnimatePresence>
         {!hidden ? (
           <motion.div
-            className="fixed z-[75]"
-            style={mascotStyle}
+            className={`fixed z-[75] ${restorePositionClass}`}
             initial={{ opacity: 0, scale: 0.82 }}
-            animate={{ left: mascotStyle.left, top: mascotStyle.top, opacity: 1, scale: 1 }}
+            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.82 }}
-            transition={{
-              left: { duration: reducedMotion ? 0 : 1.15, ease: "easeInOut" },
-              top: { duration: reducedMotion ? 0 : 1.15, ease: "easeInOut" },
-              opacity: { duration: 0.22 },
-              scale: { duration: 0.22 },
-            }}
+            transition={{ opacity: { duration: 0.22 }, scale: { duration: 0.22 } }}
           >
-            <div className="relative -translate-x-1/2 -translate-y-1/2">
+            <div className="relative">
               <AnimatePresence>
                 {nudgeVisible && !open ? (
                   <motion.button
@@ -825,7 +752,6 @@ export function AIMascotAssistant() {
                     onClick={() => openChat()}
                     aria-live="polite"
                     className={`absolute z-20 rounded-2xl border border-white/10 bg-[#090909]/95 px-4 py-3 text-left text-sm leading-6 text-zinc-100 shadow-[0_22px_70px_rgba(0,0,0,0.48)] backdrop-blur-2xl ${nudgePositionClass}`}
-                    style={compactOverlayStyle}
                     initial={{ opacity: 0, y: 10, scale: 0.96 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.96 }}
@@ -841,7 +767,6 @@ export function AIMascotAssistant() {
                     role="dialog"
                     aria-label={t.aiMascot.chatTitle}
                     className={`absolute z-30 flex max-h-[min(29rem,calc(100vh-1rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/95 shadow-[0_28px_90px_rgba(0,0,0,0.58)] backdrop-blur-2xl ${companionPanelPositionClass}`}
-                    style={compactOverlayStyle}
                     initial={{ opacity: 0, y: 12, scale: 0.96 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 12, scale: 0.96 }}
@@ -1009,24 +934,25 @@ export function AIMascotAssistant() {
                 onFocus={handleMascotInterest}
                 aria-label={t.aiMascot.openLabel}
                 data-testid="ai-mascot-open"
-                className="group relative h-24 w-24 rounded-full outline-none transition focus-visible:ring-2 focus-visible:ring-[#d7b46a]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-36 md:w-36"
+                className="group relative grid h-16 w-16 place-items-center rounded-[1.35rem] border border-[#f5dfae]/45 bg-[#d7b46a] text-black shadow-[0_18px_58px_rgba(0,0,0,0.48)] outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#d7b46a]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-20 md:w-20 after:absolute after:-bottom-1 after:right-4 after:h-4 after:w-4 after:rotate-45 after:rounded-[0.18rem] after:bg-[#d7b46a] after:shadow-[8px_8px_30px_rgba(0,0,0,0.2)]"
                 animate={
                   reducedMotion
                     ? undefined
                     : {
-                        y: mascotMood === "walking" ? [0, -8, 0, -5, 0] : [0, -5, 0],
+                        y: mascotMood === "thinking" ? [0, -4, 0] : [0, -3, 0],
                         rotate: mascotMood === "curious" ? [0, -4, 3, 0] : 0,
                       }
                 }
                 transition={{
-                  y: { duration: mascotMood === "walking" ? 1.2 : 3.8, repeat: Infinity, ease: "easeInOut" },
+                  y: { duration: mascotMood === "thinking" ? 1.4 : 3.8, repeat: Infinity, ease: "easeInOut" },
                   rotate: { duration: 1.4, ease: "easeInOut" },
                 }}
               >
-                <span className="absolute inset-2 rounded-full bg-[#d7b46a]/16 blur-2xl transition group-hover:bg-[#d7b46a]/28" />
-                <span className="absolute inset-0 rounded-full border border-white/10 bg-black/20 shadow-[0_22px_80px_rgba(0,0,0,0.48)] backdrop-blur-sm" />
-                <span className="relative block h-full w-full">
-                  <AIMascotCanvas mood={mascotMood} reducedMotion={reducedMotion} />
+                <span className="absolute -inset-2 rounded-[1.65rem] bg-[#d7b46a]/20 blur-xl transition group-hover:bg-[#d7b46a]/32" />
+                <span className="absolute inset-0 rounded-[1.35rem] bg-gradient-to-br from-[#f5dfae] via-[#d7b46a] to-[#9c7732]" />
+                <span className="relative z-10 grid h-10 w-10 place-items-center rounded-2xl bg-black/15 text-black shadow-inner md:h-12 md:w-12">
+                  <MessageCircle className="h-6 w-6 md:h-7 md:w-7" />
+                  <Sparkles className="absolute -right-1 -top-1 h-4 w-4 text-white" />
                 </span>
               </motion.button>
             </div>
