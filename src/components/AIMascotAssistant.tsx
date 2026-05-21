@@ -6,14 +6,11 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   Bot,
   CalendarDays,
-  Code2,
   Eye,
   Loader2,
-  Mail,
   Mic,
   MicOff,
   Send,
-  Sparkles,
   Volume2,
   X,
 } from "lucide-react";
