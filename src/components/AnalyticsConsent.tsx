@@ -1,7 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
-import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { useEffect, useState } from "react";
 import { GoogleTagManager } from "@/components/GoogleTagManager";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
@@ -45,14 +44,7 @@ export function AnalyticsConsent() {
 
   return (
     <>
-      {analyticsEnabled ? (
-        <>
-          <GoogleTagManager />
-          <Suspense fallback={null}>
-            <GoogleAnalytics />
-          </Suspense>
-        </>
-      ) : null}
+      {analyticsEnabled ? <GoogleTagManager /> : null}
 
       {loaded && consent === null ? (
         <div className="fixed bottom-4 left-4 right-4 z-[70] mx-auto max-w-2xl rounded-md border border-[#d7b46a]/35 bg-[#11110f]/95 p-4 text-sm text-zinc-300 shadow-[0_22px_70px_rgba(0,0,0,0.42)] backdrop-blur-xl md:left-5 md:right-auto md:mx-0 md:max-w-md">
