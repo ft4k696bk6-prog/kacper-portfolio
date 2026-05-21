@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LanguageMetadataSync } from "@/components/LanguageMetadataSync";
 import { AnalyticsConsent } from "@/components/AnalyticsConsent";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { AIMascotAssistant } from "@/components/AIMascotAssistant";
 import { Geist } from "next/font/google";
 
@@ -94,6 +96,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`scroll-smooth font-sans ${geist.variable}`}>
       <body>
+        <Suspense fallback={null}>
+          <GoogleAnalytics />
+        </Suspense>
         <LanguageProvider>
           <AnalyticsConsent />
           <LanguageMetadataSync />
