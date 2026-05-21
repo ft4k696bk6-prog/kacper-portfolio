@@ -116,7 +116,7 @@ export function buildConfiguredFallbackAnswer(
 
   if (hasAny(normalizedQuestion, ["b-crm", "b crm", "crm", "lead", "sales", "sprzedaz"])) {
     return isPolish
-      ? "B-CRM to najmocniejszy projekt do sprawdzenia: production-like CRM z rolami, statusami leadow, komentarzami, historia zmian, callbackami, spotkaniami, panelami operacyjnymi i danymi w Supabase/PostgreSQL. Najlepiej pokazuje, ze Kacper mysli procesem biznesowym, nie tylko ladnym ekranem. Mogę tez wskazac konkretnie role, workflow albo stack."
+      ? "B-CRM to najmocniejszy projekt do sprawdzenia: production-like CRM z rolami, statusami leadow, komentarzami, historia zmian, callbackami, spotkaniami, panelami operacyjnymi i danymi w Supabase/PostgreSQL. Najlepiej pokazuje, ze Kacper mysli procesem biznesowym, nie tylko ladnym ekranem. Moge tez wskazac konkretnie role, workflow albo stack."
       : "B-CRM is the strongest project to review: a production-like CRM with roles, lead statuses, comments, history, callbacks, meetings, operational panels and Supabase/PostgreSQL-backed data. It shows Kacper thinking in business workflow, not just nice screens. I can also point you to the roles, workflow or stack next.";
   }
 
@@ -134,11 +134,11 @@ export function buildConfiguredFallbackAnswer(
 
   if (hasAny(normalizedQuestion, ["contact", "kontakt", "email", "phone", "telefon", "book", "call", "meeting", "spotkanie", "rozmow"])) {
     return isPolish
-      ? "Kontakt najlepiej zalatwic przez sekcje kontaktu na stronie: jest tam kalendarz rozmowy oraz chronione odsłoniecie emaila/telefonu. Nie wymyslam prywatnych danych, bo to slaby sport i jeszcze gorszy UX."
+      ? "Kontakt najlepiej zalatwic przez sekcje kontaktu na stronie: jest tam kalendarz rozmowy oraz chronione odsloniecie emaila/telefonu. Nie wymyslam prywatnych danych, bo to slaby sport i jeszcze gorszy UX."
       : "The best route is the contact section on the page: it has calendar booking plus protected email/phone reveal. I will not invent private contact details, because that is bad sport and worse UX.";
   }
 
-  if (hasAny(normalizedQuestion, ["code", "bug", "debug", "frontend", "typescript", "kod", "blad", "błąd"])) {
+  if (hasAny(normalizedQuestion, ["code", "bug", "debug", "frontend", "typescript", "kod", "blad"])) {
     return isPolish
       ? "Moge pomoc z kodem, szczegolnie React/TypeScript/Next.js, formularze, dashboardy, API i Supabase. Wklej najmniejszy fragment problemu bez sekretow, tokenow, kluczy API ani danych klientow, a przejde po nim konkretnie."
       : "I can help with code, especially React/TypeScript/Next.js, forms, dashboards, APIs and Supabase. Paste the smallest relevant snippet without secrets, tokens, API keys or customer data, and I will go through it directly.";
