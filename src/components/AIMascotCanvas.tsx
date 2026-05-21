@@ -50,12 +50,12 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
           canvas: canvasElement,
           powerPreference: "low-power",
         });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
         renderer.setClearColor(0x000000, 0);
 
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(31, 1, 0.1, 100);
-        camera.position.set(0, 0.16, 5.6);
+        const camera = new THREE.PerspectiveCamera(29, 1, 0.1, 100);
+        camera.position.set(0, 0.04, 5.15);
 
         const root = new THREE.Group();
         scene.add(root);
@@ -167,15 +167,15 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
         rightArm.rotation.z = 0.34;
         fallbackGroup.add(rightArm);
 
-        const keyLight = new THREE.DirectionalLight(0xfff2cb, 2.8);
-        keyLight.position.set(2.8, 3.5, 4.5);
+        const keyLight = new THREE.DirectionalLight(0xfff2cb, 3.2);
+        keyLight.position.set(2.8, 3.8, 4.6);
         scene.add(keyLight);
 
-        const rimLight = new THREE.PointLight(0xd7b46a, 2.5, 7);
-        rimLight.position.set(-2.2, 1.8, 2.2);
+        const rimLight = new THREE.PointLight(0xd7b46a, 2.8, 7);
+        rimLight.position.set(-2.2, 1.9, 2.4);
         scene.add(rimLight);
 
-        scene.add(new THREE.AmbientLight(0xffffff, 1.05));
+        scene.add(new THREE.AmbientLight(0xffffff, 1.12));
 
         let loadedModel: Object3D | null = null;
         let loadedModelBaseScale = 1;
@@ -206,14 +206,14 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
           const size = new THREE.Vector3();
           box.getSize(size);
           const largestSide = Math.max(size.x, size.y, size.z) || 1;
-          const scale = 2.9 / largestSide;
+          const scale = 3.35 / largestSide;
           model.scale.setScalar(scale);
 
           const framedBox = new THREE.Box3().setFromObject(model);
           const center = new THREE.Vector3();
           framedBox.getCenter(center);
           model.position.sub(center);
-          model.position.y -= 0.14;
+          model.position.y -= 0.24;
           model.rotation.y = MODEL_FRONT_ROTATION;
           return scale;
         }
@@ -259,9 +259,10 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
 
         function resize() {
           const rect = canvasElement.getBoundingClientRect();
-          const size = Math.max(1, Math.floor(Math.min(rect.width, rect.height)));
-          renderer.setSize(size, size, false);
-          camera.aspect = 1;
+          const width = Math.max(1, Math.floor(rect.width));
+          const height = Math.max(1, Math.floor(rect.height));
+          renderer.setSize(width, height, false);
+          camera.aspect = width / height;
           camera.updateProjectionMatrix();
         }
 
@@ -281,27 +282,28 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
           const isWalking = currentMood === "walking";
           const isCurious = currentMood === "curious";
           const isJoking = currentMood === "joking";
-          const breath = motionOff ? 0 : Math.sin(elapsed * 1.8) * 0.065;
-          const stepLift = !motionOff && isWalking ? Math.abs(Math.sin(elapsed * 7.5)) * 0.085 : 0;
+          const walkPhase = elapsed * 8.8;
+          const breath = motionOff ? 0 : Math.sin(elapsed * 1.75) * 0.085;
+          const stepLift = !motionOff && isWalking ? Math.abs(Math.sin(walkPhase)) * 0.145 : 0;
           const curiousTilt = motionOff
             ? 0
             : isCurious
-              ? 0.18 + Math.sin(elapsed * 1.8) * 0.08
-              : Math.sin(elapsed * 0.9) * 0.11;
+              ? 0.26 + Math.sin(elapsed * 2) * 0.1
+              : Math.sin(elapsed * 0.85) * 0.14;
 
-          root.position.x = !motionOff && isWalking ? Math.sin(elapsed * 7.5) * 0.035 : 0;
-          root.position.y = breath + stepLift + (!motionOff && isJoking ? Math.sin(elapsed * 5.5) * 0.025 : 0);
+          root.position.x = !motionOff && isWalking ? Math.sin(walkPhase) * 0.075 : 0;
+          root.position.y = breath + stepLift + (!motionOff && isJoking ? Math.sin(elapsed * 5.7) * 0.055 : 0);
           root.rotation.y = curiousTilt;
           root.rotation.z = motionOff
             ? 0
             : isWalking
-              ? Math.sin(elapsed * 7.5) * 0.045
-              : Math.sin(elapsed * 0.7) * 0.035;
+              ? Math.sin(walkPhase) * 0.082
+              : Math.sin(elapsed * 0.72) * 0.042;
 
           if (!loadedModel) {
-            leftArm.rotation.z = -0.42 + (motionOff ? 0 : Math.sin(elapsed * 2.2) * 0.1);
-            rightArm.rotation.z = 0.42 + (motionOff ? 0 : Math.cos(elapsed * 2.1) * 0.1);
-            halo.rotation.z = elapsed * 0.28;
+            leftArm.rotation.z = -0.46 + (motionOff ? 0 : Math.sin(elapsed * 2.6) * 0.16);
+            rightArm.rotation.z = 0.46 + (motionOff ? 0 : Math.cos(elapsed * 2.4) * 0.16);
+            halo.rotation.z = elapsed * 0.34;
           }
 
           const pulse =
@@ -317,18 +319,21 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
           antennaTip.scale.setScalar(currentMood === "listening" ? 1.3 : 1);
 
           if (loadedModel) {
-            const thinkingPulse = currentMood === "thinking" ? 1 + Math.sin(elapsed * 5) * 0.018 : 1;
-            const walkLean = !motionOff && isWalking ? Math.sin(elapsed * 7.5) * 0.1 : 0;
-            loadedModel.position.x = loadedModelBaseX + (!motionOff && isWalking ? Math.sin(elapsed * 7.5) * 0.035 : 0);
+            const thinkingPulse = currentMood === "thinking" ? 1 + Math.sin(elapsed * 5) * 0.02 : 1;
+            const walkLean = !motionOff && isWalking ? Math.sin(walkPhase) * 0.17 : 0;
+            loadedModel.position.x =
+              loadedModelBaseX +
+              (!motionOff && isWalking ? Math.sin(walkPhase) * 0.085 : 0) +
+              (!motionOff && isCurious ? Math.sin(elapsed * 1.6) * 0.02 : 0);
             loadedModel.position.y =
               loadedModelBaseY +
-              (!motionOff && isWalking ? Math.abs(Math.sin(elapsed * 7.5)) * 0.08 : 0) +
-              (!motionOff && isJoking ? Math.sin(elapsed * 5.5) * 0.045 : 0);
+              (!motionOff && isWalking ? Math.abs(Math.sin(walkPhase)) * 0.15 : 0) +
+              (!motionOff && isJoking ? Math.sin(elapsed * 5.7) * 0.07 : 0);
             loadedModel.rotation.y =
               MODEL_FRONT_ROTATION +
-              (motionOff ? 0 : Math.sin(elapsed * 0.8) * (isCurious ? 0.24 : 0.16)) +
+              (motionOff ? 0 : Math.sin(elapsed * 0.82) * (isCurious ? 0.34 : 0.2)) +
               walkLean;
-            loadedModel.rotation.z = !motionOff && isWalking ? Math.sin(elapsed * 7.5) * 0.035 : 0;
+            loadedModel.rotation.z = !motionOff && isWalking ? Math.sin(walkPhase) * 0.078 : 0;
             loadedModel.scale.setScalar(loadedModelBaseScale * thinkingPulse);
           }
 
@@ -363,7 +368,7 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
     return (
       <span
         aria-hidden="true"
-        className="grid h-full w-full place-items-center rounded-full border border-[#d7b46a]/35 bg-[#d7b46a]/15 text-lg font-semibold text-[#f5dfae]"
+        className="grid h-full w-full place-items-end rounded-[2rem] text-lg font-semibold text-[#f5dfae] drop-shadow-[0_24px_36px_rgba(0,0,0,0.62)]"
       >
         AI
       </span>
