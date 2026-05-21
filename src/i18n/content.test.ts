@@ -120,8 +120,10 @@ describe("portfolio content", () => {
   });
 
   it("has localized global AI mascot copy for chat, voice, booking and code help", () => {
-    expect(en.aiMascot.chatSubtitle).toBe("Write or speak");
-    expect(pl.aiMascot.chatSubtitle).toBe("Napisz albo powiedz");
+    expect(en.aiMascot.chatSubtitle).toBe("Portfolio, code and quick actions");
+    expect(pl.aiMascot.chatSubtitle).toBe("Portfolio, kod i szybkie akcje");
+    expect(en.aiMascot.voiceCallLabel).toBe("Call");
+    expect(pl.aiMascot.voiceCallLabel).toBe("Dzwoń");
     expect(en.aiMascot.quickActions).toMatchObject({
       book: "Book a call",
       code: "Help with code",
