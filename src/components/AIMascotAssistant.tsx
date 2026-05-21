@@ -775,7 +775,16 @@ export function AIMascotAssistant() {
               x: reducedMotion ? 0 : [0, -18, 12, -8, 0],
               y: reducedMotion ? 0 : [0, -28, -8, -18, 0],
             }}
-            exit={{ opacity: 0, scale: 0.82, y: 20 }}
+            exit={{
+              opacity: 0,
+              scale: 0.82,
+              y: 20,
+              transition: {
+                opacity: { duration: 0.18 },
+                scale: { duration: 0.18 },
+                y: { duration: 0.18 },
+              },
+            }}
             transition={{
               opacity: { duration: 0.25 },
               scale: { duration: 0.25 },
