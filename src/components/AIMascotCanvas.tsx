@@ -13,100 +13,6 @@ type AIMascotCanvasProps = {
 const ASSISTANT_MODEL_PATH =
   process.env.NEXT_PUBLIC_AI_ASSISTANT_MODEL_PATH?.trim() || "/models/ai-assistant.glb";
 
-function stripEmbeddedTextureReferences(arrayBuffer: ArrayBuffer) {
-  const GLB_MAGIC = 0x46546c67;
-  const GLB_VERSION = 2;
-  const JSON_CHUNK_TYPE = 0x4e4f534a;
-  const HEADER_LENGTH = 12;
-  const CHUNK_HEADER_LENGTH = 8;
-
-  try {
-    const view = new DataView(arrayBuffer);
-    if (
-      view.byteLength < HEADER_LENGTH + CHUNK_HEADER_LENGTH ||
-      view.getUint32(0, true) !== GLB_MAGIC ||
-      view.getUint32(4, true) !== GLB_VERSION
-    ) {
-      return arrayBuffer;
-    }
-
-    const jsonLength = view.getUint32(HEADER_LENGTH, true);
-    const jsonType = view.getUint32(HEADER_LENGTH + 4, true);
-    if (jsonType !== JSON_CHUNK_TYPE) return arrayBuffer;
-
-    const jsonStart = HEADER_LENGTH + CHUNK_HEADER_LENGTH;
-    const jsonEnd = jsonStart + jsonLength;
-    if (jsonEnd > view.byteLength) return arrayBuffer;
-
-    const bytes = new Uint8Array(arrayBuffer);
-    const jsonText = new TextDecoder().decode(bytes.subarray(jsonStart, jsonEnd)).trim();
-    const gltf = JSON.parse(jsonText) as {
-      images?: unknown[];
-      materials?: Array<{
-        normalTexture?: unknown;
-        pbrMetallicRoughness?: {
-          baseColorFactor?: number[];
-          baseColorTexture?: unknown;
-          metallicFactor?: number;
-          metallicRoughnessTexture?: unknown;
-          roughnessFactor?: number;
-        };
-      }>;
-      samplers?: unknown[];
-      textures?: unknown[];
-    };
-
-    let changed = false;
-    gltf.materials?.forEach((material) => {
-      if ("normalTexture" in material) {
-        delete material.normalTexture;
-        changed = true;
-      }
-
-      const pbr = material.pbrMetallicRoughness ?? {};
-      if ("baseColorTexture" in pbr) {
-        delete pbr.baseColorTexture;
-        changed = true;
-      }
-      if ("metallicRoughnessTexture" in pbr) {
-        delete pbr.metallicRoughnessTexture;
-        changed = true;
-      }
-
-      pbr.baseColorFactor = [0.76, 0.69, 0.58, 1];
-      pbr.metallicFactor = 0.08;
-      pbr.roughnessFactor = 0.52;
-      material.pbrMetallicRoughness = pbr;
-    });
-
-    if (gltf.images?.length) {
-      gltf.images = [];
-      changed = true;
-    }
-    if (gltf.textures?.length) {
-      gltf.textures = [];
-      changed = true;
-    }
-    if (gltf.samplers?.length) {
-      gltf.samplers = [];
-      changed = true;
-    }
-
-    if (!changed) return arrayBuffer;
-
-    const nextJson = new TextEncoder().encode(JSON.stringify(gltf));
-    if (nextJson.length > jsonLength) return arrayBuffer;
-
-    const output = arrayBuffer.slice(0);
-    const outputBytes = new Uint8Array(output);
-    outputBytes.fill(0x20, jsonStart, jsonEnd);
-    outputBytes.set(nextJson, jsonStart);
-    return output;
-  } catch {
-    return arrayBuffer;
-  }
-}
-
 export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const moodRef = useRef(mood);
@@ -322,41 +228,28 @@ export function AIMascotCanvas({ mood, reducedMotion }: AIMascotCanvasProps) {
         }
 
         const loader = new GLTFLoader();
+        loader.load(
+          ASSISTANT_MODEL_PATH,
+          (gltf) => {
+            if (disposed) return;
 
-        async function loadAssistantModel() {
-          try {
-            const response = await fetch(ASSISTANT_MODEL_PATH);
-            if (!response.ok) throw new Error("Assistant model request failed.");
+            const model = gltf.scene;
+            loadedModelBaseScale = prepareModel(model);
+            fallbackGroup.visible = false;
+            root.add(model);
+            loadedModel = model;
 
-            const modelBuffer = stripEmbeddedTextureReferences(await response.arrayBuffer());
-            loader.parse(
-              modelBuffer,
-              "",
-              (gltf) => {
-                if (disposed) return;
-
-                const model = gltf.scene;
-                loadedModelBaseScale = prepareModel(model);
-                fallbackGroup.visible = false;
-                root.add(model);
-                loadedModel = model;
-
-                if (gltf.animations.length > 0) {
-                  const nextMixer = new THREE.AnimationMixer(model);
-                  gltf.animations.slice(0, 2).forEach((clip) => nextMixer.clipAction(clip).play());
-                  mixer = nextMixer;
-                }
-              },
-              () => {
-                fallbackGroup.visible = true;
-              },
-            );
-          } catch {
+            if (gltf.animations.length > 0) {
+              const nextMixer = new THREE.AnimationMixer(model);
+              gltf.animations.slice(0, 2).forEach((clip) => nextMixer.clipAction(clip).play());
+              mixer = nextMixer;
+            }
+          },
+          undefined,
+          () => {
             fallbackGroup.visible = true;
-          }
-        }
-
-        void loadAssistantModel();
+          },
+        );
 
         function resize() {
           const rect = canvasElement.getBoundingClientRect();
