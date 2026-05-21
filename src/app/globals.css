@@ -188,3 +188,95 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+@layer components {
+  [data-testid="ai-mascot-open"] {
+    width: clamp(8.5rem, 13vw, 14.5rem) !important;
+    height: clamp(12rem, 25vw, 21.5rem) !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
+    transform-origin: 50% 80%;
+  }
+
+  [data-testid="ai-mascot-open"] > span:first-child {
+    inset: auto auto 0 50% !important;
+    width: 72% !important;
+    height: 13% !important;
+    border-radius: 9999px !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    filter: blur(1.2rem) !important;
+    opacity: 0.78;
+    transform: translateX(-50%);
+  }
+
+  [data-testid="ai-mascot-open"] > span:nth-child(2) {
+    display: none !important;
+  }
+
+  [data-testid="ai-mascot-open"] > span:last-child {
+    height: 100% !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    filter: drop-shadow(0 1.8rem 2.4rem rgba(0, 0, 0, 0.68));
+    transform-origin: 50% 82%;
+    animation: ai-kacper-cinematic-idle 3.2s ease-in-out infinite;
+  }
+
+  [data-testid="ai-mascot-open"] canvas {
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  [data-testid="ai-mascot-open"]:hover > span:last-child,
+  [data-testid="ai-mascot-open"]:focus-visible > span:last-child {
+    animation-name: ai-kacper-cinematic-curious;
+    animation-duration: 1.45s;
+  }
+
+  @media (max-width: 767px) {
+    [data-testid="ai-mascot-open"] {
+      width: clamp(6.25rem, 31vw, 8.25rem) !important;
+      height: clamp(8.75rem, 45vw, 11.75rem) !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-testid="ai-mascot-open"] > span:last-child {
+      animation: none;
+    }
+  }
+}
+
+@keyframes ai-kacper-cinematic-idle {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+
+  25% {
+    transform: translate3d(0.16rem, -0.34rem, 0) rotate(-0.8deg) scale(1.01);
+  }
+
+  50% {
+    transform: translate3d(-0.12rem, -0.62rem, 0) rotate(0.7deg) scale(1.018);
+  }
+
+  75% {
+    transform: translate3d(0.1rem, -0.28rem, 0) rotate(-0.35deg) scale(1.006);
+  }
+}
+
+@keyframes ai-kacper-cinematic-curious {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+
+  28% {
+    transform: translate3d(0.38rem, -0.72rem, 0) rotate(-3deg) scale(1.035);
+  }
+
+  58% {
+    transform: translate3d(-0.28rem, -0.42rem, 0) rotate(2deg) scale(1.02);
+  }
+}
