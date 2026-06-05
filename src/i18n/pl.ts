@@ -27,7 +27,7 @@ export const pl: Translations = {
     secondary:
       "Specjalizuję się w praktycznych aplikacjach webowych: lead management, role użytkowników, formularze, dashboardy, automatyzacje i integracje API.",
     projectsBtn: "Zobacz projekty",
-    bcrmBtn: "Sprawdź B-CRM",
+    bcrmBtn: "Sprawdź B-CRM DEMO",
     contactBtn: "Kontakt",
     imageAlt: "Profesjonalny portret Kacpra Berneckiego",
   },
@@ -113,8 +113,8 @@ export const pl: Translations = {
   },
   technicalAudience: {
     title: "Dla firm i osób technicznych",
-    subtitle: "Jeśli chcesz szybko ocenić moje umiejętności web app, zacznij od B-CRM.",
-    bestProject: "Najlepszy projekt do sprawdzenia: B-CRM",
+    subtitle: "Jeśli chcesz szybko ocenić moje umiejętności web app, zacznij od B-CRM DEMO.",
+    bestProject: "Najlepszy projekt do sprawdzenia: B-CRM DEMO",
     stackLabel: "Stack",
     stack: "React, TypeScript, Next.js, Supabase, PostgreSQL, Tailwind CSS, Vercel",
     showsLabel: "Co pokazuje projekt",
@@ -189,7 +189,7 @@ export const pl: Translations = {
   },
   projects: {
     title: "Projekty",
-    subtitle: "Skupiony zestaw aplikacji biznesowych i projektów wspierających. B-CRM jest głównym dowodem technicznym.",
+    subtitle: "Skupiony zestaw aplikacji biznesowych i projektów wspierających. B-CRM DEMO jest głównym dowodem technicznym.",
     featuresLabel: "Realne funkcje",
     techLabel: "Stack",
     demoLabel: "Live demo",
@@ -202,7 +202,7 @@ export const pl: Translations = {
     problemLabel: "Problem",
     items: [
       {
-        title: "B-CRM",
+        title: "B-CRM DEMO",
         problem:
           "Zespoły sprzedażowe potrzebują jednego miejsca do kontroli właściciela leada, statusów, callbacków, spotkań i historii działań.",
         description:
@@ -218,10 +218,10 @@ export const pl: Translations = {
         ],
         technologies: ["React", "TypeScript", "Next.js", "Supabase", "PostgreSQL", "Tailwind CSS", "Vercel"],
         status: "Production-like CRM demo",
-        demoUrl: "https://b-crm-berni.vercel.app/login",
+        demoUrl: "https://b-crm-demo-berni.vercel.app/login",
         repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
         caseStudyUrl: "/case-studies/b-crm",
-        credentials: ["Konta demo są dostępne na ekranie logowania."],
+        credentials: ["Admin: demo / demo", "Handlowiec: demo-handlowiec / demo", "Menadżer: demo-menadzer / demo"],
         image: {
           src: "/images/projects/bcrm-admin-dashboard.jpg",
           alt: "Preview dashboardu admina i workflow demo B-CRM",

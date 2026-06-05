@@ -26,7 +26,7 @@ export const en = {
     secondary:
       "I focus on practical web apps: lead management, user roles, forms, dashboards, automations and API integrations.",
     projectsBtn: "View projects",
-    bcrmBtn: "Check B-CRM",
+    bcrmBtn: "Check B-CRM DEMO",
     contactBtn: "Contact",
     imageAlt: "Kacper Bernecki professional portrait",
   },
@@ -112,8 +112,8 @@ export const en = {
   },
   technicalAudience: {
     title: "For companies and technical reviewers",
-    subtitle: "Start with B-CRM if you want the fastest read on my web app skills.",
-    bestProject: "Best project to review: B-CRM",
+    subtitle: "Start with B-CRM DEMO if you want the fastest read on my web app skills.",
+    bestProject: "Best project to review: B-CRM DEMO",
     stackLabel: "Stack",
     stack: "React, TypeScript, Next.js, Supabase, PostgreSQL, Tailwind CSS, Vercel",
     showsLabel: "What the project shows",
@@ -188,7 +188,7 @@ export const en = {
   },
   projects: {
     title: "Projects",
-    subtitle: "A focused set of business apps and supporting web projects. B-CRM is the main technical proof.",
+    subtitle: "A focused set of business apps and supporting web projects. B-CRM DEMO is the main technical proof.",
     featuresLabel: "Real features",
     techLabel: "Stack",
     demoLabel: "Live demo",
@@ -201,7 +201,7 @@ export const en = {
     problemLabel: "Problem",
     items: [
       {
-        title: "B-CRM",
+        title: "B-CRM DEMO",
         problem:
           "Sales teams need one place to control lead ownership, status changes, callbacks, meetings and activity history.",
         description:
@@ -217,10 +217,10 @@ export const en = {
         ],
         technologies: ["React", "TypeScript", "Next.js", "Supabase", "PostgreSQL", "Tailwind CSS", "Vercel"],
         status: "Production-like CRM demo",
-        demoUrl: "https://b-crm-berni.vercel.app/login",
+        demoUrl: "https://b-crm-demo-berni.vercel.app/login",
         repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
         caseStudyUrl: "/case-studies/b-crm",
-        credentials: ["Demo accounts are available on the login screen."],
+        credentials: ["Admin: demo / demo", "Sales: demo-handlowiec / demo", "Manager: demo-menadzer / demo"],
         image: {
           src: "/images/projects/bcrm-admin-dashboard.jpg",
           alt: "B-CRM admin dashboard and demo workflow preview",

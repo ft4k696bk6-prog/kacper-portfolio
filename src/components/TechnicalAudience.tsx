@@ -60,7 +60,7 @@ export function TechnicalAudience() {
 
             <div className="mt-7 flex flex-wrap gap-3">
               <a
-                href="https://b-crm-berni.vercel.app/login"
+                href="https://b-crm-demo-berni.vercel.app/login"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-md bg-[#d7b46a] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5"

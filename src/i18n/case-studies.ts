@@ -62,13 +62,13 @@ export const enCaseStudies: CaseStudiesContent = {
   items: [
     {
       slug: "b-crm",
-      title: "B-CRM — CRM for lead handling and sales operations",
+      title: "B-CRM DEMO — CRM for lead handling and sales operations",
       subtitle:
         "Production-like CRM demo with role-aware views, Supabase data, operations workflow and documented limitations.",
       summary:
         "B-CRM shows a practical business web app flow: auth, roles, leads, dashboards, activities, operations and deployment.",
       status: "Production-like CRM demo",
-      liveUrl: "https://b-crm-berni.vercel.app/login",
+      liveUrl: "https://b-crm-demo-berni.vercel.app/login",
       repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
       images: [
         {
@@ -455,13 +455,13 @@ export const plCaseStudies: CaseStudiesContent = {
   items: [
     {
       slug: "b-crm",
-      title: "B-CRM — CRM do obsługi leadów i pracy sprzedażowo-operacyjnej",
+      title: "B-CRM DEMO — CRM do obsługi leadów i pracy sprzedażowo-operacyjnej",
       subtitle:
         "Production-like CRM demo z widokami zależnymi od ról, danymi Supabase, procesem realizacji i opisanymi ograniczeniami.",
       summary:
         "B-CRM pokazuje praktyczny przepływ aplikacji biznesowej: auth, role, leady, dashboardy, aktywności, realizację i deploy.",
       status: "Production-like CRM demo",
-      liveUrl: "https://b-crm-berni.vercel.app/login",
+      liveUrl: "https://b-crm-demo-berni.vercel.app/login",
       repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
       images: [
         {

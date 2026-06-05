@@ -11,7 +11,7 @@ describe("portfolio content", () => {
 
   it("keeps the requested project order", () => {
     expect(en.projects.items.map((item) => item.title)).toEqual([
-      "B-CRM",
+      "B-CRM DEMO",
       "Interactive MacBook Portfolio",
       "Berni Rush",
       "Portfolio",
@@ -20,7 +20,7 @@ describe("portfolio content", () => {
       "Leasing Calculator",
     ]);
     expect(pl.projects.items.map((item) => item.title)).toEqual([
-      "B-CRM",
+      "B-CRM DEMO",
       "Interactive MacBook Portfolio",
       "Berni Rush",
       "Portfolio",
