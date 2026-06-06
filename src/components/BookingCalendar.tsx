@@ -161,14 +161,17 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
           email: formData.get("bookingEmail"),
           company: formData.get("bookingCompany"),
           message: formData.get("bookingMessage"),
-          website: formData.get("bookingWebsite"),
+          bookingTrap: formData.get("bookingAntiSpam"),
           start: selectedSlot.start,
           turnstileToken,
         }),
       });
-      const payload = (await response.json().catch(() => ({}))) as { message?: string };
+      const payload = (await response.json().catch(() => ({}))) as {
+        booking?: { start?: string };
+        message?: string;
+      };
 
-      if (!response.ok) {
+      if (!response.ok || !payload.booking?.start) {
         throw new Error(payload.message || copy.bookingErrorLabel);
       }
 
@@ -351,7 +354,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
           </label>
           <input
             type="text"
-            name="bookingWebsite"
+            name="bookingAntiSpam"
             tabIndex={-1}
             autoComplete="off"
             className="hidden"

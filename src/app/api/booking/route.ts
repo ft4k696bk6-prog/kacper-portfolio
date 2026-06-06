@@ -8,6 +8,7 @@ const bookingSchema = z.object({
   company: z.string().trim().max(160).optional().default(""),
   message: z.string().trim().max(1200).optional().default(""),
   start: z.string().trim().datetime({ offset: true }),
+  bookingTrap: z.string().trim().max(200).optional().default(""),
   website: z.string().trim().max(200).optional().default(""),
   turnstileToken: z.string().trim().optional().default(""),
 });
@@ -67,8 +68,11 @@ export async function POST(request: NextRequest) {
   }
 
   const payload = parsed.data;
-  if (payload.website) {
-    return NextResponse.json({ ok: true });
+  if (payload.bookingTrap || payload.website) {
+    return NextResponse.json(
+      { message: "Booking request could not be verified." },
+      { status: 400 },
+    );
   }
 
   const isHuman = await verifyTurnstile(payload.turnstileToken, ip);

@@ -671,14 +671,17 @@ export function AIMascotAssistant() {
           email: bookingEmail,
           company: "",
           message: bookingTopic,
-          website,
+          bookingTrap: website,
           start: booking.selectedSlot.start,
           turnstileToken,
         }),
       });
-      const payload = (await response.json().catch(() => ({}))) as { message?: string };
+      const payload = (await response.json().catch(() => ({}))) as {
+        booking?: { start?: string };
+        message?: string;
+      };
 
-      if (!response.ok) {
+      if (!response.ok || !payload.booking?.start) {
         throw new Error(payload.message || t.aiMascot.booking.error);
       }
 
