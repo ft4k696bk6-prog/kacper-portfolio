@@ -80,7 +80,9 @@ export function Hero() {
               <ArrowDown className="h-4 w-4" />
             </Link>
             <Link
-              href="/case-studies/b-crm"
+              href="https://demo-crm.bernecki.dev/login"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-md border border-[#d7b46a]/50 bg-[#d7b46a]/10 px-6 py-3 text-base text-[#f5dfae] transition-all hover:-translate-y-0.5 hover:border-[#d7b46a]"
             >
               <BriefcaseBusiness className="h-4 w-4" />

@@ -12,22 +12,45 @@ describe("portfolio content", () => {
   it("keeps the requested project order", () => {
     expect(en.projects.items.map((item) => item.title)).toEqual([
       "B-CRM DEMO",
+      "Motomizer",
+      "StarCars Import",
+      "BeatMarket",
       "Interactive MacBook Portfolio",
       "Berni Rush",
       "Portfolio",
       "Unreal Engine Gameplay Prototype",
-      "BerniNutri",
       "Leasing Calculator",
     ]);
     expect(pl.projects.items.map((item) => item.title)).toEqual([
       "B-CRM DEMO",
+      "Motomizer",
+      "StarCars Import",
+      "BeatMarket",
       "Interactive MacBook Portfolio",
       "Berni Rush",
       "Portfolio",
       "Unreal Engine Gameplay Prototype",
-      "BerniNutri",
       "Kalkulator leasingu",
     ]);
+  });
+
+  it("publishes current project sites, case studies and the updated demo URL", () => {
+    const expected = {
+      motomizer: "https://motomizer.pl",
+      starcars: "https://star-cars.us",
+      beatmarket: "https://beatmarket.bernecki.dev",
+    };
+    for (const locale of [en, pl]) {
+      expect(locale.projects.items.some((p) => p.title === "BerniNutri")).toBe(false);
+      expect(locale.caseStudies.items.some((p) => p.slug === "berninutri")).toBe(false);
+      expect(locale.projects.items.find((p) => p.title === "B-CRM DEMO")?.demoUrl).toBe("https://demo-crm.bernecki.dev/login");
+      expect(locale.caseStudies.items.find((p) => p.slug === "b-crm")?.liveUrl).toBe("https://demo-crm.bernecki.dev/login");
+      for (const [slug, url] of Object.entries(expected)) {
+        const project = locale.projects.items.find((p) => p.caseStudyUrl === `/case-studies/${slug}`);
+        expect(project?.demoUrl).toBe(url);
+        expect(locale.caseStudies.items.find((p) => p.slug === slug)?.liveUrl).toBe(url);
+      }
+    }
   });
 
   it("keeps the technology section free of meta instructions", () => {

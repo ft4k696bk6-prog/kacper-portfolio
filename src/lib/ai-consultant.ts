@@ -23,7 +23,9 @@ Projects:
 - Berni Rush: playable browser game prototype built with React, TypeScript, Vite, Three.js, Zustand and Vercel.
 - Portfolio: this Next.js portfolio with bilingual case studies, project evidence, custom Cal.com booking, protected contact reveal, SEO metadata and analytics setup.
 - Unreal Engine Gameplay Prototype: local UE5 prototype with driving, contracts, UI/HUD, open-world blockout and gameplay interaction systems.
-- BerniNutri: nutrition/meal-analysis prototype using an AI-backed endpoint. It is not medical advice.
+- Motomizer: bilingual static product website for a car-shaped aroma diffuser with gallery, colour variants and availability form.
+- StarCars Import: responsive automotive import website with cost calculator, 3D visuals and enquiry flow.
+- BeatMarket: evolving Next.js/Supabase beat marketplace with search, filters, audio previews, producer submission and licensing.
 - Leasing Calculator: business calculator demo for leasing estimates. It is informational, not a financial offer.
 
 Contact:

@@ -10,7 +10,7 @@ import { AIMascotAssistant } from "@/components/AIMascotAssistant";
 import { Geist } from "next/font/google";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
-const siteUrl = "https://kacper-portfolio.vercel.app";
+const siteUrl = "https://bernecki.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

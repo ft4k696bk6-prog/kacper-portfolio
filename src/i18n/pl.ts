@@ -218,7 +218,7 @@ export const pl: Translations = {
         ],
         technologies: ["React", "TypeScript", "Next.js", "Supabase", "PostgreSQL", "Tailwind CSS", "Vercel"],
         status: "Production-like CRM demo",
-        demoUrl: "https://b-crm-demo-berni.vercel.app/login",
+        demoUrl: "https://demo-crm.bernecki.dev/login",
         repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
         caseStudyUrl: "/case-studies/b-crm",
         credentials: ["Admin: demo / demo", "Handlowiec: demo-handlowiec / demo", "Menadżer: demo-menadzer / demo"],
@@ -226,6 +226,92 @@ export const pl: Translations = {
           src: "/images/projects/bcrm-admin-dashboard.jpg",
           alt: "Preview dashboardu admina i workflow demo B-CRM",
         },
+      },
+      {
+        "title": "Motomizer",
+        "problem": "Produkt o niecodziennym wyglądzie i funkcjach wymaga strony, na której klient szybko zrozumie działanie urządzenia i zobaczy dostępne warianty.",
+        "description": "Responsywny landing produktowy aromatyzera w formie auta: efekt pary z wydechu, podświetlenie LED, dźwięk silnika i tryb REV. Projekt nastawiony na prezentację produktu i zbieranie zainteresowania.",
+        "features": [
+          "Interaktywny wybór koloru: czarny, biały i bordowy",
+          "Galerie zdjęć z obsługą gestów i nawigacją",
+          "Osobne wizualizacje funkcji, zestawu i wymiarów",
+          "Dwujęzyczna witryna PL/EN",
+          "Formularz powiadomienia o dostępności",
+          "Układ dostosowany do telefonu i desktopu"
+        ],
+        "technologies": [
+          "HTML",
+          "CSS",
+          "JavaScript",
+          "Responsive UI",
+          "Vercel"
+        ],
+        "status": "Publiczna strona produktu / lista zainteresowanych",
+        "demoUrl": "https://motomizer.pl",
+        "externalLabel": "Zobacz witrynę",
+        "caseStudyUrl": "/case-studies/motomizer",
+        "image": {
+          "src": "/images/projects/motomizer-showcase.svg",
+          "alt": "Grafika projektowa Motomizer — produkt, warianty kolorystyczne i galeria"
+        }
+      },
+      {
+        "title": "StarCars Import",
+        "problem": "Import auta z USA lub Kanady jest złożony: cena aukcyjna to tylko część kosztu, a klient potrzebuje czytelnej ścieżki i orientacyjnej kalkulacji.",
+        "description": "Strona usługowa dla importu samochodów z USA i Kanady, z interaktywną prezentacją marki, kalkulatorem całkowitego kosztu, formularzem kontaktowym i opisem procesu od aukcji po odbiór.",
+        "features": [
+          "Kalkulator kosztów importu z rozbiciem na opłaty",
+          "Warianty aukcji, regionów, portów i typu pojazdu",
+          "Pobieranie orientacyjnego kursu USD/PLN z NBP",
+          "Sekcje procesu, realizacji i odpowiedzi na pytania",
+          "Formularz zapytania z kontekstem kalkulacji",
+          "Interaktywne elementy 3D i animacje"
+        ],
+        "technologies": [
+          "React",
+          "TypeScript",
+          "Vite",
+          "Three.js",
+          "GSAP",
+          "Vercel"
+        ],
+        "status": "Publiczna strona usługowa / rozwój",
+        "demoUrl": "https://star-cars.us",
+        "externalLabel": "Zobacz witrynę",
+        "caseStudyUrl": "/case-studies/starcars",
+        "image": {
+          "src": "/images/projects/starcars-showcase.svg",
+          "alt": "Grafika projektowa StarCars — samochód i kalkulacja importu"
+        }
+      },
+      {
+        "title": "BeatMarket",
+        "problem": "Producenci i artyści potrzebują miejsca, w którym odsłuch, wyszukiwanie beatów i wybór licencji tworzą spójny proces zamiast wymiany plików przez wiadomości.",
+        "description": "Rozwijany marketplace beatów z katalogiem, odsłuchem, filtrami muzycznymi, kartami producentów, zgłoszeniami nowych utworów i ścieżką zakupu licencji.",
+        "features": [
+          "Katalog beatów z wyszukiwarką i sortowaniem",
+          "Filtry: gatunek, tonacja i zakres BPM",
+          "Odtwarzanie podglądów i szczegóły utworu",
+          "Profile producentów i formularz zgłoszenia beatu",
+          "Moderacja zgłoszeń przed publikacją",
+          "Obsługa licencji i rozwijana integracja płatności"
+        ],
+        "technologies": [
+          "Next.js",
+          "React",
+          "JavaScript",
+          "Supabase",
+          "PostgreSQL",
+          "Vercel"
+        ],
+        "status": "Marketplace w aktywnym rozwoju",
+        "demoUrl": "https://beatmarket.bernecki.dev",
+        "externalLabel": "Otwórz BeatMarket",
+        "caseStudyUrl": "/case-studies/beatmarket",
+        "image": {
+          "src": "/images/projects/beatmarket-showcase.svg",
+          "alt": "Grafika projektowa BeatMarket — katalog muzyczny i odtwarzacz"
+        }
       },
       {
         title: "Interactive MacBook Portfolio",
@@ -322,30 +408,6 @@ export const pl: Translations = {
         },
       },
       {
-        title: "BerniNutri",
-        problem:
-          "Analiza jedzenia ze zdjęcia wymaga jasnego przepływu review, bo estymacje AI mogą być niepełne albo niedokładne.",
-        description:
-          "Mobile-first prototyp trackera żywieniowego AI z analizą zdjęcia, lokalną historią posiłków i notą o poziomie pewności.",
-        features: [
-          "Upload zdjęcia posiłku",
-          "Endpoint analizy z OpenAI API",
-          "Podsumowanie kalorii i makro",
-          "Lokalna historia posiłków",
-          "Dashboard dziennego postępu",
-          "Obsługa błędów braku konfiguracji API",
-        ],
-        technologies: ["React", "TypeScript", "Vite", "OpenAI API", "LocalStorage", "Vercel"],
-        status: "Prototype",
-        demoUrl: "https://berninutri-portfolio.vercel.app",
-        repoUrl: "https://github.com/ft4k696bk6-prog/berninutri-portfolio",
-        caseStudyUrl: "/case-studies/berninutri",
-        image: {
-          src: "/images/projects/berninutri-live.jpg",
-          alt: "Preview mobilnego dashboardu BerniNutri",
-        },
-      },
-      {
         title: "Kalkulator leasingu",
         problem:
           "Użytkownik biznesowy często potrzebuje szybkiej estymacji kosztu leasingu przed rozmową o konkretnej ofercie finansowej.",
@@ -378,7 +440,7 @@ export const pl: Translations = {
       {
         title: "React / TypeScript",
         description:
-          "Użyte w B-CRM, BerniNutri, kalkulatorze leasingu i portfolio. Komponenty UI, formularze, routing, zarządzanie stanem i logika aplikacji.",
+          "Użyte w B-CRM, StarCars i BeatMarket, kalkulatorze leasingu i portfolio. Komponenty UI, formularze, routing, zarządzanie stanem i logika aplikacji.",
       },
       {
         title: "Next.js",

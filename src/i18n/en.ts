@@ -217,7 +217,7 @@ export const en = {
         ],
         technologies: ["React", "TypeScript", "Next.js", "Supabase", "PostgreSQL", "Tailwind CSS", "Vercel"],
         status: "Production-like CRM demo",
-        demoUrl: "https://b-crm-demo-berni.vercel.app/login",
+        demoUrl: "https://demo-crm.bernecki.dev/login",
         repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
         caseStudyUrl: "/case-studies/b-crm",
         credentials: ["Admin: demo / demo", "Sales: demo-handlowiec / demo", "Manager: demo-menadzer / demo"],
@@ -225,6 +225,92 @@ export const en = {
           src: "/images/projects/bcrm-admin-dashboard.jpg",
           alt: "B-CRM admin dashboard and demo workflow preview",
         },
+      },
+      {
+        "title": "Motomizer",
+        "problem": "A distinctive product with several functions needs a landing page that quickly explains what it does and lets visitors explore the available variants.",
+        "description": "Responsive product landing page for a car-shaped aroma diffuser featuring exhaust-like mist, LEDs, engine sound and REV mode. Built around product presentation and availability enquiries.",
+        "features": [
+          "Interactive colour selection: black, white and burgundy",
+          "Swipe-friendly product galleries and navigation",
+          "Dedicated feature, package and dimension visuals",
+          "Bilingual Polish and English website",
+          "Availability notification form",
+          "Mobile and desktop layouts"
+        ],
+        "technologies": [
+          "HTML",
+          "CSS",
+          "JavaScript",
+          "Responsive UI",
+          "Vercel"
+        ],
+        "status": "Public product landing / availability waitlist",
+        "demoUrl": "https://motomizer.pl",
+        "externalLabel": "Visit website",
+        "caseStudyUrl": "/case-studies/motomizer",
+        "image": {
+          "src": "/images/projects/motomizer-showcase.svg",
+          "alt": "Motomizer conceptual project artwork with product variants and gallery"
+        }
+      },
+      {
+        "title": "StarCars Import",
+        "problem": "Importing a car from the US or Canada is complex: the auction bid is only part of the total cost, and customers need an understandable process and estimate.",
+        "description": "Customer-facing site for US and Canadian vehicle imports, featuring interactive brand presentation, a landed-cost estimator, contact forms and a step-by-step journey from auction to delivery.",
+        "features": [
+          "Import cost breakdown and estimator",
+          "Auction, origin-region, port and vehicle choices",
+          "Indicative USD/PLN exchange rate from the Polish central bank",
+          "Process, projects and FAQ sections",
+          "Enquiry form prefilled with cost context",
+          "Interactive 3D elements and animations"
+        ],
+        "technologies": [
+          "React",
+          "TypeScript",
+          "Vite",
+          "Three.js",
+          "GSAP",
+          "Vercel"
+        ],
+        "status": "Public business website / evolving",
+        "demoUrl": "https://star-cars.us",
+        "externalLabel": "Visit website",
+        "caseStudyUrl": "/case-studies/starcars",
+        "image": {
+          "src": "/images/projects/starcars-showcase.svg",
+          "alt": "StarCars conceptual project artwork with car import cost dashboard"
+        }
+      },
+      {
+        "title": "BeatMarket",
+        "problem": "Producers and artists need a cohesive experience for discovering, previewing and licensing beats instead of fragmented file-sharing conversations.",
+        "description": "An evolving beat marketplace with catalog discovery, audio previews, musical filters, producer pages, track submission and a licensing purchase flow.",
+        "features": [
+          "Searchable beat catalog with sorting",
+          "Genre, musical-key and BPM-range filters",
+          "Audio previews and detailed beat pages",
+          "Producer profiles and track submission",
+          "Moderation before public listing",
+          "Licensing flow and developing payment integration"
+        ],
+        "technologies": [
+          "Next.js",
+          "React",
+          "JavaScript",
+          "Supabase",
+          "PostgreSQL",
+          "Vercel"
+        ],
+        "status": "Marketplace in active development",
+        "demoUrl": "https://beatmarket.bernecki.dev",
+        "externalLabel": "Open BeatMarket",
+        "caseStudyUrl": "/case-studies/beatmarket",
+        "image": {
+          "src": "/images/projects/beatmarket-showcase.svg",
+          "alt": "BeatMarket conceptual project artwork with sound catalog and player"
+        }
       },
       {
         title: "Interactive MacBook Portfolio",
@@ -321,30 +407,6 @@ export const en = {
         },
       },
       {
-        title: "BerniNutri",
-        problem:
-          "Food tracking from photos needs a clear review flow because AI nutrition estimates can be incomplete or inaccurate.",
-        description:
-          "Mobile-first AI nutrition tracker prototype with image analysis, local meal history and explicit confidence notes.",
-        features: [
-          "Meal photo upload",
-          "OpenAI-backed analysis endpoint",
-          "Calories and macro summary",
-          "Local meal history",
-          "Daily progress dashboard",
-          "Error states for missing API configuration",
-        ],
-        technologies: ["React", "TypeScript", "Vite", "OpenAI API", "LocalStorage", "Vercel"],
-        status: "Prototype",
-        demoUrl: "https://berninutri-portfolio.vercel.app",
-        repoUrl: "https://github.com/ft4k696bk6-prog/berninutri-portfolio",
-        caseStudyUrl: "/case-studies/berninutri",
-        image: {
-          src: "/images/projects/berninutri-live.jpg",
-          alt: "BerniNutri mobile dashboard preview",
-        },
-      },
-      {
         title: "Leasing Calculator",
         problem:
           "Business users often need a quick leasing cost estimate before moving to a financial offer conversation.",
@@ -377,7 +439,7 @@ export const en = {
       {
         title: "React / TypeScript",
         description:
-          "Used in B-CRM, BerniNutri, the leasing calculator and portfolio for UI components, forms, routing, state and app logic.",
+          "Used in B-CRM, StarCars and BeatMarket, the leasing calculator and portfolio for UI components, forms, routing, state and app logic.",
       },
       {
         title: "Next.js",

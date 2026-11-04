@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+ <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#121824"/><stop offset="1" stop-color="#06080c"/></linearGradient><radialGradient id="glow"><stop stop-color="#a75060" stop-opacity=".3"/><stop offset="1" stop-color="#a75060" stop-opacity="0"/></radialGradient><linearGradient id="metal" x2="0" y2="1"><stop stop-color="#cdd1d6"/><stop offset=".4" stop-color="#505867"/><stop offset="1" stop-color="#141820"/></linearGradient></defs>
+ <rect width="1600" height="900" fill="url(#bg)"/><circle cx="840" cy="460" r="490" fill="url(#glow)"/>
+ <rect x="66" y="58" width="1468" height="784" rx="22" fill="#0b0e13" stroke="#2c3240" stroke-width="3"/><path d="M66 140H1534" stroke="#242b35" stroke-width="3"/>
+ <text x="120" y="116" font-family="Arial,sans-serif" font-size="30" letter-spacing="6" fill="#f3f3f5" font-weight="bold">MOTOMIZER</text><text x="1220" y="114" font-family="Arial,sans-serif" font-size="17" letter-spacing="2" fill="#c0bdc5">SPRAWDŹ DOSTĘPNOŚĆ</text>
+ <text x="130" y="238" font-family="Arial,sans-serif" font-size="16" letter-spacing="5" fill="#d48a94">AROMATERAPIA • DESIGN • REV</text>
+ <text x="130" y="305" font-family="Arial,sans-serif" font-size="52" fill="#f3f5f9" font-weight="bold">Zapach w motoryzacyjnej</text><text x="130" y="369" font-family="Arial,sans-serif" font-size="52" fill="#f3f5f9" font-weight="bold">formie.</text>
+ <g transform="translate(215 340)"><ellipse cx="650" cy="350" rx="485" ry="74" fill="#07101a"/><path d="M155 290L245 224Q296 167 406 160L635 158Q694 162 768 223L962 250Q1034 265 1045 305L1032 350H120L115 323Q118 298 155 290Z" fill="url(#metal)" stroke="#d5d7de" stroke-width="6"/>
+ <path d="M380 167L449 100Q472 87 532 89L656 93Q711 113 749 221H275L324 190Z" fill="#0b111c" stroke="#949ba6" stroke-width="8"/><path d="M455 99L465 221M646 98L685 219" stroke="#9aa6b6" stroke-width="8"/><path d="M770 224L927 247L969 276" stroke="#e3e6ec" stroke-width="8" fill="none"/>
+ <circle cx="328" cy="337" r="68" fill="#121721" stroke="#cad1d7" stroke-width="16"/><circle cx="328" cy="337" r="30" fill="#697584"/><circle cx="862" cy="337" r="68" fill="#121721" stroke="#cad1d7" stroke-width="16"/><circle cx="862" cy="337" r="30" fill="#697584"/>
+ <path d="M1050 254C1085 222 1100 184 1075 149C1043 110 1079 73 1124 60" fill="none" stroke="#c4d0e0" stroke-opacity=".5" stroke-width="16" stroke-linecap="round"/><path d="M1071 268C1131 221 1168 187 1135 137" fill="none" stroke="#dce6f2" stroke-opacity=".33" stroke-width="11" stroke-linecap="round"/>
+ </g>
+ <text x="130" y="764" font-family="Arial,sans-serif" font-size="22" fill="#e7e8ea" letter-spacing="2">BLACK</text><circle cx="275" cy="757" r="15" fill="#111111" stroke="#abb1bd" stroke-width="3"/><circle cx="327" cy="757" r="15" fill="#fff"/><circle cx="379" cy="757" r="15" fill="#812f45"/>
+ <text x="1160" y="762" font-family="Arial,sans-serif" font-size="17" letter-spacing="3" fill="#b6bbc4">WIZUALIZACJA PROJEKTU</text>
+ </svg>

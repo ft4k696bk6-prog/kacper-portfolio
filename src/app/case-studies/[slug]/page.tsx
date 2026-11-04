@@ -9,7 +9,7 @@ type CaseStudyRouteProps = {
   }>;
 };
 
-const siteUrl = "https://kacper-portfolio.vercel.app";
+const siteUrl = "https://bernecki.dev";
 
 export function generateStaticParams() {
   return en.caseStudies.items.map((item) => ({

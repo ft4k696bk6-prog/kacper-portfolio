@@ -1,14 +1,16 @@
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = "https://kacper-portfolio.vercel.app";
+  const siteUrl = "https://bernecki.dev";
   const caseStudySlugs = [
     "b-crm",
     "interactive-portfolio",
     "berni-rush",
     "portfolio",
     "unreal-gameplay-prototype",
-    "berninutri",
+    "motomizer",
+    "starcars",
+    "beatmarket",
     "kalkulator-leasingu",
   ];
 

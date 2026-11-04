@@ -65,7 +65,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
                 className="inline-flex items-center gap-2 rounded-md bg-[#d7b46a] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5"
               >
                 <ExternalLink className="h-4 w-4" />
-                {t.caseStudies.liveDemoLabel}
+                {study.liveLabel || t.caseStudies.liveDemoLabel}
               </a>
             )}
             {study.repoUrl && (

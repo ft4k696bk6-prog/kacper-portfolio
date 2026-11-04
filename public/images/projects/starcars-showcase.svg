@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+ <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#102034"/><stop offset=".6" stop-color="#070d16"/><stop offset="1" stop-color="#0a1827"/></linearGradient><linearGradient id="car" x2=".1" y2="1"><stop stop-color="#dadfe7"/><stop offset=".55" stop-color="#788ea6"/><stop offset="1" stop-color="#1e334d"/></linearGradient></defs>
+ <rect width="1600" height="900" fill="url(#bg)"/><path d="M0 720L1600 210M0 810L1600 300" stroke="#28465e" stroke-width="2" opacity=".38"/><rect x="65" y="58" width="1470" height="783" rx="25" fill="#09111d" stroke="#284158" stroke-width="3"/><path d="M65 138H1535" stroke="#284158" stroke-width="3"/>
+ <text x="118" y="115" font-family="Arial,sans-serif" font-size="31" fill="#fff" letter-spacing="4" font-weight="bold">STAR CARS</text><text x="1240" y="112" font-family="Arial,sans-serif" font-size="18" letter-spacing="2" fill="#a4c7d9">IMPORT USA / CANADA</text>
+ <text x="127" y="244" font-family="Arial,sans-serif" font-size="19" letter-spacing="4" fill="#6dbbd1">OD AUKCJI DO TWOJEGO GARAŻU</text>
+ <text x="127" y="319" font-family="Arial,sans-serif" font-size="68" fill="#ffffff" font-weight="bold">Samochody bez granic.</text>
+ <text x="127" y="369" font-family="Arial,sans-serif" font-size="23" fill="#bdc9d8">Zakup • Transport • Odprawa • Dostawa</text>
+ <g transform="translate(86 420)"><path d="M100 238L202 196L292 110L499 86Q648 85 732 172L902 194Q967 201 991 248L975 312H82L80 279Q82 252 100 238Z" fill="url(#car)" stroke="#c2d2df" stroke-width="6"/>
+ <path d="M295 113L365 47Q392 35 462 36L584 44Q658 57 725 175H215Z" fill="#0b2136" stroke="#839cad" stroke-width="10"/><path d="M460 42L458 171" stroke="#91abbc" stroke-width="8"/>
+ <circle cx="256" cy="304" r="69" fill="#101621" stroke="#a2bacd" stroke-width="16"/><circle cx="256" cy="304" r="31" fill="#657d99"/><circle cx="770" cy="304" r="69" fill="#101621" stroke="#a2bacd" stroke-width="16"/><circle cx="770" cy="304" r="31" fill="#657d99"/>
+ </g>
+ <rect x="1053" y="405" width="375" height="332" rx="22" fill="#142538" stroke="#35617a" stroke-width="3"/><text x="1093" y="459" font-family="Arial,sans-serif" font-size="17" letter-spacing="3" fill="#7dbed2">KALKULATOR IMPORTU</text><text x="1093" y="524" font-family="Arial,sans-serif" font-size="27" fill="#f1f6fa">Cena aukcji + opłaty</text><line x1="1093" y1="557" x2="1386" y2="557" stroke="#35536b" stroke-width="3"/><text x="1093" y="615" font-family="Arial,sans-serif" font-size="23" fill="#d7e3ea">Transport + podatki</text><rect x="1093" y="653" width="294" height="50" rx="9" fill="#c2e6ed"/><text x="1139" y="685" font-family="Arial,sans-serif" font-size="20" fill="#092132" font-weight="bold">OBLICZ KOSZT  →</text>
+ <text x="120" y="776" font-family="Arial,sans-serif" font-size="16" letter-spacing="3" fill="#7792a6">WIZUALIZACJA PROJEKTU</text>
+ </svg>

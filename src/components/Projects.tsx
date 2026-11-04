@@ -199,7 +199,7 @@ export function Projects() {
                       className="inline-flex items-center gap-2 rounded-md bg-[#d7b46a] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5"
                     >
                       <ExternalLink className="h-4 w-4" />
-                      {t.projects.demoLabel}
+                      {'externalLabel' in project && project.externalLabel ? project.externalLabel : t.projects.demoLabel}
                     </a>
                   )}
                   {project.caseStudyUrl && (

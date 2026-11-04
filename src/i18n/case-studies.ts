@@ -5,6 +5,7 @@ export type CaseStudyItem = {
   summary: string;
   status: string;
   liveUrl?: string;
+  liveLabel?: string;
   repoUrl?: string;
   images?: Array<{ src: string; alt: string }>;
   problem: string;
@@ -68,7 +69,7 @@ export const enCaseStudies: CaseStudiesContent = {
       summary:
         "B-CRM shows a practical business web app flow: auth, roles, leads, dashboards, activities, operations and deployment.",
       status: "Production-like CRM demo",
-      liveUrl: "https://b-crm-demo-berni.vercel.app/login",
+      liveUrl: "https://demo-crm.bernecki.dev/login",
       repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
       images: [
         {
@@ -132,6 +133,190 @@ export const enCaseStudies: CaseStudiesContent = {
         "B-CRM is a portfolio demo with production-like patterns. It still needs broader e2e coverage, monitoring, security review and UX hardening before real production use.",
     },
     {
+      "slug": "motomizer",
+      "title": "Motomizer — an interactive product landing page",
+      "subtitle": "A responsive product experience that takes visitors from a clear first impression through colour choices and galleries to an availability enquiry.",
+      "summary": "Motomizer product website with variant galleries, responsive presentation, bilingual copy and availability enquiries.",
+      "status": "Public product landing / availability waitlist",
+      "liveUrl": "https://motomizer.pl",
+      "liveLabel": "Visit website",
+      "images": [
+        {
+          "src": "/images/projects/motomizer-showcase.svg",
+          "alt": "Conceptual Motomizer site artwork, not an actual screenshot"
+        }
+      ],
+      "problem": "A product combining fragrance, lighting, sound and car-inspired design cannot be explained well by specifications alone. Visitors need multiple views and clear differences between variants.",
+      "goal": "Create a focused product showcase that introduces the value proposition, explores the visual details and directs interested visitors to an availability form.",
+      "roles": [
+        {
+          "name": "Visitor",
+          "description": "Explores product details, switches colours and browses gallery media."
+        },
+        {
+          "name": "Prospective customer",
+          "description": "Chooses a colour and submits an email for availability updates."
+        }
+      ],
+      "features": [
+        "Product-led hero section with a direct value proposition.",
+        "Three colour variants and dedicated image galleries.",
+        "Swipe and button navigation between gallery items.",
+        "Feature, package-content and dimensions sections.",
+        "Polish and English versions.",
+        "Availability modal with colour selection and email field."
+      ],
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Vercel",
+        "Responsive Design"
+      ],
+      "decisions": [
+        "A lightweight static architecture reduces infrastructure complexity.",
+        "Colour selection updates the visible assets without a page reload.",
+        "An availability action replaces a checkout while the product is not for sale.",
+        "The product is shown before extended technical details."
+      ],
+      "learned": [
+        "Designing a single-product experience without unnecessary steps.",
+        "Building responsive image galleries and product variants.",
+        "Guiding visitors toward one concrete action before commerce is enabled."
+      ],
+      "next": [
+        "Measure how visitors interact with colour variants.",
+        "Improve availability form analytics.",
+        "Consider checkout only when sales are enabled."
+      ],
+      "limitations": "This is a product showcase, not a complete online store. The availability action does not represent a purchase or payment. Artwork above is illustrative."
+    },
+    {
+      "slug": "starcars",
+      "title": "StarCars Import — automotive service website and landed-cost calculator",
+      "subtitle": "An import service experience combining the US/Canada sourcing journey, an interactive cost estimate and a contact flow.",
+      "summary": "StarCars brings together a business website, indicative import cost calculator, enquiry forms and interactive 3D presentation.",
+      "status": "Public business website / evolving",
+      "liveUrl": "https://star-cars.us",
+      "liveLabel": "Visit website",
+      "images": [
+        {
+          "src": "/images/projects/starcars-showcase.svg",
+          "alt": "Conceptual StarCars import calculator artwork, not an actual screenshot"
+        }
+      ],
+      "problem": "The auction price alone does not show the cost of an imported vehicle. Customers need visibility into fees, inland and ocean transport, customs, tax, excise and delivery.",
+      "goal": "Explain the import journey, provide a practical initial estimate and make it easy to request a tailored quote with relevant parameters.",
+      "roles": [
+        {
+          "name": "Customer",
+          "description": "Enters vehicle parameters, reviews the estimate and sends a request."
+        },
+        {
+          "name": "Advisor",
+          "description": "Receives the enquiry context and can prepare a tailored offer."
+        }
+      ],
+      "features": [
+        "Service, process, realizations and FAQ sections.",
+        "Estimator covering auction type, origin region, vehicle class and destination port.",
+        "Indicative transport, customs, VAT, excise and other fees.",
+        "NBP USD/PLN exchange rate with a fallback value.",
+        "Enquiry prefilled with the calculation summary.",
+        "Three.js and animation-driven brand visuals."
+      ],
+      "stack": [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Three.js",
+        "GSAP",
+        "NBP API",
+        "Vercel"
+      ],
+      "decisions": [
+        "Display the cost components rather than only one total.",
+        "Treat calculations as estimates, not binding quotes.",
+        "Carry calculation context into the enquiry form.",
+        "Use 3D for brand storytelling while keeping practical information clear."
+      ],
+      "learned": [
+        "Designing calculators with multiple dependent inputs and currencies.",
+        "Combining conversion-oriented content with a useful self-service tool.",
+        "Balancing immersive visuals with understandable business actions."
+      ],
+      "next": [
+        "Review shipping rates and tax assumptions regularly.",
+        "Increase calculator test coverage for edge cases.",
+        "Further optimize 3D performance on lower-end devices."
+      ],
+      "limitations": "The calculator is indicative, not a binding offer. Rates and taxes must be checked and updated. The artwork above is illustrative."
+    },
+    {
+      "slug": "beatmarket",
+      "title": "BeatMarket — beat licensing marketplace",
+      "subtitle": "A developing platform bringing together beat discovery, previews, musical filters, producer pages, submissions and licensing.",
+      "summary": "Beat marketplace built with Next.js and Supabase, featuring catalog search, audio previews, moderation and a licensing journey.",
+      "status": "Marketplace in active development",
+      "liveUrl": "https://beatmarket.bernecki.dev",
+      "liveLabel": "Open BeatMarket",
+      "images": [
+        {
+          "src": "/images/projects/beatmarket-showcase.svg",
+          "alt": "Conceptual BeatMarket music discovery artwork, not an actual screenshot"
+        }
+      ],
+      "problem": "Beat discovery, licensing details and producer contact are often scattered. Artists need one place to find tracks, listen to previews and understand rights.",
+      "goal": "Build an integrated music marketplace connecting discovery, listening, producer profiles and licensing.",
+      "roles": [
+        {
+          "name": "Buyer / artist",
+          "description": "Searches and filters the catalog, listens to previews and reviews licensing options."
+        },
+        {
+          "name": "Producer",
+          "description": "Submits beats and can receive private access to producer tools after approval."
+        },
+        {
+          "name": "Moderator",
+          "description": "Reviews submissions before the content is publicly listed."
+        }
+      ],
+      "features": [
+        "Catalog search with price, BPM and date sorting.",
+        "Genre, musical-key and BPM-range filters.",
+        "Beat cards, detail pages and producer profiles.",
+        "Audio preview playback.",
+        "Producer submissions and approval workflow.",
+        "Licensing, purchase and download routes backed by Supabase."
+      ],
+      "stack": [
+        "Next.js",
+        "React",
+        "JavaScript",
+        "Supabase",
+        "PostgreSQL",
+        "Vercel"
+      ],
+      "decisions": [
+        "Use separate routes for catalog browsing and track details.",
+        "Keep music-specific filtering responsive without full-page reloads.",
+        "Moderate user-submitted content before public listing.",
+        "Separate payments and downloads from public catalog browsing."
+      ],
+      "learned": [
+        "Understanding the needs of both producers and buyers.",
+        "Modeling genre, key, tempo and licensing metadata.",
+        "Bringing catalog search, playback and submission into one coherent journey."
+      ],
+      "next": [
+        "Run end-to-end tests of payments and downloads.",
+        "Add security tests for uploads and producer permissions.",
+        "Further develop playback, discovery and catalog analytics."
+      ],
+      "limitations": "The platform is actively developed. Actual inventory, payments and downloads depend on approved listings and current integrations. It is not presented as a finished marketplace. Artwork above is illustrative."
+    },
+    {
       slug: "interactive-portfolio",
       title: "Interactive MacBook Portfolio — cinematic desktop-style portfolio",
       subtitle:
@@ -182,55 +367,6 @@ export const enCaseStudies: CaseStudiesContent = {
       ],
       limitations:
         "This is a secondary experimental portfolio. It is intentionally more playful than the main business web app portfolio and should be reviewed as an interactive UI project.",
-    },
-    {
-      slug: "berninutri",
-      title: "BerniNutri — AI meal photo analysis prototype",
-      subtitle:
-        "Mobile-first nutrition tracker prototype that uses an OpenAI-backed endpoint for estimated meal analysis.",
-      summary:
-        "BerniNutri is a prototype for reviewing AI-estimated calories and macros from meal photos, with explicit uncertainty.",
-      status: "Prototype",
-      liveUrl: "https://berninutri-portfolio.vercel.app",
-      repoUrl: "https://github.com/ft4k696bk6-prog/berninutri-portfolio",
-      images: [
-        {
-          src: "/images/projects/berninutri-live.jpg",
-          alt: "BerniNutri mobile dashboard preview",
-        },
-      ],
-      problem:
-        "Food analysis from a photo can be useful, but AI estimates may be incomplete or inaccurate and need a clear review flow.",
-      goal:
-        "Create a mobile-first prototype where a user uploads a meal photo, reviews estimated nutrition data and stores local meal history.",
-      roles: [],
-      features: [
-        "Meal photo upload and browser-side image compression.",
-        "Serverless analysis endpoint that keeps the OpenAI API key server-side.",
-        "Strict JSON schema for model output.",
-        "Calories, macros, ingredients, confidence and notes in the result view.",
-        "Local meal history stored in browser localStorage.",
-        "Sample meals, empty states and missing API key error state.",
-      ],
-      stack: ["React", "TypeScript", "Vite", "Vercel Functions", "OpenAI Responses API", "localStorage"],
-      decisions: [
-        "The API key stays server-side in the Vercel function.",
-        "AI output is normalized before display instead of trusted directly.",
-        "The product copy presents analysis as a helper, not dietary or medical advice.",
-      ],
-      learned: [
-        "Designing a product flow around an AI feature instead of only a prompt.",
-        "Handling structured model output and user-facing uncertainty.",
-        "Managing local browser history and useful empty states.",
-      ],
-      next: [
-        "Improve image validation and retry states.",
-        "Add editable meal results before saving.",
-        "Add account-based history with a real database.",
-        "Improve accessibility and keyboard navigation.",
-      ],
-      limitations:
-        "The app is not medical advice, dietary advice or a professional nutrition service. AI results should be treated as estimates.",
     },
     {
       slug: "kalkulator-leasingu",
@@ -461,7 +597,7 @@ export const plCaseStudies: CaseStudiesContent = {
       summary:
         "B-CRM pokazuje praktyczny przepływ aplikacji biznesowej: auth, role, leady, dashboardy, aktywności, realizację i deploy.",
       status: "Production-like CRM demo",
-      liveUrl: "https://b-crm-demo-berni.vercel.app/login",
+      liveUrl: "https://demo-crm.bernecki.dev/login",
       repoUrl: "https://github.com/ft4k696bk6-prog/B-CRM",
       images: [
         {
@@ -525,6 +661,190 @@ export const plCaseStudies: CaseStudiesContent = {
         "B-CRM jest demo portfolio z wzorcami production-like. Przed realnym użyciem produkcyjnym wymaga szerszych testów e2e, monitoringu, przeglądu bezpieczeństwa i dopracowania UX.",
     },
     {
+      "slug": "motomizer",
+      "title": "Motomizer — witryna produktu z interaktywną prezentacją",
+      "subtitle": "Od pierwszego kontaktu z produktem po wybór koloru i zgłoszenie zainteresowania: mobilny landing dla urządzenia z motoryzacyjnym charakterem.",
+      "summary": "Strona produktowa Motomizer z galerią wariantów, responsywną prezentacją, dwoma językami i formularzem dostępności.",
+      "status": "Publiczna strona produktu / lista zainteresowanych",
+      "liveUrl": "https://motomizer.pl",
+      "liveLabel": "Zobacz witrynę",
+      "images": [
+        {
+          "src": "/images/projects/motomizer-showcase.svg",
+          "alt": "Ilustracja koncepcji strony Motomizer — podgląd graficzny, nie zrzut ekranu"
+        }
+      ],
+      "problem": "Opis techniczny nie wystarczy, by pokazać produkt łączący zapach, efekty świetlne i formę samochodu. Użytkownik powinien móc obejrzeć go z różnych perspektyw i sprawdzić warianty bez szukania informacji.",
+      "goal": "Stworzyć spójną, responsywną prezentację produktu prowadzącą od głównej obietnicy przez zdjęcia, cechy i zestaw do zgłoszenia zainteresowania dostępnością.",
+      "roles": [
+        {
+          "name": "Odwiedzający",
+          "description": "Poznaje produkt, przełącza wersje kolorystyczne, przegląda galerię i materiały informacyjne."
+        },
+        {
+          "name": "Potencjalny klient",
+          "description": "Wybiera kolor i zostawia adres e-mail, aby otrzymać informację o dostępności."
+        }
+      ],
+      "features": [
+        "Układ hero z prezentacją produktu i głównymi argumentami.",
+        "Trzy warianty kolorystyczne z osobnymi galeriami.",
+        "Nawigacja po zdjęciach przyciskami i gestem.",
+        "Materiały przedstawiające działanie, wyposażenie i wymiary.",
+        "Wersja polska i angielska.",
+        "Modal dostępności z wyborem koloru i polem e-mail."
+      ],
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Vercel",
+        "Responsive Design"
+      ],
+      "decisions": [
+        "Prosta architektura statycznej witryny ogranicza zależności i koszt hostingu.",
+        "Warianty kolorystyczne aktualizują wyświetlane zdjęcia bez przeładowania strony.",
+        "Przycisk dostępności zastępuje cenę i koszyk na etapie budowania zainteresowania.",
+        "Prezentacja zaczyna się od produktu, dopiero potem rozwija szczegóły."
+      ],
+      "learned": [
+        "Projektowania ekspozycji jednego produktu bez nadmiaru kroków.",
+        "Łączenia galerii mobilnej i desktopowej.",
+        "Prowadzenia użytkownika do konkretnej akcji bez uruchamiania sprzedaży."
+      ],
+      "next": [
+        "Zweryfikować analitykę przejść między wariantami.",
+        "Rozwinąć pomiary formularza zainteresowania.",
+        "Dodać opcjonalny checkout, gdy sprzedaż będzie uruchomiona."
+      ],
+      "limitations": "To witryna produktowa, a nie kompletny sklep. Przycisk dostępności nie oznacza możliwości złożenia lub opłacenia zamówienia. Grafika powyżej jest ilustracją projektu."
+    },
+    {
+      "slug": "starcars",
+      "title": "StarCars Import — witryna usługowa i kalkulator kosztów importu",
+      "subtitle": "Rozbudowana prezentacja procesu importu aut z USA i Kanady z kalkulacją budżetu oraz bezpośrednią ścieżką do zapytania.",
+      "summary": "StarCars łączy stronę usługową, kalkulator orientacyjnej ceny importu, formularze kontaktowe i elementy 3D.",
+      "status": "Publiczna witryna usługowa / rozwój",
+      "liveUrl": "https://star-cars.us",
+      "liveLabel": "Zobacz witrynę",
+      "images": [
+        {
+          "src": "/images/projects/starcars-showcase.svg",
+          "alt": "Ilustracja projektu StarCars — grafika poglądowa kalkulatora, nie zrzut ekranu"
+        }
+      ],
+      "problem": "Klient patrząc na ofertę aukcyjną nie zna pełnego budżetu: prowizji, transportu, frachtu, opłat celnych, podatków, akcyzy i dostawy. Potrzebuje też informacji, na jakim etapie firma pomaga.",
+      "goal": "Pokazać proces importu krok po kroku, umożliwić szybką orientacyjną kalkulację i ułatwić kontakt z przesłaniem kontekstu wyceny.",
+      "roles": [
+        {
+          "name": "Klient",
+          "description": "Wprowadza parametry samochodu, przegląda kalkulację i wysyła zapytanie."
+        },
+        {
+          "name": "Doradca",
+          "description": "Otrzymuje kontekst oczekiwań i może przygotować indywidualną wycenę."
+        }
+      ],
+      "features": [
+        "Sekcje usługi, etapów procesu, pytań i odpowiedzi.",
+        "Kalkulator uwzględniający aukcję, region, kategorię pojazdu i port docelowy.",
+        "Szacunki transportu, podatków, cła, akcyzy i kosztów dodatkowych.",
+        "Pobieranie kursu USD/PLN z API NBP z wartością zapasową.",
+        "Przekazanie podsumowania kalkulacji do zapytania kontaktowego.",
+        "Animacje i prezentacja 3D jako element komunikacji marki."
+      ],
+      "stack": [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Three.js",
+        "GSAP",
+        "NBP API",
+        "Vercel"
+      ],
+      "decisions": [
+        "Kalkulator pokazuje składowe kosztów, nie samą końcową kwotę.",
+        "Wartości mają charakter orientacyjny; finalna wycena jest indywidualna.",
+        "Formularz pozwala połączyć wycenę z konkretnym zapytaniem.",
+        "Elementy 3D wspierają prezentację marki, ale nie zastępują podstawowych informacji."
+      ],
+      "learned": [
+        "Projektowania kalkulacji z wieloma zależnościami i walutami.",
+        "Łączenia treści ofertowych z narzędziem użytkowym.",
+        "Budowania efektownej wizualnie strony przy zachowaniu jasnych akcji biznesowych."
+      ],
+      "next": [
+        "Weryfikować i aktualizować stawki transportu oraz regulacje podatkowe.",
+        "Rozbudować testy kalkulatora dla nietypowych parametrów.",
+        "Optymalizować wczytywanie elementów 3D na słabszych urządzeniach."
+      ],
+      "limitations": "Kalkulator jest estymacją, nie ofertą ani gwarancją ceny końcowej. Stawki i podatki wymagają aktualizacji. Grafika powyżej jest ilustracją projektu."
+    },
+    {
+      "slug": "beatmarket",
+      "title": "BeatMarket — marketplace beatów i licencji",
+      "subtitle": "Projekt platformy łączącej katalog muzyczny, odsłuch, filtry, profile producentów oraz proces zgłaszania i kupowania beatów.",
+      "summary": "Rozwijany marketplace muzyczny w Next.js i Supabase z katalogiem, odsłuchem, filtrowaniem, moderacją i ścieżką licencji.",
+      "status": "Marketplace w aktywnym rozwoju",
+      "liveUrl": "https://beatmarket.bernecki.dev",
+      "liveLabel": "Otwórz BeatMarket",
+      "images": [
+        {
+          "src": "/images/projects/beatmarket-showcase.svg",
+          "alt": "Ilustracja projektu BeatMarket — poglądowy interfejs katalogu muzycznego"
+        }
+      ],
+      "problem": "Dostępne beaty, informacje o licencjach i kontakt z producentem bywają rozproszone. Artyści potrzebują wyszukiwarki, odsłuchu i jasnego sposobu nabycia praw do wykorzystania utworu.",
+      "goal": "Zbudować spójną platformę odkrywania beatów, w której odkrywanie, odsłuch, profil producenta i proces licencyjny są powiązane.",
+      "roles": [
+        {
+          "name": "Kupujący / artysta",
+          "description": "Wyszukuje utwory, filtruje katalog, odsłuchuje podglądy i sprawdza licencje."
+        },
+        {
+          "name": "Producent",
+          "description": "Zgłasza beat i korzysta z prywatnego dostępu do części producenckiej po akceptacji."
+        },
+        {
+          "name": "Moderator",
+          "description": "Weryfikuje materiały przed opublikowaniem ich w katalogu."
+        }
+      ],
+      "features": [
+        "Katalog z wyszukiwaniem oraz sortowaniem ceny, BPM i daty.",
+        "Filtry gatunku, tonacji i zakresu BPM.",
+        "Karty beatów, strony utworów i profile producentów.",
+        "Odtwarzanie podglądu muzycznego.",
+        "Zgłaszanie beatów przez producentów i etap zatwierdzania.",
+        "Strony licencji, zakupów i pobierania plików oraz integracja backendowa z Supabase."
+      ],
+      "stack": [
+        "Next.js",
+        "React",
+        "JavaScript",
+        "Supabase",
+        "PostgreSQL",
+        "Vercel"
+      ],
+      "decisions": [
+        "Strony katalogu i szczegółów mają osobne ścieżki dla lepszej nawigacji.",
+        "Filtry muzyczne działają bez niepotrzebnego przeładowywania całej strony.",
+        "Treści wymagają zatwierdzenia przed publiczną prezentacją.",
+        "Płatności i pobieranie plików są oddzielone od publicznego katalogu."
+      ],
+      "learned": [
+        "Projektowania rynku dwustronnego: potrzeby producenta i kupującego są różne.",
+        "Modelowania danych o gatunku, tonacji, tempie i licencji.",
+        "Łączenia odtwarzacza, wyszukiwarki i procesu zgłoszenia w jednym doświadczeniu."
+      ],
+      "next": [
+        "Przeprowadzić pełne testy ścieżki płatności i pobrania.",
+        "Dodać testy bezpieczeństwa uploadu oraz uprawnień producenta.",
+        "Rozbudować odsłuch, wyszukiwanie i analitykę katalogu."
+      ],
+      "limitations": "Platforma jest rozwijana; dostępność beatów, płatności i pobierania zależy od aktualnej konfiguracji, zatwierdzonej oferty i integracji. Nie przedstawiam jej jako ukończonego marketplace'u. Grafika powyżej jest ilustracją projektu."
+    },
+    {
       slug: "interactive-portfolio",
       title: "Interactive MacBook Portfolio — filmowe portfolio w stylu pulpitu",
       subtitle:
@@ -575,55 +895,6 @@ export const plCaseStudies: CaseStudiesContent = {
       ],
       limitations:
         "To dodatkowe portfolio eksperymentalne. Celowo jest bardziej interaktywne niż główna strona o aplikacjach biznesowych i powinno być oceniane jako projekt UI.",
-    },
-    {
-      slug: "berninutri",
-      title: "BerniNutri — prototyp analizy posiłków AI ze zdjęcia",
-      subtitle:
-        "Mobile-first prototyp trackera żywieniowego, który używa endpointu z OpenAI do estymacji posiłku.",
-      summary:
-        "BerniNutri pozwala przejrzeć estymowane kalorie i makro ze zdjęcia posiłku, jasno pokazując niepewność wyniku.",
-      status: "Prototype",
-      liveUrl: "https://berninutri-portfolio.vercel.app",
-      repoUrl: "https://github.com/ft4k696bk6-prog/berninutri-portfolio",
-      images: [
-        {
-          src: "/images/projects/berninutri-live.jpg",
-          alt: "Preview mobilnego dashboardu BerniNutri",
-        },
-      ],
-      problem:
-        "Analiza jedzenia ze zdjęcia może pomagać, ale estymacje AI bywają niepełne lub niedokładne i wymagają jasnego przepływu review.",
-      goal:
-        "Zbudować mobile-first prototyp, w którym użytkownik wrzuca zdjęcie posiłku, przegląda estymację i zapisuje lokalną historię.",
-      roles: [],
-      features: [
-        "Upload zdjęcia posiłku i kompresja obrazu po stronie przeglądarki.",
-        "Endpoint serverless, który trzyma klucz OpenAI po stronie serwera.",
-        "Ścisły schemat JSON dla odpowiedzi modelu.",
-        "Kalorie, makro, składniki, poziom pewności i notatki w widoku wyniku.",
-        "Lokalna historia posiłków zapisywana w localStorage.",
-        "Przykładowe posiłki, empty states i komunikat braku konfiguracji API.",
-      ],
-      stack: ["React", "TypeScript", "Vite", "Vercel Functions", "OpenAI Responses API", "localStorage"],
-      decisions: [
-        "Klucz API zostaje po stronie serwera w funkcji Vercel.",
-        "Wynik AI jest normalizowany przed pokazaniem użytkownikowi.",
-        "Copy przedstawia analizę jako pomocniczą estymację, nie poradę dietetyczną ani medyczną.",
-      ],
-      learned: [
-        "Projektowania przepływu produktu wokół funkcji AI, a nie samego promptu.",
-        "Obsługi ustrukturyzowanej odpowiedzi modelu i komunikowania niepewności.",
-        "Zarządzania lokalną historią w przeglądarce oraz użytecznymi empty states.",
-      ],
-      next: [
-        "Poprawić walidację obrazów i stany ponowienia analizy.",
-        "Dodać edycję wyniku przed zapisem.",
-        "Dodać historię kont użytkowników z realną bazą danych.",
-        "Poprawić dostępność i obsługę klawiatury.",
-      ],
-      limitations:
-        "Aplikacja nie jest poradą medyczną, dietetyczną ani profesjonalną usługą żywieniową. Wyniki AI są estymacją.",
     },
     {
       slug: "kalkulator-leasingu",

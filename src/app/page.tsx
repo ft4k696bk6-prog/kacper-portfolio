@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Choose between Kacper Bernecki's static business web app portfolio and interactive MacBook portfolio.",
   alternates: {
-    canonical: "https://kacper-portfolio.vercel.app",
+    canonical: "https://bernecki.dev",
   },
 };
 
