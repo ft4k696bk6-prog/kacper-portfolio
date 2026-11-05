@@ -8,6 +8,7 @@ import { AnalyticsConsent } from "@/components/AnalyticsConsent";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { AIMascotAssistant } from "@/components/AIMascotAssistant";
 import { Geist } from "next/font/google";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const geist = Geist({ subsets: ["latin", "latin-ext"], variable: "--font-sans" });
 const siteUrl = "https://bernecki.dev";
@@ -112,6 +113,7 @@ export default function RootLayout({
           <LanguageMetadataSync />
           <LanguageSwitcher />
           {children}
+          <SiteFooter />
           <AIMascotAssistant />
         </LanguageProvider>
       </body>

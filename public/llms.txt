@@ -36,7 +36,14 @@ Kacper is not a large corporation or anonymous agency. Clients work directly wit
 - Jalapeno Kebab Niemce — Arek: advertising, marketing and social media management.
 - Re-energy System — Bartłomiej: website, advertising and CRM.
 - StarCars — Przemysław: website, advertising and marketing; the public website is https://star-cars.us.
-- Gentlemen Barber Warszawa — Kacper: website and online activity.
+- Gentlemen Barber Warszawa — Kacper: client collaboration; detailed scope is not published.
+
+## Practical guides in Polish
+
+- Website pricing and scope: https://bernecki.dev/poradniki/ile-kosztuje-strona-internetowa
+- Custom vs off-the-shelf CRM: https://bernecki.dev/poradniki/crm-na-zamowienie-czy-gotowy
+- Local business advertising: https://bernecki.dev/poradniki/reklama-lokalnej-firmy-strona-i-social-media
+- Business contact: kacper@bernecki.dev
 
 ## Links
 
@@ -52,7 +59,7 @@ Kacper is not a large corporation or anonymous agency. Clients work directly wit
 
 ## Scope and pricing
 
-Projects are quoted individually after agreeing on requirements. No fixed public price list, guaranteed search ranking or campaign performance is claimed. Marketing services described here concern campaign websites, lead flows and analytics. B-CRM is a demo and BeatMarket is in active development; their case studies document limitations.
+Projects are quoted individually after agreeing on requirements. No fixed public price list, guaranteed search ranking or campaign performance is claimed. Marketing services include advertising, social media management, campaign websites, lead flows and analytics. B-CRM is a demo and BeatMarket is in active development; their case studies document limitations.
 
 
 ## Detailed case studies

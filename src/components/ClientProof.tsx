@@ -6,26 +6,30 @@ const collaborations = [
   {
     name: "Jalapeno Kebab Niemce",
     person: "Arek",
+    url: "https://www.instagram.com/jalapeno_kebab/",
     pl: "Reklamy, marketing i prowadzenie social mediów.",
     en: "Advertising, marketing and social media management.",
   },
   {
     name: "Re-energy System",
     person: "Bartłomiej",
+    url: "https://re-energysystem.pl/",
     pl: "Strona internetowa, reklamy i CRM — od koncepcji po wdrożenie.",
     en: "Website, advertising and CRM — from concept to implementation.",
   },
   {
     name: "StarCars",
     person: "Przemysław",
+    url: "https://star-cars.us",
     pl: "Strona internetowa, reklamy, marketing i rozwój obecności online.",
     en: "Website, advertising, marketing and ongoing online presence.",
   },
   {
     name: "Gentlemen Barber Warszawa",
     person: "Kacper",
-    pl: "Współpraca przy stronie i działaniach online.",
-    en: "Collaboration around the website and online activity.",
+    url: null,
+    pl: "Współpraca z salonem barberskim w Warszawie.",
+    en: "Collaboration with a Warsaw barbershop.",
   },
 ];
 
@@ -44,8 +48,8 @@ export function ClientProof() {
           </p>
           <h2 className="mt-4 text-3xl text-white md:text-5xl">
             {lang === "pl"
-              ? "Nie tylko projekty do portfolio — także realna praca dla firm."
-              : "Not just portfolio pieces — real work for real businesses."}
+              ? "Firmy, z którymi współpracuję."
+              : "Businesses I work with."}
           </h2>
           <p className="mt-5 max-w-2xl leading-8 text-zinc-400">
             {lang === "pl"
@@ -67,21 +71,18 @@ export function ClientProof() {
                 {collaboration.name}
               </h3>
               <p className="mt-2 text-sm text-zinc-500">
-                {lang === "pl" ? "Kontakt: " : "Contact: "}
+                {lang === "pl" ? "Współpraca z: " : "Working with: "}
                 {collaboration.person}
               </p>
               <p className="mt-5 text-sm leading-7 text-zinc-300">
                 {lang === "pl" ? collaboration.pl : collaboration.en}
               </p>
+              {collaboration.url && <a href={collaboration.url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm text-[#d7b46a] underline underline-offset-4">{lang === "pl" ? "Strona lub profil firmy ↗" : "Business website or profile ↗"}</a>}
             </article>
           ))}
         </div>
 
-        <p className="mt-6 text-xs leading-6 text-zinc-500">
-          {lang === "pl"
-            ? "To opis zakresu współpracy, nie fikcyjne wyniki ani anonimowe rekomendacje. Cytaty klientów mogą pojawić się po ich osobnej akceptacji."
-            : "This describes the collaboration scope, not invented results or anonymous testimonials. Client quotes can be added after separate approval."}
-        </p>
+
       </div>
     </section>
   );

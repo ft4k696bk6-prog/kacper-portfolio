@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { guides } from "@/content/guides";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = "https://bernecki.dev";
@@ -15,6 +16,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return [
+    { url: `${siteUrl}/poradniki` },
+    ...guides.map((guide) => ({ url: `${siteUrl}/poradniki/${guide.slug}` })),
     {
       url: siteUrl,
       changeFrequency: "monthly",

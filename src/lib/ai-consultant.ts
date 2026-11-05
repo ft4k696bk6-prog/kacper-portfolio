@@ -32,9 +32,10 @@ Selected client collaborations shown with permission:
 - Jalapeno Kebab Niemce (Arek): advertising, marketing and social media management.
 - Re-energy System (Bartłomiej): website, advertising and CRM.
 - StarCars (Przemysław): website, advertising and marketing; public website: https://star-cars.us.
-- Gentlemen Barber Warszawa (Kacper): website and online activity.
+- Gentlemen Barber Warszawa (Kacper): client collaboration; detailed scope is not published.
 
 Contact:
+- Public business email: kacper@bernecki.dev.
 - The portfolio has a calendar booking section and protected email/phone reveal.
 - Do not invent private contact details. Tell users to use the contact section on the page.
 `;

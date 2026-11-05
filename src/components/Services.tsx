@@ -29,13 +29,13 @@ export function Services() {
     {
       icon: MousePointer2,
       href: "/marketing-i-reklamy",
-      title: pl ? "Landing page pod reklamy" : "Campaign landing pages",
+      title: pl ? "Marketing, reklamy i social media" : "Marketing, ads & social media",
       text: pl
-        ? "Konkretna oferta, formularz i pomiar zapytań. Strony przygotowane na ruch z Google Ads, Meta i innych kampanii."
-        : "A focused offer, lead forms and measurement. Landing pages ready for traffic from Google Ads, Meta and other campaigns.",
+        ? "Prowadzenie social mediów, reklamy i strony kampanii. Spójna oferta oraz pomiar zapytań od klientów."
+        : "Social media management, advertising and campaign pages. A consistent offer and measurement of customer enquiries.",
       tags: pl
-        ? "Oferta · Formularze · Analityka"
-        : "Offer · Forms · Analytics",
+        ? "Jalapeno Kebab · StarCars"
+        : "Jalapeno Kebab · StarCars",
     },
   ];
   return (

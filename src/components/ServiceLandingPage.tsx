@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { guides } from "@/content/guides";
 import Image from "next/image";
 import {
   ArrowRight,
@@ -53,23 +54,25 @@ const content = {
       "Projektowanie i budowa CRM-ów, dashboardów, paneli administracyjnych i aplikacji webowych dla procesów biznesowych.",
   },
   marketing: {
-    title: "Landing page i strony pod reklamy — Kacper Bernecki",
-    eyebrow: "Marketing, landing page i konwersja",
+    title: "Marketing, reklamy i social media — Kacper Bernecki",
+    eyebrow: "Marketing, reklamy i prowadzenie social mediów",
     heading: "Reklama ma prowadzić do działania, nie tylko do ładnej strony.",
     intro:
-      "Buduję strony kampanii i landing page, które porządkują przekaz, prowadzą użytkownika do konkretnej akcji i pozwalają mierzyć, co dzieje się po kliknięciu reklamy.",
+      "Pomagam firmom połączyć reklamy, social media i stronę w spójną komunikację. Zakres może obejmować prowadzenie profili, przygotowanie treści, obsługę reklam oraz landing page z pomiarem zapytań. Ustalamy go pod Twoją ofertę, odbiorców i budżet.",
     bullets: [
+      "prowadzenie social mediów i przygotowanie komunikacji marki",
+      "obsługa reklam z ustalonym celem i budżetem",
       "landing page pod Google Ads, Meta Ads i kampanie lokalne",
       "strony ofertowe z jasnym CTA i formularzem",
       "formularze leadowe, newslettery i przekazywanie zapytań",
       "analityka, zdarzenia i podstawowe śledzenie konwersji",
       "szybkie poprawki i iteracje na podstawie danych",
     ],
-    proof: "Zobacz projekty stron produktowych i usługowych.",
-    proofHref: "/#projects",
-    serviceName: "Landing page i strony internetowe pod marketing",
+    proof: "Zobacz współprace: Jalapeno Kebab, StarCars, Re-energy System.",
+    proofHref: "/#collaborations",
+    serviceName: "Marketing, reklamy i prowadzenie social mediów",
     serviceDescription:
-      "Budowa landing page, stron kampanii i przepływów leadowych wspierających marketing i reklamy.",
+      "Prowadzenie social mediów, marketing, obsługa reklam oraz budowa stron kampanii i przepływów zapytań.",
   },
 } as const;
 
@@ -277,6 +280,13 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
             </Link>
           ))}
         </div>
+      </section>
+      <section className="mx-auto max-w-6xl px-5 py-12 md:px-8">
+        <h2 className="text-3xl">Przygotuj się do rozmowy</h2>
+        {guides.filter(g => g.service === `/${slug}`).map(g => <Link key={g.slug} href={`/poradniki/${g.slug}`} className="mt-6 block rounded-xl border border-[#d7b46a]/30 p-6">
+          <h3 className="text-xl text-[#f5dfae]">{g.title} →</h3><p className="mt-3 leading-7 text-zinc-400">{g.description}</p>
+        </Link>)}
+        <p className="mt-6 leading-7 text-zinc-400">{kind === "marketing" ? "Budżet reklamowy i koszt obsługi ustalamy osobno. Przed startem uzgadniamy ofertę, kanały, materiały i sposób oceny zapytań." : "Do rozmowy przygotuj cel projektu, najważniejsze funkcje, dostępne materiały i oczekiwany termin. Zakres i wycenę ustalamy przed rozpoczęciem prac."}</p>
       </section>
       <section className="mx-auto max-w-4xl px-5 py-16 md:px-8 md:py-24">
         <p className="text-sm uppercase tracking-[0.18em] text-[#d7b46a]">

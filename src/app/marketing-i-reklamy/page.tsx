@@ -2,8 +2,8 @@ import { serviceMetadata } from "@/lib/seo";
 import { ServiceLandingPage } from "@/components/ServiceLandingPage";
 
 export const metadata = serviceMetadata(
-  "Landing page i strony pod marketing i reklamy",
-  "Kacper Bernecki buduje landing page, strony kampanii, formularze i analitykę dla marketingu oraz reklam.",
+  "Marketing, reklamy i prowadzenie social mediów",
+  "Reklamy, marketing i social media dla małych firm. Kacper Bernecki: współprace z Jalapeno Kebab, StarCars i Re-energy System, strony kampanii i pomiar zapytań.",
   "marketing-i-reklamy",
 );
 

@@ -13,7 +13,7 @@ export function LanguageMetadataSync() {
       "/tworzenie-stron-internetowych",
       "/crm-i-aplikacje-webowe",
       "/marketing-i-reklamy",
-    ].includes(pathname);
+    ].includes(pathname) || pathname.startsWith("/poradniki");
     document.documentElement.lang = servicePage || pathname === "/case-studies" ? "pl" : lang;
     if (servicePage || pathname === "/case-studies" || pathname === "/choose")
       return;

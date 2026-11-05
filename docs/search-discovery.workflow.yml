@@ -1,0 +1,23 @@
+name: Check public search discovery
+on:
+  workflow_dispatch:
+    inputs:
+      submit:
+        description: Submit validated production URLs to IndexNow
+        type: boolean
+        default: false
+  schedule:
+    - cron: '21 7 * * 1'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/search-discovery.mjs
+      - if: github.event_name == 'workflow_dispatch' && inputs.submit
+        run: node scripts/search-discovery.mjs --submit
