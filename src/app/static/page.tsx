@@ -1,16 +1,6 @@
-import type { Metadata } from "next";
-import { StaticPortfolio } from "@/components/StaticPortfolio";
-
-export const metadata: Metadata = {
-  title: "Static portfolio",
-  description:
-    "Kacper Bernecki's static business web app portfolio with projects, case studies, stack, contact and booking.",
-  alternates: {
-    canonical: "https://bernecki.dev/static",
-  },
-};
+import { redirect } from "next/navigation";
 
 export default function StaticPortfolioPage() {
-  return <StaticPortfolio />;
+  redirect("/");
 }
 

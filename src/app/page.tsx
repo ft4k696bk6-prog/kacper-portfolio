@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
-import { ChoosePortfolio } from "@/components/ChoosePortfolio";
+import { StaticPortfolio } from "@/components/StaticPortfolio";
 
 export const metadata: Metadata = {
-  title: "Kacper Bernecki — Portfolio",
+  title: "Kacper Bernecki — Frontend / Web App Developer",
   description:
-    "Choose between Kacper Bernecki's static business web app portfolio and interactive MacBook portfolio.",
-  alternates: {
-    canonical: "https://bernecki.dev",
-  },
+    "Kacper Bernecki builds business web applications in React, TypeScript, Next.js and Supabase: CRMs, dashboards, forms and workflow tools.",
 };
 
 export default function Home() {
-  return <ChoosePortfolio />;
+  return <StaticPortfolio />;
 }

@@ -85,12 +85,7 @@ declare global {
 
 const HIDE_DURATION_MS = 48 * 60 * 60 * 1000;
 const HIDDEN_UNTIL_KEY = "ai-mascot-hidden-until";
-const GREETED_KEY = "ai-mascot-greeted";
-const NUDGE_COOLDOWN_KEY = "ai-mascot-nudge-last-at";
-const NUDGE_COOLDOWN_MS = 24 * 1000;
 const LINE_COOLDOWN_MS = 12 * 1000;
-const OPEN_NUDGE_DELAY_MS = 2200;
-const IDLE_NUDGE_DELAY_MS = 28 * 1000;
 
 function createMessage(role: ChatMessage["role"], content: string): ChatMessage {
   return {
@@ -134,18 +129,6 @@ function detectLocalAction(question: string): LocalAction | null {
 function pickRandom(items: string[], fallback: string) {
   if (!items.length) return fallback;
   return items[Math.floor(Math.random() * items.length)] || fallback;
-}
-
-function canShowTimedNudge() {
-  const lastShownAt = Number(localStorage.getItem(NUDGE_COOLDOWN_KEY) || 0);
-  return !Number.isFinite(lastShownAt) || Date.now() - lastShownAt > NUDGE_COOLDOWN_MS;
-}
-
-function markTimedNudgeShown(markSession = false) {
-  localStorage.setItem(NUDGE_COOLDOWN_KEY, String(Date.now()));
-  if (markSession) {
-    sessionStorage.setItem(GREETED_KEY, "true");
-  }
 }
 
 function getAssistantRuntimeCopy(lang: "en" | "pl") {
@@ -232,7 +215,6 @@ export function AIMascotAssistant() {
   const [lastFailedQuestion, setLastFailedQuestion] = useState("");
   const [dictationSupported, setDictationSupported] = useState(false);
   const [listening, setListening] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
   const [behavior, setBehavior] = useState<MascotBehaviorState>({ mood: "idle" });
   const [booking, setBooking] = useState<BookingState>(defaultBookingState);
   const [bookingName, setBookingName] = useState("");
@@ -258,7 +240,6 @@ export function AIMascotAssistant() {
   const nudgePositionClass = isCompactViewport
     ? "bottom-[calc(100%+0.75rem)] right-0 w-[min(18rem,calc(100vw-1.5rem))]"
     : "bottom-[calc(100%+0.85rem)] right-0 w-72";
-  const mascotMood: MascotMood = listening ? "listening" : loading ? "thinking" : behavior.mood;
   const assistantStatusLabel = listening
     ? t.aiMascot.dictationListeningLabel
     : loading
@@ -286,9 +267,7 @@ export function AIMascotAssistant() {
     syncCookieBannerVisibility();
     setDictationSupported(Boolean(window.SpeechRecognition || window.webkitSpeechRecognition));
 
-    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const compactQuery = window.matchMedia("(max-width: 767px)");
-    const syncMotion = () => setReducedMotion(motionQuery.matches);
     const syncCompactViewport = () => setIsCompactViewport(compactQuery.matches);
     const handleConsentChange = (event: Event) => {
       const nextConsent = (event as CustomEvent<{ consent?: CookieConsentState | null }>).detail?.consent;
@@ -310,15 +289,12 @@ export function AIMascotAssistant() {
       setCookieBannerVisible(stored !== "accepted" && stored !== "rejected");
     }
 
-    syncMotion();
     syncCompactViewport();
-    motionQuery.addEventListener("change", syncMotion);
     compactQuery.addEventListener("change", syncCompactViewport);
     window.addEventListener(COOKIE_CONSENT_EVENT, handleConsentChange);
     window.addEventListener("storage", handleStorage);
 
     return () => {
-      motionQuery.removeEventListener("change", syncMotion);
       compactQuery.removeEventListener("change", syncCompactViewport);
       window.removeEventListener(COOKIE_CONSENT_EVENT, handleConsentChange);
       window.removeEventListener("storage", handleStorage);
@@ -333,59 +309,6 @@ export function AIMascotAssistant() {
     );
     setNudgeText(t.aiMascot.greeting);
   }, [t.aiMascot.greeting, t.aiMascot.initialMessage]);
-
-  useEffect(() => {
-    if (!mounted || hidden || open || sessionStorage.getItem(GREETED_KEY) || !canShowTimedNudge()) {
-      return;
-    }
-
-    const showTimer = window.setTimeout(() => {
-      if (!canShowTimedNudge()) return;
-      setNudgeText(pickRandom(assistantRuntimeCopy.openerNudges, t.aiMascot.greeting));
-      setNudgeVisible(true);
-      setBehavior({ mood: "curious" });
-      markTimedNudgeShown(true);
-    }, OPEN_NUDGE_DELAY_MS);
-    const hideTimer = window.setTimeout(
-      () => setNudgeVisible(false),
-      OPEN_NUDGE_DELAY_MS + 9000,
-    );
-
-    return () => {
-      window.clearTimeout(showTimer);
-      window.clearTimeout(hideTimer);
-    };
-  }, [assistantRuntimeCopy, hidden, mounted, open, t.aiMascot.greeting]);
-
-  useEffect(() => {
-    if (!mounted || hidden || loading || listening || booking.step !== "idle") return;
-
-    const idleTimer = window.setTimeout(() => {
-      if (!canShowTimedNudge()) return;
-      const idleMessage = pickRandom(assistantRuntimeCopy.idleNudges, t.aiMascot.greeting);
-      if (open) {
-        setMessages((current) => [...current, createMessage("assistant", idleMessage)]);
-      } else {
-        setNudgeText(idleMessage);
-        setNudgeVisible(true);
-        window.setTimeout(() => setNudgeVisible(false), 7200);
-      }
-      setBehavior({ mood: "joking" });
-      markTimedNudgeShown();
-    }, IDLE_NUDGE_DELAY_MS);
-
-    return () => window.clearTimeout(idleTimer);
-  }, [
-    assistantRuntimeCopy,
-    booking.step,
-    hidden,
-    listening,
-    loading,
-    messages.length,
-    mounted,
-    open,
-    t.aiMascot.greeting,
-  ]);
 
   useEffect(() => {
     scrollAreaRef.current?.scrollTo({
@@ -423,8 +346,8 @@ export function AIMascotAssistant() {
   function scrollToStaticSection(hash: "#projects" | "#contact") {
     setOpen(false);
 
-    if (pathname !== "/static") {
-      router.push(`/static${hash}`);
+    if (pathname !== "/") {
+      router.push(`/${hash}`);
       return;
     }
 
@@ -940,24 +863,14 @@ export function AIMascotAssistant() {
                 onFocus={handleMascotInterest}
                 aria-label={t.aiMascot.openLabel}
                 data-testid="ai-mascot-open"
-                className="group relative grid h-14 w-14 place-items-center rounded-2xl border border-[#f5dfae]/40 bg-[#d7b46a] text-black shadow-[0_14px_42px_rgba(0,0,0,0.45)] outline-none transition hover:-translate-y-0.5 hover:border-[#f5dfae]/70 hover:shadow-[0_18px_46px_rgba(215,180,106,0.22)] focus-visible:ring-2 focus-visible:ring-[#d7b46a]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-16 md:w-16"
-                animate={
-                  reducedMotion
-                    ? undefined
-                    : {
-                        y: mascotMood === "thinking" ? [0, -4, 0] : [0, -3, 0],
-                        rotate: mascotMood === "curious" ? [0, -4, 3, 0] : 0,
-                      }
-                }
-                transition={{
-                  y: { duration: mascotMood === "thinking" ? 1.4 : 3.8, repeat: Infinity, ease: "easeInOut" },
-                  rotate: { duration: 1.4, ease: "easeInOut" },
-                }}
+                data-mood={behavior.mood}
+                className="group relative grid h-12 w-12 place-items-center rounded-full border border-[#d7b46a]/60 bg-[#11110f] text-[#f5dfae] shadow-[0_12px_32px_rgba(0,0,0,0.42)] outline-none transition hover:-translate-y-0.5 hover:border-[#f5dfae] hover:bg-[#1a1710] hover:shadow-[0_16px_38px_rgba(215,180,106,0.18)] focus-visible:ring-2 focus-visible:ring-[#d7b46a]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-14 md:w-14"
               >
-                <span className="absolute -inset-1.5 rounded-[1.35rem] bg-[#d7b46a]/20 blur-lg transition group-hover:bg-[#d7b46a]/30" />
-                <span className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#f7e5b5] via-[#d7b46a] to-[#ad863c]" />
-                <span className="relative z-10 grid h-9 w-9 place-items-center rounded-xl bg-black/12 text-black shadow-inner md:h-10 md:w-10">
-                  <MessageCircle className="h-5 w-5 md:h-6 md:w-6" />
+                <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full border border-[#11110f] bg-[#d7b46a] px-1 text-[9px] font-semibold tracking-wide text-black">
+                  AI
+                </span>
+                <span className="relative z-10 grid h-8 w-8 place-items-center rounded-full border border-[#d7b46a]/25 bg-[#d7b46a]/10 md:h-9 md:w-9">
+                  <MessageCircle className="h-4 w-4 md:h-5 md:w-5" />
                 </span>
               </motion.button>
             </div>

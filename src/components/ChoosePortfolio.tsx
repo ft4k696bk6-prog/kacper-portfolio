@@ -9,7 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export function ChoosePortfolio() {
   const { t } = useLanguage();
 
-  const staticHref = "/static";
+  const staticHref = "/";
   const interactiveHref = "https://kacper-bernecki.vercel.app";
 
   const choiceButtonClass =
@@ -86,7 +86,7 @@ export function ChoosePortfolio() {
           </div>
 
           <Link
-            href="/static#contact"
+            href="/#contact"
             className="relative z-20 mt-4 inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/[0.03] px-4 py-2 text-sm text-zinc-300 transition-colors hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
           >
             <Mail className="h-4 w-4" />

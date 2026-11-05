@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { ChoosePortfolio } from "@/components/ChoosePortfolio";
 
-export default function ChooseRedirectPage() {
-  redirect("/");
+export default function ChoosePortfolioPage() {
+  return <ChoosePortfolio />;
 }
