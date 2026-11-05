@@ -250,8 +250,8 @@ export const en = {
         "externalLabel": "Visit website",
         "caseStudyUrl": "/case-studies/motomizer",
         "image": {
-          "src": "/images/projects/motomizer-showcase.svg",
-          "alt": "Motomizer conceptual project artwork with product variants and gallery"
+          "src": "/images/projects/motomizer-live.jpg",
+          "alt": "Motomizer live website showing the automotive aroma diffuser landing page"
         }
       },
       {
@@ -279,8 +279,8 @@ export const en = {
         "externalLabel": "Visit website",
         "caseStudyUrl": "/case-studies/starcars",
         "image": {
-          "src": "/images/projects/starcars-showcase.svg",
-          "alt": "StarCars conceptual project artwork with car import cost dashboard"
+          "src": "/images/projects/starcars-live.jpg",
+          "alt": "StarCars live website showing the car import service hero section"
         }
       },
       {
@@ -308,8 +308,8 @@ export const en = {
         "externalLabel": "Open BeatMarket",
         "caseStudyUrl": "/case-studies/beatmarket",
         "image": {
-          "src": "/images/projects/beatmarket-showcase.svg",
-          "alt": "BeatMarket conceptual project artwork with sound catalog and player"
+          "src": "/images/projects/beatmarket-live.jpg",
+          "alt": "BeatMarket live website showing the beat discovery catalog"
         }
       },
       {

@@ -251,8 +251,8 @@ export const pl: Translations = {
         "externalLabel": "Zobacz witrynę",
         "caseStudyUrl": "/case-studies/motomizer",
         "image": {
-          "src": "/images/projects/motomizer-showcase.svg",
-          "alt": "Grafika projektowa Motomizer — produkt, warianty kolorystyczne i galeria"
+          "src": "/images/projects/motomizer-live.jpg",
+          "alt": "Zrzut ekranu działającej strony Motomizer z landingiem aromatyzera samochodowego"
         }
       },
       {
@@ -280,8 +280,8 @@ export const pl: Translations = {
         "externalLabel": "Zobacz witrynę",
         "caseStudyUrl": "/case-studies/starcars",
         "image": {
-          "src": "/images/projects/starcars-showcase.svg",
-          "alt": "Grafika projektowa StarCars — samochód i kalkulacja importu"
+          "src": "/images/projects/starcars-live.jpg",
+          "alt": "Zrzut ekranu działającej strony StarCars z sekcją importu samochodów"
         }
       },
       {
@@ -309,8 +309,8 @@ export const pl: Translations = {
         "externalLabel": "Otwórz BeatMarket",
         "caseStudyUrl": "/case-studies/beatmarket",
         "image": {
-          "src": "/images/projects/beatmarket-showcase.svg",
-          "alt": "Grafika projektowa BeatMarket — katalog muzyczny i odtwarzacz"
+          "src": "/images/projects/beatmarket-live.jpg",
+          "alt": "Zrzut ekranu działającego BeatMarket z katalogiem beatów"
         }
       },
       {

@@ -142,8 +142,8 @@ export const enCaseStudies: CaseStudiesContent = {
       "liveLabel": "Visit website",
       "images": [
         {
-          "src": "/images/projects/motomizer-showcase.svg",
-          "alt": "Conceptual Motomizer site artwork, not an actual screenshot"
+          "src": "/images/projects/motomizer-live.jpg",
+          "alt": "Screenshot of the live Motomizer product landing page"
         }
       ],
       "problem": "A product combining fragrance, lighting, sound and car-inspired design cannot be explained well by specifications alone. Visitors need multiple views and clear differences between variants.",
@@ -189,7 +189,7 @@ export const enCaseStudies: CaseStudiesContent = {
         "Improve availability form analytics.",
         "Consider checkout only when sales are enabled."
       ],
-      "limitations": "This is a product showcase, not a complete online store. The availability action does not represent a purchase or payment. Artwork above is illustrative."
+      "limitations": "This is a product showcase, not a complete online store. The availability action does not represent a purchase or payment. Screenshot captured from the public live site."
     },
     {
       "slug": "starcars",
@@ -201,8 +201,8 @@ export const enCaseStudies: CaseStudiesContent = {
       "liveLabel": "Visit website",
       "images": [
         {
-          "src": "/images/projects/starcars-showcase.svg",
-          "alt": "Conceptual StarCars import calculator artwork, not an actual screenshot"
+          "src": "/images/projects/starcars-live.jpg",
+          "alt": "Screenshot of the live StarCars import service website"
         }
       ],
       "problem": "The auction price alone does not show the cost of an imported vehicle. Customers need visibility into fees, inland and ocean transport, customs, tax, excise and delivery.",
@@ -250,7 +250,7 @@ export const enCaseStudies: CaseStudiesContent = {
         "Increase calculator test coverage for edge cases.",
         "Further optimize 3D performance on lower-end devices."
       ],
-      "limitations": "The calculator is indicative, not a binding offer. Rates and taxes must be checked and updated. The artwork above is illustrative."
+      "limitations": "The calculator is indicative, not a binding offer. Rates and taxes must be checked and updated. Screenshot captured from the public live site."
     },
     {
       "slug": "beatmarket",
@@ -262,8 +262,8 @@ export const enCaseStudies: CaseStudiesContent = {
       "liveLabel": "Open BeatMarket",
       "images": [
         {
-          "src": "/images/projects/beatmarket-showcase.svg",
-          "alt": "Conceptual BeatMarket music discovery artwork, not an actual screenshot"
+          "src": "/images/projects/beatmarket-live.jpg",
+          "alt": "Screenshot of the live BeatMarket beat discovery page"
         }
       ],
       "problem": "Beat discovery, licensing details and producer contact are often scattered. Artists need one place to find tracks, listen to previews and understand rights.",
