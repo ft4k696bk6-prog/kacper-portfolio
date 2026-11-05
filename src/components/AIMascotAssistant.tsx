@@ -644,7 +644,7 @@ export function AIMascotAssistant() {
     [t.aiMascot.quickActions],
   );
 
-  if (!mounted) return null;
+  if (!mounted || cookieBannerVisible) return null;
 
   return (
     <>

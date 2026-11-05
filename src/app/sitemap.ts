@@ -22,10 +22,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${siteUrl}/static`,
+      url: `${siteUrl}/case-studies`,
       lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 1,
+      priority: 0.8,
     },
     {
       url: `${siteUrl}/tworzenie-stron-internetowych`,

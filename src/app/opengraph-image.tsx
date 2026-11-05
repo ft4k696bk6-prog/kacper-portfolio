@@ -1,0 +1,59 @@
+import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+
+export const alt =
+  "Kacper Bernecki — strony internetowe, CRM i aplikacje webowe";
+export const size = { width: 1200, height: 630 };
+export const contentType = "image/png";
+
+export default async function OpenGraphImage() {
+  const font = await readFile(
+    join(process.cwd(), "public/fonts/OpenSans-Regular.ttf"),
+  );
+  return new ImageResponse(
+    <div
+      style={{
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        background: "#0c0c0b",
+        color: "#fafafa",
+        padding: "64px 72px",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        border: "2px solid #343026",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          fontSize: 24,
+          color: "#d7b46a",
+          letterSpacing: 4,
+        }}
+      >
+        KACPER BERNECKI / BERNECKI.DEV
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          fontSize: 72,
+          letterSpacing: -3,
+          lineHeight: 1.1,
+        }}
+      >
+        <span>Strony internetowe.</span>
+        <span style={{ color: "#d7b46a" }}>CRM i aplikacje webowe.</span>
+      </div>
+      <div style={{ display: "flex", fontSize: 24, color: "#a1a1aa" }}>
+        Od pomysłu do wdrożenia. Bezpośrednio ze mną.
+      </div>
+    </div>,
+    {
+      ...size,
+      fonts: [{ name: "Open Sans", data: font, style: "normal", weight: 400 }],
+    },
+  );
+}

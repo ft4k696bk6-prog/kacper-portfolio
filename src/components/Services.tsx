@@ -1,72 +1,77 @@
 "use client";
 
-import {
-  Bot,
-  FileText,
-  Gauge,
-  LayoutTemplate,
-  PanelTop,
-  Workflow,
-} from "lucide-react";
-import { motion } from "framer-motion";
+import Link from "next/link";
+import { ArrowUpRight, Globe, Workflow, MousePointer2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const icons = [PanelTop, LayoutTemplate, FileText, Gauge, Workflow, Bot];
-
 export function Services() {
-  const { t } = useLanguage();
-
+  const { lang } = useLanguage();
+  const pl = lang === "pl";
+  const services = [
+    {
+      icon: Globe,
+      href: "/tworzenie-stron-internetowych",
+      title: pl ? "Strony internetowe" : "Business websites",
+      text: pl
+        ? "Strona firmy, usługi lub produktu. Przemyślany wygląd, wygoda na telefonie i prosta droga do kontaktu."
+        : "Business, service and product websites. Thoughtful design, a great mobile experience and a clear path to contact.",
+      tags: "Motomizer · StarCars",
+    },
+    {
+      icon: Workflow,
+      href: "/crm-i-aplikacje-webowe",
+      title: pl ? "CRM i aplikacje webowe" : "CRM & web apps",
+      text: pl
+        ? "Leady, zespół i procesy w jednym miejscu. Narzędzia dopasowane do tego, jak naprawdę działa Twoja firma."
+        : "Leads, teams and workflows in one place. Tools tailored to how your business actually operates.",
+      tags: "B-CRM · BeatMarket",
+    },
+    {
+      icon: MousePointer2,
+      href: "/marketing-i-reklamy",
+      title: pl ? "Landing page pod reklamy" : "Campaign landing pages",
+      text: pl
+        ? "Konkretna oferta, formularz i pomiar zapytań. Strony przygotowane na ruch z Google Ads, Meta i innych kampanii."
+        : "A focused offer, lead forms and measurement. Landing pages ready for traffic from Google Ads, Meta and other campaigns.",
+      tags: pl
+        ? "Oferta · Formularze · Analityka"
+        : "Offer · Forms · Analytics",
+    },
+  ];
   return (
-    <section className="px-5 py-24 md:px-8">
+    <section id="services" className="px-5 py-20 md:px-8 md:py-24">
       <div className="mx-auto max-w-7xl">
-        <motion.div
-          className="max-w-3xl"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <p className="text-sm uppercase tracking-[0.28em] text-[#d7b46a]">
-            {t.services.title}
-          </p>
-          <h2 className="mt-4 text-4xl leading-tight text-white md:text-5xl">
-            {t.services.subtitle}
-          </h2>
-        </motion.div>
-
-        <motion.div
-          className="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07 } } }}
-        >
-          {t.services.items.map((item, index) => {
-            const Icon = icons[index] ?? PanelTop;
-            return (
-              <motion.article
-                key={item.title}
-                variants={{
-                  hidden: { opacity: 0, y: 26 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { duration: 0.42, ease: "easeOut" },
-                  },
-                }}
-                className="group min-h-56 rounded-md border border-white/10 bg-white/[0.035] p-6 transition-all hover:-translate-y-1 hover:border-[#d7b46a]/50 hover:bg-[#d7b46a]/[0.055]"
-              >
-                <div className="mb-6 grid h-12 w-12 place-items-center rounded-md bg-[#d7b46a]/10 text-[#f5dfae] transition-colors group-hover:bg-[#d7b46a]/20">
-                  <Icon className="h-6 w-6" />
-                </div>
-                <h3 className="text-xl text-white">{item.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-zinc-400">
-                  {item.description}
-                </p>
-              </motion.article>
-            );
-          })}
-        </motion.div>
+        <p className="text-xs uppercase tracking-[0.24em] text-[#d7b46a]">
+          {pl ? "W czym mogę pomóc" : "How I can help"}
+        </p>
+        <h2 className="mt-4 max-w-2xl text-4xl leading-tight tracking-tight md:text-5xl">
+          {pl
+            ? "Masz cel. Zbudujmy do niego dobre narzędzie."
+            : "You have a goal. Let’s build the right tool."}
+        </h2>
+        <div className="mt-10 grid gap-4 lg:grid-cols-3">
+          {services.map(({ icon: Icon, ...s }, i) => (
+            <Link
+              key={s.href}
+              href={s.href}
+              className="group flex flex-col rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.045] to-transparent p-7 transition hover:border-[#d7b46a]/50 hover:bg-[#d7b46a]/[0.04]"
+            >
+              <div className="flex items-center justify-between">
+                <Icon className="h-7 w-7 text-[#d7b46a]" />
+                <span className="text-xs text-zinc-600">0{i + 1}</span>
+              </div>
+              <h3 className="mt-9 text-2xl tracking-tight">{s.title}</h3>
+              <p className="mt-4 flex-1 text-sm leading-7 text-zinc-400">
+                {s.text}
+              </p>
+              <p className="mt-7 text-xs text-zinc-500">{s.tags}</p>
+              <span className="mt-7 flex items-center justify-between border-t border-white/10 pt-5 text-sm text-[#f5dfae]">
+                {pl ? "Zobacz zakres współpracy" : "Explore the service"}
+                <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-1 group-hover:translate-x-1" />
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

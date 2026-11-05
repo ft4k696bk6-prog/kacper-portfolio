@@ -49,7 +49,7 @@ export function AnalyticsConsent() {
       {loaded && consent === null ? (
         <div className="fixed bottom-4 left-4 right-4 z-[70] mx-auto max-w-2xl rounded-md border border-[#d7b46a]/35 bg-[#11110f]/95 p-4 text-sm text-zinc-300 shadow-[0_22px_70px_rgba(0,0,0,0.42)] backdrop-blur-xl md:left-5 md:right-auto md:mx-0 md:max-w-md">
           <p className="text-base font-medium text-white">{t.consent.title}</p>
-          <p className="mt-2 leading-6">{t.consent.description}</p>
+          <p className="mt-2 text-xs leading-5 text-zinc-400 md:text-sm md:leading-6">{t.consent.description}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <button
               type="button"

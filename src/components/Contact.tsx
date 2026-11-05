@@ -87,11 +87,11 @@ export function Contact() {
             </div>
 
             <div className="mt-5 grid gap-4">
+              <ContactReveal copy={t.contact.reveal} />
               <BookingCalendar
                 copy={t.contact.booking}
                 locale={lang === "pl" ? "pl-PL" : "en-US"}
               />
-              <ContactReveal copy={t.contact.reveal} />
             </div>
           </motion.div>
         </div>

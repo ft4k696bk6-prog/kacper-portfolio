@@ -39,7 +39,7 @@ const jsonLd = {
       ],
     },
     {
-      "@type": "ProfessionalService",
+      "@type": "Service",
       "@id": "https://bernecki.dev/#service",
       name: "Kacper Bernecki — strony internetowe, CRM i web app",
       url: "https://bernecki.dev/",
@@ -57,19 +57,52 @@ const jsonLd = {
 
 export function StaticPortfolio() {
   const { lang } = useLanguage();
-  const faq = lang === "pl"
-    ? [
-        ["Czy pracuję bezpośrednio z klientem?", "Tak. Rozmawiasz bezpośrednio z osobą, która analizuje problem, buduje rozwiązanie i odpowiada za jakość wykonania."],
-        ["Czy można zacząć od małego zakresu?", "Tak. Możemy zacząć od landing page, pierwszej wersji CRM-u albo konkretnego fragmentu procesu i rozwijać rozwiązanie etapami."],
-        ["Czy dostanę uczciwą wycenę?", "Tak. Najpierw ustalamy cel, zakres i ryzyka, a potem dostajesz konkretną wycenę bez niepotrzebnych dodatków."],
-        ["Czy pracuję z klientami z całej Polski?", "Tak. Pracuję zdalnie, a rozmowę i ustalenia możemy prowadzić online."],
-      ]
-    : [
-        ["Do I work directly with clients?", "Yes. You speak directly with the person who analyses the problem, builds the solution and owns the implementation quality."],
-        ["Can we start with a small scope?", "Yes. We can start with a landing page, a first CRM version or one concrete workflow and expand in stages."],
-        ["Will I get a fair quote?", "Yes. We agree on the goal, scope and risks first, then you get a concrete quote without unnecessary extras."],
-        ["Do I work with clients across Poland?", "Yes. I work remotely and we can handle the whole conversation and delivery online."],
-      ];
+  const faq =
+    lang === "pl"
+      ? [
+          [
+            "Czy pracuję bezpośrednio z klientem?",
+            "Tak. Rozmawiasz bezpośrednio z osobą, która analizuje problem, buduje rozwiązanie i odpowiada za jakość wykonania.",
+          ],
+          [
+            "Czy można zacząć od małego zakresu?",
+            "Tak. Możemy zacząć od landing page, pierwszej wersji CRM-u albo konkretnego fragmentu procesu i rozwijać rozwiązanie etapami.",
+          ],
+          [
+            "Ile kosztuje strona internetowa lub CRM?",
+            "Cena zależy od zakresu: liczby widoków, treści, formularzy, integracji i funkcji. Po krótkiej rozmowie ustalamy, co jest potrzebne, i przygotowuję wycenę. Możemy zacząć od mniejszej wersji i rozwijać ją etapami.",
+          ],
+          [
+            "Jak długo trwa realizacja?",
+            "Termin zależy od zakresu i dostępności materiałów. Ustalamy go przed rozpoczęciem prac, razem z etapami i kolejnością funkcji.",
+          ],
+          [
+            "Czy pracuję z klientami z całej Polski?",
+            "Tak. Pracuję zdalnie, a rozmowę i ustalenia możemy prowadzić online.",
+          ],
+        ]
+      : [
+          [
+            "Do I work directly with clients?",
+            "Yes. You speak directly with the person who analyses the problem, builds the solution and owns the implementation quality.",
+          ],
+          [
+            "Can we start with a small scope?",
+            "Yes. We can start with a landing page, a first CRM version or one concrete workflow and expand in stages.",
+          ],
+          [
+            "How much does a website or CRM cost?",
+            "The price depends on the scope: screens, content, forms, integrations and features. After a conversation, I prepare a quote. We can start with a smaller version and grow in stages.",
+          ],
+          [
+            "How long does a project take?",
+            "Timing depends on scope and the availability of content. We agree on the timeline, stages and priorities before work begins.",
+          ],
+          [
+            "Do I work with clients across Poland?",
+            "Yes. I work remotely and we can handle the whole conversation and delivery online.",
+          ],
+        ];
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -92,32 +125,54 @@ export function StaticPortfolio() {
       />
       <main className="min-h-screen bg-[#070707] text-white">
         <Hero />
-        <Profile />
-        <Experience />
         <Services />
-        <TechnicalAudience />
-        <section id="faq" className="border-y border-white/10 bg-white/[0.02] px-5 py-20 md:px-8 md:py-28">
+        <Projects />
+        <Experience />
+        <Profile />
+        <details className="mx-auto max-w-7xl px-5 py-10 md:px-8">
+          <summary className="cursor-pointer rounded-xl border border-white/10 bg-white/[0.03] p-5 text-[#f5dfae]">
+            {lang === "pl"
+              ? "Dla osób technicznych — stack i szczegóły B-CRM"
+              : "For technical reviewers — stack and B-CRM details"}
+          </summary>
+          <TechnicalAudience />
+          <Skills />
+        </details>
+        <section
+          id="faq"
+          className="border-y border-white/10 bg-white/[0.02] px-5 py-20 md:px-8 md:py-28"
+        >
           <div className="mx-auto max-w-4xl">
             <p className="text-sm uppercase tracking-[0.24em] text-[#d7b46a]">
-              {lang === "pl" ? "Najczęstsze pytania" : "Frequently asked questions"}
+              {lang === "pl"
+                ? "Najczęstsze pytania"
+                : "Frequently asked questions"}
             </p>
             <h2 className="mt-4 text-3xl text-white md:text-4xl">
-              {lang === "pl" ? "Jak wygląda współpraca?" : "What is working together like?"}
+              {lang === "pl"
+                ? "Jak wygląda współpraca?"
+                : "What is working together like?"}
             </h2>
             <div className="mt-8 divide-y divide-white/10 rounded-md border border-white/10 bg-white/[0.035] px-5">
               {faq.map(([question, answer]) => (
                 <details key={question} className="group py-5">
-                  <summary className="cursor-pointer list-none pr-8 text-lg text-white marker:hidden">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-5 text-lg text-white marker:hidden">
                     {question}
+                    <span
+                      aria-hidden="true"
+                      className="text-[#d7b46a] transition-transform group-open:rotate-45"
+                    >
+                      +
+                    </span>
                   </summary>
-                  <p className="mt-3 max-w-3xl leading-7 text-zinc-400">{answer}</p>
+                  <p className="mt-3 max-w-3xl leading-7 text-zinc-400">
+                    {answer}
+                  </p>
                 </details>
               ))}
             </div>
           </div>
         </section>
-        <Projects />
-        <Skills />
         <Contact />
       </main>
     </>

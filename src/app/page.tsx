@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { StaticPortfolio } from "@/components/StaticPortfolio";
 
 export const metadata: Metadata = {
-  title: "Kacper Bernecki — Frontend / Web App Developer",
+  title: { absolute: "Strony internetowe, CRM i aplikacje webowe | Kacper Bernecki" },
   description:
-    "Kacper Bernecki builds business web applications in React, TypeScript, Next.js and Supabase: CRMs, dashboards, forms and workflow tools.",
+    "Strony internetowe, landing page i CRM-y dla firm. Kacper Bernecki — bezpośredni kontakt, dopracowany wygląd i wycena dopasowana do zakresu.",
 };
 
 export default function Home() {

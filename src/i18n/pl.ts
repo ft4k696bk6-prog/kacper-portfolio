@@ -3,10 +3,10 @@ import { plCaseStudies } from "./case-studies";
 
 export const pl: Translations = {
   nav: {
-    home: "Start",
+    home: "Oferta",
     about: "O mnie",
     projects: "Projekty",
-    techStack: "Technologie",
+    techStack: "FAQ",
     contact: "Kontakt",
     cta: "Kontakt",
     openMenu: "Otwórz menu",
@@ -14,9 +14,9 @@ export const pl: Translations = {
     interactive: "Interaktywne portfolio",
   },
   meta: {
-    homeTitle: "Kacper Bernecki — Frontend / Web App Developer",
+    homeTitle: "Strony internetowe, CRM i aplikacje webowe | Kacper Bernecki",
     homeDescription:
-      "Tworzę aplikacje biznesowe w React, TypeScript, Next.js i Supabase: CRM-y, dashboardy, formularze i narzędzia workflow.",
+      "Strony internetowe, landing page i CRM-y dla firm. Kacper Bernecki — bezpośredni kontakt, dopracowany wygląd i wycena dopasowana do zakresu.",
   },
   hero: {
     eyebrow: "Aplikacje webowe dla biznesu",
@@ -40,11 +40,11 @@ export const pl: Translations = {
   },
   about: {
     title: "O mnie",
-    heading: "Buduję praktyczne aplikacje webowe dla procesów biznesowych.",
+    heading: "Za tym projektem stoi człowiek. Będziesz znać go po imieniu.",
     paragraphs: [
-      "Najmocniejsze projekty w moim portfolio to aplikacje operacyjne: widoki CRM, obsługa leadów, role użytkowników, dashboardy, formularze i workflow oparte o API.",
-      "Łączę frontend z wystarczającym kontekstem backendu i bazy danych, żeby budować kompletne przepływy aplikacji: Supabase auth, dane w PostgreSQL, route handlers, walidację i deploy.",
-      "AI jest częścią mojego workflow przy prototypowaniu, debugowaniu i wybranych funkcjach produktu, ale nie zastępuje kompetencji programistycznych ani decyzji technicznych.",
+      "Jestem Kacper. Projektuję i programuję strony oraz aplikacje dla firm. Rozmawiasz ze mną od pierwszych ustaleń po wdrożenie, więc pomysł nie ginie po drodze między kolejnymi osobami.",
+      "Lubię konkret: co ma zrobić użytkownik, jak uprościć pracę zespołu i które funkcje naprawdę są potrzebne. Na tej podstawie dobieram wygląd, technologię i zakres prac.",
+      "Zwracam uwagę na szczegóły: widok na telefonie, czytelne formularze, komunikaty błędów i wygodną nawigację. Projekty możesz obejrzeć na żywo i sprawdzić w case studies.",
     ],
     highlights: [
       {
@@ -67,12 +67,12 @@ export const pl: Translations = {
     imageAlt: "Profesjonalny portret siedzącego Kacpra Berneckiego",
   },
   background: {
-    title: "Kontekst",
-    heading: "Najpierw workflow biznesowy, potem technologia.",
+    title: "Współpraca krok po kroku",
+    heading: "Od „mam pomysł” do „już działa”.",
     paragraphs: [
-      "Przed pisaniem kodu patrzę na proces: kto używa aplikacji, jakich danych potrzebuje, co zmienia status i gdzie ma być widoczna kolejna akcja.",
-      "To podejście widać w B-CRM: widoki sprzedażowe i operacyjne zależne od ról, statusy leadów, callbacki, spotkania, komentarze, historia oraz reguły dostępu oparte o bazę.",
-      "Portfolio prowadzi przez projekty, które można sprawdzić przez live demo, repozytoria i case study.",
+      "Rozmowa i plan. Opowiadasz o firmie, odbiorcach i celu. Ustalamy zakres, priorytety, budżet oraz termin — zanim ruszą prace.",
+      "Projekt i wykonanie. Przygotowuję kierunek wizualny i działające widoki. Oglądasz postępy, przekazujesz uwagi i wiesz, co powstaje.",
+      "Sprawdzenie i wdrożenie. Testuję widoki na telefonie i komputerze, formularze oraz najważniejsze ścieżki. Publikujemy rozwiązanie i ustalamy ewentualny dalszy rozwój.",
     ],
   },
   services: {
@@ -189,7 +189,7 @@ export const pl: Translations = {
   },
   projects: {
     title: "Projekty",
-    subtitle: "Skupiony zestaw aplikacji biznesowych i projektów wspierających. B-CRM DEMO jest głównym dowodem technicznym.",
+    subtitle: "Zobacz, co już działa.",
     featuresLabel: "Realne funkcje",
     techLabel: "Stack",
     demoLabel: "Live demo",
@@ -206,7 +206,7 @@ export const pl: Translations = {
         problem:
           "Zespoły sprzedażowe potrzebują jednego miejsca do kontroli właściciela leada, statusów, callbacków, spotkań i historii działań.",
         description:
-          "Production-like CRM demo do obsługi lead management i procesu sprzedaży, z widokami opartymi o role i dane w Supabase.",
+          "Demo CRM-u, który porządkuje leady, zadania zespołu i proces od sprzedaży po realizację. Każda rola widzi informacje i działania potrzebne do swojej pracy.",
         features: [
           "Logowanie i konta demo",
           "Role: właściciel, admin, menadżer, handlowiec, finanse, podgląd, księgowość, logistyka, monter",
@@ -287,7 +287,7 @@ export const pl: Translations = {
       {
         "title": "BeatMarket",
         "problem": "Producenci i artyści potrzebują miejsca, w którym odsłuch, wyszukiwanie beatów i wybór licencji tworzą spójny proces zamiast wymiany plików przez wiadomości.",
-        "description": "Rozwijany marketplace beatów z katalogiem, odsłuchem, filtrami muzycznymi, kartami producentów, zgłoszeniami nowych utworów i ścieżką zakupu licencji.",
+        "description": "Marketplace dla producentów i artystów: odkrywanie muzyki, odsłuch i wybór licencji w jednym miejscu. Projekt w aktywnym rozwoju.",
         "features": [
           "Katalog beatów z wyszukiwarką i sortowaniem",
           "Filtry: gatunek, tonacja i zakres BPM",
@@ -470,9 +470,9 @@ export const pl: Translations = {
     ],
   },
   contact: {
-    title: "Porozmawiajmy o aplikacji webowej, CRM-ie albo roli frontend",
+    title: "Co chcesz zbudować?",
     description:
-      "Znajdź dostępny termin albo odsłoń email i telefon po szybkiej weryfikacji człowieka.",
+      "Napisz, czym zajmuje się Twoja firma i czego potrzebujesz. Jeśli masz inspiracje, termin lub budżet — dodaj je. Ustalimy sensowny zakres i wycenę. Możesz też wybrać termin rozmowy.",
     calendarTitle: "Kalendarz",
     calendarDescription:
       "Wybierz termin w kalendarzu.",
@@ -514,7 +514,7 @@ export const pl: Translations = {
   consent: {
     title: "Ustawienia cookies",
     description:
-      "Używam małych ustawień strony, żeby zapamiętać wybrany język i utrzymać portfolio w dobrym działaniu. Opcjonalny pomiar odwiedzin działa dopiero po akceptacji.",
+      "Zapamiętuję ustawienia strony. Opcjonalny pomiar odwiedzin włączę po Twojej zgodzie.",
     accept: "Akceptuję cookies",
     reject: "Odrzuć opcjonalne cookies",
     settings: "Ustawienia cookies",

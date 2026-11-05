@@ -7,10 +7,10 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const navItems = [
-  { href: "#home", key: "home" },
+  { href: "#services", key: "home" },
   { href: "#about", key: "about" },
   { href: "#projects", key: "projects" },
-  { href: "#tech-stack", key: "techStack" },
+  { href: "#faq", key: "techStack" },
   { href: "#contact", key: "contact" },
 ] as const;
 

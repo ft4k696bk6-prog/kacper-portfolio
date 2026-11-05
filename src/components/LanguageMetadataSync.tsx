@@ -9,7 +9,14 @@ export function LanguageMetadataSync() {
   const { lang, t } = useLanguage();
 
   useEffect(() => {
-    document.documentElement.lang = lang;
+    const servicePage = [
+      "/tworzenie-stron-internetowych",
+      "/crm-i-aplikacje-webowe",
+      "/marketing-i-reklamy",
+    ].includes(pathname);
+    document.documentElement.lang = servicePage || pathname === "/case-studies" ? "pl" : lang;
+    if (servicePage || pathname === "/case-studies" || pathname === "/choose")
+      return;
 
     const caseStudySlug = pathname.match(/^\/case-studies\/([^/]+)/)?.[1];
     const caseStudy = caseStudySlug
@@ -20,7 +27,9 @@ export function LanguageMetadataSync() {
       ? `${caseStudy.title} | Kacper Bernecki`
       : t.meta.homeTitle;
 
-    const descriptionContent = caseStudy ? caseStudy.summary : t.meta.homeDescription;
+    const descriptionContent = caseStudy
+      ? caseStudy.summary
+      : t.meta.homeDescription;
     const description =
       document.querySelector<HTMLMetaElement>('meta[name="description"]') ||
       document.head.appendChild(document.createElement("meta"));

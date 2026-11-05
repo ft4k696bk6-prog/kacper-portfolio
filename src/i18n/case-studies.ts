@@ -338,7 +338,7 @@ export const enCaseStudies: CaseStudiesContent = {
         "Add security tests for uploads and producer permissions.",
         "Further develop playback, discovery and catalog analytics."
       ],
-      "limitations": "The platform is actively developed. Actual inventory, payments and downloads depend on approved listings and current integrations. It is not presented as a finished marketplace. Artwork above is illustrative."
+      "limitations": "The platform is actively developed. Actual inventory, payments and downloads depend on approved listings and current integrations. It is not presented as a finished marketplace. Screenshots show the public live site."
     },
     {
       slug: "interactive-portfolio",
@@ -749,7 +749,7 @@ export const plCaseStudies: CaseStudiesContent = {
         "Rozwinąć pomiary formularza zainteresowania.",
         "Dodać opcjonalny checkout, gdy sprzedaż będzie uruchomiona."
       ],
-      "limitations": "To witryna produktowa, a nie kompletny sklep. Przycisk dostępności nie oznacza możliwości złożenia lub opłacenia zamówienia. Grafika powyżej jest ilustracją projektu."
+      "limitations": "To witryna produktowa, a nie kompletny sklep. Przycisk dostępności nie oznacza możliwości złożenia lub opłacenia zamówienia. Zrzuty przedstawiają publiczną wersję strony."
     },
     {
       "slug": "starcars",
@@ -818,7 +818,7 @@ export const plCaseStudies: CaseStudiesContent = {
         "Rozbudować testy kalkulatora dla nietypowych parametrów.",
         "Optymalizować wczytywanie elementów 3D na słabszych urządzeniach."
       ],
-      "limitations": "Kalkulator jest estymacją, nie ofertą ani gwarancją ceny końcowej. Stawki i podatki wymagają aktualizacji. Grafika powyżej jest ilustracją projektu."
+      "limitations": "Kalkulator jest estymacją, nie ofertą ani gwarancją ceny końcowej. Stawki i podatki wymagają aktualizacji. Zrzuty przedstawiają publiczną wersję strony."
     },
     {
       "slug": "beatmarket",
@@ -890,7 +890,7 @@ export const plCaseStudies: CaseStudiesContent = {
         "Dodać testy bezpieczeństwa uploadu oraz uprawnień producenta.",
         "Rozbudować odsłuch, wyszukiwanie i analitykę katalogu."
       ],
-      "limitations": "Platforma jest rozwijana; dostępność beatów, płatności i pobierania zależy od aktualnej konfiguracji, zatwierdzonej oferty i integracji. Nie przedstawiam jej jako ukończonego marketplace'u. Grafika powyżej jest ilustracją projektu."
+      "limitations": "Platforma jest rozwijana; dostępność beatów, płatności i pobierania zależy od aktualnej konfiguracji, zatwierdzonej oferty i integracji. Nie przedstawiam jej jako ukończonego marketplace'u. Zrzuty przedstawiają publiczną wersję strony."
     },
     {
       slug: "interactive-portfolio",

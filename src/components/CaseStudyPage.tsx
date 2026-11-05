@@ -89,10 +89,10 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
               study.images.length > 1 ? "lg:grid-cols-2" : "",
             ].join(" ")}
           >
-            {study.images.map((image) => (
+            {study.images.map((image, index) => (
               <div
                 key={image.src}
-                className="overflow-hidden rounded-md border border-white/10 bg-white/[0.035]"
+                className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.035] first:lg:col-span-2"
               >
                 <Image
                   src={image.src}
@@ -100,11 +100,11 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
                   width={1600}
                   height={900}
                   sizes={
-                    study.images && study.images.length > 1
+                    index > 0 && study.images && study.images.length > 1
                       ? "(min-width: 1024px) 44vw, 100vw"
                       : "(min-width: 1024px) 72vw, 100vw"
                   }
-                  className="aspect-[16/9] h-auto w-full object-cover"
+                  className="h-auto w-full"
                 />
               </div>
             ))}
@@ -172,7 +172,7 @@ function BackLink({ label }: { label: string }) {
     <button
       type="button"
       onClick={() => {
-        window.location.assign("/static#projects");
+        window.location.assign("/#projects");
       }}
       className="inline-flex items-center gap-2 rounded-md bg-[#d7b46a] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(215,180,106,0.22)]"
     >

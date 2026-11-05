@@ -114,7 +114,7 @@ describe("portfolio content", () => {
     expect(plInteractive?.images?.length).toBeGreaterThanOrEqual(2);
   });
 
-  it("defaults the translated content to ENG before a saved language is selected", () => {
+  it("keeps English copy available alongside the Polish offer", () => {
     expect(en.meta.homeTitle).toContain("Frontend / Web App Developer");
     expect(en.nav.interactive).toBe("Interactive portfolio");
   });

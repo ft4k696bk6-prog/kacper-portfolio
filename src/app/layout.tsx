@@ -9,17 +9,17 @@ import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { AIMascotAssistant } from "@/components/AIMascotAssistant";
 import { Geist } from "next/font/google";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const geist = Geist({ subsets: ["latin", "latin-ext"], variable: "--font-sans" });
 const siteUrl = "https://bernecki.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Kacper Bernecki — Frontend / Web App Developer",
+    default: "Strony internetowe, CRM i aplikacje webowe | Kacper Bernecki",
     template: "%s | Kacper Bernecki",
   },
   description:
-    "I build business web applications in React, TypeScript, Next.js and Supabase: CRMs, dashboards, forms and workflow tools.",
+    "Strony internetowe, landing page i CRM-y dla firm. Bezpośrednia współpraca z Kacprem Berneckim — od pomysłu i projektu po wdrożenie.",
   keywords: [
     "Kacper Bernecki",
     "Frontend Developer",
@@ -38,29 +38,29 @@ export const metadata: Metadata = {
   authors: [{ name: "Kacper Bernecki" }],
   creator: "Kacper Bernecki",
   openGraph: {
-    title: "Kacper Bernecki — Frontend / Web App Developer",
+    title: "Kacper Bernecki — strony internetowe, CRM i aplikacje webowe",
     description:
-      "Business web apps in React, TypeScript, Next.js and Supabase: CRMs, dashboards, forms and workflow tools.",
+      "Strony internetowe, landing page i CRM-y dla firm. Od pomysłu i projektu po wdrożenie — bezpośrednio z Kacprem Berneckim.",
     url: siteUrl,
     siteName: "Kacper Bernecki Portfolio",
     type: "website",
-    locale: "en_US",
-    alternateLocale: "pl_PL",
+    locale: "pl_PL",
+    alternateLocale: "en_US",
     images: [
       {
-        url: "/images/profile-3-cutout.png",
-        width: 1024,
-        height: 1280,
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
         alt: "Kacper Bernecki — Frontend / Web App Developer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kacper Bernecki — Frontend / Web App Developer",
+    title: "Kacper Bernecki — strony internetowe, CRM i aplikacje webowe",
     description:
-      "Business web apps in React, TypeScript, Next.js and Supabase: CRMs, dashboards, forms and workflow tools.",
-    images: ["/images/profile-3-cutout.png"],
+      "Strony internetowe, landing page i CRM-y dla firm. Od pomysłu i projektu po wdrożenie — bezpośrednio z Kacprem Berneckim.",
+    images: ["/opengraph-image"],
   },
   alternates: {
     canonical: siteUrl,
@@ -94,7 +94,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`scroll-smooth font-sans ${geist.variable}`}>
+    <html lang="pl" className={`scroll-smooth font-sans ${geist.variable}`}>
       <body>
         <Suspense fallback={null}>
           <GoogleAnalytics />

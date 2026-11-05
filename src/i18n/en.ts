@@ -2,10 +2,10 @@ import { enCaseStudies } from "./case-studies";
 
 export const en = {
   nav: {
-    home: "Home",
+    home: "Services",
     about: "About",
     projects: "Projects",
-    techStack: "Technologies",
+    techStack: "FAQ",
     contact: "Contact",
     cta: "Contact",
     openMenu: "Open menu",
@@ -39,11 +39,11 @@ export const en = {
   },
   about: {
     title: "About",
-    heading: "I build practical web apps for business processes, not generic portfolio demos.",
+    heading: "A real person behind your project. You’ll know me by name.",
     paragraphs: [
-      "My strongest projects are operational web apps: CRM views, lead handling, role-based access, dashboards, forms and API-backed workflows.",
-      "I combine frontend work with enough backend and database context to build useful application flows end to end: Supabase auth, PostgreSQL data, server routes, validation and deployment.",
-      "AI tools are part of my workflow for prototyping, debugging and selected product features, but the core value is still application design, implementation quality and clear technical thinking.",
+      "I’m Kacper. I design and build websites and business apps. You work directly with me from the first conversation to launch, so your idea stays clear throughout the project.",
+      "I start with practical questions: what should your visitors do, what would make your team’s work easier, and which features matter? That shapes the design, technology and scope.",
+      "I care about everyday details: mobile layouts, clear forms, helpful error messages and easy navigation. Explore my live projects and read how they were built.",
     ],
     highlights: [
       {
@@ -66,12 +66,12 @@ export const en = {
     imageAlt: "Kacper Bernecki seated professional portrait",
   },
   background: {
-    title: "Context",
-    heading: "Business workflow first, technology second.",
+    title: "Working together",
+    heading: "From an idea to a working product.",
     paragraphs: [
-      "Before writing code, I look at the process: who uses the app, what data they need, what changes status, and where the next action should be visible.",
-      "That approach is visible in B-CRM: role-aware sales and operations views, lead statuses, callbacks, meetings, comments, history and database-backed access rules.",
-      "The portfolio is organized around practical projects that can be inspected through live demos, repositories and case studies.",
+      "Conversation and plan. Tell me about your business, audience and goal. We agree on scope, priorities, budget and timing before work starts.",
+      "Design and development. I prepare the visual direction and working screens. You see progress, share feedback and know what is being built.",
+      "Testing and launch. I check mobile and desktop layouts, forms and key user journeys. We launch the solution and discuss any next steps.",
     ],
   },
   services: {
@@ -188,7 +188,7 @@ export const en = {
   },
   projects: {
     title: "Projects",
-    subtitle: "A focused set of business apps and supporting web projects. B-CRM DEMO is the main technical proof.",
+    subtitle: "See what’s already working.",
     featuresLabel: "Real features",
     techLabel: "Stack",
     demoLabel: "Live demo",
@@ -205,7 +205,7 @@ export const en = {
         problem:
           "Sales teams need one place to control lead ownership, status changes, callbacks, meetings and activity history.",
         description:
-          "Production-like CRM demo for lead management and sales workflow, built with role-based screens and Supabase-backed data.",
+          "A CRM demo that organises leads, team tasks and the journey from sales to delivery. Each role sees the information and actions needed for their work.",
         features: [
           "Login and demo accounts",
           "Roles: owner, admin, manager, sales, finance, viewer, accounting, logistics, installer",
@@ -469,9 +469,9 @@ export const en = {
     ],
   },
   contact: {
-    title: "Talk about a web app, CRM or frontend role",
+    title: "What would you like to build?",
     description:
-      "Find an available slot or reveal email and phone after a quick human check.",
+      "Tell me about your business and what you need. Share any inspiration, timing or budget you have in mind. We’ll work out a sensible scope and quote. You can also book a conversation below.",
     calendarTitle: "Calendar",
     calendarDescription:
       "Choose a meeting time in the calendar.",
@@ -513,7 +513,7 @@ export const en = {
   consent: {
     title: "Cookie settings",
     description:
-      "I use small site settings to remember your language choice and keep the portfolio working smoothly. Optional visit measurement runs only after you accept.",
+      "This site remembers your preferences. Optional visit measurement starts only with your consent.",
     accept: "Accept cookies",
     reject: "Reject optional cookies",
     settings: "Cookie settings",
