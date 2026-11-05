@@ -1,16 +1,40 @@
-# Kacper Bernecki Portfolio
+# Kacper Bernecki — Websites, CRM and Web Apps
 
-Professional portfolio for a Frontend / Web App Developer focused on business web applications: CRMs, dashboards, forms, admin panels, workflow tools and API integrations.
+Portfolio and project evidence for Kacper Bernecki, an independent Polish frontend and web application developer. I work directly with small businesses and founders on websites, landing pages, CRM systems, dashboards, forms, workflow tools and API integrations.
 
-PL: Portfolio prezentuje projekty web app bez pozycjonowania jako osoba poczatkujaca, z B-CRM jako glownym projektem technicznym.
+I am not a large agency: clients speak directly with the person designing and building the solution. The focus is clear communication, careful implementation, useful technology and a fair scope instead of unnecessary corporate process.
 
-## Live demo
+PL: Tworzę strony internetowe, landing page, CRM-y i aplikacje webowe dla małych firm. Pracuję bezpośrednio z klientem, bez korporacyjnego narzutu, z naciskiem na skrupulatność, dobry kontakt i uczciwą wycenę.
 
-https://kacper-portfolio.vercel.app
+## Services
 
-## Screenshots
+- Business websites, product websites and landing pages.
+- Campaign pages and conversion flows for marketing and advertising.
+- CRM and lead-management systems.
+- Dashboards, admin panels, forms, calculators and internal tools.
+- Role-based access, Supabase, PostgreSQL and API integrations.
+- Vercel deployment and practical iteration after launch.
 
-Screenshots should be added to `docs/screenshots/`. Placeholder image links are not included.
+## Live portfolio
+
+https://bernecki.dev
+
+Service pages:
+
+- [Website development](https://bernecki.dev/tworzenie-stron-internetowych)
+- [CRM and web applications](https://bernecki.dev/crm-i-aplikacje-webowe)
+- [Marketing and advertising landing pages](https://bernecki.dev/marketing-i-reklamy)
+
+Machine-readable project and positioning summary: [bernecki.dev/llms.txt](https://bernecki.dev/llms.txt)
+
+## Selected projects
+
+- [B-CRM](https://demo-crm.bernecki.dev/login) — production-like CRM demo with role-aware sales and operations workflows.
+- [Motomizer](https://motomizer.pl) — product landing page with responsive presentation and variant galleries.
+- [StarCars Import](https://star-cars.us) — business website with an import-cost estimator and enquiry flow.
+- [BeatMarket](https://beatmarket.bernecki.dev) — beat discovery and licensing marketplace in active development.
+
+Case studies are available at https://bernecki.dev/case-studies.
 
 ## Features
 
@@ -22,7 +46,7 @@ Screenshots should be added to `docs/screenshots/`. Placeholder image links are 
 - Turnstile fallback, honeypot and rate-limit protection for contact reveal.
 - Custom booking calendar that talks to Cal.com through server routes.
 - Conversational AI assistant with text input, optional speech input, retry/error states and portfolio-focused fallback replies.
-- Fixed bottom-right chat bubble for the assistant, without 3D model loading.
+- Fixed bottom-right AI assistant with a quiet opt-in UI, without 3D model loading.
 - Optional Google Tag Manager integration via environment variable.
 - SEO, OpenGraph, Twitter card, sitemap and robots metadata.
 
@@ -105,12 +129,19 @@ The contact reveal flow avoids rendering direct email and phone details in the i
 
 ## Roadmap
 
-- Add real screenshots for every project.
+- Add real screenshots for the remaining projects.
 - Add browser smoke tests for portfolio navigation, booking and contact reveal states.
 - Add a richer B-CRM architecture diagram.
 - Add analytics events through GTM after the container ID is configured.
 - Add GTM events for booking day/time selection after the container ID is configured.
 - Review Core Web Vitals after deployment.
+
+## Contact
+
+For a website, CRM, web app or campaign landing page, contact Kacper through https://bernecki.dev/#contact.
+
+- GitHub: https://github.com/ft4k696bk6-prog
+- LinkedIn: https://www.linkedin.com/in/kacper-bernecki/
 
 ## Status
 
