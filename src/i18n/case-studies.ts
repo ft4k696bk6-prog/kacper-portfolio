@@ -142,8 +142,16 @@ export const enCaseStudies: CaseStudiesContent = {
       "liveLabel": "Visit website",
       "images": [
         {
-          "src": "/images/projects/motomizer-live.jpg",
-          "alt": "Screenshot of the live Motomizer product landing page"
+          "src": "/images/projects/motomizer-live-1.jpg",
+          "alt": "Motomizer live website hero section"
+        },
+        {
+          "src": "/images/projects/motomizer-live-2.jpg",
+          "alt": "Motomizer live website features section"
+        },
+        {
+          "src": "/images/projects/motomizer-live-3.jpg",
+          "alt": "Motomizer live website product variant section"
         }
       ],
       "problem": "A product combining fragrance, lighting, sound and car-inspired design cannot be explained well by specifications alone. Visitors need multiple views and clear differences between variants.",
@@ -201,8 +209,16 @@ export const enCaseStudies: CaseStudiesContent = {
       "liveLabel": "Visit website",
       "images": [
         {
-          "src": "/images/projects/starcars-live.jpg",
-          "alt": "Screenshot of the live StarCars import service website"
+          "src": "/images/projects/starcars-live-1.jpg",
+          "alt": "StarCars live website hero section"
+        },
+        {
+          "src": "/images/projects/starcars-live-2.jpg",
+          "alt": "StarCars live website import cost calculator"
+        },
+        {
+          "src": "/images/projects/starcars-live-3.jpg",
+          "alt": "StarCars live website process section"
         }
       ],
       "problem": "The auction price alone does not show the cost of an imported vehicle. Customers need visibility into fees, inland and ocean transport, customs, tax, excise and delivery.",
@@ -262,8 +278,16 @@ export const enCaseStudies: CaseStudiesContent = {
       "liveLabel": "Open BeatMarket",
       "images": [
         {
-          "src": "/images/projects/beatmarket-live.jpg",
-          "alt": "Screenshot of the live BeatMarket beat discovery page"
+          "src": "/images/projects/beatmarket-live-1.jpg",
+          "alt": "BeatMarket live website hero and producer profiles"
+        },
+        {
+          "src": "/images/projects/beatmarket-live-2.jpg",
+          "alt": "BeatMarket live website genre discovery section"
+        },
+        {
+          "src": "/images/projects/beatmarket-live-3.jpg",
+          "alt": "BeatMarket live website beat discovery section"
         }
       ],
       "problem": "Beat discovery, licensing details and producer contact are often scattered. Artists need one place to find tracks, listen to previews and understand rights.",
@@ -670,8 +694,16 @@ export const plCaseStudies: CaseStudiesContent = {
       "liveLabel": "Zobacz witrynę",
       "images": [
         {
-          "src": "/images/projects/motomizer-showcase.svg",
-          "alt": "Ilustracja koncepcji strony Motomizer — podgląd graficzny, nie zrzut ekranu"
+          "src": "/images/projects/motomizer-live-1.jpg",
+          "alt": "Sekcja hero działającej strony Motomizer"
+        },
+        {
+          "src": "/images/projects/motomizer-live-2.jpg",
+          "alt": "Sekcja funkcji działającej strony Motomizer"
+        },
+        {
+          "src": "/images/projects/motomizer-live-3.jpg",
+          "alt": "Sekcja wariantów produktu na stronie Motomizer"
         }
       ],
       "problem": "Opis techniczny nie wystarczy, by pokazać produkt łączący zapach, efekty świetlne i formę samochodu. Użytkownik powinien móc obejrzeć go z różnych perspektyw i sprawdzić warianty bez szukania informacji.",
@@ -729,8 +761,16 @@ export const plCaseStudies: CaseStudiesContent = {
       "liveLabel": "Zobacz witrynę",
       "images": [
         {
-          "src": "/images/projects/starcars-showcase.svg",
-          "alt": "Ilustracja projektu StarCars — grafika poglądowa kalkulatora, nie zrzut ekranu"
+          "src": "/images/projects/starcars-live-1.jpg",
+          "alt": "Sekcja hero działającej strony StarCars"
+        },
+        {
+          "src": "/images/projects/starcars-live-2.jpg",
+          "alt": "Kalkulator kosztu importu na stronie StarCars"
+        },
+        {
+          "src": "/images/projects/starcars-live-3.jpg",
+          "alt": "Sekcja procesu działającej strony StarCars"
         }
       ],
       "problem": "Klient patrząc na ofertę aukcyjną nie zna pełnego budżetu: prowizji, transportu, frachtu, opłat celnych, podatków, akcyzy i dostawy. Potrzebuje też informacji, na jakim etapie firma pomaga.",
@@ -790,8 +830,16 @@ export const plCaseStudies: CaseStudiesContent = {
       "liveLabel": "Otwórz BeatMarket",
       "images": [
         {
-          "src": "/images/projects/beatmarket-showcase.svg",
-          "alt": "Ilustracja projektu BeatMarket — poglądowy interfejs katalogu muzycznego"
+          "src": "/images/projects/beatmarket-live-1.jpg",
+          "alt": "Hero i profile producentów na działającym BeatMarket"
+        },
+        {
+          "src": "/images/projects/beatmarket-live-2.jpg",
+          "alt": "Sekcja odkrywania gatunków na działającym BeatMarket"
+        },
+        {
+          "src": "/images/projects/beatmarket-live-3.jpg",
+          "alt": "Sekcja odkrywania beatów na działającym BeatMarket"
         }
       ],
       "problem": "Dostępne beaty, informacje o licencjach i kontakt z producentem bywają rozproszone. Artyści potrzebują wyszukiwarki, odsłuchu i jasnego sposobu nabycia praw do wykorzystania utworu.",
