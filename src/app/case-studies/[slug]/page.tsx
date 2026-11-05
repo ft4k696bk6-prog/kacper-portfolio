@@ -55,7 +55,21 @@ export default async function Page({ params }: CaseStudyRouteProps) {
   }
 
   const study = pl.caseStudies.items.find((item) => item.slug === slug)!;
+  const workSchema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "@id": `https://bernecki.dev/case-studies/${slug}#project`,
+    name: study.title,
+    description: study.summary,
+    url: `https://bernecki.dev/case-studies/${slug}`,
+    inLanguage: "pl-PL",
+    author: { "@id": "https://bernecki.dev/#person" },
+    ...(study.liveUrl ? { exampleOfWork: { "@type": "WebSite", url: study.liveUrl } } : {}),
+    ...(study.images?.length ? { image: study.images.map(img => `https://bernecki.dev${img.src}`) } : {}),
+    keywords: study.stack.join(", "),
+  };
   return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(workSchema).replace(/</g, "\\u003c") }} />
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",

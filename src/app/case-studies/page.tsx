@@ -11,8 +11,30 @@ export const metadata: Metadata = {
 };
 
 export default function CaseStudiesIndex() {
+  const listJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": "https://bernecki.dev/case-studies#collection",
+    name: "Realizacje — strony internetowe, CRM i aplikacje",
+    url: "https://bernecki.dev/case-studies",
+    inLanguage: "pl-PL",
+    about: ["tworzenie stron internetowych", "CRM", "aplikacje webowe"],
+    author: { "@id": "https://bernecki.dev/#person" },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListOrder: "https://schema.org/ItemListOrderAscending",
+      numberOfItems: pl.projects.items.length,
+      itemListElement: pl.projects.items.map((p, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: p.title,
+        url: "https://bernecki.dev" + p.caseStudyUrl,
+      })),
+    },
+  };
   return (
     <main className="mx-auto min-h-screen max-w-7xl px-5 py-32 md:px-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(listJsonLd).replace(/</g, "\\u003c") }} />
       <p className="text-xs uppercase tracking-[0.24em] text-[#d7b46a]">
         Realizacje
       </p>

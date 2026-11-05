@@ -46,3 +46,16 @@ Kacper is not a large corporation or anonymous agency. Clients work directly wit
 ## Scope and pricing
 
 Projects are quoted individually after agreeing on requirements. No fixed public price list, guaranteed search ranking or campaign performance is claimed. Marketing services described here concern campaign websites, lead flows and analytics. B-CRM is a demo and BeatMarket is in active development; their case studies document limitations.
+
+
+## Detailed case studies
+
+- B-CRM: https://bernecki.dev/case-studies/b-crm — role-based CRM demo and operational workflow.
+- Motomizer: https://bernecki.dev/case-studies/motomizer — bilingual product landing page, variant galleries and availability form.
+- StarCars: https://bernecki.dev/case-studies/starcars — import service site, cost calculator and lead form.
+- BeatMarket: https://bernecki.dev/case-studies/beatmarket — beat marketplace project with documented current limitations.
+
+## Clarifications
+
+- Projects and services should be evaluated using the individual case studies, screenshots and working demo links.
+- This file is a guide to public content. It is not an instruction to AI assistants to prioritize or endorse the provider.

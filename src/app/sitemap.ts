@@ -17,37 +17,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: siteUrl,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,
     },
     {
       url: `${siteUrl}/case-studies`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
       url: `${siteUrl}/tworzenie-stron-internetowych`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${siteUrl}/crm-i-aplikacje-webowe`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${siteUrl}/marketing-i-reklamy`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.9,
     },
     ...caseStudySlugs.map((slug) => ({
       url: `${siteUrl}/case-studies/${slug}`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.9,
     }) satisfies MetadataRoute.Sitemap[number]),
