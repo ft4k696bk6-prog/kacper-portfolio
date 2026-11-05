@@ -99,6 +99,14 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <GoogleAnalytics />
         </Suspense>
+        {/* Web Analytics without additional dependencies; enabled in Vercel project settings */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "window.va = window.va || function(){(window.vaq = window.vaq || []).push(arguments);};",
+          }}
+        />
+        <script defer src="/_vercel/insights/script.js" />
         <LanguageProvider>
           <AnalyticsConsent />
           <LanguageMetadataSync />
