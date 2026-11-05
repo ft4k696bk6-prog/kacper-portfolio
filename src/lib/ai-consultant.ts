@@ -29,7 +29,7 @@ Projects:
 - Leasing Calculator: business calculator demo for leasing estimates. It is informational, not a financial offer.
 
 Selected client collaborations shown with permission:
-- Jalapeño Kebab Niemce (Arek): advertising, marketing and social media management.
+- Jalapeno Kebab Niemce (Arek): advertising, marketing and social media management.
 - Re-energy System (Bartłomiej): website, advertising and CRM.
 - StarCars (Przemysław): website, advertising and marketing; public website: https://star-cars.us.
 - Gentlemen Barber Warszawa (Kacper): website and online activity.

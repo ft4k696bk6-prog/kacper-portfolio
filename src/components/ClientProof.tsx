@@ -4,7 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 const collaborations = [
   {
-    name: "Jalapeño Kebab Niemce",
+    name: "Jalapeno Kebab Niemce",
     person: "Arek",
     pl: "Reklamy, marketing i prowadzenie social mediów.",
     en: "Advertising, marketing and social media management.",
