@@ -11,20 +11,47 @@ import { TechnicalAudience } from "@/components/TechnicalAudience";
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Kacper Bernecki",
-  jobTitle: "Frontend / Web App Developer",
-  description:
-    "I build business web applications in React, TypeScript, Next.js and Supabase: CRMs, dashboards, forms and workflow tools.",
-  address: {
-    "@type": "PostalAddress",
-    addressCountry: "PL",
-  },
-  sameAs: [
-    "https://github.com/ft4k696bk6-prog",
-    "https://www.linkedin.com/in/kacper-bernecki/",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://bernecki.dev/#person",
+      name: "Kacper Bernecki",
+      jobTitle: "Frontend / Web App Developer",
+      description:
+        "Independent Polish developer building websites, CRM systems and practical business web apps.",
+      address: { "@type": "PostalAddress", addressCountry: "PL" },
+      sameAs: [
+        "https://github.com/ft4k696bk6-prog",
+        "https://www.linkedin.com/in/kacper-bernecki/",
+      ],
+      image: "https://bernecki.dev/images/profile-3-cutout.png",
+      knowsAbout: [
+        "Website development",
+        "CRM systems",
+        "Business web applications",
+        "React",
+        "TypeScript",
+        "Next.js",
+        "Supabase",
+        "PostgreSQL",
+        "Digital marketing websites",
+      ],
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://bernecki.dev/#service",
+      name: "Kacper Bernecki — strony internetowe, CRM i web app",
+      url: "https://bernecki.dev/",
+      provider: { "@id": "https://bernecki.dev/#person" },
+      areaServed: "PL",
+      serviceType: [
+        "Website development",
+        "CRM development",
+        "Business web application development",
+        "Landing page development",
+      ],
+    },
   ],
-  image: "/images/profile-3-cutout.png",
 };
 
 export function StaticPortfolio() {
