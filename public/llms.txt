@@ -12,6 +12,7 @@ Kacper Bernecki is an independent Polish frontend and web application developer.
 ## Services
 
 - Business websites and landing pages
+- Campaign landing pages, conversion flows and basic analytics
 - Product and service websites
 - CRM and lead-management applications
 - Dashboards and admin panels

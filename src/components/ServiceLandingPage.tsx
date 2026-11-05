@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Check, Code2, MessageCircle, ShieldCheck, Sparkles } from "lucide-react";
 
 type ServiceLandingPageProps = {
-  kind: "websites" | "apps";
+  kind: "websites" | "apps" | "marketing";
 };
 
 const content = {
@@ -43,6 +43,25 @@ const content = {
     serviceName: "Tworzenie CRM i aplikacji webowych",
     serviceDescription:
       "Projektowanie i budowa CRM-ów, dashboardów, paneli administracyjnych i aplikacji webowych dla procesów biznesowych.",
+  },
+  marketing: {
+    title: "Landing page i strony pod reklamy — Kacper Bernecki",
+    eyebrow: "Marketing, landing page i konwersja",
+    heading: "Reklama ma prowadzić do działania, nie tylko do ładnej strony.",
+    intro:
+      "Buduję strony kampanii i landing page, które porządkują przekaz, prowadzą użytkownika do konkretnej akcji i pozwalają mierzyć, co dzieje się po kliknięciu reklamy.",
+    bullets: [
+      "landing page pod Google Ads, Meta Ads i kampanie lokalne",
+      "strony ofertowe z jasnym CTA i formularzem",
+      "formularze leadowe, newslettery i przekazywanie zapytań",
+      "analityka, zdarzenia i podstawowe śledzenie konwersji",
+      "szybkie poprawki i iteracje na podstawie danych",
+    ],
+    proof: "Zobacz projekty stron produktowych i usługowych.",
+    proofHref: "/#projects",
+    serviceName: "Landing page i strony internetowe pod marketing",
+    serviceDescription:
+      "Budowa landing page, stron kampanii i przepływów leadowych wspierających marketing i reklamy.",
   },
 } as const;
 
