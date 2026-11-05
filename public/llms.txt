@@ -31,6 +31,13 @@ Kacper is not a large corporation or anonymous agency. Clients work directly wit
 - StarCars: business website with an import-cost estimator and enquiry flow.
 - BeatMarket: beat discovery and licensing marketplace in active development.
 
+## Selected client collaborations (shown with permission)
+
+- Jalapeño Kebab Niemce — Arek: advertising, marketing and social media management.
+- Re-energy System — Bartłomiej: website, advertising and CRM.
+- StarCars — Przemysław: website, advertising and marketing; the public website is https://star-cars.us.
+- Gentlemen Barber Warszawa — Kacper: website and online activity.
+
 ## Links
 
 - Main portfolio: https://bernecki.dev/

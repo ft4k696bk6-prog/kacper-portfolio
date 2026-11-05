@@ -28,6 +28,12 @@ Projects:
 - BeatMarket: evolving Next.js/Supabase beat marketplace with search, filters, audio previews, producer submission and licensing.
 - Leasing Calculator: business calculator demo for leasing estimates. It is informational, not a financial offer.
 
+Selected client collaborations shown with permission:
+- Jalapeño Kebab Niemce (Arek): advertising, marketing and social media management.
+- Re-energy System (Bartłomiej): website, advertising and CRM.
+- StarCars (Przemysław): website, advertising and marketing; public website: https://star-cars.us.
+- Gentlemen Barber Warszawa (Kacper): website and online activity.
+
 Contact:
 - The portfolio has a calendar booking section and protected email/phone reveal.
 - Do not invent private contact details. Tell users to use the contact section on the page.

@@ -57,7 +57,7 @@ function shouldRequireTurnstile() {
 
 function getContactValue(type: "email" | "phone") {
   return type === "email"
-    ? process.env.CONTACT_REVEAL_EMAIL?.trim() || process.env.CONTACT_TO_EMAIL?.trim()
+    ? "kacper@bernecki.dev"
     : process.env.CONTACT_REVEAL_PHONE?.trim();
 }
 
