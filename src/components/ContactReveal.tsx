@@ -4,7 +4,7 @@ import { DustReveal } from "@/components/DustReveal";
 import { useState } from "react";
 import type { ReactNode } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
-import { Eye, Loader2, Mail, Phone } from "lucide-react";
+import { Loader2, Mail, Phone } from "lucide-react";
 
 type RevealTarget = "email" | "phone";
 
@@ -83,7 +83,7 @@ export function ContactReveal({ copy }: ContactRevealProps) {
     <div className="contact-reveal-pair">
       <div className="contact-reveal-grid">
         <RevealButton
-          icon={<Phone className="h-4 w-4" />}
+          icon={<Phone aria-hidden="true" />}
           label={copy.phoneLabel}
           buttonLabel={copy.phoneButton}
           value={revealed.phone}
@@ -92,7 +92,7 @@ export function ContactReveal({ copy }: ContactRevealProps) {
           onClick={() => requestReveal("phone")}
         />
         <RevealButton
-          icon={<Mail className="h-4 w-4" />}
+          icon={<Mail aria-hidden="true" />}
           label={copy.emailLabel}
           buttonLabel={copy.emailButton}
           value={revealed.email}
@@ -160,10 +160,11 @@ function RevealButton({
           type="button"
           onClick={onClick}
           disabled={loading}
-          className="contact-reveal-button glass-action"
+          className="contact-reveal-button contact-icon-trigger"
+          aria-label={buttonLabel}
         >
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
-          {buttonLabel}
+          {loading ? <Loader2 className="animate-spin" aria-hidden="true" /> : icon}
+          <span className="sr-only">{buttonLabel}</span>
         </button>
       )}
     </div>

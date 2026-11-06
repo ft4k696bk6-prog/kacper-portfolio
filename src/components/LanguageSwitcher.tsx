@@ -19,9 +19,9 @@ export function LanguageSwitcher() {
   const { lang, setLang, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const [dark, setDark] = useState(pathname !== "/");
+  const [dark, setDark] = useState(true);
   useEffect(() => {
-    const update = () => { const hero = document.getElementById("home"); setDark(!hero || scrollY > hero.offsetHeight * .52); };
+    const update = () => { const hero = document.getElementById("home"); setDark(!hero || hero.classList.contains("hero-night") || scrollY > hero.offsetHeight * .52); };
     window.addEventListener("scroll", update, { passive: true }); update();
     return () => window.removeEventListener("scroll", update);
   }, [pathname]);

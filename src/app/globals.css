@@ -349,3 +349,65 @@
 .contact-reveal-button{border:1px solid #d4af6a70;border-radius:8px;background:#080808d9!important}
 .contact-revealed-value{font-size:clamp(11px,2.7vw,16px)}
 @media(max-width:767px){.hero-depth:before{height:660px}.client-loop .client-wordmark{width:210px;flex-basis:210px}.contact-hand-actions{left:-2%;right:-2%;top:30%}.contact-reveal-grid{gap:24%}}
+
+/* Single dark portrait composition; the original photograph is untouched. */
+.portfolio-content>.hero-night{background:#080808;color:#fff;height:110svh;min-height:920px;max-height:1150px}
+.hero-night:before{display:none}
+.hero-night .hero-depth-stage{height:900px}
+.hero-night .hero-depth-title{color:#ffffffe0;z-index:1}
+.hero-night .hero-depth-portrait{top:90px;width:620px;height:775px;mask-image:linear-gradient(#000 0%,#000 55%,#000b 70%,transparent 97%)}
+/* One native horizontal shelf. Active artwork expands with the card. */
+.image-books{height:490px;display:flex;flex-wrap:nowrap;gap:12px;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:#d4af6a66 #080808;padding-bottom:14px;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scroll-padding-inline:8px}
+.image-books .project-book{flex:0 0 70px;min-width:70px;transition:flex-basis .55s cubic-bezier(.22,1,.36,1),border-color .25s}
+.image-books .project-book[data-active="true"]{flex:0 0 min(620px,70vw);min-width:0}
+.image-books .project-book-image,.image-books .project-book[data-active="true"] .project-book-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;background:none;opacity:1;filter:none}
+.image-books .project-book:after{background:linear-gradient(transparent 40%,#08080844 65%,#080808ee 100%)}
+.book-identity{position:absolute;z-index:3;top:50%;left:0;width:100%;padding:10px 14px;display:flex;align-items:center;gap:12px;pointer-events:none;transform:translateY(-50%);transition:top .55s,transform .55s,background .4s}
+.book-identity-mark{display:flex;justify-content:center;align-items:center;flex-shrink:0}
+.book-identity-title{font-size:20px;font-weight:600;line-height:1.2}
+.project-book:not([data-active="true"]) .book-identity{left:50%;width:250px;justify-content:center;transform:translate(-50%,-50%) rotate(90deg);padding:0}
+.project-book:not([data-active="true"]) .book-identity-title{font-size:13px;white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis}
+.project-book:not([data-active="true"]) .book-identity-mark{display:none}
+.project-book[data-active="true"] .book-identity{top:0;transform:translateY(0);background:linear-gradient(#080808e6,#08080888,transparent);padding:20px}
+.book-expand-symbol{position:absolute;right:14px;bottom:14px;display:grid;place-items:center;width:28px;height:28px;background:#08080899;border-radius:50%;color:#fff}
+.book-expand-symbol svg{transition:transform .4s}
+.project-book[data-active="true"] .book-expand-symbol svg{transform:rotate(45deg)}
+.image-books .project-book-content{padding:18px;bottom:0}
+.image-books .project-book-content p{font-size:14px;-webkit-line-clamp:2}
+.image-books .project-book-links{margin-top:12px}
+.contact-icon-trigger{border:0!important;background:none!important;box-shadow:none!important;border-radius:50%;width:76px;height:76px;margin-inline:auto;padding:14px;color:var(--brand-gold);transition:transform .25s,color .25s}
+.contact-reveal-button.contact-icon-trigger svg{width:44px;height:44px;stroke-width:1.25}
+.contact-icon-trigger:hover{transform:translateY(-3px);color:#fff}
+.contact-icon-trigger:focus-visible{outline:2px solid var(--brand-gold);outline-offset:4px}
+.contact-revealed-value{font-size:clamp(16px,3.8vw,23px);font-weight:500;height:76px}
+.contact-reveal-card{height:90px}
+.contact-hand-actions{top:27%}
+.contact-reveal-grid{gap:30px}
+@media(max-width:767px){
+ .hero-night .hero-depth-portrait{top:175px;width:410px;height:513px}
+ .hero-night .hero-depth-stage{height:760px}
+ .portfolio-content>.hero-night{height:105svh;min-height:820px;max-height:1000px}
+ .image-books{height:440px;gap:8px}
+ .image-books .project-book{flex-basis:45px;min-width:45px}
+ .image-books .project-book[data-active="true"]{flex-basis:calc(100vw - 88px);min-width:0}
+ .image-books .project-book-content p{font-size:13px}
+ .project-book[data-active="true"] .book-identity{padding:14px;gap:8px}
+ .book-identity-title{font-size:17px}
+ .book-identity .book-brand-logo{width:100px}
+ .book-identity .book-brand-logo img{width:100px}
+ .book-identity .book-wordmark{font-size:11px}
+ .contact-hand-actions{top:27%;left:-3%;right:-3%}
+ .contact-revealed-value{font-size:clamp(15px,3.9vw,18px)}
+}
+@media(prefers-reduced-motion:reduce){.book-identity,.book-expand-symbol svg,.contact-icon-trigger{transition:none}}
+.book-controls{display:flex;justify-content:flex-end;gap:8px;margin-top:-8px}
+.book-controls button{display:grid;place-items:center;width:40px;height:40px;border:1px solid #d4af6a66;border-radius:50%;color:var(--brand-gold)}
+.book-controls button:hover{background:#d4af6a15}
+.image-books{cursor:grab;user-select:none}
+.image-books:active{cursor:grabbing}
+.book-expand-symbol svg{transform:rotate(45deg)}
+.project-book[data-active="true"] .book-expand-symbol svg{transform:rotate(0)}
+.book-expand-symbol svg path:nth-child(2){transform-origin:center;transition:opacity .3s,transform .4s}
+.project-book[data-active="true"] .book-expand-symbol svg path:nth-child(2){opacity:0;transform:scaleY(0)}
+.project-book[data-active="true"] .book-identity-title.brand-only{display:none}
+.image-books .project-book:after{background:linear-gradient(180deg,transparent 0%,#08080811 38%,#080808e6 72%,#080808 100%)}
