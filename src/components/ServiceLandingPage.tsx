@@ -198,7 +198,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           <div className="rounded-2xl border border-white/20 bg-white/[0.035] p-6 md:p-10">
             <p className="text-xs uppercase tracking-[0.2em] text-white/65">Z praktyki · Re-Energy System</p>
             <h2 className="mt-4 max-w-3xl text-3xl text-white md:text-4xl">Kampanie, które przez około 2 lata są źródłem zapytań dla firmy OZE.</h2>
-            <p className="mt-5 max-w-3xl leading-8 text-white/75">Według danych przekazanych przez właściciela Re-Energy System, firma wydała łącznie około 90 tys. zł na reklamy i osiągnęła w tym okresie wielomilionowy obrót. Kampanie były jej jedynym źródłem leadów. Obrót firmy nie jest równoznaczny z przychodem przypisanym do reklam ani wskaźnikiem ROAS.</p>
+            <p className="mt-5 max-w-3xl leading-8 text-white/75">Z udostępnionych zrzutów Meta Ads wynika 2 331 kontaktów przy średnim koszcie około 29,79 zł w 17 wybranych kampaniach. Właściciel deklaruje około 90 tys. zł wydatków reklamowych w całym okresie i wielomilionowy obrót firmy. Nie są to statystyki zamkniętych sprzedaży ani ROAS.</p>
             <div className="mt-6 flex flex-wrap gap-4">
               <Link href="/case-studies/re-energy-meta-ads" className="inline-flex items-center gap-2 rounded-lg border border-white/40 px-5 py-3 text-white">Zobacz pełne case study <ArrowRight className="h-4 w-4" /></Link>
               <Link href="/reklamy-meta-ads-dla-firm" className="inline-flex items-center gap-2 px-5 py-3 text-white/80">Jak prowadzę kampanie Meta Ads <ArrowRight className="h-4 w-4" /></Link>
@@ -298,6 +298,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
         {guides.filter(g => g.service === `/${slug}`).map(g => <Link key={g.slug} href={`/poradniki/${g.slug}`} className="glass-action mt-6 block rounded-xl border border-white/30 p-6">
           <h3 className="text-xl text-white">{g.title} →</h3><p className="mt-3 leading-7 text-white/70">{g.description}</p>
         </Link>)}
+        {kind === "marketing" && <div className="mt-6 flex flex-wrap gap-3 text-sm"><Link href="/poradniki/ile-kosztuje-lead-z-facebook-ads" className="underline underline-offset-4">Koszt leada i CPL →</Link><Link href="/poradniki/facebook-lead-ads-integracja-z-crm" className="underline underline-offset-4">Leady Meta i CRM →</Link><Link href="/poradniki/reklamy-oze-magazyny-energii" className="underline underline-offset-4">Marketing OZE →</Link></div>}
         <p className="mt-6 leading-7 text-white/70">{kind === "marketing" ? "Budżet reklamowy i koszt obsługi ustalamy osobno. Przed startem uzgadniamy ofertę, kanały, materiały i sposób oceny zapytań." : "Do rozmowy przygotuj cel projektu, najważniejsze funkcje, dostępne materiały i oczekiwany termin. Zakres i wycenę ustalamy przed rozpoczęciem prac."}</p>
       </section>
       <section className="mx-auto max-w-4xl px-5 py-16 md:px-8 md:py-24">
