@@ -4,6 +4,10 @@ Pasek współprac wykorzystuje nazwy klientów wskazane przez właściciela port
 
 - Majka Szado Walter, Kancelaria Prawna M.S.W., Rzeszów: https://rzeszow-adwokat.pl/ — logotyp pobrany z https://rzeszow-adwokat.pl/wp-content/uploads/2025/06/MSW-logotyp-V2.svg
 - Re-energy System: https://re-energysystem.pl/ — logo pobrane z https://re-energysystem.pl/wp-content/uploads/2025/01/re-energy-system.png
-- Pozostałe firmy prezentowane są typograficznie, bez tworzenia zastępczych znaków udających ich oficjalne logo.
+- StarCars: https://www.star-cars.us/ — oryginalny SVG z elementu `header .brand-link svg`.
+- Gentlemen Barber Shop: https://www.gentlemenbarber.pl/ — https://www.gentlemenbarber.pl/wp-content/uploads/2025/01/gentlemen-barber-shop-logo.webp. Współpraca wskazana przez właściciela dotyczy Warszawy, nie całej sieci.
+- Jalapeno Kebab, Niemce: wizytówka restauracji https://wciagnij.to/restauracja/pl/niemce/jalapenodoner — https://system.abspos.pl/media/files/c/8d0fd2f8-f624-434d-8d8a-4f23bc18140c.jpg.
+
+Na pasku zastosowano monochromatyczną prezentację CSS; oryginalne kolory plików zachowano.
 
 Grafiki przechowywane lokalnie, bez zależności od dostępności serwerów klientów. Sprawdzone 2026-11-06.

@@ -653,7 +653,7 @@ export function AIMascotAssistant() {
           <motion.button
             type="button"
             onClick={restoreMascot}
-            className={`fixed z-[75] inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#090909]/90 px-4 py-3 text-sm text-[#e1f4c9] shadow-[0_18px_55px_rgba(0,0,0,0.42)] backdrop-blur-xl transition hover:border-[#c2f970]/45 ${restorePositionClass}`}
+            className={`fixed z-[75] inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#090909]/90 px-4 py-3 text-sm text-[#e4e4e7] shadow-[0_18px_55px_rgba(0,0,0,0.42)] backdrop-blur-xl transition hover:border-[#f4f4f5]/45 ${restorePositionClass}`}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 16 }}
@@ -705,7 +705,7 @@ export function AIMascotAssistant() {
                       <div className="min-w-0">
                         <p className="truncate text-sm font-medium text-white">{t.aiMascot.chatTitle}</p>
                         <p className="mt-0.5 text-xs text-zinc-400">{assistantStatusLabel}</p>
-                        <p className="mt-1 text-[0.66rem] uppercase tracking-[0.18em] text-[#c2f970]/80">
+                        <p className="mt-1 text-[0.66rem] uppercase tracking-[0.18em] text-[#f4f4f5]/80">
                           {t.aiMascot.personaLabel}
                         </p>
                       </div>
@@ -714,7 +714,7 @@ export function AIMascotAssistant() {
                           type="button"
                           onClick={hideMascot}
                           aria-label={t.aiMascot.hideLabel}
-                          className="grid h-8 w-8 place-items-center rounded-full text-zinc-400 transition hover:bg-white/[0.08] hover:text-[#e1f4c9]"
+                          className="grid h-8 w-8 place-items-center rounded-full text-zinc-400 transition hover:bg-white/[0.08] hover:text-[#e4e4e7]"
                         >
                           <Eye className="h-4 w-4" />
                         </button>
@@ -739,7 +739,7 @@ export function AIMascotAssistant() {
                           key={message.id}
                           className={`max-w-[92%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-sm leading-6 ${
                             message.role === "user"
-                              ? "ml-auto rounded-br-md bg-[#c2f970] text-black shadow-[0_10px_28px_rgba(194, 249, 112,0.16)]"
+                              ? "ml-auto rounded-br-md bg-[#f4f4f5] text-black shadow-[0_10px_28px_rgba(244,244,245,0.16)]"
                               : "rounded-bl-md border border-white/[0.08] bg-white/[0.045] text-zinc-100"
                           }`}
                         >
@@ -752,7 +752,7 @@ export function AIMascotAssistant() {
                           role="status"
                           className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.055] px-4 py-3 text-sm text-zinc-300"
                         >
-                          <Loader2 className="h-4 w-4 animate-spin text-[#c2f970]" />
+                          <Loader2 className="h-4 w-4 animate-spin text-[#f4f4f5]" />
                           {t.aiMascot.thinkingLabel}
                         </div>
                       ) : null}
@@ -787,7 +787,7 @@ export function AIMascotAssistant() {
                             key={action.key}
                             type="button"
                             onClick={() => handleQuickAction(action.key)}
-                            className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-zinc-200 transition hover:border-[#c2f970]/45 hover:text-[#e1f4c9]"
+                            className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-zinc-200 transition hover:border-[#f4f4f5]/45 hover:text-[#e4e4e7]"
                           >
                             {action.label}
                           </button>
@@ -842,7 +842,7 @@ export function AIMascotAssistant() {
                             type="submit"
                             disabled={loading || !input.trim()}
                             aria-label={t.aiMascot.sendLabel}
-                            className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#c2f970] text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
+                            className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#f4f4f5] text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
                           >
                             <Send className="h-4 w-4" />
                           </button>
@@ -864,12 +864,12 @@ export function AIMascotAssistant() {
                 aria-label={t.aiMascot.openLabel}
                 data-testid="ai-mascot-open"
                 data-mood={behavior.mood}
-                className="group relative grid h-12 w-12 place-items-center rounded-full border border-[#c2f970]/60 bg-[#11110f] text-[#e1f4c9] shadow-[0_12px_32px_rgba(0,0,0,0.42)] outline-none transition hover:-translate-y-0.5 hover:border-[#e1f4c9] hover:bg-[#1a1710] hover:shadow-[0_16px_38px_rgba(194, 249, 112,0.18)] focus-visible:ring-2 focus-visible:ring-[#c2f970]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-14 md:w-14"
+                className="group relative grid h-12 w-12 place-items-center rounded-full border border-[#f4f4f5]/60 bg-[#111111] text-[#e4e4e7] shadow-[0_12px_32px_rgba(0,0,0,0.42)] outline-none transition hover:-translate-y-0.5 hover:border-[#e4e4e7] hover:bg-[#1a1a1a] hover:shadow-[0_16px_38px_rgba(244,244,245,0.18)] focus-visible:ring-2 focus-visible:ring-[#f4f4f5]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-14 md:w-14"
               >
-                <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full border border-[#11110f] bg-[#c2f970] px-1 text-[9px] font-semibold tracking-wide text-black">
+                <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full border border-[#111111] bg-[#f4f4f5] px-1 text-[9px] font-semibold tracking-wide text-black">
                   AI
                 </span>
-                <span className="relative z-10 grid h-8 w-8 place-items-center rounded-full border border-[#c2f970]/25 bg-[#c2f970]/10 md:h-9 md:w-9">
+                <span className="relative z-10 grid h-8 w-8 place-items-center rounded-full border border-[#f4f4f5]/25 bg-[#f4f4f5]/10 md:h-9 md:w-9">
                   <MessageCircle className="h-4 w-4 md:h-5 md:w-5" />
                 </span>
               </motion.button>
@@ -884,7 +884,7 @@ export function AIMascotAssistant() {
     if (booking.step === "loading-days") {
       return (
         <div className="rounded-2xl border border-white/10 bg-white/[0.045] p-4 text-sm text-zinc-300">
-          <Loader2 className="mr-2 inline h-4 w-4 animate-spin text-[#c2f970]" />
+          <Loader2 className="mr-2 inline h-4 w-4 animate-spin text-[#f4f4f5]" />
           {t.aiMascot.booking.loadingDays}
         </div>
       );
@@ -901,7 +901,7 @@ export function AIMascotAssistant() {
     if (booking.step === "days") {
       return (
         <div className="rounded-2xl border border-white/10 bg-white/[0.045] p-4">
-          <p className="mb-3 text-xs uppercase tracking-[0.18em] text-[#c2f970]">
+          <p className="mb-3 text-xs uppercase tracking-[0.18em] text-[#f4f4f5]">
             {t.aiMascot.booking.chooseDay}
           </p>
           <div className="grid grid-cols-2 gap-2">
@@ -910,7 +910,7 @@ export function AIMascotAssistant() {
                 key={day.date}
                 type="button"
                 onClick={() => void selectBookingDay(day)}
-                className="rounded-2xl border border-white/10 bg-black/25 px-3 py-3 text-left text-sm text-zinc-100 transition hover:border-[#c2f970]/50"
+                className="rounded-2xl border border-white/10 bg-black/25 px-3 py-3 text-left text-sm text-zinc-100 transition hover:border-[#f4f4f5]/50"
               >
                 <span className="block text-[0.65rem] uppercase tracking-[0.14em] text-zinc-500">
                   {day.weekday}
@@ -927,7 +927,7 @@ export function AIMascotAssistant() {
     if (booking.step === "loading-slots") {
       return (
         <div className="rounded-2xl border border-white/10 bg-white/[0.045] p-4 text-sm text-zinc-300">
-          <Loader2 className="mr-2 inline h-4 w-4 animate-spin text-[#c2f970]" />
+          <Loader2 className="mr-2 inline h-4 w-4 animate-spin text-[#f4f4f5]" />
           {t.aiMascot.booking.loadingSlots}
         </div>
       );
@@ -944,7 +944,7 @@ export function AIMascotAssistant() {
                 key={slot.start}
                 type="button"
                 onClick={() => selectBookingSlot(slot)}
-                className="rounded-full border border-white/10 bg-black/25 px-3 py-2 text-sm text-zinc-100 transition hover:border-[#c2f970]/50 hover:text-[#e1f4c9]"
+                className="rounded-full border border-white/10 bg-black/25 px-3 py-2 text-sm text-zinc-100 transition hover:border-[#f4f4f5]/50 hover:text-[#e4e4e7]"
               >
                 {slot.label}
               </button>
@@ -965,28 +965,28 @@ export function AIMascotAssistant() {
         <form onSubmit={submitBooking} className="rounded-2xl border border-white/10 bg-white/[0.045] p-4">
           <p className="mb-3 text-sm text-zinc-200">
             {formatSlotDate(booking.selectedSlot.start, timeZone, locale)} ·{" "}
-            <span className="text-[#e1f4c9]">{booking.selectedSlot.label}</span>
+            <span className="text-[#e4e4e7]">{booking.selectedSlot.label}</span>
           </p>
           <div className="grid gap-2">
             <input
               value={bookingName}
               onChange={(event) => setBookingName(event.target.value)}
               placeholder={t.aiMascot.booking.name}
-              className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[#c2f970]/60"
+              className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[#f4f4f5]/60"
             />
             <input
               value={bookingEmail}
               onChange={(event) => setBookingEmail(event.target.value)}
               placeholder={t.aiMascot.booking.email}
               type="email"
-              className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[#c2f970]/60"
+              className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[#f4f4f5]/60"
             />
             <textarea
               value={bookingTopic}
               onChange={(event) => setBookingTopic(event.target.value)}
               placeholder={t.aiMascot.booking.topic}
               rows={2}
-              className="resize-none rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[#c2f970]/60"
+              className="resize-none rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[#f4f4f5]/60"
             />
           </div>
           {turnstileSiteKey ? (
@@ -1007,7 +1007,7 @@ export function AIMascotAssistant() {
           <button
             type="submit"
             disabled={bookingDisabled}
-            className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#c2f970] px-4 py-3 text-sm font-medium text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
+            className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#f4f4f5] px-4 py-3 text-sm font-medium text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
           >
             {booking.step === "booking" ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarDays className="h-4 w-4" />}
             {t.aiMascot.booking.submit}

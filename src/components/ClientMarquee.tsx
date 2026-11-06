@@ -5,10 +5,10 @@ import { ArrowLeft, ArrowRight, Pause, Play } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const clients = [
-  {name:"Jalapeno Kebab", detail:"Niemce", url:"https://www.instagram.com/jalapeno_kebab/", logo:null},
+  {name:"Jalapeno Kebab", detail:"Niemce", url:"https://www.instagram.com/jalapeno_kebab/", logo:"/images/brands/jalapeno.jpg"},
   {name:"Re-energy System", detail:"OZE", url:"https://re-energysystem.pl/", logo:"/images/brands/re-energy.png"},
-  {name:"StarCars", detail:"USA / Canada", url:"https://star-cars.us", logo:null},
-  {name:"Gentlemen Barber", detail:"Warszawa", url:null, logo:null},
+  {name:"StarCars", detail:"USA / Canada", url:"https://star-cars.us", logo:"/images/brands/starcars.svg"},
+  {name:"Gentlemen Barber Shop", detail:"Warszawa", url:null, logo:"/images/brands/gentlemen.webp"},
   {name:"Majka Szado Walter", detail:"Rzeszów", url:"https://rzeszow-adwokat.pl/", logo:"/images/brands/msw.svg"},
 ];
 
@@ -32,7 +32,7 @@ export function ClientMarquee() {
     return()=>{cancelAnimationFrame(frame);el.removeEventListener('pointerenter',enter);el.removeEventListener('pointerleave',leave);};
   },[paused,reduced]);
   function move(direction:number){setPaused(true);ref.current?.scrollBy({left:direction*300,behavior:reduced?'instant':'smooth'});}
-  return <section aria-label={pl?'Wybrane współprace':'Selected collaborations'} className="border-y border-white/10 bg-[#101210] py-7">
+  return <section aria-label={pl?'Wybrane współprace':'Selected collaborations'} className="border-y border-white/10 bg-[#101010] py-7">
     <div className="mx-auto mb-6 flex max-w-7xl items-center justify-between gap-3 px-5 md:px-8"><p className="text-[11px] uppercase tracking-[0.2em] text-zinc-400">{pl?'Zaufali mi / wybrane współprace':'Trusted by / selected collaborations'}</p><div className="flex gap-2">
       <button onClick={()=>move(-1)} aria-label={pl?'Poprzednie firmy':'Previous businesses'} className="marquee-button"><ArrowLeft size={16}/></button>
       {!reduced && <button onClick={()=>setPaused(!paused)} aria-label={paused?(pl?'Wznów przesuwanie':'Resume scrolling'):(pl?'Zatrzymaj przesuwanie':'Pause scrolling')} className="marquee-button">{paused?<Play size={14}/>:<Pause size={14}/>}</button>}
@@ -40,7 +40,7 @@ export function ClientMarquee() {
     </div></div>
     <div ref={ref} className="client-marquee mx-auto max-w-[1440px] overflow-x-auto" onTouchStart={()=>setPaused(true)}>
       <div className="flex w-max">{[0,1].map(copy=><div key={copy} className="flex shrink-0" aria-hidden={copy===1?true:undefined}>{clients.map(client=>{
-        const content=<><div className="flex h-14 items-center">{client.logo?<Image src={client.logo} alt={client.name} width={170} height={65} className="h-14 w-40 object-contain"/>:<span className="text-[25px] font-semibold tracking-[-0.05em] text-[#e2e7dd]">{client.name}</span>}</div><p className="mt-3 text-[10px] uppercase tracking-widest text-zinc-500">{client.name} / {client.detail}</p></>;
+        const content=<><div className="flex h-20 items-center justify-center overflow-hidden"><Image src={client.logo} alt={client.name} width={240} height={client.name === "Jalapeno Kebab" ? 240 : 80} className={client.name === "Jalapeno Kebab" ? "h-60 w-60 shrink-0 object-contain" : "h-16 w-48 object-contain"}/></div><p className="mt-4 text-center text-[10px] uppercase tracking-widest text-zinc-400">{client.name} / {client.detail}</p></>;
         return client.url?<a key={client.name} href={client.url} target="_blank" rel="noopener noreferrer" tabIndex={copy===1?-1:0} className="client-wordmark">{content}</a>:<div key={client.name} className="client-wordmark">{content}</div>;
       })}</div>)}</div>
     </div>

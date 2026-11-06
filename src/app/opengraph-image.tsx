@@ -17,19 +17,19 @@ export default async function OpenGraphImage() {
         display: "flex",
         width: "100%",
         height: "100%",
-        background: "#0c0c0b",
+        background: "#0c0c0c",
         color: "#fafafa",
         padding: "64px 72px",
         flexDirection: "column",
         justifyContent: "space-between",
-        border: "2px solid #343026",
+        border: "2px solid #303030",
       }}
     >
       <div
         style={{
           display: "flex",
           fontSize: 24,
-          color: "#c2f970",
+          color: "#f4f4f5",
           letterSpacing: 4,
         }}
       >
@@ -45,7 +45,7 @@ export default async function OpenGraphImage() {
         }}
       >
         <span>Strony internetowe.</span>
-        <span style={{ color: "#c2f970" }}>CRM i aplikacje webowe.</span>
+        <span style={{ color: "#f4f4f5" }}>CRM i aplikacje webowe.</span>
       </div>
       <div style={{ display: "flex", fontSize: 24, color: "#a1a1aa" }}>
         Od pomysłu do wdrożenia. Bezpośrednio ze mną.

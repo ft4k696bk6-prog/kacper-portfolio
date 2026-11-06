@@ -13,13 +13,13 @@ export function ChoosePortfolio() {
   const interactiveHref = "https://kacper-bernecki.vercel.app";
 
   const choiceButtonClass =
-    "group inline-flex h-11 items-center gap-2 rounded-md border border-[#c2f970]/40 bg-[#0b0d0c]/92 px-4 text-sm text-[#e1f4c9] shadow-[0_18px_45px_rgba(0,0,0,0.42)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-[#c2f970]/75 hover:bg-[#17130b]";
+    "group inline-flex h-11 items-center gap-2 rounded-md border border-[#f4f4f5]/40 bg-[#0c0c0c]/92 px-4 text-sm text-[#e4e4e7] shadow-[0_18px_45px_rgba(0,0,0,0.42)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-[#f4f4f5]/75 hover:bg-[#171717]";
   const mobileChoiceButtonClass =
-    "pointer-events-auto inline-flex h-8 items-center gap-1.5 rounded-md border border-[#c2f970]/45 bg-[#0b0d0c]/92 px-2 text-[11px] text-[#e1f4c9] shadow-[0_16px_38px_rgba(0,0,0,0.42)] backdrop-blur-xl";
+    "pointer-events-auto inline-flex h-8 items-center gap-1.5 rounded-md border border-[#f4f4f5]/45 bg-[#0c0c0c]/92 px-2 text-[11px] text-[#e4e4e7] shadow-[0_16px_38px_rgba(0,0,0,0.42)] backdrop-blur-xl";
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#070707] text-white">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(194, 249, 112,0.18),transparent_32%),radial-gradient(circle_at_82%_28%,rgba(34,83,67,0.22),transparent_34%),linear-gradient(135deg,#020202_0%,#10100f_50%,#050505_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(244,244,245,0.18),transparent_32%),radial-gradient(circle_at_82%_28%,rgba(45,45,45,0.22),transparent_34%),linear-gradient(135deg,#020202_0%,#101010_50%,#050505_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-[#070707] via-[#070707]/86 to-transparent" />
 
       <section className="relative mx-auto flex min-h-screen max-w-7xl flex-col items-center px-5 pb-8 pt-28 text-center sm:pt-24 md:px-8 lg:pt-24">
@@ -42,7 +42,7 @@ export function ChoosePortfolio() {
         >
           <div className="pointer-events-none absolute left-1/2 top-[228px] z-20 flex w-full max-w-[360px] -translate-x-1/2 items-center justify-between sm:hidden">
             <Link href={staticHref} className={mobileChoiceButtonClass}>
-              <FileText className="h-3 w-3 shrink-0 text-[#c2f970]" />
+              <FileText className="h-3 w-3 shrink-0 text-[#f4f4f5]" />
               {t.choose.staticLabel}
             </Link>
             <a
@@ -51,7 +51,7 @@ export function ChoosePortfolio() {
               rel="noopener noreferrer"
               className={mobileChoiceButtonClass}
             >
-              <ExternalLink className="h-3 w-3 shrink-0 text-[#c2f970]" />
+              <ExternalLink className="h-3 w-3 shrink-0 text-[#f4f4f5]" />
               {t.choose.interactiveLabel}
             </a>
           </div>
@@ -59,7 +59,7 @@ export function ChoosePortfolio() {
           <div className="relative mt-0 h-[500px] w-full max-w-[1000px] sm:h-[610px] lg:h-[650px]">
             <div className="absolute left-1/2 top-[194px] z-20 hidden w-full max-w-[620px] -translate-x-1/2 items-center justify-between sm:flex lg:top-[208px]">
               <Link href={staticHref} className={choiceButtonClass}>
-                <FileText className="h-4 w-4 shrink-0 text-[#c2f970]" />
+                <FileText className="h-4 w-4 shrink-0 text-[#f4f4f5]" />
                 {t.choose.staticLabel}
               </Link>
               <a
@@ -68,12 +68,12 @@ export function ChoosePortfolio() {
                 rel="noopener noreferrer"
                 className={choiceButtonClass}
               >
-                <ExternalLink className="h-4 w-4 shrink-0 text-[#c2f970]" />
+                <ExternalLink className="h-4 w-4 shrink-0 text-[#f4f4f5]" />
                 {t.choose.interactiveLabel}
               </a>
             </div>
 
-            <div className="pointer-events-none absolute left-1/2 top-8 h-[450px] w-[450px] -translate-x-1/2 rounded-full bg-[#c2f970]/12 blur-3xl sm:top-12 sm:h-[560px] sm:w-[560px]" />
+            <div className="pointer-events-none absolute left-1/2 top-8 h-[450px] w-[450px] -translate-x-1/2 rounded-full bg-[#f4f4f5]/12 blur-3xl sm:top-12 sm:h-[560px] sm:w-[560px]" />
             <Image
               src="/images/portfolio-choice-portrait.png"
               alt={t.choose.imageAlt}
@@ -87,7 +87,7 @@ export function ChoosePortfolio() {
 
           <Link
             href="/#contact"
-            className="relative z-20 mt-4 inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/[0.03] px-4 py-2 text-sm text-zinc-300 transition-colors hover:border-[#c2f970]/60 hover:text-[#e1f4c9]"
+            className="relative z-20 mt-4 inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/[0.03] px-4 py-2 text-sm text-zinc-300 transition-colors hover:border-[#f4f4f5]/60 hover:text-[#e4e4e7]"
           >
             <Mail className="h-4 w-4" />
             {t.choose.contactCta}

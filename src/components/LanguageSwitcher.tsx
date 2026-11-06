@@ -25,7 +25,7 @@ export function LanguageSwitcher() {
       onClick={() => setLang(value)}
       className={`h-9 min-w-10 rounded-md px-3 text-sm transition-all ${
         lang === value
-          ? "bg-[#c2f970] text-black shadow-[0_0_24px_rgba(194, 249, 112,0.28)]"
+          ? "bg-[#f4f4f5] text-black shadow-[0_0_24px_rgba(244,244,245,0.28)]"
           : "text-zinc-400 hover:bg-white/5 hover:text-white"
       }`}
       aria-pressed={lang === value}
@@ -47,7 +47,7 @@ export function LanguageSwitcher() {
           className="group flex items-center gap-3"
           onClick={() => setIsOpen(false)}
         >
-          <span className="grid h-10 w-10 place-items-center rounded-md border border-[#c2f970]/40 bg-[#c2f970]/10 text-sm text-[#e1f4c9]">
+          <span className="grid h-10 w-10 place-items-center rounded-md border border-[#f4f4f5]/40 bg-[#f4f4f5]/10 text-sm text-[#e4e4e7]">
             KB
           </span>
           <span className="hidden text-sm uppercase tracking-[0.28em] text-zinc-300 transition-colors group-hover:text-white sm:inline">
@@ -60,7 +60,7 @@ export function LanguageSwitcher() {
             <a
               key={item.href}
               href={anchorHref(item.href)}
-              className="rounded-md px-4 py-2 text-sm text-zinc-300 transition-colors hover:bg-white/5 hover:text-[#e1f4c9]"
+              className="rounded-md px-4 py-2 text-sm text-zinc-300 transition-colors hover:bg-white/5 hover:text-[#e4e4e7]"
             >
               {t.nav[item.key]}
             </a>
@@ -76,14 +76,14 @@ export function LanguageSwitcher() {
             href="https://kacper-bernecki.vercel.app"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/[0.03] px-4 py-2 text-sm text-zinc-100 transition-all hover:-translate-y-0.5 hover:border-[#c2f970]/60 hover:text-[#e1f4c9]"
+            className="inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/[0.03] px-4 py-2 text-sm text-zinc-100 transition-all hover:-translate-y-0.5 hover:border-[#f4f4f5]/60 hover:text-[#e4e4e7]"
           >
-            <Laptop className="h-4 w-4 text-[#c2f970]" />
+            <Laptop className="h-4 w-4 text-[#f4f4f5]" />
             {t.nav.interactive}
           </a>
           <a
             href={anchorHref("#contact")}
-            className="inline-flex items-center gap-2 rounded-md border border-[#c2f970]/50 bg-[#c2f970] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(194, 249, 112,0.25)]"
+            className="inline-flex items-center gap-2 rounded-md border border-[#f4f4f5]/50 bg-[#f4f4f5] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(244,244,245,0.25)]"
           >
             <Mail className="h-4 w-4" />
             {t.nav.cta}
@@ -91,14 +91,14 @@ export function LanguageSwitcher() {
           <a
             href={anchorHref("#contact")}
             aria-label={t.contact.calendarCta}
-            className="grid h-10 w-10 place-items-center rounded-md border border-[#c2f970]/40 bg-[#c2f970]/10 text-[#e1f4c9] transition-all hover:-translate-y-0.5 hover:border-[#c2f970]/70 hover:bg-[#c2f970]/15"
+            className="grid h-10 w-10 place-items-center rounded-md border border-[#f4f4f5]/40 bg-[#f4f4f5]/10 text-[#e4e4e7] transition-all hover:-translate-y-0.5 hover:border-[#f4f4f5]/70 hover:bg-[#f4f4f5]/15"
           >
             <CalendarDays className="h-4 w-4" />
           </a>
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
-          <div className="flex rounded-md border border-[#c2f970]/35 bg-white/[0.04] p-1">
+          <div className="flex rounded-md border border-[#f4f4f5]/35 bg-white/[0.04] p-1">
             {languageButton("pl", "PL")}
             {languageButton("en", "ENG")}
           </div>
@@ -107,7 +107,7 @@ export function LanguageSwitcher() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={t.nav.interactive}
-            className="grid h-11 w-11 place-items-center rounded-md border border-[#c2f970]/40 bg-[#c2f970]/10 text-[#e1f4c9]"
+            className="grid h-11 w-11 place-items-center rounded-md border border-[#f4f4f5]/40 bg-[#f4f4f5]/10 text-[#e4e4e7]"
           >
             <Laptop className="h-5 w-5" />
           </a>
@@ -143,7 +143,7 @@ export function LanguageSwitcher() {
               <a
                 href={anchorHref("#contact")}
                 onClick={() => setIsOpen(false)}
-                className="inline-flex items-center gap-2 rounded-md bg-[#c2f970] px-4 py-2 text-sm text-black"
+                className="inline-flex items-center gap-2 rounded-md bg-[#f4f4f5] px-4 py-2 text-sm text-black"
               >
                 <Mail className="h-4 w-4" />
                 {t.nav.cta}
@@ -152,7 +152,7 @@ export function LanguageSwitcher() {
                 href={anchorHref("#contact")}
                 onClick={() => setIsOpen(false)}
                 aria-label={t.contact.calendarCta}
-                className="grid h-10 w-10 place-items-center rounded-md border border-[#c2f970]/40 bg-[#c2f970]/10 text-[#e1f4c9]"
+                className="grid h-10 w-10 place-items-center rounded-md border border-[#f4f4f5]/40 bg-[#f4f4f5]/10 text-[#e4e4e7]"
               >
                 <CalendarDays className="h-4 w-4" />
               </a>

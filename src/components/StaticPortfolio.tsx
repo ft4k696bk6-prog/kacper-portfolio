@@ -176,7 +176,7 @@ export function StaticPortfolio() {
         <Profile />
         <ClientProof />
         <details className="mx-auto max-w-7xl px-5 py-10 md:px-8">
-          <summary className="cursor-pointer rounded-xl border border-white/10 bg-white/[0.03] p-5 text-[#e1f4c9]">
+          <summary className="cursor-pointer rounded-xl border border-white/10 bg-white/[0.03] p-5 text-[#e4e4e7]">
             {lang === "pl"
               ? "Dla osób technicznych — stack i szczegóły B-CRM"
               : "For technical reviewers — stack and B-CRM details"}
@@ -189,7 +189,7 @@ export function StaticPortfolio() {
           className="border-y border-white/10 bg-white/[0.02] px-5 py-20 md:px-8 md:py-28"
         >
           <div className="mx-auto max-w-4xl">
-            <p className="text-sm uppercase tracking-[0.24em] text-[#c2f970]">
+            <p className="text-sm uppercase tracking-[0.24em] text-[#f4f4f5]">
               {lang === "pl"
                 ? "Najczęstsze pytania"
                 : "Frequently asked questions"}
@@ -206,7 +206,7 @@ export function StaticPortfolio() {
                     {question}
                     <span
                       aria-hidden="true"
-                      className="text-[#c2f970] transition-transform group-open:rotate-45"
+                      className="text-[#f4f4f5] transition-transform group-open:rotate-45"
                     >
                       +
                     </span>

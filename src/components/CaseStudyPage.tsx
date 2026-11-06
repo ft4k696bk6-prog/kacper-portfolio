@@ -46,7 +46,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
         <BackLink label={t.caseStudies.projectsBackLabel} />
 
         <section className="py-12">
-          <p className="text-sm uppercase tracking-[0.28em] text-[#c2f970]">
+          <p className="text-sm uppercase tracking-[0.28em] text-[#f4f4f5]">
             {t.caseStudies.eyebrow}
           </p>
           <h1 className="mt-5 max-w-5xl text-4xl leading-tight text-white md:text-6xl">
@@ -62,7 +62,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
                 href={study.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-[#c2f970] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-md bg-[#f4f4f5] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5"
               >
                 <ExternalLink className="h-4 w-4" />
                 {study.liveLabel || t.caseStudies.liveDemoLabel}
@@ -73,7 +73,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
                 href={study.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-5 py-3 text-sm text-white transition-colors hover:border-[#c2f970]/60 hover:text-[#e1f4c9]"
+                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-5 py-3 text-sm text-white transition-colors hover:border-[#f4f4f5]/60 hover:text-[#e4e4e7]"
               >
                 <Github className="h-4 w-4" />
                 {t.caseStudies.repoLabel}
@@ -118,7 +118,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
         </section>
 
         <section className="mt-8 rounded-md border border-white/10 bg-white/[0.035] p-5 md:p-6">
-          <h2 className="text-sm uppercase tracking-[0.24em] text-[#c2f970]">
+          <h2 className="text-sm uppercase tracking-[0.24em] text-[#f4f4f5]">
             {t.caseStudies.stackLabel}
           </h2>
           <div className="mt-4 flex flex-wrap gap-2">
@@ -139,7 +139,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
             <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {study.roles.map((role) => (
                 <article key={role.name} className="rounded-md border border-white/10 bg-black/20 p-4">
-                  <h3 className="text-lg text-[#e1f4c9]">{role.name}</h3>
+                  <h3 className="text-lg text-[#e4e4e7]">{role.name}</h3>
                   <p className="mt-3 text-sm leading-7 text-zinc-300">{role.description}</p>
                 </article>
               ))}
@@ -154,7 +154,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
           <InfoList title={t.caseStudies.sections.next} items={study.next} />
         </section>
 
-        <section className="mt-8 rounded-md border border-[#c2f970]/25 bg-[#c2f970]/10 p-5 md:p-6">
+        <section className="mt-8 rounded-md border border-[#f4f4f5]/25 bg-[#f4f4f5]/10 p-5 md:p-6">
           <h2 className="text-2xl text-white">{t.caseStudies.sections.limitations}</h2>
           <p className="mt-4 text-sm leading-7 text-zinc-200">{study.limitations}</p>
         </section>
@@ -174,7 +174,7 @@ function BackLink({ label }: { label: string }) {
       onClick={() => {
         window.location.assign("/#projects");
       }}
-      className="inline-flex items-center gap-2 rounded-md bg-[#c2f970] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(194, 249, 112,0.22)]"
+      className="inline-flex items-center gap-2 rounded-md bg-[#f4f4f5] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(244,244,245,0.22)]"
     >
       <ArrowLeft className="h-4 w-4" />
       {label}
@@ -198,7 +198,7 @@ function InfoList({ title, items }: Pick<CaseStudyItem, "title"> & { items: stri
       <ul className="mt-5 space-y-3">
         {items.map((item) => (
           <li key={item} className="flex gap-3 text-sm leading-7 text-zinc-300">
-            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#c2f970]" />
+            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#f4f4f5]" />
             {item}
           </li>
         ))}

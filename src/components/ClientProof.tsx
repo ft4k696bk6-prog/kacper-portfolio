@@ -44,7 +44,7 @@ export function ClientProof() {
     >
       <div className="mx-auto max-w-7xl">
         <div className="max-w-3xl">
-          <p className="text-sm uppercase tracking-[0.24em] text-[#c2f970]">
+          <p className="text-sm uppercase tracking-[0.24em] text-[#f4f4f5]">
             {lang === "pl" ? "Współprace" : "Collaborations"}
           </p>
           <h2 className="mt-4 text-3xl text-white md:text-5xl">
@@ -68,7 +68,7 @@ export function ClientProof() {
               <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">
                 {lang === "pl" ? "Klient" : "Client"}
               </p>
-              <h3 className="mt-3 text-xl text-[#e1f4c9]">
+              <h3 className="mt-3 text-xl text-[#e4e4e7]">
                 {collaboration.name}
               </h3>
               {collaboration.person && <p className="mt-2 text-sm text-zinc-500">
@@ -78,7 +78,7 @@ export function ClientProof() {
               <p className="mt-5 text-sm leading-7 text-zinc-300">
                 {lang === "pl" ? collaboration.pl : collaboration.en}
               </p>
-              {collaboration.url && <a href={collaboration.url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm text-[#c2f970] underline underline-offset-4">{lang === "pl" ? "Strona lub profil firmy ↗" : "Business website or profile ↗"}</a>}
+              {collaboration.url && <a href={collaboration.url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm text-[#f4f4f5] underline underline-offset-4">{lang === "pl" ? "Strona lub profil firmy ↗" : "Business website or profile ↗"}</a>}
             </article>
           ))}
         </div>
