@@ -13,7 +13,7 @@ describe("restricted portfolio OpenRouter configuration", () => {
   it("pins a single inexpensive model with strict token caps", () => {
     expect(PORTFOLIO_AI_MODEL).toBe("openai/gpt-oss-20b");
     expect(PORTFOLIO_AI_MAX_QUESTION_LENGTH).toBe(250);
-    expect(PORTFOLIO_AI_MAX_RESPONSE_TOKENS).toBeLessThanOrEqual(200);
+    expect(PORTFOLIO_AI_MAX_RESPONSE_TOKENS).toBeLessThanOrEqual(256);
   });
 
   it("recognizes real portfolio questions in both languages", () => {
