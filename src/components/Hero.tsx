@@ -26,6 +26,7 @@ export function Hero() {
     <div className="hero-depth-stage">
       <h1 className="hero-depth-title"><span>{lang === "pl" ? "Twoja firma." : "Your business."}</span><span>{lang === "pl" ? "Moje doświadczenie." : "My experience."}</span></h1>
       <Image src="/images/profile-3-cutout.png" alt="Kacper Bernecki" width={1024} height={1280} priority sizes="(min-width:1024px) 540px, 94vw" className="hero-depth-portrait"/>
+      <div className="hero-desk" aria-hidden="true"><div className="hero-desk-top"/><div className="hero-desk-edge"/><div className="hero-desk-front"/></div>
     </div>
   </section>;
 }

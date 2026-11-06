@@ -5,7 +5,7 @@
 .portfolio-scene {position:relative;isolation:isolate;background:var(--brand-black);overflow:clip}
 .portfolio-content {position:relative;z-index:1}
 .portfolio-content > section {background:var(--brand-black)}
-.portfolio-content > .hero-depth {background:linear-gradient(to bottom,#e8e4dc 0%,#e8e4dc 28%,#c6c2ba 46%,#77746f 61%,#353432 77%,#080808 100%)}
+.portfolio-content > .hero-depth {background:#080808}
 .brand-action,.studio-cta {background-color:var(--brand-gold);background-image:linear-gradient(110deg,transparent 12%,rgba(255,255,255,.42) 48%,transparent 76%);background-size:210% 100%;background-position:0 50%;color:#111;border:1px solid #c5a05e;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
 .brand-action:not(:disabled):is(:hover,:focus-visible,:active),.studio-cta:is(:hover,:focus-visible,:active) {background-position:100% 50%;color:#111}
 .brand-mark,.brand-selected,.brand-outline {color:var(--brand-gold);border:1px solid var(--brand-gold);background:var(--brand-black)}
@@ -310,3 +310,44 @@
  .project-shelf .project-book-content p{display:block;-webkit-line-clamp:unset}
 }
 @media(prefers-reduced-motion:reduce){.contact-revealed-value span{animation:none}}
+
+/* A tangible desk: top plane, narrow edge, and a dark front below it. */
+.hero-depth:before{content:"";position:absolute;inset:0 0 auto;height:750px;background:#e8e4dc}
+.hero-depth-portrait{mask-image:none}
+.hero-desk{position:absolute;z-index:3;top:645px;left:50%;width:100vw;transform:translateX(-50%);height:460px;pointer-events:none}
+.hero-desk-top{height:100px;clip-path:polygon(9% 0,91% 0,100% 100%,0 100%);background:repeating-linear-gradient(2deg,transparent 0 5px,#ffffff06 6px,transparent 7px 13px),linear-gradient(180deg,#25221d,#594b37 70%,#393026);border-bottom:1px solid #d4af6a70;box-shadow:inset 0 18px 35px #0008}
+.hero-desk-top:after{content:"";display:block;width:40%;height:100%;margin:auto;background:radial-gradient(ellipse at center,#0009,transparent 70%)}
+.hero-desk-top{background-image:url('/images/desk-grain.svg');background-size:100% 100%}
+.hero-desk-edge{height:12px;background:linear-gradient(#a0875a,#493d2a 20%,#171512 85%);box-shadow:0 18px 30px #000}
+.hero-desk-front{height:350px;background:linear-gradient(180deg,#181714 0%,#10100e 30%,#080808 80%)}
+.client-loop{overflow:hidden;touch-action:pan-y;cursor:grab;user-select:none;max-width:1440px;margin-inline:auto}
+.client-loop-track,.client-loop-copy{display:flex;width:max-content;flex-shrink:0}
+.client-loop-track{will-change:transform}
+.image-books{height:480px;gap:10px;margin-inline:0;padding:0;width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.image-books .project-book{min-width:52px;flex:1 1 0;height:100%;margin:0}
+.image-books .project-book[data-active="true"]{flex:6 1 0;min-width:320px;height:100%}
+.image-books .project-book-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;filter:none;opacity:.75}
+.project-book-atmosphere{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.27;filter:blur(2px)}
+.image-books .project-book[data-active="true"] .project-book-image{opacity:1;object-fit:contain;background:#080808}
+.image-books .project-book:after{background:linear-gradient(transparent 35%,#080808dd 66%,#080808 100%)}
+.project-brand-spine{position:absolute;left:50%;top:50%;z-index:2;transform:translate(-50%,-50%) rotate(90deg);display:flex;align-items:center;justify-content:center;width:170px;height:40px;pointer-events:none;color:#fff}
+.project-book[data-active="true"] .project-brand-spine{opacity:0}
+.book-brand-logo{display:flex;width:155px;height:38px;align-items:center;justify-content:center;overflow:hidden;isolation:isolate}
+.book-brand-logo img{object-fit:contain;max-height:38px;width:150px;mix-blend-mode:screen}
+.book-jalapeno img{width:190px;height:190px;max-height:none;max-width:none;flex-shrink:0}
+.book-wordmark{font-size:14px;font-weight:800;letter-spacing:.16em}
+.project-active-brand{height:36px;display:flex;align-items:center;margin-bottom:8px}
+.image-books .project-book-content{padding:20px}
+.image-books .project-book-logo{font-size:25px}
+.image-books .project-book-content p{font-size:12px;-webkit-line-clamp:2}
+@media(max-width:767px){.image-books{height:430px;gap:6px}.image-books .project-book{min-width:28px;flex:0 0 28px}.image-books .project-book[data-active="true"]{min-width:190px;flex:1 0 190px}.image-books .project-book-content{padding:12px}.image-books .project-book-logo{font-size:19px}.image-books .project-book-links{gap:5px;margin-top:9px}.image-books .project-book-links a{font-size:10px;padding:7px}.image-books .project-active-brand{height:28px}.image-books .project-book-content p{font-size:11px}.image-books .project-book:after{background:linear-gradient(transparent 30%,#080808eb 60%,#080808 100%)}}
+.client-loop .client-wordmark{width:240px;height:100px;overflow:hidden;flex:0 0 240px;isolation:isolate}
+.client-loop-logo{max-width:195px;max-height:70px;width:auto;height:auto;object-fit:contain;mix-blend-mode:screen;pointer-events:none}
+.client-loop .client-jalapeno-logo{width:240px;height:240px;max-width:none;max-height:none;flex-shrink:0;object-fit:contain;mix-blend-mode:screen;pointer-events:none}
+.contact-hand-actions{top:31%;left:-4%;right:-4%}
+.contact-reveal-card{height:72px;padding:0;border:0;background:transparent;border-radius:0}
+.contact-reveal-card>p{display:none}
+.contact-reveal-grid{gap:clamp(25px,18vw,170px)}
+.contact-reveal-button{border:1px solid #d4af6a70;border-radius:8px;background:#080808d9!important}
+.contact-revealed-value{font-size:clamp(11px,2.7vw,16px)}
+@media(max-width:767px){.hero-depth:before{height:660px}.hero-desk{top:600px}.hero-desk-top{height:65px;clip-path:polygon(5% 0,95% 0,100% 100%,0 100%)}.hero-desk-edge{height:9px}.hero-desk-front{height:330px}.client-loop .client-wordmark{width:210px;flex-basis:210px}.contact-hand-actions{left:-2%;right:-2%;top:30%}.contact-reveal-grid{gap:24%}}
