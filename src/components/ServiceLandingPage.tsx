@@ -68,8 +68,8 @@ const content = {
       "analityka, zdarzenia i podstawowe śledzenie konwersji",
       "szybkie poprawki i iteracje na podstawie danych",
     ],
-    proof: "Zobacz współprace: Jalapeno Kebab, StarCars, Re-energy System.",
-    proofHref: "/#collaborations",
+    proof: "Re-Energy System: case study kampanii Meta Ads i pozyskiwania leadów.",
+    proofHref: "/case-studies/re-energy-meta-ads",
     serviceName: "Marketing, reklamy i prowadzenie social mediów",
     serviceDescription:
       "Prowadzenie social mediów, marketing, obsługa reklam oraz budowa stron kampanii i przepływów zapytań.",
@@ -193,6 +193,19 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
         </div>
       </section>
 
+      {kind === "marketing" && (
+        <section className="mx-auto max-w-6xl px-5 py-12 md:px-8">
+          <div className="rounded-2xl border border-white/20 bg-white/[0.035] p-6 md:p-10">
+            <p className="text-xs uppercase tracking-[0.2em] text-white/65">Z praktyki · Re-Energy System</p>
+            <h2 className="mt-4 max-w-3xl text-3xl text-white md:text-4xl">Kampanie, które przez około 2 lata są źródłem zapytań dla firmy OZE.</h2>
+            <p className="mt-5 max-w-3xl leading-8 text-white/75">Według danych przekazanych przez właściciela Re-Energy System, firma wydała łącznie około 90 tys. zł na reklamy i osiągnęła w tym okresie wielomilionowy obrót. Kampanie były jej jedynym źródłem leadów. Obrót firmy nie jest równoznaczny z przychodem przypisanym do reklam ani wskaźnikiem ROAS.</p>
+            <div className="mt-6 flex flex-wrap gap-4">
+              <Link href="/case-studies/re-energy-meta-ads" className="inline-flex items-center gap-2 rounded-lg border border-white/40 px-5 py-3 text-white">Zobacz pełne case study <ArrowRight className="h-4 w-4" /></Link>
+              <Link href="/reklamy-meta-ads-dla-firm" className="inline-flex items-center gap-2 px-5 py-3 text-white/80">Jak prowadzę kampanie Meta Ads <ArrowRight className="h-4 w-4" /></Link>
+            </div>
+          </div>
+        </section>
+      )}
       <section className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-[0.8fr_1.2fr] md:px-8 md:py-24">
         <div>
           <p className="text-sm uppercase tracking-[0.18em] text-white">

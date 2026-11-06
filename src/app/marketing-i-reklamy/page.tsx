@@ -2,8 +2,8 @@ import { serviceMetadata } from "@/lib/seo";
 import { ServiceLandingPage } from "@/components/ServiceLandingPage";
 
 export const metadata = serviceMetadata(
-  "Marketing, reklamy i prowadzenie social mediów",
-  "Reklamy, marketing i social media dla małych firm. Kacper Bernecki: współprace z Jalapeno Kebab, StarCars i Re-energy System, strony kampanii i pomiar zapytań.",
+  "Meta Ads i marketing dla firm — pozyskiwanie leadów",
+  "Pozyskiwanie leadów przez Meta Ads, kampanie Facebook i Instagram, strony ofertowe i CRM. Zobacz case study kampanii Re-Energy System i poznaj proces współpracy.",
   "marketing-i-reklamy",
 );
 

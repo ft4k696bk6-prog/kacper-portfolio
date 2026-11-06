@@ -49,10 +49,10 @@ export const metadata: Metadata = {
     alternateLocale: "en_US",
     images: [
       {
-        url: "/opengraph-image?brand=gold-kb-2026",
+        url: "/opengraph-image?brand=silver-kb-2026",
         width: 1200,
         height: 630,
-        alt: "Kacper Bernecki — złote logo KB, strony internetowe, CRM i aplikacje",
+        alt: "Kacper Bernecki — srebrne logo KB, strony internetowe, CRM i aplikacje",
       },
     ],
   },
@@ -69,10 +69,10 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   icons: {
     icon: [
-      { url: "/favicon-gold.svg", type: "image/svg+xml" },
+      { url: "/favicon-silver.svg", type: "image/svg+xml" },
       { url: "/icon", type: "image/png", sizes: "512x512" },
     ],
-    shortcut: [{ url: "/favicon-gold.svg", type: "image/svg+xml" }],
+    shortcut: [{ url: "/favicon-silver.svg", type: "image/svg+xml" }],
     apple: [{ url: "/apple-icon", type: "image/png", sizes: "180x180" }],
   },
   robots: {

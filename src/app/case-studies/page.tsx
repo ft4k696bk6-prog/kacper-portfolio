@@ -6,7 +6,7 @@ import { pl } from "@/i18n/pl";
 export const metadata: Metadata = {
   title: "Realizacje — strony internetowe i aplikacje",
   description:
-    "Zobacz projekty Kacpra Berneckiego: Motomizer, StarCars, BeatMarket i B-CRM. Prawdziwe widoki, opis funkcji i linki do działających stron.",
+    "Realizacje Kacpra Berneckiego: B-CRM, Motomizer, StarCars, BeatMarket i case study kampanii Meta Ads Re-Energy System. Projekty, proces i wyniki.",
   alternates: { canonical: "https://bernecki.dev/case-studies" },
 };
 
@@ -23,8 +23,8 @@ export default function CaseStudiesIndex() {
     mainEntity: {
       "@type": "ItemList",
       itemListOrder: "https://schema.org/ItemListOrderAscending",
-      numberOfItems: pl.projects.items.length,
-      itemListElement: pl.projects.items.map((p, index) => ({
+      numberOfItems: pl.projects.items.length + 1,
+      itemListElement: [{title:"Re-Energy System — Meta Ads", caseStudyUrl:"/case-studies/re-energy-meta-ads"}, ...pl.projects.items].map((p, index) => ({
         "@type": "ListItem",
         position: index + 1,
         name: p.title,
@@ -45,6 +45,12 @@ export default function CaseStudiesIndex() {
         Strony firmowe, produktowe i aplikacje. Sprawdź, co robią, jak powstały
         i które rozwiązania mogą przydać się w Twojej firmie.
       </p>
+      <Link href="/case-studies/re-energy-meta-ads" className="mt-12 block rounded-2xl border border-white/25 bg-white/[0.04] p-7 transition hover:border-white/60 md:p-10">
+        <p className="text-xs uppercase tracking-[0.2em] text-white/65">Nowe case study · Meta Ads / OZE</p>
+        <h2 className="mt-3 text-3xl text-white md:text-4xl">Re-Energy System — kampanie leadowe napędzające sprzedaż</h2>
+        <p className="mt-4 max-w-3xl leading-8 text-white/75">Około 2 lata kampanii, około 90 tys. zł wydatków reklamowych i wielomilionowy obrót firmy — według informacji przekazanych przez właściciela. Sprawdź podejście do formularzy, jakości leadów, sprzedaży i pomiaru.</p>
+        <span className="mt-6 inline-block text-sm text-white underline underline-offset-4">Przeczytaj case study →</span>
+      </Link>
       <div className="mt-12 grid gap-6 md:grid-cols-2">
         {pl.projects.items.map((p) => (
           <Link

@@ -18,6 +18,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: `${siteUrl}/poradniki` },
     ...guides.map((guide) => ({ url: `${siteUrl}/poradniki/${guide.slug}` })),
+    { url: siteUrl + "/case-studies/re-energy-meta-ads", changeFrequency: "monthly", priority: 0.9 },
+    { url: siteUrl + "/reklamy-meta-ads-dla-firm", changeFrequency: "monthly", priority: 0.9 },
     {
       url: siteUrl,
       changeFrequency: "monthly",
