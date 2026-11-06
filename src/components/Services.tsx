@@ -10,6 +10,13 @@ export function Services() {
   const services = [
     {
       icon: Globe,
+      href: "/#contact",
+      title: pl ? "Marka i rozwój od zera" : "Brand and business launch",
+      text: pl ? "Pozycjonowanie oferty, kierunek identyfikacji marki i wejście firmy do internetu. Łączę stronę, komunikację, reklamy i narzędzia do obsługi klientów w jeden plan rozwoju." : "Brand direction, online presence, marketing and tools for customer operations in one development plan.",
+      tags: "Re-energy · Motomizer",
+    },
+    {
+      icon: Globe,
       href: "/tworzenie-stron-internetowych",
       title: pl ? "Strony internetowe" : "Business websites",
       text: pl
@@ -49,7 +56,7 @@ export function Services() {
             ? "Masz cel. Zbudujmy do niego dobre narzędzie."
             : "You have a goal. Let’s build the right tool."}
         </h2>
-        <div className="mt-10 grid gap-4 lg:grid-cols-3">
+        <div className="mt-10 grid gap-4 lg:grid-cols-2">
           {services.map(({ icon: Icon, ...s }, i) => (
             <Link
               key={s.href}

@@ -35,10 +35,12 @@ export function AnalyticsConsent() {
     window.dispatchEvent(new CustomEvent(COOKIE_CONSENT_EVENT, { detail: { consent: next } }));
   }
 
-  function reopenSettings() {
-    setConsent(null);
-    window.dispatchEvent(new CustomEvent(COOKIE_CONSENT_EVENT, { detail: { consent: null } }));
-  }
+  useEffect(() => {
+    const open = () => { setConsent(null); window.dispatchEvent(new CustomEvent(COOKIE_CONSENT_EVENT, { detail: { consent: null } })); };
+    window.addEventListener("portfolio-open-cookie-settings", open);
+    return () => window.removeEventListener("portfolio-open-cookie-settings", open);
+  }, []);
+
 
   const analyticsEnabled = loaded && consent === "accepted";
 
@@ -69,15 +71,6 @@ export function AnalyticsConsent() {
         </div>
       ) : null}
 
-      {loaded && consent !== null ? (
-        <button
-          type="button"
-          onClick={reopenSettings}
-          className="fixed bottom-3 left-3 z-[65] rounded-md border border-white/10 bg-[var(--brand-black)]/80 px-3 py-2 text-xs text-white/70 backdrop-blur transition hover:border-[var(--brand-gold)] hover:text-white"
-        >
-          {t.consent.settings}
-        </button>
-      ) : null}
     </>
   );
 }

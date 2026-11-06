@@ -206,7 +206,7 @@ export const pl: Translations = {
         problem:
           "Zespoły sprzedażowe potrzebują jednego miejsca do kontroli właściciela leada, statusów, callbacków, spotkań i historii działań.",
         description:
-          "Demo CRM-u, który porządkuje leady, zadania zespołu i proces od sprzedaży po realizację. Każda rola widzi informacje i działania potrzebne do swojej pracy.",
+          "Autorski CRM zbudowany przeze mnie od zera. Porządkuje leady, zadania zespołu i proces od sprzedaży po realizację. Publiczne demo pokazuje role i workflow bez danych klientów.",
         features: [
           "Logowanie i konta demo",
           "Role: właściciel, admin, menadżer, handlowiec, finanse, podgląd, księgowość, logistyka, monter",

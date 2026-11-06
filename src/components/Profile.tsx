@@ -18,6 +18,7 @@ export function Profile() {
         <div>
           <div className="space-y-4 text-base leading-8 text-white">
             {t.about.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            <p>Doświadczenie w kredytach i ubezpieczeniach pomaga mi rozumieć pracę sprzedaży, obieg dokumentów i momenty, w których klient potrzebuje jasnej informacji. Tę perspektywę wykorzystuję przy projektowaniu narzędzi i komunikacji firm.</p>
           </div>
           {/* Essential content stays visible in SSR and with reduced motion.
               Inherited hidden variants previously left an empty-looking panel. */}

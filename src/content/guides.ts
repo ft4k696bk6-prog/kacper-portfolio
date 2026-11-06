@@ -1,5 +1,6 @@
 import { errorGuides } from "./errorGuides";
-export const guides = [...errorGuides,
+import { practicalGuides } from "./practicalGuides";
+export const guides = [...practicalGuides, ...errorGuides,
   {
     slug: "ile-kosztuje-strona-internetowa",
     title: "Ile kosztuje strona internetowa dla małej firmy?",

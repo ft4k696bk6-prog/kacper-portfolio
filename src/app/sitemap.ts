@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { guides } from "@/content/guides";
+import { realizations } from "@/content/realizations";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = "https://bernecki.dev";
@@ -16,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return [
+    ...realizations.map(item => ({url: `${siteUrl}/realizacje/${item.slug}`})),
     { url: `${siteUrl}/poradniki` },
     ...guides.map((guide) => ({ url: `${siteUrl}/poradniki/${guide.slug}` })),
     { url: siteUrl + "/case-studies/re-energy-meta-ads", changeFrequency: "monthly", priority: 0.9 },

@@ -5,7 +5,7 @@
 .portfolio-scene {position:relative;isolation:isolate;background:var(--brand-black);overflow:clip}
 .portfolio-content {position:relative;z-index:1}
 .portfolio-content > section {background:var(--brand-black)}
-.portfolio-content > .hero-studio {background:#e8e4dc}
+.portfolio-content > .hero-depth {background:linear-gradient(to bottom,#e8e4dc 0%,#e8e4dc 28%,#c6c2ba 46%,#77746f 61%,#353432 77%,#080808 100%)}
 .brand-action,.studio-cta {background-color:var(--brand-gold);background-image:linear-gradient(110deg,transparent 12%,rgba(255,255,255,.42) 48%,transparent 76%);background-size:210% 100%;background-position:0 50%;color:#111;border:1px solid #c5a05e;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
 .brand-action:not(:disabled):is(:hover,:focus-visible,:active),.studio-cta:is(:hover,:focus-visible,:active) {background-position:100% 50%;color:#111}
 .brand-mark,.brand-selected,.brand-outline {color:var(--brand-gold);border:1px solid var(--brand-gold);background:var(--brand-black)}
@@ -229,54 +229,26 @@
 
 
 /* Restrained editorial portrait on warm stone; the existing image is unchanged. */
-.hero-studio{position:relative;isolation:isolate;overflow:hidden;min-height:690px;color:#161513;padding:113px 24px 36px}
-.hero-studio::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;background:radial-gradient(circle at 78% 38%,rgba(203,168,108,.15),transparent 46%),repeating-linear-gradient(103deg,transparent 0px,transparent 109px,rgba(143,121,83,.055) 110px,transparent 111px)}
-.hero-studio::after{content:"<main>   // build  { design: purpose }   </main>";position:absolute;left:5%;bottom:12%;font:11px ui-monospace,SFMono-Regular,monospace;letter-spacing:.16em;color:rgba(77,67,54,.08);pointer-events:none;white-space:nowrap;transform:rotate(-4deg)}
-.hero-shell{position:relative;z-index:1}
-.hero-kicker{font-size:11px;letter-spacing:.26em;font-weight:650;color:#6d6458;border-bottom:1px solid rgba(31,27,20,.14);padding-bottom:18px}
-.hero-kicker span{margin:0 10px;color:#b08f57}
-.hero-layout{display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:24px;min-height:540px}
-.hero-copy{position:relative;z-index:3;padding:25px 0}
-.hero-headline{font-size:clamp(3.7rem,6.7vw,7.1rem);line-height:.99;letter-spacing:-.075em;font-weight:600;max-width:11ch}
-.hero-headline span{color:#847052}
-.hero-lead{font-size:clamp(1rem,1.4vw,1.16rem);line-height:1.65;margin-top:28px;max-width:33ch;color:#514b43}
-.hero-services{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;max-width:460px}
-.hero-services span{font-size:11px;padding:8px 11px;border:1px solid rgba(29,24,17,.19);border-radius:99px;color:#42382e;background:rgba(255,255,255,.3)}
-.hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:22px;margin-top:30px}
-.hero-text-link{display:inline-flex;align-items:center;gap:7px;color:#28221a;font-size:14px;font-weight:600;white-space:nowrap;border-bottom:1px solid rgba(40,34,26,.3);padding:9px 0;transition:border-color .2s}
-.hero-text-link:hover{border-color:#28221a}
-.hero-visual{position:relative;align-self:end;width:100%;max-width:510px;margin-inline:auto}
-.hero-photo-frame{position:relative;width:100%;aspect-ratio:4/4.7}
-.hero-portrait{height:100%;width:100%;object-fit:contain;object-position:bottom;mask-image:linear-gradient(to bottom,black 88%,transparent 100%)}
-.hero-signature{position:absolute;right:3%;bottom:6%;font:10px ui-monospace,SFMono-Regular,monospace;letter-spacing:.2em;color:rgba(43,35,25,.38)}
-.hero-fade{position:absolute;pointer-events:none;inset:auto 0 0;height:30px;background:linear-gradient(to bottom,transparent,#080808)}
-@media(min-width:1100px){.hero-studio{min-height:740px}.hero-layout{min-height:585px}}
-@media(max-width:767px){
- .hero-studio{padding:97px 20px 0;min-height:670px;height:auto}
- .hero-kicker{font-size:9px;letter-spacing:.19em;padding-bottom:14px}
- .hero-layout{display:block;position:relative;min-height:535px}
- .hero-copy{padding-top:36px;padding-bottom:155px;width:100%}
- .hero-headline{max-width:5.4ch;font-size:clamp(2.4rem,10.8vw,4rem);line-height:1.04;letter-spacing:-.068em;position:relative;z-index:3}
- .hero-lead{max-width:17ch;font-size:13px;line-height:1.5;margin-top:17px}
- .hero-services{max-width:175px;gap:6px;margin-top:13px}
- .hero-services span{font-size:10px;padding:6px 8px}
- .hero-visual{position:absolute;width:75%;right:-8%;top:55px;max-width:340px;z-index:1;pointer-events:none}
- .hero-photo-frame{aspect-ratio:4/5.7}
- .hero-signature{bottom:5%;font-size:8px}
- .hero-actions{position:absolute;z-index:4;top:380px;left:0;right:0;display:flex;flex-direction:column;align-items:stretch;gap:10px;margin:0}
- .studio-cta{min-height:51px;font-size:14px}
- .hero-text-link{align-self:flex-start;font-size:13px;padding:8px 0}
- .hero-fade{height:28px}
+
+.hero-depth {position:relative;isolation:isolate;overflow:hidden;min-height:1100px;height:135svh;max-height:1400px;background:linear-gradient(to bottom,#e8e4dc 0%,#e8e4dc 28%,#c6c2ba 46%,#77746f 61%,#353432 77%,#080808 100%);color:#242320}
+.hero-depth-stage {position:relative;max-width:1440px;height:850px;margin:auto}
+.hero-depth-portrait {position:absolute;z-index:2;top:90px;left:50%;width:540px;height:675px;max-width:none;object-fit:contain;transform:translate(-50%,var(--portrait-shift,0px));mask-image:linear-gradient(#000 75%,transparent 100%)}
+.hero-depth-title {position:absolute;z-index:1;inset:320px 5% auto;display:flex;align-items:center;justify-content:space-between;gap:380px;font-size:clamp(28px,3.2vw,48px);line-height:1.13;font-weight:550;letter-spacing:-.05em;transform:translateY(var(--title-shift,0px))}
+.hero-depth-title span {max-width:29%}
+.site-nav {background:rgba(232,228,220,.12)!important;backdrop-filter:blur(22px) saturate(1.1);border-color:rgb(0 0 0 / .08)!important;color:#242320;transition:background .4s,color .4s}
+.site-nav[data-dark="true"] {background:rgb(8 8 8 / .7)!important;color:#fff;border-color:rgb(255 255 255 / .1)!important}
+.site-nav:not([data-dark="true"]) .ui-nav,.site-nav:not([data-dark="true"]) .text-white {color:inherit}
+.site-nav:not([data-dark="true"]) .brand-outline,.site-nav:not([data-dark="true"]) .brand-mark,.site-nav:not([data-dark="true"]) .brand-selected{background:rgba(232,228,220,.2);color:#242320;border-color:#24232044}
+.site-nav:not([data-dark="true"]) .nav-language{background:transparent!important;border-color:#24232044!important}
+.site-nav:not([data-dark="true"]) .nav-language button{color:#242320}
+@media(max-width:767px) {
+ .hero-depth {height:125svh;min-height:940px;max-height:1200px}
+ .hero-depth-stage {height:720px}
+ .hero-depth-portrait {top:210px;width:380px;height:475px}
+ .hero-depth-title {inset:125px 6% auto;gap:20px;font-size:clamp(21px,5.7vw,30px)}
+ .hero-depth-title span {max-width:50%;overflow-wrap:anywhere}
+ .hero-depth-title span:last-child {text-align:right}
 }
-@media(min-width:500px) and (max-width:767px){
- .hero-studio{min-height:720px}
- .hero-headline{max-width:9ch;font-size:clamp(3.7rem,8vw,5rem)}
- .hero-visual{right:-3%;width:58%;top:50px}
- .hero-lead{max-width:27ch}
- .hero-services{max-width:300px}
- .hero-actions{top:385px;right:37%}
-}
-@media(max-width:359px){.hero-headline{font-size:36px}.hero-visual{width:75%;right:-11%;top:70px}.hero-actions{top:365px}}
 /* Native scrolling prevents RAF and scrollLeft competing with gestures. */
 .client-marquee{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x;cursor:grab;user-select:none}
 .client-marquee.is-dragging{cursor:grabbing;scroll-behavior:auto}
@@ -312,3 +284,29 @@
 .contact-hand-actions .grid > div{border:1px solid rgba(212,175,106,.45);background:rgba(8,8,8,.8)}
 @media(max-width:520px){.contact-hand-actions{left:0;right:0;bottom:1%}.contact-hand-actions .grid > div{padding:8px}.contact-hand-actions .grid button{font-size:11px;padding:9px 4px}.contact-hands{margin-top:5px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.glass-action,.studio-cta,.project-book,.menu-morph i{transition:none!important}.glass-action::after{animation:none!important}}
+
+.contact-hand-actions{top:12%;bottom:auto;left:0;right:0}
+.contact-hand-actions > .contact-reveal-pair{background:none;border:0;backdrop-filter:none;padding:0}
+.contact-reveal-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,10vw,120px)}
+.contact-reveal-card{position:relative;min-width:0;height:108px;padding:10px;border:1px solid #d4af6a66;border-radius:12px;background:#080808ee}
+.contact-reveal-card > p{font-size:10px;letter-spacing:.12em}
+.contact-reveal-button,.contact-revealed-value{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:60px;min-width:0;font-size:clamp(10px,2.6vw,14px);line-height:1.4;text-align:center;overflow-wrap:anywhere}
+.contact-reveal-button{gap:5px}.contact-reveal-button svg{flex-shrink:0;width:13px}
+.contact-dust{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.contact-revealed-value span{animation:contact-value 1.1s both}
+@keyframes contact-value{0%,85%{opacity:0}100%{opacity:1}}
+.project-shelf .project-book-image{object-fit:contain;object-position:center top;height:55%;background:#080808;opacity:1;filter:none}
+.project-shelf .project-book:after{background:linear-gradient(transparent 45%,#080808 60%)}
+.project-shelf .project-book-content{padding:20px}
+@media(max-width:767px){
+ .project-shelf{display:block;height:auto;margin-inline:0;padding:0;width:100%;overflow:visible}
+ .project-shelf .project-book{min-width:0;margin-bottom:10px;height:64px}
+ .project-shelf .project-book[data-active="true"]{height:auto;min-height:260px;min-width:0}
+ .project-shelf .project-book-spine{writing-mode:horizontal-tb;transform:none;left:18px;bottom:22px;font-size:13px;letter-spacing:0}
+ .project-shelf .project-book-image{display:none}
+ .project-shelf .project-book[data-active="true"] .project-book-image{display:block;position:relative;inset:auto;width:100%;height:auto;max-height:300px;aspect-ratio:16/10;object-fit:contain}
+ .project-shelf .project-book[data-active="true"] .project-book-content{position:relative;inset:auto;transform:none}
+ .project-shelf .project-book:after{display:none}
+ .project-shelf .project-book-content p{display:block;-webkit-line-clamp:unset}
+}
+@media(prefers-reduced-motion:reduce){.contact-revealed-value span{animation:none}}

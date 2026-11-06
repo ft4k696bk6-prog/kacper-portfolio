@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { CalendarDays, Mail } from "lucide-react";
+import { CalendarDays, Cookie, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -19,6 +19,13 @@ export function LanguageSwitcher() {
   const { lang, setLang, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const [dark, setDark] = useState(pathname !== "/");
+  useEffect(() => {
+    const update = () => { const hero = document.getElementById("home"); setDark(!hero || scrollY > hero.offsetHeight * .52); };
+    window.addEventListener("scroll", update, { passive: true }); update();
+    return () => window.removeEventListener("scroll", update);
+  }, [pathname]);
+  const cookies = <button type="button" aria-label={t.consent.settings} onClick={() => window.dispatchEvent(new Event("portfolio-open-cookie-settings"))} className="brand-outline grid h-10 w-10 place-items-center rounded-md"><Cookie size={17}/></button>;
   const anchorHref = (hash: string) => (pathname === "/" ? hash : `/${hash}`);
 
   const languageButton = (value: "pl" | "en", label: string) => (
@@ -37,7 +44,7 @@ export function LanguageSwitcher() {
 
   return (
     <motion.header
-      className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[var(--brand-black)]/85 backdrop-blur-xl"
+      data-dark={dark} className="site-nav fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[var(--brand-black)]/85 backdrop-blur-xl"
       initial={{ opacity: 0, y: -18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
@@ -56,7 +63,7 @@ export function LanguageSwitcher() {
           </span>
         </a>
 
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="hidden items-center gap-1 xl:flex">
           {navItems.map((item) => (
             <a
               key={item.href}
@@ -69,8 +76,8 @@ export function LanguageSwitcher() {
           <Link href="/poradniki" className="ui-nav rounded-md px-4 py-2 text-sm">{lang === "pl" ? "Poradniki" : "Guides"}</Link>
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
-          <div className="flex rounded-md border border-white/10 bg-[var(--brand-black)] p-1">
+        <div className="hidden items-center gap-3 xl:flex">{cookies}
+          <div className="nav-language flex rounded-md border border-white/10 bg-[var(--brand-black)] p-1">
             {languageButton("pl", "PL")}
             {languageButton("en", "ENG")}
           </div>
@@ -90,8 +97,8 @@ export function LanguageSwitcher() {
           </a>
         </div>
 
-        <div className="flex items-center gap-2 lg:hidden">
-          <div className="flex rounded-md border border-white/35 bg-[var(--brand-black)] p-1">
+        <div className="flex items-center gap-2 xl:hidden">{cookies}
+          <div className="nav-language flex rounded-md border border-white/35 bg-[var(--brand-black)] p-1">
             {languageButton("pl", "PL")}
             {languageButton("en", "ENG")}
           </div>
@@ -110,7 +117,7 @@ export function LanguageSwitcher() {
       {isOpen && (
         <motion.div
           id="mobile-portfolio-navigation"
-          className="border-t border-white/10 bg-[var(--brand-black)] px-5 py-5 lg:hidden"
+          className="border-t border-white/10 bg-[var(--brand-black)] px-5 py-5 xl:hidden"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}

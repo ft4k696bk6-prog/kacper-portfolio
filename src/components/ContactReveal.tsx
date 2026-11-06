@@ -1,5 +1,6 @@
 "use client";
 
+import { DustReveal } from "@/components/DustReveal";
 import { useState } from "react";
 import type { ReactNode } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
@@ -79,8 +80,8 @@ export function ContactReveal({ copy }: ContactRevealProps) {
   }
 
   return (
-    <div className="rounded-md border border-white/10 bg-[var(--brand-black)] p-4 md:p-5">
-      <div className="grid gap-3 sm:grid-cols-2">
+    <div className="contact-reveal-pair">
+      <div className="contact-reveal-grid">
         <RevealButton
           icon={<Phone className="h-4 w-4" />}
           label={copy.phoneLabel}
@@ -142,7 +143,7 @@ function RevealButton({
   onClick: () => void;
 }) {
   return (
-    <div className="rounded-md border border-white/10 bg-black/20 p-3">
+    <div className="contact-reveal-card">
       <p className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-white/70">
         {icon}
         {label}
@@ -150,16 +151,16 @@ function RevealButton({
       {value && href ? (
         <a
           href={href}
-          className="mt-2 block break-all text-sm text-white transition-colors hover:text-white"
+          className="contact-revealed-value"
         >
-          {value}
+          <DustReveal text={value}/><span>{value}</span>
         </a>
       ) : (
         <button
           type="button"
           onClick={onClick}
           disabled={loading}
-          className="glass-action mt-2 inline-flex w-full items-center justify-center gap-2 rounded-md border border-white/35 bg-[var(--brand-black)] px-3 py-2.5 text-sm text-white transition-all hover:border-[var(--brand-gold)] disabled:cursor-not-allowed disabled:opacity-70"
+          className="contact-reveal-button glass-action"
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
           {buttonLabel}

@@ -18,8 +18,8 @@ const steps = [
 ];
 const numbers = [
   { value: "ok. 2 lata", title: "Okres pozyskiwania leadów", detail: "Czas podany przez właściciela firmy." },
-  { value: "ok. 90 tys. zł", title: "Łączne wydatki reklamowe", detail: "Szacunkowa kwota przekazana przez właściciela." },
-  { value: "wiele mln zł", title: "Obrót przedsiębiorstwa", detail: "Deklarowany obrót firmy, nie przychód przypisany reklamom." },
+  { value: "90 837 zł", title: "Wydatki na leady", detail: "Zaktualizowana kwota podana przez Kacpra Berneckiego; Meta służyło pozyskiwaniu klientów i pracowników." },
+  { value: "6 mln zł", title: "Obrót przedsiębiorstwa", detail: "Według relacji Kacpra Berneckiego. Obrót firmy, nie zysk ani niezależnie zmierzony ROAS." },
 ];
 const screenshotMetrics = [
   { value: "2 331", title: "Kontakty w Meta", detail: "Suma wyników w 17 wybranych kampaniach pozyskiwania kontaktów." },
