@@ -82,15 +82,6 @@ export function ContactReveal({ copy }: ContactRevealProps) {
     <div className="rounded-md border border-white/10 bg-[var(--brand-black)] p-4 md:p-5">
       <div className="grid gap-3 sm:grid-cols-2">
         <RevealButton
-          icon={<Mail className="h-4 w-4" />}
-          label={copy.emailLabel}
-          buttonLabel={copy.emailButton}
-          value={revealed.email}
-          href={revealed.email ? `mailto:${revealed.email}` : undefined}
-          loading={state === "checking" && activeTarget === "email"}
-          onClick={() => requestReveal("email")}
-        />
-        <RevealButton
           icon={<Phone className="h-4 w-4" />}
           label={copy.phoneLabel}
           buttonLabel={copy.phoneButton}
@@ -98,6 +89,15 @@ export function ContactReveal({ copy }: ContactRevealProps) {
           href={revealed.phone ? `tel:${revealed.phone.replace(/\s/g, "")}` : undefined}
           loading={state === "checking" && activeTarget === "phone"}
           onClick={() => requestReveal("phone")}
+        />
+        <RevealButton
+          icon={<Mail className="h-4 w-4" />}
+          label={copy.emailLabel}
+          buttonLabel={copy.emailButton}
+          value={revealed.email}
+          href={revealed.email ? `mailto:${revealed.email}` : undefined}
+          loading={state === "checking" && activeTarget === "email"}
+          onClick={() => requestReveal("email")}
         />
       </div>
 

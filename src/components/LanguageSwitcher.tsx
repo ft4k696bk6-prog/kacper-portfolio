@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { CalendarDays, Laptop, Mail, Menu, X } from "lucide-react";
+import Link from "next/link";
+import { CalendarDays, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -65,6 +66,7 @@ export function LanguageSwitcher() {
               {t.nav[item.key]}
             </a>
           ))}
+          <Link href="/poradniki" className="ui-nav rounded-md px-4 py-2 text-sm">{lang === "pl" ? "Poradniki" : "Guides"}</Link>
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
@@ -72,15 +74,6 @@ export function LanguageSwitcher() {
             {languageButton("pl", "PL")}
             {languageButton("en", "ENG")}
           </div>
-          <a
-            href="https://kacper-bernecki.vercel.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="brand-outline inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm transition-colors"
-          >
-            <Laptop className="h-4 w-4 text-white" />
-            {t.nav.interactive}
-          </a>
           <a
             href={anchorHref("#contact")}
             className="brand-action glass-action inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm transition-all hover:-translate-y-0.5"
@@ -102,27 +95,21 @@ export function LanguageSwitcher() {
             {languageButton("pl", "PL")}
             {languageButton("en", "ENG")}
           </div>
-          <a
-            href="https://kacper-bernecki.vercel.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={t.nav.interactive}
-            className="brand-outline grid h-11 w-11 place-items-center rounded-md transition-colors"
-          >
-            <Laptop className="h-5 w-5" />
-          </a>
           <button
             onClick={() => setIsOpen((open) => !open)}
             className="brand-outline grid h-11 w-11 place-items-center rounded-md transition-colors"
+            aria-expanded={isOpen}
+            aria-controls="mobile-portfolio-navigation"
             aria-label={isOpen ? t.nav.closeMenu : t.nav.openMenu}
           >
-            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <span className={["menu-morph", isOpen ? "is-open" : ""].join(" ")} aria-hidden="true"><i/><i/><i/></span>
           </button>
         </div>
       </div>
 
       {isOpen && (
         <motion.div
+          id="mobile-portfolio-navigation"
           className="border-t border-white/10 bg-[var(--brand-black)] px-5 py-5 lg:hidden"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -139,6 +126,7 @@ export function LanguageSwitcher() {
                 {t.nav[item.key]}
               </a>
             ))}
+            <Link href="/poradniki" className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang === "pl" ? "Poradniki" : "Guides"}</Link>
             <div className="mt-3 flex items-center justify-between gap-3">
               <a
                 href={anchorHref("#contact")}

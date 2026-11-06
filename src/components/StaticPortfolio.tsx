@@ -1,7 +1,6 @@
 "use client";
 
 import { Hero } from "@/components/Hero";
-import { KineticBackdrop } from "@/components/KineticBackdrop";
 import { ClientMarquee } from "@/components/ClientMarquee";
 import { Profile } from "@/components/Profile";
 import { Experience } from "@/components/Experience";
@@ -168,7 +167,6 @@ export function StaticPortfolio() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <div className="portfolio-scene">
-      <KineticBackdrop />
       <main className="portfolio-content min-h-screen text-white">
         <Hero />
         <ClientMarquee />
