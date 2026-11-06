@@ -49,10 +49,10 @@ export const metadata: Metadata = {
     alternateLocale: "en_US",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?brand=silver-kb-2026",
         width: 1200,
         height: 630,
-        alt: "Kacper Bernecki — Frontend / Web App Developer",
+        alt: "Kacper Bernecki — srebrne logo KB, strony internetowe, CRM i aplikacje",
       },
     ],
   },
@@ -61,15 +61,19 @@ export const metadata: Metadata = {
     title: "Kacper Bernecki — strony internetowe, CRM i aplikacje webowe",
     description:
       "Strony internetowe, landing page i CRM-y dla firm. Od pomysłu i projektu po wdrożenie — bezpośrednio z Kacprem Berneckim.",
-    images: ["/opengraph-image"],
+    images: ["/opengraph-image?brand=silver-kb-2026"],
   },
   alternates: {
     canonical: siteUrl,
   },
   manifest: "/site.webmanifest",
   icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/apple-touch-icon.svg", type: "image/svg+xml" }],
+    icon: [
+      { url: "/favicon-silver.svg", type: "image/svg+xml" },
+      { url: "/icon", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: [{ url: "/favicon-silver.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/apple-icon", type: "image/png", sizes: "180x180" }],
   },
   robots: {
     index: true,
