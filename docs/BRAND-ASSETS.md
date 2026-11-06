@@ -12,4 +12,6 @@ Pasek współprac wykorzystuje nazwy klientów wskazane przez właściciela port
 
 Na pasku zachowano oryginalne kolory logotypów, bez filtrów grayscale/brightness.
 
+Jalapeno: zachowano oryginalny plik JPG. Czarny prostokąt jest neutralizowany przez `mix-blend-mode: screen` na jawnie określonym, izolowanym tle kafelka (również w hover), dzięki czemu kompozycja nie zależy od warstw przewijanego paska. Nie wykorzystano automatycznie wygenerowanych wariantów, które zniekształcały litery.
+
 Grafiki przechowywane lokalnie, bez zależności od dostępności serwerów klientów. Sprawdzone 2026-11-06.
