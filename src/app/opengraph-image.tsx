@@ -28,12 +28,52 @@ export default async function OpenGraphImage() {
       <div
         style={{
           display: "flex",
-          fontSize: 24,
-          color: "#f4f4f5",
-          letterSpacing: 4,
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
-        KACPER BERNECKI / BERNECKI.DEV
+        <div
+          style={{
+            display: "flex",
+            fontSize: 24,
+            color: "#f4f4f5",
+            letterSpacing: 4,
+          }}
+        >
+          KACPER BERNECKI / BERNECKI.DEV
+        </div>
+        {/* Silver KB badge echoes the site's current /favicon-silver.svg. */}
+        <div
+          style={{
+            display: "flex",
+            width: 84,
+            height: 84,
+            padding: 7,
+            borderRadius: 18,
+            background: "#090909",
+            border: "2px solid #77777b",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              height: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 12,
+              background: "#111111",
+              border: "2px solid rgba(244,244,245,0.65)",
+              color: "#e4e4e7",
+              fontSize: 27,
+              fontWeight: 700,
+              letterSpacing: 2,
+            }}
+          >
+            KB
+          </div>
+        </div>
       </div>
       <div
         style={{
