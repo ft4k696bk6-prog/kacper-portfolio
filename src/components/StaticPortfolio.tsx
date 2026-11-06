@@ -1,6 +1,7 @@
 "use client";
 
 import { Hero } from "@/components/Hero";
+import { TriangleBackdrop } from "@/components/TriangleBackdrop";
 import { ClientMarquee } from "@/components/ClientMarquee";
 import { Profile } from "@/components/Profile";
 import { Experience } from "@/components/Experience";
@@ -166,7 +167,9 @@ export function StaticPortfolio() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <main className="min-h-screen bg-[#070707] text-white">
+      <div className="portfolio-scene">
+      <TriangleBackdrop />
+      <main className="portfolio-content min-h-screen text-white">
         <Hero />
         <ClientMarquee />
         <Projects />
@@ -219,6 +222,7 @@ export function StaticPortfolio() {
         </section>
         <Contact />
       </main>
+      </div>
     </>
   );
 }

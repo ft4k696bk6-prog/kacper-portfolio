@@ -43,7 +43,7 @@ export default async function OpenGraphImage() {
         >
           KACPER BERNECKI / BERNECKI.DEV
         </div>
-        {/* Silver KB badge echoes the site's current /favicon-silver.svg. */}
+        {/* Gold KB badge echoes the site's current /favicon-gold.svg. */}
         <div
           style={{
             display: "flex",
@@ -52,7 +52,7 @@ export default async function OpenGraphImage() {
             padding: 7,
             borderRadius: 18,
             background: "#090909",
-            border: "2px solid #77777b",
+            border: "2px solid #a88b56",
           }}
         >
           <div
@@ -64,8 +64,8 @@ export default async function OpenGraphImage() {
               justifyContent: "center",
               borderRadius: 12,
               background: "#111111",
-              border: "2px solid rgba(244,244,245,0.65)",
-              color: "#e4e4e7",
+              border: "2px solid rgba(201,168,106,0.8)",
+              color: "#d8bb87",
               fontSize: 27,
               fontWeight: 700,
               letterSpacing: 2,

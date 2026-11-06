@@ -35,6 +35,12 @@ export async function generateMetadata({
     alternates: {
       canonical: `${siteUrl}/case-studies/${study.slug}`,
     },
+    twitter: {
+      card: "summary_large_image",
+      title: `${study.title} — Case study | Kacper Bernecki`,
+      description: study.summary,
+      images: study.images?.[0] ? [{ url: study.images[0].src, alt: study.images[0].alt }] : ["/opengraph-image"],
+    },
     openGraph: {
       title: `${study.title} — Case study`,
       description: study.summary,

@@ -23,6 +23,13 @@ function contrast(first: string, second: string) {
 }
 
 describe("champagne accent readability", () => {
+  it("keeps every metallic gradient stop readable behind dark button text", () => {
+    const gradient = css.match(/--brand-metal:([^;]+);/)?.[1];
+    expect(gradient).toBeTruthy();
+    const stops = gradient!.match(/#[a-f0-9]{6}/gi)!;
+    expect(stops.length).toBeGreaterThanOrEqual(5);
+    for (const stop of stops) expect(contrast(stop, "#171717")).toBeGreaterThanOrEqual(7);
+  });
   it.each(["--brand-gold", "--brand-gold-hover"])("keeps dark CTA text at AAA contrast on %s", (name) => {
     expect(contrast(token(name), "#171717")).toBeGreaterThanOrEqual(7);
   });

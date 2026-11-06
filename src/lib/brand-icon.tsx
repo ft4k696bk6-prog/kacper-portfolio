@@ -1,10 +1,10 @@
 import { ImageResponse } from "next/og";
 
 /**
- * Rasterize the existing silver KB mark used by /favicon.svg for platforms
+ * Rasterize the gold KB mark used by /favicon-gold.svg for platforms
  * that require PNG icons (home screen and PWA installations).
  */
-export function renderSilverBrandIcon(size: number) {
+export function renderBrandIcon(size: number) {
   const scale = size / 64;
 
   return new ImageResponse(
@@ -23,7 +23,7 @@ export function renderSilverBrandIcon(size: number) {
         style={{
           display: "flex",
           flex: 1,
-          border: `${2 * scale}px solid rgba(244,244,245,0.65)`,
+          border: `${2 * scale}px solid rgba(201,168,106,0.8)`,
           borderRadius: 11 * scale,
           background: "#111111",
           alignItems: "center",
@@ -33,7 +33,7 @@ export function renderSilverBrandIcon(size: number) {
         <span
           style={{
             display: "flex",
-            color: "#e4e4e7",
+            color: "#d8bb87",
             fontSize: 22 * scale,
             fontWeight: 700,
             letterSpacing: 1.5 * scale,
