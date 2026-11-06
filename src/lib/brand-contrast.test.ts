@@ -22,16 +22,16 @@ function contrast(first: string, second: string) {
   return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
 }
 
-describe("champagne accent readability", () => {
-  it("keeps every metallic gradient stop readable behind dark button text", () => {
-    const gradient = css.match(/--brand-metal:([^;]+);/)?.[1];
-    expect(gradient).toBeTruthy();
-    const stops = gradient!.match(/#[a-f0-9]{6}/gi)!;
-    expect(stops.length).toBeGreaterThanOrEqual(5);
-    for (const stop of stops) expect(contrast(stop, "#171717")).toBeGreaterThanOrEqual(7);
+describe("three-color visual system", () => {
+  it("has one gold accent, with no separate silver or gradient gold palette", () => {
+    expect(token("--brand-black")).toBe("#080808");
+    expect(token("--brand-white")).toBe("#ffffff");
+    expect(token("--brand-gold")).toBe("#d4af6a");
+    expect(css).not.toContain("--brand-metal");
+    expect(css).not.toContain("--brand-gold-hover");
   });
-  it.each(["--brand-gold", "--brand-gold-hover"])("keeps dark CTA text at AAA contrast on %s", (name) => {
-    expect(contrast(token(name), "#171717")).toBeGreaterThanOrEqual(7);
+  it("keeps dark CTA text at AAA contrast", () => {
+    expect(contrast(token("--brand-gold"), token("--brand-black"))).toBeGreaterThanOrEqual(7);
   });
 
   it("keeps small gold labels readable against the dark section surfaces", () => {

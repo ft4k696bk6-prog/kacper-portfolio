@@ -79,7 +79,7 @@ export function ContactReveal({ copy }: ContactRevealProps) {
   }
 
   return (
-    <div className="rounded-md border border-white/10 bg-white/[0.035] p-4 md:p-5">
+    <div className="rounded-md border border-white/10 bg-[var(--brand-black)] p-4 md:p-5">
       <div className="grid gap-3 sm:grid-cols-2">
         <RevealButton
           icon={<Mail className="h-4 w-4" />}
@@ -103,7 +103,7 @@ export function ContactReveal({ copy }: ContactRevealProps) {
 
       {turnstileSiteKey && humanCheckTarget && !revealed[humanCheckTarget] && (
         <div className="mt-4 rounded-md border border-white/10 bg-black/20 p-3">
-          <p className="mb-3 text-xs uppercase tracking-[0.16em] text-zinc-500">
+          <p className="mb-3 text-xs uppercase tracking-[0.16em] text-white/70">
             {copy.humanCheckLabel}
           </p>
           <Turnstile
@@ -116,7 +116,7 @@ export function ContactReveal({ copy }: ContactRevealProps) {
       )}
 
       {message && state === "error" && (
-        <p className="mt-4 rounded-md border border-red-400/20 bg-red-400/10 p-3 text-sm text-red-100">
+        <p className="mt-4 rounded-md border border-[var(--brand-gold)] bg-[var(--brand-black)] p-3 text-sm text-white">
           {message}
         </p>
       )}
@@ -143,14 +143,14 @@ function RevealButton({
 }) {
   return (
     <div className="rounded-md border border-white/10 bg-black/20 p-3">
-      <p className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-zinc-500">
+      <p className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-white/70">
         {icon}
         {label}
       </p>
       {value && href ? (
         <a
           href={href}
-          className="mt-2 block break-all text-sm text-[#e4e4e7] transition-colors hover:text-white"
+          className="mt-2 block break-all text-sm text-white transition-colors hover:text-white"
         >
           {value}
         </a>
@@ -159,7 +159,7 @@ function RevealButton({
           type="button"
           onClick={onClick}
           disabled={loading}
-          className="glass-action mt-2 inline-flex w-full items-center justify-center gap-2 rounded-md border border-[#f4f4f5]/35 bg-[#f4f4f5]/10 px-3 py-2.5 text-sm text-[#e4e4e7] transition-all hover:border-[#f4f4f5]/70 disabled:cursor-not-allowed disabled:opacity-70"
+          className="glass-action mt-2 inline-flex w-full items-center justify-center gap-2 rounded-md border border-white/35 bg-[var(--brand-black)] px-3 py-2.5 text-sm text-white transition-all hover:border-[var(--brand-gold)] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
           {buttonLabel}

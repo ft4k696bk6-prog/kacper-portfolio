@@ -13,7 +13,7 @@ export function renderBrandIcon(size: number) {
         display: "flex",
         width: "100%",
         height: "100%",
-        background: "#090909",
+        background: "#080808",
         padding: 5 * scale,
         borderRadius: 14 * scale,
         alignItems: "stretch",
@@ -23,9 +23,9 @@ export function renderBrandIcon(size: number) {
         style={{
           display: "flex",
           flex: 1,
-          border: `${2 * scale}px solid rgba(201,168,106,0.8)`,
+          border: `${2 * scale}px solid rgba(212,175,106,0.8)`,
           borderRadius: 11 * scale,
-          background: "#111111",
+          background: "#080808",
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -33,7 +33,7 @@ export function renderBrandIcon(size: number) {
         <span
           style={{
             display: "flex",
-            color: "#d8bb87",
+            color: "#d4af6a",
             fontSize: 22 * scale,
             fontWeight: 700,
             letterSpacing: 1.5 * scale,

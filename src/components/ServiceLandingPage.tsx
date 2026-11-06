@@ -150,31 +150,30 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
   };
 
   return (
-    <main className="min-h-screen bg-[#070707] text-white">
+    <main className="min-h-screen bg-[var(--brand-black)] text-white">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <section className="relative overflow-hidden border-b border-white/10 px-5 pb-20 pt-36 md:px-8 md:pb-28 md:pt-44">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(244,244,245,0.18),transparent_34%),radial-gradient(circle_at_82%_25%,rgba(45,45,45,0.2),transparent_34%)]" />
         <div className="relative mx-auto max-w-6xl">
           <Link
             href="/"
-            className="mb-10 inline-flex items-center gap-2 text-sm text-[#e4e4e7] hover:text-white"
+            className="mb-10 inline-flex items-center gap-2 text-sm text-white hover:text-white"
           >
-            <span className="grid h-8 w-8 place-items-center rounded-md border border-[#f4f4f5]/40 bg-[#f4f4f5]/10 text-xs">
+            <span className="grid h-8 w-8 place-items-center rounded-md border border-white/40 bg-[var(--brand-black)] text-xs">
               KB
             </span>
             Kacper Bernecki
           </Link>
-          <p className="mb-5 flex items-center gap-2 text-sm uppercase tracking-[0.18em] text-[#f4f4f5]">
+          <p className="mb-5 flex items-center gap-2 text-sm uppercase tracking-[0.18em] text-white">
             <Sparkles className="h-4 w-4" />
             {page.eyebrow}
           </p>
           <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">
             {page.heading}
           </h1>
-          <p className="mt-7 max-w-3xl text-lg leading-8 text-zinc-300">
+          <p className="mt-7 max-w-3xl text-lg leading-8 text-white">
             {page.intro}
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -186,7 +185,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
             </Link>
             <Link
               href={page.proofHref}
-              className="glass-action inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-6 py-3 text-zinc-200 transition hover:border-[#f4f4f5]/60 hover:text-[#e4e4e7]"
+              className="glass-action inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-6 py-3 text-white transition hover:border-[var(--brand-gold)] hover:text-white"
             >
               {page.proof} <ArrowRight className="h-4 w-4" />
             </Link>
@@ -196,7 +195,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
 
       <section className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-[0.8fr_1.2fr] md:px-8 md:py-24">
         <div>
-          <p className="text-sm uppercase tracking-[0.18em] text-[#f4f4f5]">
+          <p className="text-sm uppercase tracking-[0.18em] text-white">
             Co mogę zrobić
           </p>
           <h2 className="mt-4 text-3xl">
@@ -207,18 +206,18 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           {page.bullets.map((bullet) => (
             <div
               key={bullet}
-              className="flex gap-3 rounded-xl border border-white/10 bg-white/[0.035] p-4 text-zinc-200"
+              className="flex gap-3 rounded-xl border border-white/10 bg-[var(--brand-black)] p-4 text-white"
             >
-              <Check className="mt-0.5 h-5 w-5 shrink-0 text-[#f4f4f5]" />
+              <Check className="mt-0.5 h-5 w-5 shrink-0 text-white" />
               <span>{bullet}</span>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="border-y border-white/10 bg-white/[0.025] px-5 py-16 md:px-8 md:py-24">
+      <section className="border-y border-white/10 bg-[var(--brand-black)] px-5 py-16 md:px-8 md:py-24">
         <div className="mx-auto max-w-6xl">
-          <p className="text-sm uppercase tracking-[0.18em] text-[#f4f4f5]">
+          <p className="text-sm uppercase tracking-[0.18em] text-white">
             Dlaczego ze mną
           </p>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -241,11 +240,11 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
             ].map(([Icon, title, description]) => (
               <div
                 key={title as string}
-                className="rounded-2xl border border-white/10 bg-[#0b0b0b] p-6"
+                className="rounded-2xl border border-white/10 bg-[var(--brand-black)] p-6"
               >
-                <Icon className="h-6 w-6 text-[#f4f4f5]" />
+                <Icon className="h-6 w-6 text-white" />
                 <h3 className="mt-5 text-xl">{title as string}</h3>
-                <p className="mt-3 leading-7 text-zinc-400">
+                <p className="mt-3 leading-7 text-white/70">
                   {description as string}
                 </p>
               </div>
@@ -263,7 +262,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
             <Link
               key={example.slug}
               href={`/case-studies/${example.slug}`}
-              className="glass-action group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] transition hover:border-[#f4f4f5]/50"
+              className="glass-action group overflow-hidden rounded-2xl border border-white/10 bg-[var(--brand-black)] transition hover:border-[var(--brand-gold)]"
             >
               <Image
                 src={`/images/projects/${example.image}`}
@@ -273,7 +272,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
                 sizes="(min-width: 768px) 45vw, 100vw"
                 className="h-auto w-full"
               />
-              <p className="flex items-center justify-between p-5 text-[#e4e4e7]">
+              <p className="flex items-center justify-between p-5 text-white">
                 {example.name}
                 <ArrowRight className="h-4 w-4" />
               </p>
@@ -283,20 +282,20 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
       </section>
       <section className="mx-auto max-w-6xl px-5 py-12 md:px-8">
         <h2 className="text-3xl">Przygotuj się do rozmowy</h2>
-        {guides.filter(g => g.service === `/${slug}`).map(g => <Link key={g.slug} href={`/poradniki/${g.slug}`} className="glass-action mt-6 block rounded-xl border border-[#f4f4f5]/30 p-6">
-          <h3 className="text-xl text-[#e4e4e7]">{g.title} →</h3><p className="mt-3 leading-7 text-zinc-400">{g.description}</p>
+        {guides.filter(g => g.service === `/${slug}`).map(g => <Link key={g.slug} href={`/poradniki/${g.slug}`} className="glass-action mt-6 block rounded-xl border border-white/30 p-6">
+          <h3 className="text-xl text-white">{g.title} →</h3><p className="mt-3 leading-7 text-white/70">{g.description}</p>
         </Link>)}
-        <p className="mt-6 leading-7 text-zinc-400">{kind === "marketing" ? "Budżet reklamowy i koszt obsługi ustalamy osobno. Przed startem uzgadniamy ofertę, kanały, materiały i sposób oceny zapytań." : "Do rozmowy przygotuj cel projektu, najważniejsze funkcje, dostępne materiały i oczekiwany termin. Zakres i wycenę ustalamy przed rozpoczęciem prac."}</p>
+        <p className="mt-6 leading-7 text-white/70">{kind === "marketing" ? "Budżet reklamowy i koszt obsługi ustalamy osobno. Przed startem uzgadniamy ofertę, kanały, materiały i sposób oceny zapytań." : "Do rozmowy przygotuj cel projektu, najważniejsze funkcje, dostępne materiały i oczekiwany termin. Zakres i wycenę ustalamy przed rozpoczęciem prac."}</p>
       </section>
       <section className="mx-auto max-w-4xl px-5 py-16 md:px-8 md:py-24">
-        <p className="text-sm uppercase tracking-[0.18em] text-[#f4f4f5]">
+        <p className="text-sm uppercase tracking-[0.18em] text-white">
           Najczęstsze pytania
         </p>
-        <div className="mt-8 divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/[0.025] px-5">
+        <div className="mt-8 divide-y divide-white/10 rounded-2xl border border-white/10 bg-[var(--brand-black)] px-5">
           {faq.map((item) => (
             <div key={item.question} className="py-6">
               <h2 className="text-lg text-white">{item.question}</h2>
-              <p className="mt-3 leading-7 text-zinc-400">{item.answer}</p>
+              <p className="mt-3 leading-7 text-white/70">{item.answer}</p>
             </div>
           ))}
         </div>

@@ -17,7 +17,7 @@ export function Skills() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <p className="text-sm uppercase tracking-[0.28em] text-[#f4f4f5]">
+          <p className="text-sm uppercase tracking-[0.28em] text-white">
             {t.skills.title}
           </p>
           <h2 className="mt-4 max-w-4xl text-4xl leading-tight text-white md:text-5xl">
@@ -43,13 +43,13 @@ export function Skills() {
                   transition: { duration: 0.35, ease: "easeOut" },
                 },
               }}
-              className="min-h-40 rounded-md border border-white/10 bg-white/[0.035] p-5 text-zinc-200 transition-colors hover:border-[#f4f4f5]/45 hover:text-white"
+              className="min-h-40 rounded-md border border-white/10 bg-[var(--brand-black)] p-5 text-white transition-colors hover:border-[var(--brand-gold)] hover:text-white"
             >
               <div className="mb-4 flex items-center gap-3">
-                <CheckCircle2 className="h-5 w-5 shrink-0 text-[#f4f4f5]" />
+                <CheckCircle2 className="h-5 w-5 shrink-0 text-white" />
                 <h3 className="text-lg text-white">{skill.title}</h3>
               </div>
-              <p className="text-sm leading-7 text-zinc-400">{skill.description}</p>
+              <p className="text-sm leading-7 text-white/70">{skill.description}</p>
             </motion.div>
           ))}
         </motion.div>

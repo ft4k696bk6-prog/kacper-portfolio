@@ -40,11 +40,11 @@ export function ClientProof() {
   return (
     <section
       id="collaborations"
-      className="border-y border-white/10 bg-[#0b0b0b] px-5 py-20 md:px-8 md:py-28"
+      className="border-y border-white/10 bg-[var(--brand-black)] px-5 py-20 md:px-8 md:py-28"
     >
       <div className="mx-auto max-w-7xl">
         <div className="max-w-3xl">
-          <p className="text-sm uppercase tracking-[0.24em] text-[#f4f4f5]">
+          <p className="text-sm uppercase tracking-[0.24em] text-white">
             {lang === "pl" ? "Współprace" : "Collaborations"}
           </p>
           <h2 className="mt-4 text-3xl text-white md:text-5xl">
@@ -52,7 +52,7 @@ export function ClientProof() {
               ? "Firmy, z którymi współpracuję."
               : "Businesses I work with."}
           </h2>
-          <p className="mt-5 max-w-2xl leading-8 text-zinc-400">
+          <p className="mt-5 max-w-2xl leading-8 text-white/70">
             {lang === "pl"
               ? "Poniżej pokazuję wybrane współprace za zgodą klientów. Zakres jest konkretny, a kontakt pozostaje bezpośredni — bez przekazywania projektu między kilkoma osobami."
               : "Selected collaborations shown with client permission. The scope is concrete and communication stays direct — without passing the project between several people."}
@@ -63,22 +63,22 @@ export function ClientProof() {
           {collaborations.map((collaboration) => (
             <article
               key={collaboration.name}
-              className="rounded-2xl border border-white/10 bg-white/[0.03] p-6"
+              className="rounded-2xl border border-white/10 bg-[var(--brand-black)] p-6"
             >
-              <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">
+              <p className="text-xs uppercase tracking-[0.18em] text-white/70">
                 {lang === "pl" ? "Klient" : "Client"}
               </p>
-              <h3 className="mt-3 text-xl text-[#e4e4e7]">
+              <h3 className="mt-3 text-xl text-white">
                 {collaboration.name}
               </h3>
-              {collaboration.person && <p className="mt-2 text-sm text-zinc-500">
+              {collaboration.person && <p className="mt-2 text-sm text-white/70">
                 {lang === "pl" ? "Współpraca z: " : "Working with: "}
                 {collaboration.person}
               </p>}
-              <p className="mt-5 text-sm leading-7 text-zinc-300">
+              <p className="mt-5 text-sm leading-7 text-white">
                 {lang === "pl" ? collaboration.pl : collaboration.en}
               </p>
-              {collaboration.url && <a href={collaboration.url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm text-[#f4f4f5] underline underline-offset-4">{lang === "pl" ? "Strona lub profil firmy ↗" : "Business website or profile ↗"}</a>}
+              {collaboration.url && <a href={collaboration.url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm text-white underline underline-offset-4">{lang === "pl" ? "Strona lub profil firmy ↗" : "Business website or profile ↗"}</a>}
             </article>
           ))}
         </div>

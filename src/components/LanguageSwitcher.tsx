@@ -26,7 +26,7 @@ export function LanguageSwitcher() {
       className={`h-9 min-w-10 rounded-md px-3 text-sm transition-all ${
         lang === value
           ? "brand-selected"
-          : "text-zinc-400 hover:bg-white/5 hover:text-white"
+          : "text-white/70 hover:bg-[var(--brand-black)] hover:text-white"
       }`}
       aria-pressed={lang === value}
     >
@@ -36,7 +36,7 @@ export function LanguageSwitcher() {
 
   return (
     <motion.header
-      className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[#070707]/85 backdrop-blur-xl"
+      className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[var(--brand-black)]/85 backdrop-blur-xl"
       initial={{ opacity: 0, y: -18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
@@ -50,7 +50,7 @@ export function LanguageSwitcher() {
           <span className="brand-mark grid h-10 w-10 place-items-center rounded-md border text-sm">
             KB
           </span>
-          <span className="hidden text-sm uppercase tracking-[0.28em] text-zinc-300 transition-colors group-hover:text-white sm:inline">
+          <span className="hidden text-sm uppercase tracking-[0.28em] text-white transition-colors group-hover:text-white sm:inline">
             Kacper Bernecki
           </span>
         </a>
@@ -60,7 +60,7 @@ export function LanguageSwitcher() {
             <a
               key={item.href}
               href={anchorHref(item.href)}
-              className="glass-action rounded-md px-4 py-2 text-sm text-zinc-300 transition-colors hover:bg-white/5 hover:text-[#e4e4e7]"
+              className="ui-nav rounded-md px-4 py-2 text-sm"
             >
               {t.nav[item.key]}
             </a>
@@ -68,7 +68,7 @@ export function LanguageSwitcher() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <div className="flex rounded-md border border-white/10 bg-white/[0.03] p-1">
+          <div className="flex rounded-md border border-white/10 bg-[var(--brand-black)] p-1">
             {languageButton("pl", "PL")}
             {languageButton("en", "ENG")}
           </div>
@@ -76,14 +76,14 @@ export function LanguageSwitcher() {
             href="https://kacper-bernecki.vercel.app"
             target="_blank"
             rel="noopener noreferrer"
-            className="glass-action inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/[0.03] px-4 py-2 text-sm text-zinc-100 transition-all hover:-translate-y-0.5 hover:border-[#f4f4f5]/60 hover:text-[#e4e4e7]"
+            className="brand-outline inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm transition-colors"
           >
-            <Laptop className="h-4 w-4 text-[#f4f4f5]" />
+            <Laptop className="h-4 w-4 text-white" />
             {t.nav.interactive}
           </a>
           <a
             href={anchorHref("#contact")}
-            className="brand-action glass-action inline-flex items-center gap-2 rounded-md border border-[#f4f4f5]/50  px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(244,244,245,0.25)]"
+            className="brand-action glass-action inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm transition-all hover:-translate-y-0.5"
           >
             <Mail className="h-4 w-4" />
             {t.nav.cta}
@@ -91,14 +91,14 @@ export function LanguageSwitcher() {
           <a
             href={anchorHref("#contact")}
             aria-label={t.contact.calendarCta}
-            className="glass-action grid h-10 w-10 place-items-center rounded-md border border-[#f4f4f5]/40 bg-[#f4f4f5]/10 text-[#e4e4e7] transition-all hover:-translate-y-0.5 hover:border-[#f4f4f5]/70 hover:bg-[#f4f4f5]/15"
+            className="brand-outline grid h-10 w-10 place-items-center rounded-md transition-colors"
           >
             <CalendarDays className="h-4 w-4" />
           </a>
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
-          <div className="flex rounded-md border border-[#f4f4f5]/35 bg-white/[0.04] p-1">
+          <div className="flex rounded-md border border-white/35 bg-[var(--brand-black)] p-1">
             {languageButton("pl", "PL")}
             {languageButton("en", "ENG")}
           </div>
@@ -107,13 +107,13 @@ export function LanguageSwitcher() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={t.nav.interactive}
-            className="glass-action grid h-11 w-11 place-items-center rounded-md border border-[#f4f4f5]/40 bg-[#f4f4f5]/10 text-[#e4e4e7]"
+            className="brand-outline grid h-11 w-11 place-items-center rounded-md transition-colors"
           >
             <Laptop className="h-5 w-5" />
           </a>
           <button
             onClick={() => setIsOpen((open) => !open)}
-            className="glass-action grid h-11 w-11 place-items-center rounded-md border border-white/10 bg-white/[0.03] text-zinc-200"
+            className="brand-outline grid h-11 w-11 place-items-center rounded-md transition-colors"
             aria-label={isOpen ? t.nav.closeMenu : t.nav.openMenu}
           >
             {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -123,7 +123,7 @@ export function LanguageSwitcher() {
 
       {isOpen && (
         <motion.div
-          className="border-t border-white/10 bg-[#070707] px-5 py-5 lg:hidden"
+          className="border-t border-white/10 bg-[var(--brand-black)] px-5 py-5 lg:hidden"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}
@@ -133,7 +133,7 @@ export function LanguageSwitcher() {
               <a
                 key={item.href}
                 href={anchorHref(item.href)}
-                className="glass-action rounded-md px-3 py-3 text-base text-zinc-200 hover:bg-white/5"
+                className="glass-action rounded-md px-3 py-3 text-base text-white hover:bg-[var(--brand-black)]"
                 onClick={() => setIsOpen(false)}
               >
                 {t.nav[item.key]}
@@ -152,7 +152,7 @@ export function LanguageSwitcher() {
                 href={anchorHref("#contact")}
                 onClick={() => setIsOpen(false)}
                 aria-label={t.contact.calendarCta}
-                className="glass-action grid h-10 w-10 place-items-center rounded-md border border-[#f4f4f5]/40 bg-[#f4f4f5]/10 text-[#e4e4e7]"
+                className="brand-outline grid h-10 w-10 place-items-center rounded-md transition-colors"
               >
                 <CalendarDays className="h-4 w-4" />
               </a>

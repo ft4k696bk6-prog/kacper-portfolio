@@ -30,29 +30,29 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
 
   if (!study) {
     return (
-      <main className="min-h-screen bg-[#070707] px-5 py-32 text-white md:px-8">
+      <main className="min-h-screen bg-[var(--brand-black)] px-5 py-32 text-white md:px-8">
         <div className="mx-auto max-w-4xl">
           <BackLink label={t.caseStudies.projectsBackLabel} />
           <h1 className="mt-10 text-4xl md:text-5xl">{t.caseStudies.notFoundTitle}</h1>
-          <p className="mt-4 text-zinc-300">{t.caseStudies.notFoundDescription}</p>
+          <p className="mt-4 text-white">{t.caseStudies.notFoundDescription}</p>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#070707] px-5 py-28 text-white md:px-8">
+    <main className="min-h-screen bg-[var(--brand-black)] px-5 py-28 text-white md:px-8">
       <div className="mx-auto max-w-6xl">
         <BackLink label={t.caseStudies.projectsBackLabel} />
 
         <section className="py-12">
-          <p className="brand-eyebrow text-sm uppercase tracking-[0.28em] text-[#f4f4f5]">
+          <p className="brand-eyebrow text-sm uppercase tracking-[0.28em] text-white">
             {t.caseStudies.eyebrow}
           </p>
           <h1 className="mt-5 max-w-5xl text-4xl leading-tight text-white md:text-6xl">
             {study.title}
           </h1>
-          <p className="mt-6 max-w-4xl text-lg leading-8 text-zinc-300">
+          <p className="mt-6 max-w-4xl text-lg leading-8 text-white">
             {study.subtitle}
           </p>
 
@@ -73,7 +73,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
                 href={study.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass-action inline-flex items-center gap-2 rounded-md border border-white/15 px-5 py-3 text-sm text-white transition-colors hover:border-[#f4f4f5]/60 hover:text-[#e4e4e7]"
+                className="glass-action inline-flex items-center gap-2 rounded-md border border-white/15 px-5 py-3 text-sm text-white transition-colors hover:border-[var(--brand-gold)] hover:text-white"
               >
                 <Github className="h-4 w-4" />
                 {t.caseStudies.repoLabel}
@@ -92,7 +92,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
             {study.images.map((image, index) => (
               <div
                 key={image.src}
-                className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.035] first:lg:col-span-2"
+                className="overflow-hidden rounded-xl border border-white/10 bg-[var(--brand-black)] first:lg:col-span-2"
               >
                 <Image
                   src={image.src}
@@ -117,15 +117,15 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
           <SummaryCard title={t.projects.statusLabel} body={study.status} />
         </section>
 
-        <section className="mt-8 rounded-md border border-white/10 bg-white/[0.035] p-5 md:p-6">
-          <h2 className="text-sm uppercase tracking-[0.24em] text-[#f4f4f5]">
+        <section className="mt-8 rounded-md border border-white/10 bg-[var(--brand-black)] p-5 md:p-6">
+          <h2 className="text-sm uppercase tracking-[0.24em] text-white">
             {t.caseStudies.stackLabel}
           </h2>
           <div className="mt-4 flex flex-wrap gap-2">
             {study.stack.map((tech) => (
               <span
                 key={tech}
-                className="rounded-md border border-white/10 bg-black/30 px-3 py-1.5 text-xs text-zinc-300"
+                className="rounded-md border border-white/10 bg-black/30 px-3 py-1.5 text-xs text-white"
               >
                 {tech}
               </span>
@@ -134,13 +134,13 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
         </section>
 
         {study.roles.length > 0 && (
-          <section className="mt-8 rounded-md border border-white/10 bg-white/[0.035] p-5 md:p-6">
+          <section className="mt-8 rounded-md border border-white/10 bg-[var(--brand-black)] p-5 md:p-6">
             <h2 className="text-3xl text-white">{t.caseStudies.sections.roles}</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {study.roles.map((role) => (
                 <article key={role.name} className="rounded-md border border-white/10 bg-black/20 p-4">
-                  <h3 className="text-lg text-[#e4e4e7]">{role.name}</h3>
-                  <p className="mt-3 text-sm leading-7 text-zinc-300">{role.description}</p>
+                  <h3 className="text-lg text-white">{role.name}</h3>
+                  <p className="mt-3 text-sm leading-7 text-white">{role.description}</p>
                 </article>
               ))}
             </div>
@@ -154,9 +154,9 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
           <InfoList title={t.caseStudies.sections.next} items={study.next} />
         </section>
 
-        <section className="mt-8 rounded-md border border-[#f4f4f5]/25 bg-[#f4f4f5]/10 p-5 md:p-6">
+        <section className="mt-8 rounded-md border border-white/25 bg-[var(--brand-black)] p-5 md:p-6">
           <h2 className="text-2xl text-white">{t.caseStudies.sections.limitations}</h2>
-          <p className="mt-4 text-sm leading-7 text-zinc-200">{study.limitations}</p>
+          <p className="mt-4 text-sm leading-7 text-white">{study.limitations}</p>
         </section>
 
         <div className="mt-8">
@@ -174,7 +174,7 @@ function BackLink({ label }: { label: string }) {
       onClick={() => {
         window.location.assign("/#projects");
       }}
-      className="brand-action glass-action inline-flex items-center gap-2 rounded-md  px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(244,244,245,0.22)]"
+      className="brand-action glass-action inline-flex items-center gap-2 rounded-md  px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-none"
     >
       <ArrowLeft className="h-4 w-4" />
       {label}
@@ -184,21 +184,21 @@ function BackLink({ label }: { label: string }) {
 
 function SummaryCard({ title, body }: { title: string; body: string }) {
   return (
-    <article className="rounded-md border border-white/10 bg-white/[0.035] p-5">
+    <article className="rounded-md border border-white/10 bg-[var(--brand-black)] p-5">
       <h2 className="text-xl text-white">{title}</h2>
-      <p className="mt-3 text-sm leading-7 text-zinc-300">{body}</p>
+      <p className="mt-3 text-sm leading-7 text-white">{body}</p>
     </article>
   );
 }
 
 function InfoList({ title, items }: Pick<CaseStudyItem, "title"> & { items: string[] }) {
   return (
-    <article className="rounded-md border border-white/10 bg-white/[0.035] p-5 md:p-6">
+    <article className="rounded-md border border-white/10 bg-[var(--brand-black)] p-5 md:p-6">
       <h2 className="text-2xl text-white">{title}</h2>
       <ul className="mt-5 space-y-3">
         {items.map((item) => (
-          <li key={item} className="flex gap-3 text-sm leading-7 text-zinc-300">
-            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#f4f4f5]" />
+          <li key={item} className="flex gap-3 text-sm leading-7 text-white">
+            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--brand-black)]" />
             {item}
           </li>
         ))}

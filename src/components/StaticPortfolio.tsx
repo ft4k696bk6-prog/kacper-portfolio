@@ -1,7 +1,7 @@
 "use client";
 
 import { Hero } from "@/components/Hero";
-import { TriangleBackdrop } from "@/components/TriangleBackdrop";
+import { KineticBackdrop } from "@/components/KineticBackdrop";
 import { ClientMarquee } from "@/components/ClientMarquee";
 import { Profile } from "@/components/Profile";
 import { Experience } from "@/components/Experience";
@@ -168,7 +168,7 @@ export function StaticPortfolio() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <div className="portfolio-scene">
-      <TriangleBackdrop />
+      <KineticBackdrop />
       <main className="portfolio-content min-h-screen text-white">
         <Hero />
         <ClientMarquee />
@@ -177,7 +177,7 @@ export function StaticPortfolio() {
         <Experience />
         <Profile />
         <details className="mx-auto max-w-7xl px-5 py-10 md:px-8">
-          <summary className="cursor-pointer rounded-xl border border-white/10 bg-white/[0.03] p-5 text-[#e4e4e7]">
+          <summary className="cursor-pointer rounded-xl border border-white/10 bg-[var(--brand-black)] p-5 text-white">
             {lang === "pl"
               ? "Dla osób technicznych — stack i szczegóły B-CRM"
               : "For technical reviewers — stack and B-CRM details"}
@@ -187,10 +187,10 @@ export function StaticPortfolio() {
         </details>
         <section
           id="faq"
-          className="border-y border-white/10 bg-white/[0.02] px-5 py-20 md:px-8 md:py-28"
+          className="border-y border-white/10 bg-[var(--brand-black)] px-5 py-20 md:px-8 md:py-28"
         >
           <div className="mx-auto max-w-4xl">
-            <p className="brand-eyebrow text-sm uppercase tracking-[0.24em] text-[#f4f4f5]">
+            <p className="brand-eyebrow text-sm uppercase tracking-[0.24em] text-white">
               {lang === "pl"
                 ? "Najczęstsze pytania"
                 : "Frequently asked questions"}
@@ -200,19 +200,19 @@ export function StaticPortfolio() {
                 ? "Jak wygląda współpraca?"
                 : "What is working together like?"}
             </h2>
-            <div className="mt-8 divide-y divide-white/10 rounded-md border border-white/10 bg-white/[0.035] px-5">
+            <div className="mt-8 divide-y divide-white/10 rounded-md border border-white/10 bg-[var(--brand-black)] px-5">
               {faq.map(([question, answer]) => (
                 <details key={question} className="group py-5">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-5 text-lg text-white marker:hidden">
                     {question}
                     <span
                       aria-hidden="true"
-                      className="text-[#f4f4f5] transition-transform group-open:rotate-45"
+                      className="text-white transition-transform group-open:rotate-45"
                     >
                       +
                     </span>
                   </summary>
-                  <p className="mt-3 max-w-3xl leading-7 text-zinc-400">
+                  <p className="mt-3 max-w-3xl leading-7 text-white/70">
                     {answer}
                   </p>
                 </details>

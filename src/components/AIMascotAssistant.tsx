@@ -564,7 +564,7 @@ export function AIMascotAssistant() {
           <motion.button
             type="button"
             onClick={restoreMascot}
-            className={`fixed z-[75] inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#090909]/90 px-4 py-3 text-sm text-[#e4e4e7] shadow-[0_18px_55px_rgba(0,0,0,0.42)] backdrop-blur-xl transition hover:border-[#f4f4f5]/45 ${restorePositionClass}`}
+            className={`fixed z-[75] inline-flex items-center gap-2 rounded-full border border-white/10 bg-[var(--brand-black)]/90 px-4 py-3 text-sm text-white shadow-[0_18px_55px_rgba(0,0,0,0.42)] backdrop-blur-xl transition hover:border-[var(--brand-gold)] ${restorePositionClass}`}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 16 }}
@@ -605,7 +605,7 @@ export function AIMascotAssistant() {
                           type="button"
                           onClick={hideMascot}
                           aria-label={t.aiMascot.hideLabel}
-                          className="grid h-8 w-8 place-items-center rounded-full text-zinc-400 transition hover:bg-white/[0.08] hover:text-[#e4e4e7]"
+                          className="grid h-8 w-8 place-items-center rounded-full text-white/70 transition hover:bg-[var(--brand-black)] hover:text-white"
                         >
                           <Eye className="h-4 w-4" />
                         </button>
@@ -613,7 +613,7 @@ export function AIMascotAssistant() {
                           type="button"
                           onClick={() => setOpen(false)}
                           aria-label={t.aiMascot.closeLabel}
-                          className="grid h-8 w-8 place-items-center rounded-full text-zinc-400 transition hover:bg-white/[0.08] hover:text-white"
+                          className="grid h-8 w-8 place-items-center rounded-full text-white/70 transition hover:bg-[var(--brand-black)] hover:text-white"
                         >
                           <X className="h-4 w-4" />
                         </button>
@@ -630,8 +630,8 @@ export function AIMascotAssistant() {
                           key={message.id}
                           className={`max-w-[92%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-sm leading-6 ${
                             message.role === "user"
-                              ? "ml-auto rounded-br-md bg-[#f4f4f5] text-black shadow-[0_10px_28px_rgba(244,244,245,0.16)]"
-                              : "rounded-bl-md border border-white/[0.08] bg-white/[0.045] text-zinc-100"
+                              ? "ml-auto rounded-br-md border border-[var(--brand-gold)] bg-[var(--brand-black)] text-white"
+                              : "rounded-bl-md border border-white/[0.08] bg-[var(--brand-black)] text-white"
                           }`}
                         >
                           {message.content}
@@ -641,9 +641,9 @@ export function AIMascotAssistant() {
                       {loading ? (
                         <div
                           role="status"
-                          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.055] px-4 py-3 text-sm text-zinc-300"
+                          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[var(--brand-black)] px-4 py-3 text-sm text-white"
                         >
-                          <Loader2 className="h-4 w-4 animate-spin text-[#f4f4f5]" />
+                          <Loader2 className="h-4 w-4 animate-spin text-white" />
                           {t.aiMascot.thinkingLabel}
                         </div>
                       ) : null}
@@ -653,7 +653,7 @@ export function AIMascotAssistant() {
                       {error ? (
                         <div
                           role="alert"
-                          className="rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-100"
+                          className="rounded-2xl border border-[var(--brand-gold)] bg-[var(--brand-black)] px-4 py-3 text-sm text-white"
                         >
                           <p>{error}</p>
                           {lastFailedQuestion ? (
@@ -661,7 +661,7 @@ export function AIMascotAssistant() {
                               type="button"
                               onClick={() => void sendMessage(lastFailedQuestion, { retry: true })}
                               disabled={loading}
-                              className="mt-3 inline-flex items-center gap-2 rounded-full border border-red-200/25 px-3 py-2 text-xs text-red-50 transition hover:border-red-100/50 disabled:cursor-not-allowed disabled:opacity-60"
+                              className="mt-3 inline-flex items-center gap-2 rounded-full border border-[var(--brand-gold)] px-3 py-2 text-xs text-white transition hover:border-[var(--brand-gold)] disabled:cursor-not-allowed disabled:opacity-60"
                             >
                               <RotateCcw className="h-3.5 w-3.5" />
                               {assistantRuntimeCopy.retryLabel}
@@ -678,7 +678,7 @@ export function AIMascotAssistant() {
                             key={action.key}
                             type="button"
                             onClick={() => handleQuickAction(action.key)}
-                            className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-zinc-200 transition hover:border-[#f4f4f5]/45 hover:text-[#e4e4e7]"
+                            className="shrink-0 rounded-full border border-white/10 bg-[var(--brand-black)] px-3 py-2 text-xs text-white transition hover:border-[var(--brand-gold)] hover:text-white"
                           >
                             {action.label}
                           </button>
@@ -713,7 +713,7 @@ export function AIMascotAssistant() {
                             placeholder={dictationSupported ? t.aiMascot.placeholderDictation : t.aiMascot.placeholder}
                             rows={1}
                             maxLength={1400}
-                            className="max-h-28 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-6 text-white outline-none placeholder:text-zinc-500"
+                            className="max-h-28 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-6 text-white outline-none placeholder:text-white/70"
                           />
                           {dictationSupported ? (
                             <button
@@ -722,8 +722,8 @@ export function AIMascotAssistant() {
                               aria-label={listening ? t.aiMascot.stopMicLabel : t.aiMascot.micLabel}
                               className={`grid h-10 w-10 shrink-0 place-items-center rounded-full transition ${
                                 listening
-                                  ? "bg-red-400/20 text-red-100"
-                                  : "bg-white/[0.06] text-zinc-200 hover:bg-white/[0.1]"
+                                  ? "bg-[var(--brand-black)] text-white"
+                                  : "bg-[var(--brand-black)] text-white hover:bg-[var(--brand-black)]"
                               }`}
                             >
                               {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
@@ -738,7 +738,7 @@ export function AIMascotAssistant() {
                             <Send className="h-4 w-4" />
                           </button>
                         </div>
-                        <p className="mt-2 text-xs leading-5 text-zinc-500">
+                        <p className="mt-2 text-xs leading-5 text-white/70">
                           {dictationSupported ? t.aiMascot.dictationHint : t.aiMascot.dictationUnsupported}
                         </p>
                       </form>
@@ -753,12 +753,12 @@ export function AIMascotAssistant() {
                 aria-label={t.aiMascot.openLabel}
                 data-testid="ai-mascot-open"
                 data-mood={behavior.mood}
-                className="group relative grid h-12 w-12 place-items-center rounded-full border border-[#f4f4f5]/60 bg-[#111111] text-[#e4e4e7] shadow-[0_12px_32px_rgba(0,0,0,0.42)] outline-none transition hover:-translate-y-0.5 hover:border-[#e4e4e7] hover:bg-[#1a1a1a] hover:shadow-[0_16px_38px_rgba(244,244,245,0.18)] focus-visible:ring-2 focus-visible:ring-[#f4f4f5]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-14 md:w-14"
+                className="brand-outline group relative grid h-12 w-12 place-items-center rounded-full outline-none transition focus-visible:ring-2 focus-visible:ring-[var(--brand-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-14 md:w-14"
               >
                 <span className="brand-action absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full border border-[#111111]  px-1 text-[9px] font-semibold tracking-wide text-black">
                   AI
                 </span>
-                <span className="relative z-10 grid h-8 w-8 place-items-center rounded-full border border-[#f4f4f5]/25 bg-[#f4f4f5]/10 md:h-9 md:w-9">
+                <span className="relative z-10 grid h-8 w-8 place-items-center md:h-9 md:w-9">
                   <MessageCircle className="h-4 w-4 md:h-5 md:w-5" />
                 </span>
               </motion.button>
@@ -772,8 +772,8 @@ export function AIMascotAssistant() {
   function renderBookingPanel() {
     if (booking.step === "loading-days") {
       return (
-        <div className="rounded-2xl border border-white/10 bg-white/[0.045] p-4 text-sm text-zinc-300">
-          <Loader2 className="mr-2 inline h-4 w-4 animate-spin text-[#f4f4f5]" />
+        <div className="rounded-2xl border border-white/10 bg-[var(--brand-black)] p-4 text-sm text-white">
+          <Loader2 className="mr-2 inline h-4 w-4 animate-spin text-white" />
           {t.aiMascot.booking.loadingDays}
         </div>
       );
@@ -781,7 +781,7 @@ export function AIMascotAssistant() {
 
     if (booking.step === "error") {
       return (
-        <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-100">
+        <div className="rounded-2xl border border-[var(--brand-gold)] bg-[var(--brand-black)] p-4 text-sm text-white">
           {booking.message}
         </div>
       );
@@ -789,8 +789,8 @@ export function AIMascotAssistant() {
 
     if (booking.step === "days") {
       return (
-        <div className="rounded-2xl border border-white/10 bg-white/[0.045] p-4">
-          <p className="mb-3 text-xs uppercase tracking-[0.18em] text-[#f4f4f5]">
+        <div className="rounded-2xl border border-white/10 bg-[var(--brand-black)] p-4">
+          <p className="mb-3 text-xs uppercase tracking-[0.18em] text-white">
             {t.aiMascot.booking.chooseDay}
           </p>
           <div className="grid grid-cols-2 gap-2">
@@ -799,13 +799,13 @@ export function AIMascotAssistant() {
                 key={day.date}
                 type="button"
                 onClick={() => void selectBookingDay(day)}
-                className="rounded-2xl border border-white/10 bg-black/25 px-3 py-3 text-left text-sm text-zinc-100 transition hover:border-[#f4f4f5]/50"
+                className="rounded-2xl border border-white/10 bg-black/25 px-3 py-3 text-left text-sm text-white transition hover:border-[var(--brand-gold)]"
               >
-                <span className="block text-[0.65rem] uppercase tracking-[0.14em] text-zinc-500">
+                <span className="block text-[0.65rem] uppercase tracking-[0.14em] text-white/70">
                   {day.weekday}
                 </span>
                 <span className="text-lg text-white">{day.day}</span>{" "}
-                <span className="text-xs uppercase text-zinc-400">{day.month}</span>
+                <span className="text-xs uppercase text-white/70">{day.month}</span>
               </button>
             ))}
           </div>
@@ -815,8 +815,8 @@ export function AIMascotAssistant() {
 
     if (booking.step === "loading-slots") {
       return (
-        <div className="rounded-2xl border border-white/10 bg-white/[0.045] p-4 text-sm text-zinc-300">
-          <Loader2 className="mr-2 inline h-4 w-4 animate-spin text-[#f4f4f5]" />
+        <div className="rounded-2xl border border-white/10 bg-[var(--brand-black)] p-4 text-sm text-white">
+          <Loader2 className="mr-2 inline h-4 w-4 animate-spin text-white" />
           {t.aiMascot.booking.loadingSlots}
         </div>
       );
@@ -824,16 +824,16 @@ export function AIMascotAssistant() {
 
     if (booking.step === "slots") {
       return (
-        <div className="rounded-2xl border border-white/10 bg-white/[0.045] p-4">
+        <div className="rounded-2xl border border-white/10 bg-[var(--brand-black)] p-4">
           <p className="mb-1 text-sm text-white">{booking.selectedDayLabel}</p>
-          <p className="mb-3 text-xs text-zinc-500">{timeZone}</p>
+          <p className="mb-3 text-xs text-white/70">{timeZone}</p>
           <div className="grid grid-cols-3 gap-2">
             {booking.slots.map((slot) => (
               <button
                 key={slot.start}
                 type="button"
                 onClick={() => selectBookingSlot(slot)}
-                className="rounded-full border border-white/10 bg-black/25 px-3 py-2 text-sm text-zinc-100 transition hover:border-[#f4f4f5]/50 hover:text-[#e4e4e7]"
+                className="rounded-full border border-white/10 bg-black/25 px-3 py-2 text-sm text-white transition hover:border-[var(--brand-gold)] hover:text-white"
               >
                 {slot.label}
               </button>
@@ -851,31 +851,31 @@ export function AIMascotAssistant() {
         Boolean(turnstileSiteKey && !turnstileToken);
 
       return (
-        <form onSubmit={submitBooking} className="rounded-2xl border border-white/10 bg-white/[0.045] p-4">
-          <p className="mb-3 text-sm text-zinc-200">
+        <form onSubmit={submitBooking} className="rounded-2xl border border-white/10 bg-[var(--brand-black)] p-4">
+          <p className="mb-3 text-sm text-white">
             {formatSlotDate(booking.selectedSlot.start, timeZone, locale)} ·{" "}
-            <span className="text-[#e4e4e7]">{booking.selectedSlot.label}</span>
+            <span className="text-white">{booking.selectedSlot.label}</span>
           </p>
           <div className="grid gap-2">
             <input
               value={bookingName}
               onChange={(event) => setBookingName(event.target.value)}
               placeholder={t.aiMascot.booking.name}
-              className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[#f4f4f5]/60"
+              className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[var(--brand-gold)]"
             />
             <input
               value={bookingEmail}
               onChange={(event) => setBookingEmail(event.target.value)}
               placeholder={t.aiMascot.booking.email}
               type="email"
-              className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[#f4f4f5]/60"
+              className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[var(--brand-gold)]"
             />
             <textarea
               value={bookingTopic}
               onChange={(event) => setBookingTopic(event.target.value)}
               placeholder={t.aiMascot.booking.topic}
               rows={2}
-              className="resize-none rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[#f4f4f5]/60"
+              className="resize-none rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[var(--brand-gold)]"
             />
           </div>
           {turnstileSiteKey ? (
@@ -889,7 +889,7 @@ export function AIMascotAssistant() {
             </div>
           ) : null}
           {booking.message ? (
-            <p className="mt-3 rounded-2xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-100">
+            <p className="mt-3 rounded-2xl border border-[var(--brand-gold)] bg-[var(--brand-black)] p-3 text-sm text-white">
               {booking.message}
             </p>
           ) : null}
@@ -907,7 +907,7 @@ export function AIMascotAssistant() {
 
     if (booking.step === "success") {
       return (
-        <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm text-emerald-100">
+        <div className="rounded-2xl border border-[var(--brand-gold)] bg-[var(--brand-black)] p-4 text-sm text-white">
           {booking.message}
         </div>
       );

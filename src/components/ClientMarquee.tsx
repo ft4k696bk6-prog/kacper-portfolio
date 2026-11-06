@@ -107,15 +107,15 @@ export function ClientMarquee() {
     };
   }, [paused, reduced]);
   function move(direction: number) { moveRef.current(direction); }
-  return <section id="collaborations" aria-label={pl?'Przykładowe firmy, z którymi współpracuję':'Some of the businesses I work with'} className="border-y border-white/10 bg-[#101010] py-7">
-    <div className="mx-auto mb-6 flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 md:px-8"><h2 className="max-w-sm text-xs leading-6 uppercase tracking-[0.16em] text-zinc-400">{pl?'Przykładowe firmy, z którymi współpracuję':'Some of the businesses I work with'}</h2><div className="flex shrink-0 gap-2">
-      <button onClick={()=>move(-1)} aria-label={pl?'Poprzednie firmy':'Previous businesses'} className="glass-action marquee-button"><ArrowLeft size={16}/></button>
-      {!reduced && <button onClick={()=>setPaused(!paused)} aria-label={paused?(pl?'Wznów przesuwanie':'Resume scrolling'):(pl?'Zatrzymaj przesuwanie':'Pause scrolling')} className="glass-action marquee-button">{paused?<Play size={14}/>:<Pause size={14}/>}</button>}
-      <button onClick={()=>move(1)} aria-label={pl?'Następne firmy':'Next businesses'} className="glass-action marquee-button"><ArrowRight size={16}/></button>
+  return <section id="collaborations" aria-label={pl?'Przykładowe firmy, z którymi współpracuję':'Some of the businesses I work with'} className="border-y border-white/10 bg-[var(--brand-black)] py-7">
+    <div className="mx-auto mb-6 flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 md:px-8"><h2 className="max-w-sm text-xs leading-6 uppercase tracking-[0.16em] text-white/70">{pl?'Przykładowe firmy, z którymi współpracuję':'Some of the businesses I work with'}</h2><div className="flex shrink-0 gap-2">
+      <button onClick={()=>move(-1)} aria-label={pl?'Poprzednie firmy':'Previous businesses'} className="brand-outline marquee-button"><ArrowLeft size={16}/></button>
+      {!reduced && <button onClick={()=>setPaused(!paused)} aria-label={paused?(pl?'Wznów przesuwanie':'Resume scrolling'):(pl?'Zatrzymaj przesuwanie':'Pause scrolling')} className="brand-outline marquee-button">{paused?<Play size={14}/>:<Pause size={14}/>}</button>}
+      <button onClick={()=>move(1)} aria-label={pl?'Następne firmy':'Next businesses'} className="brand-outline marquee-button"><ArrowRight size={16}/></button>
     </div></div>
     <div ref={ref} className="client-marquee mx-auto max-w-[1440px] overflow-x-auto">
       <div className="flex w-max">{[0,1,2].map(copy=><div key={copy} className="flex shrink-0" aria-hidden={copy!==1?true:undefined}>{clients.map(client=>{
-        const content=<><div className="flex h-20 items-center justify-center overflow-hidden">{client.logo ? <Image src={client.logo} alt={client.name} width={240} height={client.name === "Jalapeno Kebab" ? 240 : 80} className={client.name === "Jalapeno Kebab" ? "h-60 w-60 shrink-0 object-contain" : "h-16 w-48 object-contain"}/> : <span className="motomizer-wordmark">MOTOMIZER</span>}</div><p className="mt-4 text-center text-[10px] uppercase tracking-widest text-zinc-400">{client.name} / {client.detail}</p></>;
+        const content=<><div className="flex h-20 items-center justify-center overflow-hidden">{client.logo ? <Image src={client.logo} alt={client.name} width={240} height={client.name === "Jalapeno Kebab" ? 240 : 80} className={client.name === "Jalapeno Kebab" ? "h-60 w-60 shrink-0 object-contain" : "h-16 w-48 object-contain"}/> : <span className="motomizer-wordmark">MOTOMIZER</span>}</div><p className="mt-4 text-center text-[10px] uppercase tracking-widest text-white/70">{client.name} / {client.detail}</p></>;
         return client.url?<a key={client.name} href={client.url} target="_blank" rel="noopener noreferrer" tabIndex={copy!==1?-1:0} className="client-wordmark">{content}</a>:<div key={client.name} className="client-wordmark">{content}</div>;
       })}</div>)}</div>
     </div>

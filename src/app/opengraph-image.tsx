@@ -52,7 +52,7 @@ export default async function OpenGraphImage() {
             padding: 7,
             borderRadius: 18,
             background: "#090909",
-            border: "2px solid #a88b56",
+            border: "2px solid #d4af6a",
           }}
         >
           <div
@@ -64,8 +64,8 @@ export default async function OpenGraphImage() {
               justifyContent: "center",
               borderRadius: 12,
               background: "#111111",
-              border: "2px solid rgba(201,168,106,0.8)",
-              color: "#d8bb87",
+              border: "2px solid rgba(212,175,106,0.8)",
+              color: "#d4af6a",
               fontSize: 27,
               fontWeight: 700,
               letterSpacing: 2,

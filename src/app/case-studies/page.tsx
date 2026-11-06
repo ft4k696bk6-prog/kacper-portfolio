@@ -35,13 +35,13 @@ export default function CaseStudiesIndex() {
   return (
     <main className="mx-auto min-h-screen max-w-7xl px-5 py-32 md:px-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(listJsonLd).replace(/</g, "\\u003c") }} />
-      <p className="text-xs uppercase tracking-[0.24em] text-[#f4f4f5]">
+      <p className="text-xs uppercase tracking-[0.24em] text-white">
         Realizacje
       </p>
       <h1 className="mt-5 text-4xl tracking-tight md:text-6xl">
         Od potrzeby do działającego projektu.
       </h1>
-      <p className="mt-6 max-w-2xl leading-8 text-zinc-400">
+      <p className="mt-6 max-w-2xl leading-8 text-white/70">
         Strony firmowe, produktowe i aplikacje. Sprawdź, co robią, jak powstały
         i które rozwiązania mogą przydać się w Twojej firmie.
       </p>
@@ -50,7 +50,7 @@ export default function CaseStudiesIndex() {
           <Link
             key={p.title}
             href={p.caseStudyUrl}
-            className="overflow-hidden rounded-2xl border border-white/10 transition hover:border-[#f4f4f5]/50"
+            className="overflow-hidden rounded-2xl border border-white/10 transition hover:border-[var(--brand-gold)]"
           >
             <Image
               src={p.image.src}
@@ -61,8 +61,8 @@ export default function CaseStudiesIndex() {
               className="aspect-[16/10] h-auto w-full object-cover object-top"
             />
             <div className="p-6">
-              <h2 className="text-2xl text-[#e4e4e7]">{p.title}</h2>
-              <p className="mt-3 text-sm leading-7 text-zinc-400">
+              <h2 className="text-2xl text-white">{p.title}</h2>
+              <p className="mt-3 text-sm leading-7 text-white/70">
                 {p.description}
               </p>
             </div>
@@ -71,7 +71,7 @@ export default function CaseStudiesIndex() {
       </div>
       <Link
         href="/#contact"
-        className="mt-12 inline-flex rounded-xl bg-[#f4f4f5] px-6 py-4 text-black"
+        className="mt-12 inline-flex rounded-xl bg-[var(--brand-black)] px-6 py-4 text-black"
       >
         Porozmawiajmy o Twoim projekcie →
       </Link>
