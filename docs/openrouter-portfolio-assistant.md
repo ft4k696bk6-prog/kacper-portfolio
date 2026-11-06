@@ -26,7 +26,7 @@ page layout, SEO, image assets, or the current production deployment.
 - Input: a single latest user question, max 250 characters. Previous chat
   history is accepted from the existing UI for compatibility but **discarded**
   before the upstream call.
-- Output: at most 192 model tokens and 850 visible characters.
+- Output: at most 256 model tokens and 850 visible characters.
 - No tools, browsing, image uploads, model fallback chains or NVIDIA fallback.
 - Off-topic requests return a fixed, free refusal without calling OpenRouter.
 - Serverless in-memory limits: 5 requests per IP per 10 minutes, max 100
@@ -46,4 +46,4 @@ keys or confidential commercial information is added.
   injections may occasionally change model behavior.
 - Per-instance counters cannot enforce an absolute sitewide daily limit.
 - The provider credit cap controls API cost, not Vercel infrastructure usage.
-- The key has not been added by this branch; an account owner must supply it.
+- The key is not stored in the branch; it must be supplied in Vercel by the account owner.
