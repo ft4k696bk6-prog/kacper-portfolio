@@ -7,7 +7,7 @@ import { enCaseStudies, plCaseStudies } from "../i18n/case-studies";
  */
 export const PORTFOLIO_AI_MODEL = "openai/gpt-oss-20b";
 export const PORTFOLIO_AI_MAX_QUESTION_LENGTH = 250;
-export const PORTFOLIO_AI_MAX_RESPONSE_TOKENS = 192;
+export const PORTFOLIO_AI_MAX_RESPONSE_TOKENS = 256;
 
 type Language = "en" | "pl";
 
