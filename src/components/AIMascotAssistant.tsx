@@ -250,7 +250,6 @@ export function AIMascotAssistant() {
     localStorage.setItem(HIDDEN_UNTIL_KEY, String(Date.now() + HIDE_DURATION_MS));
     setOpen(false);
     setHidden(true);
-    setNudgeVisible(false);
   }
 
   function restoreMascot() {
