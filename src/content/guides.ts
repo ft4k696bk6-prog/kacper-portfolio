@@ -43,7 +43,7 @@ export const guides = [
       { title: "Co mierzyć zamiast samych polubień?", paragraphs: ["Rozróżnij kliknięcie kontaktu, wysłanie zapytania i pozyskanie klienta. Kliknięcie numeru telefonu nie potwierdza rozmowy, a wysłany formularz nie oznacza jeszcze wartościowego zlecenia. Jeśli to możliwe, zapisuj źródło zapytania i jego dalszy wynik.", "Koszt wartościowego zapytania policz, dzieląc wydatki na kampanię przez liczbę zapytań spełniających ustalone kryteria. Przy porównywaniu kanałów uwzględnij także koszty obsługi i przygotowania materiałów. Pomiar analityczny konfiguruj z uwzględnieniem wymaganych zgód użytkowników."] },
       { title: "Budżet i obsługa kontaktów", paragraphs: ["Oddziel budżet płacony platformie reklamowej od wynagrodzenia za obsługę, materiały i stronę. Ustal limit wydatków oraz warunki oceny pierwszych wyników. Jeśli pojawiają się niepasujące zapytania, sprawdź ofertę, kierowanie reklamy i treść formularza przed zwiększaniem budżetu.", "Ustal też, kto odpowiada na wiadomości i oddzwania. Napisz na kacper@bernecki.dev, w jakiej branży działasz, gdzie obsługujesz klientów, co chcesz promować i jakie kanały już masz. Na tej podstawie ustalimy zakres działań."] },
     ],
-  },,
+  },
 {
   "slug": "ile-kosztuje-lead-z-facebook-ads",
   "title": "Ile kosztuje lead z Facebook Ads? CPL i prawdziwa ocena reklamy",
