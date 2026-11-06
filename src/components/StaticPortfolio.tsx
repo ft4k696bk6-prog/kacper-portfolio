@@ -1,6 +1,7 @@
 "use client";
 
 import { Hero } from "@/components/Hero";
+import { ClientMarquee } from "@/components/ClientMarquee";
 import { Profile } from "@/components/Profile";
 import { Experience } from "@/components/Experience";
 import { Services } from "@/components/Services";
@@ -168,13 +169,14 @@ export function StaticPortfolio() {
       />
       <main className="min-h-screen bg-[#070707] text-white">
         <Hero />
-        <Services />
+        <ClientMarquee />
         <Projects />
+        <Services />
         <Experience />
         <Profile />
         <ClientProof />
         <details className="mx-auto max-w-7xl px-5 py-10 md:px-8">
-          <summary className="cursor-pointer rounded-xl border border-white/10 bg-white/[0.03] p-5 text-[#f5dfae]">
+          <summary className="cursor-pointer rounded-xl border border-white/10 bg-white/[0.03] p-5 text-[#e1f4c9]">
             {lang === "pl"
               ? "Dla osób technicznych — stack i szczegóły B-CRM"
               : "For technical reviewers — stack and B-CRM details"}
@@ -187,7 +189,7 @@ export function StaticPortfolio() {
           className="border-y border-white/10 bg-white/[0.02] px-5 py-20 md:px-8 md:py-28"
         >
           <div className="mx-auto max-w-4xl">
-            <p className="text-sm uppercase tracking-[0.24em] text-[#d7b46a]">
+            <p className="text-sm uppercase tracking-[0.24em] text-[#c2f970]">
               {lang === "pl"
                 ? "Najczęstsze pytania"
                 : "Frequently asked questions"}
@@ -204,7 +206,7 @@ export function StaticPortfolio() {
                     {question}
                     <span
                       aria-hidden="true"
-                      className="text-[#d7b46a] transition-transform group-open:rotate-45"
+                      className="text-[#c2f970] transition-transform group-open:rotate-45"
                     >
                       +
                     </span>

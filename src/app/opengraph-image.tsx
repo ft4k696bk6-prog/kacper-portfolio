@@ -29,7 +29,7 @@ export default async function OpenGraphImage() {
         style={{
           display: "flex",
           fontSize: 24,
-          color: "#d7b46a",
+          color: "#c2f970",
           letterSpacing: 4,
         }}
       >
@@ -45,7 +45,7 @@ export default async function OpenGraphImage() {
         }}
       >
         <span>Strony internetowe.</span>
-        <span style={{ color: "#d7b46a" }}>CRM i aplikacje webowe.</span>
+        <span style={{ color: "#c2f970" }}>CRM i aplikacje webowe.</span>
       </div>
       <div style={{ display: "flex", fontSize: 24, color: "#a1a1aa" }}>
         Od pomysłu do wdrożenia. Bezpośrednio ze mną.

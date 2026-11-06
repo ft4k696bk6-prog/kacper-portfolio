@@ -18,10 +18,10 @@ export function Experience() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <div className="mb-5 grid h-12 w-12 place-items-center rounded-md border border-[#d7b46a]/35 bg-[#d7b46a]/10 text-[#f5dfae]">
+            <div className="mb-5 grid h-12 w-12 place-items-center rounded-md border border-[#c2f970]/35 bg-[#c2f970]/10 text-[#e1f4c9]">
               <Layers3 className="h-6 w-6" />
             </div>
-            <p className="text-sm uppercase tracking-[0.28em] text-[#d7b46a]">
+            <p className="text-sm uppercase tracking-[0.28em] text-[#c2f970]">
               {t.background.title}
             </p>
             <h2 className="mt-4 max-w-xl text-4xl leading-tight text-white md:text-5xl">
@@ -39,7 +39,7 @@ export function Experience() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: index * 0.08 }}
               >
-                <span className="mb-4 inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#d7b46a]/10 text-sm text-[#f5dfae]">
+                <span className="mb-4 inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#c2f970]/10 text-sm text-[#e1f4c9]">
                   0{index + 1}
                 </span>
                 <p className="text-base leading-8 text-zinc-300">{paragraph}</p>

@@ -3,6 +3,7 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const collaborations = [
+  { name: "Majka Szado Walter", person: null, url: "https://rzeszow-adwokat.pl/", pl: "Współpraca z kancelarią adwokacką w Rzeszowie.", en: "Collaboration with a law firm in Rzeszów." },
   {
     name: "Jalapeno Kebab Niemce",
     person: "Arek",
@@ -43,7 +44,7 @@ export function ClientProof() {
     >
       <div className="mx-auto max-w-7xl">
         <div className="max-w-3xl">
-          <p className="text-sm uppercase tracking-[0.24em] text-[#d7b46a]">
+          <p className="text-sm uppercase tracking-[0.24em] text-[#c2f970]">
             {lang === "pl" ? "Współprace" : "Collaborations"}
           </p>
           <h2 className="mt-4 text-3xl text-white md:text-5xl">
@@ -58,7 +59,7 @@ export function ClientProof() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {collaborations.map((collaboration) => (
             <article
               key={collaboration.name}
@@ -67,17 +68,17 @@ export function ClientProof() {
               <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">
                 {lang === "pl" ? "Klient" : "Client"}
               </p>
-              <h3 className="mt-3 text-xl text-[#f5dfae]">
+              <h3 className="mt-3 text-xl text-[#e1f4c9]">
                 {collaboration.name}
               </h3>
-              <p className="mt-2 text-sm text-zinc-500">
+              {collaboration.person && <p className="mt-2 text-sm text-zinc-500">
                 {lang === "pl" ? "Współpraca z: " : "Working with: "}
                 {collaboration.person}
-              </p>
+              </p>}
               <p className="mt-5 text-sm leading-7 text-zinc-300">
                 {lang === "pl" ? collaboration.pl : collaboration.en}
               </p>
-              {collaboration.url && <a href={collaboration.url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm text-[#d7b46a] underline underline-offset-4">{lang === "pl" ? "Strona lub profil firmy ↗" : "Business website or profile ↗"}</a>}
+              {collaboration.url && <a href={collaboration.url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm text-[#c2f970] underline underline-offset-4">{lang === "pl" ? "Strona lub profil firmy ↗" : "Business website or profile ↗"}</a>}
             </article>
           ))}
         </div>

@@ -35,7 +35,7 @@ export default function CaseStudiesIndex() {
   return (
     <main className="mx-auto min-h-screen max-w-7xl px-5 py-32 md:px-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(listJsonLd).replace(/</g, "\\u003c") }} />
-      <p className="text-xs uppercase tracking-[0.24em] text-[#d7b46a]">
+      <p className="text-xs uppercase tracking-[0.24em] text-[#c2f970]">
         Realizacje
       </p>
       <h1 className="mt-5 text-4xl tracking-tight md:text-6xl">
@@ -50,7 +50,7 @@ export default function CaseStudiesIndex() {
           <Link
             key={p.title}
             href={p.caseStudyUrl}
-            className="overflow-hidden rounded-2xl border border-white/10 transition hover:border-[#d7b46a]/50"
+            className="overflow-hidden rounded-2xl border border-white/10 transition hover:border-[#c2f970]/50"
           >
             <Image
               src={p.image.src}
@@ -61,7 +61,7 @@ export default function CaseStudiesIndex() {
               className="aspect-[16/10] h-auto w-full object-cover object-top"
             />
             <div className="p-6">
-              <h2 className="text-2xl text-[#f5dfae]">{p.title}</h2>
+              <h2 className="text-2xl text-[#e1f4c9]">{p.title}</h2>
               <p className="mt-3 text-sm leading-7 text-zinc-400">
                 {p.description}
               </p>
@@ -71,7 +71,7 @@ export default function CaseStudiesIndex() {
       </div>
       <Link
         href="/#contact"
-        className="mt-12 inline-flex rounded-xl bg-[#d7b46a] px-6 py-4 text-black"
+        className="mt-12 inline-flex rounded-xl bg-[#c2f970] px-6 py-4 text-black"
       >
         Porozmawiajmy o Twoim projekcie →
       </Link>

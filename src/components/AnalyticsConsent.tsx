@@ -47,21 +47,21 @@ export function AnalyticsConsent() {
       {analyticsEnabled ? <GoogleTagManager /> : null}
 
       {loaded && consent === null ? (
-        <div className="fixed bottom-4 left-4 right-4 z-[70] mx-auto max-w-2xl rounded-md border border-[#d7b46a]/35 bg-[#11110f]/95 p-4 text-sm text-zinc-300 shadow-[0_22px_70px_rgba(0,0,0,0.42)] backdrop-blur-xl md:left-5 md:right-auto md:mx-0 md:max-w-md">
+        <div className="fixed bottom-4 left-4 right-4 z-[70] mx-auto max-w-2xl rounded-md border border-[#c2f970]/35 bg-[#11110f]/95 p-4 text-sm text-zinc-300 shadow-[0_22px_70px_rgba(0,0,0,0.42)] backdrop-blur-xl md:left-5 md:right-auto md:mx-0 md:max-w-md">
           <p className="text-base font-medium text-white">{t.consent.title}</p>
           <p className="mt-2 text-xs leading-5 text-zinc-400 md:text-sm md:leading-6">{t.consent.description}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => choose("accepted")}
-              className="rounded-md bg-[#d7b46a] px-4 py-2 text-sm text-black transition hover:-translate-y-0.5"
+              className="rounded-md bg-[#c2f970] px-4 py-2 text-sm text-black transition hover:-translate-y-0.5"
             >
               {t.consent.accept}
             </button>
             <button
               type="button"
               onClick={() => choose("rejected")}
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-zinc-100 transition hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
+              className="rounded-md border border-white/15 px-4 py-2 text-sm text-zinc-100 transition hover:border-[#c2f970]/60 hover:text-[#e1f4c9]"
             >
               {t.consent.reject}
             </button>
@@ -73,7 +73,7 @@ export function AnalyticsConsent() {
         <button
           type="button"
           onClick={reopenSettings}
-          className="fixed bottom-3 left-3 z-[65] rounded-md border border-white/10 bg-[#11110f]/80 px-3 py-2 text-xs text-zinc-400 backdrop-blur transition hover:border-[#d7b46a]/45 hover:text-[#f5dfae]"
+          className="fixed bottom-3 left-3 z-[65] rounded-md border border-white/10 bg-[#11110f]/80 px-3 py-2 text-xs text-zinc-400 backdrop-blur transition hover:border-[#c2f970]/45 hover:text-[#e1f4c9]"
         >
           {t.consent.settings}
         </button>

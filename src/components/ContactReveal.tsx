@@ -150,7 +150,7 @@ function RevealButton({
       {value && href ? (
         <a
           href={href}
-          className="mt-2 block break-all text-sm text-[#f5dfae] transition-colors hover:text-white"
+          className="mt-2 block break-all text-sm text-[#e1f4c9] transition-colors hover:text-white"
         >
           {value}
         </a>
@@ -159,7 +159,7 @@ function RevealButton({
           type="button"
           onClick={onClick}
           disabled={loading}
-          className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-md border border-[#d7b46a]/35 bg-[#d7b46a]/10 px-3 py-2.5 text-sm text-[#f5dfae] transition-all hover:border-[#d7b46a]/70 disabled:cursor-not-allowed disabled:opacity-70"
+          className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-md border border-[#c2f970]/35 bg-[#c2f970]/10 px-3 py-2.5 text-sm text-[#e1f4c9] transition-all hover:border-[#c2f970]/70 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
           {buttonLabel}

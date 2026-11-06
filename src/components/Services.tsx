@@ -41,7 +41,7 @@ export function Services() {
   return (
     <section id="services" className="px-5 py-20 md:px-8 md:py-24">
       <div className="mx-auto max-w-7xl">
-        <p className="text-xs uppercase tracking-[0.24em] text-[#d7b46a]">
+        <p className="text-xs uppercase tracking-[0.24em] text-[#c2f970]">
           {pl ? "W czym mogę pomóc" : "How I can help"}
         </p>
         <h2 className="mt-4 max-w-2xl text-4xl leading-tight tracking-tight md:text-5xl">
@@ -54,10 +54,10 @@ export function Services() {
             <Link
               key={s.href}
               href={s.href}
-              className="group flex flex-col rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.045] to-transparent p-7 transition hover:border-[#d7b46a]/50 hover:bg-[#d7b46a]/[0.04]"
+              className="group flex flex-col rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.045] to-transparent p-7 transition hover:border-[#c2f970]/50 hover:bg-[#c2f970]/[0.04]"
             >
               <div className="flex items-center justify-between">
-                <Icon className="h-7 w-7 text-[#d7b46a]" />
+                <Icon className="h-7 w-7 text-[#c2f970]" />
                 <span className="text-xs text-zinc-600">0{i + 1}</span>
               </div>
               <h3 className="mt-9 text-2xl tracking-tight">{s.title}</h3>
@@ -65,7 +65,7 @@ export function Services() {
                 {s.text}
               </p>
               <p className="mt-7 text-xs text-zinc-500">{s.tags}</p>
-              <span className="mt-7 flex items-center justify-between border-t border-white/10 pt-5 text-sm text-[#f5dfae]">
+              <span className="mt-7 flex items-center justify-between border-t border-white/10 pt-5 text-sm text-[#e1f4c9]">
                 {pl ? "Zobacz zakres współpracy" : "Explore the service"}
                 <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-1 group-hover:translate-x-1" />
               </span>

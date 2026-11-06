@@ -19,10 +19,10 @@ export function TechnicalAudience() {
           transition={{ duration: 0.5 }}
         >
           <div>
-            <div className="mb-5 grid h-12 w-12 place-items-center rounded-md bg-[#d7b46a]/10 text-[#f5dfae]">
+            <div className="mb-5 grid h-12 w-12 place-items-center rounded-md bg-[#c2f970]/10 text-[#e1f4c9]">
               <ShieldCheck className="h-6 w-6" />
             </div>
-            <p className="text-sm uppercase tracking-[0.28em] text-[#d7b46a]">
+            <p className="text-sm uppercase tracking-[0.28em] text-[#c2f970]">
               {t.technicalAudience.title}
             </p>
             <h2 className="mt-4 text-4xl leading-tight text-white md:text-5xl">
@@ -31,8 +31,8 @@ export function TechnicalAudience() {
             <p className="mt-5 text-base leading-8 text-zinc-300">
               {t.technicalAudience.subtitle}
             </p>
-            <div className="mt-6 rounded-md border border-[#d7b46a]/25 bg-[#d7b46a]/10 p-4">
-              <div className="flex items-center gap-2 text-sm uppercase tracking-[0.18em] text-[#f5dfae]">
+            <div className="mt-6 rounded-md border border-[#c2f970]/25 bg-[#c2f970]/10 p-4">
+              <div className="flex items-center gap-2 text-sm uppercase tracking-[0.18em] text-[#e1f4c9]">
                 <Database className="h-4 w-4" />
                 {t.technicalAudience.stackLabel}
               </div>
@@ -43,7 +43,7 @@ export function TechnicalAudience() {
           </div>
 
           <div>
-            <h3 className="text-sm uppercase tracking-[0.24em] text-[#d7b46a]">
+            <h3 className="text-sm uppercase tracking-[0.24em] text-[#c2f970]">
               {t.technicalAudience.showsLabel}
             </h3>
             <ul className="mt-5 grid gap-3">
@@ -52,7 +52,7 @@ export function TechnicalAudience() {
                   key={item}
                   className="flex gap-3 rounded-md border border-white/10 bg-black/20 p-4 text-sm leading-7 text-zinc-300"
                 >
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d7b46a]" />
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#c2f970]" />
                   {item}
                 </li>
               ))}
@@ -63,7 +63,7 @@ export function TechnicalAudience() {
                 href="https://demo-crm.bernecki.dev/login"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-[#d7b46a] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-md bg-[#c2f970] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5"
               >
                 <ExternalLink className="h-4 w-4" />
                 {t.technicalAudience.links.demo}
@@ -72,20 +72,20 @@ export function TechnicalAudience() {
                 href="https://github.com/ft4k696bk6-prog/B-CRM"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
+                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[#c2f970]/60 hover:text-[#e1f4c9]"
               >
                 <Github className="h-4 w-4" />
                 {t.technicalAudience.links.repo}
               </a>
               <Link
                 href="/case-studies/b-crm"
-                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
+                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[#c2f970]/60 hover:text-[#e1f4c9]"
               >
                 {t.technicalAudience.links.caseStudy}
               </Link>
               <Link
                 href="#contact"
-                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
+                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[#c2f970]/60 hover:text-[#e1f4c9]"
               >
                 {t.technicalAudience.links.contact}
               </Link>

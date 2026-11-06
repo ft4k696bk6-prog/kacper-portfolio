@@ -11,7 +11,7 @@ export function Profile() {
 
   return (
     <section id="about" className="relative border-y border-white/10 bg-[#0b0b0a] px-5 py-20 md:px-8">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#d7b46a]/40 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c2f970]/40 to-transparent" />
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -19,7 +19,7 @@ export function Profile() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5 }}
         >
-          <p className="text-sm uppercase tracking-[0.28em] text-[#d7b46a]">
+          <p className="text-sm uppercase tracking-[0.28em] text-[#c2f970]">
             {t.about.title}
           </p>
           <h2 className="mt-4 max-w-3xl text-4xl leading-tight text-white md:text-5xl">
@@ -65,7 +65,7 @@ export function Profile() {
                   }}
                   className="grid gap-4 p-5 sm:grid-cols-[3rem_1fr] sm:items-start"
                 >
-                  <div className="grid h-12 w-12 place-items-center rounded-md bg-[#d7b46a]/10 text-[#f5dfae]">
+                  <div className="grid h-12 w-12 place-items-center rounded-md bg-[#c2f970]/10 text-[#e1f4c9]">
                     <Icon className="h-5 w-5" />
                   </div>
                   <div>

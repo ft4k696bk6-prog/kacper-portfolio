@@ -156,18 +156,18 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <section className="relative overflow-hidden border-b border-white/10 px-5 pb-20 pt-36 md:px-8 md:pb-28 md:pt-44">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(215,180,106,0.18),transparent_34%),radial-gradient(circle_at_82%_25%,rgba(34,83,67,0.2),transparent_34%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(194, 249, 112,0.18),transparent_34%),radial-gradient(circle_at_82%_25%,rgba(34,83,67,0.2),transparent_34%)]" />
         <div className="relative mx-auto max-w-6xl">
           <Link
             href="/"
-            className="mb-10 inline-flex items-center gap-2 text-sm text-[#f5dfae] hover:text-white"
+            className="mb-10 inline-flex items-center gap-2 text-sm text-[#e1f4c9] hover:text-white"
           >
-            <span className="grid h-8 w-8 place-items-center rounded-md border border-[#d7b46a]/40 bg-[#d7b46a]/10 text-xs">
+            <span className="grid h-8 w-8 place-items-center rounded-md border border-[#c2f970]/40 bg-[#c2f970]/10 text-xs">
               KB
             </span>
             Kacper Bernecki
           </Link>
-          <p className="mb-5 flex items-center gap-2 text-sm uppercase tracking-[0.18em] text-[#d7b46a]">
+          <p className="mb-5 flex items-center gap-2 text-sm uppercase tracking-[0.18em] text-[#c2f970]">
             <Sparkles className="h-4 w-4" />
             {page.eyebrow}
           </p>
@@ -180,13 +180,13 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/#contact"
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-[#d7b46a] px-6 py-3 text-black transition hover:-translate-y-0.5"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-[#c2f970] px-6 py-3 text-black transition hover:-translate-y-0.5"
             >
               Porozmawiajmy o projekcie <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href={page.proofHref}
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-6 py-3 text-zinc-200 transition hover:border-[#d7b46a]/60 hover:text-[#f5dfae]"
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-6 py-3 text-zinc-200 transition hover:border-[#c2f970]/60 hover:text-[#e1f4c9]"
             >
               {page.proof} <ArrowRight className="h-4 w-4" />
             </Link>
@@ -196,7 +196,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
 
       <section className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-[0.8fr_1.2fr] md:px-8 md:py-24">
         <div>
-          <p className="text-sm uppercase tracking-[0.18em] text-[#d7b46a]">
+          <p className="text-sm uppercase tracking-[0.18em] text-[#c2f970]">
             Co mogę zrobić
           </p>
           <h2 className="mt-4 text-3xl">
@@ -209,7 +209,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
               key={bullet}
               className="flex gap-3 rounded-xl border border-white/10 bg-white/[0.035] p-4 text-zinc-200"
             >
-              <Check className="mt-0.5 h-5 w-5 shrink-0 text-[#d7b46a]" />
+              <Check className="mt-0.5 h-5 w-5 shrink-0 text-[#c2f970]" />
               <span>{bullet}</span>
             </div>
           ))}
@@ -218,7 +218,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
 
       <section className="border-y border-white/10 bg-white/[0.025] px-5 py-16 md:px-8 md:py-24">
         <div className="mx-auto max-w-6xl">
-          <p className="text-sm uppercase tracking-[0.18em] text-[#d7b46a]">
+          <p className="text-sm uppercase tracking-[0.18em] text-[#c2f970]">
             Dlaczego ze mną
           </p>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -243,7 +243,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
                 key={title as string}
                 className="rounded-2xl border border-white/10 bg-[#0b0b0b] p-6"
               >
-                <Icon className="h-6 w-6 text-[#d7b46a]" />
+                <Icon className="h-6 w-6 text-[#c2f970]" />
                 <h3 className="mt-5 text-xl">{title as string}</h3>
                 <p className="mt-3 leading-7 text-zinc-400">
                   {description as string}
@@ -263,7 +263,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
             <Link
               key={example.slug}
               href={`/case-studies/${example.slug}`}
-              className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] transition hover:border-[#d7b46a]/50"
+              className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] transition hover:border-[#c2f970]/50"
             >
               <Image
                 src={`/images/projects/${example.image}`}
@@ -273,7 +273,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
                 sizes="(min-width: 768px) 45vw, 100vw"
                 className="h-auto w-full"
               />
-              <p className="flex items-center justify-between p-5 text-[#f5dfae]">
+              <p className="flex items-center justify-between p-5 text-[#e1f4c9]">
                 {example.name}
                 <ArrowRight className="h-4 w-4" />
               </p>
@@ -283,13 +283,13 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
       </section>
       <section className="mx-auto max-w-6xl px-5 py-12 md:px-8">
         <h2 className="text-3xl">Przygotuj się do rozmowy</h2>
-        {guides.filter(g => g.service === `/${slug}`).map(g => <Link key={g.slug} href={`/poradniki/${g.slug}`} className="mt-6 block rounded-xl border border-[#d7b46a]/30 p-6">
-          <h3 className="text-xl text-[#f5dfae]">{g.title} →</h3><p className="mt-3 leading-7 text-zinc-400">{g.description}</p>
+        {guides.filter(g => g.service === `/${slug}`).map(g => <Link key={g.slug} href={`/poradniki/${g.slug}`} className="mt-6 block rounded-xl border border-[#c2f970]/30 p-6">
+          <h3 className="text-xl text-[#e1f4c9]">{g.title} →</h3><p className="mt-3 leading-7 text-zinc-400">{g.description}</p>
         </Link>)}
         <p className="mt-6 leading-7 text-zinc-400">{kind === "marketing" ? "Budżet reklamowy i koszt obsługi ustalamy osobno. Przed startem uzgadniamy ofertę, kanały, materiały i sposób oceny zapytań." : "Do rozmowy przygotuj cel projektu, najważniejsze funkcje, dostępne materiały i oczekiwany termin. Zakres i wycenę ustalamy przed rozpoczęciem prac."}</p>
       </section>
       <section className="mx-auto max-w-4xl px-5 py-16 md:px-8 md:py-24">
-        <p className="text-sm uppercase tracking-[0.18em] text-[#d7b46a]">
+        <p className="text-sm uppercase tracking-[0.18em] text-[#c2f970]">
           Najczęstsze pytania
         </p>
         <div className="mt-8 divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/[0.025] px-5">
@@ -303,7 +303,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
         <div className="mt-10 text-center">
           <Link
             href="/#contact"
-            className="inline-flex items-center gap-2 rounded-md bg-[#d7b46a] px-6 py-3 text-black transition hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 rounded-md bg-[#c2f970] px-6 py-3 text-black transition hover:-translate-y-0.5"
           >
             Opisz, czego potrzebujesz <ArrowRight className="h-4 w-4" />
           </Link>

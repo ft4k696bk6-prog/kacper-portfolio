@@ -191,19 +191,19 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
 
   return (
     <motion.div
-      className="rounded-md border border-[#d7b46a]/25 bg-[linear-gradient(145deg,rgba(255,255,255,0.07),rgba(255,255,255,0.025))] p-4 shadow-[0_24px_70px_rgba(0,0,0,0.3)] md:p-5"
+      className="rounded-md border border-[#c2f970]/25 bg-[linear-gradient(145deg,rgba(255,255,255,0.07),rgba(255,255,255,0.025))] p-4 shadow-[0_24px_70px_rgba(0,0,0,0.3)] md:p-5"
       initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: 0.08 }}
     >
       <div className="flex items-center gap-3">
-        <div className="relative grid h-11 w-11 shrink-0 place-items-center rounded-[1rem] border border-[#f5dfae]/45 bg-[#d7b46a]/25 text-[#f9e7b9] shadow-[inset_0_1px_0_rgba(255,255,255,0.28),0_14px_34px_rgba(215,180,106,0.18)]">
+        <div className="relative grid h-11 w-11 shrink-0 place-items-center rounded-[1rem] border border-[#e1f4c9]/45 bg-[#c2f970]/25 text-[#f9e7b9] shadow-[inset_0_1px_0_rgba(255,255,255,0.28),0_14px_34px_rgba(194, 249, 112,0.18)]">
           <CalendarDays className="h-5 w-5" />
           <span className="absolute left-2.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#fff4cf]" />
           <span className="absolute right-2.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#fff4cf]" />
         </div>
-        <p className="text-sm uppercase tracking-[0.18em] text-[#f5dfae]">
+        <p className="text-sm uppercase tracking-[0.18em] text-[#e1f4c9]">
           {copy.title}
         </p>
       </div>
@@ -238,7 +238,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
                     type="button"
                     onClick={() => void selectDay(day)}
                     aria-label={`${copy.chooseDayLabel}: ${day.date}`}
-                    className="min-h-[76px] rounded-md border border-white/10 bg-black/20 p-2 text-left text-zinc-200 transition-all hover:border-[#d7b46a]/45 hover:bg-white/[0.055] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7b46a]/70"
+                    className="min-h-[76px] rounded-md border border-white/10 bg-black/20 p-2 text-left text-zinc-200 transition-all hover:border-[#c2f970]/45 hover:bg-white/[0.055] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2f970]/70"
                   >
                     <span className="block text-[0.65rem] uppercase tracking-[0.14em]">
                       {formattedDay.weekday}
@@ -264,16 +264,16 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
               <button
                 type="button"
                 onClick={backToDays}
-                className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-zinc-200 transition-colors hover:border-[#d7b46a]/45 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7b46a]/70"
+                className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-zinc-200 transition-colors hover:border-[#c2f970]/45 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2f970]/70"
               >
-                <ArrowLeft className="h-4 w-4 text-[#d7b46a]" />
+                <ArrowLeft className="h-4 w-4 text-[#c2f970]" />
                 {copy.backToDaysLabel}
               </button>
             </div>
 
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-zinc-500">
-                <Clock3 className="h-4 w-4 text-[#d7b46a]" />
+                <Clock3 className="h-4 w-4 text-[#c2f970]" />
                 {copy.chooseTimeLabel}
               </div>
               <p className="text-xs text-zinc-500">{copy.timezoneLabel}</p>
@@ -296,10 +296,10 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
                       setState("idle");
                     }}
                     className={[
-                      "rounded-md border px-3 py-3 text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7b46a]/70",
+                      "rounded-md border px-3 py-3 text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2f970]/70",
                       selectedSlot?.start === slot.start
-                        ? "border-[#d7b46a] bg-[#d7b46a] text-black"
-                        : "border-white/10 bg-black/20 text-zinc-100 hover:border-[#d7b46a]/45",
+                        ? "border-[#c2f970] bg-[#c2f970] text-black"
+                        : "border-white/10 bg-black/20 text-zinc-100 hover:border-[#c2f970]/45",
                     ].join(" ")}
                   >
                     {slot.label}
@@ -315,7 +315,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
         <form onSubmit={handleBooking} className="mt-6 rounded-md border border-white/10 bg-black/20 p-4">
           <p className="mb-4 text-sm text-zinc-300">
             {formatSlotDate(selectedSlot.start, timeZone, locale)} ·{" "}
-            <span className="text-[#f5dfae]">{selectedSlot.label}</span>
+            <span className="text-[#e1f4c9]">{selectedSlot.label}</span>
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="grid gap-2 text-sm text-zinc-200">
@@ -324,7 +324,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
                 name="bookingName"
                 required
                 minLength={2}
-                className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[#d7b46a]/70"
+                className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[#c2f970]/70"
               />
             </label>
             <label className="grid gap-2 text-sm text-zinc-200">
@@ -333,7 +333,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
                 name="bookingEmail"
                 required
                 type="email"
-                className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[#d7b46a]/70"
+                className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[#c2f970]/70"
               />
             </label>
           </div>
@@ -341,7 +341,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
             {copy.bookingCompanyLabel}
             <input
               name="bookingCompany"
-              className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[#d7b46a]/70"
+              className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[#c2f970]/70"
             />
           </label>
           <label className="mt-3 grid gap-2 text-sm text-zinc-200">
@@ -349,7 +349,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
             <textarea
               name="bookingMessage"
               rows={3}
-              className="resize-none rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm leading-6 text-white outline-none transition-colors focus:border-[#d7b46a]/70"
+              className="resize-none rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm leading-6 text-white outline-none transition-colors focus:border-[#c2f970]/70"
             />
           </label>
           <input
@@ -375,7 +375,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
           <button
             type="submit"
             disabled={state === "booking"}
-            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#d7b46a] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#c2f970] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {state === "booking" ? (
               <>

@@ -15,7 +15,7 @@ export function Contact() {
       id="contact"
       className="relative overflow-hidden border-t border-white/10 bg-[#090908] px-5 py-8 md:px-8 lg:min-h-[100svh] lg:py-10"
     >
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#d7b46a]/60 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c2f970]/60 to-transparent" />
       <div className="mx-auto flex min-h-[calc(100svh-5rem)] max-w-7xl flex-col justify-between gap-6">
         <div className="grid flex-1 gap-6 xl:grid-cols-[0.76fr_1.24fr] xl:items-center">
           <motion.div
@@ -40,7 +40,7 @@ export function Contact() {
               />
             </motion.div>
 
-            <div className="absolute inset-x-10 bottom-3 h-px bg-gradient-to-r from-transparent via-[#d7b46a]/75 to-transparent shadow-[0_0_26px_rgba(215,180,106,0.42)]" />
+            <div className="absolute inset-x-10 bottom-3 h-px bg-gradient-to-r from-transparent via-[#c2f970]/75 to-transparent shadow-[0_0_26px_rgba(194, 249, 112,0.42)]" />
           </motion.div>
 
           <motion.div
@@ -50,7 +50,7 @@ export function Contact() {
             transition={{ duration: 0.55 }}
           >
             <div className="max-w-3xl">
-              <p className="text-sm uppercase tracking-[0.28em] text-[#d7b46a]">
+              <p className="text-sm uppercase tracking-[0.28em] text-[#c2f970]">
                 {t.nav.contact}
               </p>
               <h2 className="mt-4 text-4xl leading-tight text-white md:text-5xl">
@@ -63,25 +63,25 @@ export function Contact() {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <span className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300">
-                <MapPin className="h-4 w-4 text-[#d7b46a]" />
+                <MapPin className="h-4 w-4 text-[#c2f970]" />
                 {t.contact.location}
               </span>
               <a
                 href={t.contact.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 transition-colors hover:border-[#d7b46a]/45 hover:text-white"
+                className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 transition-colors hover:border-[#c2f970]/45 hover:text-white"
               >
-                <Github className="h-4 w-4 text-[#d7b46a]" />
+                <Github className="h-4 w-4 text-[#c2f970]" />
                 {t.contact.githubCta}
               </a>
               <a
                 href={t.contact.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 transition-colors hover:border-[#d7b46a]/45 hover:text-white"
+                className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 transition-colors hover:border-[#c2f970]/45 hover:text-white"
               >
-                <Linkedin className="h-4 w-4 text-[#d7b46a]" />
+                <Linkedin className="h-4 w-4 text-[#c2f970]" />
                 {t.contact.linkedinCta}
               </a>
             </div>

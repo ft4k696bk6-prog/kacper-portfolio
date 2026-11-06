@@ -15,7 +15,7 @@ export function Projects() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="text-xs uppercase tracking-[0.24em] text-[#d7b46a]">
+            <p className="text-xs uppercase tracking-[0.24em] text-[#c2f970]">
               {t.projects.title}
             </p>
             <h2 className="mt-4 text-4xl tracking-tight md:text-5xl">
@@ -24,35 +24,36 @@ export function Projects() {
           </div>
           <Link
             href="/case-studies"
-            className="inline-flex items-center gap-2 text-sm text-[#f5dfae]"
+            className="inline-flex items-center gap-2 text-sm text-[#e1f4c9]"
           >
             {lang === "pl" ? "Wszystkie case studies" : "All case studies"}
             <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
-        <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          {t.projects.items.slice(0, 4).map((project, index) => (
+        <div className="mt-12 grid items-start gap-x-8 gap-y-14 lg:grid-cols-2">
+          {[...t.projects.items.slice(1, 4), t.projects.items[0]].map((project, index) => (
             <article
               key={project.title}
-              className="overflow-hidden rounded-2xl border border-white/10 bg-[#11110f] transition hover:border-[#d7b46a]/40"
+              className="group/project overflow-hidden rounded-xl border border-white/10 bg-[#111510] transition duration-300 hover:border-[#c2f970]/40"
               data-case-study-card={project.caseStudyUrl}
             >
               <Link
                 href={project.caseStudyUrl}
                 aria-label={`${t.projects.caseStudyLabel}: ${project.title}`}
-                className="group block overflow-hidden border-b border-white/10 bg-black/20"
+                className="group block overflow-hidden border-b border-white/10 bg-[#1b2119] p-4 pb-0 md:p-7 md:pb-0"
               >
+                <div aria-hidden="true" className="flex items-center gap-1.5 rounded-t-lg border-x border-t border-white/15 bg-[#151914] px-4 py-3"><span className="h-1.5 w-1.5 rounded-full bg-white/30"/><span className="h-1.5 w-1.5 rounded-full bg-white/20"/><span className="h-1.5 w-1.5 rounded-full bg-white/10"/><span className="ml-3 truncate font-mono text-[10px] text-zinc-500">{project.title}</span></div>
                 <Image
                   src={project.image.src}
                   alt={project.image.alt}
                   width={1440}
                   height={900}
                   sizes="(min-width: 1024px) 45vw, 95vw"
-                  className="aspect-[16/10] h-auto w-full object-cover object-top transition duration-500 group-hover:scale-[1.02]"
+                  className="aspect-[16/10] h-auto w-full border-x border-white/15 bg-[#090b08] object-contain object-top transition duration-500 group-hover:brightness-110"
                 />
               </Link>
               <div className="p-6 md:p-8">
-                <p className="text-xs uppercase tracking-[0.16em] text-[#d7b46a]">
+                <p className="text-xs uppercase tracking-[0.16em] text-[#c2f970]">
                   0{index + 1} / {project.title}
                 </p>
                 <h3 className="mt-3 text-2xl tracking-tight">
@@ -97,7 +98,7 @@ export function Projects() {
                 <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
                   <Link
                     href={project.caseStudyUrl}
-                    className="inline-flex items-center gap-2 text-sm text-[#f5dfae]"
+                    className="inline-flex items-center gap-2 text-sm text-[#e1f4c9]"
                   >
                     {lang === "pl"
                       ? "Zobacz realizację"
@@ -145,7 +146,7 @@ export function Projects() {
               <Link
                 href={p.caseStudyUrl}
                 key={p.title}
-                className="overflow-hidden rounded-xl border border-white/10 transition hover:border-[#d7b46a]/40"
+                className="overflow-hidden rounded-xl border border-white/10 transition hover:border-[#c2f970]/40"
               >
                 <Image
                   src={p.image.src}
@@ -156,7 +157,7 @@ export function Projects() {
                   className="aspect-video h-auto w-full object-cover"
                 />
                 <div className="p-4">
-                  <h3 className="text-lg text-[#f5dfae]">{p.title}</h3>
+                  <h3 className="text-lg text-[#e1f4c9]">{p.title}</h3>
                   <p className="mt-2 text-xs leading-6 text-zinc-400">
                     {p.description}
                   </p>
