@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
           { role: "user", content: question },
         ],
         max_completion_tokens: PORTFOLIO_AI_MAX_RESPONSE_TOKENS,
-        reasoning: { effort: "minimal", exclude: true },
+        reasoning: { effort: "low", exclude: true },
         stream: false,
       }),
     });
