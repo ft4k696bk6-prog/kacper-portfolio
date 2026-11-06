@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { usePathname, useRouter } from "next/navigation";
 import { CalendarDays, Eye, Loader2, MessageCircle, Mic, MicOff, RotateCcw, Send, X } from "lucide-react";
@@ -43,7 +43,7 @@ type BookingState = {
 };
 
 type LocalAction = "projects" | "bcrm" | "book" | "contact";
-type MascotMood = "idle" | "walking" | "curious" | "joking" | "listening" | "thinking";
+type MascotMood = "idle" | "curious" | "joking" | "listening" | "thinking";
 
 type MascotBehaviorState = {
   mood: MascotMood;
@@ -85,7 +85,6 @@ declare global {
 
 const HIDE_DURATION_MS = 48 * 60 * 60 * 1000;
 const HIDDEN_UNTIL_KEY = "ai-mascot-hidden-until";
-const LINE_COOLDOWN_MS = 12 * 1000;
 
 function createMessage(role: ChatMessage["role"], content: string): ChatMessage {
   return {
@@ -126,61 +125,8 @@ function detectLocalAction(question: string): LocalAction | null {
   return null;
 }
 
-function pickRandom(items: string[], fallback: string) {
-  if (!items.length) return fallback;
-  return items[Math.floor(Math.random() * items.length)] || fallback;
-}
-
 function getAssistantRuntimeCopy(lang: "en" | "pl") {
-  if (lang === "pl") {
-    return {
-      retryLabel: "Ponow odpowiedz",
-      openerNudges: [
-        "Ej, tu zywy przewodnik. Pokazac B-CRM czy od razu wejsc w konkrety?",
-        "Chodze po tej stronie i pilnuje, zeby nikt nie zgubil najlepszego projektu.",
-        "Mozesz mnie zapytac o stack, projekty albo kod. Ja nie gryze, najwyzej poprawie UX.",
-      ],
-      idleNudges: [
-        "Moge porownac projekty albo wskazac najlepszy dowod techniczny.",
-        "Dobry nastepny ruch: B-CRM. Tam jest najwiecej miesa.",
-        "Jak chcesz, moge zrobic szybka trase po portfolio. Bez przewodnickiego tonu z muzeum.",
-      ],
-      movementNudges: [
-        "Patrol portfolio trwa. Podejrzanie duzo Reacta, ale w dobrym sensie.",
-        "O, tu warto kliknac projekty. Ja tylko subtelnie macham neonowym drogowskazem.",
-        "Przechadzam sie, bo statyczny chatbot to juz troche muzeum internetu.",
-      ],
-      hoverNudges: [
-        "Tak, zyje. Prawie. Zapytaj o B-CRM albo kod.",
-        "Kliknij mnie, a otworze mini wejscie. Bez wielkiego okna, obiecuje.",
-        "Masz pytanie techniczne? Dawaj najmniejszy fragment, bez sekretow.",
-      ],
-    };
-  }
-
-  return {
-    retryLabel: "Retry answer",
-    openerNudges: [
-      "Hey, living guide here. Want B-CRM first, or should we go straight to the useful bits?",
-      "I wander around this page so nobody misses the strongest project.",
-      "Ask me about the stack, projects or code. I do not bite. I may judge bad UX a little.",
-    ],
-    idleNudges: [
-      "I can compare projects or point to the strongest technical proof.",
-      "Good next move: B-CRM. That is where the useful evidence lives.",
-      "I can give you a fast route through the portfolio. No museum-guide monologue.",
-    ],
-    movementNudges: [
-      "Portfolio patrol continues. Suspicious amount of React, but in a good way.",
-      "Projects are worth a click. I am only waving a tasteful little sign.",
-      "I move because static chat bubbles are basically internet furniture.",
-    ],
-    hoverNudges: [
-      "Yep, alive. Almost. Ask me about B-CRM or code.",
-      "Click me and I will open the tiny input. No giant chat wall.",
-      "Technical question? Paste the smallest snippet, no secrets.",
-    ],
-  };
+  return { retryLabel: lang === "pl" ? "Ponów odpowiedź" : "Retry answer" };
 }
 
 const defaultBookingState: BookingState = {
@@ -203,8 +149,6 @@ export function AIMascotAssistant() {
   const [open, setOpen] = useState(false);
   const [cookieBannerVisible, setCookieBannerVisible] = useState(false);
   const [isCompactViewport, setIsCompactViewport] = useState(false);
-  const [nudgeVisible, setNudgeVisible] = useState(false);
-  const [nudgeText, setNudgeText] = useState(t.aiMascot.greeting);
   const [messages, setMessages] = useState<ChatMessage[]>([
     createMessage("assistant", t.aiMascot.initialMessage),
   ]);
@@ -224,7 +168,6 @@ export function AIMascotAssistant() {
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
-  const lastLineAtRef = useRef(0);
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const locale = lang === "pl" ? "pl-PL" : "en-US";
   const timeZone = process.env.NEXT_PUBLIC_CALENDAR_TIMEZONE || DEFAULT_BOOKING_TIME_ZONE;
@@ -237,29 +180,6 @@ export function AIMascotAssistant() {
   const companionPanelSizeClass = isCompactViewport
     ? "h-[min(22rem,calc(100vh-19rem))]"
     : "h-[min(34rem,calc(100vh-7rem))]";
-  const nudgePositionClass = isCompactViewport
-    ? "bottom-[calc(100%+0.75rem)] right-0 w-[min(18rem,calc(100vw-1.5rem))]"
-    : "bottom-[calc(100%+0.85rem)] right-0 w-72";
-  const assistantStatusLabel = listening
-    ? t.aiMascot.dictationListeningLabel
-    : loading
-      ? t.aiMascot.thinkingLabel
-      : t.aiMascot.dictationReadyLabel;
-  const showCompanionLine = useCallback(
-    (lines: string[], fallback: string, mood: MascotMood = "joking") => {
-      if (open) return;
-      const now = Date.now();
-      if (now - lastLineAtRef.current < LINE_COOLDOWN_MS) return;
-
-      lastLineAtRef.current = now;
-      setNudgeText(pickRandom(lines, fallback));
-      setNudgeVisible(true);
-      setBehavior({ mood });
-      window.setTimeout(() => setNudgeVisible(false), 6200);
-    },
-    [open],
-  );
-
   useEffect(() => {
     setMounted(true);
     const hiddenUntil = Number(localStorage.getItem(HIDDEN_UNTIL_KEY) || 0);
@@ -307,8 +227,7 @@ export function AIMascotAssistant() {
         ? [createMessage("assistant", t.aiMascot.initialMessage)]
         : current,
     );
-    setNudgeText(t.aiMascot.greeting);
-  }, [t.aiMascot.greeting, t.aiMascot.initialMessage]);
+  }, [t.aiMascot.initialMessage]);
 
   useEffect(() => {
     scrollAreaRef.current?.scrollTo({
@@ -319,7 +238,6 @@ export function AIMascotAssistant() {
 
   function openChat(prefill?: string) {
     setHidden(false);
-    setNudgeVisible(false);
     setOpen(true);
     setBehavior({ mood: "curious" });
     if (prefill) {
@@ -332,7 +250,6 @@ export function AIMascotAssistant() {
     localStorage.setItem(HIDDEN_UNTIL_KEY, String(Date.now() + HIDE_DURATION_MS));
     setOpen(false);
     setHidden(true);
-    setNudgeVisible(false);
   }
 
   function restoreMascot() {
@@ -627,12 +544,6 @@ export function AIMascotAssistant() {
     }
   }
 
-  function handleMascotInterest() {
-    if (loading || listening) return;
-    setBehavior({ mood: "curious" });
-    showCompanionLine(assistantRuntimeCopy.hoverNudges, t.aiMascot.greeting, "curious");
-  }
-
   const quickActions = useMemo(
     () => [
       { key: "projects" as const, label: t.aiMascot.quickActions.projects },
@@ -675,22 +586,6 @@ export function AIMascotAssistant() {
           >
             <div className="relative">
               <AnimatePresence>
-                {nudgeVisible && !open ? (
-                  <motion.button
-                    type="button"
-                    onClick={() => openChat()}
-                    aria-live="polite"
-                    className={`absolute z-20 rounded-2xl border border-white/10 bg-[#090909]/95 px-4 py-3 text-left text-sm leading-6 text-zinc-100 shadow-[0_22px_70px_rgba(0,0,0,0.48)] backdrop-blur-2xl ${nudgePositionClass}`}
-                    initial={{ opacity: 0, y: 10, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.96 }}
-                  >
-                    {nudgeText}
-                  </motion.button>
-                ) : null}
-              </AnimatePresence>
-
-              <AnimatePresence>
                 {open ? (
                   <motion.aside
                     role="dialog"
@@ -704,10 +599,6 @@ export function AIMascotAssistant() {
                     <div className="flex items-start justify-between gap-3 border-b border-white/[0.07] px-4 py-3">
                       <div className="min-w-0">
                         <p className="truncate text-sm font-medium text-white">{t.aiMascot.chatTitle}</p>
-                        <p className="mt-0.5 text-xs text-zinc-400">{assistantStatusLabel}</p>
-                        <p className="mt-1 text-[0.66rem] uppercase tracking-[0.18em] text-[#f4f4f5]/80">
-                          {t.aiMascot.personaLabel}
-                        </p>
                       </div>
                       <div className="flex shrink-0 items-center gap-1">
                         <button
@@ -859,8 +750,6 @@ export function AIMascotAssistant() {
               <motion.button
                 type="button"
                 onClick={() => openChat()}
-                onMouseEnter={handleMascotInterest}
-                onFocus={handleMascotInterest}
                 aria-label={t.aiMascot.openLabel}
                 data-testid="ai-mascot-open"
                 data-mood={behavior.mood}
