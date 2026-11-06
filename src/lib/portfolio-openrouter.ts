@@ -1,4 +1,4 @@
-import { enCaseStudies, plCaseStudies } from "@/i18n/case-studies";
+import { enCaseStudies, plCaseStudies } from "../i18n/case-studies";
 
 /**
  * Public-only facts. Do not place private conversation history, client data,
