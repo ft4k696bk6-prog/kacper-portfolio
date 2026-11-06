@@ -142,11 +142,15 @@ describe("portfolio content", () => {
     expect(pl.consent.accept).toBe("Akceptuję cookies");
   });
 
-  it("has localized global AI mascot copy for chat, dictation, booking and code help", () => {
-    expect(en.aiMascot.chatSubtitle).toBe("Portfolio, code and quick actions");
-    expect(pl.aiMascot.chatSubtitle).toBe("Portfolio, kod i szybkie akcje");
-    expect(en.aiMascot.dictationReadyLabel).toBe("Mini chat ready");
-    expect(pl.aiMascot.dictationReadyLabel).toBe("Mini czat gotowy");
+  it("keeps the simplified AI assistant title and localized chat, dictation and booking", () => {
+    expect(en.aiMascot.chatTitle).toBe("AI Assistant");
+    expect(en.aiMascot.chatSubtitle).toBe("Projects and collaboration");
+    expect(pl.aiMascot.chatTitle).toBe("Asystent AI");
+    expect(pl.aiMascot.chatSubtitle).toBe("Projekty i współpraca");
+    expect(en.aiMascot.dictationReadyLabel).toBe("Ready to chat");
+    expect(pl.aiMascot.dictationReadyLabel).toBe("Gotowy do rozmowy");
+    expect(pl.aiMascot.initialMessage).not.toContain("chodzę tu po ekranie");
+    expect(en.aiMascot.initialMessage).not.toContain("wander around");
     expect(en.aiMascot.quickActions).toMatchObject({
       book: "Find a slot",
       code: "Help with code",
