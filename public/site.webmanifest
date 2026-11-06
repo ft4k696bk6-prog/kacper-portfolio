@@ -3,17 +3,25 @@
   "short_name": "Kacper",
   "icons": [
     {
-      "src": "/favicon.svg",
-      "sizes": "64x64",
-      "type": "image/svg+xml"
+      "src": "/favicon-silver.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "/apple-touch-icon.svg",
+      "src": "/icon",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-icon",
       "sizes": "180x180",
-      "type": "image/svg+xml"
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
-  "theme_color": "#090908",
-  "background_color": "#090908",
+  "theme_color": "#090909",
+  "background_color": "#090909",
   "display": "standalone"
 }
