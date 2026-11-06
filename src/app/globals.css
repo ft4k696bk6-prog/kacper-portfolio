@@ -2,7 +2,17 @@
 
 @custom-variant dark (&:is(.dark *));
 
-.hero-studio { background: #070707; }
+.hero-studio { position: relative; isolation: isolate; overflow: hidden; background: #070707; }
+.hero-atmosphere { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 8% 8%, #8052ff20, transparent 48%), radial-gradient(ellipse at 95% 95%, #639cc91a, transparent 45%); }
+.hero-atmosphere::after { content: ""; position: absolute; inset: 0; opacity: .5; background: radial-gradient(circle at 16% 13%, #bba3ff 0 1px, transparent 2px), radial-gradient(circle at 58% 23%, #8cbce2 0 1px, transparent 2px), radial-gradient(circle at 73% 11%, #bba3ff 0 1px, transparent 2px), radial-gradient(circle at 48% 82%, #8cbce2 0 1px, transparent 2px), radial-gradient(circle at 93% 41%, #bba3ff 0 1px, transparent 2px); }
+.headline-lustre { color: #c4b5fd; background: linear-gradient(105deg, #a5a5b4 0%, #c4b5fd 30%, #e2e8f0 48%, #a7c5e1 65%, #a5a5b4 100%); background-size: 180% 100%; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: headline-lustre 9s ease-in-out 1; }
+@keyframes headline-lustre { from { background-position: 100% 50%; } to { background-position: 0% 50%; } }
+/* One restrained reflection per interaction, never an endlessly flashing CTA. */
+.glass-action { position: relative; isolation: isolate; overflow: hidden; transition: box-shadow .25s, border-color .25s, background-color .25s, transform .25s; }
+.glass-action::after { content: ""; position: absolute; pointer-events: none; inset: -30% auto -30% 0; width: 55%; opacity: 0; background: linear-gradient(105deg, transparent, #bbb0ff24 35%, #ffffff66 50%, #afceeb26 65%, transparent); transform: translateX(-160%) skewX(-18deg); }
+.glass-action:not(:disabled):is(:hover, :focus-visible) { box-shadow: 0 0 24px #b3a2ed26, inset 0 1px 0 #ffffff38; border-color: #c4b5fd80; }
+.glass-action:not(:disabled):is(:hover, :focus-visible)::after { animation: glass-reflection .75s ease-out 1; }
+@keyframes glass-reflection { 0% { transform: translateX(-160%) skewX(-18deg); opacity: 0; } 20%, 70% { opacity: 1; } 100% { transform: translateX(280%) skewX(-18deg); opacity: 0; } }
 .hero-headline { font-size: clamp(3.5rem, 6.8vw, 6.8rem); line-height: 1.02; letter-spacing: -0.065em; font-weight: 500; }
 .studio-cta { display: inline-flex; align-items: center; gap: 1.4rem; padding: 1.1rem 1.5rem; border-radius: 6px; background: #f4f4f5; color: #171717; font-weight: 600; transition: background .2s, transform .2s; }
 .studio-cta:hover { background: #d4d4d8; transform: translateY(-3px); }
@@ -10,7 +20,8 @@
 .client-marquee { scrollbar-width: none; overscroll-behavior-x: contain; max-width: 100%; }
 .client-marquee::-webkit-scrollbar { display: none; }
 .client-wordmark { display: block; width: 300px; flex-shrink: 0; padding: 12px 30px; border-right: 1px solid #ffffff10; }
-.client-wordmark img { filter: grayscale(1) brightness(2); mix-blend-mode: screen; }
+.client-wordmark img { mix-blend-mode: screen; }
+.motomizer-wordmark { color: #f5f5f2; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif; font-size: 20px; font-weight: 800; letter-spacing: .19em; }
 .client-wordmark:hover { background: #ffffff04; }
 .marquee-button { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid #ffffff20; border-radius: 50%; color: #d4d4d4; }
 .marquee-button:hover { background: #f4f4f5; color: #111; }
@@ -20,6 +31,9 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto !important; }
   .studio-cta { transition: none; }
+  .headline-lustre, .glass-action:not(:disabled):is(:hover, :focus-visible)::after { animation: none; }
+  .glass-action { transition: none; }
+  .glass-action::after { display: none; }
 }
 
 :root {

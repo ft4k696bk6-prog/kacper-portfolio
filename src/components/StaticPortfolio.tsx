@@ -9,7 +9,6 @@ import { Projects } from "@/components/Projects";
 import { Skills } from "@/components/Skills";
 import { Contact } from "@/components/Contact";
 import { TechnicalAudience } from "@/components/TechnicalAudience";
-import { ClientProof } from "@/components/ClientProof";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const jsonLd = {
@@ -174,7 +173,6 @@ export function StaticPortfolio() {
         <Services />
         <Experience />
         <Profile />
-        <ClientProof />
         <details className="mx-auto max-w-7xl px-5 py-10 md:px-8">
           <summary className="cursor-pointer rounded-xl border border-white/10 bg-white/[0.03] p-5 text-[#e4e4e7]">
             {lang === "pl"

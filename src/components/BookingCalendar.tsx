@@ -238,7 +238,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
                     type="button"
                     onClick={() => void selectDay(day)}
                     aria-label={`${copy.chooseDayLabel}: ${day.date}`}
-                    className="min-h-[76px] rounded-md border border-white/10 bg-black/20 p-2 text-left text-zinc-200 transition-all hover:border-[#f4f4f5]/45 hover:bg-white/[0.055] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f4f4f5]/70"
+                    className="glass-action min-h-[76px] rounded-md border border-white/10 bg-black/20 p-2 text-left text-zinc-200 transition-all hover:border-[#f4f4f5]/45 hover:bg-white/[0.055] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f4f4f5]/70"
                   >
                     <span className="block text-[0.65rem] uppercase tracking-[0.14em]">
                       {formattedDay.weekday}
@@ -264,7 +264,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
               <button
                 type="button"
                 onClick={backToDays}
-                className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-zinc-200 transition-colors hover:border-[#f4f4f5]/45 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f4f4f5]/70"
+                className="glass-action inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-zinc-200 transition-colors hover:border-[#f4f4f5]/45 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f4f4f5]/70"
               >
                 <ArrowLeft className="h-4 w-4 text-[#f4f4f5]" />
                 {copy.backToDaysLabel}
@@ -375,7 +375,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
           <button
             type="submit"
             disabled={state === "booking"}
-            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#f4f4f5] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+            className="glass-action mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#f4f4f5] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {state === "booking" ? (
               <>

@@ -54,14 +54,14 @@ export function AnalyticsConsent() {
             <button
               type="button"
               onClick={() => choose("accepted")}
-              className="rounded-md bg-[#f4f4f5] px-4 py-2 text-sm text-black transition hover:-translate-y-0.5"
+              className="glass-action rounded-md bg-[#f4f4f5] px-4 py-2 text-sm text-black transition hover:-translate-y-0.5"
             >
               {t.consent.accept}
             </button>
             <button
               type="button"
               onClick={() => choose("rejected")}
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-zinc-100 transition hover:border-[#f4f4f5]/60 hover:text-[#e4e4e7]"
+              className="glass-action rounded-md border border-white/15 px-4 py-2 text-sm text-zinc-100 transition hover:border-[#f4f4f5]/60 hover:text-[#e4e4e7]"
             >
               {t.consent.reject}
             </button>

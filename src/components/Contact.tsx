@@ -70,7 +70,7 @@ export function Contact() {
                 href={t.contact.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 transition-colors hover:border-[#f4f4f5]/45 hover:text-white"
+                className="glass-action inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 transition-colors hover:border-[#f4f4f5]/45 hover:text-white"
               >
                 <Github className="h-4 w-4 text-[#f4f4f5]" />
                 {t.contact.githubCta}
@@ -79,7 +79,7 @@ export function Contact() {
                 href={t.contact.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 transition-colors hover:border-[#f4f4f5]/45 hover:text-white"
+                className="glass-action inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 transition-colors hover:border-[#f4f4f5]/45 hover:text-white"
               >
                 <Linkedin className="h-4 w-4 text-[#f4f4f5]" />
                 {t.contact.linkedinCta}

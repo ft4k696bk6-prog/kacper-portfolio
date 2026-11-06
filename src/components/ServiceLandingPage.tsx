@@ -180,13 +180,13 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/#contact"
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-[#f4f4f5] px-6 py-3 text-black transition hover:-translate-y-0.5"
+              className="glass-action inline-flex items-center justify-center gap-2 rounded-md bg-[#f4f4f5] px-6 py-3 text-black transition hover:-translate-y-0.5"
             >
               Porozmawiajmy o projekcie <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href={page.proofHref}
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-6 py-3 text-zinc-200 transition hover:border-[#f4f4f5]/60 hover:text-[#e4e4e7]"
+              className="glass-action inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-6 py-3 text-zinc-200 transition hover:border-[#f4f4f5]/60 hover:text-[#e4e4e7]"
             >
               {page.proof} <ArrowRight className="h-4 w-4" />
             </Link>
@@ -263,7 +263,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
             <Link
               key={example.slug}
               href={`/case-studies/${example.slug}`}
-              className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] transition hover:border-[#f4f4f5]/50"
+              className="glass-action group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] transition hover:border-[#f4f4f5]/50"
             >
               <Image
                 src={`/images/projects/${example.image}`}
@@ -283,7 +283,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
       </section>
       <section className="mx-auto max-w-6xl px-5 py-12 md:px-8">
         <h2 className="text-3xl">Przygotuj się do rozmowy</h2>
-        {guides.filter(g => g.service === `/${slug}`).map(g => <Link key={g.slug} href={`/poradniki/${g.slug}`} className="mt-6 block rounded-xl border border-[#f4f4f5]/30 p-6">
+        {guides.filter(g => g.service === `/${slug}`).map(g => <Link key={g.slug} href={`/poradniki/${g.slug}`} className="glass-action mt-6 block rounded-xl border border-[#f4f4f5]/30 p-6">
           <h3 className="text-xl text-[#e4e4e7]">{g.title} →</h3><p className="mt-3 leading-7 text-zinc-400">{g.description}</p>
         </Link>)}
         <p className="mt-6 leading-7 text-zinc-400">{kind === "marketing" ? "Budżet reklamowy i koszt obsługi ustalamy osobno. Przed startem uzgadniamy ofertę, kanały, materiały i sposób oceny zapytań." : "Do rozmowy przygotuj cel projektu, najważniejsze funkcje, dostępne materiały i oczekiwany termin. Zakres i wycenę ustalamy przed rozpoczęciem prac."}</p>
@@ -303,7 +303,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
         <div className="mt-10 text-center">
           <Link
             href="/#contact"
-            className="inline-flex items-center gap-2 rounded-md bg-[#f4f4f5] px-6 py-3 text-black transition hover:-translate-y-0.5"
+            className="glass-action inline-flex items-center gap-2 rounded-md bg-[#f4f4f5] px-6 py-3 text-black transition hover:-translate-y-0.5"
           >
             Opisz, czego potrzebujesz <ArrowRight className="h-4 w-4" />
           </Link>

@@ -62,7 +62,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
                 href={study.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-[#f4f4f5] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5"
+                className="glass-action inline-flex items-center gap-2 rounded-md bg-[#f4f4f5] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5"
               >
                 <ExternalLink className="h-4 w-4" />
                 {study.liveLabel || t.caseStudies.liveDemoLabel}
@@ -73,7 +73,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
                 href={study.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-5 py-3 text-sm text-white transition-colors hover:border-[#f4f4f5]/60 hover:text-[#e4e4e7]"
+                className="glass-action inline-flex items-center gap-2 rounded-md border border-white/15 px-5 py-3 text-sm text-white transition-colors hover:border-[#f4f4f5]/60 hover:text-[#e4e4e7]"
               >
                 <Github className="h-4 w-4" />
                 {t.caseStudies.repoLabel}
@@ -174,7 +174,7 @@ function BackLink({ label }: { label: string }) {
       onClick={() => {
         window.location.assign("/#projects");
       }}
-      className="inline-flex items-center gap-2 rounded-md bg-[#f4f4f5] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(244,244,245,0.22)]"
+      className="glass-action inline-flex items-center gap-2 rounded-md bg-[#f4f4f5] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(244,244,245,0.22)]"
     >
       <ArrowLeft className="h-4 w-4" />
       {label}
