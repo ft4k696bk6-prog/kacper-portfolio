@@ -733,7 +733,7 @@ export function AIMascotAssistant() {
                             type="submit"
                             disabled={loading || !input.trim()}
                             aria-label={t.aiMascot.sendLabel}
-                            className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#f4f4f5] text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
+                            className="brand-action grid h-10 w-10 shrink-0 place-items-center rounded-full  text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
                           >
                             <Send className="h-4 w-4" />
                           </button>
@@ -755,7 +755,7 @@ export function AIMascotAssistant() {
                 data-mood={behavior.mood}
                 className="group relative grid h-12 w-12 place-items-center rounded-full border border-[#f4f4f5]/60 bg-[#111111] text-[#e4e4e7] shadow-[0_12px_32px_rgba(0,0,0,0.42)] outline-none transition hover:-translate-y-0.5 hover:border-[#e4e4e7] hover:bg-[#1a1a1a] hover:shadow-[0_16px_38px_rgba(244,244,245,0.18)] focus-visible:ring-2 focus-visible:ring-[#f4f4f5]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-14 md:w-14"
               >
-                <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full border border-[#111111] bg-[#f4f4f5] px-1 text-[9px] font-semibold tracking-wide text-black">
+                <span className="brand-action absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full border border-[#111111]  px-1 text-[9px] font-semibold tracking-wide text-black">
                   AI
                 </span>
                 <span className="relative z-10 grid h-8 w-8 place-items-center rounded-full border border-[#f4f4f5]/25 bg-[#f4f4f5]/10 md:h-9 md:w-9">
@@ -896,7 +896,7 @@ export function AIMascotAssistant() {
           <button
             type="submit"
             disabled={bookingDisabled}
-            className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#f4f4f5] px-4 py-3 text-sm font-medium text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
+            className="brand-action mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full  px-4 py-3 text-sm font-medium text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
           >
             {booking.step === "booking" ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarDays className="h-4 w-4" />}
             {t.aiMascot.booking.submit}

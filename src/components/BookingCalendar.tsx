@@ -238,7 +238,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
                     type="button"
                     onClick={() => void selectDay(day)}
                     aria-label={`${copy.chooseDayLabel}: ${day.date}`}
-                    className="glass-action min-h-[76px] rounded-md border border-white/10 bg-black/20 p-2 text-left text-zinc-200 transition-all hover:border-[#f4f4f5]/45 hover:bg-white/[0.055] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f4f4f5]/70"
+                    className="glass-action min-h-[76px] rounded-md border border-white/10 bg-black/20 p-2 text-left text-zinc-200 transition-all hover:border-[#f4f4f5]/45 hover:bg-white/[0.055] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a86a]/70"
                   >
                     <span className="block text-[0.65rem] uppercase tracking-[0.14em]">
                       {formattedDay.weekday}
@@ -264,7 +264,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
               <button
                 type="button"
                 onClick={backToDays}
-                className="glass-action inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-zinc-200 transition-colors hover:border-[#f4f4f5]/45 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f4f4f5]/70"
+                className="glass-action inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-zinc-200 transition-colors hover:border-[#f4f4f5]/45 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a86a]/70"
               >
                 <ArrowLeft className="h-4 w-4 text-[#f4f4f5]" />
                 {copy.backToDaysLabel}
@@ -296,9 +296,9 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
                       setState("idle");
                     }}
                     className={[
-                      "rounded-md border px-3 py-3 text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f4f4f5]/70",
+                      "rounded-md border px-3 py-3 text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a86a]/70",
                       selectedSlot?.start === slot.start
-                        ? "border-[#f4f4f5] bg-[#f4f4f5] text-black"
+                        ? "brand-action"
                         : "border-white/10 bg-black/20 text-zinc-100 hover:border-[#f4f4f5]/45",
                     ].join(" ")}
                   >
@@ -324,7 +324,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
                 name="bookingName"
                 required
                 minLength={2}
-                className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[#f4f4f5]/70"
+                className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[#c9a86a]/70"
               />
             </label>
             <label className="grid gap-2 text-sm text-zinc-200">
@@ -333,7 +333,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
                 name="bookingEmail"
                 required
                 type="email"
-                className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[#f4f4f5]/70"
+                className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[#c9a86a]/70"
               />
             </label>
           </div>
@@ -341,7 +341,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
             {copy.bookingCompanyLabel}
             <input
               name="bookingCompany"
-              className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[#f4f4f5]/70"
+              className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[#c9a86a]/70"
             />
           </label>
           <label className="mt-3 grid gap-2 text-sm text-zinc-200">
@@ -349,7 +349,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
             <textarea
               name="bookingMessage"
               rows={3}
-              className="resize-none rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm leading-6 text-white outline-none transition-colors focus:border-[#f4f4f5]/70"
+              className="resize-none rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm leading-6 text-white outline-none transition-colors focus:border-[#c9a86a]/70"
             />
           </label>
           <input
@@ -375,7 +375,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
           <button
             type="submit"
             disabled={state === "booking"}
-            className="glass-action mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#f4f4f5] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+            className="brand-action glass-action mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md  px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {state === "booking" ? (
               <>

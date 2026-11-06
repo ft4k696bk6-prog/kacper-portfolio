@@ -46,7 +46,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
         <BackLink label={t.caseStudies.projectsBackLabel} />
 
         <section className="py-12">
-          <p className="text-sm uppercase tracking-[0.28em] text-[#f4f4f5]">
+          <p className="brand-eyebrow text-sm uppercase tracking-[0.28em] text-[#f4f4f5]">
             {t.caseStudies.eyebrow}
           </p>
           <h1 className="mt-5 max-w-5xl text-4xl leading-tight text-white md:text-6xl">
@@ -62,7 +62,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
                 href={study.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass-action inline-flex items-center gap-2 rounded-md bg-[#f4f4f5] px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5"
+                className="brand-action glass-action inline-flex items-center gap-2 rounded-md  px-5 py-3 text-sm text-black transition-all hover:-translate-y-0.5"
               >
                 <ExternalLink className="h-4 w-4" />
                 {study.liveLabel || t.caseStudies.liveDemoLabel}
@@ -174,7 +174,7 @@ function BackLink({ label }: { label: string }) {
       onClick={() => {
         window.location.assign("/#projects");
       }}
-      className="glass-action inline-flex items-center gap-2 rounded-md bg-[#f4f4f5] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(244,244,245,0.22)]"
+      className="brand-action glass-action inline-flex items-center gap-2 rounded-md  px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(244,244,245,0.22)]"
     >
       <ArrowLeft className="h-4 w-4" />
       {label}

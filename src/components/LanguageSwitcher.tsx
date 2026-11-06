@@ -25,7 +25,7 @@ export function LanguageSwitcher() {
       onClick={() => setLang(value)}
       className={`h-9 min-w-10 rounded-md px-3 text-sm transition-all ${
         lang === value
-          ? "bg-[#f4f4f5] text-black shadow-[0_0_24px_rgba(244,244,245,0.28)]"
+          ? "brand-selected"
           : "text-zinc-400 hover:bg-white/5 hover:text-white"
       }`}
       aria-pressed={lang === value}
@@ -47,7 +47,7 @@ export function LanguageSwitcher() {
           className="group flex items-center gap-3"
           onClick={() => setIsOpen(false)}
         >
-          <span className="grid h-10 w-10 place-items-center rounded-md border border-[#f4f4f5]/40 bg-[#f4f4f5]/10 text-sm text-[#e4e4e7]">
+          <span className="brand-mark grid h-10 w-10 place-items-center rounded-md border text-sm">
             KB
           </span>
           <span className="hidden text-sm uppercase tracking-[0.28em] text-zinc-300 transition-colors group-hover:text-white sm:inline">
@@ -83,7 +83,7 @@ export function LanguageSwitcher() {
           </a>
           <a
             href={anchorHref("#contact")}
-            className="glass-action inline-flex items-center gap-2 rounded-md border border-[#f4f4f5]/50 bg-[#f4f4f5] px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(244,244,245,0.25)]"
+            className="brand-action glass-action inline-flex items-center gap-2 rounded-md border border-[#f4f4f5]/50  px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(244,244,245,0.25)]"
           >
             <Mail className="h-4 w-4" />
             {t.nav.cta}
@@ -143,7 +143,7 @@ export function LanguageSwitcher() {
               <a
                 href={anchorHref("#contact")}
                 onClick={() => setIsOpen(false)}
-                className="glass-action inline-flex items-center gap-2 rounded-md bg-[#f4f4f5] px-4 py-2 text-sm text-black"
+                className="brand-action glass-action inline-flex items-center gap-2 rounded-md  px-4 py-2 text-sm text-black"
               >
                 <Mail className="h-4 w-4" />
                 {t.nav.cta}

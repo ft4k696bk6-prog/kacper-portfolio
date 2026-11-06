@@ -50,7 +50,7 @@ export function Contact() {
             transition={{ duration: 0.55 }}
           >
             <div className="max-w-3xl">
-              <p className="text-sm uppercase tracking-[0.28em] text-[#f4f4f5]">
+              <p className="brand-eyebrow text-sm uppercase tracking-[0.28em] text-[#f4f4f5]">
                 {t.nav.contact}
               </p>
               <h2 className="mt-4 text-4xl leading-tight text-white md:text-5xl">

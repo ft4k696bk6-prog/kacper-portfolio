@@ -187,7 +187,7 @@ export function StaticPortfolio() {
           className="border-y border-white/10 bg-white/[0.02] px-5 py-20 md:px-8 md:py-28"
         >
           <div className="mx-auto max-w-4xl">
-            <p className="text-sm uppercase tracking-[0.24em] text-[#f4f4f5]">
+            <p className="brand-eyebrow text-sm uppercase tracking-[0.24em] text-[#f4f4f5]">
               {lang === "pl"
                 ? "Najczęstsze pytania"
                 : "Frequently asked questions"}

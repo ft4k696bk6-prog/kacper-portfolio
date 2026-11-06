@@ -180,7 +180,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/#contact"
-              className="glass-action inline-flex items-center justify-center gap-2 rounded-md bg-[#f4f4f5] px-6 py-3 text-black transition hover:-translate-y-0.5"
+              className="brand-action glass-action inline-flex items-center justify-center gap-2 rounded-md  px-6 py-3 text-black transition hover:-translate-y-0.5"
             >
               Porozmawiajmy o projekcie <ArrowRight className="h-4 w-4" />
             </Link>
@@ -303,7 +303,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
         <div className="mt-10 text-center">
           <Link
             href="/#contact"
-            className="glass-action inline-flex items-center gap-2 rounded-md bg-[#f4f4f5] px-6 py-3 text-black transition hover:-translate-y-0.5"
+            className="brand-action glass-action inline-flex items-center gap-2 rounded-md  px-6 py-3 text-black transition hover:-translate-y-0.5"
           >
             Opisz, czego potrzebujesz <ArrowRight className="h-4 w-4" />
           </Link>

@@ -15,7 +15,7 @@ export function Projects() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="text-xs uppercase tracking-[0.24em] text-[#f4f4f5]">
+            <p className="brand-eyebrow text-xs uppercase tracking-[0.24em] text-[#f4f4f5]">
               {t.projects.title}
             </p>
             <h2 className="mt-4 text-4xl tracking-tight md:text-5xl">

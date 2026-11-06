@@ -41,7 +41,7 @@ export function Services() {
   return (
     <section id="services" className="px-5 py-20 md:px-8 md:py-24">
       <div className="mx-auto max-w-7xl">
-        <p className="text-xs uppercase tracking-[0.24em] text-[#f4f4f5]">
+        <p className="brand-eyebrow text-xs uppercase tracking-[0.24em] text-[#f4f4f5]">
           {pl ? "W czym mogę pomóc" : "How I can help"}
         </p>
         <h2 className="mt-4 max-w-2xl text-4xl leading-tight tracking-tight md:text-5xl">
