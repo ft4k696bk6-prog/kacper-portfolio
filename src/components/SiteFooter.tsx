@@ -12,12 +12,13 @@ export function SiteFooter() {
       <div>
         <Link href="/" className="text-xl text-white">Kacper Bernecki</Link>
         <p className="mt-4 max-w-sm leading-7 text-white/70">{english
-          ? "Websites, CRM systems, web applications, advertising and social media. Direct collaboration, working remotely with clients across Poland."
-          : "Strony internetowe, CRM-y, aplikacje webowe, reklamy i social media. Bezpośrednia współpraca, zdalnie w całej Polsce."}</p>
+          ? "Business development, product sourcing, websites, CRM, advertising and sales. Direct collaboration with businesses across Poland."
+          : "Rozwój biznesu, sourcing produktów, strony, CRM, reklamy i sprzedaż. Bezpośrednia współpraca w całej Polsce."}</p>
         <a href="mailto:kacper@bernecki.dev" className="mt-5 inline-block text-white underline underline-offset-4">kacper@bernecki.dev</a>
       </div>
       <nav aria-label={english?"Services":"Oferta"} className="space-y-4 text-white">
         <p className="text-xs uppercase tracking-widest text-white/70">{english?"Services":"Oferta"}</p>
+        <Link className="block" href="/rozwoj-biznesu">{english?"Business development and sourcing":"Rozwój biznesu i sourcing"}</Link>
         <Link className="block" href="/tworzenie-stron-internetowych">{english?"Website development":"Tworzenie stron internetowych"}</Link>
         <Link className="block" href="/crm-i-aplikacje-webowe">{english?"CRM and web applications":"CRM i aplikacje webowe"}</Link>
         <Link className="block" href="/marketing-i-reklamy">{english?"Marketing, advertising and social media":"Marketing, reklamy i social media"}</Link>
