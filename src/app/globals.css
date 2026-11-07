@@ -412,22 +412,32 @@
 .project-book[data-active="true"] .book-identity-title.brand-only{display:none}
 .image-books .project-book:after{background:linear-gradient(180deg,transparent 0%,#08080811 38%,#080808e6 72%,#080808 100%)}
 
-/* Photographic first plan dissolves into the exact black of the next section. */
-.portfolio-content > .scenic-parallax{position:relative;isolation:isolate;overflow:hidden;background:#080808;height:140svh;min-height:1100px;max-height:1450px}
+/* All scenery stays behind the portrait. The scene ends in a generous black pause. */
+.portfolio-content > .scenic-parallax{position:relative;isolation:isolate;overflow:hidden;background:#080808;height:160svh;min-height:1300px;max-height:1750px}
+.scenic-scene{position:relative;height:1000px;isolation:isolate}
 .scenic-backdrop{position:absolute;z-index:0;inset:-8% 0 0;mask-image:linear-gradient(#000 0%,#000 48%,#0008 73%,transparent 100%)}
 .scenic-backdrop img{object-fit:cover;object-position:center 60%;filter:saturate(.16) brightness(.63)}
-.scenic-portrait-stage{position:absolute;z-index:1;inset:0}
-.scenic-portrait{position:absolute;top:90px;left:50%;transform:translateX(-50%);width:620px;height:auto;max-width:none;mask-image:linear-gradient(#000 0%,#000 90%,transparent 100%)}
-.scenic-foreground{position:absolute;z-index:2;left:0;right:0;top:54%;bottom:-8%;background:url('/images/hero-rock-foreground.webp') center bottom / auto 280% no-repeat;filter:saturate(.12) brightness(.75);mask-image:linear-gradient(transparent 0%,#000 12%,#000 50%,transparent 100%);pointer-events:none}
-.scenic-fade{position:absolute;z-index:3;inset:0;pointer-events:none;background:linear-gradient(180deg,#08080833 0%,transparent 20%,transparent 53%,#08080844 68%,#080808dd 88%,#080808 100%)}
+.scenic-portrait-stage{position:absolute;z-index:3;inset:0}
+.scenic-portrait{position:absolute;top:90px;left:50%;transform:translateX(-50%);width:620px;height:auto;max-width:none;mask-image:linear-gradient(#000 0%,#000 78%,transparent 100%)}
+.scenic-terrain{position:absolute;z-index:1;left:0;right:0;top:45%;bottom:0;background:url('/images/hero-rock-foreground.webp') center bottom / auto 280% no-repeat;filter:saturate(.12) brightness(.75);mask-image:linear-gradient(transparent 0%,#000 12%,#000 50%,transparent 100%);pointer-events:none}
+.scenic-fade{position:absolute;z-index:2;inset:0;pointer-events:none;background:linear-gradient(180deg,#08080833 0%,transparent 20%,transparent 40%,#08080888 60%,#080808 84%,#080808 100%)}
+.scenic-signature{position:absolute;z-index:4;left:8%;top:245px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#ffffffb3}
+.scenic-title{position:absolute;z-index:4;inset:0;margin:0;font-size:clamp(28px,3.2vw,44px);font-weight:500;line-height:1.15;letter-spacing:-.045em;color:#fff}
+.scenic-title span{position:absolute;white-space:nowrap}
+.scenic-title span:nth-child(1){left:8%;top:285px}
+.scenic-title span:nth-child(2){left:8%;top:338px}
+.scenic-title span:nth-child(3){right:8%;top:310px}
 html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
 .lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
 @media(max-width:767px){
- .portfolio-content > .scenic-parallax{height:135svh;min-height:940px;max-height:1200px}
- .scenic-portrait{top:155px;width:min(94vw,470px)}
+ .portfolio-content > .scenic-parallax{height:155svh;min-height:1200px;max-height:1500px}
+ .scenic-scene{height:calc(305px + min(117.46vw,587px))}
+ .scenic-portrait{top:205px;width:min(94vw,470px)}
  .scenic-backdrop img{object-position:58% center}
- .scenic-foreground{top:45%;background-size:auto 280%}
+ .scenic-signature{top:118px;left:0;right:0;text-align:center;font-size:10px}
+ .scenic-title{inset:148px 5% auto;display:flex;flex-wrap:wrap;justify-content:center;column-gap:.3em;row-gap:.1em;font-size:clamp(22px,5.7vw,31px)}
+ .scenic-title span{position:static;white-space:normal}
 }
 @media(max-width:767px) and (orientation:portrait){
  .contact-reveal-card:first-child .contact-icon-trigger{margin-left:0;margin-right:auto}

@@ -58,7 +58,9 @@ export function ParallaxComponent({ title, portraitAlt }: ParallaxProps) {
 
   return (
     <section id="home" ref={root} className="hero-night scenic-parallax" aria-labelledby="hero-title">
-      <h1 id="hero-title" className="sr-only">{title}</h1>
+      <div className="scenic-scene">
+      <p className="scenic-signature">Kacper Bernecki</p>
+      <h1 id="hero-title" className="scenic-title">{title.split(" ").map(word => <span key={word}>{word} </span>)}</h1>
       <div className="scenic-backdrop" data-parallax-layer="1" aria-hidden="true">
         <Image src="/images/hero-alpine-landscape.jpg" alt="" fill priority sizes="100vw" />
       </div>
@@ -66,8 +68,9 @@ export function ParallaxComponent({ title, portraitAlt }: ParallaxProps) {
         <Image src="/images/profile-1-cutout.png" alt={portraitAlt} width={1122} height={1402}
           priority sizes="(min-width: 768px) 620px, 94vw" className="scenic-portrait" />
       </div>
-      <div className="scenic-foreground" data-parallax-layer="2" aria-hidden="true" />
+      <div className="scenic-terrain" data-parallax-layer="2" aria-hidden="true" />
       <div className="scenic-fade" aria-hidden="true" />
+      </div>
     </section>
   );
 }
