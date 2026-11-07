@@ -20,7 +20,7 @@ require.extensions[".ts"] = function transpile(mod, filename) {
 };
 const directory = require(path.resolve("src/lib/guide-directory.ts"));
 // Three manually bilingual business articles are maintained in businessGuides.ts, not the machine translation corpus.
-const authoredBusinessGuides=new Set(["zwrot-vat-8-23-przyklad-50000","kiedy-vat-8-budownictwo-oze-klimatyzacja-fryzjer","od-pomyslu-do-firmy-pierwsze-kroki"]);
+const authoredBusinessGuides=new Set(require(path.resolve("src/content/businessGuides.ts")).businessArticles.map(article=>article.slug));
 const raw = directory.allGuides.filter(guide=>!authoredBusinessGuides.has(guide.slug)).map((guide) => ({
   slug: guide.slug,
   title: guide.title,
