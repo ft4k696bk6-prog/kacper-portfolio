@@ -315,7 +315,7 @@
       "Zweryfikuj konfigurację ważności OTP oraz sposób obsługi callbacka w aplikacji."
     ],
     "fix": [
-      "Pokaż użytkownikowi przycisk do wygenerowania nowego linku i jasny komunikat o wygaśnięciu.",
+      "Pokaż użytkownikowi przycisk do wygenerowania nowego linku i jasny komunikat o wygaśnięciu. Sprawdź szczególnie, czy prefetch linków w skrzynce nie zużywa tokenu przed kliknięciem użytkownika.",
       "Nie próbuj odzyskiwać zużytego tokenu; nowa próba powinna utworzyć nowy, niezależny proces logowania."
     ],
     "verify": "Nowy token pozwala zalogować się tylko raz, a stary pozostaje nieważny.",
