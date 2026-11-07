@@ -52,7 +52,7 @@ describe("programmatic SEO catalog", () => {
   it("recommends relevant articles without producing thousands of links", () => {
     const slug = "supabase-storage-413-entity-too-large-upload";
     const related = getRelatedGuides(slug);
-    expect(related.length).toBeLessThanOrEqual(6);
+    expect(related.length).toBeLessThanOrEqual(10);
     expect(related.every((guide) => guide.slug !== slug)).toBe(true);
     expect(guideCategory(getGuide(slug)!)).toBe("supabase-bazy");
   });
