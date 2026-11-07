@@ -41,7 +41,7 @@ export function HomeStudio() {
           </div>
           <div className={styles.tileCaption}><strong>StarCars</strong><ArrowUpRight size={16}/></div>
         </Link>
-        <Link href="/case-studies/isto-kebab" className={`${styles.heroTile} ${styles.tileIsto}`}>
+        <Link href="/realizacje/isto-kebab-strona" className={`${styles.heroTile} ${styles.tileIsto}`}>
           <div className={styles.tileVisual}>
             <img src="https://s0.wp.com/mshots/v1/https%3A%2F%2Fisto.bernecki.dev%2F?vpw=1440&vph=940&w=1200" alt={lang === "pl" ? "Zrzut rzeczywistej strony Isto Kebab" : "Screenshot of the real Isto Kebab website"} width={1200} height={784} loading="lazy" decoding="async" />
           </div>
