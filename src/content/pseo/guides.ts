@@ -135,7 +135,7 @@ export const publishedEntries: readonly PseoEntry[] = [
       "Nie dopisuj node_modules do repozytorium i nie usuwaj package-lock.json tylko po to, by wyłączyć konflikt. Stracisz odtwarzalność instalacji."
     ],
     sources: [{ label: "npm CLI — npm ci", url: "https://docs.npmjs.com/cli/v11/commands/npm-ci" }]
-  }
+  },
   {
     status: "published",
     slug: "google-search-console-nieprawidlowy-adres-mapy-witryny",
