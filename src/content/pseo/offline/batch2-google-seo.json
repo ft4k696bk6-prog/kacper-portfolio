@@ -1,0 +1,202 @@
+[
+  {
+    "slug": "seo-hreflang-return-links-missing",
+    "title": "Google hreflang: brak linków zwrotnych między językami",
+    "symptom": "Wyszukiwarka ignoruje część deklaracji alternatywnych wersji językowych.",
+    "diagnose": "Sprawdź hreflang w obu kierunkach dla pary adresów oraz status 200 obu stron.",
+    "fix": "Dodaj wzajemne tagi alternate wskazujące kanoniczne odpowiedniki z poprawnymi kodami języka i regionu.",
+    "verify": "Raport języków nie wskazuje przypadkowych adresów, a wersje mają spójne alternates.",
+    "source": "https://developers.google.com/search/docs/specialty/international/localized-versions",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-canonical-http-instead-of-https",
+    "title": "SEO: canonical wskazuje HTTP, a strona działa na HTTPS",
+    "symptom": "Strona dostępna po HTTPS deklaruje jako podstawowy adres wersję bez szyfrowania.",
+    "diagnose": "Odczytaj link rel=canonical w finalnym HTML oraz docelowe przekierowania HTTP do HTTPS.",
+    "fix": "Ujednolić metadataBase i generowanie adresu kanonicznego tak, aby wskazywał HTTPS docelowej domeny.",
+    "verify": "Każdy artykuł deklaruje właściwy HTTPS URL, a wersja HTTP trwale do niego prowadzi.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-noindex-canonical-conflicting",
+    "title": "SEO: noindex i canonical jednocześnie utrudniają kontrolę indeksacji",
+    "symptom": "W jednej stronie metadane jednocześnie ustawiają noindex i canonical do innego wpisu.",
+    "diagnose": "Sprawdź, czy celem jest wyłączenie konkretnego adresu, czy konsolidacja duplikatu.",
+    "fix": "Wybierz spójną strategię dla prawdziwego duplikatu i nie stosuj noindex jako zamiennika canonical.",
+    "verify": "Kontrola URL pokazuje oczekiwane dyrektywy, a nie sprzeczne sygnały dla robotów.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-sitemap-over-50000",
+    "title": "Sitemap.xml: za dużo adresów w jednym pliku",
+    "symptom": "Generator mapy serwisu tworzy XML przekraczający limit protokołu sitemap.",
+    "diagnose": "Policz adresy url i rozmiar nieskompresowanego pliku oraz sprawdź strukturę urlset.",
+    "fix": "Podziel mapę na kilka prawidłowych plików i utwórz sitemap index z działającymi linkami.",
+    "verify": "Każda mapa mieści się w limitach, a indeks map wskazuje wszystkie potrzebne URL.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-sitemap-gzip-invalid-response",
+    "title": "Sitemap.xml.gz: robot nie potrafi rozpakować mapy",
+    "symptom": "Przeglądarka pobiera plik, lecz narzędzie wyszukiwarki zgłasza błąd formatu.",
+    "diagnose": "Sprawdź czy odpowiedź ma poprawny gzip oraz czy po rozpakowaniu otrzymujesz prawidłowy XML.",
+    "fix": "Popraw generowanie kompresji i nagłówki serwera, unikając podwójnego gzip przez CDN.",
+    "verify": "Plik da się rozpakować i zwalidować, a wszystkie loc są poprawnymi URL.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-google-search-console-inspection-quota",
+    "title": "Search Console: limit Inspekcji URL po wielu prośbach",
+    "symptom": "Próby zgłaszania dziesiątek artykułów kończą się ograniczeniem liczby kontroli.",
+    "diagnose": "Sprawdź komunikat quota i rozdziel inspekcję od zwykłego przesłania sitemap.",
+    "fix": "Publikuj poprawne linki wewnętrzne i mapę; ręcznie sprawdzaj próbkę ważnych stron zamiast spamować inspekcjami.",
+    "verify": "Limit nie jest obchodzony automatem, a nowe URL są dostępne do samodzielnego odkrywania.",
+    "source": "https://support.google.com/webmasters/answer/9012289",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-5xx-googlebot-intermittent",
+    "title": "SEO: Googlebot trafia na okresowe błędy HTTP 503",
+    "symptom": "Strona zwykle działa, lecz w raporcie crawlu pojawiają się błędy serwera.",
+    "diagnose": "Porównaj logi 5xx z czasem crawlu oraz obciążeniem bazy lub funkcji serverless.",
+    "fix": "Usuń przeciążenie i dodaj odpowiedni retry/backoff dla zależności, zamiast zwracać pusty HTML.",
+    "verify": "W okresie testowym crawler dostaje stabilne odpowiedzi 200 dla ważnych stron.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/http-network-errors",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-infinite-scroll-no-pagination-links",
+    "title": "SEO: infinite scroll ukrywa dalsze artykuły przed robotem",
+    "symptom": "Katalog doładowuje wpisy wyłącznie po przewinięciu i nie ma linków do kolejnych zestawów.",
+    "diagnose": "Sprawdź w źródłowym HTML, czy istnieje zwykła numerowana nawigacja href.",
+    "fix": "Dodaj osobne URL paginacji i linki do stron kolejnych części, pozostawiając infinite scroll jako ulepszenie UI.",
+    "verify": "Każdy artykuł jest osiągalny z paginowanego katalogu bez przewijania i klikania JavaScript.",
+    "source": "https://developers.google.com/search/docs/specialty/ecommerce/pagination-and-incremental-page-loading",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-search-console-txt-wrong-dns-zone",
+    "title": "Search Console: weryfikacja domeny TXT nie przechodzi",
+    "symptom": "Rekord TXT widoczny w panelu rejestratora, ale Google nie wykrywa tokenu.",
+    "diagnose": "Sprawdź autorytatywne serwery DNS domeny i zapytanie TXT w publicznym resolverze.",
+    "fix": "Dodaj rekord do aktywnej strefy w odpowiedniej nazwie hosta i poczekaj na propagację.",
+    "verify": "Token jest widoczny publicznie, a Search Console potwierdza własność domeny.",
+    "source": "https://support.google.com/webmasters/answer/9008080",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-sitemap-index-child-404",
+    "title": "Sitemap index: podrzędna mapa zwraca 404",
+    "symptom": "Główne sitemap index jest pobierane, ale część wymienionych map nie istnieje.",
+    "diagnose": "Odczytaj wszystkie elementy loc w indeksie i sprawdź ich status HTTP bez logowania.",
+    "fix": "Aktualizuj indeks tylko adresami rzeczywiście generowanych map i popraw trasy podczas deploya.",
+    "verify": "Wszystkie mapy podrzędne zwracają 200 i zawierają prawidłowe kanoniczne adresy.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/sitemaps/large-sitemaps",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-google-title-rewritten",
+    "title": "Google zmienia title tag strony w wynikach wyszukiwania",
+    "symptom": "Wynik wyszukiwania ma inny tytuł niż zdefiniowany na stronie.",
+    "diagnose": "Sprawdź tytuł HTML, H1 i treść anchor text linków prowadzących do podstrony.",
+    "fix": "Zadbaj o jednoznaczny, konkretny tytuł zgodny z treścią zamiast powtarzać słowa kluczowe.",
+    "verify": "Tytuł strony jest spójny z tematem; decyzja Google o wyświetlanej etykiecie nadal może się różnić.",
+    "source": "https://developers.google.com/search/docs/appearance/title-link",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-breadcrumb-jsonld-wrong-positions",
+    "title": "BreadcrumbList: nieprawidłowe position w danych strukturalnych",
+    "symptom": "Rich Results Test zgłasza błąd w ścieżce nawigacji artykułu.",
+    "diagnose": "Sprawdź listę itemListElement i unikalną, rosnącą numerację position.",
+    "fix": "Wygeneruj listę 1,2,3 z prawdziwymi URL kategorii, a nie sztuczną ścieżkę główna → wszystkie miasta.",
+    "verify": "Breadcrumbs przechodzą walidację i odpowiadają temu, co użytkownik widzi na stronie.",
+    "source": "https://developers.google.com/search/docs/appearance/structured-data/breadcrumb",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-faq-rich-results-not-shown",
+    "title": "FAQPage schema: nie widać rozwijanych pytań w Google",
+    "symptom": "Strona ma poprawne FAQPage JSON-LD, ale wynik organiczny nie pokazuje rozszerzenia FAQ.",
+    "diagnose": "Sprawdź aktualne ograniczenia Google dotyczące FAQ rich results i czy test oznacza dane jako prawidłowe.",
+    "fix": "Nie twórz masowo zbędnych bloków FAQ dla samych SERP; skup się na rzetelnych odpowiedziach użytkownika.",
+    "verify": "Treść pozostaje użyteczna i poprawna strukturalnie, bez obietnicy specjalnego wyglądu wyniku.",
+    "source": "https://developers.google.com/search/docs/appearance/structured-data/faqpage",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-product-schema-wrong-price",
+    "title": "Product schema: inna cena w JSON-LD niż na stronie",
+    "symptom": "W kodzie strukturalnym jest stara cena produktu, a użytkownik widzi aktualną ofertę.",
+    "diagnose": "Porównaj widoczną kwotę, walutę, dostępność i wartości offers.price w JSON-LD.",
+    "fix": "Generuj dane strukturalne z tego samego źródła co interfejs i aktualizuj je przy zmianie oferty.",
+    "verify": "Dane widoczne i maszynowe są zgodne; nie deklarujesz nieistniejących promocji.",
+    "source": "https://developers.google.com/search/docs/appearance/structured-data/product",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-robots-txt-503-temporary",
+    "title": "Robots.txt zwraca 503 i Google ogranicza crawl",
+    "symptom": "Witryna ma poprawne strony, ale serwer czasem nie udostępnia pliku robots.txt.",
+    "diagnose": "Sprawdź status i czas odpowiedzi /robots.txt podczas obciążenia oraz reguły proxy.",
+    "fix": "Zapewnij stabilną, szybką odpowiedź robots.txt niezależną od bazy i ciężkich funkcji.",
+    "verify": "Robot potrafi stale pobrać konfigurację, a ważne strony pozostają dostępne.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/robots/intro",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-mobile-viewport-clipped-text",
+    "title": "SEO mobile: tekst wychodzi poza ekran w Google Mobile Usability",
+    "symptom": "Na wąskim telefonie treść artykułu jest szersza od viewportu i wymaga przewijania w poziomie.",
+    "diagnose": "Sprawdź elementy z długimi URL, pre/code, tabelami i fixed width na ekranie 320px.",
+    "fix": "Dodaj zawijanie długich ciągów i kontrolowany scroll dla tabel oraz bloków kodu.",
+    "verify": "Tekst da się przeczytać na małym ekranie bez poziomego przewijania całej strony.",
+    "source": "https://web.dev/learn/design/responsive-images",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-googlebot-slow-javascript-render",
+    "title": "Googlebot widzi tekst dopiero po ciężkim JavaScript",
+    "symptom": "Witryna ładuje treść poradników przez client-side fetch i HTML początkowy jest pusty.",
+    "diagnose": "Porównaj odpowiedź HTML serwera z widokiem po renderowaniu i ograniczonym czasem wykonania skryptów.",
+    "fix": "Renderuj podstawową treść na serwerze albo statycznie, zostawiając wyszukiwanie jako ulepszenie klienta.",
+    "verify": "Nagłówki i właściwy tekst znajdują się w serwerowym HTML bez uruchamiania JS.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-paginated-category-orphan-pages",
+    "title": "SEO: artykuły z dalszych stron kategorii są osierocone",
+    "symptom": "W sitemap są URL, ale z menu nie da się dotrzeć do wielu nowych poradników.",
+    "diagnose": "Sprawdź, czy paginacja kategorii ma linki href i czy filtr nie ukrywa całych partii w HTML.",
+    "fix": "Dodaj dostępne strony kategorii, numerowane odnośniki i sensowne powiązania między artykułami.",
+    "verify": "Każdy artykuł ma co najmniej jeden rzeczywisty link wewnętrzny z katalogu.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/links-crawlable",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-404-internal-links-broken",
+    "title": "SEO: wewnętrzne linki z poradników prowadzą na 404",
+    "symptom": "Po zmianie slugu starsze wpisy nadal wskazują nieaktualny adres.",
+    "diagnose": "Uruchom crawler linków wewnętrznych i porównaj źródłowe href ze zbiorem opublikowanych slugów.",
+    "fix": "Zaktualizuj odnośniki i dodaj 301 dla ważnych historycznych URL prowadzących do nowej treści.",
+    "verify": "Test linków nie wykrywa 404, a dawne ważne adresy prowadzą do właściwych artykułów.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/301-redirects",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-search-console-property-url-prefix",
+    "title": "Search Console: mapę zgłoszono do niewłaściwego prefiksu domeny",
+    "symptom": "Sitemap dla HTTPS działa, ale konto otwiera usługę HTTP lub subdomenę preview.",
+    "diagnose": "Sprawdź wybraną property i jej prefiks w panelu przed ponownym zgłoszeniem mapy.",
+    "fix": "Wybierz zweryfikowaną usługę odpowiadającą produkcji i dodaj prawidłowy pełny adres mapy.",
+    "verify": "Mapa jest przypisana do właściwej property bez mnożenia duplikatów URL.",
+    "source": "https://support.google.com/webmasters/answer/7451001",
+    "category": "seo-google"
+  }
+]
