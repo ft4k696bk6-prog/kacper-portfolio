@@ -6,6 +6,7 @@ import { realizations } from "@/content/realizations";
 import { InteractiveImageAccordion } from "@/components/ui/interactive-image-accordion";
 
 const realizationCovers: Record<string, { image: string; alt: string; href?: string }> = {
+ "isto-kebab-strona": {image:"https://s0.wp.com/mshots/v1/https%3A%2F%2Fisto.bernecki.dev%2F?vpw=1440&vph=940&w=1200",alt:"Zrzut autentycznej strony Isto Kebab, z publicznego wdrożenia",href:"/realizacje/isto-kebab-strona"},
  "b-code": {image:"b-code-editorial.jpg",alt:"Ilustracja kodu — autorski projekt B-Code"},
  "reenergy-strona": {image:"reenergy-website-live.jpg",alt:"Zrzut działającej strony Re-energy System"},
  "reenergy-rozwoj-marki": {image:"reenergy-campaign-results.jpg",alt:"Case study Re-energy — budżet reklamowy i opis wyników",href:"/case-studies/re-energy-meta-ads"},
@@ -14,6 +15,7 @@ const realizationCovers: Record<string, { image: string; alt: string; href?: str
 };
 
 const previewDescriptions: Record<string, { pl: string; en: string }> = {
+ "/realizacje/isto-kebab-strona": {pl:"Isto Kebab: strona, menu i system zamówień.",en:"Isto Kebab: a restaurant site, menu and ordering workflow."},
  "/case-studies/b-crm": {pl:"Autorski CRM: leady, zadania i realizacja sprzedaży w jednym miejscu.",en:"A custom CRM for leads, team tasks and sales delivery."},
  "/case-studies/motomizer": {pl:"Strona produktu z wyborem wariantów i interaktywną prezentacją funkcji.",en:"A product website with variant selection and interactive feature previews."},
  "/case-studies/starcars": {pl:"Import aut z USA i Kanady: oferta, kalkulator kosztów i kontakt.",en:"US and Canadian car imports: services, a cost calculator and contact."},
@@ -26,6 +28,7 @@ const previewDescriptions: Record<string, { pl: string; en: string }> = {
 };
 
 const realizationPreviews: Record<string, { pl: [string, string]; en: [string, string] }> = {
+ "isto-kebab-strona": {pl:["Isto Kebab — strona i zamówienia","Interaktywne menu i strona restauracji z obsługą zamówień."],en:["Isto Kebab — website and orders","An interactive restaurant website with an ordering flow."]},
  "jalapeno-marketing": {pl:["Jalapeno — lokalna społeczność","Reklamy i social media budujące lokalną społeczność."],en:["Jalapeno — local community","Advertising and social media for a local community."]},
  "reenergy-rozwoj-marki": {pl:["Re-energy — rozwój marki","Marketing, pozyskiwanie kontaktów i rekrutacja dla firmy OZE."],en:["Re-energy — brand growth","Marketing, lead generation and recruitment for a renewable energy business."]},
  "reenergy-crm": {pl:["Re-energy — CRM i proces","Obsługa zapytań i pracy zespołu w powiązaniu z reklamami."],en:["Re-energy — CRM & workflows","Enquiry handling and team workflows connected to advertising."]},
@@ -37,7 +40,7 @@ const realizationPreviews: Record<string, { pl: [string, string]; en: [string, s
 };
 
 function ProjectMark({title}:{title:string}) {
- const logo=/Jalapeno/.test(title)?"/images/brands/jalapeno.jpg":/Re-energy/i.test(title)?"/images/brands/re-energy.png":/StarCars/.test(title)?"/images/brands/starcars.svg":/Gentlemen/.test(title)?"/images/brands/gentlemen.webp":null;
+ const logo=/Isto Kebab/i.test(title)?"/images/brands/isto-kebab.svg":/Jalapeno/.test(title)?"/images/brands/jalapeno.jpg":/Re-energy/i.test(title)?"/images/brands/re-energy.png":/StarCars/.test(title)?"/images/brands/starcars.svg":/Gentlemen/.test(title)?"/images/brands/gentlemen.webp":null;
  if(logo)return <span className={"book-brand-logo "+(/Jalapeno/.test(title)?"book-jalapeno":"")}><Image src={logo} alt="" width={180} height={60}/></span>;
  if(/Motomizer/.test(title))return <span className="book-wordmark">MOTOMIZER</span>;
  const name=/Berni/.test(title)?"BERNI RUSH":/Unreal/.test(title)?"UNREAL ENGINE":/B-Code/.test(title)?"B-CODE":/CRM/.test(title)?"B-CRM":/BeatMarket/.test(title)?"BeatMarket":/leasing/i.test(title)?"LEASING":/MacBook/.test(title)?"KB / INTERACTIVE":"KB / PORTFOLIO";
@@ -51,10 +54,10 @@ export function Projects(){
  ...realizations.map(p=>{
    const cover=realizationCovers[p.slug];
    const preview=realizationPreviews[p.slug]?.[lang];
-   return {title:preview?.[0]??p.title,description:preview?.[1]??p.summary,image:"/images/projects/"+(cover?.image??p.slug+"-chapter.jpg"),imageAlt:cover?.alt??"Zrzut strony z opisem realizacji: "+p.title,href:cover?.href??"/realizacje/"+p.slug,category:p.category,demo:""};
+   return {title:preview?.[0]??p.title,description:preview?.[1]??p.summary,image:cover?.image?.startsWith("https://")?cover.image:"/images/projects/"+(cover?.image??p.slug+"-chapter.jpg"),imageAlt:cover?.alt??"Zrzut strony z opisem realizacji: "+p.title,href:cover?.href??"/realizacje/"+p.slug,category:p.category,demo:""};
  })
  ].map(p=>({...p,logoOnly:true,mark:<ProjectMark title={p.title}/>,editorial:p.href==="/realizacje/b-code"?{heading:lang==="pl"?"B-Code / narzędzie AI":"B-Code / AI tool",detail:lang==="pl"?"Integracja modeli AI o różnych rolach.":"AI models with different roles, connected in one app."}:p.category==="Marketing"?{heading:/StarCars/.test(p.title)?(lang==="pl"?"Film. Montaż.\nSocial media.":"Video. Editing.\nSocial media."):/Motomizer/.test(p.title)?(lang==="pl"?"Produkt. Marka.\nKomunikacja.":"Product. Brand.\nCommunication."):(lang==="pl"?"Treści. Kampanie.\nKomunikacja.":"Content. Campaigns.\nCommunication."),detail:p.description}:undefined})).sort((a,b)=>{
-   const order:Record<string,number>={"/case-studies/starcars":0,"/case-studies/b-crm":1,"/case-studies/motomizer":2};
+   const order:Record<string,number>={"/case-studies/starcars":0,"/realizacje/isto-kebab-strona":1,"/case-studies/b-crm":2,"/case-studies/motomizer":3};
    return (order[a.href]??3)-(order[b.href]??3);
  });
  const filtered=items.filter(p=>filter==="Wszystko"||p.category===filter);
