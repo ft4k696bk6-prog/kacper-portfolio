@@ -1,0 +1,202 @@
+[
+  {
+    "slug": "github-actions-workflow-dispatch-not-visible",
+    "title": "GitHub Actions: przycisk Run workflow nie jest widoczny",
+    "symptom": "Workflow istnieje w gałęzi roboczej, lecz nie ma opcji ręcznego uruchomienia.",
+    "diagnose": "Sprawdź obecność workflow_dispatch oraz czy plik znajduje się na domyślnej gałęzi repozytorium.",
+    "fix": "Dodaj workflow_dispatch i wprowadź workflow na default branch zgodnie z zasadami GitHuba.",
+    "verify": "Przycisk pojawia się w Actions i uruchamia właściwą wersję pliku.",
+    "source": "https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-path-filter-skips",
+    "title": "GitHub Actions: push nie uruchamia CI przez paths",
+    "symptom": "Zmiana w pliku kodu nie powoduje uruchomienia oczekiwanego workflow.",
+    "diagnose": "Sprawdź warunki on.push.paths, paths-ignore i rzeczywiste nazwy zmienionych plików w commicie.",
+    "fix": "Popraw wzorce glob dla folderu aplikacji i nie wykluczaj krytycznych testów potrzebnych przy każdej zmianie.",
+    "verify": "Zmiana objętego wzorcem pliku uruchamia pipeline, a ignorowana dokumentacja zachowuje wybrany tryb.",
+    "source": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-checkout-shallow-history",
+    "title": "GitHub Actions: git merge-base nie działa przez shallow clone",
+    "symptom": "Skrypt analizy zmian nie może ustalić wspólnego przodka gałęzi, mimo że repo działa lokalnie.",
+    "diagnose": "Sprawdź ustawienie fetch-depth w actions/checkout i brak historii w katalogu .git runnera.",
+    "fix": "Ustaw wystarczającą historię fetch-depth lub pobierz potrzebną gałąź przed analizą diff.",
+    "verify": "Porównanie PR z bazą działa bez wymuszania force push i bez brakującego przodka.",
+    "source": "https://github.com/actions/checkout",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-output-multiline-invalid",
+    "title": "GitHub Actions: Invalid format podczas zapisu GITHUB_OUTPUT",
+    "symptom": "Job przestaje działać po wypisaniu wielowierszowej wartości do pliku output.",
+    "diagnose": "Sprawdź, czy echo zapisuje surowy JSON z newline zamiast zgodnej składni output dla wielu wierszy.",
+    "fix": "Użyj wspieranej składni delimitera dla multiline output albo bezpiecznego jednoliniowego JSON.",
+    "verify": "Kolejny step poprawnie odczytuje pełny output bez zgubionych znaków nowej linii.",
+    "source": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-concurrency-cancel-main",
+    "title": "GitHub Actions: starszy build anuluje nowszy w grupie concurrency",
+    "symptom": "Po serii pushów jedno uruchomienie jest canceled i nie dochodzi do publikacji.",
+    "diagnose": "Sprawdź concurrency.group, cancel-in-progress i to, czy kilka środowisk używa tej samej grupy.",
+    "fix": "Wydziel grupy według gałęzi lub środowiska; dla niepodzielnej publikacji pozostaw kolejkę bez anulowania.",
+    "verify": "Oczekiwana wersja produkcji jest wdrażana raz, a przerwany test nie usuwa plików nowego deploya.",
+    "source": "https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-env-secret-not-in-job",
+    "title": "GitHub Actions: environment secret pusty mimo poprawnej nazwy",
+    "symptom": "Sekret widnieje w środowisku production, lecz job nie otrzymuje jego wartości.",
+    "diagnose": "Sprawdź, czy job ma przypisane environment i czy wymagany reviewer zatwierdził deployment.",
+    "fix": "Zdefiniuj właściwe environment w job i zachowaj reguły approvals dla sekretów produkcyjnych.",
+    "verify": "Po zatwierdzeniu odpowiedni job może użyć sekretu, a zwykły PR go nie otrzymuje.",
+    "source": "https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-reusable-workflow-secret",
+    "title": "GitHub Actions: reusable workflow nie otrzymuje przekazanego sekretu",
+    "symptom": "Wywołany workflow działa, ale token używany przez jego job jest pusty.",
+    "diagnose": "Sprawdź deklarację workflow_call.secrets i to, jakie secret przekazuje workflow wywołujący.",
+    "fix": "Przekaż potrzebny sekret jawnie w secrets albo użyj dozwolonego secrets: inherit w kontrolowanym kontekście.",
+    "verify": "Zaufany reusable workflow działa, a niespowiązane wywołania nie otrzymują dostępu.",
+    "source": "https://docs.github.com/en/actions/how-tos/sharing-automations/reusing-workflows",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-matrix-fail-fast-cancels",
+    "title": "GitHub Actions: matrix fail-fast kończy wszystkie testy po jednym błędzie",
+    "symptom": "Jedna kombinacja Node i systemu operacyjnego zawodzi, a pozostałe testy nie kończą pracy.",
+    "diagnose": "Sprawdź strategy.fail-fast oraz wymaganą liczbę kombinacji w matrix.",
+    "fix": "Dla diagnostyki ustaw fail-fast: false, a wynik końcowy uzależnij od kompletnego zestawu sprawdzeń.",
+    "verify": "Raport pokazuje rzeczywisty status każdej konfiguracji, bez ukrywania kolejnych błędów.",
+    "source": "https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-node-cache-misses",
+    "title": "GitHub Actions: cache npm zawsze ma Cache miss",
+    "symptom": "Kolejny run ponownie pobiera wszystkie zależności mimo skonfigurowanego cache.",
+    "diagnose": "Sprawdź package-lock.json, cache-dependency-path i to, czy runner używa npm czy innego managera.",
+    "fix": "Ustaw ścieżkę lockfile odpowiadającą rzeczywistemu workspace i użyj wspieranej konfiguracji setup-node.",
+    "verify": "Następny run używa cache zależności przy niezmienionym lockfile i nadal wykonuje npm ci.",
+    "source": "https://github.com/actions/setup-node",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-ghcr-403-write-package",
+    "title": "GitHub Actions: push do GHCR zwraca denied 403",
+    "symptom": "Workflow buduje obraz Dockera, ale publikacja do ghcr.io nie ma uprawnień.",
+    "diagnose": "Sprawdź packages: write w permissions i to, czy pakiet jest przypisany do właściwego repo.",
+    "fix": "Nadaj potrzebne uprawnienie GITHUB_TOKEN i popraw dostęp pakietu bez wklejania prywatnego tokenu w Dockerfile.",
+    "verify": "Obraz jest wypychany wyłącznie z uprawnionej gałęzi, a PR bez uprawnień nie publikuje paczek.",
+    "source": "https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-artifact-expired",
+    "title": "GitHub Actions: artifact expired przed pobraniem",
+    "symptom": "Przy próbie odtworzenia starego builda download-artifact nie znajduje pliku.",
+    "diagnose": "Sprawdź retention-days artefaktu i czas od ostatniego pomyślnego uploadu.",
+    "fix": "Wydłuż retencję w dozwolonym zakresie lub twórz wydania z trwałymi artefaktami, jeśli są wymagane.",
+    "verify": "Wspierane wydanie można odtworzyć z zachowanego artefaktu, a stare pliki mają przewidzianą retencję.",
+    "source": "https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-required-check-pending",
+    "title": "GitHub: Required status check pozostaje Pending mimo zielonego CI",
+    "symptom": "PR ma poprawne testy, ale reguła gałęzi czeka na nieistniejący status.",
+    "diagnose": "Sprawdź nazwy jobów wymagane w ruleset i nazwy publikowane po zmianie nazwy workflow.",
+    "fix": "Zaktualizuj regułę do rzeczywistego joba lub przywróć spójną nazwę checka bez wyłączania ochrony.",
+    "verify": "Scalenie jest możliwe dopiero po zaliczeniu dokładnie wymaganego testu.",
+    "source": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "vercel-env-production-preview-different",
+    "title": "Vercel: produkcja działa, preview nie ma konfiguracji API",
+    "symptom": "Podgląd PR zwraca błąd integracji, a domena produkcyjna działa poprawnie.",
+    "diagnose": "Sprawdź zakresy Production, Preview i Development każdej zmiennej środowiskowej.",
+    "fix": "Przypisz zmienne do właściwego środowiska i używaj oddzielnych danych testowych w preview.",
+    "verify": "Preview działa na testowej integracji bez uzyskania dostępu do tajnych danych produkcyjnych.",
+    "source": "https://vercel.com/docs/environment-variables",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-production-branch-incorrect",
+    "title": "Vercel: push do main wdraża podgląd zamiast produkcji",
+    "symptom": "Nowy commit jest READY, ale nie pojawia się pod własną domeną serwisu.",
+    "diagnose": "Sprawdź Production Branch projektu oraz czy Git Integration obserwuje właściwe repo i gałąź.",
+    "fix": "Ustaw poprawną gałąź produkcyjną i zweryfikuj alias przypisanej domeny po nowym deploymentcie.",
+    "verify": "Merge do main aktywuje właściwą wersję pod domeną, bez przypadkowego deploya z gałęzi roboczej.",
+    "source": "https://vercel.com/docs/git/vercel-for-github",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-project-404-wrong-domain",
+    "title": "Vercel: domena wskazuje inny projekt i zwraca 404",
+    "symptom": "Podgląd działa, ale niestandardowa domena zwraca stronę błędu z innego serwisu.",
+    "diagnose": "Sprawdź przypisanie domeny w Vercel i rekordy DNS dla aktywnej strefy.",
+    "fix": "Przypnij domenę do właściwego projektu i usuń konfliktujące wpisy zgodnie z instrukcją platformy.",
+    "verify": "Własna domena pokazuje tę samą wersję projektu co poprawny deployment preview.",
+    "source": "https://vercel.com/docs/domains",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-function-size-limit",
+    "title": "Vercel: Function size limit exceeded przy deployu",
+    "symptom": "Build bundluje zbyt dużą funkcję i deployment zostaje odrzucony.",
+    "diagnose": "Sprawdź bundle funkcji i zależności dołączone do Route Handler, zwłaszcza duże biblioteki.",
+    "fix": "Usuń nieużywane pakiety lub rozdziel ciężką logikę do osobnej usługi, zamiast pakować wszystko w jedną funkcję.",
+    "verify": "Deployment przechodzi limit rozmiaru i endpoint nadal działa dla oczekiwanych danych.",
+    "source": "https://vercel.com/docs/functions/limitations",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-build-cache-stale-dependency",
+    "title": "Vercel: Build Cache przechowuje stary rezultat po zmianie zależności",
+    "symptom": "Preview pokazuje poprzednią wersję biblioteki mimo zmian w kodzie.",
+    "diagnose": "Porównaj SHA lockfile i log instalacji z aktualnym commitem deploymentu.",
+    "fix": "Wykonaj redeploy bez cache po ustaleniu przyczyny i upewnij się, że package-lock jest aktualny.",
+    "verify": "Nowy build zawiera właściwy pakiet, a następne deploye nie odtwarzają starej konfiguracji.",
+    "source": "https://vercel.com/docs/deployments/configure-a-build",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-redirect-308-query-lost",
+    "title": "Vercel: redirect usuwa parametry kampanii i formularza",
+    "symptom": "Po wejściu z reklamy URL gubi część query string i analityka traci źródło wejścia.",
+    "diagnose": "Sprawdź reguły redirects i docelowy URL w Location dla zapytania z parametrem testowym.",
+    "fix": "Popraw regułę lub kod przekierowania tak, aby świadomie zachowywał potrzebne parametry.",
+    "verify": "Nowy URL zachowuje dozwolone parametry, a niebezpieczny otwarty redirect nie powstaje.",
+    "source": "https://vercel.com/docs/redirects",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-logs-missing-source-maps",
+    "title": "Vercel: runtime logs pokazują minified stack trace",
+    "symptom": "Błąd funkcji jest trudny do powiązania z konkretną linią źródłowego TypeScript.",
+    "diagnose": "Sprawdź, czy sourcemaps są generowane i w jaki sposób wyświetlany jest stack trace.",
+    "fix": "Użyj wspieranego mapowania błędów lub systemu monitoringu bez publikowania map z sekretami.",
+    "verify": "Testowy wyjątek wskazuje czytelny moduł źródłowy bez ujawniania prywatnych danych.",
+    "source": "https://vercel.com/docs/observability",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-cache-immutable-public-file",
+    "title": "Vercel: plik public z tą samą nazwą nie aktualizuje się u użytkownika",
+    "symptom": "Po wymianie zdjęcia pod stałą nazwą część przeglądarek nadal pokazuje starą grafikę.",
+    "diagnose": "Sprawdź Cache-Control i ETag dla zasobu oraz politykę cache CDN.",
+    "fix": "Wersjonuj nazwę pliku lub query zgodnie z charakterem cache i aktualizuj odnośniki podczas deploya.",
+    "verify": "Nowa wersja strony odwołuje się do nowego zasobu, a cache nie psuje istniejących stron.",
+    "source": "https://vercel.com/docs/edge-network/caching",
+    "category": "vercel-hosting"
+  }
+]
