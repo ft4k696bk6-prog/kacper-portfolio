@@ -9,7 +9,7 @@ export function LanguageMetadataSync() {
   const { lang, t } = useLanguage();
 
   useEffect(() => {
-    const englishGuide = pathname.startsWith("/en/guides");
+    const englishGuide = pathname.startsWith("/en/");
     const servicePage = [
       "/tworzenie-stron-internetowych",
       "/crm-i-aplikacje-webowe",
