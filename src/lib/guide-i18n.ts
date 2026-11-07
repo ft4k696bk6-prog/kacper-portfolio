@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import englishCorpus from "@/content/pseo/guide-translations.en.json";
-import { allGuides, getGuide, guideCategories, guideCategory } from "@/lib/guide-directory";
+import englishCorpus from "../content/pseo/guide-translations.en.json";
+import { allGuides, getGuide, guideCategories, guideCategory } from "./guide-directory";
 
 export type EnglishSection = {title:string;paragraphs:string[]};
 export type EnglishEdition = {
