@@ -1,0 +1,362 @@
+[
+  {
+    "slug": "nextjs-dynamicparams-false-404-new-article",
+    "title": "Next.js: nowy artykuł 404 przez dynamicParams = false",
+    "symptom": "Po dopisaniu artykułu do danych /poradniki/nowy zwraca 404, choć starsze slugi działają.",
+    "cause": "Opcja dynamicParams=false ogranicza obsługę segmentów do wartości podanych przez generateStaticParams przy buildzie.",
+    "inspect": [
+      "Odczytaj wartość dynamicParams w pliku trasy i listę slugów zwracaną przez generateStaticParams.",
+      "Porównaj SHA produkcyjnego deploymentu z momentem dodania artykułu i ustal, czy nowy slug był w buildzie."
+    ],
+    "fix": [
+      "Dla witryny, która publikuje nowe slugi bez pełnego rebuilda, ustaw świadomie dynamicParams=true i właściwy cache.",
+      "Jeżeli używasz w pełni statycznego eksportu, generuj wszystkie potrzebne parametry podczas budowania i uruchamiaj nowy deployment po publikacji."
+    ],
+    "verify": "Nowy artykuł zwraca 200 pod własnym URL, a nieznany slug nadal zwraca prawdziwe 404.",
+    "warning": "Nie kieruj wszystkich nieznanych slugów na jeden artykuł zastępczy z kodem 200.",
+    "source": "https://nextjs.org/docs/app/api-reference/file-conventions/dynamic-routes",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-output-export-dynamic-route-error",
+    "title": "Next.js output export: dynamic route missing generateStaticParams",
+    "symptom": "Projekt z output: export buduje się do momentu przejścia przez trasę dynamiczną i zgłasza brak generateStaticParams.",
+    "cause": "Eksport statyczny nie może na żądanie generować nowych stron, dlatego potrzebuje kompletu adresów znanych podczas builda.",
+    "inspect": [
+      "Sprawdź ustawienie output w next.config i listę tras z segmentami w nawiasach kwadratowych.",
+      "Ustal, czy dane wszystkich stron istnieją w chwili budowania, czy są pobierane na żądanie."
+    ],
+    "fix": [
+      "Dodaj generateStaticParams zwracającą komplet parametrów, gdy zbiór jest znany i skończony.",
+      "Jeśli adresy mają powstawać dynamicznie, usuń eksport statyczny i użyj hostingu wspierającego renderowanie serwerowe."
+    ],
+    "verify": "Po buildzie istnieje HTML dla każdego przewidzianego slugu, a nowy slug wymaga zamierzonej procedury publikacji.",
+    "warning": "Nie ustawiaj dynamicParams=true jako rzekomej naprawy ograniczeń statycznego export.",
+    "source": "https://nextjs.org/docs/app/guides/static-exports",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-route-handler-get-caching-stale",
+    "title": "Next.js Route Handler GET zwraca stary JSON po aktualizacji",
+    "symptom": "Po zmianie konfiguracji endpoint /api/config pokazuje poprzednie wartości, chociaż baza ma nowe dane.",
+    "cause": "Cache i sposób renderowania route handlerów zależą od wersji Next.js oraz jawnych ustawień revalidate lub fetch.",
+    "inspect": [
+      "Sprawdź wersję frameworka i odpowiedź endpointu w Network z odpowiednimi nagłówkami cache.",
+      "Porównaj odczyt danych bezpośrednio w bazie i wynik tego samego requestu bez CDN lub cache przeglądarki."
+    ],
+    "fix": [
+      "Dla danych wymagających świeżości skonfiguruj odpowiednie cache-control lub dynamic behavior i jawnie oznacz operację jako dynamiczną.",
+      "Dla danych, które mogą być buforowane, ustaw przewidywalny czas odświeżania i kontrolowane unieważnianie cache."
+    ],
+    "verify": "Po zmianie rekordu API zwraca nową wartość w wymaganym czasie, a niezbędne cache pozostaje skuteczne.",
+    "warning": "Nie kopiuj konfiguracji cache między różnymi wersjami Next.js bez sprawdzenia jej znaczenia.",
+    "source": "https://nextjs.org/docs/app/getting-started/route-handlers",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-router-refresh-not-updating-data",
+    "title": "Next.js router.refresh() nie odświeża danych z listy",
+    "symptom": "Po zapisaniu rekordu router.refresh nie pokazuje nowej wartości mimo zakończonego POST.",
+    "cause": "Refresh ponawia renderowanie trasy, ale wewnętrzne źródła danych mogą nadal zwracać cache starej odpowiedzi.",
+    "inspect": [
+      "Sprawdź, czy mutacja zakończyła się sukcesem i czy w bazie rzeczywiście pojawiła się zmiana.",
+      "Zweryfikuj ustawienia cache fetch, revalidate oraz reakcję Client Component na nowe props z serwera."
+    ],
+    "fix": [
+      "Unieważnij właściwy cache przez mechanizmy revalidatePath lub revalidateTag w zaufanej akcji serwerowej.",
+      "Upewnij się, że klient nie nadpisuje aktualnych props starym lokalnym stanem lub odpowiedzią wcześniejszego fetch."
+    ],
+    "verify": "Po zapisie zmiana pojawia się w UI bez pełnego restartu aplikacji i bez wyłączania wszystkich cache.",
+    "warning": "Nie traktuj router.refresh jako zamiennika poprawnego unieważniania danych aplikacji.",
+    "source": "https://nextjs.org/docs/app/api-reference/functions/use-router",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-revalidatepath-wrong-url",
+    "title": "Next.js revalidatePath nie odświeża konkretnej podstrony",
+    "symptom": "Po wykonaniu akcji revalidatePath użytkownik nadal widzi zbuforowaną wersję szczegółów zamówienia.",
+    "cause": "Ścieżka przekazana do unieważnienia może nie odpowiadać rzeczywistej trasie lub wzorcowi dynamicznemu.",
+    "inspect": [
+      "Sprawdź, którą ścieżkę użytkownik otwiera oraz jaką wartość przekazujesz do revalidatePath.",
+      "Dla segmentów dynamicznych porównaj pełny URL konkretnego rekordu z wzorcem /[id] i parametrem typu."
+    ],
+    "fix": [
+      "Wywołaj revalidatePath z rzeczywistą ścieżką konkretnej strony lub prawidłowym wzorcem i typem zgodnym z API.",
+      "Oddziel unieważnianie listy od podstrony szczegółów, gdy obie pobierają inne dane."
+    ],
+    "verify": "Po zmianie rekordu oba odpowiednie widoki pokazują nową wartość w przewidzianym scenariuszu.",
+    "warning": "Nie unieważniaj całego serwisu w reakcji na zmianę pojedynczego wpisu, jeśli nie jest to potrzebne.",
+    "source": "https://nextjs.org/docs/app/api-reference/functions/revalidatePath",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-notfound-caught-in-try",
+    "title": "Next.js notFound() kończy jako błąd 500 po złapaniu wyjątku",
+    "symptom": "Nieistniejący artykuł powinien zwrócić 404, lecz catch zamienia wewnętrzne notFound() w zwykły błąd aplikacji.",
+    "cause": "Funkcja notFound przerywa renderowanie specjalnym wyjątkiem frameworka, który może zostać niewłaściwie przechwycony.",
+    "inspect": [
+      "Odszukaj wywołania notFound() w blokach try/catch i sprawdź, co robi obsługa catch.",
+      "W testowym żądaniu porównaj status HTTP nieistniejącego slugu i sposób renderowania not-found.tsx."
+    ],
+    "fix": [
+      "Obsłuż błędy bazy wewnątrz try, a warunek braku rekordu oceniaj poza catch i tam wywołaj notFound().",
+      "Zachowaj odrębne stany: brak wpisu, brak uprawnień i awaria API powinny prowadzić do różnych odpowiedzi."
+    ],
+    "verify": "Nieistniejący adres zwraca 404 z właściwą stroną błędu, a awaria bazy nie jest ukryta jako brak wpisu.",
+    "warning": "Nie zwracaj 200 z samym tekstem „nie znaleziono”, bo to tworzy Soft 404 w SEO.",
+    "source": "https://nextjs.org/docs/app/api-reference/functions/not-found",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-image-fill-missing-sizes",
+    "title": "Next.js Image fill bez sizes pobiera za duży plik",
+    "symptom": "Na telefonie grafika zajmuje mały fragment ekranu, ale przeglądarka pobiera szeroki obraz przeznaczony na desktop.",
+    "cause": "Komponent Image z fill bez odpowiedniego sizes może pozwolić przeglądarce wybrać nieoptymalny wariant obrazu.",
+    "inspect": [
+      "Sprawdź fizyczne rozmiary widocznego obrazu w różnych breakpointach i jego downloaded size w Network.",
+      "Odczytaj wygenerowane srcset i sizes oraz sprawdź raport Largest Contentful Paint dla strony."
+    ],
+    "fix": [
+      "Dodaj sizes opisujące rzeczywistą szerokość kontenera, np. 100vw na mobile i część szerokości na desktopie.",
+      "Przy fill ustaw rodzicowi position: relative oraz znany wymiar lub aspect-ratio, aby layout nie zapadał się."
+    ],
+    "verify": "Przeglądarka wybiera wariant obrazu dopasowany do viewportu, bez niepotrzebnego transferu na telefonie.",
+    "warning": "Nie ustawiaj sizes=\"100vw\" dla miniatury zajmującej 20% szerokości desktopu.",
+    "source": "https://nextjs.org/docs/app/api-reference/components/image",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-css-global-import-location",
+    "title": "Next.js: global CSS import w niewłaściwym komponencie",
+    "symptom": "Po dodaniu nowego arkusza pojawia się błąd dotyczący lokalizacji globalnego CSS lub kolejności stylów.",
+    "cause": "Reguły importowania globalnych stylów zależą od Pages Router, App Router i konfiguracji bundlera.",
+    "inspect": [
+      "Sprawdź czy projekt używa katalogu app czy pages i w jakim komponencie pojawia się globalny import.",
+      "Zidentyfikuj konflikt dwóch globalnych arkuszy oraz kolejność ich ładowania po nawigacji."
+    ],
+    "fix": [
+      "Przenieś globalne style do właściwego entry point frameworka lub użyj CSS Modules dla pojedynczych komponentów.",
+      "Jeśli konflikt wynika z kolejności stylów, uprość zależności i ustal spójny punkt importu dla całej witryny."
+    ],
+    "verify": "Build i nawigacja między podstronami nie zgłaszają błędu CSS, a wygląd nie zależy od kolejności wejścia.",
+    "warning": "Nie zamieniaj wszystkich stylów na !important, bo ukryje to konflikt zamiast go rozwiązać.",
+    "source": "https://nextjs.org/docs/app/getting-started/css",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-nextfont-google-build-fetch-fail",
+    "title": "Next.js next/font: Failed to fetch Google Fonts podczas builda",
+    "symptom": "Wdrożenie przerywa kompilację przy pobieraniu czcionki przez next/font/google.",
+    "cause": "Proces budowania może nie mieć dostępu do serwera czcionek, a automatyczny fetch nie jest niezawodny w każdym środowisku.",
+    "inspect": [
+      "Sprawdź konkretny font, jego wagę i logi błędu sieciowego z procesu build.",
+      "Porównaj, czy projekt przechodzi build w środowisku z dostępem sieciowym i bez niego."
+    ],
+    "fix": [
+      "Zweryfikuj konfigurację czcionki i w razie potrzeby użyj legalnie uzyskanych plików lokalnych przez next/font/local.",
+      "Upewnij się, że wybrane wagi i subsety rzeczywiście istnieją i nie generują niepotrzebnych requestów."
+    ],
+    "verify": "Build przechodzi bez niekontrolowanego pobierania zasobów w runtime i tekst jest czytelny przy fallbacku.",
+    "warning": "Nie pobieraj przypadkowych fontów z nieznanych stron ani nie łam ich licencji.",
+    "source": "https://nextjs.org/docs/app/api-reference/components/font",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-csp-inline-script-block",
+    "title": "Next.js: Content Security Policy blokuje skrypty aplikacji",
+    "symptom": "Przeglądarka pokazuje Refused to execute inline script i część interakcji nie działa po zaostrzeniu CSP.",
+    "cause": "Next.js może potrzebować odpowiedniej konfiguracji nonce lub hash dla skryptów w zależności od sposobu renderowania.",
+    "inspect": [
+      "Sprawdź nagłówek Content-Security-Policy i dokładny komunikat wraz z nazwą zablokowanej dyrektywy.",
+      "Ustal, czy problem dotyczy własnego skryptu, frameworka czy zewnętrznej integracji analytics."
+    ],
+    "fix": [
+      "Skonfiguruj nonce lub hash zgodnie z modelem renderowania Next.js i przekazuj go do potrzebnych skryptów.",
+      "Wyeliminuj zbędne inline scripts i ogranicz zaufane źródła, zachowując testy na stronach statycznych i dynamicznych."
+    ],
+    "verify": "Interakcje działają, a CSP nadal blokuje celowo nieautoryzowane skrypty i niepotrzebne domeny.",
+    "warning": "Nie ustawiaj unsafe-inline globalnie tylko po to, by zlikwidować komunikaty konsoli.",
+    "source": "https://nextjs.org/docs/app/guides/content-security-policy",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-server-only-module-client",
+    "title": "Next.js: server-only module przypadkowo importowany w Client Component",
+    "symptom": "Build wykrywa niedozwolony import modułu server-only do komponentu z use client.",
+    "cause": "Moduł może odczytywać sekrety lub API Node i nie wolno umieszczać go w bundle przeglądarki.",
+    "inspect": [
+      "Zidentyfikuj łańcuch importów prowadzący od Client Component do pliku serwerowego.",
+      "Zobacz, czy funkcja w module pobiera token, łączy się z bazą lub używa process.env bez NEXT_PUBLIC_."
+    ],
+    "fix": [
+      "Przenieś wrażliwą logikę do Server Component, Server Action albo Route Handler, a do klienta przekaż tylko dozwolone dane.",
+      "Oznacz poufne moduły importem server-only i rozdziel typy od funkcji runtime, żeby przypadkowy import nie wracał."
+    ],
+    "verify": "Kompilacja przechodzi, a tajny klucz nie występuje w bundle pobieranym przez przeglądarkę.",
+    "warning": "Nie zastępuj server-only przez NEXT_PUBLIC_ przy korzystaniu z prywatnego tokenu.",
+    "source": "https://nextjs.org/docs/app/getting-started/server-and-client-components",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-sitemap-preview-domain",
+    "title": "Next.js sitemap zawiera adresy preview zamiast domeny produkcyjnej",
+    "symptom": "Sitemap XML działa, ale jej elementy loc wskazują tymczasową domenę deploya Vercel.",
+    "cause": "Adresy w sitemap zostały zbudowane z niestabilnej zmiennej VERCEL_URL zamiast z publicznej domeny kanonicznej.",
+    "inspect": [
+      "Otwórz produkcyjną sitemap i sprawdź prefiks kilku losowych elementów loc.",
+      "Porównaj konstrukcję adresów w app/sitemap.ts z domeną canonical ustawioną w metadataBase."
+    ],
+    "fix": [
+      "Użyj jawnej kanonicznej domeny produkcyjnej w generatorze mapy i zbuduj bezwzględne URL wszystkich ważnych stron.",
+      "Oddziel mapę środowiska preview od produkcji, jeśli publikujesz podglądy indeksowane tylko na własne potrzeby."
+    ],
+    "verify": "Sitemap zawiera adresy właściwego hosta HTTPS, a ich canonical wskazuje ten sam host.",
+    "warning": "Nie wpisuj do sitemap każdej krótkotrwałej domeny preview, bo utrudnia to konsolidację URL.",
+    "source": "https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-opengraph-image-runtime-error",
+    "title": "Next.js opengraph-image generuje 500 podczas udostępniania linku",
+    "symptom": "Strona otwiera się normalnie, ale endpoint /opengraph-image zwraca 500 i miniatura w komunikatorze nie działa.",
+    "cause": "Generowanie grafiki OG ma osobne ograniczenia środowiska oraz fontów i może wykonywać inne instrukcje niż główna strona.",
+    "inspect": [
+      "Prześledź log błędu samej trasy grafiki i sprawdź, czy żądanie nie dotyczy odmiennego runtime.",
+      "Zweryfikuj rozmiar obrazu, obsługiwane formaty i czy wykorzystywana czcionka jest dostępna w pakiecie wdrożeniowym."
+    ],
+    "fix": [
+      "Uprość renderer i przekaż poprawne fonty lub zasoby wspierane przez ImageResponse, bez odwołań do niedostępnego filesystem.",
+      "Przetestuj obraz bezpośrednio pod jego URL, niezależnie od renderowania strony i metatagów Open Graph."
+    ],
+    "verify": "Obraz zwraca 200 z poprawnym typem media, a podgląd linku wyświetla aktualną grafikę.",
+    "warning": "Nie zakładaj, że poprawne og:image w HTML oznacza działający endpoint samej miniatury.",
+    "source": "https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-basepath-static-assets-404",
+    "title": "Next.js: po ustawieniu basePath zasoby _next zwracają 404",
+    "symptom": "Aplikacja w podkatalogu /panel otwiera HTML, lecz style i JavaScript są ładowane z nieprawidłowych ścieżek.",
+    "cause": "Konfiguracja basePath i assetPrefix może nie pasować do reverse proxy albo docelowego podkatalogu.",
+    "inspect": [
+      "W Network znajdź brakujące zasoby _next i zapisz ich pełne adresy URL.",
+      "Porównaj basePath w next.config z regułami proxy i faktyczną ścieżką, pod którą serwowany jest projekt."
+    ],
+    "fix": [
+      "Ujednolić basePath z proxy oraz popraw odwołania do publicznych zasobów, które nie są automatycznie prefiksowane.",
+      "Przebuduj projekt po zmianie basePath, gdyż ustawienie jest wbudowywane w kod klienta podczas builda."
+    ],
+    "verify": "HTML, CSS i JS ładują się z tego samego przewidzianego prefixu na produkcji.",
+    "warning": "Nie próbuj naprawiać każdego zasobu osobnym przekierowaniem, gdy cały prefix jest zły.",
+    "source": "https://nextjs.org/docs/app/api-reference/config/next-config-js/basePath",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-trailing-slash-redirect-loop",
+    "title": "Next.js: trailingSlash tworzy przekierowania między /oferta i /oferta/",
+    "symptom": "Żądanie /oferta przechodzi przez kolejne 308 i wraca do poprzedniego adresu.",
+    "cause": "Next.js i zewnętrzny reverse proxy mogą wymuszać sprzeczne reguły slash na końcu URL.",
+    "inspect": [
+      "Sprawdź pełny łańcuch odpowiedzi Location dla obu wariantów adresu.",
+      "Porównaj ustawienie trailingSlash w next.config z regułami CDN, hostingu i serwera pośredniczącego."
+    ],
+    "fix": [
+      "Wybierz jedną strategię trailingSlash i usuń przeciwstawną regułę w drugiej warstwie routingu.",
+      "Zaktualizuj linki wewnętrzne, canonical i sitemap do jednej wersji adresu."
+    ],
+    "verify": "Oba warianty kończą na jednym docelowym URL bez pętli, a strona zwraca 200.",
+    "warning": "Nie próbuj wyciszyć pętli przez zignorowanie przekierowań w crawlerze.",
+    "source": "https://nextjs.org/docs/app/api-reference/config/next-config-js/trailingSlash",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-route-handler-options-405",
+    "title": "Next.js API endpoint zwraca 405 dla metody OPTIONS",
+    "symptom": "Aplikacja próbuje wysłać request z innej domeny, ale endpoint odpowiada Method Not Allowed podczas preflight.",
+    "cause": "Trasa może nie udostępniać oczekiwanych metod lub odpowiedź OPTIONS nie zawiera wymaganych nagłówków CORS.",
+    "inspect": [
+      "Sprawdź żądanie OPTIONS w DevTools oraz listę eksportowanych handlerów GET/POST/OPTIONS w pliku route.ts.",
+      "Porównaj wymagane metody, nagłówki i origin z konfiguracją endpointu i reverse proxy."
+    ],
+    "fix": [
+      "Zaimplementuj OPTIONS z odpowiednimi nagłówkami Access-Control-Allow-* dla dokładnie dozwolonych domen.",
+      "Zachowaj autoryzację rzeczywistego POST oraz zwracaj kontrolowane 405 dla metod celowo niewspieranych."
+    ],
+    "verify": "Preflight przechodzi, a zaufany origin może wysłać właściwy POST, przy zachowaniu odmowy dla nieuprawnionych klientów.",
+    "warning": "Nie myl CORS z autoryzacją użytkownika; sama zgodna domena nie daje dostępu do danych.",
+    "source": "https://nextjs.org/docs/app/getting-started/route-handlers",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-headers-dynamic-rendering-build",
+    "title": "Next.js: odczyt headers() blokuje statyczne prerenderowanie",
+    "symptom": "Strona wcześniej była generowana statycznie, a po dodaniu headers() przechodzi na tryb dynamiczny lub build zgłasza ostrzeżenie.",
+    "cause": "Odczyt nagłówków zależy od konkretnego żądania i może uniemożliwiać wykonanie całej trasy jako stałego HTML przy buildzie.",
+    "inspect": [
+      "Sprawdź, gdzie wywołujesz headers() i czy komponent jest używany przez wszystkie podstrony w layout.",
+      "Zweryfikuj, czy wymagane informacje rzeczywiście zależą od requestu, czy są stałą konfiguracją aplikacji."
+    ],
+    "fix": [
+      "Przenieś logikę zależną od nagłówków do wyraźnej dynamicznej trasy lub mniejszego wydzielonego fragmentu.",
+      "Dla treści publicznych użyj stałej konfiguracji, gdy nagłówek nie jest wymagany do renderowania."
+    ],
+    "verify": "Trasy mają zamierzony tryb renderowania, a build nie zmienia go przypadkowo przez wspólny layout.",
+    "warning": "Nie próbuj odczytywać prywatnych nagłówków użytkownika w statycznie wygenerowanym HTML.",
+    "source": "https://nextjs.org/docs/app/api-reference/functions/headers",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-parallel-routes-default-404",
+    "title": "Next.js parallel routes: po odświeżeniu modal zamienia się w 404",
+    "symptom": "Nawigacja w aplikacji otwiera modal, ale bezpośrednie odświeżenie aktualnego URL pokazuje brak dopasowania równoległej trasy.",
+    "cause": "Parallel routes i intercepting routes mogą wymagać default.tsx dla slotów, które nie pasują podczas pełnego reloadu.",
+    "inspect": [
+      "Sprawdź strukturę katalogów @slot, (.)segment i brakujące pliki default.tsx.",
+      "Porównaj soft navigation z bezpośrednim wpisaniem URL w nowym oknie, zwłaszcza dla zamykanych modali."
+    ],
+    "fix": [
+      "Dodaj przewidziane default.tsx do równoległych slotów i zapewnij osobną pełną stronę dla bezpośredniej nawigacji.",
+      "Ustal semantykę zamykania modala i historię przeglądarki, by Back nie prowadził do pustego widoku."
+    ],
+    "verify": "Soft navigation pokazuje modal, a reload daje działającą stronę lub świadomy fallback, zamiast przypadkowego 404.",
+    "warning": "Nie traktuj intercepted route jako jedynej strony dostępnej pod danym URL.",
+    "source": "https://nextjs.org/docs/app/api-reference/file-conventions/parallel-routes",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-link-href-undefined-runtime",
+    "title": "Next.js Link: href is required przy renderowaniu listy",
+    "symptom": "Lista poradników działa dla części rekordów, ale render jednego elementu z Link kończy się błędem o brakującym href.",
+    "cause": "Dane mogą mieć pusty slug albo funkcja budująca URL otrzymała undefined z opcjonalnego pola.",
+    "inspect": [
+      "Sprawdź wartości href dla każdego elementu zanim zostaną przekazane do komponentu Link.",
+      "Ustal, czy źródło danych zawiera rekordy robocze bez slugu, których nie należy publikować."
+    ],
+    "fix": [
+      "Waliduj slug podczas importu treści i generuj Link wyłącznie dla istniejących, poprawnych adresów.",
+      "Dla brakujących danych pokaż nieklikalny stan i zapisz błąd walidacji treści w CI zamiast tworzyć /undefined."
+    ],
+    "verify": "Każdy link jest prawidłowy i prowadzi do istniejącego adresu; katalog nie renderuje przypadkowych slugów.",
+    "warning": "Nie ukrywaj błędu wpisaniem href=\"#\" dla każdego uszkodzonego rekordu.",
+    "source": "https://nextjs.org/docs/app/api-reference/components/link",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-form-server-action-origin-mismatch",
+    "title": "Next.js Server Action: Invalid Server Actions request origin mismatch",
+    "symptom": "Zapis przez formularz nie działa tylko za reverse proxy lub niestandardową domeną i pojawia się komunikat o origin mismatch.",
+    "cause": "Server Actions weryfikują pochodzenie żądania, a proxy może przekazywać Host i X-Forwarded-Host niezgodne z Origin.",
+    "inspect": [
+      "Sprawdź nagłówki Origin, Host i X-Forwarded-Host dla problematycznego POST w bezpiecznym środowisku.",
+      "Porównaj konfigurację proxy oraz listę faktycznie zaufanych domen formularza."
+    ],
+    "fix": [
+      "Popraw przekazywanie nagłówków w proxy i skonfiguruj dozwolone origin tylko dla rzeczywistych hostów aplikacji.",
+      "Zweryfikuj CSRF i połączenie HTTPS, pozostawiając odmowę dla żądań z niezaufanych domen."
+    ],
+    "verify": "Prawidłowy formularz z domeny produkcyjnej zapisuje dane, a obcy origin nadal jest blokowany.",
+    "warning": "Nie ustawiaj wildcard dla każdej domeny tylko w celu usunięcia błędu.",
+    "source": "https://nextjs.org/docs/app/api-reference/config/next-config-js/serverActions",
+    "category": "nextjs-react"
+  }
+]

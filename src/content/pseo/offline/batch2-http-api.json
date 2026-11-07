@@ -1,0 +1,202 @@
+[
+  {
+    "slug": "api-http-400-malformed-json",
+    "title": "HTTP 400: Unexpected token podczas parsowania JSON",
+    "symptom": "Endpoint odrzuca żądanie zanim zapisze dane formularza, a konsola pokazuje błąd JSON.",
+    "diagnose": "Sprawdź rzeczywiste body, poprawność przecinków i znaki niewłaściwie escapowane przez klienta.",
+    "fix": "Używaj JSON.stringify zamiast sklejania tekstu i obsłuż niepoprawny JSON kontrolowanym 400.",
+    "verify": "Poprawny obiekt przechodzi, a błędna składnia nie uruchamia operacji zapisu.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-401-bearer-missing",
+    "title": "HTTP 401 Unauthorized: brak tokenu Bearer w żądaniu",
+    "symptom": "Endpoint prywatny zwraca 401, choć w interfejsie użytkownik wygląda na zalogowanego.",
+    "diagnose": "Sprawdź, czy request przekazuje nagłówek Authorization i czy token nie wygasł.",
+    "fix": "Pobieraj aktualny access token z zaufanego mechanizmu sesji i obsługuj ponowne logowanie.",
+    "verify": "Prawidłowy użytkownik dostaje odpowiedź, a anonimowy nie otrzymuje prywatnych danych.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-403-wrong-role",
+    "title": "HTTP 403 Forbidden: zalogowany użytkownik nie ma uprawnienia",
+    "symptom": "Token jest ważny, ale API odmawia wykonania działania administratora.",
+    "diagnose": "Sprawdź rolę po stronie serwera, przypisanie do tenant i zasady RLS dla danego zasobu.",
+    "fix": "Ustal odpowiednią politykę i zwracaj odmowę dla użytkowników bez wymaganego uprawnienia.",
+    "verify": "Administrator może wykonać akcję, a zwykły użytkownik nadal otrzymuje 403.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-404-route-prefix",
+    "title": "HTTP 404 w API po zmianie prefiksu /api/v2",
+    "symptom": "Frontend wywołuje starą ścieżkę po wdrożeniu nowej wersji endpointów.",
+    "diagnose": "W Network sprawdź rzeczywisty URL, metodę i router zarejestrowanych endpointów.",
+    "fix": "Zmień klienta na właściwy endpoint, a dla starych integracji rozważ kontrolowaną zgodność wsteczną.",
+    "verify": "Żądanie trafia do właściwego handlera, a nieznane zasoby nadal zwracają 404.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-405-unsupported-method",
+    "title": "HTTP 405 Method Not Allowed przy wysłaniu DELETE",
+    "symptom": "Adres zasobu jest poprawny, ale serwer nie obsługuje metody HTTP użytej przez klienta.",
+    "diagnose": "Sprawdź metodę requestu i nagłówek Allow w odpowiedzi, jeśli jest udostępniony.",
+    "fix": "Dopasuj metodę do kontraktu endpointu albo zaimplementuj obsługę DELETE z poprawną autoryzacją.",
+    "verify": "Przewidziana metoda działa, a operacje niedopuszczone nadal zwracają 405.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-408-request-timeout",
+    "title": "HTTP 408 Request Timeout podczas przesyłania wolnego żądania",
+    "symptom": "Serwer zamyka żądanie, zanim klient zdąży wysłać całe body.",
+    "diagnose": "Sprawdź timeout przyjmowania requestu i opóźnienia sieciowe klienta.",
+    "fix": "Zmniejsz rozmiar danych lub zastosuj upload strumieniowy i rozsądne limity czasu po stronie infrastruktury.",
+    "verify": "Mały i duży dozwolony upload zachowują przewidywalne limity bez blokowania serwera.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/408",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-409-resource-conflict",
+    "title": "HTTP 409 Conflict po powtórnym utworzeniu rekordu",
+    "symptom": "Ponowny submit formularza próbuje zapisać istniejący identyfikator zamówienia.",
+    "diagnose": "Sprawdź unikalny klucz biznesowy i liczbę powtórnych requestów z tego samego źródła.",
+    "fix": "Wprowadź idempotency key albo kontrolowany upsert tylko dla operacji, które wolno bezpiecznie powtarzać.",
+    "verify": "Dwa identyczne żądania nie tworzą dwóch zamówień ani nie nadpisują obcego rekordu.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/409",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-413-request-too-large",
+    "title": "HTTP 413 Payload Too Large przy przesyłaniu pliku",
+    "symptom": "Upload PDF jest odrzucany przez proxy zanim aplikacja zdąży sprawdzić typ pliku.",
+    "diagnose": "Porównaj rozmiar requestu z limitem proxy, platformy i samego endpointu.",
+    "fix": "Kieruj duże pliki bezpośrednio do autoryzowanego storage, pozostawiając w API metadane.",
+    "verify": "Dopuszczony upload działa, a przekroczenie limitu daje czytelny komunikat.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/413",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-414-uri-too-long",
+    "title": "HTTP 414 URI Too Long przez filtry wyszukiwania w URL",
+    "symptom": "Rozbudowany formularz wyszukiwania generuje adres GET z tysiącami parametrów.",
+    "diagnose": "Sprawdź długość finalnego URL i liczbę kodowanych filtrów w query string.",
+    "fix": "Dla obszernych zapytań zastosuj POST z body lub przechowuj stan filtrów pod krótkim identyfikatorem.",
+    "verify": "Filtrowanie działa, a kopiowane krótkie URL nie ujawniają poufnych danych klientów.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/414",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-431-request-header-fields-too-large",
+    "title": "HTTP 431: za duży nagłówek Cookie po wielu sesjach",
+    "symptom": "API nie przyjmuje żądania, mimo że body jest małe i poprawne.",
+    "diagnose": "Sprawdź rozmiar nagłówka Cookie i liczbę powielanych ciasteczek dla domeny.",
+    "fix": "Usuń przestarzałe cookies przez poprawne Max-Age/Path i trzymaj duże dane sesji po stronie serwera.",
+    "verify": "Request przechodzi bez przekraczania limitu nagłówków, a sesja działa poprawnie.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/431",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-500-unhandled-exception",
+    "title": "HTTP 500 Internal Server Error bez informacji dla użytkownika",
+    "symptom": "Formularz wyświetla ogólny błąd zapisu, a backend rzuca nieobsłużony wyjątek.",
+    "diagnose": "Zbadaj log stack trace i korelację request ID bez przechowywania pełnych danych klientów.",
+    "fix": "Obsłuż znane błędy walidacji, zostaw 500 dla awarii serwera i dodaj monitoring przyczyn.",
+    "verify": "Użytkownik dostaje bezpieczny komunikat, a operator może znaleźć konkretny problem po request ID.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-502-bad-gateway",
+    "title": "HTTP 502 Bad Gateway po zmianie adresu usługi",
+    "symptom": "Proxy działa, ale serwer aplikacji nie zwraca poprawnej odpowiedzi upstream.",
+    "diagnose": "Sprawdź konfigurację hosta i portu upstream oraz dostępność procesu aplikacji.",
+    "fix": "Napraw routing i health check usługi, zapewniając szyfrowanie lub zaufaną sieć połączenia.",
+    "verify": "Proxy zwraca prawidłowy status i body, a awaria upstream pozostaje czytelnie logowana.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-503-service-unavailable",
+    "title": "HTTP 503 Service Unavailable podczas restartu integracji",
+    "symptom": "Zapytania chwilowo odmawiają obsługi w oknie maintenance lub przeciążenia.",
+    "diagnose": "Sprawdź stan instancji, health checks i czy odpowiedź zawiera Retry-After.",
+    "fix": "Dla bezpiecznych operacji dodaj ograniczony retry, a dla zapisów zastosuj idempotencję.",
+    "verify": "Usługa odzyskuje poprawne odpowiedzi bez powielania rekordów po przerwie.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-504-gateway-timeout",
+    "title": "HTTP 504 Gateway Timeout w integracji CRM",
+    "symptom": "Proxy kończy oczekiwanie, zanim baza lub dostawca zewnętrzny udzieli odpowiedzi.",
+    "diagnose": "Zmierz czas od proxy do API i od API do zależności, wskazując faktyczny wolny krok.",
+    "fix": "Skróć blokujące operacje albo przenieś długie zadania do kolejki z odczytem statusu.",
+    "verify": "Żądania użytkownika nie wiszą do timeoutu, a zadanie kończy się kontrolowanie.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/504",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-content-encoding-gzip-invalid",
+    "title": "HTTP: invalid gzip response po włączeniu kompresji",
+    "symptom": "Klient próbuje rozpakować dane i zgłasza błąd mimo statusu 200.",
+    "diagnose": "Porównaj Content-Encoding z bajtami body i sprawdź, czy CDN nie kompresuje już skompresowanych danych.",
+    "fix": "Usuń podwójne kodowanie lub popraw nagłówki zgodnie z rzeczywiście wysyłaną zawartością.",
+    "verify": "Odpowiedź można rozpakować i sparsować w przeglądarce i przy użyciu curl.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-conditional-etag-412",
+    "title": "HTTP 412 Precondition Failed przy aktualizacji rekordu",
+    "symptom": "API odmawia zapisu, bo klient edytował nieaktualną wersję danych.",
+    "diagnose": "Sprawdź nagłówek If-Match i ETag aktualnej reprezentacji rekordu.",
+    "fix": "Pobierz świeżą wersję, pokaż różnice i ponów zapis świadomie po rozwiązaniu konfliktu.",
+    "verify": "Równoległe edycje nie nadpisują cudzych zmian bez ostrzeżenia.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/412",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-multipart-boundary-missing",
+    "title": "Upload multipart: brak boundary w Content-Type",
+    "symptom": "Endpoint nie rozpoznaje FormData i zwraca błąd parsowania pliku.",
+    "diagnose": "Sprawdź, czy kod ręcznie wymusza Content-Type: multipart/form-data bez parametru boundary.",
+    "fix": "Usuń ręcznie ustawiony nagłówek i pozwól fetch automatycznie wygenerować boundary.",
+    "verify": "Serwer prawidłowo odczytuje pola i plik bez gubienia bajtów.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/API/FormData",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-pagination-cursor-repeat",
+    "title": "API pagination: kolejne strony zwracają te same rekordy",
+    "symptom": "Lista kontaktów ma duplikaty podczas przewijania, mimo że limit jest poprawny.",
+    "diagnose": "Sprawdź stabilność sortowania i czy cursor zawiera pełny klucz sortowania, łącznie z ID.",
+    "fix": "Użyj keyset pagination ze stabilną kolejnością i idempotentnym łączeniem rekordów.",
+    "verify": "Każdy rekord pojawia się dokładnie raz podczas przechodzenia przez wynik.",
+    "source": "https://www.postgresql.org/docs/current/queries-limit.html",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-websocket-1006-abnormal-closure",
+    "title": "WebSocket close 1006: połączenie znika bez komunikatu",
+    "symptom": "Realtime CRM rozłącza się na mobilnym internecie, a aplikacja nie odzyskuje zmian.",
+    "diagnose": "Sprawdź ping/pong, timeout proxy i to, czy połączenie jest zamykane przy zmianie sieci.",
+    "fix": "Dodaj reconnect z backoff oraz pełny re-fetch po ponownym połączeniu.",
+    "verify": "Widok odzyskuje aktualne dane bez gubienia wpisów i wielokrotnych subskrypcji.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent/code",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-sse-response-buffered",
+    "title": "Server-Sent Events: wiadomości przychodzą wszystkie na końcu",
+    "symptom": "Klient EventSource długo nie otrzymuje eventów, a potem dostaje je w jednej paczce.",
+    "diagnose": "Sprawdź Content-Type text/event-stream i czy proxy buforuje odpowiedź strumieniową.",
+    "fix": "Wyłącz niezamierzone buforowanie na tej trasie i wysyłaj poprawnie zakończone eventy oraz heartbeat.",
+    "verify": "Zdarzenia docierają w trakcie działania procesu zamiast dopiero po zamknięciu HTTP.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events",
+    "category": "formularze-api"
+  }
+]

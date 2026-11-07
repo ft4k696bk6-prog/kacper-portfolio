@@ -1,0 +1,202 @@
+[
+  {
+    "slug": "supabase-storage-mime-not-allowed",
+    "title": "Supabase Storage: MIME type not allowed podczas uploadu",
+    "symptom": "Załącznik HEIC lub PDF jest odrzucany przed zapisaniem pliku.",
+    "diagnose": "Sprawdź ograniczenia MIME w konfiguracji bucketa oraz prawdziwy Content-Type przesłanego pliku.",
+    "fix": "Dodaj tylko potrzebne typy do allowlist lub dokonaj kontrolowanej konwersji po weryfikacji formatu.",
+    "verify": "Dozwolony plik przechodzi, a niedozwolony typ nadal jest blokowany.",
+    "source": "https://supabase.com/docs/guides/storage/buckets/fundamentals",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-storage-file-size-limit",
+    "title": "Supabase Storage: upload file size exceeded mimo wolnego miejsca",
+    "symptom": "Wgrywanie większego załącznika kończy się błędem limitu rozmiaru.",
+    "diagnose": "Sprawdź limit rozmiaru obiektu ustawiony w buckecie i planie oraz rozmiar rzeczywistego requestu.",
+    "fix": "Użyj resumable upload dla dużych plików lub zwiększ limit zgodnie z potrzebą i możliwościami planu.",
+    "verify": "Poprawny większy plik zapisuje się, a rzeczywiście za duży daje przewidywalny komunikat.",
+    "source": "https://supabase.com/docs/guides/storage/uploads/resumable-uploads",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-storage-tus-resume-fails",
+    "title": "Supabase Storage: TUS resumable upload zatrzymuje się po zerwaniu sieci",
+    "symptom": "Po przerwaniu wysyłki przeglądarka rozpoczyna plik od nowa albo zgłasza konflikt.",
+    "diagnose": "Sprawdź identyfikator uploadu, fingerprint i czy bucket/ścieżka pozostały takie same.",
+    "fix": "Zaimplementuj wznowienie przez właściwego klienta TUS, przechowując stan uploadu zgodnie z jego kontraktem.",
+    "verify": "Plik kontynuuje wysyłkę po chwilowej przerwie bez tworzenia uszkodzonej kopii.",
+    "source": "https://supabase.com/docs/guides/storage/uploads/resumable-uploads",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-storage-cdn-old-object",
+    "title": "Supabase Storage: CDN pokazuje stare zdjęcie po podmianie",
+    "symptom": "Obraz pod tym samym URL nie zmienia się od razu po zapisaniu nowej wersji.",
+    "diagnose": "Sprawdź cache-control obiektu i nagłówki odpowiedzi CDN dla konkretnego adresu.",
+    "fix": "Zapisuj nową wersję pod nową ścieżką lub kontroluj cache zgodnie z wymaganiami aplikacji.",
+    "verify": "Nowy URL pokazuje nowy plik, a stary może wygasnąć bez przypadkowej podmiany.",
+    "source": "https://supabase.com/docs/guides/storage/cdn/fundamentals",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-storage-transform-image-quality",
+    "title": "Supabase Storage: transform image zwraca błąd dla HEIC",
+    "symptom": "Próba wygenerowania miniatury ze zdjęcia kończy się odmową albo pustym obrazem.",
+    "diagnose": "Sprawdź format źródła i listę typów obsługiwanych przez Image Transformations.",
+    "fix": "Konwertuj nieobsługiwany format do dozwolonego przy uploadzie i zachowaj oryginał, jeśli jest potrzebny.",
+    "verify": "Miniatura otwiera się na mobile i desktopie, zachowując poprawne proporcje.",
+    "source": "https://supabase.com/docs/guides/storage/serving/image-transformations",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-storage-path-case-sensitive",
+    "title": "Supabase Storage: plik jest, ale download daje 404 przez wielkość liter",
+    "symptom": "Użytkownik widzi nazwę pliku, lecz pobranie z własnej ścieżki zwraca Not Found.",
+    "diagnose": "Porównaj pełny storage path z listy obiektów z path używanym przez frontend, łącznie z wielkością liter.",
+    "fix": "Zapisuj i odczytuj kanoniczną ścieżkę zwróconą przez upload zamiast rekonstruować ją z nazw wyświetlanych.",
+    "verify": "Pobranie działa dla oryginalnego pliku, a nieistniejąca ścieżka daje 404.",
+    "source": "https://supabase.com/docs/guides/storage/management/download",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-storage-signed-upload-token",
+    "title": "Supabase Storage: signed upload URL odrzuca wysyłkę",
+    "symptom": "Klient dostaje podpisany adres do uploadu, ale żądanie nie może dodać pliku.",
+    "diagnose": "Sprawdź czas ważności tokenu, bucket i dokładną ścieżkę, dla której podpis został wystawiony.",
+    "fix": "Twórz adres tuż przed wysyłką oraz przekazuj token wyłącznie uprawnionemu użytkownikowi.",
+    "verify": "Jednorazowy transfer działa dla właściwego obiektu, bez dostępu do innych plików.",
+    "source": "https://supabase.com/docs/guides/storage/uploads/standard-uploads",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-storage-bucket-not-found",
+    "title": "Supabase Storage: Bucket not found po zmianie środowiska",
+    "symptom": "Aplikacja próbuje wysłać zdjęcie, ale bucket istnieje tylko na innej instancji.",
+    "diagnose": "Porównaj identyfikator projektu Supabase i nazwę bucketa ze środowiskiem, w którym wykonano upload.",
+    "fix": "Utwórz poprawnie skonfigurowany bucket w docelowym projekcie i używaj identycznej nazwy w kodzie.",
+    "verify": "Upload działa na produkcji bez zapisywania danych w testowej instancji.",
+    "source": "https://supabase.com/docs/guides/storage/buckets/creating-buckets",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-storage-rls-folder-prefix",
+    "title": "Supabase Storage: użytkownik widzi pliki innego folderu",
+    "symptom": "Polityka Storage pozwala odczytać obiekty z katalogu sąsiadującego z folderem użytkownika.",
+    "diagnose": "Sprawdź warunek polityki i funkcje storage.foldername oraz format identyfikatorów w ścieżkach.",
+    "fix": "Zastąp nieprecyzyjne LIKE bezpiecznym porównaniem segmentu folderu z auth.uid() i sprawdź wszystkie operacje.",
+    "verify": "Dwa konta odczytują wyłącznie własne pliki, a próba zmiany folderu jest odrzucona.",
+    "source": "https://supabase.com/docs/guides/storage/security/access-control",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-storage-list-shows-empty",
+    "title": "Supabase Storage: list() zwraca pusty folder mimo zapisanych plików",
+    "symptom": "Zapisany obiekt można pobrać po znanej ścieżce, lecz list nie pokazuje rekordów.",
+    "diagnose": "Sprawdź polityki SELECT na storage.objects oraz prefix, limit i offset przekazywane do list().",
+    "fix": "Udziel tylko koniecznego prawa listowania dla danego folderu i upewnij się, że filtr prefix jest właściwy.",
+    "verify": "Uprawniony użytkownik widzi własny katalog, a brak prawa nie odsłania cudzych nazw.",
+    "source": "https://supabase.com/docs/guides/storage/security/access-control",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-realtime-channel-duplicate-subscriptions",
+    "title": "Supabase Realtime: ta sama zmiana pojawia się kilka razy w tabeli",
+    "symptom": "Po kilkukrotnym wejściu na ekran każdy INSERT dopisuje rekord kilka razy.",
+    "diagnose": "Sprawdź, czy useEffect tworzy nowe kanały bez removeChannel w cleanup.",
+    "fix": "Subskrybuj jeden kanał dla aktywnego widoku i usuń go podczas odmontowania komponentu.",
+    "verify": "Jeden event daje jedną aktualizację listy niezależnie od liczby wcześniejszych wejść.",
+    "source": "https://supabase.com/docs/guides/realtime/postgres-changes",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-realtime-reconnect-dropped-updates",
+    "title": "Supabase Realtime: po utracie internetu lista nie nadrabia zmian",
+    "symptom": "Po ponownym połączeniu WebSocket UI zachowuje starszy zestaw rekordów.",
+    "diagnose": "Sprawdź statusy kanału i czy po reconnect wykonujesz niezależne pobranie stanu serwera.",
+    "fix": "Po odtworzeniu połączenia wykonaj re-fetch, a zdarzenia stosuj jako sygnał zmian, nie jedyną kopię stanu.",
+    "verify": "Po krótkiej przerwie lista odzwierciedla bieżącą zawartość bazy.",
+    "source": "https://supabase.com/docs/guides/realtime",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-database-branch-missing-migration",
+    "title": "Supabase Branching: preview ma inną strukturę tabel niż main",
+    "symptom": "Preview działa na osobnej gałęzi bazy i nie widzi kolumn dodanych na produkcji.",
+    "diagnose": "Sprawdź przypisanie projektu preview do gałęzi DB oraz zestaw zastosowanych migracji.",
+    "fix": "Zastosuj migracje w przewidzianym porządku do gałęzi testowej i przetestuj jej dane przykładowe.",
+    "verify": "Preview przechodzi testy na takim samym modelu tabel, bez nadpisywania produkcji.",
+    "source": "https://supabase.com/docs/guides/deployment/branching",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-migration-history-mismatch",
+    "title": "Supabase CLI: migration history does not match",
+    "symptom": "Polecenie migracji odmawia dalszych zmian przez rozbieżność lokalnej i zdalnej historii.",
+    "diagnose": "Porównaj pliki migracji w repo z wpisami w tabeli historii migracji zdalnego projektu.",
+    "fix": "Uzgodnij prawdziwy stan schematu przed wykonaniem repair historii, robiąc kopię zapasową.",
+    "verify": "Po wyrównaniu historii nowe migracje są stosowane dokładnie raz.",
+    "source": "https://supabase.com/docs/guides/local-development/overview",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-db-webhook-recursive-updates",
+    "title": "Supabase Database Webhooks: aktualizacja uruchamia się w pętli",
+    "symptom": "Webhook od zmiany statusu zapisuje ten sam rekord i generuje serię kolejnych webhooków.",
+    "diagnose": "Sprawdź warunek triggera i to, czy handler aktualizuje kolumnę obserwowaną przez tę samą automatyzację.",
+    "fix": "Wprowadź filtr rzeczywistej zmiany i idempotentny identyfikator zdarzenia; unikaj ponownego zapisu bez potrzeby.",
+    "verify": "Jeden status uruchamia przewidzianą akcję bez nieskończonej pętli wywołań.",
+    "source": "https://supabase.com/docs/guides/database/webhooks",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-vault-secret-rpc-exposure",
+    "title": "Supabase Vault: sekret dostępny przez publiczne RPC",
+    "symptom": "Funkcja SQL zwraca prywatne wartości z Vault do klienta z publicznym tokenem.",
+    "diagnose": "Sprawdź granty EXECUTE, schemat ekspozycji i SECURITY DEFINER użytej funkcji.",
+    "fix": "Przenieś odczyt sekretu do zaufanego backendu lub usuń publiczny grant funkcji.",
+    "verify": "Klient anonimowy nie odczytuje sekretu, a uprawniona integracja działa.",
+    "source": "https://supabase.com/docs/guides/database/vault",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-pgvector-embedding-dimension",
+    "title": "pgvector: different vector dimensions przy wyszukiwaniu",
+    "symptom": "Wyszukiwanie semantyczne odrzuca zapytanie, bo wymiar wektora różni się od wymiaru kolumny.",
+    "diagnose": "Sprawdź liczbę wymiarów embedding modelu i typ vector(n) w tabeli.",
+    "fix": "Ujednolić model i schemat, przebuduj embeddingi po kontrolowanej zmianie modelu.",
+    "verify": "Zapytanie i wszystkie zapisane wektory mają zgodny wymiar.",
+    "source": "https://supabase.com/docs/guides/ai/vector-columns",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-pgvector-hnsw-missing-results",
+    "title": "pgvector HNSW: wyszukiwanie przy filtrze zwraca zbyt mało wyników",
+    "symptom": "Zastosowany filtr tenant_id ogranicza liczbę zwróconych wyników poniżej oczekiwanego limitu.",
+    "diagnose": "Porównaj wynik przy wyszukiwaniu dokładnym z przybliżonym indeksem HNSW i filtrem tenant_id.",
+    "fix": "Dostosuj parametry wyszukiwania lub strategię indeksów zgodnie z selektywnością filtrów.",
+    "verify": "Test porównawczy mierzy recall i nie ujawnia wektorów innych tenantów.",
+    "source": "https://supabase.com/docs/guides/ai/semantic-search",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-db-backup-restore-production",
+    "title": "Supabase: przywrócenie backupu nie odtwarza ostatnich zmian",
+    "symptom": "Po odzyskaniu bazy część ostatnich rekordów jest nieobecna.",
+    "diagnose": "Sprawdź dokładny timestamp backupu oraz dostępność PITR dla projektu i planu.",
+    "fix": "Wybierz właściwy punkt odzyskiwania i wykonaj test odtwarzania poza produkcją przed decyzją.",
+    "verify": "Zestaw rekordów odpowiada wybranemu punktowi czasu, a granice utraty danych są jawnie udokumentowane.",
+    "source": "https://supabase.com/docs/guides/platform/backups",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-connection-ipv4-incompatibility",
+    "title": "Supabase: klient IPv4 nie łączy się z direct database",
+    "symptom": "Sterownik poza hostingiem zgłasza timeout przy direct connection, mimo że credentials są poprawne.",
+    "diagnose": "Sprawdź obsługę IPv6 w środowisku klienta i dostępne typy połączeń w panelu projektu.",
+    "fix": "Użyj zalecanego poolera IPv4, jeśli środowisko nie ma zgodnego routingu IPv6.",
+    "verify": "Połączenie działa po właściwej trasie, bez wystawiania bazy publicznie poza potrzebą.",
+    "source": "https://supabase.com/docs/guides/database/connecting-to-postgres",
+    "category": "supabase-bazy"
+  }
+]

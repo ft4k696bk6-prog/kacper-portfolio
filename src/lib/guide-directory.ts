@@ -1,9 +1,10 @@
 import { guides as existingGuides } from "../content/guides";
 import { pseoGuides } from "../content/pseo/guides";
 import { offlineGuides } from "../content/pseo/offline-guides";
+import { offlineBatchTwoGuides } from "../content/pseo/offline-batch2-guides";
 
 /** Jeden katalog: zachowuje wszystkie poradniki tworzone równolegle w guides.ts. */
-export const allGuides = [...existingGuides, ...pseoGuides, ...offlineGuides];
+export const allGuides = [...existingGuides, ...pseoGuides, ...offlineGuides, ...offlineBatchTwoGuides];
 export type Guide = (typeof allGuides)[number];
 
 export const guideCategories = [

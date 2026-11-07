@@ -1,0 +1,362 @@
+[
+  {
+    "slug": "react-strictmode-effect-twice",
+    "title": "React StrictMode uruchamia efekt dwa razy w development",
+    "symptom": "Po otwarciu formularza w środowisku developerskim widzisz dwa identyczne logi i dwa zapytania z efektu.",
+    "cause": "Tryb StrictMode celowo uruchamia dodatkowy cykl setup i cleanup efektu podczas rozwoju, aby wykryć błędne skutki uboczne.",
+    "inspect": [
+      "Ustal, czy problem występuje tylko w development, czy także w zbudowanej produkcyjnej aplikacji.",
+      "Sprawdź, czy useEffect ma poprawną funkcję cleanup i czy kod nie tworzy subskrypcji bez zwolnienia."
+    ],
+    "fix": [
+      "Dodaj cleanup anulujący fetch lub zamykający subskrypcję, a operacje zapisu zabezpiecz idempotencją po stronie serwera.",
+      "Jeżeli efekt inicjuje zasób, zapewnij jego jednoznaczne otwieranie i zamykanie zamiast sztucznego blokowania drugiego uruchomienia flagą."
+    ],
+    "verify": "W produkcji wykonywana jest przewidziana operacja, a w development dodatkowy test StrictMode nie pozostawia podwójnych subskrypcji.",
+    "warning": "Nie wyłączaj StrictMode tylko po to, by ukryć wyciek lub nieidempotentny zapis.",
+    "source": "https://react.dev/reference/react/StrictMode",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-state-direct-mutation-no-render",
+    "title": "React nie renderuje po zmianie obiektu w useState",
+    "symptom": "Po dopisaniu pozycji do tablicy lista pozostaje bez zmian, choć obiekt w konsoli ma już nowy element.",
+    "cause": "Bezpośrednia mutacja tablicy lub obiektu zachowuje referencję, a React może pominąć aktualizację stanu.",
+    "inspect": [
+      "Znajdź metody push, splice lub przypisania do właściwości wykonywane bezpośrednio na zmiennej stanu.",
+      "Sprawdź, czy setState dostaje tę samą referencję co poprzednio zamiast nowej tablicy lub obiektu."
+    ],
+    "fix": [
+      "Zastosuj niemutującą aktualizację, np. setItems(prev => [...prev, newItem]), zachowując identyfikatory rekordów.",
+      "Dla zagnieżdżonych danych skopiuj wszystkie zmieniane poziomy obiektu lub użyj sprawdzonego mechanizmu immutable update."
+    ],
+    "verify": "Po dodaniu i usunięciu elementu widok natychmiast się aktualizuje i nie modyfikuje historycznych wersji stanu.",
+    "warning": "Nie próbuj wymuszać forceUpdate jako rozwiązania mutacji danych.",
+    "source": "https://react.dev/learn/updating-arrays-in-state",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-usememo-stale-filter-results",
+    "title": "React useMemo zwraca stare wyniki po zmianie filtra",
+    "symptom": "Zmiana zaznaczonej kategorii nie aktualizuje listy, dopóki nie zostanie zmienione inne pole.",
+    "cause": "Wynik memoizacji zależy od wartości pominiętej w tablicy dependencies, więc React ponownie wykorzystuje nieaktualne obliczenie.",
+    "inspect": [
+      "Sprawdź wszystkie wartości odczytywane w callbacku useMemo, w tym parametry i funkcje pomocnicze.",
+      "Porównaj zawartość tablicy dependencies z wartościami rzeczywiście wpływającymi na rezultat filtrowania."
+    ],
+    "fix": [
+      "Dodaj wszystkie zależności do useMemo albo usuń memoizację, jeśli filtrowanie jest tanie i nie wymaga optymalizacji.",
+      "W przypadku danych zmienianych przez mutację napraw również aktualizacje stanu, by zależności otrzymywały nowe referencje."
+    ],
+    "verify": "Po zmianie każdego filtra lista pokazuje oczekiwany zestaw bez odświeżania przeglądarki.",
+    "warning": "Nie ignoruj reguły exhaustive-deps tylko dlatego, że obecna wersja wygląda na szybszą.",
+    "source": "https://react.dev/reference/react/useMemo",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-usecallback-stale-permissions",
+    "title": "React useCallback pamięta nieaktualne uprawnienia użytkownika",
+    "symptom": "Po zmianie roli przycisk nadal wykonuje akcję według poprzedniej roli zapisanej w callbacku.",
+    "cause": "Callback może zamknąć w closure starą wartość role, jeśli nie została zadeklarowana w dependencies.",
+    "inspect": [
+      "Sprawdź, czy wywołanie jest oparte na uprawnieniach w UI czy w niezależnej walidacji API.",
+      "Przejrzyj tablicę zależności useCallback i ustal, kiedy zmienia się aktualny obiekt sesji."
+    ],
+    "fix": [
+      "Uwzględnij potrzebną rolę w zależnościach, a aktualne uprawnienia egzekwuj również po stronie serwera przy każdej operacji.",
+      "Przy zmianie sesji wyczyść podręczne dane użytkownika oraz unieważnij stare zapytania i callbacki."
+    ],
+    "verify": "Nowa rola jest odzwierciedlona w interfejsie, a serwer odrzuca akcje po odebraniu uprawnień.",
+    "warning": "Nie opieraj bezpieczeństwa na ukryciu przycisku lub pamięci stanu React.",
+    "source": "https://react.dev/reference/react/useCallback",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-error-boundary-async-rejection",
+    "title": "React Error Boundary nie łapie odrzuconego Promise w kliknięciu",
+    "symptom": "Po błędzie podczas zapisu formularza Error Boundary nie wyświetla fallbacku, a konsola pokazuje unhandled rejection.",
+    "cause": "Granica błędów React dotyczy renderowania i wybranych faz komponentów, nie wszystkich błędów z handlerów czy zadań async.",
+    "inspect": [
+      "Sprawdź, w którym miejscu powstaje błąd: render, event handler, useEffect czy Promise w API.",
+      "Porównaj zachowanie po celowym throw w renderze z błędem odrzuconego fetch wewnątrz onClick."
+    ],
+    "fix": [
+      "W obsłudze zdarzenia zastosuj try/catch, kontrolowany stan błędu i czytelny komunikat użytkownika.",
+      "Użyj Error Boundary dla awarii renderowania, a błędy transportowe i walidacyjne obsługuj w warstwie formularza."
+    ],
+    "verify": "Błąd API pokazuje komunikat w formularzu, a błąd renderowania osobny fallback, bez białego ekranu.",
+    "warning": "Nie zakładaj, że jeden Error Boundary zastępuje obsługę wszystkich asynchronicznych wyjątków.",
+    "source": "https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-form-button-default-submits",
+    "title": "React: kliknięcie drugiego przycisku przypadkowo wysyła formularz",
+    "symptom": "Przycisk otwierający podgląd w środku form wywołuje submit i zapisuje niekompletne dane.",
+    "cause": "Element button bez określonego type ma domyślną semantykę submit wewnątrz formularza.",
+    "inspect": [
+      "Sprawdź strukturę DOM, a nie tylko komponent JSX, i ustal, który button wywołuje zdarzenie submit.",
+      "Prześledź event submit oraz liczbę wywołań action lub handlera w DevTools."
+    ],
+    "fix": [
+      "Przycisk pomocniczy ustaw jako type=\"button\"; tylko przycisk zapisujący pozostaw type=\"submit\".",
+      "Dodaj walidację po stronie serwera i blokadę duplikatów zapisów, jeśli użytkownik kliknie wiele razy."
+    ],
+    "verify": "Kliknięcie podglądu nie wysyła żądania, a zapis odbywa się tylko na świadomy submit.",
+    "warning": "Nie usuwaj obsługi Enter z formularza zamiast ustawić prawidłowy typ przycisku.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-effect-interval-memory-leak",
+    "title": "React: setInterval mnoży zapytania po przełączaniu zakładek",
+    "symptom": "Każde ponowne otwarcie panelu prowadzi do kolejnego timera i coraz większej liczby żądań API.",
+    "cause": "Efekt tworzy interval, lecz nie zwalnia go przy zmianie zależności lub odmontowaniu komponentu.",
+    "inspect": [
+      "Sprawdź liczbę aktywnych timerów w profilu komponentu i czy częstotliwość requestów rośnie po ponownym wejściu.",
+      "Zobacz cleanup zwracany przez useEffect i to, od których wartości zależy częstotliwość odpytywania."
+    ],
+    "fix": [
+      "Zwróć funkcję clearInterval(id) z efektu, a przy ukryciu widoku wstrzymaj polling, jeśli nie jest potrzebny.",
+      "Poza intervalem zadbaj o anulowanie trwających requestów, żeby starsza odpowiedź nie aktualizowała nieaktualnego widoku."
+    ],
+    "verify": "Po wielokrotnym przełączeniu panelu widoczny jest jeden timer lub żaden w stanie nieaktywnym.",
+    "warning": "Nie twórz setInterval bezpośrednio w ciele komponentu podczas każdego renderu.",
+    "source": "https://react.dev/reference/react/useEffect",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-portal-modal-focus-lost",
+    "title": "React: modal przez portal gubi fokus klawiatury",
+    "symptom": "Po otwarciu okna dialogowego Tab przechodzi do elementów pod modalem, a Escape nie zamyka okna.",
+    "cause": "Przeniesienie DOM przez createPortal nie dostarcza automatycznie pełnego mechanizmu dostępności dialogu.",
+    "inspect": [
+      "Sprawdź rolę dialog, aria-modal, etykietę i kolejność fokusu po otwarciu.",
+      "Zbadaj, czy w tle wciąż da się aktywować elementy klawiaturą lub czy fokus znika po zamknięciu."
+    ],
+    "fix": [
+      "Użyj natywnego dialog lub biblioteki zapewniającej focus trap, obsługę Escape i prawidłowy powrót fokusu.",
+      "Zablokuj interakcję z tłem podczas modalnego dialogu, a po zamknięciu ustaw fokus na przycisk otwierający."
+    ],
+    "verify": "Nawigacja Tab pozostaje w otwartym modalnym oknie, a Escape zamyka je i zwraca fokus.",
+    "warning": "Nie traktuj samego wysokiego z-index jako zapewnienia dostępności modalnego interfejsu.",
+    "source": "https://react.dev/reference/react-dom/createPortal",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-context-provider-recreates-value",
+    "title": "React Context: wszystkie wiersze renderują się po zmianie jednego pola",
+    "symptom": "W CRM zmiana pojedynczego elementu listy powoduje ponowne renderowanie dużej liczby niezależnych komponentów.",
+    "cause": "Obiekt value kontekstu może mieć nową tożsamość przy każdym renderze providera, nawet gdy logiczne dane się nie zmieniły.",
+    "inspect": [
+      "W React DevTools Profiler znajdź komponent Context.Provider i elementy reagujące na aktualizację.",
+      "Sprawdź, czy value={{...}} i przekazane callbacks są tworzone ponownie w każdym renderze."
+    ],
+    "fix": [
+      "Rozdziel konteksty według niezależnych rodzajów danych i ustabilizuj rzeczywiście potrzebne wartości oraz funkcje.",
+      "Dla dużych list rozważ selektory stanu lub osobny store zamiast jednego kontekstu zawierającego wszystkie rekordy."
+    ],
+    "verify": "Profiler pokazuje mniejszą liczbę niepotrzebnych renderów przy zachowaniu prawidłowych aktualizacji.",
+    "warning": "Nie memoizuj całej aplikacji przypadkowymi useMemo bez pomiaru faktycznych wąskich gardeł.",
+    "source": "https://react.dev/reference/react/useContext",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-ref-current-no-rerender",
+    "title": "React: zmiana ref.current nie aktualizuje licznika na ekranie",
+    "symptom": "Kliknięcie zwiększa wartość ref.current, ale interfejs nadal pokazuje poprzednią liczbę.",
+    "cause": "Ref służy do przechowywania mutable wartości, których zmiana nie wyzwala renderowania React.",
+    "inspect": [
+      "Sprawdź, czy licznik jest wyświetlany bezpośrednio z ref.current zamiast z useState.",
+      "Ustal, czy wartość ma być widoczna na ekranie, czy tylko zapamiętana między wywołaniami handlera."
+    ],
+    "fix": [
+      "Przenieś wartość wpływającą na UI do useState i użyj aktualizacji funkcyjnej zależnej od poprzedniej wartości.",
+      "Pozostaw useRef dla uchwytów DOM i danych technicznych, których aktualizacja nie musi zmieniać widoku."
+    ],
+    "verify": "Po kliknięciu wyświetlana wartość aktualizuje się zgodnie ze stanem, a ref nie jest używany do renderowania licznika.",
+    "warning": "Nie wymuszaj renderu przez przypadkowy dodatkowy setState, jeśli źródłem danych powinien być właściwy stan.",
+    "source": "https://react.dev/reference/react/useRef",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "typescript-ts2532-object-possibly-undefined",
+    "title": "TypeScript TS2532: Object is possibly undefined w danych API",
+    "symptom": "Typecheck zgłasza możliwość undefined przy odczycie właściwości obiektu pobieranego asynchronicznie.",
+    "cause": "Typ dopuszcza brak wartości, więc bezwarunkowy odczyt może rzeczywiście spowodować błąd w runtime.",
+    "inspect": [
+      "Sprawdź rzeczywisty typ response i czy API ma opcjonalne pola oraz stan początkowy null lub undefined.",
+      "Ustal, jak UI powinien wyglądać przed zakończeniem fetch oraz dla odpowiedzi bez danych."
+    ],
+    "fix": [
+      "Dodaj warunek zawężający typ albo bezpieczne optional chaining z jawną obsługą braku informacji.",
+      "Jeśli pole jest wymagane, waliduj dane wejściowe na granicy API zamiast bezpodstawnie używać operatora !."
+    ],
+    "verify": "Typecheck przechodzi, a brak danych pokazuje przewidziany pusty stan bez wyjątku.",
+    "warning": "Nie wpisuj as any w każdym miejscu, ponieważ usuwa to potrzebne ostrzeżenie o brakującym polu.",
+    "source": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "typescript-ts7053-no-index-signature",
+    "title": "TypeScript TS7053: string nie może indeksować zdefiniowanego obiektu",
+    "symptom": "Odczyt translations[key] nie przechodzi kompilacji, gdy key ma typ string, a obiekt tylko skończone klucze.",
+    "cause": "Dowolny string nie musi być dozwolonym kluczem mapy, dlatego TypeScript blokuje niezweryfikowany odczyt.",
+    "inspect": [
+      "Porównaj typ key i keyof typeof translations oraz skąd pochodzi klucz z parametru trasy.",
+      "Sprawdź, czy zestaw dozwolonych wartości jest rzeczywiście zamknięty czy ma być słownikiem otwartym."
+    ],
+    "fix": [
+      "Zawęź key do keyof typeof translations po walidacji wejścia lub zastosuj type guard sprawdzający obecność klucza.",
+      "Dla rzeczywiście dynamicznych map zadeklaruj Record<string,T> i przewidziany fallback przy brakującym kluczu."
+    ],
+    "verify": "Kompilator akceptuje odczyt, a nieznany parametr nie prowadzi do renderowania undefined.",
+    "warning": "Nie rzutuj niezweryfikowanego parametru URL na keyof tylko po to, by wyciszyć błąd.",
+    "source": "https://www.typescriptlang.org/docs/handbook/2/keyof-types.html",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "typescript-ts2741-missing-property",
+    "title": "TypeScript TS2741: Property is missing in type przy tworzeniu obiektu",
+    "symptom": "Po dodaniu wymaganego pola do typu User kompilator odrzuca obiekt formularza bez tej właściwości.",
+    "cause": "Model typu wymaga pola, którego obiekt faktycznie nie zawiera; może to ujawnić brak migracji lub mapowania.",
+    "inspect": [
+      "Sprawdź definicję wymaganego pola i wszystkie miejsca konstruowania obiektu danej struktury.",
+      "Porównaj dane pochodzące z formularza z wartościami domyślnymi, które powinien ustalać serwer."
+    ],
+    "fix": [
+      "Uzupełnij wymagane pole prawidłową wartością albo świadomie zmień model na opcjonalny, jeśli biznesowo może go nie być.",
+      "Dla modeli API używaj odrębnych typów CreateUser, User i UpdateUser, gdy mają inne pola wymagane."
+    ],
+    "verify": "Poprawny obiekt przechodzi kompilację, a brak faktycznie wymaganego pola nadal daje błąd.",
+    "warning": "Nie dodawaj sztucznego pustego stringu dla pola bezpieczeństwa lub identyfikatora właściciela.",
+    "source": "https://www.typescriptlang.org/docs/handbook/2/objects.html",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "typescript-ts18046-error-unknown",
+    "title": "TypeScript TS18046: zmienna error ma typ unknown w catch",
+    "symptom": "Kod catch(error) nie pozwala odczytać error.message mimo że w konsoli widać Error.",
+    "cause": "JavaScript pozwala rzucać dowolną wartość, więc TypeScript nie zakłada, że schwytany obiekt jest instancją Error.",
+    "inspect": [
+      "Sprawdź wszystkie miejsca catch i to, czy zewnętrzne biblioteki zwracają inne kształty wyjątków.",
+      "Ustal, jakie informacje mogą trafić do logu, a jakie są sekretami lub danymi klienta."
+    ],
+    "fix": [
+      "Użyj if(error instanceof Error) przed dostępem do message i przygotuj bezpieczny komunikat dla innych wartości.",
+      "Dla błędów dostawcy opracuj osobny walidator kształtu odpowiedzi i nie ujawniaj całego payloadu użytkownikowi."
+    ],
+    "verify": "Typecheck działa, a komunikat nie wyświetla poufnych fragmentów błędu z API.",
+    "warning": "Nie zmieniaj globalnie catch na any bez potrzeby, bo traci się walidację rodzaju wyjątku.",
+    "source": "https://www.typescriptlang.org/tsconfig/useUnknownInCatchVariables.html",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "typescript-ts2307-cannot-find-module-types",
+    "title": "TypeScript TS2307 Cannot find module mimo udanej instalacji npm",
+    "symptom": "Edytor lub build zgłasza TS2307 dla biblioteki, która figuruje w node_modules.",
+    "cause": "Przyczyną może być niewłaściwe moduleResolution, brak deklaracji typów lub różnica nazwy importu.",
+    "inspect": [
+      "Sprawdź package.json i wersję paczki oraz to, czy moduł ma types w exports lub pliku deklaracji.",
+      "Porównaj tsconfig moduleResolution z rzeczywistym runtime ESM/CJS i frameworkiem."
+    ],
+    "fix": [
+      "Dopasuj ścieżkę importu oraz konfigurację moduleResolution do bundlera lub NodeNext zgodnie z pakietem.",
+      "Jeśli biblioteka nie dostarcza typów, doinstaluj właściwy pakiet @types lub własną minimalną deklarację zamiast udawać typ any."
+    ],
+    "verify": "Czysty typecheck na CI odnajduje moduł, a runtime uruchamia ten sam import bez błędu.",
+    "warning": "Nie zmieniaj losowo opcji tsconfig, jeśli problem jest w eksporcie konkretnej paczki.",
+    "source": "https://www.typescriptlang.org/docs/handbook/modules/reference.html",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "typescript-ts2322-type-not-assignable",
+    "title": "TypeScript TS2322: string is not assignable to number po pobraniu formularza",
+    "symptom": "Po odczycie pola liczbowego z HTML TypeScript nie pozwala przypisać jego wartości do number.",
+    "cause": "Wartość input.value jest stringiem niezależnie od type=\"number\", a pusty wpis nie reprezentuje prawidłowej liczby.",
+    "inspect": [
+      "Sprawdź typy event.currentTarget.value i oczekiwany typ modelu biznesowego.",
+      "Przetestuj pusty input, wartość z przecinkiem i zwykłą liczbę, by ustalić zasady parsowania."
+    ],
+    "fix": [
+      "Wykonaj jawne parsowanie Number lub valueAsNumber, a NaN i brak liczby obsłuż w walidacji formularza.",
+      "Oddziel typ string używany do wprowadzania danych od typu number zapisywanego po udanej walidacji."
+    ],
+    "verify": "Dane liczbowe nie zawierają NaN, a błędny wpis wyświetla informację zamiast cichego przekształcenia na zero.",
+    "warning": "Nie wymuszaj typu number przez as number na stringu, bo nie konwertuje to wartości.",
+    "source": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "typescript-no-inputs-found-ts18003",
+    "title": "TypeScript TS18003 No inputs were found in config file",
+    "symptom": "Polecenie tsc zgłasza, że nie znalazło żadnych plików wejściowych, chociaż repo ma pliki .ts i .tsx.",
+    "cause": "Reguły include, exclude lub wskazanie tsconfig mogą wykluczać rzeczywistą lokalizację kodu.",
+    "inspect": [
+      "Sprawdź, z którego katalogu uruchamiasz tsc i który tsconfig jest faktycznie wskazany przez komendę.",
+      "Porównaj include oraz exclude z rozmieszczeniem katalogów src, app i tests."
+    ],
+    "fix": [
+      "Ustaw poprawne wzorce include dla plików źródłowych; wyklucz tylko rzeczywiste katalogi z wynikami builda.",
+      "Dla monorepo sprawdź references i komendy tsc -p względem konkretnego projektu, a nie ślepo globalnego tsconfig."
+    ],
+    "verify": "Typecheck znajduje pliki projektu i raportuje rzeczywiste błędy, zamiast kończyć się TS18003.",
+    "warning": "Nie dodawaj przypadkowego pustego pliku .ts tylko po to, by odsunąć błąd bez walidacji kodu.",
+    "source": "https://www.typescriptlang.org/tsconfig/include.html",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "typescript-ts2688-cannot-find-type-definitions",
+    "title": "TypeScript TS2688 Cannot find type definition file dla Node",
+    "symptom": "Kompilator zgłasza brak deklaracji Node, choć kod JavaScript buduje się przez bundler.",
+    "cause": "tsconfig może wymagać types: [\"node\"] bez zainstalowanego pasującego @types/node w danym workspace.",
+    "inspect": [
+      "Otwórz pełny komunikat i sprawdź listę types w tsconfig oraz obecność @types/node w lockfile.",
+      "Porównaj wersję runtime i pakietu deklaracji oraz katalog, w którym uruchamiasz npm ci."
+    ],
+    "fix": [
+      "Dodaj odpowiednie @types/node jako zależność developerską do właściwego pakietu, jeśli projekt faktycznie używa API Node.",
+      "Jeśli pliki są tylko frontendowe, skonfiguruj oddzielny tsconfig zamiast narzucać im globalne typy serwerowe."
+    ],
+    "verify": "Czysta instalacja i tsc przechodzą, a deklaracje DOM i Node nie mieszają przypadkowo zewnętrznych obiektów.",
+    "warning": "Nie kopiuj zawartości node_modules z innego komputera zamiast poprawić manifest paczek.",
+    "source": "https://www.typescriptlang.org/tsconfig/types.html",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "typescript-ts1259-default-import",
+    "title": "TypeScript TS1259 default import bez esModuleInterop",
+    "symptom": "Import domyślny biblioteki CommonJS kończy się błędem TS1259 dotyczącym zgodności modułów.",
+    "cause": "Wybrany moduł eksportuje kształt niezgodny z deklaracją domyślnego importu w bieżącym trybie kompilacji.",
+    "inspect": [
+      "Sprawdź dokumentację importu i deklaracje .d.ts danej biblioteki oraz ustawienia module i esModuleInterop.",
+      "Porównaj wynik transpilacji z prawdziwym środowiskiem Node lub bundlerem używanym przez aplikację."
+    ],
+    "fix": [
+      "Zastosuj zgodną składnię importu lub świadomie włącz interoperacyjność w tsconfig dla całego projektu.",
+      "Po zmianie przetestuj import w runtime, szczególnie przy mieszaniu require, import i NodeNext."
+    ],
+    "verify": "Kompilator i uruchomiony kod odczytują właściwy eksport, a nie undefined.default.",
+    "warning": "Nie zmieniaj na oślep systemu modułów całej aplikacji dla jednej paczki bez testów.",
+    "source": "https://www.typescriptlang.org/tsconfig/esModuleInterop.html",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "typescript-union-exhaustive-never",
+    "title": "TypeScript: nowa wartość enum omija niepełny switch",
+    "symptom": "Po dodaniu nowego statusu zamówienia jedna gałąź UI wyświetla pusty tekst, choć build przechodzi.",
+    "cause": "Kod switch nie sprawdza wyczerpująco wszystkich wariantów typu union i nowa wartość przechodzi niezauważona.",
+    "inspect": [
+      "Przejrzyj definicję union statusów i wszystkie funkcje mapujące status na etykietę i uprawnienia.",
+      "Sprawdź przypadek default i czy zwraca cichy undefined dla nieznanej wartości."
+    ],
+    "fix": [
+      "Użyj sprawdzania wyczerpującego z parametrem never w gałęzi default lub funkcji assertNever.",
+      "Dodaj test pokrywający wszystkie dopuszczalne statusy oraz zachowanie przy nieoczekiwanych danych z API."
+    ],
+    "verify": "Dodanie nowego statusu wymusza poprawienie mapowania w typecheck, a obecne wartości dają właściwe etykiety.",
+    "warning": "Nie wpisuj domyślnej etykiety „OK” dla nieznanego statusu, bo maskuje błąd przepływu.",
+    "source": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
+    "category": "nextjs-react"
+  }
+]

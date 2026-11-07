@@ -1,0 +1,202 @@
+[
+  {
+    "slug": "dns-cname-www-points-old-host",
+    "title": "DNS: www otwiera starą stronę po przeniesieniu domeny",
+    "symptom": "Domena główna pokazuje nowy serwis, ale www nadal kieruje do poprzedniego hostingu.",
+    "diagnose": "Sprawdź autorytatywne rekordy CNAME/A dla www i głównej nazwy oraz reguły redirect.",
+    "fix": "Ujednolić rekordy zgodnie z nowym hostingiem i przekieruj niekanoniczny host na właściwą wersję.",
+    "verify": "Oba warianty hosta otwierają poprawną witrynę bez błędnego certyfikatu.",
+    "source": "https://www.cloudflare.com/learning/dns/dns-records/dns-cname-record/",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "dns-dnssec-servfail-after-ns-change",
+    "title": "DNSSEC SERVFAIL po zmianie serwerów nazw",
+    "symptom": "Część użytkowników nie może otworzyć domeny, mimo że rekordy A wyglądają poprawnie.",
+    "diagnose": "Sprawdź rekord DS w rejestrze i konfigurację DNSKEY w aktywnej strefie po migracji.",
+    "fix": "Uzgodnij DS z nowym dostawcą DNS lub bezpiecznie wyłącz nieaktualną delegację zgodnie z procedurą.",
+    "verify": "Publiczne resolvery z walidacją DNSSEC odpowiadają bez SERVFAIL.",
+    "source": "https://www.cloudflare.com/learning/dns/dnssec/how-dnssec-works/",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "dns-spf-too-many-lookups",
+    "title": "SPF PermError: przekroczono limit odwołań DNS",
+    "symptom": "Wiadomości odrzucane są mimo istnienia jednego rekordu SPF z wieloma include.",
+    "diagnose": "Policz mechanizmy SPF wymagające DNS lookup, nie tylko widoczne fragmenty include.",
+    "fix": "Usuń nieużywanych nadawców i zoptymalizuj rekord zgodnie z limitem RFC 7208.",
+    "verify": "Test domeny nie wskazuje przekroczenia limitu, a legalny nadawca uzyskuje SPF pass.",
+    "source": "https://www.rfc-editor.org/rfc/rfc7208",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "dns-dkim-selector-not-found",
+    "title": "DKIM: selector not found po podłączeniu nowego dostawcy",
+    "symptom": "Email zawiera DKIM-Signature, ale resolver nie znajduje rekordu klucza.",
+    "diagnose": "Odczytaj selektor s= i domenę d= z wiadomości, potem sprawdź dokładny host TXT/CNAME.",
+    "fix": "Dodaj właściwy publiczny klucz wskazany przez dostawcę, nie kopiując prywatnych danych.",
+    "verify": "Nowa wiadomość przechodzi DKIM verification dla odpowiedniego selektora.",
+    "source": "https://www.rfc-editor.org/rfc/rfc6376",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "dns-dmarc-report-mailbox-bounces",
+    "title": "DMARC: raporty aggregate nie przychodzą na skrzynkę raportową",
+    "symptom": "Rekord _dmarc ma rua, ale właściciel nie otrzymuje przewidzianych zbiorczych raportów.",
+    "diagnose": "Sprawdź składnię adresu mailto w rua i czy skrzynka faktycznie odbiera wiadomości z załącznikami.",
+    "fix": "Popraw rekord i skonfiguruj retencję raportów, pamiętając że dostawcy nie muszą raportować natychmiast.",
+    "verify": "Adres odbiera rzeczywiste raporty od dostawców, którzy je wysyłają, bez obietnicy kompletności.",
+    "source": "https://www.rfc-editor.org/rfc/rfc7489",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "email-550-5-7-26-unauthenticated",
+    "title": "Email 550 5.7.26: wiadomość odrzucona jako unauthenticated",
+    "symptom": "Wysyłka ze strony firmowej odbija się z informacją o brakującym SPF lub DKIM.",
+    "diagnose": "Sprawdź Authentication-Results i Return-Path testowej wiadomości oraz źródło SMTP.",
+    "fix": "Skonfiguruj zgodny SPF/DKIM dla prawdziwego nadawcy i popraw domenę From zgodnie z DMARC.",
+    "verify": "Odbiorca akceptuje uwierzytelnione wiadomości bez udawania innej domeny.",
+    "source": "https://support.google.com/a/answer/81126",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "email-ptr-reverse-dns-missing",
+    "title": "Email: brak PTR reverse DNS pogarsza dostarczalność SMTP",
+    "symptom": "Własny serwer pocztowy jest odrzucany lub traktowany podejrzliwie przez część odbiorców.",
+    "diagnose": "Sprawdź reverse lookup IP serwera i zgodność PTR z FQDN oraz rekordem A.",
+    "fix": "Poproś właściciela adresu IP o poprawny rekord PTR i utrzymuj zgodną nazwę serwera SMTP.",
+    "verify": "Reverse DNS wskazuje właściwy host, a testy doręczania nie pokazują problemu tożsamości.",
+    "source": "https://support.google.com/a/answer/81126",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "email-mail-forward-loop",
+    "title": "Poczta: forward między dwiema skrzynkami tworzy pętlę",
+    "symptom": "Automatyczne przekierowanie wraca na poprzedni adres i wiadomość trafia do bounce.",
+    "diagnose": "Sprawdź reguły forwarding obu skrzynek i nagłówki Received w odrzuconej wiadomości.",
+    "fix": "Usuń jedną przeciwstawną regułę lub ustaw jedno rzeczywiste docelowe konto odbiorcze.",
+    "verify": "Test trafia jeden raz do odbiorcy bez przekroczenia liczby skoków poczty.",
+    "source": "https://www.rfc-editor.org/rfc/rfc5321",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "email-mx-priority-backup-delivery",
+    "title": "MX priority: poczta trafia na nieaktywny backup mailserver",
+    "symptom": "Część wiadomości wraca jako niedostarczona po zmianie operatora poczty.",
+    "diagnose": "Sprawdź wszystkie rekordy MX z priorytetami i czy każdy wskazany host rzeczywiście obsługuje domenę.",
+    "fix": "Usuń przestarzały serwer zapasowy albo popraw jego konfigurację zgodnie z architekturą dostawcy.",
+    "verify": "Mail z dwóch niezależnych domen trafia do poprawnej skrzynki bez rozproszenia.",
+    "source": "https://www.cloudflare.com/learning/dns/dns-records/dns-mx-record/",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "email-smtp-connection-587-timeout",
+    "title": "SMTP: timeout przy wysyłce przez port 587",
+    "symptom": "Strona zapisuje formularz, ale serwer nie nawiązuje połączenia z dostawcą poczty.",
+    "diagnose": "Sprawdź dostępność portu 587 z hostingu i wymagany tryb STARTTLS oraz nazwę hosta.",
+    "fix": "Użyj poprawnej konfiguracji SMTP i autoryzowanych credentials na serwerze; rozważ API providera.",
+    "verify": "Testowa wiadomość dociera, a dane logowania nie są dostępne w frontendzie.",
+    "source": "https://www.rfc-editor.org/rfc/rfc6409",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "crm-lead-stage-history-missing",
+    "title": "CRM: status leada zmienia się, ale historia nie zapisuje autora",
+    "symptom": "Pracownik przesuwa sprawę na kolejny etap, a po tygodniu nie wiadomo kto to zrobił.",
+    "diagnose": "Sprawdź, czy aktualizacja statusu i zapis zdarzenia audit log wykonywane są atomowo.",
+    "fix": "Zapisuj actor_id, czas i stare/nowe wartości w kontrolowanej transakcji po stronie serwera.",
+    "verify": "Historia odtwarza wszystkie uprawnione zmiany bez ujawnienia prywatnych danych innym rolom.",
+    "source": "https://www.postgresql.org/docs/current/tutorial-transactions.html",
+    "category": "crm-leady"
+  },
+  {
+    "slug": "crm-assignment-race-two-salespeople",
+    "title": "CRM: dwóch handlowców przejmuje tego samego leada",
+    "symptom": "Równoczesne kliknięcie „Weź” pozwala przypisać jeden rekord dwóm osobom.",
+    "diagnose": "Sprawdź, czy przejęcie wykonuje atomowy UPDATE z warunkiem owner_id IS NULL.",
+    "fix": "Wprowadź warunkowe przypisanie w jednej transakcji i sprawdź liczbę zmienionych rekordów.",
+    "verify": "Tylko jeden handlowiec otrzymuje skuteczne przypisanie, a drugi widzi informację o zajęciu.",
+    "source": "https://www.postgresql.org/docs/current/transaction-iso.html",
+    "category": "crm-leady"
+  },
+  {
+    "slug": "crm-dashboard-count-diff-filter",
+    "title": "CRM: licznik 180 leadów, a lista pokazuje 120",
+    "symptom": "Nagłówek panelu i paginowana tabela podają różne liczby kontaktów.",
+    "diagnose": "Sprawdź, czy COUNT i SELECT używają tych samych filtrów RLS, statusów, archiwum i dat.",
+    "fix": "Ujednolić warunki obu zapytań oraz nazwij wyraźnie liczbę ogólną i liczbę w bieżącym filtrze.",
+    "verify": "Licznik zgadza się z listą dla aktywnego filtra, a ogół nie udaje aktualnego wyniku.",
+    "source": "https://www.postgresql.org/docs/current/functions-aggregate.html",
+    "category": "crm-leady"
+  },
+  {
+    "slug": "crm-csv-utf8-polish-characters",
+    "title": "CRM: eksport CSV wyświetla krzaczki zamiast polskich liter",
+    "symptom": "Plik eksportu otwiera się w Excelu z błędnymi znakami w imionach i nazwach miejscowości.",
+    "diagnose": "Sprawdź kodowanie UTF-8 oraz sposób importowania CSV przez program odbiorcy.",
+    "fix": "Udostępnij eksport UTF-8 z poprawnym quoting i instrukcją importu, ewentualnie odpowiednim BOM.",
+    "verify": "Znaki ą, ć, ę, ł i ś są czytelne w wybranym narzędziu bez utraty danych.",
+    "source": "https://www.rfc-editor.org/rfc/rfc4180",
+    "category": "crm-leady"
+  },
+  {
+    "slug": "crm-csv-formula-injection",
+    "title": "CRM: eksport CSV pozwala na wykonanie formuły z pola klienta",
+    "symptom": "Pole tekstowe zaczynające się od = lub + jest interpretowane przez arkusz jako formuła.",
+    "diagnose": "Sprawdź, jak eksport traktuje wartości zewnętrzne i w jaki sposób użytkownik otwiera arkusz.",
+    "fix": "Escapuj niebezpieczne prefiksy komórek według wybranego formatu i waliduj import danych.",
+    "verify": "Złośliwe pole jest zwykłym tekstem, a nie formułą wykonującą działanie w arkuszu.",
+    "source": "https://owasp.org/www-community/attacks/CSV_Injection",
+    "category": "crm-leady"
+  },
+  {
+    "slug": "crm-callback-timezone-dst",
+    "title": "CRM: callback umówiony na 10:00 pojawia się godzinę później",
+    "symptom": "Zadania zaplanowane przed zmianą czasu są wyświetlane o innej godzinie u handlowca.",
+    "diagnose": "Sprawdź, czy baza zapisuje timestamptz i jaka strefa czasowa jest przypisana do użytkownika.",
+    "fix": "Przechowuj moment w UTC i przeliczaj na strefę użytkownika przy prezentacji z uwzględnieniem DST.",
+    "verify": "Powiadomienie pojawia się o przewidzianej lokalnej godzinie także po zmianie czasu.",
+    "source": "https://www.postgresql.org/docs/current/datatype-datetime.html",
+    "category": "crm-leady"
+  },
+  {
+    "slug": "crm-archived-leads-show-in-active",
+    "title": "CRM: zarchiwizowane leady wracają na listę aktywną",
+    "symptom": "Po zaznaczeniu archiwum wpis znika, ale po odświeżeniu ponownie trafia do kolejki.",
+    "diagnose": "Sprawdź, czy API filtruje archived_at oraz status i czy aktualizacja zapisuje właściwą kolumnę.",
+    "fix": "Zastosuj wspólny warunek listy aktywnej i wyłącz zarchiwizowane rekordy z callbacków.",
+    "verify": "Archiwum pozostaje dostępne dla uprawnionych osób, a aktywna kolejka nie pokazuje starych spraw.",
+    "source": "https://supabase.com/docs/guides/database/postgres/row-level-security",
+    "category": "crm-leady"
+  },
+  {
+    "slug": "crm-phone-e164-invalid-country-code",
+    "title": "CRM: numer telefonu z Polski nie działa przy automatycznym oddzwanianiu",
+    "symptom": "Numer zapisuje się w bazie, ale integracja telefoniczna odrzuca format bez kodu kraju.",
+    "diagnose": "Sprawdź normalizację numeru i czy znak +48 nie został dodany dwukrotnie.",
+    "fix": "Przechowuj numer w uzgodnionym formacie E.164 i zachowaj oryginalny zapis do diagnostyki.",
+    "verify": "Integracja poprawnie wybiera numer z Polski i nie zmienia przypadkowo numerów zagranicznych.",
+    "source": "https://www.itu.int/rec/T-REC-E.164/",
+    "category": "crm-leady"
+  },
+  {
+    "slug": "crm-lead-pagination-stale-cursor",
+    "title": "CRM: po przewinięciu kolejne leady są pomijane",
+    "symptom": "Paginacja listy zmienia wynik podczas dodawania nowych leadów i część rekordów ginie.",
+    "diagnose": "Sprawdź sortowanie po created_at i id oraz czy offset opiera się na zmiennym zbiorze.",
+    "fix": "Zastosuj stabilną paginację keyset z parą created_at i ID oraz deduplikuj łączenie stron.",
+    "verify": "Użytkownik może przewinąć wszystkie rekordy bez braków i powtórzeń.",
+    "source": "https://www.postgresql.org/docs/current/queries-limit.html",
+    "category": "crm-leady"
+  },
+  {
+    "slug": "crm-file-attachment-preview-unauthorized",
+    "title": "CRM: miniaturka załącznika dostępna bez zalogowania",
+    "symptom": "Prywatny dokument klienta otwiera się po bezpośrednim URL z historii przeglądarki.",
+    "diagnose": "Sprawdź ustawienie prywatnego bucketa i czas życia signed URL oraz kontrolę uprawnień po stronie API.",
+    "fix": "Generuj krótko ważny adres tylko po autoryzacji dostępu do konkretnej sprawy.",
+    "verify": "Anonimowa osoba nie pobiera pliku, a uprawniony handlowiec ma dostęp do własnego rekordu.",
+    "source": "https://supabase.com/docs/guides/storage/security/access-control",
+    "category": "crm-leady"
+  }
+]
