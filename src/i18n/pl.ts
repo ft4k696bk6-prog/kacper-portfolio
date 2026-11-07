@@ -470,9 +470,9 @@ export const pl: Translations = {
     ],
   },
   contact: {
-    title: "Co chcesz zbudować?",
+    title: "Porozmawiajmy o Twojej firmie.",
     description:
-      "Napisz, czym zajmuje się Twoja firma i czego potrzebujesz. Jeśli masz inspiracje, termin lub budżet — dodaj je. Ustalimy sensowny zakres i wycenę. Możesz też wybrać termin rozmowy.",
+      "Opowiedz, czego potrzebujesz. Ustalimy zakres, termin i wycenę. Napisz lub wybierz termin rozmowy.",
     calendarTitle: "Kalendarz",
     calendarDescription:
       "Wybierz termin w kalendarzu.",

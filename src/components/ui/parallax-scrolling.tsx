@@ -3,12 +3,12 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-type ParallaxProps = { title: string; portraitAlt: string };
+type ParallaxProps = { title: [string, string]; subtitle: string; portraitAlt: string };
 
 /** Layered scroll inspired by Osmo's parallax-scrolling component on 21st.dev.
  * Keep the original portrait still; only the scenery has a different scroll rate.
  */
-export function ParallaxComponent({ title, portraitAlt }: ParallaxProps) {
+export function ParallaxComponent({ title, subtitle, portraitAlt }: ParallaxProps) {
   const root = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -58,7 +58,10 @@ export function ParallaxComponent({ title, portraitAlt }: ParallaxProps) {
     <section id="home" ref={root} className="hero-night scenic-parallax" aria-labelledby="hero-title">
       <div className="scenic-scene">
         <p className="scenic-signature">Kacper Bernecki</p>
-        <h1 id="hero-title" className="scenic-title">{title.split(" ").map(word => <span key={word}>{word} </span>)}</h1>
+        <div className="scenic-copy">
+          <h1 id="hero-title" className="scenic-title">{title.map(line => <span key={line}>{line}</span>)}</h1>
+          <p className="scenic-subtitle">{subtitle}</p>
+        </div>
         {/* The mask belongs to a stationary clipping window, never the moving image.
             This prevents scenery from escaping below the portrait during scroll. */}
         <div className="scenic-backdrop-window" aria-hidden="true">

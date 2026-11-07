@@ -469,9 +469,9 @@ export const en = {
     ],
   },
   contact: {
-    title: "What would you like to build?",
+    title: "Let’s talk about your business.",
     description:
-      "Tell me about your business and what you need. Share any inspiration, timing or budget you have in mind. We’ll work out a sensible scope and quote. You can also book a conversation below.",
+      "Tell me what you need. We’ll work out the scope, timing and quote. Send a message or book a call.",
     calendarTitle: "Calendar",
     calendarDescription:
       "Choose a meeting time in the calendar.",

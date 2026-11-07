@@ -12,7 +12,7 @@ export function Services() {
       icon: Globe,
       href: "/#contact",
       title: pl ? "Marka i rozwój od zera" : "Brand and business launch",
-      text: pl ? "Pozycjonowanie oferty, kierunek identyfikacji marki i wejście firmy do internetu. Łączę stronę, komunikację, reklamy i narzędzia do obsługi klientów w jeden plan rozwoju." : "Brand direction, online presence, marketing and tools for customer operations in one development plan.",
+      text: pl ? "Od pomysłu na markę do strony, komunikacji i pierwszych kampanii." : "From brand direction to your website, messaging and first campaigns.",
       tags: "Re-energy · Motomizer",
     },
     {
@@ -20,8 +20,8 @@ export function Services() {
       href: "/tworzenie-stron-internetowych",
       title: pl ? "Strony internetowe" : "Business websites",
       text: pl
-        ? "Strona firmy, usługi lub produktu. Przemyślany wygląd, wygoda na telefonie i prosta droga do kontaktu."
-        : "Business, service and product websites. Thoughtful design, a great mobile experience and a clear path to contact.",
+        ? "Czytelna oferta, dopracowany wygląd i prosta droga do kontaktu."
+        : "A clear offer, thoughtful design and an easy way to get in touch.",
       tags: "Motomizer · StarCars",
     },
     {
@@ -29,51 +29,51 @@ export function Services() {
       href: "/crm-i-aplikacje-webowe",
       title: pl ? "CRM i aplikacje webowe" : "CRM & web apps",
       text: pl
-        ? "Leady, zespół i procesy w jednym miejscu. Narzędzia dopasowane do tego, jak naprawdę działa Twoja firma."
-        : "Leads, teams and workflows in one place. Tools tailored to how your business actually operates.",
+        ? "Leady, zespół i procesy w narzędziu dopasowanym do Twojej firmy."
+        : "Leads, teams and workflows in a tool built around your business.",
       tags: "B-CRM · BeatMarket",
     },
     {
       icon: MousePointer2,
       href: "/marketing-i-reklamy",
-      title: pl ? "Marketing, reklamy i social media" : "Marketing, ads & social media",
+      title: pl ? "Marketing i social media" : "Marketing & social media",
       text: pl
-        ? "Prowadzenie social mediów, reklamy i strony kampanii. Spójna oferta oraz pomiar zapytań od klientów."
-        : "Social media management, advertising and campaign pages. A consistent offer and measurement of customer enquiries.",
+        ? "Treści, kampanie reklamowe i pomiar zapytań od klientów."
+        : "Content, ad campaigns and measurement of customer enquiries.",
       tags: pl
         ? "Jalapeno Kebab · StarCars"
         : "Jalapeno Kebab · StarCars",
     },
   ];
   return (
-    <section id="services" className="px-5 py-20 md:px-8 md:py-24">
+    <section id="services" className="services-editorial px-5 py-16 md:px-8 md:py-20">
       <div className="mx-auto max-w-7xl">
         <p className="brand-eyebrow text-xs uppercase tracking-[0.24em] text-white">
           {pl ? "W czym mogę pomóc" : "How I can help"}
         </p>
         <h2 className="mt-4 max-w-2xl text-4xl leading-tight tracking-tight md:text-5xl">
           {pl
-            ? "Masz cel. Zbudujmy do niego dobre narzędzie."
-            : "You have a goal. Let’s build the right tool."}
+            ? "Od pomysłu do działania."
+            : "From idea to launch."}
         </h2>
-        <div className="mt-10 grid gap-4 lg:grid-cols-2">
+        <div className="service-list mt-10 grid gap-x-12 md:grid-cols-2">
           {services.map(({ icon: Icon, ...s }, i) => (
             <Link
               key={s.href}
               href={s.href}
-              className="group flex flex-col rounded-2xl border border-white/10 bg-[var(--brand-black)] p-7 transition hover:border-[var(--brand-accent)] hover:bg-[var(--brand-black)]"
+              className="service-item group flex flex-col border-t border-white/15 py-7 transition hover:border-[var(--brand-accent)]"
             >
               <div className="flex items-center justify-between">
                 <Icon className="h-7 w-7 text-[var(--brand-accent)]" />
                 <span className="text-xs text-white/70">0{i + 1}</span>
               </div>
-              <h3 className="mt-9 text-2xl tracking-tight">{s.title}</h3>
-              <p className="mt-4 flex-1 text-sm leading-7 text-white/70">
+              <h3 className="mt-5 text-2xl tracking-tight">{s.title}</h3>
+              <p className="mt-3 flex-1 text-sm leading-6 text-white/70">
                 {s.text}
               </p>
-              <p className="mt-7 text-xs text-white/70">{s.tags}</p>
-              <span className="mt-7 flex items-center justify-between border-t border-white/10 pt-5 text-sm text-white">
-                {pl ? "Zobacz zakres współpracy" : "Explore the service"}
+              <span className="mt-5 flex items-center justify-between gap-4 text-xs text-white/60">
+                <span>{s.tags}</span>
+                <span className="sr-only">{pl ? "Zobacz zakres współpracy" : "Explore the service"}</span>
                 <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-1 group-hover:translate-x-1" />
               </span>
             </Link>
