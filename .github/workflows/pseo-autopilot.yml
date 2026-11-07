@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/pseo-autopilot.yml'
+      - 'src/app/api/pseo-bridge/route.ts'
   schedule:
     - cron: '23 3 * * *'
       timezone: 'Europe/Warsaw'
@@ -19,6 +20,7 @@ on:
 permissions:
   contents: write
   issues: read
+  id-token: write
 
 concurrency:
   group: pseo-autopilot-main
@@ -42,11 +44,11 @@ jobs:
         with:
           ref: main
           persist-credentials: true
-      - name: Ensure OpenRouter key is configured
+      - name: Confirm secure GitHub OIDC is available
         shell: bash
         run: |
-          if [ -z "${OPENROUTER_API_KEY:-}" ]; then
-            echo '::error::Brak OPENROUTER_API_KEY. Otwórz repozytorium > Settings > Secrets and variables > Actions > New repository secret.'
+          if [ -z "${OPENROUTER_API_KEY:-}" ] && { [ -z "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" ] || [ -z "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}" ]; }; then
+            echo '::error::Brak OIDC i klucza; workflow wymaga permissions id-token: write.'
             exit 1
           fi
       - name: Install Node 22
