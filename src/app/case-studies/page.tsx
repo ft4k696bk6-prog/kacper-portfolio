@@ -49,7 +49,7 @@ export default function CaseStudiesIndex() {
       <Link href="/case-studies/re-energy-meta-ads" className="surface-card mt-12 block rounded-2xl border border-white/25 bg-white/[0.04] p-7 transition hover:border-white/60 md:p-10">
         <p className="text-xs uppercase tracking-[0.2em] text-white/65">Nowe case study · Meta Ads / OZE</p>
         <h2 className="mt-3 text-3xl text-white md:text-4xl">Re-Energy System — kampanie leadowe napędzające sprzedaż</h2>
-        <p className="mt-4 max-w-3xl leading-8 text-white/75">Zrzuty Meta Ads potwierdzają 2 331 kontaktów przy średnim koszcie około 29,79 zł w wybranych kampaniach. Właściciel deklaruje około 2 lata działań i wielomilionowy obrót firmy. Sprawdź metodę, ograniczenia pomiaru i proces sprzedaży.</p>
+        <p className="mt-4 max-w-3xl leading-8 text-white/75">Przez około 2 lata kampanie Meta Ads wspierały pozyskiwanie klientów dla Re-Energy System. W 17 kampaniach leadowych pozyskano 2 331 kontaktów przy średnim koszcie 29,79 zł. Zobacz, jak połączyłem reklamy z obsługą zapytań.</p>
         <span className="mt-6 inline-block text-sm text-white underline underline-offset-4">Przeczytaj case study →</span>
       </Link>
       <div className="mt-12 grid gap-6 md:grid-cols-2">
