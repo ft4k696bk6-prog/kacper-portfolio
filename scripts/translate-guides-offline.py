@@ -44,7 +44,7 @@ polish_letters = re.compile(r"[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]")
 
 def _pieces(value, max_chars=220):
     """Split long, often technical paragraphs before translation to avoid model truncation."""
-    sentences = re.split(r'(?<=[.!?])\\s+(?=[A-ZĄĆĘŁŃÓŚŹŻ0-9])', value.strip())
+    sentences = re.split(r'(?<=[.!?])\s+(?=[A-ZĄĆĘŁŃÓŚŹŻ0-9])', value.strip())
     chunks = []
     for sentence in sentences:
         words = sentence.split()
