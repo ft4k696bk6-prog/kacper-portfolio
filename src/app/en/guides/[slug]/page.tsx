@@ -6,6 +6,7 @@ import { guideScreenshots } from "@/content/guideScreenshots";
 import { getRelatedGuides } from "@/lib/guide-directory";
 import { getEnglishGuide, getEnglishGuides, englishGuideCategory, englishCategory, englishCategoryCounts } from "@/lib/guide-i18n";
 import { VatComparison } from "@/components/VatComparison";
+import {blogPostsForGuideCategory} from "@/content/blog";
 
 type Props={params:Promise<{slug:string}>};
 export const dynamicParams=true;
@@ -32,6 +33,7 @@ export default async function EnglishGuidePage({params}:Props){
  const screenshot=guideScreenshots[slug]??[];
  const related=getRelatedGuides(slug,10).map(g=>getEnglishGuide(g.slug)).filter((g):g is NonNullable<typeof g>=>Boolean(g));
  const others=englishCategoryCounts().filter(c=>c.slug!==categorySlug&&c.count>0).sort((a,b)=>b.count-a.count).slice(0,5);
+ const connectedBlogPosts=blogPostsForGuideCategory(categorySlug,1);
  const url=`https://bernecki.dev/en/guides/${slug}`;
  const jsonLd={"@context":"https://schema.org","@graph":[
   {"@type":"Article","@id":url+"#article",headline:guide.title,description:guide.description,inLanguage:"en",mainEntityOfPage:url,isAccessibleForFree:true,author:{"@type":"Organization",name:"bernecki.dev",url:"https://bernecki.dev"},image:screenshot.length?`https://bernecki.dev${screenshot[0].src}`:"https://bernecki.dev/opengraph-image"},
@@ -74,6 +76,12 @@ export default async function EnglishGuidePage({params}:Props){
    <p className="mt-4 leading-7 text-white/70">Describe the problem, your current setup and the expected outcome. We can discuss a practical implementation.</p>
    <div className="mt-6 flex flex-wrap gap-5"><a href={`mailto:kacper@bernecki.dev?subject=${encodeURIComponent(guide.title)}`} className="rounded-lg brand-action px-5 py-3 text-black">Contact me</a><Link href={guide.service} className="py-3 text-white">{guide.serviceLabel} (PL) →</Link></div>
   </aside>
+  {connectedBlogPosts.length>0&&<nav aria-label="Related blog article" className="mt-12 border-t border-white/20 pt-9">
+   <h2 className="text-2xl">Explore the broader topic</h2>
+   {connectedBlogPosts.map(post=><Link key={post.slug} href={`/en/blog/${post.slug}`} className="surface-card mt-5 block rounded-xl border border-white/15 p-5 transition-colors hover:border-white/50">
+    <p className="text-xl">{post.en.title}</p><p className="mt-3 leading-7 text-white/70">{post.en.excerpt}</p>
+   </Link>)}
+  </nav>}
   <nav aria-label="Related English guides" className="mt-14">
    <h2 className="text-2xl">Related guides</h2>
    <div className="mt-6 grid gap-3 md:grid-cols-2">{related.map(item=><Link key={item.slug} href={`/en/guides/${item.slug}`} className="surface-card rounded-xl border border-white/15 p-4 transition-colors hover:border-white/50">
