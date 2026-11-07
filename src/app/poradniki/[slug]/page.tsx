@@ -7,6 +7,7 @@ import { allGuides, getGuide, guideCategory, getCategory, getRelatedGuides, getG
 import { serviceMetadata } from "@/lib/seo";
 import { getEnglishGuide } from "@/lib/guide-i18n";
 import { VatComparison } from "@/components/VatComparison";
+import {blogPostsForGuideCategory} from "@/content/blog";
 
 type Props = { params: Promise<{ slug: string }> };
 export const dynamicParams = true;
@@ -36,6 +37,7 @@ export default async function GuidePage({params}: Props) {
   const currentCategory = guideCategory(guide);
   const nearbyCategories = getGuideCounts().filter(item => item.slug !== currentCategory && item.count > 0).sort((a,b)=>b.count-a.count).slice(0,5);
   const relatedGuides = getRelatedGuides(slug, 10);
+  const connectedBlogPosts=blogPostsForGuideCategory(currentCategory,1);
   const url = `https://bernecki.dev/poradniki/${slug}`;
   const data = {"@context":"https://schema.org", "@graph":[
     {"@type":"Article", "@id":`${url}#article`, headline:guide.title, description:guide.description, articleSection:("category" in guide ? guide.category : getCategory(guideCategory(guide))?.label), mainEntityOfPage:url, inLanguage:"pl-PL", isAccessibleForFree:true, author:isAuto ? {"@type":"Organization",name:"bernecki.dev",url:"https://bernecki.dev/"} : {"@type":"Person", "@id":"https://bernecki.dev/#person", name:"Kacper Bernecki", url:"https://bernecki.dev/"}, image: screenshots.length ? `https://bernecki.dev${screenshots[0].src}` : "https://bernecki.dev/opengraph-image"},
@@ -65,6 +67,12 @@ export default async function GuidePage({params}: Props) {
       {"sources" in guide && guide.sources && <aside className="surface-card mt-12 rounded-xl border border-white/15 p-5"><h2 className="text-lg">Dokumentacja i źródła</h2><ul className="mt-3 space-y-2">{guide.sources.map((source)=><li key={source.url}><a className="text-sm text-[var(--brand-accent)] underline underline-offset-4" href={source.url} target="_blank" rel="noopener noreferrer">{source.label}</a></li>)}</ul></aside>}
     </article>
     <aside className="surface-card mt-14 rounded-2xl border border-white/30 bg-[var(--brand-black)] p-7"><h2 className="text-2xl">Przełóżmy to na Twoją firmę.</h2><p className="mt-4 leading-7 text-white/70">Opisz swój cel, obecne rozwiązanie i termin. Ustalimy, czego potrzebujesz na start.</p><div className="mt-6 flex flex-wrap gap-5"><a href={`mailto:kacper@bernecki.dev?subject=${encodeURIComponent(guide.title)}`} className="rounded-lg brand-action px-5 py-3 text-black">Napisz o projekcie</a><Link href={guide.service} className="py-3 text-white">{guide.serviceLabel} →</Link></div></aside>
+    {connectedBlogPosts.length>0&&<nav aria-label="Temat szerzej na blogu" className="mt-12 border-t border-white/20 pt-9">
+      <h2 className="text-2xl">Temat szerzej na blogu</h2>
+      {connectedBlogPosts.map(post=><Link key={post.slug} href={`/blog/${post.slug}`} className="surface-card mt-5 block rounded-xl border border-white/15 p-5 transition-colors hover:border-white/50">
+        <p className="text-xl text-white">{post.pl.title}</p><p className="mt-3 leading-7 text-white/70">{post.pl.excerpt}</p>
+      </Link>)}
+    </nav>}
     <nav aria-label="Powiązane poradniki" className="mt-14">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <h2 className="text-2xl">Powiązane rozwiązania</h2>
