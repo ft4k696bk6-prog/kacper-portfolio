@@ -1,0 +1,202 @@
+[
+  {
+    "slug": "supabase-email-rate-limit-429",
+    "title": "Supabase Auth: rate limit exceeded przy wysyłaniu kodów",
+    "symptom": "Wielokrotne kliknięcie „Wyślij kod” kończy się odmową kolejnego emaila.",
+    "diagnose": "Sprawdź ograniczenia wysyłki, ilość żądań na użytkownika i czy UI wywołuje signInWithOtp wielokrotnie.",
+    "fix": "Zablokuj ponawianie na czas cooldown i ustaw dostawcę SMTP zgodnie z limitem projektu.",
+    "verify": "Test po odczekaniu limitu wysyła pojedynczy kod, bez lawiny powtórnych żądań.",
+    "source": "https://supabase.com/docs/guides/auth/rate-limits",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-email-not-confirmed",
+    "title": "Supabase Auth: Email not confirmed mimo prawidłowego hasła",
+    "symptom": "Login odrzuca prawidłowe dane, ale konto wymaga potwierdzenia adresu.",
+    "diagnose": "Sprawdź email_confirmed_at w bezpiecznym panelu i konfigurację Confirm email dla projektu.",
+    "fix": "Wyświetl komunikat o weryfikacji i udostępnij bezpieczne ponowne wysłanie emaila.",
+    "verify": "Po potwierdzeniu adresu konto może się zalogować; niepotwierdzone nadal ma ograniczenia.",
+    "source": "https://supabase.com/docs/guides/auth/auth-email-password",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-invalid-login-credentials",
+    "title": "Supabase Auth: Invalid login credentials dla istniejącego konta",
+    "symptom": "Logowanie hasłem kończy się odmową, choć formularz przyjmuje wpisane dane.",
+    "diagnose": "Sprawdź, czy konto istnieje w danym projekcie i czy UI wywołuje właściwą metodę signInWithPassword.",
+    "fix": "Obsłuż bezpiecznie reset hasła oraz sprawdź, czy email nie jest przypadkowo modyfikowany.",
+    "verify": "Poprawny login działa, a przy błędnych danych nie ujawniasz, czy konto istnieje.",
+    "source": "https://supabase.com/docs/guides/auth/passwords",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-captcha-failed",
+    "title": "Supabase Auth: captcha verification failed przy rejestracji",
+    "symptom": "Formularz odrzuca nowego użytkownika mimo poprawnych pól i akceptacji regulaminu.",
+    "diagnose": "Sprawdź konfigurację CAPTCHA, klucz site key i obecność tokenu w żądaniu rejestracji.",
+    "fix": "Wysyłaj aktualny captchaToken w wymaganym parametrze i obsłuż możliwość ponowienia wyzwania.",
+    "verify": "Prawdziwy użytkownik przechodzi test, a brak poprawnego tokenu jest nadal blokowany.",
+    "source": "https://supabase.com/docs/guides/auth/auth-captcha",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-weak-password-rejection",
+    "title": "Supabase Auth: Weak Password blokuje tworzenie konta",
+    "symptom": "Użytkownik nie może ustawić hasła, mimo że ma wystarczającą liczbę znaków.",
+    "diagnose": "Sprawdź aktywne wymagania długości i dodatkowych klas znaków w konfiguracji Auth.",
+    "fix": "Pokaż wymagania przed wysłaniem formularza i waliduj je zgodnie z ustawieniami serwera.",
+    "verify": "Hasło zgodne z polityką przechodzi, a słabe pozostaje odrzucane na serwerze.",
+    "source": "https://supabase.com/docs/guides/auth/passwords",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-oauth-provider-disabled",
+    "title": "Supabase Auth: Unsupported provider po kliknięciu „Google”",
+    "symptom": "Przycisk OAuth zgłasza błąd, chociaż przekierowanie aplikacji jest poprawne.",
+    "diagnose": "Sprawdź, czy wybrany provider jest włączony i ma skonfigurowane dane klienta w Auth Providers.",
+    "fix": "Aktywuj dostawcę po skonfigurowaniu prawidłowych danych OAuth i dozwolonych redirect URI.",
+    "verify": "Przycisk otwiera autoryzację dla właściwego projektu, a wyłączony provider nie działa przypadkowo.",
+    "source": "https://supabase.com/docs/guides/auth/social-login/auth-google",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-oauth-redirect-uri-mismatch",
+    "title": "Supabase OAuth: redirect_uri_mismatch w Google",
+    "symptom": "Po wybraniu logowania przez Google pojawia się odmowa niezgodnego przekierowania.",
+    "diagnose": "Porównaj redirect URI w Google Cloud Console z dokładnym callbackiem projektu Supabase.",
+    "fix": "Skonfiguruj dozwolony adres callbacka z właściwym HTTPS i identyfikatorem projektu.",
+    "verify": "OAuth wraca do właściwego projektu, a nieautoryzowane redirect URI pozostają niedozwolone.",
+    "source": "https://supabase.com/docs/guides/auth/social-login/auth-google",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-session-ssr-missing",
+    "title": "Supabase SSR: serwer nie widzi sesji, choć klient jest zalogowany",
+    "symptom": "Client Component rozpoznaje użytkownika, lecz Server Component zwraca widok gościa.",
+    "diagnose": "Sprawdź przekazywanie cookies, ustawienia klienta server-side i middleware aktualizujący sesję.",
+    "fix": "Użyj zalecanego pakietu SSR i prawidłowego odczytu cookies na serwerze bez wycieku tokenu.",
+    "verify": "Odświeżenie strony zachowuje sesję zarówno po stronie klienta, jak i serwera.",
+    "source": "https://supabase.com/docs/guides/auth/server-side/nextjs",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-getsession-vs-getuser",
+    "title": "Supabase Auth: getSession nie wystarcza do sprawdzenia uprawnień",
+    "symptom": "Endpoint przyjmuje sesję odczytaną z cookies jako ostateczny dowód tożsamości.",
+    "diagnose": "Sprawdź, czy serwer uwierzytelnia użytkownika, czy tylko ufa danym sesji przechowywanym po stronie klienta.",
+    "fix": "W operacjach wymagających zaufania weryfikuj użytkownika serwerowo odpowiednią metodą Auth.",
+    "verify": "Podszyta sesja nie pozwala wykonać operacji, a poprawny użytkownik przechodzi kontrolę.",
+    "source": "https://supabase.com/docs/guides/auth/server-side/nextjs",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-redirect-url-not-allowed",
+    "title": "Supabase Auth: redirect URL not allowed przy resetowaniu hasła",
+    "symptom": "Kliknięcie reset password kieruje na adres, którego projekt Auth nie akceptuje.",
+    "diagnose": "Sprawdź Site URL, Redirect URLs i wartość redirectTo wysyłaną przez frontend.",
+    "fix": "Dodaj dokładny bezpieczny adres aplikacji do listy dozwolonych, bez wildcard dla obcych domen.",
+    "verify": "Reset wraca do właściwego formularza i nie umożliwia otwartego przekierowania.",
+    "source": "https://supabase.com/docs/guides/auth/redirect-urls",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-invite-user-email",
+    "title": "Supabase Auth: zaproszony użytkownik nie może ustawić hasła",
+    "symptom": "Link zaproszenia działa, ale po kliknięciu nie ma poprawnego ekranu ustawiania hasła.",
+    "diagnose": "Sprawdź template email invite i URL callbacka oraz czy token zaproszenia jest przetwarzany.",
+    "fix": "Zaimplementuj obsługę callback i kontrolowany formularz ustawienia hasła dla zaproszonego konta.",
+    "verify": "Zaproszony użytkownik aktywuje konto raz, a zużyty link nie uruchamia ponownej aktywacji.",
+    "source": "https://supabase.com/docs/guides/auth/auth-email-templates",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-signout-all-devices",
+    "title": "Supabase Auth: wylogowanie nie zamyka innych sesji",
+    "symptom": "Po wylogowaniu z telefonu sesja na drugim urządzeniu nadal ma dostęp przez jakiś czas.",
+    "diagnose": "Sprawdź scope użytej metody signOut i rolę access tokenów oraz refresh tokenów.",
+    "fix": "Jeśli wymagasz globalnego wylogowania, użyj właściwego scope i osobnej serwerowej kontroli dla wrażliwych operacji.",
+    "verify": "Po wygaśnięciu dostępu inne sesje nie mogą go odnowić, a nowe logowanie wymaga autoryzacji.",
+    "source": "https://supabase.com/docs/reference/javascript/auth-signout",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-password-recovery-no-session",
+    "title": "Supabase: password recovery otwiera stronę bez sesji",
+    "symptom": "Po kliknięciu linku zmiany hasła strona nie rozpoznaje trybu recovery.",
+    "diagnose": "Sprawdź hash fragment lub code w callbacku, zależnie od użytego flow, i czy link nie jest konsumowany dwukrotnie.",
+    "fix": "Obsłuż prawidłowo odzyskanie sesji lub wymianę code, potem pozwól ustawić hasło przez Auth.",
+    "verify": "Nowe hasło działa, a przypadkowy URL bez ważnego tokenu nie otwiera formularza zmiany.",
+    "source": "https://supabase.com/docs/guides/auth/passwords",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-mfa-aal2-required",
+    "title": "Supabase MFA: access token ma AAL1 zamiast AAL2",
+    "symptom": "Działanie wymagające MFA zwraca odmowę mimo poprawnego loginu i hasła.",
+    "diagnose": "Sprawdź aktualny assurance level sesji i czy użytkownik zakończył challenge drugiego składnika.",
+    "fix": "Po pomyślnym verify MFA odśwież kontekst sesji i ponów operację kontrolowaną na serwerze.",
+    "verify": "Zwykła sesja AAL1 jest blokowana tam, gdzie wymagane jest AAL2, a zweryfikowana działa.",
+    "source": "https://supabase.com/docs/guides/auth/auth-mfa",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-mfa-totp-time-invalid",
+    "title": "Supabase MFA: kod TOTP jest stale odrzucany",
+    "symptom": "Aplikacja autoryzująca pokazuje kod, ale Supabase zwraca invalid challenge.",
+    "diagnose": "Sprawdź, czy zegar urządzenia ma poprawny czas i czy kod pochodzi z właściwego konta MFA.",
+    "fix": "Zacznij nowe wyzwanie i użyj aktualnego kodu z aplikacji, nie przechowując go w logach.",
+    "verify": "Weryfikacja działa dla bieżącego kodu i pozostaje odporna na stare, zużyte kody.",
+    "source": "https://supabase.com/docs/guides/auth/auth-mfa/totp",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-admin-createuser-service-role",
+    "title": "Supabase Admin: createUser zwraca odmowę dla anon key",
+    "symptom": "Funkcja administracyjna próbuje tworzyć użytkowników za pomocą klienta publicznego.",
+    "diagnose": "Sprawdź, czy wywołanie admin API jest wykonywane w przeglądarce i jakiej roli używa token.",
+    "fix": "Przenieś admin API do zaufanego backendu z kluczem serwisowym i własną kontrolą uprawnień.",
+    "verify": "Tylko uprawniony administrator może tworzyć konta, a publiczny klient nie widzi klucza serwisowego.",
+    "source": "https://supabase.com/docs/reference/javascript/auth-admin-createuser",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-user-metadata-not-roles",
+    "title": "Supabase Auth: rola admin z user_metadata nie zabezpiecza API",
+    "symptom": "Aplikacja uznaje wartość user_metadata.role podaną przez klienta za uprawnienie administratora.",
+    "diagnose": "Sprawdź, czy użytkownik może sam zmienić user_metadata i czy endpoint ufa tym polom.",
+    "fix": "Przenieś role do zabezpieczonej tabeli lub kontrolowanych claimów zarządzanych po stronie serwera.",
+    "verify": "Zmiana własnego profilu nie nadaje możliwości zarządzania innymi użytkownikami.",
+    "source": "https://supabase.com/docs/guides/database/postgres/row-level-security",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-password-update-reauth",
+    "title": "Supabase Auth: updateUser hasło wymaga ponownego uwierzytelnienia",
+    "symptom": "Zalogowany użytkownik nie może zmienić hasła w panelu konta.",
+    "diagnose": "Sprawdź politykę secure password change i czy sesja ma aktualne potwierdzenie tożsamości.",
+    "fix": "Zrealizuj przewidziany proces reauthentication przed updateUser zamiast wyłączać zabezpieczenie.",
+    "verify": "Poprawnie uwierzytelniony użytkownik zmienia hasło, a przejęta stara sesja ma ograniczone możliwości.",
+    "source": "https://supabase.com/docs/guides/auth/passwords",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-anonymous-rls-access",
+    "title": "Supabase Auth: anonymous user widzi zasoby zwykłego konta",
+    "symptom": "Aplikacja traktuje anonimowo zalogowane konto jako pełne konto authenticated.",
+    "diagnose": "Sprawdź typ sesji, claim is_anonymous i polityki RLS dla obiektów wymagających stałego konta.",
+    "fix": "Dopasuj polityki do typu konta oraz wdrożenie zamiany anonimowej sesji na pełną.",
+    "verify": "Tymczasowe konto nie odczytuje prywatnych danych użytkownika z pełną weryfikacją.",
+    "source": "https://supabase.com/docs/guides/auth/auth-anonymous",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-access-token-claims-mismatch",
+    "title": "Supabase JWT: nowe role nie pojawiają się w aktywnym tokenie",
+    "symptom": "Po zmianie roli w bazie użytkownik nadal otrzymuje odmowę lub zachowuje stare uprawnienie.",
+    "diagnose": "Sprawdź źródło claimów i czas wystawienia access tokena względem zmiany uprawnienia.",
+    "fix": "Wymuś poprawne odświeżenie sesji, a krytyczne autoryzacje kontroluj po stronie bazy na aktualnych danych.",
+    "verify": "Zmiana roli działa zgodnie z ustaloną polityką bezpieczeństwa, bez polegania na starym JWT.",
+    "source": "https://supabase.com/docs/guides/auth/auth-hooks/custom-access-token-hook",
+    "category": "supabase-bazy"
+  }
+]

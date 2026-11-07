@@ -57,7 +57,10 @@ for(const folder of ["src/content","src/content/pseo"]){
 }
 // Offline pSEO is published by deterministic, versioned cases; protect it from AI topic duplication.
 for (const offlineFile of [
- "nextjs-react.json","supabase-postgres.json","vercel-github.json","seo-wordpress.json","meta-mail-api.json"
+ "nextjs-react.json","supabase-postgres.json","vercel-github.json","seo-wordpress.json","meta-mail-api.json",
+ "batch2-react-typescript.json","batch2-nextjs-router.json","batch2-supabase-auth.json",
+ "batch2-supabase-storage.json","batch2-github-vercel.json","batch2-google-seo.json",
+ "batch2-wordpress.json","batch2-meta-ads.json","batch2-http-api.json","batch2-dns-crm.json"
 ]) {
  const cases = read("src/content/pseo/offline/" + offlineFile);
  for (const entry of cases) {
