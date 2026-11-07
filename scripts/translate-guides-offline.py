@@ -123,6 +123,42 @@ if len(result) != len(source):
     raise SystemExit(f"Incomplete translation corpus: {len(result)} of {len(source)} source pages")
 if len(polish_residue) > max(3, len(source)//20):
     raise SystemExit(f"Untranslated Polish paragraphs detected: {polish_residue[:10]}")
+# Keep manually edited SEO headlines stable while their Polish source remains unchanged.
+# This is a small editorial layer, not a claim of human review of the full translation.
+editorial_path = Path("src/content/pseo/english-title-overrides.json")
+editorial = json.loads(editorial_path.read_text("utf8")) if editorial_path.exists() else {}
+
+glossary = [
+    (r"\\bSubabase\\b", "Supabase"),
+    (r"\\bSubbase\\b", "Supabase"),
+    (r"\\bConversations API\\b", "Conversions API"),
+    (r"\\bleady\\b", "leads"),
+    (r"\\bleades\\b", "leads"),
+    (r"\\bdefloyment\\b", "deployment"),
+    (r"\\bdefloy\\b", "deploy"),
+    (r"\\btraders\\b", "sales representatives"),
+    (r"\\btrader\\b", "sales representative"),
+    (r"\\bmerchants\\b", "sales representatives"),
+    (r"\\bmerchant\\b", "sales representative"),
+    (r"\\bEscapulate\\b", "Escape"),
+    (r"\\bbushes\\b", "garbled characters"),
+    (r"\\bunique contrast\\b", "unique constraint"),
+]
+def polish_technical_terminology(value):
+    for pattern, replacement in glossary:
+        value = re.sub(pattern, replacement, value, flags=re.IGNORECASE)
+    return value
+
+for slug, record in result.items():
+    for field in ["title", "description", "intro", "serviceLabel"]:
+        record[field] = polish_technical_terminology(record[field])
+    for section in record["sections"]:
+        section["title"] = polish_technical_terminology(section["title"])
+        section["paragraphs"] = [polish_technical_terminology(p) for p in section["paragraphs"]]
+    headline = editorial.get(slug, {})
+    if headline.get("sourceHash") == record["sourceHash"] and headline.get("title"):
+        record["title"] = headline["title"]
+
 dest_path.parent.mkdir(parents=True, exist_ok=True)
 dest_path.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf8")
 print(f"Done: {len(result)} English versions, {translated_count} newly translated, {len(cache)} unique segments.",flush=True)
