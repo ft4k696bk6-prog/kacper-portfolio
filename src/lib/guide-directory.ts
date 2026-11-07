@@ -20,6 +20,8 @@ export const guideCategories = [
   { slug: "wordpress", label: "WordPress", description: "Wtyczki, konfiguracja, adresy i problemy stron WordPress." },
   { slug: "strony-ux", label: "Strony i UX", description: "Wygląd mobilny, obrazy, nawigacja, szybkość i dostępność." },
   { slug: "automatyzacje", label: "Automatyzacje", description: "Automatyczne procesy, harmonogramy, integracje i alerty." },
+  { slug: "branze-pkd", label: "Pomysły na działalność i PKD", description: "Przykłady fryzjera, barbera, studia tatuażu i wykończeniówki: PKD, podatki, koszty i marże." },
+  { slug: "spolki-cit", label: "Spółki, CIT i wypłaty", description: "CIT 9% i 19%, dywidenda, estoński CIT, umowy i rozliczenia wspólników." },
   { slug: "biznes-podatki", label: "Biznes i podatki", description: "Edukacja dla przedsiębiorców: podstawy VAT, stawki, dostawcy, koszty i zakładanie firmy." },
   { slug: "inne", label: "Pozostałe poradniki", description: "Praktyczne rozwiązania problemów z projektami internetowymi." }
 ] as const;
