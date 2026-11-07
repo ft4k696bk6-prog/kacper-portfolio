@@ -1,0 +1,694 @@
+{
+  "api-http-408-request-timeout": {
+    "sourceHash": "161e52577cdd30081663c86a40aa62190d5e099d774a22875645d760a705adae",
+    "title": "HTTP 408 Request Timeout During a Slow Upload"
+  },
+  "api-http-409-resource-conflict": {
+    "sourceHash": "bc43cac23d54bcf3b3e98922ea03aa7cd531f0fcc6b48e8d5bc7719438d685dd",
+    "title": "HTTP 409 Conflict When Creating an Existing Record"
+  },
+  "api-http-415-unsupported-media": {
+    "sourceHash": "0d7e37b2d5a73ab5714203cf396cd0da2adce81466d46bf84f1b6130709ec7bc",
+    "title": "HTTP 415 Unsupported Media Type When Submitting a Form"
+  },
+  "api-http-422-validation-error": {
+    "sourceHash": "e843a57b0f2633d07e47161eb2eb50bfc75a409cafee1f4d1ea8b940ead8a1ab",
+    "title": "HTTP 422 Unprocessable Content Despite Valid JSON"
+  },
+  "api-http-429-retry-after": {
+    "sourceHash": "d3a06690a4224bd17b50a36f7895c2f00471e54a69fa12d61dfee2b136c58d3c",
+    "title": "HTTP 429 Too Many Requests: How to Retry Safely"
+  },
+  "api-http-500-unhandled-exception": {
+    "sourceHash": "170812dea913fd42198f9505e98886938d107f0a72ad403e46506fe51227e334",
+    "title": "HTTP 500 Internal Server Error: How to Find the Cause"
+  },
+  "api-multipart-boundary-missing": {
+    "sourceHash": "01f0a8909832d7ffc401e7900ea07d33acaa493060a1142aea81c4b2a2551cba",
+    "title": "Multipart Upload Fails: Missing Boundary in Content-Type"
+  },
+  "api-sse-response-buffered": {
+    "sourceHash": "ca179d4383d39038f1adb1652fec1b3ab1adc99b756941c6fa0330aab5eda802",
+    "title": "Server-Sent Events Arrive All at Once: Fix Response Buffering"
+  },
+  "asystent-ai-wymysla-projekty-portfolio": {
+    "sourceHash": "baeb9cb9b6bd3f668198c6c41cfdf50e218a6bc713bca2a4a583c81d4992ee51",
+    "title": "AI Portfolio Assistant Invents Projects: How to Prevent Hallucinations"
+  },
+  "conversions-api-event-match-quality-spada": {
+    "sourceHash": "2902dc6cf88a472c452e8d62a7f02146322e2e83844b2581bb77c13e9e0334f8",
+    "title": "Meta Conversions API: Event Match Quality Is Dropping"
+  },
+  "crm-admin-role-possible-bypass-endpoint": {
+    "sourceHash": "7207c95c8b76192b4af1ea5609b847b904881645eba1ffee55ca53404ac9add9",
+    "title": "CRM Admin Role: How to Detect and Fix Authorization Bypasses"
+  },
+  "crm-assignment-race-two-salespeople": {
+    "sourceHash": "cfa7ec0d8fbec4234417a8bf4a21d3076c6ea97e96f7811c3d45fe1b9c27de4a",
+    "title": "CRM: Two Sales Reps Claim the Same Lead"
+  },
+  "crm-callback-timezone-dst": {
+    "sourceHash": "7f7cfd5654b7a2e21753bceda812c6d42deb8663cdea184d50fee08a6d3af83d",
+    "title": "CRM: A Callback Scheduled for 10:00 Appears One Hour Later"
+  },
+  "crm-csv-formula-injection": {
+    "sourceHash": "56ccd0f810353e752213f4e50aa16e7ce4da9f329ddc827798ecb3f914887795",
+    "title": "CRM: Prevent Formula Injection in CSV Exports"
+  },
+  "crm-csv-utf8-polish-characters": {
+    "sourceHash": "170139fd8b5ae2b9a374d6528e56b61ab055e3eaa9f8ccc92d6653fa13bba8de",
+    "title": "CRM: CSV Export Shows Garbled Polish Characters"
+  },
+  "crm-dashboard-count-diff-filter": {
+    "sourceHash": "f0146503ec102ccb04b27c22f2245e80c8330a27cf858dfca8a3e4a4b40ea7c9",
+    "title": "CRM Shows 180 Leads but Only 120 on the List"
+  },
+  "crm-duplikaty-leadow-webhook": {
+    "sourceHash": "03c4de1f7b3bd409408b121fad99a457ef9f6afae926cd4cea8ac8128f779ae3",
+    "title": "CRM Creates Duplicate Leads from One Form Submission"
+  },
+  "crm-eksport-leadow-zgody-i-uprawnienia": {
+    "sourceHash": "df3b84805f96fac24df5e671badfee83d9b1ac85a38b8ce4f75777c956819dd4",
+    "title": "CRM Lead Export: Consent, Permissions and Data Protection"
+  },
+  "crm-file-attachment-preview-unauthorized": {
+    "sourceHash": "4b478bf9cd018a26d10f5322ac099f52a818885ea1a039f36620a7fe942cc290",
+    "title": "CRM: Attachment Preview Accessible Without Login"
+  },
+  "crm-filtry-ukrywaja-leady": {
+    "sourceHash": "9b233649fe35ebe9ff43f486c90196e433c0f768efccc213de03030b006f3f5b",
+    "title": "CRM Leads Disappear After Changing Filters"
+  },
+  "crm-google-drive-zalaczniki-token-wygasl": {
+    "sourceHash": "245ca39a1a3fde2f24b3f6e36f735909a123a6ab8bb85f09d2ce2b4733370ad5",
+    "title": "Google Drive Integration in CRM Stops Working: Expired or Revoked Token"
+  },
+  "crm-lead-niewidoczny-po-usunieciu-blokady-rls": {
+    "sourceHash": "6065be7fa456cac4690f03c874b3445e1e3460e35c43d3b4ae69d988acc2efcf",
+    "title": "CRM: Sales Rep Cannot See a Lead After It Is Unblocked"
+  },
+  "crm-lead-pagination-stale-cursor": {
+    "sourceHash": "988124ce0825eeba03729740b02698ad39e4a393238b7a10d4848523287ddf17",
+    "title": "CRM Pagination Skips Leads When Scrolling"
+  },
+  "crm-lead-stage-history-missing": {
+    "sourceHash": "86a51b2805a628e568c4e01d53a08973d23a01556ed374ec1df86dda60c8b41d",
+    "title": "CRM Status Changes but the Audit Trail Does Not Record the Author"
+  },
+  "crm-licznik-leadow-nie-zgadza-sie-z-lista": {
+    "sourceHash": "18fcfe8dceeff0bf4ceec8337807ff333e561f76b0d9da2cb2efbbde25c69131",
+    "title": "CRM Lead Count Does Not Match the Visible List"
+  },
+  "crm-na-zamowienie-czy-gotowy": {
+    "sourceHash": "07580efe1992c477987057084dc1e21147609a8e35733f6a8b0f8b35c843abd4",
+    "title": "Custom CRM or Off-the-Shelf System: Which Is Better?"
+  },
+  "crm-odblokowany-lead-nadal-niewidoczny": {
+    "sourceHash": "fb41012f1c2012ec1c939896b08035ae52438614c5dd33a263c50647915756b4",
+    "title": "CRM: Unblocked Lead Is Still Invisible to the Sales Rep"
+  },
+  "crm-phone-e164-invalid-country-code": {
+    "sourceHash": "f8cccc9022671670c68019c109f382db7bc5f6d98f2bfff94bb16a9fb7a55c78",
+    "title": "CRM: Polish Phone Number Fails in Automated Calling"
+  },
+  "crm-powtorne-przypisanie-tworzy-duplikat": {
+    "sourceHash": "c6c31cdcd4acbc0e5bbe9a76fd9005f4da3f22230fcdcab0856360f8dc6db1e9",
+    "title": "CRM: Reassigning a Lead Creates a Duplicate"
+  },
+  "crm-przypisanie-leadow-nie-aktualizuje-listy": {
+    "sourceHash": "c17981abba1ce0c86b6c863598a3a02d61cb5994d48bd3c1ecf41d7e5bc8c6e1",
+    "title": "CRM: Assigned Lead Is Not Visible to the Employee"
+  },
+  "crm-pwa-powiadomienia-nie-przychodza": {
+    "sourceHash": "38e576bc6dde13278b88357da7186349a7edad8811a88dd943d7ffe06eeec191",
+    "title": "CRM PWA: Push Notifications Do Not Arrive on the Phone"
+  },
+  "crm-termin-montazu-nie-widoczny": {
+    "sourceHash": "8e8f2d8737a3f2e70f5fb03c6205f605c7576b11c866dc40e1252ffe99ef3665",
+    "title": "CRM: Installation Date Is Not Visible to the Sales Rep"
+  },
+  "dns-dkim-selector-not-found": {
+    "sourceHash": "4d130dbe4bfb8cbc5402e0b98f2b2d36daeafe320fbe379ae7bc125c675ff535",
+    "title": "DKIM Selector Not Found After Switching Email Providers"
+  },
+  "dns-dmarc-report-mailbox-bounces": {
+    "sourceHash": "7fe0087761f8106da84a5e41120fe9e098841d2ce651c201d6533073ba86f074",
+    "title": "DMARC Aggregate Reports Are Not Arriving"
+  },
+  "dns-dnssec-servfail-after-ns-change": {
+    "sourceHash": "743fb424b7639545bc97b973a8b0195dc1e967b3255b64ebe1dd73ec5d5f513d",
+    "title": "DNSSEC SERVFAIL After Changing Nameservers"
+  },
+  "dns-spf-too-many-lookups": {
+    "sourceHash": "552699a7d339f75e6049d0186a60952036517d7f545df57debf3f44e295df1cf",
+    "title": "SPF PermError: DNS Lookup Limit Exceeded"
+  },
+  "domena-email-spf-dkim-dmarc-problemy": {
+    "sourceHash": "756aac83575e88ee2a7ac8ac492db53a1e29d5bf55a44e6861b6a8d8f5d60dea",
+    "title": "SPF, DKIM and DMARC: Why Business Emails Go to Spam"
+  },
+  "email-mail-forward-loop": {
+    "sourceHash": "a641c5d5c0c3f68770ca8b8cb7f2146fbea4000a0523832742b0a733154c6163",
+    "title": "Email Forwarding Loop Between Two Mailboxes"
+  },
+  "email-mx-priority-backup-delivery": {
+    "sourceHash": "fa95edd167cdacfec759f64992e4cc0d4408b546034bd218c1c812f733bf72e5",
+    "title": "MX Priority: Mail Reaches an Obsolete Backup Server"
+  },
+  "email-smtp-connection-587-timeout": {
+    "sourceHash": "445f4f3f9e85fa1df26ae44a0299752db5dc3f0f480d3d5559f6a4736819de79",
+    "title": "SMTP Connection Timeout on Port 587"
+  },
+  "facebook-ads-jak-obliczyc-sredni-cpl-kampanii": {
+    "sourceHash": "9d8295ea584e78184eb84eb34f5aa2a108fce7309044c877b87d5577b38bdb6a",
+    "title": "How to Calculate Average CPL Across Meta Ads Campaigns"
+  },
+  "facebook-lead-ads-integracja-z-crm": {
+    "sourceHash": "d6f0a9e7c0b3a998f49be4178986c4c110da71c18aeb721ab280cfc65782f1ae",
+    "title": "Facebook Lead Ads to CRM Integration: How to Avoid Losing Leads"
+  },
+  "formularz-meta-ads-czy-landing-page": {
+    "sourceHash": "ea40fdeb45eb24ec766784df87d589bcfa4558c381fdb9ff39a6a76ecdfc8589",
+    "title": "Meta Lead Form vs. Landing Page: Which Works Better?"
+  },
+  "github-actions-checkout-shallow-history": {
+    "sourceHash": "e5e3ae9fd50d58fc3a992ce296ff18a54d7002029c522e2539243bf561be2cb4",
+    "title": "GitHub Actions: git merge-base Fails with a Shallow Clone"
+  },
+  "github-actions-concurrency-cancel-main": {
+    "sourceHash": "27bcb1b39dc6f0a33d5696b5bc402f9031c4410908507b44a1220276eaf597a0",
+    "title": "GitHub Actions: Concurrency Settings Cancel the Wrong Build"
+  },
+  "github-actions-env-secret-empty": {
+    "sourceHash": "00fb28a128f69212f21b589be91a8bd9e151657f896ac138961647db27f08baf",
+    "title": "GitHub Actions: Secret Environment Variable Is Empty"
+  },
+  "github-actions-fork-secrets-missing": {
+    "sourceHash": "ff056db190d6fabc6b5e44a9b03d76fb1a616a8baee104e39eb02af2d12686c1",
+    "title": "GitHub Actions: Secrets Unavailable in Forked Pull Requests"
+  },
+  "github-actions-job-stuck-queued": {
+    "sourceHash": "badb5b8542ca6344a04ebde448356aa1a0b3e42b41c07093d0327213f4b45e8f",
+    "title": "GitHub Actions: Job Stuck in Queued State"
+  },
+  "github-actions-matrix-fail-fast-cancels": {
+    "sourceHash": "b3eaa7cd003f7a472cc184515c76ddaa81ff23a20c366dd9c3c31cd0719211e5",
+    "title": "GitHub Actions: Matrix Fail-Fast Cancels Remaining Tests"
+  },
+  "github-actions-merge-conflict-automation": {
+    "sourceHash": "9784646b3d0027b547f0794bbafb8aa58f07c702c3cb08c855472eb9bc340297",
+    "title": "GitHub Actions: Automated Commit Conflicts with Changes to Main"
+  },
+  "github-actions-node-cache-misses": {
+    "sourceHash": "45027a0c36b2cae11cb01bc64083adcfa7d8fcba51d382d3bae88bf0e7f51aec",
+    "title": "GitHub Actions: npm Cache Misses on Every Run"
+  },
+  "github-actions-schedule-not-starting": {
+    "sourceHash": "269ac54915ca6b35796eb906c634b7613fe9303fd44bcf8c069801507d86cdfe",
+    "title": "GitHub Actions: Scheduled Workflow Is Not Running"
+  },
+  "google-business-weryfikacja-wideo-brak-filmu": {
+    "sourceHash": "e056b278a21e0891512df496912d1c422c5a0f5b75058ce9b20b03bce5f84e6c",
+    "title": "Google Business Profile Requires Video Verification: What Can You Do?"
+  },
+  "google-business-wizytowka-bez-adresu-weryfikacja": {
+    "sourceHash": "c8ffbecbb51d7cd664af784e7f09a376715d540f6bcb2b5d521cb03baf3a14ee",
+    "title": "Google Business Profile Without a Public Address: Verification Guide"
+  },
+  "google-search-console-nieprawidlowy-adres-mapy-witryny": {
+    "sourceHash": "dac50d8de7461f537a44419bc1fd8209899ec1d9d28710e209bd823a2fd7ab4e",
+    "title": "Google Search Console: Invalid Sitemap Address"
+  },
+  "google-zeskanowano-ale-nie-zindeksowano": {
+    "sourceHash": "c5a9c2ca36eaa925d9217737adad6a813cf90cd05b6f74129fd1149e5699b0d3",
+    "title": "Google: Crawled – Currently Not Indexed"
+  },
+  "icloud-custom-domain-nie-ma-hasla": {
+    "sourceHash": "96d452e626e1100fd60a56b52ea46b3ecf8b8060f696cc76349af795ff4a7bdb",
+    "title": "iCloud Custom Email Domain Has No Separate Password: How to Set Up Mail"
+  },
+  "icloud-hide-my-email-nie-przekazuje": {
+    "sourceHash": "5781c237535460d3af73c46b293d8efb85b0e0211e83bf2010cabc90a35465cd",
+    "title": "Apple Hide My Email Is Not Forwarding Messages"
+  },
+  "mail-icloud-custom-domain-missing-address": {
+    "sourceHash": "1f806c52203dc8398e68458971dffd804a356e2608d7ae7d7018ea40e3c21ab4",
+    "title": "iCloud Mail: Custom Domain Is Connected but Address Receives No Mail"
+  },
+  "mail-icloud-hide-my-email-forwarding": {
+    "sourceHash": "7e73e12e1c71ebed015b19e35be84a7315c57ea7379db60a5a141d749a23f089",
+    "title": "iCloud Hide My Email: Forwarding Is Not Working"
+  },
+  "meta-account-restricted-security-check": {
+    "sourceHash": "2f259d9b2bd88e504cbef6d0a2661cdab720032e9e90b9ddc6a7cc93a978bcf5",
+    "title": "Meta Ads Account Restricted After a Security Review"
+  },
+  "meta-ad-catalog-products-rejected": {
+    "sourceHash": "64e7ddd8979d693833516b7a07160c13b8bb93c400d8764ee01fd7d36cc42964",
+    "title": "Meta Catalog Rejects Products Because of Their Images"
+  },
+  "meta-ad-rejected-policy": {
+    "sourceHash": "18ccde4fee757a41c1a7d55e484f7a14585bdfb13c5acf7de55f3f5b3934fa43",
+    "title": "Meta Ads: Ad Rejected for Policy Violations"
+  },
+  "meta-ads-audience-overlap": {
+    "sourceHash": "1edee8acdc11c9ffbce52c5b9c1c5d4151a81202be2d0315b39245763151ce72",
+    "title": "Meta Ads: Ad Sets Compete for the Same Audience"
+  },
+  "meta-ads-budget-spent-no-impressions": {
+    "sourceHash": "8ea36894bccf462d921a5c85adc77863eeb9a32e3338626e050c23ab7092026a",
+    "title": "Meta Ads: Campaign Is Active but Has No Impressions"
+  },
+  "meta-ads-creative-text-overlay-crop": {
+    "sourceHash": "0929fc8233397d1cef713c02b3942857cc2e9a1e191ef7c45b015a8c8c6292a4",
+    "title": "Meta Ads: Text Gets Cropped in Instagram Stories"
+  },
+  "meta-ads-instagram-account-disconnected": {
+    "sourceHash": "e501c8bb07b0e41be75efe0f524c1378807a5ac2f1aa87c26ace254d32818bf0",
+    "title": "Meta Ads: Instagram Account Unavailable When Creating an Ad"
+  },
+  "meta-ads-pixel-event-priority-conflict": {
+    "sourceHash": "a4108138912328a36943a446fc2baf91f6676d81044c747a4304a388e0fdf80e",
+    "title": "Meta Pixel: Purchase Event Is Not Prioritized Correctly"
+  },
+  "meta-ads-reklama-aktywna-zero-wyswietlen": {
+    "sourceHash": "6a74eaa9522cc293892664427a4262fcc2899c02a6795839149e91c35a1be44c",
+    "title": "Meta Ads: Ad Is Active but Has Zero Impressions"
+  },
+  "meta-ads-reklama-odrzucona-co-robic": {
+    "sourceHash": "c7b77039bdacea5464456f1940c62869c335b865cde30cd6ab9feafe8a1073e3",
+    "title": "Meta Ads: Advertisement Rejected — How to Appeal"
+  },
+  "meta-ads-report-attribution-diff": {
+    "sourceHash": "c39c03c0bbe9c9b2da969d9bdbf6f4618bb14d49c20f6441334bd27ec9eb33ef",
+    "title": "Meta Ads Reports More Conversions Than Your CRM"
+  },
+  "meta-adset-no-delivery-learning-limited": {
+    "sourceHash": "6016f87d39a32f7937a5228e6c5f83a419a5846d33c50ec60a0d396d678e7dd7",
+    "title": "Meta Ads: Ad Set Is Stuck in Learning Limited"
+  },
+  "meta-capi-test-event-code-no-events": {
+    "sourceHash": "2b0af55067dfa7aaf10428effb767c1781bbcb85f7e0e0d5724dcbd6cde3d91b",
+    "title": "Meta Conversions API: Test Events Shows Nothing Despite HTTP 200"
+  },
+  "meta-duplikaty-pixel-conversions-api": {
+    "sourceHash": "f9a6991784b92e3591ba1a96b70b97c015830c7e10c4ff5cdfc3e76cf8dc1e29",
+    "title": "Meta Pixel and Conversions API Count the Same Conversion Twice"
+  },
+  "meta-lead-ads-access-token-expired": {
+    "sourceHash": "20beef724696837ab2b202e2cb42af9ef2654be8354793788ec4d543f754bc3d",
+    "title": "Meta Lead Ads: Expired Access Token Stops CRM Lead Delivery"
+  },
+  "meta-lead-ads-formularz-jest-crm-pusty": {
+    "sourceHash": "2e074ce4202d153d28a7de72fa51a1afb9e7d03a640e231ee8646122f190e9b6",
+    "title": "Meta Leads Are Missing from CRM: Integration Checklist"
+  },
+  "meta-leadads-access-no-download": {
+    "sourceHash": "9491baa9ed4a5255c9aaf7ec2997db3f8a8d2c4cfb1faae403ff30b613719a9c",
+    "title": "Meta Lead Ads: Form Has Leads but Download Is Blocked"
+  },
+  "meta-leadform-quality-vs-volume": {
+    "sourceHash": "b16732feeb319b8739646167224de3790d9f80e33feb0fa74c23c709cfea8695",
+    "title": "Meta Lead Ads: Low-Cost Forms Produce Poor-Quality Leads"
+  },
+  "meta-leady-duplikaty-po-retry-webhook": {
+    "sourceHash": "8761cf814d436ed96349e0fd89bdf8e2317dd380c018527e7755fccb90f5b131",
+    "title": "Meta Webhook Retry Creates Duplicate Leads in CRM"
+  },
+  "meta-nie-widze-strony-w-menadzerze-reklam": {
+    "sourceHash": "ab425d5bbdededc11dd226ca1da84fd079013ea2cd5cd61b7d269d9f1e2bb002",
+    "title": "Meta Ads Manager: Business Page Is Missing from Ad Identity"
+  },
+  "meta-pixel-capi-brak-zdarzen": {
+    "sourceHash": "09a563ad3a6c6bab242948799dd9943ec687e975fe21b206cfed2324d3d39c57",
+    "title": "Meta Pixel and Conversions API: Missing Events in Events Manager"
+  },
+  "meta-reklama-edycja-tekstu-brak-efektu": {
+    "sourceHash": "0656aaf154327fcf6838c248a7a212ece43b8bd193347e93562c9407b9187915",
+    "title": "Meta Ads: Edited Ad Copy Is Not Showing"
+  },
+  "mobile-menu-biale-tlo-zmiana-stylu": {
+    "sourceHash": "4c139ee539ebed6e46d7911618f2dffd5b127842c5be0223f6250009705a6966",
+    "title": "Mobile Menu Has a White Background on a Dark Website"
+  },
+  "mobile-tekst-nachodzi-na-twarz-zdjecie": {
+    "sourceHash": "996c48aaf8c3c37e4c97bec39d5fb320fb0aef67f2a23b3d57603dd3654e533f",
+    "title": "Mobile Hero Text Overlaps the Person in the Photo"
+  },
+  "mobile-viewport-przeskakuje-przewijanie": {
+    "sourceHash": "4ed3e53d80c995f35256c89f660a822f49bf5b50851e12fcee62edb3329a7aa4",
+    "title": "Mobile Viewport Jumps During Scrolling: CSS Fixes"
+  },
+  "next-image-obraz-znika-po-resize": {
+    "sourceHash": "63572197f639d5d1d396b888626a7f94293fb5ecd647d4a2d334d00945a352f3",
+    "title": "Next.js Image Disappears or Resizes Incorrectly"
+  },
+  "nextjs-basepath-static-assets-404": {
+    "sourceHash": "c9988ce413436022c229bda4af62ffa69d6f281cf9a9c95ea834ad1375a18deb",
+    "title": "Next.js: Static Assets Return 404 After Setting basePath"
+  },
+  "nextjs-form-server-action-origin-mismatch": {
+    "sourceHash": "81ef5b8ace931ebe2c7f9dd4fd135802cbac2c92b1f4883db0dfe522853a6ffa",
+    "title": "Next.js Server Action: Origin Mismatch Error"
+  },
+  "nextjs-hydration-failed-jak-naprawic": {
+    "sourceHash": "10d6f7c0ee53b3fe8c2ff8bd7b283282ce0c1a7f4384178515f716b597910103",
+    "title": "Next.js: How to Debug and Fix Hydration Failed"
+  },
+  "nextjs-next-redirect-caught-exception": {
+    "sourceHash": "4867e3b869bc94e126933297d8e95e26965200b9f5d9b6aecd1fd8ac1e1f3ace",
+    "title": "Next.js: NEXT_REDIRECT Is Caught by try/catch"
+  },
+  "nextjs-output-export-dynamic-route-error": {
+    "sourceHash": "9ef5e860b62e5131608c0f7fb62c331c48e1b65635f4d59d8b4ecb3df70e42ad",
+    "title": "Next.js Static Export: Dynamic Route Missing generateStaticParams"
+  },
+  "nextjs-revalidatepath-wrong-url": {
+    "sourceHash": "c7209aefd49fed979957fcc1db3bac65d145ade5835c0b2fbfe25acf4629846e",
+    "title": "Next.js revalidatePath Does Not Refresh a Specific Page"
+  },
+  "nextjs-trailing-slash-redirect-loop": {
+    "sourceHash": "6de80003badd0baf7630a30a4639890bab16f8f2661ea0d66da3c67abc40b609",
+    "title": "Next.js trailingSlash Causes a Redirect Loop"
+  },
+  "node-npm-ci-eresolve-lockfile-bledy-build": {
+    "sourceHash": "96a158a225d8e7e772b00e2421b39ea184248960b205fed58d106292a5484b9b",
+    "title": "npm ci Fails in CI Because the Lockfile Is Incompatible"
+  },
+  "pixel-dwukrotne-zliczanie-potwierdzenie": {
+    "sourceHash": "fccbebf6fa2981ba6b489ba5411697628385c5c8632d6cc86645d2f62fe51c3a",
+    "title": "Pixel and Conversions API count the same transaction twice on the confirmation page"
+  },
+  "postgres-22001-string-too-long": {
+    "sourceHash": "e2d90ad21af24df425243f4c85012c983e32d0a401920131c8ae60d9086a7d2e",
+    "title": "PostgreSQL 22001: Value Too Long for Column Type"
+  },
+  "postgres-23505-duplicate-key": {
+    "sourceHash": "010c1471d39a7e0194b2aee052c313ace08f76911e15cc7d45a0a62a942cc0ff",
+    "title": "PostgreSQL 23505: Duplicate Key Violates Unique Constraint"
+  },
+  "postgres-40001-serialization-failure": {
+    "sourceHash": "2399868822f2c444e5fc05868aa5593a4982fee3c542e9e577c414a3babea6e7",
+    "title": "PostgreSQL 40001: Serialization Failure from Concurrent Updates"
+  },
+  "postgres-40p01-deadlock-detected": {
+    "sourceHash": "a50cc702ac69ad1f57ba82aea482ec21b8e2c79fba27548f958e8e3237fc5ea3",
+    "title": "PostgreSQL 40P01: Deadlock Detected During Concurrent Writes"
+  },
+  "react-effect-interval-memory-leak": {
+    "sourceHash": "89efd4e23e2304fb2ed75ef64425f21844fff3e3e000067b19944e6269e39f14",
+    "title": "React: setInterval Creates Duplicate Requests After Switching Tabs"
+  },
+  "react-hooks-rendered-fewer": {
+    "sourceHash": "72cf402f96d9428720edb617753cc218b33bb77064b594f4abd4f686ef6ea14f",
+    "title": "React: Rendered Fewer Hooks Than Expected"
+  },
+  "react-maximum-update-depth": {
+    "sourceHash": "802a13ba2f586ee0e623b992a43bdde24133eef38e915cd8f733b9739d75338c",
+    "title": "React: Maximum Update Depth Exceeded in useEffect"
+  },
+  "react-portal-modal-focus-lost": {
+    "sourceHash": "e4c0de33e1aa7393c859a918d5b98213256bca9c9aa7116ab2c7e01e91b5c133",
+    "title": "React: Modal Loses Keyboard Focus"
+  },
+  "react-stale-state-handler": {
+    "sourceHash": "107b5a4ebf15586374ef6b6749009bd580e79c3ce20fa6a457f4369c7ffa79fe",
+    "title": "React setState Does Not Increment After Rapid Clicks"
+  },
+  "reklama-lokalnej-firmy-strona-i-social-media": {
+    "sourceHash": "43be643b3cd412a58fc03e684a8d088d656758f8f7708d38bfa89ddc9a446f10",
+    "title": "Local Business Advertising: Website, Social Media and Analytics"
+  },
+  "reklamy-oze-magazyny-energii": {
+    "sourceHash": "ed1fd8ef8d0f4bf12d50de637822d5668504483b74532aa96deb64ebb58ca97b",
+    "title": "Renewable Energy Ads: How to Find Customers for Energy Storage"
+  },
+  "seo-article-schema-jsonld": {
+    "sourceHash": "dd75be84cb42adab86ad2523dda584896ecc11234c87b5b13ab6c483fbd556b4",
+    "title": "Article Schema JSON-LD: Does It Help SEO?"
+  },
+  "seo-breadcrumb-jsonld-wrong-positions": {
+    "sourceHash": "a9a1c3b20204f9728a84202b0861f003fc6bdff23dffbb91a6b011a699b6b2cb",
+    "title": "BreadcrumbList: Invalid Position Values in Structured Data"
+  },
+  "seo-chatgpt-ai-overviews-cytowanie-strony": {
+    "sourceHash": "a9d7f347334043c28ee6828abce898d87a39605022133a2952de6f9fa223404c",
+    "title": "How to Improve Your Chances of Being Cited by AI Search"
+  },
+  "seo-faq-rich-results-not-shown": {
+    "sourceHash": "b7b69f88f2ea21cacf88b14ebb52236db81bee5b2ec4c5d03d4ddede7c816bfc",
+    "title": "FAQPage Schema: Why Google Does Not Show FAQ Rich Results"
+  },
+  "seo-infinite-scroll-no-pagination-links": {
+    "sourceHash": "e5b1641995e117222c46bcc648c89eeec049045375ae3d4661ba3c92c10b3293",
+    "title": "SEO: Infinite Scroll Hides Articles from Search Crawlers"
+  },
+  "seo-llms-txt-czy-ai-cytuje": {
+    "sourceHash": "e62b608bebde1ce2a58b7af8a69ad0a70a7e45a7e3e64d6b4ebe56e5127fea71",
+    "title": "Does llms.txt Help AI Assistants Cite Your Website?"
+  },
+  "seo-paginated-category-orphan-pages": {
+    "sourceHash": "dfff006501bd8bc8f0e474e555452d68de33609f3bd58cb530553e8d9794199f",
+    "title": "SEO: Articles on Later Category Pages Are Orphaned"
+  },
+  "seo-product-schema-wrong-price": {
+    "sourceHash": "5bc5cf1c6f7d0e53cec877345be51174b97805bec8a932dd88c07f0ed250d13c",
+    "title": "Product Schema: Structured Data Price Differs from the Page"
+  },
+  "seo-search-console-property-url-prefix": {
+    "sourceHash": "fadea250aadf255f13d8344d90779008958f6750acd438237fc6f3e10c3b5ff3",
+    "title": "Search Console: Sitemap Submitted to the Wrong URL Prefix"
+  },
+  "seo-sitemap-gzip-invalid-response": {
+    "sourceHash": "a66f0aa243e45578e5f19835f66c0aa364d7da31fb1adc695f2d17033bcccd65",
+    "title": "Sitemap.xml.gz: Google Cannot Decompress the Sitemap"
+  },
+  "seo-sitemap-index-child-404": {
+    "sourceHash": "4ec83d60c7f12635f614a2071c5c795e2f4087b3687292242f2eb7dd7db3069e",
+    "title": "Sitemap Index: A Child Sitemap Returns 404"
+  },
+  "seo-sitemap-over-50000": {
+    "sourceHash": "77839284eec3c28f5c1fc4133f0de58a06c17e8a7e66e3e379a1aba7a880dc5a",
+    "title": "Sitemap.xml Exceeds the 50,000-URL Limit"
+  },
+  "supabase-auth-anonymous-rls-access": {
+    "sourceHash": "18ffc57d2a81b59afaf5903e64dbd38b1171265c03e41c6ad5bef4674694e73e",
+    "title": "Supabase Auth: anonymous user sees ordinary account resources"
+  },
+  "supabase-auth-invalid-login-credentials": {
+    "sourceHash": "304edad193efc429d3a6ff352fc3bd356d91a20b6ebc26ef847b2cf99f694add",
+    "title": "Supabase Auth: Invalid Login Credentials for an Existing Account"
+  },
+  "supabase-auth-otp-expired": {
+    "sourceHash": "72c7f456c782fc2325bcd3ebb23a145ae4ee5c636de948198c53fc5a2abc5cf1",
+    "title": "Supabase Auth: OTP Has Expired"
+  },
+  "supabase-auth-password-recovery-no-session": {
+    "sourceHash": "979fc4ea82f34d173ed10de38e22212140bdae82fd4965c65bea0c1bd25bfe7c",
+    "title": "Supabase: Password Recovery Opens Without a Session"
+  },
+  "supabase-auth-session-ssr-missing": {
+    "sourceHash": "9d342c4f09d136d8b46bc6d131d44f0d1dd4b7e1975b40d6a08b41e9bbf7866e",
+    "title": "Supabase SSR: Server Cannot Read the Logged-In Session"
+  },
+  "supabase-bledny-klucz-obcy-blokuje-usuniecie-uzytkownika": {
+    "sourceHash": "fe3c7540e15ac87ed445133747607f6ef80726e0b8d04f07436f40d8cd98b763",
+    "title": "Supabase/PostgreSQL: Foreign Key Constraint Blocks User Deletion"
+  },
+  "supabase-connection-ipv4-incompatibility": {
+    "sourceHash": "7a435c1b099d46946658504e9c41336bd3b1e7edc67f0727d7ab5551521c9c47",
+    "title": "Supabase: IPv4 Client Cannot Use Direct Database Connection"
+  },
+  "supabase-db-webhook-recursive-updates": {
+    "sourceHash": "af24d149e75f1869c611350bd2f5b38b7c1e07654dd56920d267ac89933bbab0",
+    "title": "Supabase Database Webhook Triggers an Update Loop"
+  },
+  "supabase-edge-function-invalid-jwt": {
+    "sourceHash": "c334185002b8a51a1557c3404bb157efbe1c8e64017672c9091bf1214a726a05",
+    "title": "Supabase Edge Function: Invalid JWT"
+  },
+  "supabase-email-rate-limit-429": {
+    "sourceHash": "a8c62bd1dc96a49d39cd46981043d9b6f35865c5d1c5343478fa29f100eb4b69",
+    "title": "Supabase Auth: Rate Limit Exceeded When Sending Codes"
+  },
+  "supabase-insert-dziala-select-pusty": {
+    "sourceHash": "d1e32f22d149edafa41f83c6edb3048053508e583bf12abcceb79ae028b52f28",
+    "title": "Supabase: INSERT Succeeds but SELECT Returns No Rows"
+  },
+  "supabase-limit-1000-recordow-odpowiedz": {
+    "sourceHash": "94afc042cb71b58d1fef64ca8243ebd24005e0da84bdce6e9baf2f6fc5d62c1a",
+    "title": "Why Supabase Returns a Maximum of 1,000 Rows"
+  },
+  "supabase-permission-denied-schema-public": {
+    "sourceHash": "505c7ec3f91ae5d70229a86aa4834573d63f0b63e3d356671fdf14c1631ee30e",
+    "title": "Supabase: Permission Denied for Schema public"
+  },
+  "supabase-pgrst116-single-no-rows": {
+    "sourceHash": "114a038a5ea6b4a4895e3cc713125d82205e8f6ae6356a2f69cabb714911662e",
+    "title": "Supabase PGRST116: .single() Returns No Rows"
+  },
+  "supabase-pgrst202-schema-cache": {
+    "sourceHash": "c553aa8e9fdcde3f818604576db8611082035d4f26c27639ed0caa9be72b2f4a",
+    "title": "Supabase PGRST202: Function Missing from Schema Cache"
+  },
+  "supabase-pgvector-embedding-dimension": {
+    "sourceHash": "82132ad5153a9a2a7aaf6d43d1c9b5834235585ba39c6b57a749d34f06842f5f",
+    "title": "pgvector: Vector Dimension Mismatch"
+  },
+  "supabase-postgres-connection-pool-exhausted": {
+    "sourceHash": "6735eb2ddc678368f0b0c87708af21864926ab07fd2e8cb8ab4a6d80499a8b88",
+    "title": "Supabase: too many clients already connected to PostgreSQL"
+  },
+  "supabase-realtime-nie-odswieza-listy": {
+    "sourceHash": "065bed27bc6460374e05348b42abac6aebb8e90c6f31f2c5e1c037f2799e8b4f",
+    "title": "Supabase Realtime does not update the list without refresh"
+  },
+  "supabase-realtime-reconnect-dropped-updates": {
+    "sourceHash": "8d98d18cb7b6ee469052d3b28d071a485618bd5e8d318976fa5f9f7047b87c9d",
+    "title": "Supabase Realtime: Missing Updates After Reconnection"
+  },
+  "supabase-realtime-subscriber-no-events": {
+    "sourceHash": "caf3287b67c5ee70d5597cdd7acf5e606c547619f77154e03a9fc466c23d631f",
+    "title": "Supabase Realtime: subscription works, but there are no changes in the table"
+  },
+  "supabase-refresh-token-wygasl-diagnostyka-i-naprawa": {
+    "sourceHash": "bf46ad8cf3f171089419422f0ab76849bc724f694c9493dad8e21d0f731ab0ff",
+    "title": "Supabase: Refresh Token Expired — Troubleshooting"
+  },
+  "supabase-rls-blokuje-select-pomimo-zalogowania": {
+    "sourceHash": "f1f6bf5cf64d8ec0bd0971e0c8656a06923e0decf635efcc76636ab7455524c7",
+    "title": "Supabase: SELECT returns empty results despite valid authorization — RLS diagnostic"
+  },
+  "supabase-rls-insert-with-check": {
+    "sourceHash": "956f379632b56613286df92ffce51aa8b233e42f07283dbad1fab8f9180aede2",
+    "title": "Supabase: new row Violates row-level security policy at INSERT"
+  },
+  "supabase-rls-pusta-lista-po-logowaniu": {
+    "sourceHash": "9cd958be37f8ce5545d3e54eabbe010e595a8921aefec5f0e17852930eaebc52",
+    "title": "Supabase returns an empty list after logging in — check RLS"
+  },
+  "supabase-storage-cdn-old-object": {
+    "sourceHash": "92104bf5f1cbb79427fb5d8975eba967166ed0ebbf7d5422ab23edc1b83f2dfd",
+    "title": "Supabase Storage: CDN Shows an Outdated Image"
+  },
+  "supabase-storage-file-size-limit": {
+    "sourceHash": "1bcb3ebdb7209227ab89c43d5e62744270dab83dc0d49b5fd7a4f457be6a8f0e",
+    "title": "Supabase Storage: Upload Exceeds File Size Limit"
+  },
+  "supabase-storage-mime-not-allowed": {
+    "sourceHash": "1529393d97804a270cc03ae443fbf5f71ae9df7171eadbff93b69cccdd063ab2",
+    "title": "Supabase Storage: MIME Type Not Allowed"
+  },
+  "supabase-storage-path-case-sensitive": {
+    "sourceHash": "7b60cd26b459d1cf604c02af106f98935517e1ad391a16b6736e5fe5a4e2b0cc",
+    "title": "Supabase Storage: File Download 404 Caused by Case Sensitivity"
+  },
+  "supabase-storage-signed-upload-token": {
+    "sourceHash": "3e8a8b795f482fa44e1731887ef1e086b29c9157f897c6de0c67d921f3cdc3b2",
+    "title": "Supabase Storage: Signed Upload URL Rejects the File"
+  },
+  "supabase-storage-tus-resume-fails": {
+    "sourceHash": "27e71cb8a049a657680ab748bf64d32fb8a8fe3784ec98314a80f45309766e9b",
+    "title": "Supabase Storage: Resumable Upload Stops After Connection Loss"
+  },
+  "supabase-storage-upload-conflict-409": {
+    "sourceHash": "156f1abe10eeccefe0695b7c652c7a04d9f70dc7f53784c745a1d33c02c6754f",
+    "title": "Supabase Storage: 409 Asset Already Exists during re-upload"
+  },
+  "supabase-update-using-with-check": {
+    "sourceHash": "8117d6dc155bd396d0589525f2f371206ade1d3ae806e09afb216d914f2401c3",
+    "title": "Supabase: UPDATE ends without error, but does not change anything"
+  },
+  "typescript-ts2307-cannot-find-module-types": {
+    "sourceHash": "85b11ada4391e3a6c25ac5fd1516f5cbd2db48347ffc672d982bca253f8a401e",
+    "title": "TypeScript TS2307: Cannot Find Module Despite Installation"
+  },
+  "typescript-ts2322-type-not-assignable": {
+    "sourceHash": "149d42deea142579ae2737426618aa8a6f3d4c003bcc7d0fe42b90f42bfbede2",
+    "title": "TypeScript TS2322: String Is Not Assignable to Number"
+  },
+  "typescript-ts2532-object-possibly-undefined": {
+    "sourceHash": "f55ae6e40b28a13dd3867fbfebe6aa7a41c9eb80dea596ff11a43a1b118b92fa",
+    "title": "TypeScript TS2532: Object Is Possibly Undefined"
+  },
+  "vercel-build-node-version-mismatch": {
+    "sourceHash": "14b4716d8c729c9b759b0ff958e913d5adc19da87c21ba968d1fec7324c76e76",
+    "title": "Vercel: Build Fails Because of a Different Node.js Version"
+  },
+  "vercel-cache-immutable-public-file": {
+    "sourceHash": "2888e918230f8b620d3c95044fa2efc8a3186358cb7f5c958a1a43300de46d03",
+    "title": "Vercel: Cached Public File Does Not Update After Deployment"
+  },
+  "vercel-cron-endpoint-401": {
+    "sourceHash": "005a91ec04386e45e2dfe8a2858511d322e5f9ae97f66da4b9dd32f120a5a6cc",
+    "title": "Vercel Cron Jobs: Endpoint Returns 401"
+  },
+  "vercel-deployment-ready-old-content": {
+    "sourceHash": "a12739bf31b836f9b013ad1e4959ad1039e0cfc2a07cdf62059d55e60a490e91",
+    "title": "Vercel: Domain Still Shows Old Content After Deployment"
+  },
+  "vercel-dns-propagacja-nie-dziala": {
+    "sourceHash": "0a75c2bea0c98db5aea9fceac7db542253b9a2d48d19fd5afc004765abc57dba",
+    "title": "Vercel Domain Is Not Working: DNS Troubleshooting"
+  },
+  "vercel-error-500-po-publikacji": {
+    "sourceHash": "d43cf854991b83acb453da853c45265ce78a21963f261fae2a38b28315186760",
+    "title": "Next.js on Vercel: HTTP 500 Only After Deployment"
+  },
+  "vercel-function-size-limit": {
+    "sourceHash": "c2cc81bd3d923b6fafbd3b46cc501face411bbc79e4678facafd36e405d85d6b",
+    "title": "Vercel Function Size Limit Exceeded During Deployment"
+  },
+  "vercel-function-timeout-external-api": {
+    "sourceHash": "835847ac3a2cd5d05ad6f29afc8f09cea0b229e5f7ab4d5b916eb4a495111e76",
+    "title": "Vercel Function Times Out While Waiting for an External API"
+  },
+  "vercel-logs-missing-source-maps": {
+    "sourceHash": "1bd4d7bdcb6ae56605c745848ae7e95353e72edc6b8afe0873437d5475adff13",
+    "title": "Vercel Runtime Logs Show Minified Stack Traces"
+  },
+  "vercel-output-directory-wrong": {
+    "sourceHash": "ff727c6201d05e6d09bff38763619f7d5cc7ba88251f97f3e768e14525d598a7",
+    "title": "Vercel Deployment Is READY but the Site Is Empty"
+  },
+  "vercel-preview-protection-401": {
+    "sourceHash": "dc7f527e1e7c8e538da85ad3fd3336dd45a8ba2efb5ae304ba5ace99725c590b",
+    "title": "Vercel Preview Returns HTTP 401 to Unauthenticated Visitors"
+  },
+  "vercel-production-branch-incorrect": {
+    "sourceHash": "78cf82879413c1775e236b94f315c98462d41ce3ccdedcbef704ee928cd36985",
+    "title": "Vercel: Push to Main Creates a Preview Instead of Production Deployment"
+  },
+  "vercel-this-deployment-is-temporarily-paused": {
+    "sourceHash": "2e23a451716176962e7df4cb3f9f471946e7eca5f2c4b0f4624616a8abb6ae12",
+    "title": "Vercel: This Deployment Is Temporarily Paused"
+  },
+  "wordpress-block-editor-invalid-json": {
+    "sourceHash": "18cdcc9c2eccb0f2dddb5f6daf3d16d7fdbf667c78a36eb06599bf4966b93cf1",
+    "title": "WordPress Gutenberg: Update Failed Due to Invalid JSON Response"
+  },
+  "wordpress-database-prefix-changed": {
+    "sourceHash": "fb192ae4177214c7628cf122ae9c8e121405224f21bbb48efac93ec5a2d6ca48",
+    "title": "WordPress Requests a Fresh Install After Migration"
+  },
+  "wordpress-image-processing-failed": {
+    "sourceHash": "d40da2a74668bd8c2d109413b19d222bc9b0e7b42685bd9c93e831c5ef0560bf",
+    "title": "WordPress Cannot Process Large Images"
+  },
+  "wordpress-plugin-update-ftp-credentials": {
+    "sourceHash": "8d0380c4a1835bc284e663864a7e21f927d061cf85f4454977edbbb1bb9d6369",
+    "title": "WordPress Plugin Update Asks for FTP Credentials"
+  },
+  "wordpress-rest-api-403-security-plugin": {
+    "sourceHash": "a19e5ff5d26d9b5b928a6dbbc3dfa39dbec5f6ba585a622ca44901c36903dc89",
+    "title": "WordPress REST API Returns 403 Because of a Security Plugin"
+  },
+  "wordpress-search-engine-visibility-noindex": {
+    "sourceHash": "f009fef558ac6f9d1a0ccc7b59c508af44362f2d1f2160ba578c667bf8642dd1",
+    "title": "WordPress Is Not Indexed Because of Search Engine Visibility Setting"
+  },
+  "wordpress-wp-mail-form-no-email": {
+    "sourceHash": "7d6c9fec53b0b6b624f54f47b967651a86ab337e263ea83b91c72a03741d84ee",
+    "title": "WordPress Form Shows Success but wp_mail Does Not Deliver Email"
+  }
+}
