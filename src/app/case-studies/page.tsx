@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Realizacje — strony internetowe i aplikacje",
   description:
     "Realizacje Kacpra Berneckiego: B-CRM, Motomizer, StarCars, BeatMarket i case study kampanii Meta Ads Re-Energy System. Projekty, proces i wyniki.",
-  alternates: { canonical: "https://bernecki.dev/case-studies" },
+  alternates: { canonical:"https://bernecki.dev/case-studies",languages:{"pl-PL":"https://bernecki.dev/case-studies",en:"https://bernecki.dev/en/case-studies"} },
 };
 
 export default function CaseStudiesIndex() {
