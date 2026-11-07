@@ -2,31 +2,22 @@
 
 import { useState } from "react";
 
+import { calculateVat } from "@/lib/vat-math";
+
 type Basis = "gross" | "net";
 type Lang = "pl" | "en";
-type Amount = {net:number;gross:number;vat:number};
 const money = (value:number,lang:Lang) => new Intl.NumberFormat(lang==="pl"?"pl-PL":"en-GB",{
   minimumFractionDigits:2,maximumFractionDigits:2
 }).format(value)+" zł";
-const round=(n:number)=>Math.round((n+Number.EPSILON)*100)/100;
-const calculate=(amount:number,rate:number,basis:Basis):Amount=>{
-  const safe=Number.isFinite(amount)?Math.min(100000000,Math.max(0,amount)):0;
-  if(basis==="net"){
-    const net=round(safe),vat=round(net*rate/100);
-    return {net,vat,gross:round(net+vat)};
-  }
-  const gross=round(safe),net=round(gross/(1+rate/100));
-  return {net,gross,vat:round(gross-net)};
-};
 
 export function VatComparison({lang="pl"}:{lang?:Lang}) {
   const [basis,setBasis]=useState<Basis>("gross");
   const [sales,setSales]=useState(50000);
   const [purchases,setPurchases]=useState(50000);
-  const s=calculate(sales,8,basis);
-  const p=calculate(purchases,23,basis);
-  const excess=round(p.vat-s.vat);
-  const margin=round(s.net-p.net);
+  const s=calculateVat(sales,8,basis);
+  const p=calculateVat(purchases,23,basis);
+  const excess=Math.round((p.vat-s.vat)*100)/100;
+  const margin=Math.round((s.net-p.net)*100)/100;
   const pl=lang==="pl";
   return <section aria-label={pl?"Interaktywny kalkulator VAT 8% i 23%":"Interactive 8% versus 23% VAT calculator"} className="my-10 scroll-mt-28 rounded-2xl border border-white/20 bg-[#11161b] p-5 md:p-7">
     <p className="text-xs uppercase tracking-[.18em] text-white/60">{pl?"Kalkulator edukacyjny":"Educational calculator"}</p>
