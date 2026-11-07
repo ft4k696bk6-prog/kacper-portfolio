@@ -1,4 +1,6 @@
 import { industryGuideArticles } from "./industryGuides";
+import { taxGuideArticles } from "./taxGuides";
+import { companyGuideArticles } from "./companyGuides";
 /**
  * Carefully scoped general business education. No individualized tax, customs,
  * accounting or legal advice. English is authored alongside Polish, not generated
@@ -215,6 +217,8 @@ export const businessArticles = [
     }
   }
   ...industryGuideArticles,
+  ...taxGuideArticles,
+  ...companyGuideArticles,
 ] as const;
 
 export const businessGuides = businessArticles.map(article => ({
@@ -223,7 +227,7 @@ export const businessGuides = businessArticles.map(article => ({
   description: article.pl.description,
   intro: article.pl.intro,
   sections: article.pl.sections,
-  category: "biznes-podatki" as const,
+  category: companyGuideArticles.some(x=>x.slug===article.slug) ? "spolki-cit" as const : industryGuideArticles.some(x=>x.slug===article.slug) ? "branze-pkd" as const : "biznes-podatki" as const,
   service: "/rozwoj-biznesu",
   serviceLabel: "Rozwój biznesu",
   sources: article.sources
