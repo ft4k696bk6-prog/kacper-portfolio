@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Export actual published guide data for offline PL→EN translation.
  * Uses the project's installed TypeScript compiler; no extra dependencies.
