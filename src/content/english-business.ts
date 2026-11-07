@@ -51,7 +51,7 @@ export const englishServices = {
 } as const;
 
 export const englishRealizations = {
- "isto-kebab-strona":{title:"Isto Kebab — Restaurant Website and Orders",category:"Websites",summary:"A restaurant site with menu, product selection and an ordering workflow.",details:["Designed and developed the Isto Kebab website for a restaurant in Jabłonka, including a mobile-friendly menu, food presentation and customer ordering interface.","The project connects a public website with ordering workflows and an operational panel. The live site is also available at isto.bernecki.dev.","The screenshots shown in this portfolio come from the actual deployed website, not generated mockups."]},
+ "isto-kebab-strona":{title:"Isto Kebab — Restaurant Website and Orders",category:"Websites",summary:"A restaurant site with menu, product selection and an ordering workflow.",details:["Designed and developed the Isto Kebab website for a restaurant in Jabłonka, including a mobile-friendly menu, food presentation and customer ordering interface.","The project connects a public website with ordering workflows and an operational panel. The live site is also available at isto.bernecki.dev.","The project combines an engaging food menu with a practical process for collecting and managing online orders."]},
   "jalapeno-marketing":{
     title:"Jalapeno — Local Community and Marketing",category:"Marketing",
     summary:"Advertising and social media that helped a local restaurant reach customers in Niemce and surrounding towns.",
