@@ -178,4 +178,4 @@ async function main(){
  state.lastSummary={attempts,approved,rejected,cost:Number(cost.toFixed(4))};
  write(output,records);write(stateFile,state);publishReport();
 }
-main().catch(e=>{console.error("pSEO Autopilot: "+String(e.message||e).replaceAll(key,"[REDACTED]"));process.exitCode=1;});
+main().catch(e=>{const message=String(e.message||e);console.error("pSEO Autopilot: "+(key?message.replaceAll(key,"[REDACTED]"):message));process.exitCode=1;});
