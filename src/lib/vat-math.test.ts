@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { calculateVat } from "./vat-math";
 import { businessArticles, businessGuides } from "../content/businessGuides";
+import { companyGuideArticles } from "../content/companyGuides";
+import { industryGuideArticles } from "../content/industryGuides";
 import { getEnglishGuide, getEnglishGuides } from "./guide-i18n";
 import { getGuide, guideCategory } from "./guide-directory";
 
@@ -20,13 +22,13 @@ describe("business education and VAT math",()=>{
   expect(sale.net-buy.net).toBe(0);
  });
  it("adds uniquely named source-backed guides with complete paired English editions",()=>{
-  expect(businessGuides).toHaveLength(3);
-  expect(new Set(businessGuides.map(g=>g.slug)).size).toBe(3);
+  expect(businessGuides).toHaveLength(15);
+  expect(new Set(businessGuides.map(g=>g.slug)).size).toBe(businessGuides.length);
   for(const entry of businessArticles){
    expect(entry.sources.length).toBeGreaterThanOrEqual(2);
    expect(entry.sources.every(source=>source.url.startsWith("https://"))).toBe(true);
    expect(getGuide(entry.slug)).toBeDefined();
-   expect(guideCategory(getGuide(entry.slug)!)).toBe("biznes-podatki");
+   expect(guideCategory(getGuide(entry.slug)!)).toBe(companyGuideArticles.some(g=>g.slug===entry.slug)?"spolki-cit":industryGuideArticles.some(g=>g.slug===entry.slug)?"branze-pkd":"biznes-podatki");
    const english=getEnglishGuide(entry.slug);
    expect(english?.title).toBe(entry.en.title);
    expect(english?.sections.length).toBe(entry.en.sections.length);
