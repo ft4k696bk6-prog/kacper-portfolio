@@ -1,0 +1,362 @@
+[
+  {
+    "slug": "seo-robots-disallow-sitemap-confusion",
+    "title": "SEO: robots.txt blokuje stronę mimo obecności w sitemap.xml",
+    "symptom": "Mapa witryny zawiera adres, lecz robot nie może wejść na niego z powodu reguły Disallow.",
+    "cause": "Sitemap jest wskazówką do odkrywania URL, a robots.txt może niezależnie zabraniać ich skanowania.",
+    "inspect": [
+      "Otwórz produkcyjny /robots.txt i sprawdź reguły odnoszące się do konkretnej ścieżki.",
+      "W Search Console przeprowadź Inspekcję URL i porównaj wskazanie blokady z rzeczywistym plikiem robots."
+    ],
+    "fix": [
+      "Usuń niezamierzoną regułę Disallow dla publicznych stron, zachowując świadomie chronione obszary.",
+      "Po zmianie pliku sprawdź, czy URL zwraca 200, ma poprawny canonical oraz nie zawiera noindex."
+    ],
+    "verify": "Robot może pobrać publiczną stronę, a raport po ponownym crawlu nie wskazuje blokady robots.",
+    "warning": "Nie używaj robots.txt do ukrywania prywatnych danych przed nieuprawnionymi użytkownikami.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/robots/intro",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-noindex-in-http-header",
+    "title": "Google: strona ma noindex w nagłówku X-Robots-Tag",
+    "symptom": "W HTML nie ma meta robots noindex, ale Search Console informuje o wykluczeniu z indeksu.",
+    "cause": "Dyrektywa noindex może być dostarczana w nagłówku HTTP X-Robots-Tag, także dla nie-HTML.",
+    "inspect": [
+      "Sprawdź nagłówki odpowiedzi za pomocą curl -I i zweryfikuj je pod docelową domeną.",
+      "Porównaj zachowanie preview, produkcji, reverse proxy i CDN, aby znaleźć warstwę dodającą dyrektywę."
+    ],
+    "fix": [
+      "Usuń niezamierzony X-Robots-Tag: noindex w konfiguracji serwera lub aplikacji dla publicznych stron.",
+      "Pozostaw noindex dla rzeczywistych stron prywatnych i wyników wyszukiwania, gdzie jest to świadoma decyzja."
+    ],
+    "verify": "Po wdrożeniu nagłówek produkcyjny nie zawiera niepożądanego noindex; kontrola URL weryfikuje zmianę.",
+    "warning": "Nie naprawiaj problemu wyłącznie dodaniem meta index, gdy serwer nadal wysyła noindex.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-sitemap-xml-invalid-namespace",
+    "title": "Google Search Console: sitemap.xml odrzucona jako niepoprawny XML",
+    "symptom": "Plik /sitemap.xml otwiera się w przeglądarce, ale raport pokazuje błąd formatu lub parsowania.",
+    "cause": "Mapa może zawierać niepoprawne znaczniki, złą przestrzeń nazw albo nieescapowane znaki specjalne.",
+    "inspect": [
+      "Sprawdź odpowiedź serwera i surowy XML, nie polegając tylko na wyglądzie dokumentu w przeglądarce.",
+      "Zwaliduj URLSet, namespace, kodowanie UTF-8 oraz znaki & w adresach URL."
+    ],
+    "fix": [
+      "Wygeneruj poprawną strukturę urlset i loc zgodną z protokołem sitemap i usuń elementy nieobsługiwane przez parser.",
+      "Zamiast wklejać ręcznie fragmenty XML, użyj serializatora, który prawidłowo escapuje znaki."
+    ],
+    "verify": "Walidator akceptuje XML, a ponowne pobranie mapy w Search Console nie zgłasza błędu formatu.",
+    "warning": "Nie wpisuj w XML surowych parametrów zapytania z & bez escapowania.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-sitemap-404-after-next-deploy",
+    "title": "Next.js: /sitemap.xml zwraca 404 po wdrożeniu",
+    "symptom": "W środowisku lokalnym mapa witryny istnieje, ale pod domeną produkcyjną zwraca HTTP 404.",
+    "cause": "Trasa sitemap może nie być częścią buildu lub URL wskazuje inne środowisko albo aplikację.",
+    "inspect": [
+      "Sprawdź bezpośrednio https://domena/sitemap.xml i SHA wdrożenia na Vercel.",
+      "Ustal, czy aplikacja używa app/sitemap.ts, pliku w public/ czy zewnętrznego generatora."
+    ],
+    "fix": [
+      "Dodaj lub popraw właściwą trasę metadanych App Router albo umieść statyczny plik w public/.",
+      "Upewnij się, że domena jest przypięta do poprawnego projektu i nie ma rewrite przechwytującego /sitemap.xml."
+    ],
+    "verify": "Produkcyjny URL zwraca HTTP 200 i XML z prawdziwymi adresami kanonicznymi.",
+    "warning": "Nie zgłaszaj w Search Console adresu, którego serwer publicznie nie udostępnia.",
+    "source": "https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-google-soft-404",
+    "title": "Google: Soft 404 mimo odpowiedzi HTTP 200",
+    "symptom": "Podstrona zwraca 200, ale Search Console klasyfikuje ją jako Soft 404.",
+    "cause": "Witryna może pokazywać komunikat „nie znaleziono” lub niemal pustą stronę pod adresem, który technicznie nie zwraca 404.",
+    "inspect": [
+      "Otwórz dokładny URL jako niezalogowany użytkownik i sprawdź tekst widoczny w HTML.",
+      "Porównaj zawartość prawdziwego artykułu z widokiem dla nieznanego slug lub brakującego produktu."
+    ],
+    "fix": [
+      "Dla nieistniejącego zasobu zwracaj realne HTTP 404 lub 410, zamiast strony z błędem i statusem 200.",
+      "Dla istniejącej podstrony przywróć pełną wartościową treść i popraw dostęp do danych."
+    ],
+    "verify": "Nieistniejący adres daje 404, a ważny artykuł zwraca 200 z właściwą treścią.",
+    "warning": "Nie zmuszaj każdej nieistniejącej trasy do renderowania strony głównej.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/http-network-errors",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-redirect-chain-too-long",
+    "title": "SEO: łańcuch przekierowań HTTP → www → bez www → HTTPS",
+    "symptom": "Robot i użytkownik przechodzą przez kilka przekierowań, a czasem trafiają w pętlę.",
+    "cause": "Niespójne reguły hostingu, aplikacji i CDN mogą przekierowywać do różnych wersji tej samej domeny.",
+    "inspect": [
+      "Wykonaj curl -IL dla wariantów HTTP/HTTPS oraz www/bez www i zapisz kolejne nagłówki Location.",
+      "Sprawdź ustawienia domeny produkcyjnej, reguły CDN i konfigurację reverse proxy."
+    ],
+    "fix": [
+      "Wybierz jeden kanoniczny wariant hosta i protokołu, a pozostałe kieruj bezpośrednio na niego.",
+      "Ujednolić sitemap, canonical i linki wewnętrzne do tej samej wersji adresów."
+    ],
+    "verify": "Każdy wariant trafia do jednego kanonicznego URL bez pętli, a docelowa strona zwraca 200.",
+    "warning": "Nie projektuj osobnych reguł redirect w kilku warstwach bez przetestowania ich łącznie.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/301-redirects",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-google-jsonld-parse-error",
+    "title": "Google Rich Results: nieprawidłowy JSON-LD blokuje dane strukturalne",
+    "symptom": "Test wyników z elementami rozszerzonymi zgłasza parsing error mimo że strona wizualnie działa.",
+    "cause": "Kod danych strukturalnych może mieć nieprawidłowy JSON albo niezgodne typy właściwości schematu.",
+    "inspect": [
+      "Odczytaj JSON-LD z HTML strony po produkcyjnym renderowaniu, nie tylko z JSX źródłowego.",
+      "Sprawdź komunikat parsera i czy treść dynamiczna nie wprowadza nieescapowanych znaków."
+    ],
+    "fix": [
+      "Serializuj obiekt jako poprawny JSON i bezpiecznie escapuj znaki, zamiast konstruować JSON-LD przez konkatenację stringów.",
+      "Wybieraj typy i pola danych strukturalnych odpowiadające rzeczywistej zawartości strony; nie fałszuj ocen."
+    ],
+    "verify": "JSON-LD przechodzi test składni i odpowiedni walidator Google bez błędów krytycznych.",
+    "warning": "Nie dodawaj schema Review z nieistniejącymi opiniami, żeby wymusić gwiazdki w wynikach.",
+    "source": "https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-google-pagination-canonical",
+    "title": "SEO: paginacja katalogu kieruje canonical wszystkich stron na stronę 1",
+    "symptom": "Kolejne strony listy są dostępne, ale każda deklaruje jako kanoniczny pierwszy adres katalogu.",
+    "cause": "Błędny canonical może sygnalizować wyszukiwarce, że inne strony są zduplikowaną wersją tej samej treści.",
+    "inspect": [
+      "Sprawdź rel=canonical na /poradniki?strona=2 i porównaj rzeczywiste rekordy z pierwszą stroną.",
+      "Zweryfikuj, czy parametry są celowo indeksowane, czy służą tylko nawigacji użytkownika."
+    ],
+    "fix": [
+      "Jeśli paginowane strony mają osobną indeksowalną zawartość, rozważ własny canonical i czytelny URL każdej części.",
+      "Jeśli świadomie ustawiono noindex follow dla paginacji, zapewnij odkrywanie wszystkich poradników przez sitemap i linki kategorii."
+    ],
+    "verify": "Wybrane podejście jest spójne: robot może znaleźć wszystkie artykuły, a parametry nie tworzą przypadkowych duplikatów.",
+    "warning": "Nie ustawiaj jednego canonical bez rozróżnienia, czy zawartość kolejnych stron naprawdę jest ta sama.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/canonicalization",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-open-graph-old-image-cache",
+    "title": "Facebook i LinkedIn pokazują starą miniaturkę linku",
+    "symptom": "Po zmianie og:image na stronie komunikatory nadal wyświetlają poprzedni obraz.",
+    "cause": "Platformy społecznościowe przechowują metadane i miniatury w swojej pamięci cache.",
+    "inspect": [
+      "Sprawdź rzeczywisty og:image, og:title i canonical w HTML pod finalnym URL strony.",
+      "Otwórz adres obrazu anonimowo, sprawdź HTTP 200, content type i rozmiar."
+    ],
+    "fix": [
+      "Podmień grafikę na nowy stabilny adres, popraw metatagi i użyj dostępnych narzędzi odświeżania podglądu.",
+      "Zadbaj o jedną spójną ikonę favicon i osobne grafiki Open Graph dla ważnych podstron."
+    ],
+    "verify": "Nowo wklejony link wyświetla właściwy obraz w kilku platformach, a źródło HTML wskazuje aktualny plik.",
+    "warning": "Nie zakładaj, że samo odświeżenie przeglądarki czyści cache LinkedIn lub Facebooka.",
+    "source": "https://ogp.me/",
+    "category": "seo-google"
+  },
+  {
+    "slug": "seo-js-navigation-not-crawlable",
+    "title": "Googlebot nie odkrywa podstron przez menu z samymi onClick",
+    "symptom": "Użytkownik przechodzi przez nawigację, ale wyszukiwarka słabo znajduje wewnętrzne adresy.",
+    "cause": "Linki wykonywane wyłącznie przez eventy JavaScript mogą nie dawać robotowi typowych odnośników do śledzenia.",
+    "inspect": [
+      "Sprawdź, czy menu zawiera rzeczywiste elementy a z atrybutem href do podstron.",
+      "Zobacz surowe HTML i porównaj nawigację po renderowaniu JavaScript."
+    ],
+    "fix": [
+      "Dla nawigacji użyj semantycznych linków Link lub a href, pozostawiając przyciski do prawdziwych akcji.",
+      "Dodaj przejrzyste huby kategorii z linkami do istotnych poradników i unikaj nieograniczonych list linków w stopce."
+    ],
+    "verify": "Robot może przejść do istotnych stron po zwykłych href, a menu nadal jest dostępne klawiaturą.",
+    "warning": "Nie udawaj linku elementem div z onClick, jeśli prowadzi on na inny URL.",
+    "source": "https://developers.google.com/search/docs/crawling-indexing/links-crawlable",
+    "category": "seo-google"
+  },
+  {
+    "slug": "wordpress-permalinks-404-after-migration",
+    "title": "WordPress: podstrony mają 404 po migracji, a strona główna działa",
+    "symptom": "Po przeniesieniu serwisu otwiera się główna strona, ale artykuły i podstrony nie działają.",
+    "cause": "Reguły przepisywania adresów lub ustawienia permalinków mogą nie pasować do nowego serwera.",
+    "inspect": [
+      "Sprawdź czy żądana strona istnieje w panelu oraz jaki ma slug i aktualną bazę URL.",
+      "Porównaj konfigurację rewrite dla Apache/Nginx oraz działanie witryny na głównej domenie."
+    ],
+    "fix": [
+      "W panelu WordPress zapisz ponownie ustawienia bezpośrednich odnośników, aby odświeżyć reguły tam, gdzie to właściwe.",
+      "Skonfiguruj poprawne reguły serwera i zachowaj przekierowania starych adresów na nowe, jeśli ich struktura się zmieniła."
+    ],
+    "verify": "Podstrony i wpisy zwracają 200, a stare ważne URL prowadzą do nowych stron bez pętli.",
+    "warning": "Nie naprawiaj problemu przez tworzenie osobnej strony 404 dla każdego istniejącego artykułu.",
+    "source": "https://wordpress.org/documentation/article/settings-permalinks-screen/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-https-redirect-loop",
+    "title": "WordPress: ERR_TOO_MANY_REDIRECTS po włączeniu HTTPS",
+    "symptom": "Po zmianie ustawień adresu na HTTPS strona logowania i panel wp-admin zaczynają się zapętlać.",
+    "cause": "Reverse proxy i WordPress mogą mieć niezgodne informacje o protokole żądania i przekierowywać na siebie.",
+    "inspect": [
+      "Sprawdź wartości WordPress Address i Site Address oraz pełny łańcuch Location.",
+      "Zweryfikuj ustawienia SSL w hostingu i sposób przekazywania HTTPS przez reverse proxy."
+    ],
+    "fix": [
+      "Ujednolić protokół strony, proxy i reguły redirect; popraw sposób rozpoznawania HTTPS w konfiguracji serwera.",
+      "Jeśli panel jest niedostępny, zastosuj bezpieczną naprawę przez konfigurację serwera z kopią zapasową."
+    ],
+    "verify": "Strona i panel otwierają się po HTTPS bez pętli na nowej karcie w oknie prywatnym.",
+    "warning": "Nie stosuj jednocześnie kilku wtyczek, które każda wymusza własne przekierowania.",
+    "source": "https://wordpress.org/documentation/article/https-for-wordpress/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-critical-error-plugin",
+    "title": "WordPress: There has been a critical error on this website po aktualizacji wtyczki",
+    "symptom": "Strona przestaje działać zaraz po aktualizacji, a WordPress pokazuje komunikat o błędzie krytycznym.",
+    "cause": "Wtyczka lub motyw może wywoływać fatal error w PHP albo nie być zgodna z nową wersją środowiska.",
+    "inspect": [
+      "Sprawdź logi PHP i tryb odzyskiwania WordPress, identyfikując konkretny plik i stack trace.",
+      "Zanotuj ostatnią aktualizację wtyczki, motywu lub PHP oraz posiadane backupy."
+    ],
+    "fix": [
+      "W trybie awaryjnym wyłącz tylko problematyczną wtyczkę i przywróć zgodną wersję, jeśli to konieczne.",
+      "Wykonaj aktualizację testową na staging i usuń przyczynę błędu przed ponownym włączeniem."
+    ],
+    "verify": "Frontend i panel działają, a log nie zawiera nowych błędów fatal dla tej operacji.",
+    "warning": "Nie wyłączaj wszystkich zabezpieczeń PHP ani nie usuwaj danych wtyczek bez kopii zapasowej.",
+    "source": "https://wordpress.org/documentation/article/faq-troubleshooting/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-php-memory-exhausted",
+    "title": "WordPress: Allowed memory size exhausted podczas edycji strony",
+    "symptom": "Edytor lub zaplecze kończy działanie błędem fatal PHP o przekroczeniu memory_limit.",
+    "cause": "Proces może zużywać więcej pamięci niż pozwala konfiguracja PHP, czasem z powodu ciężkiej wtyczki.",
+    "inspect": [
+      "Sprawdź dokładną wartość limitu oraz nazwę pliku wskazanego w logu fatal error.",
+      "Porównaj zużycie pamięci przy wyłączonej problematycznej funkcji z normalnym działaniem."
+    ],
+    "fix": [
+      "Zidentyfikuj wtyczkę lub operację zużywającą pamięć i usuń zbędne ładowanie danych.",
+      "Zwiększ limit tylko do rozsądnej wartości wspieranej przez hosting, po ustaleniu źródła zużycia."
+    ],
+    "verify": "Wykonanie edycji nie wywołuje fatal error, a zużycie pamięci jest stabilne.",
+    "warning": "Nie ustawiaj nieograniczonej pamięci PHP jako zamiennika diagnostyki.",
+    "source": "https://wordpress.org/documentation/article/editing-wp-config-php/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-rest-api-403-security-plugin",
+    "title": "WordPress REST API: /wp-json zwraca 403 przez zabezpieczenie",
+    "symptom": "Publiczne endpointy REST API przestają działać po instalacji wtyczki bezpieczeństwa.",
+    "cause": "Firewall lub wtyczka może filtrować żądania zanim WordPress przetworzy konkretną trasę.",
+    "inspect": [
+      "Porównaj odpowiedź /wp-json z innymi endpointami i sprawdź logi firewall dla kodu 403.",
+      "Zobacz, czy problem dotyczy wszystkich metod, czy tylko żądań POST wymagających nonce lub autoryzacji."
+    ],
+    "fix": [
+      "Przywróć dostęp tylko do potrzebnych publicznych tras i zachowaj ochronę endpointów prywatnych.",
+      "Dla operacji zalogowanych sprawdź nonce i uprawnienia użytkownika zamiast bezwarunkowo wyłączać weryfikację."
+    ],
+    "verify": "Publiczny endpoint działa, a modyfikacja danych bez uwierzytelnienia nadal zwraca odmowę.",
+    "warning": "Nie wyłączaj wszystkich reguł WAF ani całej autoryzacji REST, aby naprawić jeden formularz.",
+    "source": "https://developer.wordpress.org/rest-api/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-wp-cron-not-running",
+    "title": "WordPress: zaplanowane wpisy nie publikują się, bo WP-Cron nie działa",
+    "symptom": "Zaplanowana publikacja lub kopia zapasowa pozostaje zaległa mimo ustawionego harmonogramu.",
+    "cause": "WP-Cron może opierać się na odwiedzinach witryny, a ruch lub konfiguracja hostingu wpływa na jego uruchamianie.",
+    "inspect": [
+      "Sprawdź listę zaplanowanych zadań i czy DISABLE_WP_CRON nie jest włączone bez zastępczego harmonogramu.",
+      "Zweryfikuj, czy hosting nie blokuje loopback requests lub żądań do wp-cron.php."
+    ],
+    "fix": [
+      "Skonfiguruj zadanie systemowego cron według zaleceń hostingu, gdy potrzebujesz niezależności od ruchu.",
+      "Zapewnij idempotencję zadań i rejestr błędów dla powiadomień lub publikacji."
+    ],
+    "verify": "Zaległy wpis publikuje się, a kolejne uruchomienia zachodzą bez podwójnej publikacji.",
+    "warning": "Nie wywołuj wp-cron.php publicznie bez żadnej kontroli częstotliwości i kosztów.",
+    "source": "https://developer.wordpress.org/plugins/cron/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-media-broken-after-url-change",
+    "title": "WordPress: zdjęcia zwracają 404 po zmianie domeny",
+    "symptom": "Teksty i artykuły działają, ale obrazy nadal próbują ładować się ze starej domeny.",
+    "cause": "Zapisane odnośniki mediów mogą zawierać poprzedni URL albo pliki uploadu nie zostały przeniesione.",
+    "inspect": [
+      "W Network odczytaj pełną ścieżkę 404 i sprawdź, czy odpowiada ona starym adresom.",
+      "Zobacz na serwerze, czy plik faktycznie istnieje w wp-content/uploads w oczekiwanej lokalizacji."
+    ],
+    "fix": [
+      "Przenieś brakujące pliki i popraw odniesienia do domeny narzędziem bezpiecznie obsługującym serializowane dane WordPress.",
+      "Przetestuj miniatury i różne rozmiary grafik; w razie potrzeby odtwórz metadane obrazów."
+    ],
+    "verify": "Obrazy i miniatury otwierają się na nowym hostingu, a HTML nie zawiera starych niedziałających URL.",
+    "warning": "Nie wykonuj surowego REPLACE w bazie danych bez uwzględnienia serializacji PHP i kopii zapasowej.",
+    "source": "https://developer.wordpress.org/cli/commands/search-replace/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-mixed-content-https",
+    "title": "WordPress: mixed content blokuje CSS i zdjęcia po HTTPS",
+    "symptom": "Po włączeniu SSL strona wygląda niepoprawnie, bo przeglądarka blokuje zasoby ładowane przez HTTP.",
+    "cause": "Stare adresy http:// w motywie, CSS lub bazie mogą pozostać mimo przejścia samej domeny na HTTPS.",
+    "inspect": [
+      "Otwórz Console i Network, ustal dokładne zasoby mieszane oraz miejsce ich generowania.",
+      "Porównaj adresy WordPress Address, Site Address i statyczne URL motywu."
+    ],
+    "fix": [
+      "Zastąp wewnętrzne HTTP poprawnymi HTTPS i ujednolić ustawienia motywu oraz wtyczek.",
+      "Sprawdź, czy zewnętrzne źródło faktycznie obsługuje TLS; w przeciwnym razie podmień usługę lub zasób."
+    ],
+    "verify": "Konsola nie raportuje mixed content, a wszystkie style i obrazy ładują się po HTTPS.",
+    "warning": "Nie maskuj problemu przez wyłączenie ochrony mixed content w przeglądarce.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-wp-mail-form-no-email",
+    "title": "WordPress: formularz pokazuje sukces, ale wp_mail nie dostarcza wiadomości",
+    "symptom": "Użytkownik widzi potwierdzenie wysłania, a w skrzynce odbiorcy nie ma zgłoszenia.",
+    "cause": "Wywołanie wp_mail nie gwarantuje dostarczenia wiadomości; problem może być w transporcie lub autoryzacji domeny.",
+    "inspect": [
+      "Sprawdź, czy kod rzeczywiście wywołuje wp_mail i czy serwer lub wtyczka rejestruje błędy wysyłki.",
+      "Zweryfikuj SPF, DKIM, From i odbiorcę; sprawdź folder spam i logi dostawcy poczty."
+    ],
+    "fix": [
+      "Skonfiguruj uwierzytelniony transport przez zaufany serwer SMTP albo transakcyjny provider zgodnie z domeną.",
+      "Przechowuj zapytanie w bazie/CRM jako źródło prawdy i wysyłaj email jako dodatkowe powiadomienie."
+    ],
+    "verify": "Testowy formularz tworzy rekord i wiadomość dociera do docelowej skrzynki wraz z poprawnym uwierzytelnieniem.",
+    "warning": "Nie pokazuj „wysłano wiadomość” jako gwarancji doręczenia, jeśli aplikacja nie ma potwierdzenia.",
+    "source": "https://developer.wordpress.org/reference/functions/wp_mail/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-cache-stale-content",
+    "title": "WordPress: zmiany w Elementorze nie widać na stronie publicznej",
+    "symptom": "Edycja zapisuje się w panelu, ale niezalogowany użytkownik widzi starą wersję treści lub CSS.",
+    "cause": "Cache wtyczki, hostingu, CDN lub wygenerowane pliki CSS mogą przechowywać starszą wersję strony.",
+    "inspect": [
+      "Porównaj widok po zalogowaniu z widokiem w prywatnym oknie oraz odpowiedzi HTTP dla obu.",
+      "Sprawdź aktywne mechanizmy cache i to, czy wygenerowany CSS ma aktualną wersję."
+    ],
+    "fix": [
+      "Wyczyść wyłącznie właściwe warstwy cache i zregeneruj CSS przy zgodnej procedurze narzędzia.",
+      "Ustal reguły unieważniania cache po publikacji, aby problem nie wracał po każdej edycji."
+    ],
+    "verify": "W prywatnym oknie widoczna jest nowa wersja, a pozostałe strony nie straciły wydajności.",
+    "warning": "Nie wyłączaj każdego cache globalnie bez wskazania warstwy przetrzymującej starą odpowiedź.",
+    "source": "https://wordpress.org/documentation/article/optimization-caching/",
+    "category": "wordpress"
+  }
+]
