@@ -42,6 +42,40 @@ translated_count = 0
 polish_residue = []
 polish_letters = re.compile(r"[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]")
 
+def _pieces(value, max_chars=220):
+    """Split long, often technical paragraphs before translation to avoid model truncation."""
+    sentences = re.split(r'(?<=[.!?])\\s+(?=[A-ZĄĆĘŁŃÓŚŹŻ0-9])', value.strip())
+    chunks = []
+    for sentence in sentences:
+        words = sentence.split()
+        if not words:
+            continue
+        current = ""
+        for word in words:
+            if len(current) + 1 + len(word) > max_chars and current:
+                chunks.append(current)
+                current = word
+            else:
+                current = (current + " " + word).strip()
+        if current:
+            chunks.append(current)
+    return chunks or [value]
+
+def _translate_piece(piece, depth=0):
+    result = translator.translate(piece).strip()
+    suspicious = not result or (len(piece)>70 and len(result)<10)
+    if suspicious and len(piece)>55 and depth<5:
+        # Try smaller chunks instead of publishing a garbled sentence or dropping text.
+        words = piece.split()
+        if len(words)>2:
+            half = len(words)//2
+            left = " ".join(words[:half])
+            right = " ".join(words[half:])
+            return _translate_piece(left,depth+1) + " " + _translate_piece(right,depth+1)
+    if suspicious:
+        raise ValueError("Translation failed for source: " + repr(piece[:150]) + " | result: " + repr(result[:100]))
+    return result
+
 def convert(value):
     if not isinstance(value, str):
         raise ValueError("Cannot translate non-string")
@@ -49,10 +83,11 @@ def convert(value):
         return value
     if value in cache:
         return cache[value]
-    result = translator.translate(value).strip()
-    if not result or (len(value) > 70 and len(result) < 10):
-        raise ValueError("Empty or implausibly truncated translation")
-    if result == value and len(value) > 40 and polish_letters.search(value):
+    parts = _pieces(value)
+    result = " ".join(_translate_piece(part) for part in parts).strip()
+    if not result or (len(value)>70 and len(result)<10):
+        raise ValueError("Empty or implausibly truncated translation for " + repr(value[:150]))
+    if result == value and len(value)>40 and polish_letters.search(value):
         polish_residue.append(value[:100])
     cache[value] = result
     return result
