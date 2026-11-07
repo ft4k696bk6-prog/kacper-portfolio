@@ -63,7 +63,7 @@
       "Ustal, czy aplikacja używa app/sitemap.ts, pliku w public/ czy zewnętrznego generatora."
     ],
     "fix": [
-      "Dodaj lub popraw właściwą trasę metadanych App Router albo umieść statyczny plik w public/.",
+      "Dodaj lub popraw właściwą trasę metadanych App Router albo umieść statyczny plik w public/. Nie myl pliku sitemap.xml w katalogu public z trasą metadata route, bo ich jednoczesne użycie może tworzyć konflikt.",
       "Upewnij się, że domena jest przypięta do poprawnego projektu i nie ma rewrite przechwytującego /sitemap.xml."
     ],
     "verify": "Produkcyjny URL zwraca HTTP 200 i XML z prawdziwymi adresami kanonicznymi.",
@@ -153,7 +153,7 @@
       "Otwórz adres obrazu anonimowo, sprawdź HTTP 200, content type i rozmiar."
     ],
     "fix": [
-      "Podmień grafikę na nowy stabilny adres, popraw metatagi i użyj dostępnych narzędzi odświeżania podglądu.",
+      "Podmień grafikę na nowy stabilny adres, popraw metatagi i użyj dostępnych narzędzi odświeżania podglądu. Zapisz również absolutne wymiary i format miniatury; różne komunikatory mogą inaczej przycinać nietypowe obrazy.",
       "Zadbaj o jedną spójną ikonę favicon i osobne grafiki Open Graph dla ważnych podstron."
     ],
     "verify": "Nowo wklejony link wyświetla właściwy obraz w kilku platformach, a źródło HTML wskazuje aktualny plik.",
@@ -243,7 +243,7 @@
       "Porównaj zużycie pamięci przy wyłączonej problematycznej funkcji z normalnym działaniem."
     ],
     "fix": [
-      "Zidentyfikuj wtyczkę lub operację zużywającą pamięć i usuń zbędne ładowanie danych.",
+      "Zidentyfikuj wtyczkę lub operację zużywającą pamięć i usuń zbędne ładowanie danych. Jeżeli wyjątek dotyczy wyłącznie importu, uruchom go na próbce i sprawdź, czy rozmiar danych powoduje nadmierne zużycie.",
       "Zwiększ limit tylko do rozsądnej wartości wspieranej przez hosting, po ustaleniu źródła zużycia."
     ],
     "verify": "Wykonanie edycji nie wywołuje fatal error, a zużycie pamięci jest stabilne.",
@@ -315,7 +315,7 @@
       "Porównaj adresy WordPress Address, Site Address i statyczne URL motywu."
     ],
     "fix": [
-      "Zastąp wewnętrzne HTTP poprawnymi HTTPS i ujednolić ustawienia motywu oraz wtyczek.",
+      "Zastąp wewnętrzne HTTP poprawnymi HTTPS i ujednolić ustawienia motywu oraz wtyczek. Po poprawce wykonaj test podstrony z najstarszymi zdjęciami, bo to tam najczęściej pozostają historyczne URL HTTP.",
       "Sprawdź, czy zewnętrzne źródło faktycznie obsługuje TLS; w przeciwnym razie podmień usługę lub zasób."
     ],
     "verify": "Konsola nie raportuje mixed content, a wszystkie style i obrazy ładują się po HTTPS.",
