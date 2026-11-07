@@ -11,8 +11,7 @@ import cases9 from "./offline/batch2-dns-crm.json";
 
 /** 200 source-based editorial cases. No generative AI API is used for this batch. */
 export const offlineBatchTwoCases = [
-  ...cases0,
-  ...cases1,
+  ...[...cases0, ...cases1].map((item) => ({ slug:item.slug,title:item.title,symptom:item.symptom,diagnose:item.inspect.join(" "),fix:item.fix.join(" "),verify:item.verify,source:item.source,category:item.category,cause:item.cause,warning:item.warning })),
   ...cases2,
   ...cases3,
   ...cases4,
@@ -67,7 +66,7 @@ export const offlineBatchTwoGuides = offlineBatchTwoCases.map((item) => {
     slug: item.slug,
     title: item.title,
     description: item.symptom,
-    intro: item.symptom + " Poniższa procedura pokazuje diagnozę i weryfikację konkretnej przyczyny, nie potwierdza jednak usterki w nieznanym środowisku.",
+    intro: item.symptom + ("cause" in item ? " "+item.cause : " Opis dotyczy typowej przyczyny i wymaga potwierdzenia na rzeczywistych danych."),
     service,serviceLabel,
     category: item.category,
     offlinePseo: true as const,
@@ -75,7 +74,7 @@ export const offlineBatchTwoGuides = offlineBatchTwoCases.map((item) => {
       {title:"Jak rozpoznać źródło problemu",paragraphs:[item.diagnose,evidenceHints[item.category] ?? "Zapisz dokładny komunikat, wersję środowiska oraz warunki wystąpienia problemu."]},
       {title:"Kroki naprawcze",paragraphs:[item.fix]},
       {title:"Jak przetestować rozwiązanie",paragraphs:[item.verify]},
-      {title:"Bezpieczeństwo i ograniczenia",paragraphs:[safetyNotes[item.category] ?? "Nie publikuj prywatnych danych ani sekretów i testuj zmiany przed wdrożeniem produkcyjnym."]}
+      {title:"Bezpieczeństwo i ograniczenia",paragraphs:[("warning" in item ? item.warning : safetyNotes[item.category]) ?? "Nie publikuj prywatnych danych ani sekretów i testuj zmiany przed wdrożeniem produkcyjnym."]}
     ],
     sources:[{label:"Dokumentacja producenta lub oficjalny standard",url:item.source}]
   };
