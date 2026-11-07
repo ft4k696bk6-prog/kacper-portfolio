@@ -1,10 +1,10 @@
 {
   "api-conditional-etag-412": {
-    "sourceHash": "9d0f28667c9de8b7a49327d9be2f848658ab7fc34e70e98bedd2a5a9294740ac",
+    "sourceHash": "b56e3906af786be9ca3c11e62592d89033e76b80e970b1263b8a9e9e98e13881",
     "status": "machine",
     "title": "HTTP 412 Precondition Failed on record update",
     "description": "The API refuses to write because the client edited an outdated version of the data.",
-    "intro": "The API refuses to write because the client edited an outdated version of the data. The cause needs to be checked in the real environment.",
+    "intro": "The API refuses to write because the client edited an outdated version of the data.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -35,11 +35,11 @@
     ]
   },
   "api-content-encoding-gzip-invalid": {
-    "sourceHash": "9fb5eb7b57ca1ccf30e76835eb258539b388c8d6680f8affadc8408ef34baaf8",
+    "sourceHash": "bee002040de146a9a6a3f5de3182afbf0b6a9e35d8f72d63b76f12b8c1e84f53",
     "status": "machine",
     "title": "HTTP: invalid gzip response when compression is enabled",
     "description": "The client tries to unpack the data and reports an error despite status 200.",
-    "intro": "The client tries to unpack the data and reports an error despite status 200. The cause needs to be checked in the real environment.",
+    "intro": "The client tries to unpack the data and reports an error despite status 200.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -142,11 +142,11 @@
     ]
   },
   "api-http-400-malformed-json": {
-    "sourceHash": "cf46ec709668b499d846125a3708195af0b2d3a864ed0aca9cbd96cea5af0d70",
+    "sourceHash": "1bfbf8dc6d1595d38975e689d07d2aedfaa93a6c11b21803ee06bae8c405a023",
     "status": "machine",
     "title": "HTTP 400: Unexpected token while parsing JSON",
     "description": "Endpoint rejects the request before saving the form and the console shows JSON error.",
-    "intro": "Endpoint rejects the request before saving the form and the console shows JSON error. The cause needs to be checked in the real environment.",
+    "intro": "Endpoint rejects the request before saving the form and the console shows JSON error.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -177,11 +177,11 @@
     ]
   },
   "api-http-401-bearer-missing": {
-    "sourceHash": "156f476d999c67efdc18d773bfbba45dc5694226e2aaba2634b32e6f6c949703",
+    "sourceHash": "2dd69c0ef49aa2b8becdc280aa73ab9b78bd964a2cadba87cf2d0330035c3394",
     "status": "machine",
     "title": "HTTP 401 Unauthorized: No Bearer Token in Request",
     "description": "The private endpoint returns 401, although the user in the interface looks logged in.",
-    "intro": "The private endpoint returns 401, although the user in the interface looks logged in. The cause needs to be checked in the real environment.",
+    "intro": "The private endpoint returns 401, although the user in the interface looks logged in.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -212,11 +212,11 @@
     ]
   },
   "api-http-403-wrong-role": {
-    "sourceHash": "907d8b0aabe696e96d69eb891709dce3c49e5bebf149f26fdae64ccf2a404957",
+    "sourceHash": "0103f2c32cde9afd3a7dcc2e7f5fe535965c94f85f663959669369b8f50684c3",
     "status": "machine",
     "title": "HTTP 403 Forbidden: logged user does not have permission",
     "description": "Token is important, but the API refuses to act as administrator.",
-    "intro": "Token is important, but the API refuses to act as administrator. The cause needs to be checked in the real environment.",
+    "intro": "Token is important, but the API refuses to act as administrator.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -247,11 +247,11 @@
     ]
   },
   "api-http-404-route-prefix": {
-    "sourceHash": "9a024ee8e59e4037a9bb9fe060a7e51cfe9947862f983715e1b989cf7f8f3fd7",
+    "sourceHash": "d264d22489629da7014622fc0c80f48e6e085c2d31cb52bd1b65b9d5e0432f80",
     "status": "machine",
     "title": "HTTP 404 in API after changing prefix /api/v2",
     "description": "Frontend creates an old path after the implementation of the new endpoint version.",
-    "intro": "Frontend creates an old path after the implementation of the new endpoint version. The cause needs to be checked in the real environment.",
+    "intro": "Frontend creates an old path after the implementation of the new endpoint version.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -282,11 +282,11 @@
     ]
   },
   "api-http-405-unsupported-method": {
-    "sourceHash": "613bc1919a782895f2e9b79840100bffeb05a17322e48c6e2559487726a06f30",
+    "sourceHash": "9980b2bcf24343bd97ef471771d34fbbf8ad164ad6c65abfb09b7fbd94418adb",
     "status": "machine",
     "title": "HTTP 405 Method Not Allowed when sending DELETE",
     "description": "The resource address is correct, but the server does not support the HTTP method used by the client.",
-    "intro": "The resource address is correct, but the server does not support the HTTP method used by the client. The cause needs to be checked in the real environment.",
+    "intro": "The resource address is correct, but the server does not support the HTTP method used by the client.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -317,11 +317,11 @@
     ]
   },
   "api-http-408-request-timeout": {
-    "sourceHash": "aa4ed53a08f0df29a92b62f9d54f403a562d1c14bf95577d4c8b6007971cd65e",
+    "sourceHash": "161e52577cdd30081663c86a40aa62190d5e099d774a22875645d760a705adae",
     "status": "machine",
     "title": "HTTP 408 Request Timeout when sending free request",
     "description": "The server closes the request before the customer can send the whole body.",
-    "intro": "The server closes the request before the customer can send the whole body. The cause needs to be checked in the real environment.",
+    "intro": "The server closes the request before the customer can send the whole body.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -352,11 +352,11 @@
     ]
   },
   "api-http-409-resource-conflict": {
-    "sourceHash": "a5a40a233a52d5ccbd6b56d19c5217b44857f388c7714966b1bc525160f97a8e",
+    "sourceHash": "bc43cac23d54bcf3b3e98922ea03aa7cd531f0fcc6b48e8d5bc7719438d685dd",
     "status": "machine",
     "title": "HTTP 409 Conflict after resetting the record",
     "description": "A resubmit form tries to save an existing order ID.",
-    "intro": "A resubmit form tries to save an existing order ID. The cause needs to be checked in the real environment.",
+    "intro": "A resubmit form tries to save an existing order ID.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -387,11 +387,11 @@
     ]
   },
   "api-http-413-request-too-large": {
-    "sourceHash": "cbdbcf3a90d94d8428d0022bc1faea042351ce781d10562c3827c089d89e8c78",
+    "sourceHash": "2362ac487f3250117dd860753ac2e1505065deeb07aa3cdc9ae4f697c736b96d",
     "status": "machine",
     "title": "HTTP 413 Payload Too Large when uploading file",
     "description": "Upload PDF is rejected by proxy before the application can check the file type.",
-    "intro": "Upload PDF is rejected by proxy before the application can check the file type. The cause needs to be checked in the real environment.",
+    "intro": "Upload PDF is rejected by proxy before the application can check the file type.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -422,11 +422,11 @@
     ]
   },
   "api-http-414-uri-too-long": {
-    "sourceHash": "eaf9c5f64cf3d96bfe2a74834307cfac843b6b68cd318ec24e1d08bec105ab82",
+    "sourceHash": "bfcecb101df13aa3ae76ee6984674352a95b72baf30bb2b6cde936b821beae93",
     "status": "machine",
     "title": "HTTP 414 URI Too Long through search filters in URL",
     "description": "An extended search form generates a GET address with thousands of parameters.",
-    "intro": "An extended search form generates a GET address with thousands of parameters. The cause needs to be checked in the real environment.",
+    "intro": "An extended search form generates a GET address with thousands of parameters.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -565,11 +565,11 @@
     ]
   },
   "api-http-431-request-header-fields-too-large": {
-    "sourceHash": "4dce5559b884304671062fb7163562ed4272e191c0fc30d21820e3e1521cd9b9",
+    "sourceHash": "c275b5f34b6dacfaf4457eef6b2490111fa2a7ef0078c73ebf84152b23c99ba9",
     "status": "machine",
     "title": "HTTP 431: too big cookie header after multiple sessions",
     "description": "The API does not accept the request, even though the body is small and correct.",
-    "intro": "The API does not accept the request, even though the body is small and correct. The cause needs to be checked in the real environment.",
+    "intro": "The API does not accept the request, even though the body is small and correct.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -600,11 +600,11 @@
     ]
   },
   "api-http-500-unhandled-exception": {
-    "sourceHash": "62146b23a7a9c61b73e608eb4c9b5237e9abfa5c6c9e2602739f65c66cab735e",
+    "sourceHash": "170812dea913fd42198f9505e98886938d107f0a72ad403e46506fe51227e334",
     "status": "machine",
     "title": "HTTP 500 Internal Server Error without user information",
     "description": "The form displays a general write error, and backend throws an unserviced exception.",
-    "intro": "The form displays a general write error, and backend throws an unserviced exception. The cause needs to be checked in the real environment.",
+    "intro": "The form displays a general write error, and backend throws an unserviced exception.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -635,11 +635,11 @@
     ]
   },
   "api-http-502-bad-gateway": {
-    "sourceHash": "12715fca5fd17517e0a01f5a0c5a03b00d0ae7562cd29c121a1a5809d2a4e85e",
+    "sourceHash": "ceb644099e15d444074908476b62f7eb573bba4bd4f55a8c9e9340d64873da03",
     "status": "machine",
     "title": "HTTP 502 Bad Gateway after changing service address",
     "description": "Proxy works, but the application server does not return the correct upstream response.",
-    "intro": "Proxy works, but the application server does not return the correct upstream response. The cause needs to be checked in the real environment.",
+    "intro": "Proxy works, but the application server does not return the correct upstream response.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -670,11 +670,11 @@
     ]
   },
   "api-http-503-service-unavailable": {
-    "sourceHash": "8968d67f45ffa3fd854b90e7709e44558768f556e832e9eb7bf586a91bf9a507",
+    "sourceHash": "25dc9b0615aa6935a7f31f371a55297c85f73b2d38ef621190c635e784a54c15",
     "status": "machine",
     "title": "HTTP 503 Service Unavailable when restarting integration",
     "description": "Questions temporarily refuse to operate in the maintenance window or overload.",
-    "intro": "Questions temporarily refuse to operate in the maintenance window or overload. The cause needs to be checked in the real environment.",
+    "intro": "Questions temporarily refuse to operate in the maintenance window or overload.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -705,11 +705,11 @@
     ]
   },
   "api-http-504-gateway-timeout": {
-    "sourceHash": "1dbbc868293e38801a7ccc8cb3cfddec25895c0c3d85c1e7ac44b180828b926e",
+    "sourceHash": "4ff23cf1022ea8da0b1db8061d66cfab520b91b39e3afdbc1b9f6f60b39f9905",
     "status": "machine",
     "title": "HTTP 504 Gateway Timeout in CRM integration",
     "description": "Proxy completes waiting before the base or external supplier responds.",
-    "intro": "Proxy completes waiting before the base or external supplier responds. The cause needs to be checked in the real environment.",
+    "intro": "Proxy completes waiting before the base or external supplier responds.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -740,11 +740,11 @@
     ]
   },
   "api-multipart-boundary-missing": {
-    "sourceHash": "e58bb6f5065cba4b18e54760b00f667b0d7c34533151aae1a6a8551449c3b84a",
+    "sourceHash": "01f0a8909832d7ffc401e7900ea07d33acaa493060a1142aea81c4b2a2551cba",
     "status": "machine",
     "title": "Upload multiplepart: No Boundary in Content-Type",
     "description": "Endpoint does not recognize FormData and returns file parsing error.",
-    "intro": "Endpoint does not recognize FormData and returns file parsing error. The cause needs to be checked in the real environment.",
+    "intro": "Endpoint does not recognize FormData and returns file parsing error.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -775,11 +775,11 @@
     ]
   },
   "api-pagination-cursor-repeat": {
-    "sourceHash": "323b9bb4226b3516445052b9e482bafb9d2fdc9530c37c27dddc8b55102a1e10",
+    "sourceHash": "cf5523a761416e2d70aec997251a057b97e98e4925277fc0d77651cf0609983f",
     "status": "machine",
     "title": "API pagination: next pages return the same records",
     "description": "The contact list has duplicates while scrolling, even though the limit is correct.",
-    "intro": "The contact list has duplicates while scrolling, even though the limit is correct. The cause needs to be checked in the real environment.",
+    "intro": "The contact list has duplicates while scrolling, even though the limit is correct.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -810,11 +810,11 @@
     ]
   },
   "api-sse-response-buffered": {
-    "sourceHash": "b29edbff513cd1924dff8261bc3d9f36c0d97ddc05786bfcc45e463d54e3d883",
+    "sourceHash": "ca179d4383d39038f1adb1652fec1b3ab1adc99b756941c6fa0330aab5eda802",
     "status": "machine",
     "title": "Server-Sent Events: messages come all at the end",
     "description": "The EventSource client does not receive events for long and then gets them in one package.",
-    "intro": "The EventSource client does not receive events for long and then gets them in one package. The cause needs to be checked in the real environment.",
+    "intro": "The EventSource client does not receive events for long and then gets them in one package.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -881,11 +881,11 @@
     ]
   },
   "api-websocket-1006-abnormal-closure": {
-    "sourceHash": "dfcd75632e83cc7410d62cda8f266d8dcd67cfdda702650150de56ffaf410a68",
+    "sourceHash": "9c6213d2e9db17f6e01a482c7ddd4c5d053d201e29582483ba1dfcb879591c2d",
     "status": "machine",
     "title": "WebSocket close 1006: connection disappears without message",
     "description": "Realtime CRM hangs up on the mobile internet and the application does not recover changes.",
-    "intro": "Realtime CRM hangs up on the mobile internet and the application does not recover changes. The cause needs to be checked in the real environment.",
+    "intro": "Realtime CRM hangs up on the mobile internet and the application does not recover changes.",
     "serviceLabel": "Integration and APIs",
     "sections": [
       {
@@ -1137,11 +1137,11 @@
     ]
   },
   "crm-archived-leads-show-in-active": {
-    "sourceHash": "a7d6f430ea5cd1d358bf7f7da01a2e2ec1f86fb7f44e3502083dffd07b6845ed",
+    "sourceHash": "67f9ae292e612162707629df4b7d969042039bb50b8be12b8106c5c26018df1c",
     "status": "machine",
     "title": "CRM: archived leads return to active list",
     "description": "After selecting the archive, the entry disappears, but after the refresh it goes back to the queue.",
-    "intro": "After selecting the archive, the entry disappears, but after the refresh it goes back to the queue. The cause needs to be checked in the real environment.",
+    "intro": "After selecting the archive, the entry disappears, but after the refresh it goes back to the queue.",
     "serviceLabel": "CRM and Lead support",
     "sections": [
       {
@@ -1172,11 +1172,11 @@
     ]
   },
   "crm-assignment-race-two-salespeople": {
-    "sourceHash": "1f0de12b5f2e000bfa26054e325e84e4aa53947b41fc963f18ff051743184d28",
+    "sourceHash": "cfa7ec0d8fbec4234417a8bf4a21d3076c6ea97e96f7811c3d45fe1b9c27de4a",
     "status": "machine",
     "title": "CRM: Two traders take over the same lead",
     "description": "The simultaneous click “Take” allows you to assign one record to two people.",
-    "intro": "The simultaneous click “Take” allows you to assign one record to two people. The cause needs to be checked in the real environment.",
+    "intro": "The simultaneous click “Take” allows you to assign one record to two people.",
     "serviceLabel": "CRM and Lead support",
     "sections": [
       {
@@ -1207,11 +1207,11 @@
     ]
   },
   "crm-callback-timezone-dst": {
-    "sourceHash": "be5ebd71fe927043f51b09411023c34983e219d6e30d40ab152a239265aba69a",
+    "sourceHash": "7f7cfd5654b7a2e21753bceda812c6d42deb8663cdea184d50fee08a6d3af83d",
     "status": "machine",
     "title": "CRM: callback scheduled at 10:00 p.m. appears an hour later",
     "description": "Tasks scheduled before the change of time are displayed at another time at the trader.",
-    "intro": "Tasks scheduled before the change of time are displayed at another time at the trader. The cause needs to be checked in the real environment.",
+    "intro": "Tasks scheduled before the change of time are displayed at another time at the trader.",
     "serviceLabel": "CRM and Lead support",
     "sections": [
       {
@@ -1242,11 +1242,11 @@
     ]
   },
   "crm-csv-formula-injection": {
-    "sourceHash": "62881790541419ef0f92f9c4f3c527683e328199f4fa410d563a8035c4e51536",
+    "sourceHash": "56ccd0f810353e752213f4e50aa16e7ce4da9f329ddc827798ecb3f914887795",
     "status": "machine",
     "title": "CRM: CSV export allows you to execute formula from customer field",
     "description": "The text field starting with = or + is interpreted by the sheet as a formula.",
-    "intro": "The text field starting with = or + is interpreted by the sheet as a formula. The cause needs to be checked in the real environment.",
+    "intro": "The text field starting with = or + is interpreted by the sheet as a formula.",
     "serviceLabel": "CRM and Lead support",
     "sections": [
       {
@@ -1277,11 +1277,11 @@
     ]
   },
   "crm-csv-utf8-polish-characters": {
-    "sourceHash": "92dbdcfcabdb61f923c07aea7bc81f4752005cc20a06f4e8ad1b5332581b70a3",
+    "sourceHash": "170139fd8b5ae2b9a374d6528e56b61ab055e3eaa9f8ccc92d6653fa13bba8de",
     "status": "machine",
     "title": "CRM: CSV export displays bushes instead of Polish letters",
     "description": "The export file opens in Excel with incorrect characters in the town names and names.",
-    "intro": "The export file opens in Excel with incorrect characters in the town names and names. The cause needs to be checked in the real environment.",
+    "intro": "The export file opens in Excel with incorrect characters in the town names and names.",
     "serviceLabel": "CRM and Lead support",
     "sections": [
       {
@@ -1312,11 +1312,11 @@
     ]
   },
   "crm-dashboard-count-diff-filter": {
-    "sourceHash": "cc837306cd1aa16fc23c7aed13e33ab759c4a8287087f1ab0870d269f46fb5be",
+    "sourceHash": "f0146503ec102ccb04b27c22f2245e80c8330a27cf858dfca8a3e4a4b40ea7c9",
     "status": "machine",
     "title": "CRM: counter 180 lead and list shows 120",
     "description": "The panel header and the paged table give different number of contacts.",
-    "intro": "The panel header and the paged table give different number of contacts. The cause needs to be checked in the real environment.",
+    "intro": "The panel header and the paged table give different number of contacts.",
     "serviceLabel": "CRM and Lead support",
     "sections": [
       {
@@ -1406,11 +1406,11 @@
     ]
   },
   "crm-file-attachment-preview-unauthorized": {
-    "sourceHash": "2069c0109caa4a8e144cf31f912eb5f84fd41779892376fbafaab609159fddda",
+    "sourceHash": "4b478bf9cd018a26d10f5322ac099f52a818885ea1a039f36620a7fe942cc290",
     "status": "machine",
     "title": "CRM: Appendix thumbnail available without login",
     "description": "A private client document opens after a direct URL from the browser history.",
-    "intro": "A private client document opens after a direct URL from the browser history. The cause needs to be checked in the real environment.",
+    "intro": "A private client document opens after a direct URL from the browser history.",
     "serviceLabel": "CRM and Lead support",
     "sections": [
       {
@@ -1618,11 +1618,11 @@
     ]
   },
   "crm-lead-pagination-stale-cursor": {
-    "sourceHash": "afc443dee84ae6c341b9fef52d98de68e20f406a58e5579bd2e59cf473d29d9a",
+    "sourceHash": "988124ce0825eeba03729740b02698ad39e4a393238b7a10d4848523287ddf17",
     "status": "machine",
     "title": "CRM: After scrolling further leads are omitted",
     "description": "List Pagination changes the score when adding new leads and some records are lost.",
-    "intro": "List Pagination changes the score when adding new leads and some records are lost. The cause needs to be checked in the real environment.",
+    "intro": "List Pagination changes the score when adding new leads and some records are lost.",
     "serviceLabel": "CRM and Lead support",
     "sections": [
       {
@@ -1653,11 +1653,11 @@
     ]
   },
   "crm-lead-stage-history-missing": {
-    "sourceHash": "80cab3e0ba3793997b5c421f5e43e2c4bfa4fa694d0a6e565b4e86ec381e5853",
+    "sourceHash": "86a51b2805a628e568c4e01d53a08973d23a01556ed374ec1df86dda60c8b41d",
     "status": "machine",
     "title": "CRM: Lead status changes, but history does not save author",
     "description": "The employee moves the case to the next stage, and after a week, no one knows who did it.",
-    "intro": "The employee moves the case to the next stage, and after a week, no one knows who did it. The cause needs to be checked in the real environment.",
+    "intro": "The employee moves the case to the next stage, and after a week, no one knows who did it.",
     "serviceLabel": "CRM and Lead support",
     "sections": [
       {
@@ -1688,11 +1688,11 @@
     ]
   },
   "crm-licznik-leadow-nie-zgadza-sie-z-lista": {
-    "sourceHash": "55036ca08ec38ccff6e8036cf0838d58168e916cf7ae33a024dc1ba60c14030a",
+    "sourceHash": "18fcfe8dceeff0bf4ceec8337807ff333e561f76b0d9da2cb2efbbde25c69131",
     "status": "machine",
     "title": "CRM shows 180 lead, but there is less on the list — how to fix it?",
     "description": "The CRM contact counter disagrees with the list? Check filters, pagination, RLS permissions and counting queries.",
-    "intro": "The panel shows 180 contacts, but the trader sees only part. Such a problem arose in the analysis of the B-CRM operation. The counter itself does not prove that all records are available to the logged person.",
+    "intro": "The panel shows 180 contacts, but the trader sees only part. The reason is the difference between the way records are counted and the filters and list permissions.",
     "serviceLabel": "CRM and web applications",
     "sections": [
       {
@@ -1766,11 +1766,11 @@
     ]
   },
   "crm-odblokowany-lead-nadal-niewidoczny": {
-    "sourceHash": "04657c91382a8c39160dd0b2a99cd81fc2c582be2f7913b74cac620ff4cb4267",
+    "sourceHash": "fb41012f1c2012ec1c939896b08035ae52438614c5dd33a263c50647915756b4",
     "status": "machine",
     "title": "I unlock the lead at CRM, but the trader can't see it.",
     "description": "What to check when after removing the lead lock does not return to the merchant list: status, assignment, RLS and refresh.",
-    "intro": "The administrator unlocks the contact, and the dealer does not appear in the panel. A similar symptom was reported in B-CRM for queue and contact block.",
+    "intro": "The administrator unlocks the contact, but the trader still does not see it in the panel. It is worth checking separately the assignment, record visibility and refresh.",
     "serviceLabel": "CRM and web applications",
     "sections": [
       {
@@ -1832,11 +1832,11 @@
     ]
   },
   "crm-phone-e164-invalid-country-code": {
-    "sourceHash": "954c5ebdd91790687706ec3d155cc4b40b3545c4dbdc02d7b72570fda61a4f3f",
+    "sourceHash": "f8cccc9022671670c68019c109f382db7bc5f6d98f2bfff94bb16a9fb7a55c78",
     "status": "machine",
     "title": "CRM: phone number from Poland does not work when calling back automatically",
     "description": "The number is recorded in the database, but telephone integration rejects the format without country code.",
-    "intro": "The number is recorded in the database, but telephone integration rejects the format without country code. The cause needs to be checked in the real environment.",
+    "intro": "The number is recorded in the database, but telephone integration rejects the format without country code.",
     "serviceLabel": "CRM and Lead support",
     "sections": [
       {
@@ -2032,11 +2032,11 @@
     ]
   },
   "dns-cname-www-points-old-host": {
-    "sourceHash": "f9014cf43674b584f591aba0db998c425d33d665904dd8b55e02967a4c1f6626",
+    "sourceHash": "02fbdcc42396dea3eb27bcd50eb8a5cc71129aa1d8ab4ea881f0f69e091d3093",
     "status": "machine",
     "title": "DNS: www opens old page after domain transfer",
     "description": "The main domain shows a new service, but the web continues to direct to the previous hosting.",
-    "intro": "The main domain shows a new service, but the web continues to direct to the previous hosting. The cause needs to be checked in the real environment.",
+    "intro": "The main domain shows a new service, but the web continues to direct to the previous hosting.",
     "serviceLabel": "Domains and Mail",
     "sections": [
       {
@@ -2067,11 +2067,11 @@
     ]
   },
   "dns-dkim-selector-not-found": {
-    "sourceHash": "6c712cc1a79935c739955c51505fdc1188219c402e79a2a90d664e42cacefd5d",
+    "sourceHash": "4d130dbe4bfb8cbc5402e0b98f2b2d36daeafe320fbe379ae7bc125c675ff535",
     "status": "machine",
     "title": "DKIM: selector not found after connecting a new supplier",
     "description": "The email contains DKIM-Signature, but resolver does not find the key record.",
-    "intro": "The email contains DKIM-Signature, but resolver does not find the key record. The cause needs to be checked in the real environment.",
+    "intro": "The email contains DKIM-Signature, but resolver does not find the key record.",
     "serviceLabel": "Domains and Mail",
     "sections": [
       {
@@ -2102,11 +2102,11 @@
     ]
   },
   "dns-dmarc-report-mailbox-bounces": {
-    "sourceHash": "3171e094f7ae60324e1af422c82fc9146d8842c89cf672844109319c2969372c",
+    "sourceHash": "7fe0087761f8106da84a5e41120fe9e098841d2ce651c201d6533073ba86f074",
     "status": "machine",
     "title": "DMARC: Aggregate reports do not come to the report box",
     "description": "Record  dmarc ma rua, but the owner does not receive the planned collective reports.",
-    "intro": "Record  dmarc ma rua, but the owner does not receive the planned collective reports. The cause needs to be checked in the real environment.",
+    "intro": "Record  dmarc ma rua, but the owner does not receive the planned collective reports.",
     "serviceLabel": "Domains and Mail",
     "sections": [
       {
@@ -2137,11 +2137,11 @@
     ]
   },
   "dns-dnssec-servfail-after-ns-change": {
-    "sourceHash": "7fa9e4b5cb06bac4b30f2807ad9040682f88e93fce6880a6853ca816eb8e487a",
+    "sourceHash": "743fb424b7639545bc97b973a8b0195dc1e967b3255b64ebe1dd73ec5d5f513d",
     "status": "machine",
     "title": "DNSSEC SERVICE after changing names servers",
     "description": "Some users cannot open the domain even though the A records look good.",
-    "intro": "Some users cannot open the domain even though the A records look good. The cause needs to be checked in the real environment.",
+    "intro": "Some users cannot open the domain even though the A records look good.",
     "serviceLabel": "Domains and Mail",
     "sections": [
       {
@@ -2172,11 +2172,11 @@
     ]
   },
   "dns-spf-too-many-lookups": {
-    "sourceHash": "b73c08ce57d1740db8c37c2819b2e891c5c59345f6da47924edd00f316911d2b",
+    "sourceHash": "552699a7d339f75e6049d0186a60952036517d7f545df57debf3f44e295df1cf",
     "status": "machine",
     "title": "SPF PermError: DNS appeal limit exceeded",
     "description": "Messages are rejected despite the existence of one SPF record with multiple include.",
-    "intro": "Messages are rejected despite the existence of one SPF record with multiple include. The cause needs to be checked in the real environment.",
+    "intro": "Messages are rejected despite the existence of one SPF record with multiple include.",
     "serviceLabel": "Domains and Mail",
     "sections": [
       {
@@ -2240,11 +2240,11 @@
     ]
   },
   "email-550-5-7-26-unauthenticated": {
-    "sourceHash": "e0cb7f1a7a4ada2a7ae87101352dd1755af28d8c9a416f67bd78f1791398598e",
+    "sourceHash": "5a2f23d987cc0392bb4d5f482c586e591f3a8e171b7bb8d33fa3947f85e5ab8e",
     "status": "machine",
     "title": "Email 550 5.7.26: message rejected as unauthenticated",
     "description": "Shipping from the company reflects information about the missing SPF or DKIM.",
-    "intro": "Shipping from the company reflects information about the missing SPF or DKIM. The cause needs to be checked in the real environment.",
+    "intro": "Shipping from the company reflects information about the missing SPF or DKIM.",
     "serviceLabel": "Domains and Mail",
     "sections": [
       {
@@ -2275,11 +2275,11 @@
     ]
   },
   "email-mail-forward-loop": {
-    "sourceHash": "9049fc72ba02e75c18d479244aee06a335bbd8b6ef9beec1900153057cbd03f6",
+    "sourceHash": "a641c5d5c0c3f68770ca8b8cb7f2146fbea4000a0523832742b0a733154c6163",
     "status": "machine",
     "title": "Mail: Forward between two boxes creates a loop",
     "description": "Automatic redirect returns to the previous address and the message goes to the bounce.",
-    "intro": "Automatic redirect returns to the previous address and the message goes to the bounce. The cause needs to be checked in the real environment.",
+    "intro": "Automatic redirect returns to the previous address and the message goes to the bounce.",
     "serviceLabel": "Domains and Mail",
     "sections": [
       {
@@ -2310,11 +2310,11 @@
     ]
   },
   "email-mx-priority-backup-delivery": {
-    "sourceHash": "4e9759357277ed5503ab5462b1539faa8d771e6772351c3cb861811af69e2200",
+    "sourceHash": "fa95edd167cdacfec759f64992e4cc0d4408b546034bd218c1c812f733bf72e5",
     "status": "machine",
     "title": "MX priority: mail goes to inactive mailserver backup",
     "description": "Part of the message returns as undelivered after changing the mail operator.",
-    "intro": "Part of the message returns as undelivered after changing the mail operator. The cause needs to be checked in the real environment.",
+    "intro": "Part of the message returns as undelivered after changing the mail operator.",
     "serviceLabel": "Domains and Mail",
     "sections": [
       {
@@ -2345,11 +2345,11 @@
     ]
   },
   "email-ptr-reverse-dns-missing": {
-    "sourceHash": "fb2c4e25924012025d2e3409ac652115485312031c5c5a021ea14832dbf32424",
+    "sourceHash": "7429a0c56cfcfde89a36071f3cb20ed5d4598c17f37e9550dc0ee8eeda5142d8",
     "status": "machine",
     "title": "Email: no PTR reverse DNS impairs SMTP delivery",
     "description": "The own mail server is rejected or treated suspiciously by some recipients.",
-    "intro": "The own mail server is rejected or treated suspiciously by some recipients. The cause needs to be checked in the real environment.",
+    "intro": "The own mail server is rejected or treated suspiciously by some recipients.",
     "serviceLabel": "Domains and Mail",
     "sections": [
       {
@@ -2380,11 +2380,11 @@
     ]
   },
   "email-smtp-connection-587-timeout": {
-    "sourceHash": "b281e2a5f7b01668934a77f54c6a7e5460f2c9966814b40719fe45c1f96b4c58",
+    "sourceHash": "445f4f3f9e85fa1df26ae44a0299752db5dc3f0f480d3d5559f6a4736819de79",
     "status": "machine",
     "title": "SMTP: timeout on shipment via port 587",
     "description": "The website saves the form, but the server does not establish a connection with the mail provider.",
-    "intro": "The website saves the form, but the server does not establish a connection with the mail provider. The cause needs to be checked in the real environment.",
+    "intro": "The website saves the form, but the server does not establish a connection with the mail provider.",
     "serviceLabel": "Domains and Mail",
     "sections": [
       {
@@ -2571,11 +2571,11 @@
     ]
   },
   "formularz-strona-nie-dziala-500": {
-    "sourceHash": "a1412a045f80ff99eddd9be634c88c916a55a0f32aa7f8bc85b8f2fa7665e134",
+    "sourceHash": "3a5f179299ebc6564687c1a67dbe45690813d25658098dac61de28e9fb06d817",
     "status": "machine",
     "title": "The form on the website does not send messages — what do you check in the API?",
     "description": "You click Send and nothing happens? How to track the form from your browser through API to email or CRM.",
-    "intro": "The form looks correct, but the customer does not receive confirmation and the application does not go to the company. Such a problem occurred during the testing of the service page form.",
+    "intro": "The form looks correct, but the customer does not receive confirmation and the application does not go to the company. First check whether the request goes to the server, saves the request and returns the true shipping result.",
     "serviceLabel": "CRM and integration",
     "sections": [
       {
@@ -2630,11 +2630,11 @@
     ]
   },
   "github-actions-artifact-expired": {
-    "sourceHash": "c245c29c32bf5bd40ff07fab62f61ff9136c73ae5578ab23e762349372f7a897",
+    "sourceHash": "592acf282670eb3877d3abc5f5275af1adce4b5cad1c78d0ebe09c8c806dd19e",
     "status": "machine",
     "title": "GitHub Actions: artifact expired before downloading",
     "description": "When trying to play the old build download-artifact does not find a file.",
-    "intro": "When trying to play the old build download-artifact does not find a file. The cause needs to be checked in the real environment.",
+    "intro": "When trying to play the old build download-artifact does not find a file.",
     "serviceLabel": "Automation",
     "sections": [
       {
@@ -2737,11 +2737,11 @@
     ]
   },
   "github-actions-checkout-shallow-history": {
-    "sourceHash": "f1e8cbc44da953e6f92e9ccb3a72993007ea6e10ce6378e58390596f5a12dfad",
+    "sourceHash": "e5e3ae9fd50d58fc3a992ce296ff18a54d7002029c522e2539243bf561be2cb4",
     "status": "machine",
     "title": "GitHub Actions: git merge-base does not work by Shallow clone",
     "description": "The change analysis script cannot determine a common branch ancestor, even though repo works locally.",
-    "intro": "The change analysis script cannot determine a common branch ancestor, even though repo works locally. The cause needs to be checked in the real environment.",
+    "intro": "The change analysis script cannot determine a common branch ancestor, even though repo works locally.",
     "serviceLabel": "Automation",
     "sections": [
       {
@@ -2772,11 +2772,11 @@
     ]
   },
   "github-actions-concurrency-cancel-main": {
-    "sourceHash": "231fef3ec7ef521386d0e2dc677a5cbe2a580268d405fa53e91c50f32560bb89",
+    "sourceHash": "27bcb1b39dc6f0a33d5696b5bc402f9031c4410908507b44a1220276eaf597a0",
     "status": "machine",
     "title": "GitHub Actions: The older build cancels newer in the competitive group",
     "description": "After the push series one launch is canned and there is no publication.",
-    "intro": "After the push series one launch is canned and there is no publication. The cause needs to be checked in the real environment.",
+    "intro": "After the push series one launch is canned and there is no publication.",
     "serviceLabel": "Automation",
     "sections": [
       {
@@ -2843,11 +2843,11 @@
     ]
   },
   "github-actions-env-secret-not-in-job": {
-    "sourceHash": "c782b48915e2ed4df6c700afba95f3bc4d89d3d26760bdaf80da641cc7eef252",
+    "sourceHash": "85e1e32b3cedc2566e04d5e654d75ee1842ab0de1efa345ead94a6cb2c5e3bd0",
     "status": "machine",
     "title": "GitHub Actions: environment secret empty despite the correct name",
     "description": "The secret is found in the production environment, but the job is not given its value.",
-    "intro": "The secret is found in the production environment, but the job is not given its value. The cause needs to be checked in the real environment.",
+    "intro": "The secret is found in the production environment, but the job is not given its value.",
     "serviceLabel": "Automation",
     "sections": [
       {
@@ -2914,11 +2914,11 @@
     ]
   },
   "github-actions-ghcr-403-write-package": {
-    "sourceHash": "2326a28f49a498885d974f01d4e36363444e8394dd9a7d946b01d08defba23c4",
+    "sourceHash": "235eb546b6b365aa611ef0f8b8e1119c17a0f37af208bc9fd24f6cf39ad5a791",
     "status": "machine",
     "title": "GitHub Actions: push to GHCR returns denied 403",
     "description": "Workflow builds an image of Docker, but publication to ghcr.io does not have permission.",
-    "intro": "Workflow builds an image of Docker, but publication to ghcr.io does not have permission. The cause needs to be checked in the real environment.",
+    "intro": "Workflow builds an image of Docker, but publication to ghcr.io does not have permission.",
     "serviceLabel": "Automation",
     "sections": [
       {
@@ -3021,11 +3021,11 @@
     ]
   },
   "github-actions-matrix-fail-fast-cancels": {
-    "sourceHash": "fbd164373fda1df4057b872c35c3859cc91b898d7deadf5a22c41e14b6ae1851",
+    "sourceHash": "b3eaa7cd003f7a472cc184515c76ddaa81ff23a20c366dd9c3c31cd0719211e5",
     "status": "machine",
     "title": "GitHub Actions: matrix fail-fast completes all tests after one error",
     "description": "One combination of Node and the operating system fails and the other tests do not finish.",
-    "intro": "One combination of Node and the operating system fails and the other tests do not finish. The cause needs to be checked in the real environment.",
+    "intro": "One combination of Node and the operating system fails and the other tests do not finish.",
     "serviceLabel": "Automation",
     "sections": [
       {
@@ -3092,11 +3092,11 @@
     ]
   },
   "github-actions-node-cache-misses": {
-    "sourceHash": "263718c3f6846025be29a71ca6ec51099b3b9d2bb8238b00eec239d6c8c70440",
+    "sourceHash": "45027a0c36b2cae11cb01bc64083adcfa7d8fcba51d382d3bae88bf0e7f51aec",
     "status": "machine",
     "title": "GitHub Actions: cache emp always has Cache miss",
     "description": "Another run re-downloads all dependencies despite the configured cache.",
-    "intro": "Another run re-downloads all dependencies despite the configured cache. The cause needs to be checked in the real environment.",
+    "intro": "Another run re-downloads all dependencies despite the configured cache.",
     "serviceLabel": "Automation",
     "sections": [
       {
@@ -3163,11 +3163,11 @@
     ]
   },
   "github-actions-output-multiline-invalid": {
-    "sourceHash": "e1692fef1df7c800ed814dcfa7a2db3fbfcb01eaaa5462dd264440e32d1d569a",
+    "sourceHash": "ba7b43a3397867d72852ea0c78d99e5a790f4189c16461017e4fd5ca5903d622",
     "status": "machine",
     "title": "GitHub Actions: Invalid format when writing GITHUB OUTPUT",
     "description": "Job ceases to work after writing a multi-line value to the output file.",
-    "intro": "Job ceases to work after writing a multi-line value to the output file. The cause needs to be checked in the real environment.",
+    "intro": "Job ceases to work after writing a multi-line value to the output file.",
     "serviceLabel": "Automation",
     "sections": [
       {
@@ -3198,11 +3198,11 @@
     ]
   },
   "github-actions-path-filter-skips": {
-    "sourceHash": "af997124624a4dcd83a33b57ea476aa918983f808412e4e1bc3c9ccb8abf74b3",
+    "sourceHash": "c0b2e5822d50da2465b8a381c6085370c4f1303d99e7d4baf0e36344d9dc4553",
     "status": "machine",
     "title": "GitHub Actions: push does not run CI through paths",
     "description": "The change in the code file does not trigger the expected workflow.",
-    "intro": "The change in the code file does not trigger the expected workflow. The cause needs to be checked in the real environment.",
+    "intro": "The change in the code file does not trigger the expected workflow.",
     "serviceLabel": "Automation",
     "sections": [
       {
@@ -3233,11 +3233,11 @@
     ]
   },
   "github-actions-required-check-pending": {
-    "sourceHash": "1a9778562179c4533c62de1c8bbbd89d098d03a5386cfd8193c039617fc20faf",
+    "sourceHash": "fe67722b4c28d9b1ea6e706d6db3e0062365129a3f4478cdb0bea0e5338b14e7",
     "status": "machine",
     "title": "GitHub: Required status check remains Pending despite the green CI",
     "description": "PR has correct tests, but the branch rule waits for nonexistent status.",
-    "intro": "PR has correct tests, but the branch rule waits for nonexistent status. The cause needs to be checked in the real environment.",
+    "intro": "PR has correct tests, but the branch rule waits for nonexistent status.",
     "serviceLabel": "Automation",
     "sections": [
       {
@@ -3268,11 +3268,11 @@
     ]
   },
   "github-actions-reusable-workflow-secret": {
-    "sourceHash": "0be5dc7010826459d5d8208d89304a52d981019d4531c2c219d8f65aa8ad7ab7",
+    "sourceHash": "c14cb12a6fb64594f2c87009f3cc1ecb6851fb409b6d875356a9e4be539ce4ca",
     "status": "machine",
     "title": "GitHub Actions: reusable workflow does not receive the secret provided",
     "description": "The called workflow works, but the token used by his job is empty.",
-    "intro": "The called workflow works, but the token used by his job is empty. The cause needs to be checked in the real environment.",
+    "intro": "The called workflow works, but the token used by his job is empty.",
     "serviceLabel": "Automation",
     "sections": [
       {
@@ -3339,11 +3339,11 @@
     ]
   },
   "github-actions-workflow-dispatch-not-visible": {
-    "sourceHash": "0c5656e5794aa3e784db304e04799167305016ec9ae256ffb3fee221136341a3",
+    "sourceHash": "02b14a883e6612006ea840b7b70568dc7072f75ce866958ed18c39dc650dc61c",
     "status": "machine",
     "title": "GitHub Actions: Run workflow button is not visible",
     "description": "Workflow exists in the working branch, but there is no manual launch option.",
-    "intro": "Workflow exists in the working branch, but there is no manual launch option. The cause needs to be checked in the real environment.",
+    "intro": "Workflow exists in the working branch, but there is no manual launch option.",
     "serviceLabel": "Automation",
     "sections": [
       {
@@ -3625,11 +3625,11 @@
     ]
   },
   "google-sitemap-zgloszona-a-strony-brak": {
-    "sourceHash": "56fb0ef03f10744ef443b295409b99ac93b005dbc6672136339481d51c117ef9",
+    "sourceHash": "afc183bf5e4eb3ec241410a5b83f25cd96368f78a381cf60986d0e1b429d5ec3",
     "status": "machine",
     "title": "Sitemap sent to Google, but the pages are still not in the results",
     "description": "Google Search Console adopted sitemap.xml, but the domain does not appear in the search engine. What's next?",
-    "intro": "Search Console shows a successful map message, but after entering a new page name it is difficult to find the result. This situation was analysed on company websites.",
+    "intro": "Search Console shows a successful map message, but after entering a new page name it is difficult to find the result. Site map status and page presence in the index are two different search stages.",
     "serviceLabel": "Pages, SEO and advertising",
     "sections": [
       {
@@ -3849,11 +3849,11 @@
     ]
   },
   "icloud-wlasna-domena-maile-nie-dochodza": {
-    "sourceHash": "b80c951ff4472c2f51c40d17038b0e936a8fd577fb61a106d7bdb0c38ddf205f",
+    "sourceHash": "ade832f1179e45806361c64d486abf92918e69629ddd48370836987ffb87ad54",
     "status": "machine",
     "title": "iCloud Mail: messages to address in your own domain do not arrive",
     "description": "You have an e-mail @yourjadomena.pl in iCloud+, but nothing comes? Check MX, DKIM, alias, and transfer.",
-    "intro": "The address in the domain is added to iCloud+, but messages from external broadcasters do not appear in the mailbox. Such a problem occurred during the mail configuration at Bernecki.dev.",
+    "intro": "The address in the domain is added to iCloud+, but messages from external broadcasters do not appear in the mailbox. Most often you have to check DNS records, address activation and account configuration.",
     "serviceLabel": "CRM and integration",
     "sections": [
       {
@@ -3882,11 +3882,11 @@
     ]
   },
   "ile-kosztuje-lead-z-facebook-ads": {
-    "sourceHash": "1821046a00dd3dfcea33546ba8879fe3edad1b90366b19fb8dd0aa29f0555e50",
+    "sourceHash": "2c68add8292c981f3a9f3eee0eda7269c42b1272030167d95e9df3d285bfc678",
     "status": "machine",
     "title": "How much does a Facebook Ads lead cost? CPL and true evaluation of advertising",
     "description": "How to calculate the cost of lead with Meta Ads, what is different from CPL from CAC and why a cheap form does not always bring the customer. Example of RES campaign.",
-    "intro": "Cost of lead (CPL) is expenditure on campaigns divided by the number of contacts obtained. It's important, but not the only number. On the basis of the Meta Ads discharges available in one of the RES projects, 2 331 contacts and the average CPL can be demonstrated about PLN 29.79 in selected campaigns. This does not mean that this is exactly how much it costs to lead in every industry.",
+    "intro": "Cost of lead (CPL) is expenditure on campaigns divided by the number of contacts obtained. It's important, but not the only number. In Meta Ads campaigns for Re-Energy System I gained 2,331 contacts at average cost PLN 29.79 in a list of 17 lead campaigns. The cost of getting contact depends on the industry, offer and market.",
     "serviceLabel": "Conducting Meta Ads campaign",
     "sections": [
       {
@@ -3900,7 +3900,7 @@
         "title": "How do you calculate the average cost of contact without being told?",
         "paragraphs": [
           "The expenditure of the same campaign shall be cumulated and divided by the sum of the contacts obtained. This is a weighted average of the number of results, not a simple average of the costs of individual campaigns. Thanks to this, a small campaign with several leads does not distort the image of a large campaign.",
-          "In the available discharges, the selected 17 lead campaigns had a total of 2,331 contacts and around PLN 69,4 thousand expenditure. This gives about PLN 29.79 per contact. The amounts displayed in thousands were rounded; discharges do not specify the date range, so they should not be attributed to a specific year."
+          "Example: 17 lead campaigns Re-Energy System generated 2,331 contacts with total expenditures of approximately PLN 69.4,000. The average cost of contact was PLN 29.79. This is the result of this campaign set, not the industry average."
         ]
       },
       {
@@ -4225,11 +4225,11 @@
     ]
   },
   "meta-account-restricted-security-check": {
-    "sourceHash": "9e163e5f62f7e5e6517e1a6716f72ab5d40c2f385a9c94ad165e24f1314039f6",
+    "sourceHash": "2f259d9b2bd88e504cbef6d0a2661cdab720032e9e90b9ddc6a7cc93a978bcf5",
     "status": "machine",
     "title": "Meta: advertising account limited after screening",
     "description": "The account cannot create new campaigns, although the user sees historical ads.",
-    "intro": "The account cannot create new campaigns, although the user sees historical ads. The cause needs to be checked in the real environment.",
+    "intro": "The account cannot create new campaigns, although the user sees historical ads.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4260,11 +4260,11 @@
     ]
   },
   "meta-ad-catalog-products-rejected": {
-    "sourceHash": "67a7b2852f1fd05b8979c5fc9ff0a2205dba46f5b415547ae5ef1a375a815a20",
+    "sourceHash": "64e7ddd8979d693833516b7a07160c13b8bb93c400d8764ee01fd7d36cc42964",
     "status": "machine",
     "title": "Meta Catalog: Products rejected by abnormal photos",
     "description": "Feed is downloaded, but some products are not eligible for catalogue advertising.",
-    "intro": "Feed is downloaded, but some products are not eligible for catalogue advertising. The cause needs to be checked in the real environment.",
+    "intro": "Feed is downloaded, but some products are not eligible for catalogue advertising.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4295,11 +4295,11 @@
     ]
   },
   "meta-ad-rejected-policy": {
-    "sourceHash": "713a2528682a63095c51e5df7bb73069d361197bb22c7b1d2a41eb65628a496d",
+    "sourceHash": "18ccde4fee757a41c1a7d55e484f7a14585bdfb13c5acf7de55f3f5b3934fa43",
     "status": "machine",
     "title": "Meta Ads: advertising rejected due to advertising rules",
     "description": "The new creation is marked as Rejected despite the working group and budget.",
-    "intro": "The new creation is marked as Rejected despite the working group and budget. The cause needs to be checked in the real environment.",
+    "intro": "The new creation is marked as Rejected despite the working group and budget.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4330,11 +4330,11 @@
     ]
   },
   "meta-ads-account-payment-declined": {
-    "sourceHash": "279f247178f19fd9ac70443ff644b8096e179261e8ae093144a48e2dfc847a04",
+    "sourceHash": "6ff7a40034c34ba14b9ca3d919bbd8666c3292c4065c99953a28a11ffa8ccd81",
     "status": "machine",
     "title": "Meta Ads: Payment failed stops active campaign",
     "description": "Advertising sets do not spend the budget, and the account shows a payment problem.",
-    "intro": "Advertising sets do not spend the budget, and the account shows a payment problem. The cause needs to be checked in the real environment.",
+    "intro": "Advertising sets do not spend the budget, and the account shows a payment problem.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4365,11 +4365,11 @@
     ]
   },
   "meta-ads-audience-overlap": {
-    "sourceHash": "8be8ce389adc6919037d1a9c6c66db0da3b8e203346bd43715d0621b4c43c826",
+    "sourceHash": "1edee8acdc11c9ffbce52c5b9c1c5d4151a81202be2d0315b39245763151ce72",
     "status": "machine",
     "title": "Meta Ads: Advertising sets compete for the same customers",
     "description": "Several similar sets have an unstable result cost, although the creations are different.",
-    "intro": "Several similar sets have an unstable result cost, although the creations are different. The cause needs to be checked in the real environment.",
+    "intro": "Several similar sets have an unstable result cost, although the creations are different.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4400,11 +4400,11 @@
     ]
   },
   "meta-ads-budget-spent-no-impressions": {
-    "sourceHash": "9997e3d6399d42114fd03c060f2934f7603fc50a01f515b0baf3bdf4925ab6c6",
+    "sourceHash": "8ea36894bccf462d921a5c85adc77863eeb9a32e3338626e050c23ab7092026a",
     "status": "machine",
     "title": "Meta Ads: budget is set, but no views",
     "description": "The set has Active status, but the visible range remains close to zero.",
-    "intro": "The set has Active status, but the visible range remains close to zero. The cause needs to be checked in the real environment.",
+    "intro": "The set has Active status, but the visible range remains close to zero.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4435,11 +4435,11 @@
     ]
   },
   "meta-ads-campaign-schedule-timezone": {
-    "sourceHash": "a45faf21801b23fc2ea68c617e27d64b96a15e0a9d3ac587db002ef23df31bfe",
+    "sourceHash": "898aab35318dec0e591bacf847ff6ab895a16f02693979ed5718db1b21bf665d",
     "status": "machine",
     "title": "Meta Ads: ads are displayed at different times than planned",
     "description": "The campaign has a schedule, but reported hours do not correspond to local company time.",
-    "intro": "The campaign has a schedule, but reported hours do not correspond to local company time. The cause needs to be checked in the real environment.",
+    "intro": "The campaign has a schedule, but reported hours do not correspond to local company time.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4470,11 +4470,11 @@
     ]
   },
   "meta-ads-creative-text-overlay-crop": {
-    "sourceHash": "76f1088f45e0a0ebc8f77c30244e1ad320f77c98f2ad37c2113944501084f135",
+    "sourceHash": "0929fc8233397d1cef713c02b3942857cc2e9a1e191ef7c45b015a8c8c6292a4",
     "status": "machine",
     "title": "Meta Ads: advertising looks bad in Stories despite correct preview",
     "description": "Text and logo are cut off after displaying creations in vertical placements.",
-    "intro": "Text and logo are cut off after displaying creations in vertical placements. The cause needs to be checked in the real environment.",
+    "intro": "Text and logo are cut off after displaying creations in vertical placements.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4505,11 +4505,11 @@
     ]
   },
   "meta-ads-frequency-high": {
-    "sourceHash": "b61201dcbf0869c9e9a0b6ff27ec03ee43208be7055841262606fbebe470d7d2",
+    "sourceHash": "d6072d1ce747aa9f24423f7ccdc4610968d2085484abb5ec9656ea1a97ca5e4c",
     "status": "machine",
     "title": "Meta Ads: increasing frequency and falling CTR",
     "description": "The audiences see the same advertising more and more frequently and click on it.",
-    "intro": "The audiences see the same advertising more and more frequently and click on it. The cause needs to be checked in the real environment.",
+    "intro": "The audiences see the same advertising more and more frequently and click on it.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4540,11 +4540,11 @@
     ]
   },
   "meta-ads-instagram-account-disconnected": {
-    "sourceHash": "969df046485f1ad0bfb063178d0456f28db4c2ca73ff3e21c23bd3b5aab887ad",
+    "sourceHash": "e501c8bb07b0e41be75efe0f524c1378807a5ac2f1aa87c26ace254d32818bf0",
     "status": "machine",
     "title": "Meta Ads: advertising cannot use Instagram",
     "description": "The company's Instagram profile is missing when selecting the advertising identity.",
-    "intro": "The company's Instagram profile is missing when selecting the advertising identity. The cause needs to be checked in the real environment.",
+    "intro": "The company's Instagram profile is missing when selecting the advertising identity.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4575,11 +4575,11 @@
     ]
   },
   "meta-ads-pixel-event-priority-conflict": {
-    "sourceHash": "84a150293763cee35c87ea0129d5cb14eec99daaf7c901c3622106f8a0e6c1ae",
+    "sourceHash": "a4108138912328a36943a446fc2baf91f6676d81044c747a4304a388e0fdf80e",
     "status": "machine",
     "title": "Pixel Meta: Purchase is not properly prioritised",
     "description": "The event report shows a configuration conflict and inconsistent data in sales campaigns.",
-    "intro": "The event report shows a configuration conflict and inconsistent data in sales campaigns. The cause needs to be checked in the real environment.",
+    "intro": "The event report shows a configuration conflict and inconsistent data in sales campaigns.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4676,11 +4676,11 @@
     ]
   },
   "meta-ads-report-attribution-diff": {
-    "sourceHash": "26c131c3ca9b9264b20a4d0e996263bb59e40d085f8a3e6f2ef8271dfa22321d",
+    "sourceHash": "c39c03c0bbe9c9b2da969d9bdbf6f4618bb14d49c20f6441334bd27ec9eb33ef",
     "status": "machine",
     "title": "Meta Ads: more conversion in Advertising Manager than in CRM",
     "description": "The platform shall attribute more results than the number of contracts actually signed.",
-    "intro": "The platform shall attribute more results than the number of contracts actually signed. The cause needs to be checked in the real environment.",
+    "intro": "The platform shall attribute more results than the number of contracts actually signed.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4813,11 +4813,11 @@
     ]
   },
   "meta-capi-currency-value-invalid": {
-    "sourceHash": "220117a8f2b5a05c4b7db35268dbb1d59f2876e62669652f12fd7e0358a5267c",
+    "sourceHash": "0bf3f10fb4ab00aa7603b04e47d508fbb763be01d3968cbdb44278be3b3c838b",
     "status": "machine",
     "title": "CAPI Meta: Purchase event has invalid currency or value",
     "description": "The purchase is sent, but the report or diagnosis shows incorrect values.",
-    "intro": "The purchase is sent, but the report or diagnosis shows incorrect values. The cause needs to be checked in the real environment.",
+    "intro": "The purchase is sent, but the report or diagnosis shows incorrect values.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4848,11 +4848,11 @@
     ]
   },
   "meta-capi-event-time-outside-window": {
-    "sourceHash": "a0d8ded2ca83855148b6804ccce8069ea3a4e95629c1a570775773fe6e5e5c4d",
+    "sourceHash": "a1e044ef93ca13bbb6528f3b6bc0ebb6e605dbda7b1b7ad06768d408570a9d5e",
     "status": "machine",
     "title": "CAPI Meta: event time outside the acceptable range",
     "description": "Server Event is rejected or marked as late despite the correct token.",
-    "intro": "Server Event is rejected or marked as late despite the correct token. The cause needs to be checked in the real environment.",
+    "intro": "Server Event is rejected or marked as late despite the correct token.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4919,11 +4919,11 @@
     ]
   },
   "meta-capi-user-data-hash-wrong": {
-    "sourceHash": "1401939531a57e0c56b7172ea6b1cbe72b111bbc82426c0a9f13e6a6c95e5f78",
+    "sourceHash": "3c9d7e4fe5b7a2da7f0796372185c4feecab62f080cfaf6becb6ea1832c68c60",
     "status": "machine",
     "title": "CAPI Meta: email hash does not improve event matching",
     "description": "Events occur, but user data have incorrect normalization before hashing.",
-    "intro": "Events occur, but user data have incorrect normalization before hashing. The cause needs to be checked in the real environment.",
+    "intro": "Events occur, but user data have incorrect normalization before hashing.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -4980,11 +4980,11 @@
     ]
   },
   "meta-events-domain-blocked": {
-    "sourceHash": "35a538b5295d4a7609d1d945a6aa93e74a9eaa0e75ee0729e33b2ac98a2f9632",
+    "sourceHash": "cb7d5d5818ceb2ecece1e1d1191070462211c7fdbc8872ba095d7bbc023ed623",
     "status": "machine",
     "title": "Meta Events Manager: events from an unexpected domain",
     "description": "The system reports the movement of events originating outside the target page or test domain.",
-    "intro": "The system reports the movement of events originating outside the target page or test domain. The cause needs to be checked in the real environment.",
+    "intro": "The system reports the movement of events originating outside the target page or test domain.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -5179,11 +5179,11 @@
     ]
   },
   "meta-leadform-privacy-policy-missing": {
-    "sourceHash": "1e3323b8fa7af8fe4595d65469e5172e653428948368ea6f562a298c4cf528d5",
+    "sourceHash": "412ec3c671878dd44e5b3a4e516f9a469cc179adc6beada719ac1027d29646aa",
     "status": "machine",
     "title": "Meta Lead Ads: Unable to publish a form without privacy policy",
     "description": "Instant Form stops publication and asks for the correct link to the privacy rules.",
-    "intro": "Instant Form stops publication and asks for the correct link to the privacy rules. The cause needs to be checked in the real environment.",
+    "intro": "Instant Form stops publication and asks for the correct link to the privacy rules.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -5214,11 +5214,11 @@
     ]
   },
   "meta-leadform-quality-vs-volume": {
-    "sourceHash": "1e4e2632a60b72f03da26ef48c9ee8fcdfa95ce925d09cdf13549762d7a5b142",
+    "sourceHash": "b16732feeb319b8739646167224de3790d9f80e33feb0fa74c23c709cfea8695",
     "status": "machine",
     "title": "Meta Lead Ads: Cheap forms without receiving customers",
     "description": "The panel reports a lot of lead, but CRM has a lot of wrong numbers and random reports.",
-    "intro": "The panel reports a lot of lead, but CRM has a lot of wrong numbers and random reports. The cause needs to be checked in the real environment.",
+    "intro": "The panel reports a lot of lead, but CRM has a lot of wrong numbers and random reports.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -5374,11 +5374,11 @@
     ]
   },
   "meta-pixel-domain-not-verified": {
-    "sourceHash": "9e08dcf7f6840c6af67dd81d871924abae9d3b32292c4be788ea0ecf59b7c07b",
+    "sourceHash": "3c03a186b38caaa83c61d062d24be3c66dc33caa5b3391ec51b185b75396a2b7",
     "status": "machine",
     "title": "Pixel Meta: domain unverified for event configuration",
     "description": "The panel requires confirmation of the site's ownership before the selected domain operation.",
-    "intro": "The panel requires confirmation of the site's ownership before the selected domain operation. The cause needs to be checked in the real environment.",
+    "intro": "The panel requires confirmation of the site's ownership before the selected domain operation.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -5409,11 +5409,11 @@
     ]
   },
   "meta-pixel-pageview-duplicate": {
-    "sourceHash": "cc146dac7e0cdee997eb1d03b9b9f3d915fe9e46bf9ae36c3251b83aa9cb4171",
+    "sourceHash": "d03031317878e9bcdc3f27b02354da266afa166764160c665168ffed0d94c34d",
     "status": "machine",
     "title": "Meta Pixel: PageView counts twice on one page",
     "description": "One address opening gives two independent PageView events in Events Manager.",
-    "intro": "One address opening gives two independent PageView events in Events Manager. The cause needs to be checked in the real environment.",
+    "intro": "One address opening gives two independent PageView events in Events Manager.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -5671,11 +5671,11 @@
     ]
   },
   "mobile-viewport-przeskakuje-przewijanie": {
-    "sourceHash": "03689092a22bad294c32f80056683689f4fbe8caf1b1cc75be2d6b254bab882d",
+    "sourceHash": "4ed3e53d80c995f35256c89f660a822f49bf5b50851e12fcee62edb3329a7aa4",
     "status": "machine",
     "title": "Phone page jumps when scrolling — CSS causes",
     "description": "A mobile viewport jumps when scrolling, animations, or an extended Safari bar. How to diagnose 100vh and layout shifts.",
-    "intro": "On iPhone, the background or sections of the page jump while desktop looks normal. Such a problem arose when developing a portfolio.",
+    "intro": "On iPhone, the background or sections of the page jump while desktop looks normal. On mobile devices, the height of the visible area changes when scrolling and hiding the browser bar.",
     "serviceLabel": "Website creation",
     "sections": [
       {
@@ -8306,7 +8306,7 @@
     ]
   },
   "reklamy-oze-magazyny-energii": {
-    "sourceHash": "00d5ca0221b440c72d19b60ae4fbecca34d11d4b0099ae3be20d8be86aa42c0d",
+    "sourceHash": "ed1fd8ef8d0f4bf12d50de637822d5668504483b74532aa96deb64ebb58ca97b",
     "status": "machine",
     "title": "RES Advertising and Energy Magazines — How to Get Customers?",
     "description": "How to conduct Meta Ads campaigns for photovoltaics and energy storage: communications, contact qualification, salesmen's service and CPL measurement.",
@@ -8330,8 +8330,8 @@
       {
         "title": "Example from the Re-Energy System campaign",
         "paragraphs": [
-          "Owner of the Re-Energy System declares that advertising campaigns for about two years were the only source of obtaining company lead. In the available Meta Ads discharges from selected 17 lead campaigns you can see a total of 2,331 contacts, at an average cost of about PLN 29.79.",
-          "This is the result of selected campaigns, not the entire period of activity. We do not publish campaign names, areas or budgets of single advertisements. The dumps do not contain an unambiguous period of dates."
+          "For about two years Meta Ads was the source of new queries for the Re-Energy System. In 17 lead campaigns I gained 2,331 contacts at an average cost of PLN 29.79.",
+          "The results include 17 campaigns geared towards networking. I analyse the quality of applications and the effectiveness of further service in CRM separately."
         ]
       },
       {
@@ -8377,11 +8377,11 @@
     ]
   },
   "seo-404-internal-links-broken": {
-    "sourceHash": "388b69aa3d1a2f59dc1a900289720bbf320cd2f171035b9230c727964775a969",
+    "sourceHash": "7106bd145c747f5cfe1ebf5c9456b70b9e32967ea890bf232226d8ff0930c052",
     "status": "machine",
     "title": "SEO: Internal links from guidebooks lead to 404",
     "description": "After changing the service older entries still indicate an outdated address.",
-    "intro": "After changing the service older entries still indicate an outdated address. The cause needs to be checked in the real environment.",
+    "intro": "After changing the service older entries still indicate an outdated address.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -8412,11 +8412,11 @@
     ]
   },
   "seo-5xx-googlebot-intermittent": {
-    "sourceHash": "9d5a00feb0034afd3ff3f249c4fa6dcd174a811c932d4b4477c0c14c6009020b",
+    "sourceHash": "81d32f19a479d587ae544536ec7de20323a46eb922ff709f971e3ecdb085ad86",
     "status": "machine",
     "title": "SEO: Googlebot hits periodic HTTP 503 errors",
     "description": "The site usually works, but the crawl report contains server errors.",
-    "intro": "The site usually works, but the crawl report contains server errors. The cause needs to be checked in the real environment.",
+    "intro": "The site usually works, but the crawl report contains server errors.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -8480,11 +8480,11 @@
     ]
   },
   "seo-breadcrumb-jsonld-wrong-positions": {
-    "sourceHash": "4bbc73d612ce724acc40fb8482501c90e4407529a1e28da65d48dd3821374d6b",
+    "sourceHash": "a9a1c3b20204f9728a84202b0861f003fc6bdff23dffbb91a6b011a699b6b2cb",
     "status": "machine",
     "title": "BreadcrumbList: abnormal position in structural data",
     "description": "Rich Results Test reports an error in the article's navigation path.",
-    "intro": "Rich Results Test reports an error in the article's navigation path. The cause needs to be checked in the real environment.",
+    "intro": "Rich Results Test reports an error in the article's navigation path.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -8515,11 +8515,11 @@
     ]
   },
   "seo-canonical-http-instead-of-https": {
-    "sourceHash": "9c50796b84ad363338e3a931f0b1bcfbfb8fdda77ed91bf28d25029c0ae982bc",
+    "sourceHash": "6edfb82f8cd9a8d7bd1e41b2dbee6b4d4115264a3cc6fe99d50205ea945698f6",
     "status": "machine",
     "title": "SEO: canonical indicates HTTP, and the page works on HTTPS",
     "description": "The page available after HTTPS declares as the basic address version without encryption.",
-    "intro": "The page available after HTTPS declares as the basic address version without encryption. The cause needs to be checked in the real environment.",
+    "intro": "The page available after HTTPS declares as the basic address version without encryption.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -8583,11 +8583,11 @@
     ]
   },
   "seo-faq-rich-results-not-shown": {
-    "sourceHash": "d392c15c5a7226d20e6afa49f6dc6e9f46800e66e388797373a5d0c2209428a5",
+    "sourceHash": "b7b69f88f2ea21cacf88b14ebb52236db81bee5b2ec4c5d03d4ddede7c816bfc",
     "status": "machine",
     "title": "FAQPage scheme: no drop-down questions seen in Google",
     "description": "The page has the correct FAQPage JSON-LD, but the organic result does not show the FAQ extension.",
-    "intro": "The page has the correct FAQPage JSON-LD, but the organic result does not show the FAQ extension. The cause needs to be checked in the real environment.",
+    "intro": "The page has the correct FAQPage JSON-LD, but the organic result does not show the FAQ extension.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -8723,11 +8723,11 @@
     ]
   },
   "seo-google-search-console-inspection-quota": {
-    "sourceHash": "666cdb5f3d94ce5ae7e5a88c9bb3a5873c699b0245292c3612f2eed2819eb403",
+    "sourceHash": "c63ef7b22775a072bfb4408380ea3e494dd9e29a075dd9f30f015d185882a89f",
     "status": "machine",
     "title": "Search Console: limit to URL inspection after multiple requests",
     "description": "Attempts to report tens of articles end in a limited number of checks.",
-    "intro": "Attempts to report tens of articles end in a limited number of checks. The cause needs to be checked in the real environment.",
+    "intro": "Attempts to report tens of articles end in a limited number of checks.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -8794,11 +8794,11 @@
     ]
   },
   "seo-google-title-rewritten": {
-    "sourceHash": "382e9a1098dbc7238a79a87bb589dd77d70320cac6be5a552e3ce3688b700ba2",
+    "sourceHash": "2f8c3d8bf5539f78c2c320f2ff92d854d917087eef578d465920b96c80206e7e",
     "status": "machine",
     "title": "Google changes the title tag of the page in the search results",
     "description": "The search result has a different title than defined on the page.",
-    "intro": "The search result has a different title than defined on the page. The cause needs to be checked in the real environment.",
+    "intro": "The search result has a different title than defined on the page.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -8829,11 +8829,11 @@
     ]
   },
   "seo-googlebot-slow-javascript-render": {
-    "sourceHash": "00608c029910dadda5024b18f7638ec5159afc03dd5f8a2e07aea0efe390718b",
+    "sourceHash": "782ff54502432ad2bf862a71110c378fb3b30b3c99344c8cde309e4093d5471c",
     "status": "machine",
     "title": "Googlebot sees the text only after heavy JavaScript",
     "description": "The site loads the contents of the manuals through client-side fetch and HTML initial is empty.",
-    "intro": "The site loads the contents of the manuals through client-side fetch and HTML initial is empty. The cause needs to be checked in the real environment.",
+    "intro": "The site loads the contents of the manuals through client-side fetch and HTML initial is empty.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -8864,11 +8864,11 @@
     ]
   },
   "seo-hreflang-return-links-missing": {
-    "sourceHash": "8f8f3b59df4b01e412ed0016a6b40d5dfa1b91a25da972bc1cda5b7e05e7994d",
+    "sourceHash": "6bca4a383b4916a80e9057a03fdb47ed8a8b812d176273b64a5b0950eca6bad9",
     "status": "machine",
     "title": "Google hreflang: no links between languages",
     "description": "The search engine ignores some of the declarations of alternative language versions.",
-    "intro": "The search engine ignores some of the declarations of alternative language versions. The cause needs to be checked in the real environment.",
+    "intro": "The search engine ignores some of the declarations of alternative language versions.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -8899,11 +8899,11 @@
     ]
   },
   "seo-infinite-scroll-no-pagination-links": {
-    "sourceHash": "e9ca9266f90fe735f0307a82edba7804ddeb90ef3a678cb6f3ddd3ccf044b030",
+    "sourceHash": "e5b1641995e117222c46bcc648c89eeec049045375ae3d4661ba3c92c10b3293",
     "status": "machine",
     "title": "SEO: Infinite scroll hides further articles from the robot",
     "description": "The directory charges entries only after scrolling and there are no links to subsequent sets.",
-    "intro": "The directory charges entries only after scrolling and there are no links to subsequent sets. The cause needs to be checked in the real environment.",
+    "intro": "The directory charges entries only after scrolling and there are no links to subsequent sets.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -9036,11 +9036,11 @@
     ]
   },
   "seo-mobile-viewport-clipped-text": {
-    "sourceHash": "e66cd1b1682fdfd39835a3912c33293b27fff4724d458d19baf9bc6ada5f29ff",
+    "sourceHash": "15f3a694dfd79dbd5af3528c8dd3fa04ab23aff884817aa9cbcb5970cddb0c42",
     "status": "machine",
     "title": "SEO mobile: text goes beyond the screen in Google Mobile Usability",
     "description": "On a narrow phone, the article's content is wider than the viewport and requires horizontal scrolling.",
-    "intro": "On a narrow phone, the article's content is wider than the viewport and requires horizontal scrolling. The cause needs to be checked in the real environment.",
+    "intro": "On a narrow phone, the article's content is wider than the viewport and requires horizontal scrolling.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -9071,11 +9071,11 @@
     ]
   },
   "seo-noindex-canonical-conflicting": {
-    "sourceHash": "b41c06795be74ebd0fea5c15e5e31f2bf17050049e95cc28fdb0a494b4a91805",
+    "sourceHash": "a41fe6f324ea2bea3f48fe6057d32e78ff85eb0eea23c16c4a5bcaf393adfff7",
     "status": "machine",
     "title": "SEO: noindex and canonical simultaneously hinder indexing control",
     "description": "On one page the metadata simultaneously set noindex and canonical to another entry.",
-    "intro": "On one page the metadata simultaneously set noindex and canonical to another entry. The cause needs to be checked in the real environment.",
+    "intro": "On one page the metadata simultaneously set noindex and canonical to another entry.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -9178,11 +9178,11 @@
     ]
   },
   "seo-paginated-category-orphan-pages": {
-    "sourceHash": "d1bb4be941907199c6627144261f98b0c16cc2aae11637f0417f62161a5b4244",
+    "sourceHash": "dfff006501bd8bc8f0e474e555452d68de33609f3bd58cb530553e8d9794199f",
     "status": "machine",
     "title": "SEO: articles from further parts of the categories are orphaned",
     "description": "There are URLs in the sitemap, but many new guides cannot be reached from the menu.",
-    "intro": "There are URLs in the sitemap, but many new guides cannot be reached from the menu. The cause needs to be checked in the real environment.",
+    "intro": "There are URLs in the sitemap, but many new guides cannot be reached from the menu.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -9246,11 +9246,11 @@
     ]
   },
   "seo-product-schema-wrong-price": {
-    "sourceHash": "47eac413373aa7ffdeba06d1e68afbb7199171dba589369c692a0eb6b6e15cca",
+    "sourceHash": "5bc5cf1c6f7d0e53cec877345be51174b97805bec8a932dd88c07f0ed250d13c",
     "status": "machine",
     "title": "Product scheme: different price in JSON-LD than on site",
     "description": "In the structural code is the old product price and the user sees the current offer.",
-    "intro": "In the structural code is the old product price and the user sees the current offer. The cause needs to be checked in the real environment.",
+    "intro": "In the structural code is the old product price and the user sees the current offer.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -9353,11 +9353,11 @@
     ]
   },
   "seo-robots-txt-503-temporary": {
-    "sourceHash": "b317d9f74b28746a588f2461cdd2f507bf58d0866e7b6b88f0ea8218f8962992",
+    "sourceHash": "4936a0f18404f97612f2025cda114785bc37bf20a2c6856a49aa605c2ec960cb",
     "status": "machine",
     "title": "Robots.txt returns 503 and Google limits crawl",
     "description": "The site has the correct pages, but the server sometimes does not share a robot.txt file.",
-    "intro": "The site has the correct pages, but the server sometimes does not share a robot.txt file. The cause needs to be checked in the real environment.",
+    "intro": "The site has the correct pages, but the server sometimes does not share a robot.txt file.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -9388,11 +9388,11 @@
     ]
   },
   "seo-search-console-property-url-prefix": {
-    "sourceHash": "98867511905d7580f5a186a4d28417275f9fd62287cd8412977a10a32c8a7450",
+    "sourceHash": "fadea250aadf255f13d8344d90779008958f6750acd438237fc6f3e10c3b5ff3",
     "status": "machine",
     "title": "Search Console: map reported to the wrong domain prefix",
     "description": "Sitemap for HTTPS works, but an account opens HTTP service or preview subdomain.",
-    "intro": "Sitemap for HTTPS works, but an account opens HTTP service or preview subdomain. The cause needs to be checked in the real environment.",
+    "intro": "Sitemap for HTTPS works, but an account opens HTTP service or preview subdomain.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -9423,11 +9423,11 @@
     ]
   },
   "seo-search-console-txt-wrong-dns-zone": {
-    "sourceHash": "3694e1ed82db185ec38b886c3db53455d750344da4aedffc693c24f9114bedad",
+    "sourceHash": "f34681308a3d54e352802473d27ce8c113ef4877c84d6ab1be186e7c50428c21",
     "status": "machine",
     "title": "Search Console: TXT domain verification does not pass",
     "description": "The TXT record displayed in the recorder panel, but Google does not detect token.",
-    "intro": "The TXT record displayed in the recorder panel, but Google does not detect token. The cause needs to be checked in the real environment.",
+    "intro": "The TXT record displayed in the recorder panel, but Google does not detect token.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -9494,11 +9494,11 @@
     ]
   },
   "seo-sitemap-gzip-invalid-response": {
-    "sourceHash": "8af0fadf30ea599efcf884cf64480d382ead15a134adfd1c53bf63f9c21c22f4",
+    "sourceHash": "a66f0aa243e45578e5f19835f66c0aa364d7da31fb1adc695f2d17033bcccd65",
     "status": "machine",
     "title": "Sitemap.xml.gz: a robot can't unpack a map",
     "description": "The browser downloads the file, but the search engine reports a format error.",
-    "intro": "The browser downloads the file, but the search engine reports a format error. The cause needs to be checked in the real environment.",
+    "intro": "The browser downloads the file, but the search engine reports a format error.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -9529,11 +9529,11 @@
     ]
   },
   "seo-sitemap-index-child-404": {
-    "sourceHash": "0e12c8735e09ca366c0ef825a6402073b9d8ff04392fda553726842bf729960e",
+    "sourceHash": "4ec83d60c7f12635f614a2071c5c795e2f4087b3687292242f2eb7dd7db3069e",
     "status": "machine",
     "title": "Sitemap index: The submap returns 404",
     "description": "The main sitemap index is downloaded, but some of these maps do not exist.",
-    "intro": "The main sitemap index is downloaded, but some of these maps do not exist. The cause needs to be checked in the real environment.",
+    "intro": "The main sitemap index is downloaded, but some of these maps do not exist.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -9564,11 +9564,11 @@
     ]
   },
   "seo-sitemap-over-50000": {
-    "sourceHash": "0d0e889bfde382b0df507cb3d0230e4686640527e35c0b721f7d2d2b96b2d727",
+    "sourceHash": "77839284eec3c28f5c1fc4133f0de58a06c17e8a7e66e3e379a1aba7a880dc5a",
     "status": "machine",
     "title": "Sitemap.xml: too many addresses in one file",
     "description": "The service map generator creates XML exceeding the limit of the sitemap protocol.",
-    "intro": "The service map generator creates XML exceeding the limit of the sitemap protocol. The cause needs to be checked in the real environment.",
+    "intro": "The service map generator creates XML exceeding the limit of the sitemap protocol.",
     "serviceLabel": "SEO and Pages",
     "sections": [
       {
@@ -9694,11 +9694,11 @@
     ]
   },
   "supabase-auth-access-token-claims-mismatch": {
-    "sourceHash": "be39101d142dab307cbb3463f9fe4ef70d571b1b6e70b219f31fcfa4b8e7b4ea",
+    "sourceHash": "2cb775da40cad853afbda2fbab37c07b79e1eb46a9840375354cc14274074919",
     "status": "machine",
     "title": "Supabase JWT: new roles do not appear in active token",
     "description": "After changing the role in the database, the user still receives a refusal or retains the old permission.",
-    "intro": "After changing the role in the database, the user still receives a refusal or retains the old permission. The cause needs to be checked in the real environment.",
+    "intro": "After changing the role in the database, the user still receives a refusal or retains the old permission.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -9729,11 +9729,11 @@
     ]
   },
   "supabase-auth-admin-createuser-service-role": {
-    "sourceHash": "d95af2f13a20ef419a386da2cd629d7f61081e1371d2824c3f42861e364778d6",
+    "sourceHash": "4ae035e31a68a93e2b063a5412370b0bf2efc4118aa3461fba674e25a6ba3725",
     "status": "machine",
     "title": "Supabase Admin: createUser returns a refusal for an anon key",
     "description": "The administrative function tries to create users using a public client.",
-    "intro": "The administrative function tries to create users using a public client. The cause needs to be checked in the real environment.",
+    "intro": "The administrative function tries to create users using a public client.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -9764,11 +9764,11 @@
     ]
   },
   "supabase-auth-anonymous-rls-access": {
-    "sourceHash": "0408e3a12a4b2481fe9b735a37168f17015d249201d904918b70dd59853556f8",
+    "sourceHash": "18ffc57d2a81b59afaf5903e64dbd38b1171265c03e41c6ad5bef4674694e73e",
     "status": "machine",
     "title": "Subabase Auth: anonymous user sees ordinary account resources",
     "description": "The application treats an anonymously logged account as a full authenticated account.",
-    "intro": "The application treats an anonymously logged account as a full authenticated account. The cause needs to be checked in the real environment.",
+    "intro": "The application treats an anonymously logged account as a full authenticated account.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -9799,11 +9799,11 @@
     ]
   },
   "supabase-auth-captcha-failed": {
-    "sourceHash": "4a952a12abc9187ecbfd54f9c4990f74f5a60245647c479697b7919da48bd273",
+    "sourceHash": "7433f8ff86c7130718c1cafa84587f0bab3b45ce6644977015ee6d91469da1e6",
     "status": "machine",
     "title": "Supabase Auth: captcha verification failed at registration",
     "description": "The form rejects the new user despite correct fields and acceptance of the rules.",
-    "intro": "The form rejects the new user despite correct fields and acceptance of the rules. The cause needs to be checked in the real environment.",
+    "intro": "The form rejects the new user despite correct fields and acceptance of the rules.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -9834,11 +9834,11 @@
     ]
   },
   "supabase-auth-email-not-confirmed": {
-    "sourceHash": "021da433d5114ffe35e017448a25e649e20f20bf7b6072cfda280b7880b5bf0a",
+    "sourceHash": "1c6f764b868acd601b401991ab0d3b85a3cca8d3e233641694c32ce0a1423948",
     "status": "machine",
     "title": "Supabase Auth: Email not confirmed despite the correct password",
     "description": "Login rejects the correct data, but the account needs an address confirmation.",
-    "intro": "Login rejects the correct data, but the account needs an address confirmation. The cause needs to be checked in the real environment.",
+    "intro": "Login rejects the correct data, but the account needs an address confirmation.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -9905,11 +9905,11 @@
     ]
   },
   "supabase-auth-getsession-vs-getuser": {
-    "sourceHash": "8239b1845c5ff364d21850e5e50de98c1e3003b9b32f0ec62958d4225a612f1c",
+    "sourceHash": "45ed843ff3e75068cf1e5c1a0163550076fc1f14b4f2d7ea9414d25e11f1a551",
     "status": "machine",
     "title": "Supabase Auth: getSession is not enough to check your permissions",
     "description": "Endpoint accepts the session read with cookies as the final identity card.",
-    "intro": "Endpoint accepts the session read with cookies as the final identity card. The cause needs to be checked in the real environment.",
+    "intro": "Endpoint accepts the session read with cookies as the final identity card.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -9940,11 +9940,11 @@
     ]
   },
   "supabase-auth-invalid-login-credentials": {
-    "sourceHash": "1ccd123aa77e4dd430f702fb6834413d0c4533d4cd77484d52228e05f5fcc141",
+    "sourceHash": "304edad193efc429d3a6ff352fc3bd356d91a20b6ebc26ef847b2cf99f694add",
     "status": "machine",
     "title": "Supabase Auth: Invalid login creditials for existing account",
     "description": "Password login ends with refusal, although the form accepts entered data.",
-    "intro": "Password login ends with refusal, although the form accepts entered data. The cause needs to be checked in the real environment.",
+    "intro": "Password login ends with refusal, although the form accepts entered data.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -9975,11 +9975,11 @@
     ]
   },
   "supabase-auth-invite-user-email": {
-    "sourceHash": "5d337de99e4c046692eefa999a81c2f70e71d31bf797ccecf8f493c72b000dfa",
+    "sourceHash": "94fba2ef5f956216d922eebe54022ed891c0b6e2f8d5014041b2b4c0d1819589",
     "status": "machine",
     "title": "Supabase Auth: The invited user cannot set the password",
     "description": "The invitation link works, but there is no valid password setting screen when clicking.",
-    "intro": "The invitation link works, but there is no valid password setting screen when clicking. The cause needs to be checked in the real environment.",
+    "intro": "The invitation link works, but there is no valid password setting screen when clicking.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10010,11 +10010,11 @@
     ]
   },
   "supabase-auth-mfa-aal2-required": {
-    "sourceHash": "1eaeb27a5836b698dc6f4f0d57deda7a27baaa3f6044427ae2c0bbcad8abb99b",
+    "sourceHash": "1f187d2c609db48a26aef5d6235a1c6e386e759ce339374a8030165e59042453",
     "status": "machine",
     "title": "Supabase MFA: access token has AAL1 instead of AAL2",
     "description": "Action requiring MFA returns the refusal despite the correct login and password.",
-    "intro": "Action requiring MFA returns the refusal despite the correct login and password. The cause needs to be checked in the real environment.",
+    "intro": "Action requiring MFA returns the refusal despite the correct login and password.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10045,11 +10045,11 @@
     ]
   },
   "supabase-auth-mfa-totp-time-invalid": {
-    "sourceHash": "b586613bc339bfc14ef9b343edbde561e6e555c8fa0edca120a0e7ebddf04085",
+    "sourceHash": "dde7634caed9767b00f36d07fbad807b2016f6b849e3f5a2ced4f1a7d7a40399",
     "status": "machine",
     "title": "Supabase MFA: TOTP code is constantly rejected",
     "description": "Authorizing application shows code, but Supabase returns invalid challenge.",
-    "intro": "Authorizing application shows code, but Supabase returns invalid challenge. The cause needs to be checked in the real environment.",
+    "intro": "Authorizing application shows code, but Supabase returns invalid challenge.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10080,11 +10080,11 @@
     ]
   },
   "supabase-auth-oauth-provider-disabled": {
-    "sourceHash": "6e8cbf8cff2cf10dcb8c38382be3fe24fc2db98daf0d5248ef6abd87083d4461",
+    "sourceHash": "471e568a9b5ba028cf7e687fae56a574e0c4dbd61104aa933ac80366052d91a5",
     "status": "machine",
     "title": "Supabase Auth: Unsupported provider after clicking “Google”",
     "description": "The OAuth button reports an error, although redirecting the application is correct.",
-    "intro": "The OAuth button reports an error, although redirecting the application is correct. The cause needs to be checked in the real environment.",
+    "intro": "The OAuth button reports an error, although redirecting the application is correct.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10115,11 +10115,11 @@
     ]
   },
   "supabase-auth-oauth-redirect-uri-mismatch": {
-    "sourceHash": "5f410fb09b8d3dfaa5a4e620b73cecc234289bdf018170fb63dc6f39cd45f585",
+    "sourceHash": "47679514a064294037bc06adde681bb8a2ef162e5814a95eb7a846ea2f828d33",
     "status": "machine",
     "title": "Supabase OAuth: redirect uri mismatch in Google",
     "description": "When Google selects to log in, it appears that it refuses to redirect.",
-    "intro": "When Google selects to log in, it appears that it refuses to redirect. The cause needs to be checked in the real environment.",
+    "intro": "When Google selects to log in, it appears that it refuses to redirect.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10186,11 +10186,11 @@
     ]
   },
   "supabase-auth-password-recovery-no-session": {
-    "sourceHash": "6b5a855df64a98153072e95ca1041c554ee820253ac76b0ccc05b9a502c2ab18",
+    "sourceHash": "979fc4ea82f34d173ed10de38e22212140bdae82fd4965c65bea0c1bd25bfe7c",
     "status": "machine",
     "title": "Subabase: password recovery opens page without session",
     "description": "Upon clicking the password change link, the page does not recognize recovery mode.",
-    "intro": "Upon clicking the password change link, the page does not recognize recovery mode. The cause needs to be checked in the real environment.",
+    "intro": "Upon clicking the password change link, the page does not recognize recovery mode.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10221,11 +10221,11 @@
     ]
   },
   "supabase-auth-password-update-reauth": {
-    "sourceHash": "e42f6e30821efd96378f65b9840942f860383952fa9cd409584553c7d9c33bd1",
+    "sourceHash": "5d7845f5119a502726833ec543c937a2a3af1235353143c5a621c4d250af11c2",
     "status": "machine",
     "title": "Supabase Auth: updateUser password needs to be authenticated again",
     "description": "The logged user cannot change the password in the account panel.",
-    "intro": "The logged user cannot change the password in the account panel. The cause needs to be checked in the real environment.",
+    "intro": "The logged user cannot change the password in the account panel.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10256,11 +10256,11 @@
     ]
   },
   "supabase-auth-redirect-url-not-allowed": {
-    "sourceHash": "27f73e78a7e16bbb1194dc70710de6d4e2acc922d43159608d602c8b26b29769",
+    "sourceHash": "278cb1cc4620a71a3093b4fa715f24416af386e70cf9c15ce59545c2f6b59cf9",
     "status": "machine",
     "title": "Supabase Auth: redirect URL not allowed on password reset",
     "description": "The reset password clicks to an address Auth does not accept.",
-    "intro": "The reset password clicks to an address Auth does not accept. The cause needs to be checked in the real environment.",
+    "intro": "The reset password clicks to an address Auth does not accept.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10291,11 +10291,11 @@
     ]
   },
   "supabase-auth-session-ssr-missing": {
-    "sourceHash": "94af50f9ed93de8725834c31d17be96119a65aa78988a3c703dec697210b38c7",
+    "sourceHash": "9d342c4f09d136d8b46bc6d131d44f0d1dd4b7e1975b40d6a08b41e9bbf7866e",
     "status": "machine",
     "title": "SSR Subbase: server does not see session, although the client is logged",
     "description": "Client Component recognizes user, but Server Component returns guest view.",
-    "intro": "Client Component recognizes user, but Server Component returns guest view. The cause needs to be checked in the real environment.",
+    "intro": "Client Component recognizes user, but Server Component returns guest view.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10326,11 +10326,11 @@
     ]
   },
   "supabase-auth-signout-all-devices": {
-    "sourceHash": "4f21ade717b858ac3c4ee140fef871625775d6a83ab47978f6875efed1053187",
+    "sourceHash": "227148704d8e9e01ba87a6a5fb34e9b434e9d035bcbfbd6cd17d9464889cc2dd",
     "status": "machine",
     "title": "Supabase Auth: Logout does not close other sessions",
     "description": "After logging out the phone, the session on the second device still has access for a while.",
-    "intro": "After logging out the phone, the session on the second device still has access for a while. The cause needs to be checked in the real environment.",
+    "intro": "After logging out the phone, the session on the second device still has access for a while.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10361,11 +10361,11 @@
     ]
   },
   "supabase-auth-user-metadata-not-roles": {
-    "sourceHash": "18b74020934377e80010106befc46a20778c0adcfb20b2171750bf83dfc82c0f",
+    "sourceHash": "2b88adb768335c804cc705aceecdf6794a9e36db02ea69b1d0c9f89b824215b1",
     "status": "machine",
     "title": "Supabase Auth: The role of admin with user metadata does not protect API",
     "description": "The application recognises the user metadata.role value given by the client as the administrator's permission.",
-    "intro": "The application recognises the user metadata.role value given by the client as the administrator's permission. The cause needs to be checked in the real environment.",
+    "intro": "The application recognises the user metadata.role value given by the client as the administrator's permission.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10396,11 +10396,11 @@
     ]
   },
   "supabase-auth-weak-password-rejection": {
-    "sourceHash": "3f4b9caad996959fdebf8ece5dc26a143710e9fff316545294a81d11813a4f10",
+    "sourceHash": "7e3c111744323a24ffda5bce25429b01885106decccf23beca4956e62f96cbd7",
     "status": "machine",
     "title": "Supabase Auth: Weak Password blocks account creation",
     "description": "The user cannot set the password even though it has enough characters.",
-    "intro": "The user cannot set the password even though it has enough characters. The cause needs to be checked in the real environment.",
+    "intro": "The user cannot set the password even though it has enough characters.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10474,11 +10474,11 @@
     ]
   },
   "supabase-connection-ipv4-incompatibility": {
-    "sourceHash": "5d2df60c47eb052c2e2f439955835983c59289893f649c56e9b6aff162ddc587",
+    "sourceHash": "7a435c1b099d46946658504e9c41336bd3b1e7edc67f0727d7ab5551521c9c47",
     "status": "machine",
     "title": "Subbase: IPv4 client does not connect to direct database",
     "description": "The driver outside the host reports a timeout at direct connection, even though the credentials are correct.",
-    "intro": "The driver outside the host reports a timeout at direct connection, even though the credentials are correct. The cause needs to be checked in the real environment.",
+    "intro": "The driver outside the host reports a timeout at direct connection, even though the credentials are correct.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10509,11 +10509,11 @@
     ]
   },
   "supabase-database-branch-missing-migration": {
-    "sourceHash": "6fe918fb58d1890448139e727b38a9fcb12ab53c0b860b0bad9b9675852fc581",
+    "sourceHash": "ab426de7c40d4ed2b91a37fbb25ff0db8fc2268ea3b75c22d4c5bf0c14952829",
     "status": "machine",
     "title": "Supabase Branching: preview has a different structure of tables than main",
     "description": "Preview operates on a separate branch of the base and does not see columns added on production.",
-    "intro": "Preview operates on a separate branch of the base and does not see columns added on production. The cause needs to be checked in the real environment.",
+    "intro": "Preview operates on a separate branch of the base and does not see columns added on production.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10544,11 +10544,11 @@
     ]
   },
   "supabase-db-backup-restore-production": {
-    "sourceHash": "547f5276bd383dfca1409e5c7af3fa84dd94818bcc6954b36cdf5e3a6e21efbb",
+    "sourceHash": "e4c4265e78dc1ca76ce94c94350e93f9527eafbb601e91ea4ae02f90787d5eb8",
     "status": "machine",
     "title": "Supabase: Restoring backup does not restore recent changes",
     "description": "Once the database has been recovered, some of the last records are absent.",
-    "intro": "Once the database has been recovered, some of the last records are absent. The cause needs to be checked in the real environment.",
+    "intro": "Once the database has been recovered, some of the last records are absent.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10579,11 +10579,11 @@
     ]
   },
   "supabase-db-webhook-recursive-updates": {
-    "sourceHash": "5596bbae77b78360f4398a4c1ff642a3f6aeab27179be2a45e40b484a6250118",
+    "sourceHash": "af24d149e75f1869c611350bd2f5b38b7c1e07654dd56920d267ac89933bbab0",
     "status": "machine",
     "title": "Supreme Database Webhooks: Update launches in loop",
     "description": "Webhook since status change saves the same record and generates a series of consecutive webhooks.",
-    "intro": "Webhook since status change saves the same record and generates a series of consecutive webhooks. The cause needs to be checked in the real environment.",
+    "intro": "Webhook since status change saves the same record and generates a series of consecutive webhooks.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10686,11 +10686,11 @@
     ]
   },
   "supabase-email-rate-limit-429": {
-    "sourceHash": "85efcf8058a895ecb7c03fc0613f6ab22e92e7ee080700281f5af5f7d15b9576",
+    "sourceHash": "a8c62bd1dc96a49d39cd46981043d9b6f35865c5d1c5343478fa29f100eb4b69",
     "status": "machine",
     "title": "Supabase Auth: rate limit enhanced when sending codes",
     "description": "Multiple click “Send Code” ends with the refusal of another email.",
-    "intro": "Multiple click “Send Code” ends with the refusal of another email. The cause needs to be checked in the real environment.",
+    "intro": "Multiple click “Send Code” ends with the refusal of another email.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10832,11 +10832,11 @@
     ]
   },
   "supabase-migration-history-mismatch": {
-    "sourceHash": "4d3130ab9b878f7e2a807c6916f606a4e1996dc572bc32181f6fc7610707a8f3",
+    "sourceHash": "97b75c5edb415a63e73d07832a9242d3fd2c7cedfc25d1609c48c847d65fd6e9",
     "status": "machine",
     "title": "Supabase CLI: migration history does not match",
     "description": "The migration command refuses further changes by the divergence of local and remote history.",
-    "intro": "The migration command refuses further changes by the divergence of local and remote history. The cause needs to be checked in the real environment.",
+    "intro": "The migration command refuses further changes by the divergence of local and remote history.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -10975,11 +10975,11 @@
     ]
   },
   "supabase-pgvector-embedding-dimension": {
-    "sourceHash": "3f537d7998bddfd942441063134ff5e7dc7fa5360417b61c0d1eb9c4f8f0376c",
+    "sourceHash": "82132ad5153a9a2a7aaf6d43d1c9b5834235585ba39c6b57a749d34f06842f5f",
     "status": "machine",
     "title": "pgvector: different vector distinctions when searching",
     "description": "Semantic search rejects the question, because the dimension of the vector differs from the dimension of the column.",
-    "intro": "Semantic search rejects the question, because the dimension of the vector differs from the dimension of the column. The cause needs to be checked in the real environment.",
+    "intro": "Semantic search rejects the question, because the dimension of the vector differs from the dimension of the column.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -11010,11 +11010,11 @@
     ]
   },
   "supabase-pgvector-hnsw-missing-results": {
-    "sourceHash": "30533b88c021c0fd3ddad2daab7774236a387c32a221a0c3489de7bb38b74ca3",
+    "sourceHash": "426f28d8c311cf1a72246d105a06a09ef75a0fe61f68006102e768c3a433b0aa",
     "status": "machine",
     "title": "pgvector HNSW: filter search returns too few results",
     "description": "The tenant id filter used limits the number of results returned below the expected limit.",
-    "intro": "The tenant id filter used limits the number of results returned below the expected limit. The cause needs to be checked in the real environment.",
+    "intro": "The tenant id filter used limits the number of results returned below the expected limit.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -11081,11 +11081,11 @@
     ]
   },
   "supabase-realtime-channel-duplicate-subscriptions": {
-    "sourceHash": "ea168c5e7b524fa9268e32a51b04d261217c98d2133498e3f62a2f10ccd59475",
+    "sourceHash": "d681d7ea438c018bab568b7fde54d92b8430306c98dbd09d4b3def9d16b934fd",
     "status": "machine",
     "title": "Supabase Realtime: the same change appears several times in the table",
     "description": "After entering the screen several times each INSERT adds a record several times.",
-    "intro": "After entering the screen several times each INSERT adds a record several times. The cause needs to be checked in the real environment.",
+    "intro": "After entering the screen several times each INSERT adds a record several times.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -11149,11 +11149,11 @@
     ]
   },
   "supabase-realtime-reconnect-dropped-updates": {
-    "sourceHash": "1413988e55efc33043321eeffd962a13ea60012b9294ba8e8581e9094268c5a9",
+    "sourceHash": "8d98d18cb7b6ee469052d3b28d071a485618bd5e8d318976fa5f9f7047b87c9d",
     "status": "machine",
     "title": "Subabase Realtime: After losing the internet, the list does not make up for changes",
     "description": "After reconnecting WebSocket UI retains an older set of records.",
-    "intro": "After reconnecting WebSocket UI retains an older set of records. The cause needs to be checked in the real environment.",
+    "intro": "After reconnecting WebSocket UI retains an older set of records.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -11525,11 +11525,11 @@
     ]
   },
   "supabase-storage-bucket-not-found": {
-    "sourceHash": "50a3019c3a8a521ece885bf6436acd14c40334451c0bf3febfc169907a621952",
+    "sourceHash": "f556ef6a9b04c615cdb4af53f745a86e35b1294eae0961d59bdfe9c145eec491",
     "status": "machine",
     "title": "Supabase Storage: Bucket not found after changing the environment",
     "description": "The app tries to send a picture, but the bucket only exists at another instance.",
-    "intro": "The app tries to send a picture, but the bucket only exists at another instance. The cause needs to be checked in the real environment.",
+    "intro": "The app tries to send a picture, but the bucket only exists at another instance.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -11560,11 +11560,11 @@
     ]
   },
   "supabase-storage-cdn-old-object": {
-    "sourceHash": "1a2b7825cfa4aee83ab3590537b44fc0c75e7fd35b22fdd4fc1dc4765928e577",
+    "sourceHash": "92104bf5f1cbb79427fb5d8975eba967166ed0ebbf7d5422ab23edc1b83f2dfd",
     "status": "machine",
     "title": "Subabase Storage: CDN shows old image after swapping",
     "description": "The image under the same URL does not change immediately after saving a new version.",
-    "intro": "The image under the same URL does not change immediately after saving a new version. The cause needs to be checked in the real environment.",
+    "intro": "The image under the same URL does not change immediately after saving a new version.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -11595,11 +11595,11 @@
     ]
   },
   "supabase-storage-file-size-limit": {
-    "sourceHash": "1978a40284b1ad97914ab2c285fe44437f8bea9668f037ed6efc96b2c1c20cdf",
+    "sourceHash": "1bcb3ebdb7209227ab89c43d5e62744270dab83dc0d49b5fd7a4f457be6a8f0e",
     "status": "machine",
     "title": "Subabase Storage: upload file size enhanced despite free space",
     "description": "Loading a larger attachment ends with a size limit error.",
-    "intro": "Loading a larger attachment ends with a size limit error. The cause needs to be checked in the real environment.",
+    "intro": "Loading a larger attachment ends with a size limit error.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -11630,11 +11630,11 @@
     ]
   },
   "supabase-storage-list-shows-empty": {
-    "sourceHash": "96fa9ff8c25cdcde0546e8adfd3bd761b977f0bec277302af5ff83b22120e39f",
+    "sourceHash": "50c7e2d061d253552d77ae6e69bf06bc5961b625cd6e294cadbd95377985b4db",
     "status": "machine",
     "title": "Supabase Storage: list() returns an empty folder despite saved files",
     "description": "The saved object can be downloaded on a known path, but the list does not show records.",
-    "intro": "The saved object can be downloaded on a known path, but the list does not show records. The cause needs to be checked in the real environment.",
+    "intro": "The saved object can be downloaded on a known path, but the list does not show records.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -11665,11 +11665,11 @@
     ]
   },
   "supabase-storage-mime-not-allowed": {
-    "sourceHash": "2a345ea46d0d015fdb380c6908fe2c937c6c5e988414d8cd2bebbc177a76a109",
+    "sourceHash": "1529393d97804a270cc03ae443fbf5f71ae9df7171eadbff93b69cccdd063ab2",
     "status": "machine",
     "title": "Subabase Storage: MIME type not allowed during upload",
     "description": "The HEIC or PDF attachment is rejected before saving the file.",
-    "intro": "The HEIC or PDF attachment is rejected before saving the file. The cause needs to be checked in the real environment.",
+    "intro": "The HEIC or PDF attachment is rejected before saving the file.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -11700,11 +11700,11 @@
     ]
   },
   "supabase-storage-path-case-sensitive": {
-    "sourceHash": "9d6d665761f2141bfa1931f4273d67ad3febbe4e83caea573c81288f468d5749",
+    "sourceHash": "7b60cd26b459d1cf604c02af106f98935517e1ad391a16b6736e5fe5a4e2b0cc",
     "status": "machine",
     "title": "Supabase Storage: file is, but download gives 404 by letter size",
     "description": "The user sees the file name, but the download from its own path returns Not Found.",
-    "intro": "The user sees the file name, but the download from its own path returns Not Found. The cause needs to be checked in the real environment.",
+    "intro": "The user sees the file name, but the download from its own path returns Not Found.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -11771,11 +11771,11 @@
     ]
   },
   "supabase-storage-rls-folder-prefix": {
-    "sourceHash": "ef1a37ecfe0af5f860293d73644185a0a53064f2c9a01e59a782c22e0db761c1",
+    "sourceHash": "6aff215d2586e3215c49f5a5e73bf0a3c62f2967faeec5a77cb48707fc9bb952",
     "status": "machine",
     "title": "Supabase Storage: user sees files of another folder",
     "description": "Storage policy allows you to read objects from the folder adjacent to the user folder.",
-    "intro": "Storage policy allows you to read objects from the folder adjacent to the user folder. The cause needs to be checked in the real environment.",
+    "intro": "Storage policy allows you to read objects from the folder adjacent to the user folder.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -11806,11 +11806,11 @@
     ]
   },
   "supabase-storage-signed-upload-token": {
-    "sourceHash": "35bee54360eb4f7fa2b118d72a059be9060f95c645835ecd66a65308e5108404",
+    "sourceHash": "3e8a8b795f482fa44e1731887ef1e086b29c9157f897c6de0c67d921f3cdc3b2",
     "status": "machine",
     "title": "Supabase Storage: signed upload URL rejects shipment",
     "description": "The client gets a signed address to upload, but the request cannot add a file.",
-    "intro": "The client gets a signed address to upload, but the request cannot add a file. The cause needs to be checked in the real environment.",
+    "intro": "The client gets a signed address to upload, but the request cannot add a file.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -11841,11 +11841,11 @@
     ]
   },
   "supabase-storage-transform-image-quality": {
-    "sourceHash": "1c4c541af9d5d799be80d27ca458e30676aeab34f4d83cd003640f75a46bc1fb",
+    "sourceHash": "3b8c369bfc63e3cb7872a71dc4bd79255210cdd7259bd3bcf8fe6c385fff7e96",
     "status": "machine",
     "title": "Supabase Storage: Transform image returns error for HEIC",
     "description": "The attempt to generate a miniature from the photo ends with a refusal or an empty image.",
-    "intro": "The attempt to generate a miniature from the photo ends with a refusal or an empty image. The cause needs to be checked in the real environment.",
+    "intro": "The attempt to generate a miniature from the photo ends with a refusal or an empty image.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -11876,11 +11876,11 @@
     ]
   },
   "supabase-storage-tus-resume-fails": {
-    "sourceHash": "224d5c66f400e6faf40f3cd801669b9c66ab801259478c91e01151926b6b5265",
+    "sourceHash": "27e71cb8a049a657680ab748bf64d32fb8a8fe3784ec98314a80f45309766e9b",
     "status": "machine",
     "title": "Subabase Storage: TUS resumeable upload stops after network break",
     "description": "After the shipment is discontinued, the viewer starts the file again or reports a conflict.",
-    "intro": "After the shipment is discontinued, the viewer starts the file again or reports a conflict. The cause needs to be checked in the real environment.",
+    "intro": "After the shipment is discontinued, the viewer starts the file again or reports a conflict.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -12016,11 +12016,11 @@
     ]
   },
   "supabase-vault-secret-rpc-exposure": {
-    "sourceHash": "c3cbf8e331e55b25558c1eebd7ad05409575812f0b3dd077b6d74102df142ac0",
+    "sourceHash": "a4ccfcba0d35a6da14f362c166b39574a5299d3ff78069ed3b4e32ca3205c34e",
     "status": "machine",
     "title": "Supabase Vault: a secret accessible by the public RPC",
     "description": "SQL returns private values from Vault to a public token client.",
-    "intro": "SQL returns private values from Vault to a public token client. The cause needs to be checked in the real environment.",
+    "intro": "SQL returns private values from Vault to a public token client.",
     "serviceLabel": "CRM and databases",
     "sections": [
       {
@@ -12650,11 +12650,11 @@
     ]
   },
   "vercel-build-cache-stale-dependency": {
-    "sourceHash": "d10787c4a530a0eacdbaf57a068d66ab2287e4fea2c126599690e7c96c4d5a9c",
+    "sourceHash": "e50cc87fc892d7eaff12909ef0c5893610bad78259827f617fdd724572752cc0",
     "status": "machine",
     "title": "Vercel: Build Cache keeps the old result after the dependencies change",
     "description": "Preview shows the previous version of the library despite changes in the code.",
-    "intro": "Preview shows the previous version of the library despite changes in the code. The cause needs to be checked in the real environment.",
+    "intro": "Preview shows the previous version of the library despite changes in the code.",
     "serviceLabel": "Implementation and hosting",
     "sections": [
       {
@@ -12721,11 +12721,11 @@
     ]
   },
   "vercel-cache-immutable-public-file": {
-    "sourceHash": "9cabd66bcfbcfbc72c56d8f1fdc346fd9e825a620555190c1092ecd9b644979d",
+    "sourceHash": "2888e918230f8b620d3c95044fa2efc8a3186358cb7f5c958a1a43300de46d03",
     "status": "machine",
     "title": "Vercel: Public file with the same name does not update with the user",
     "description": "After replacing the image under the permanent name, some browsers still show the old graphics.",
-    "intro": "After replacing the image under the permanent name, some browsers still show the old graphics. The cause needs to be checked in the real environment.",
+    "intro": "After replacing the image under the permanent name, some browsers still show the old graphics.",
     "serviceLabel": "Implementation and hosting",
     "sections": [
       {
@@ -12961,11 +12961,11 @@
     ]
   },
   "vercel-env-production-preview-different": {
-    "sourceHash": "edac82328023326c6ae871ae655eaa279918ab0de275dc003a6bf33852244dc1",
+    "sourceHash": "349c90d8b5c2b8f2b401edd9a54bf85d171b4a81c193b73ab26f567a848c49c1",
     "status": "machine",
     "title": "Vercel: production works, preview has no API configuration",
     "description": "The PR preview returns the integration error and the production domain works properly.",
-    "intro": "The PR preview returns the integration error and the production domain works properly. The cause needs to be checked in the real environment.",
+    "intro": "The PR preview returns the integration error and the production domain works properly.",
     "serviceLabel": "Implementation and hosting",
     "sections": [
       {
@@ -13029,11 +13029,11 @@
     ]
   },
   "vercel-function-size-limit": {
-    "sourceHash": "200e17a3c5c60ec1400ded01dd0c16c22f3ddc85a99af2b12f3a9464117511b7",
+    "sourceHash": "c2cc81bd3d923b6fafbd3b46cc501face411bbc79e4678facafd36e405d85d6b",
     "status": "machine",
     "title": "Vercel: Function size limit exceeded at defloy",
     "description": "The Build bundles too much function and the defloyment is rejected.",
-    "intro": "The Build bundles too much function and the defloyment is rejected. The cause needs to be checked in the real environment.",
+    "intro": "The Build bundles too much function and the defloyment is rejected.",
     "serviceLabel": "Implementation and hosting",
     "sections": [
       {
@@ -13133,11 +13133,11 @@
     ]
   },
   "vercel-logs-missing-source-maps": {
-    "sourceHash": "87d8fa587b01bd26fe3bdda58fc009e59869ac3baf45fba6b89fe90408a9d342",
+    "sourceHash": "1bd4d7bdcb6ae56605c745848ae7e95353e72edc6b8afe0873437d5475adff13",
     "status": "machine",
     "title": "Vercel: runtime logs show a minified stack track track",
     "description": "A function error is difficult to connect to a specific TypeScript source line.",
-    "intro": "A function error is difficult to connect to a specific TypeScript source line. The cause needs to be checked in the real environment.",
+    "intro": "A function error is difficult to connect to a specific TypeScript source line.",
     "serviceLabel": "Implementation and hosting",
     "sections": [
       {
@@ -13309,11 +13309,11 @@
     ]
   },
   "vercel-production-branch-incorrect": {
-    "sourceHash": "2611f29902bc4ac00702e6b22b95abb1f02e5c75cbb12b001040bf1176919244",
+    "sourceHash": "78cf82879413c1775e236b94f315c98462d41ce3ccdedcbef704ee928cd36985",
     "status": "machine",
     "title": "Vercel: push to main implements preview instead of production",
     "description": "The new commit is READY, but does not appear under its own domain service.",
-    "intro": "The new commit is READY, but does not appear under its own domain service. The cause needs to be checked in the real environment.",
+    "intro": "The new commit is READY, but does not appear under its own domain service.",
     "serviceLabel": "Implementation and hosting",
     "sections": [
       {
@@ -13344,11 +13344,11 @@
     ]
   },
   "vercel-project-404-wrong-domain": {
-    "sourceHash": "1d6b67ce1b51f11d2c56d78d78f941e41dec8bd3bbae562dacee490883db370b",
+    "sourceHash": "44bc050ec5478bf560346eafe8d29825a3df2e359b932ab6c95d39411a6b6ef5",
     "status": "machine",
     "title": "Vercel: domain indicates another project and returns 404",
     "description": "The preview works, but the custom domain returns an error page from another service.",
-    "intro": "The preview works, but the custom domain returns an error page from another service. The cause needs to be checked in the real environment.",
+    "intro": "The preview works, but the custom domain returns an error page from another service.",
     "serviceLabel": "Implementation and hosting",
     "sections": [
       {
@@ -13379,11 +13379,11 @@
     ]
   },
   "vercel-redirect-308-query-lost": {
-    "sourceHash": "ed38c20ae2e27ea9d0eb5989e6ee081bc686c6f310dbbf02c3124bda585805a5",
+    "sourceHash": "7ff25696df6e91cf37f22390951035945daa4621c91fa684befbb3bcea0669dd",
     "status": "machine",
     "title": "Vercel: redirect removes campaign and form parameters",
     "description": "Upon entering the URL, it loses some of the query string and analyst loses the source of the entry.",
-    "intro": "Upon entering the URL, it loses some of the query string and analyst loses the source of the entry. The cause needs to be checked in the real environment.",
+    "intro": "Upon entering the URL, it loses some of the query string and analyst loses the source of the entry.",
     "serviceLabel": "Implementation and hosting",
     "sections": [
       {
@@ -13483,11 +13483,11 @@
     ]
   },
   "vercel-this-deployment-is-temporarily-paused": {
-    "sourceHash": "a3a34f57c580594b89f5cf119d5426b7c92c80a6e4022794c91c92113ec73dc1",
+    "sourceHash": "2e23a451716176962e7df4cb3f9f471946e7eca5f2c4b0f4624616a8abb6ae12",
     "status": "machine",
     "title": "Vercel: This defloyment is temporally paused — what does it mean and how do we restore the site?",
     "description": "On the page you see This deposit is temporally paused? Check project status, plan limit and final implementation.",
-    "intro": "The page or CRM stops opening and everyone sees the message This deposit is temporally paused. A similar case concerned the implementation of B-CRM.",
+    "intro": "The page or CRM does not open and instead of the application, a message appears This deposit is temporally paused. First we need to establish the status of the project in Vercel.",
     "serviceLabel": "Website creation",
     "sections": [
       {
@@ -13621,11 +13621,11 @@
     ]
   },
   "woocommerce-coupon-does-not-apply": {
-    "sourceHash": "467d46b7dd898a1988a49adc22bb4adc295e544f9864226083cf9ff3054790d6",
+    "sourceHash": "a4b392cdbef3b0b6f0e90957b9d9f37414aa39f7472144a84218ebbb1f037ad4",
     "status": "machine",
     "title": "WooCommerce: discount code is valid, but discount is not charged",
     "description": "The customer enters a coupon, but the basket shows a message about unfulfilled conditions.",
-    "intro": "The customer enters a coupon, but the basket shows a message about unfulfilled conditions. The cause needs to be checked in the real environment.",
+    "intro": "The customer enters a coupon, but the basket shows a message about unfulfilled conditions.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -13656,11 +13656,11 @@
     ]
   },
   "woocommerce-no-shipping-methods": {
-    "sourceHash": "3ad63f7f3a9dee33367601dc3be99148acdd7d1c706f3fee45ef22aaaf3b6e4a",
+    "sourceHash": "69b84670caf19ceaa6bb9a3f510312095688427e37205157ae421ccab079e980",
     "status": "machine",
     "title": "WooCommerce: no delivery methods available in basket",
     "description": "The customer sees the products, but checkout reports no shipping options.",
-    "intro": "The customer sees the products, but checkout reports no shipping options. The cause needs to be checked in the real environment.",
+    "intro": "The customer sees the products, but checkout reports no shipping options.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -13691,11 +13691,11 @@
     ]
   },
   "woocommerce-webhook-order-duplicate": {
-    "sourceHash": "4ed763664e6967ee4f6d360645d6ef8b3389b75f2f0031578ab2322fbaad532d",
+    "sourceHash": "9336c0dcab84adc44886623f74ba73a3bc5fc948ec154b4e9d33917771fb7bd9",
     "status": "machine",
     "title": "WooCommerce: webhook orders creates two CRM records",
     "description": "After purchase, integration receives a repeat notification and saves the order twice.",
-    "intro": "After purchase, integration receives a repeat notification and saves the order twice. The cause needs to be checked in the real environment.",
+    "intro": "After purchase, integration receives a repeat notification and saves the order twice.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -13726,11 +13726,11 @@
     ]
   },
   "wordpress-ajax-400-bad-request": {
-    "sourceHash": "fbb7c5a547cfcf65646dd2c1a139b6980cf09586b174cf4aed45be28b2fa248a",
+    "sourceHash": "6db43b3bc9415b19abe75e116e7b8767f36f1a12ce2e73681efcd94114a15e23",
     "status": "machine",
     "title": "WordPress admin-ajax.php returns 400 after clicking the plugin",
     "description": "Part of the backend function is not working, and Network indicates HTTP 400 for admin-ajax.php.",
-    "intro": "Part of the backend function is not working, and Network indicates HTTP 400 for admin-ajax.php. The cause needs to be checked in the real environment.",
+    "intro": "Part of the backend function is not working, and Network indicates HTTP 400 for admin-ajax.php.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -13761,11 +13761,11 @@
     ]
   },
   "wordpress-block-editor-invalid-json": {
-    "sourceHash": "4dd96addca037f16f8be2155455c24109526ba067bd8d2e6e6f08f7b8cd53d28",
+    "sourceHash": "18cdcc9c2eccb0f2dddb5f6daf3d16d7fdbf667c78a36eb06599bf4966b93cf1",
     "status": "machine",
     "title": "WordPress Gutenberg: update failed — JSON's incorrect response",
     "description": "The block editor does not save changes, although the normal page works.",
-    "intro": "The block editor does not save changes, although the normal page works. The cause needs to be checked in the real environment.",
+    "intro": "The block editor does not save changes, although the normal page works.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -13868,11 +13868,11 @@
     ]
   },
   "wordpress-database-connection-error": {
-    "sourceHash": "dfcd4caf3275b973911bb0483f354e96187fd5befd56e98364398042a7defc69",
+    "sourceHash": "477ab5f43fc3cd291a4099a617f7c9c2cff70fbb07ae7b1ccd662d98d1eadd60",
     "status": "machine",
     "title": "WordPress: Error establishing a database connection",
     "description": "The entire site and WordPress panel show a message about the lack of connection to the database.",
-    "intro": "The entire site and WordPress panel show a message about the lack of connection to the database. The cause needs to be checked in the real environment.",
+    "intro": "The entire site and WordPress panel show a message about the lack of connection to the database.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -13903,11 +13903,11 @@
     ]
   },
   "wordpress-database-prefix-changed": {
-    "sourceHash": "390568639288beefdc46f20c6dce1184424e15af57bd0ec6fd54af5cdc414b42",
+    "sourceHash": "fb192ae4177214c7628cf122ae9c8e121405224f21bbb48efac93ec5a2d6ca48",
     "status": "machine",
     "title": "WordPress: After migration, request reinstall despite existing database",
     "description": "There are entries in the database, but the application does not see installation tables.",
-    "intro": "There are entries in the database, but the application does not see installation tables. The cause needs to be checked in the real environment.",
+    "intro": "There are entries in the database, but the application does not see installation tables.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -13974,11 +13974,11 @@
     ]
   },
   "wordpress-image-processing-failed": {
-    "sourceHash": "574d57e123ab364aa1bb4ce576328708a35227dc50fbb6ed5a81139cc98a9c2e",
+    "sourceHash": "d40da2a74668bd8c2d109413b19d222bc9b0e7b42685bd9c93e831c5ef0560bf",
     "status": "machine",
     "title": "WordPress: The server cannot process the image at large photo",
     "description": "The photo is uploaded in part, but WordPress does not create the required miniatures.",
-    "intro": "The photo is uploaded in part, but WordPress does not create the required miniatures. The cause needs to be checked in the real environment.",
+    "intro": "The photo is uploaded in part, but WordPress does not create the required miniatures.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -14009,11 +14009,11 @@
     ]
   },
   "wordpress-login-redirect-back-to-login": {
-    "sourceHash": "931615c71bae9e25f84a0fce1421c3c27ca00bf390fdb3f29cc2557def917f5b",
+    "sourceHash": "ff3ba3596b16e351bbcb6a460fdb7380a405307730a5a3103ccf5b55e546a4bc",
     "status": "machine",
     "title": "WordPress: wp-admin returns to login screen after entering password",
     "description": "Password is accepted, but after a while the user sees the login form again.",
-    "intro": "Password is accepted, but after a while the user sees the login form again. The cause needs to be checked in the real environment.",
+    "intro": "Password is accepted, but after a while the user sees the login form again.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -14044,11 +14044,11 @@
     ]
   },
   "wordpress-maintenance-mode-stuck": {
-    "sourceHash": "1d07a76dec3bcc527f8cbc43ceab7b6aeb5033d4573af453f7fa8671edf9b049",
+    "sourceHash": "43449f3868b682ffc02fd2919669d9e61598b7291283b5ac04bb282e4acb2677",
     "status": "machine",
     "title": "WordPress: Briefly unavailable for scheduled maintenance does not disappear",
     "description": "After updating the plugin, the entire site remains in maintenance mode.",
-    "intro": "After updating the plugin, the entire site remains in maintenance mode. The cause needs to be checked in the real environment.",
+    "intro": "After updating the plugin, the entire site remains in maintenance mode.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -14115,11 +14115,11 @@
     ]
   },
   "wordpress-media-http-error-upload": {
-    "sourceHash": "1a03e757f3283bed6242e2601d154115e59dad5b97557db440d9946b455df366",
+    "sourceHash": "e277c565d8629bbd3b91f0eeb35e68f727eba3f26c1c50da758ca05ceddd3e65",
     "status": "machine",
     "title": "WordPress: HTTP error when uploading photos",
     "description": "Upload a small file works and the larger image stops with a general HTTP error.",
-    "intro": "Upload a small file works and the larger image stops with a general HTTP error. The cause needs to be checked in the real environment.",
+    "intro": "Upload a small file works and the larger image stops with a general HTTP error.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -14258,11 +14258,11 @@
     ]
   },
   "wordpress-php-upgrade-breaks-theme": {
-    "sourceHash": "f7e4996a3dcebef8f1787363ccc33a7043953c345b4d9a5d040fbc625a101751",
+    "sourceHash": "698d42488f43215990170a6972c0910f9af4989a5d09873b60944bf61fdefe18",
     "status": "machine",
     "title": "WordPress: The theme stops working after changing the PHP version",
     "description": "After updating PHP, fatal error appears from the old theme file.",
-    "intro": "After updating PHP, fatal error appears from the old theme file. The cause needs to be checked in the real environment.",
+    "intro": "After updating PHP, fatal error appears from the old theme file.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -14293,11 +14293,11 @@
     ]
   },
   "wordpress-plugin-update-ftp-credentials": {
-    "sourceHash": "0c510950a2310f764224e707ab443365009589750978fab8dcac8880b740cc34",
+    "sourceHash": "8d0380c4a1835bc284e663864a7e21f927d061cf85f4454977edbbb1bb9d6369",
     "status": "machine",
     "title": "WordPress: Update plugin requests FTP data",
     "description": "Installing updates does not work without manually providing an FTP account.",
-    "intro": "Installing updates does not work without manually providing an FTP account. The cause needs to be checked in the real environment.",
+    "intro": "Installing updates does not work without manually providing an FTP account.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -14328,11 +14328,11 @@
     ]
   },
   "wordpress-post-schedule-missed": {
-    "sourceHash": "13f612d502bfb20fa4cbd81187a1e976aef4c18022ade84e52620a05e5b5ead6",
+    "sourceHash": "9bb8fca48605ebd109b0702427bac0923e2f05c01bfda6e8f00da52da5e7fea4",
     "status": "machine",
     "title": "WordPress: Missed schedule when publishing a scheduled entry",
     "description": "The entry after the planned date remains unpublished in the panel.",
-    "intro": "The entry after the planned date remains unpublished in the panel. The cause needs to be checked in the real environment.",
+    "intro": "The entry after the planned date remains unpublished in the panel.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -14399,11 +14399,11 @@
     ]
   },
   "wordpress-rest-nonce-expired": {
-    "sourceHash": "305d5cf9a519cf1efa86c85103da6cf590e462dfb789d4c0cc731c011335deef",
+    "sourceHash": "7824a83a53415bcf1d0ddc73b7631226db8ed969fd8c9c8eeeed70e1cb27a493",
     "status": "machine",
     "title": "WordPress REST API: cookie is invalid or nonce expired",
     "description": "After a longer period of editing, the entry record does not work despite prior login.",
-    "intro": "After a longer period of editing, the entry record does not work despite prior login. The cause needs to be checked in the real environment.",
+    "intro": "After a longer period of editing, the entry record does not work despite prior login.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -14434,11 +14434,11 @@
     ]
   },
   "wordpress-search-engine-visibility-noindex": {
-    "sourceHash": "52c06b9a9d92d1eff0545a39ec9388bb50bbd9e21ab7f8245b0fcc170c480eaa",
+    "sourceHash": "f009fef558ac6f9d1a0ccc7b59c508af44362f2d1f2160ba578c667bf8642dd1",
     "status": "machine",
     "title": "WordPress does not appear in Google by setting “Distort Search”",
     "description": "The new site has a correct map and content, but generates a noindex directive.",
-    "intro": "The new site has a correct map and content, but generates a noindex directive. The cause needs to be checked in the real environment.",
+    "intro": "The new site has a correct map and content, but generates a noindex directive.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -14469,11 +14469,11 @@
     ]
   },
   "wordpress-site-health-loopback-failed": {
-    "sourceHash": "dbd305d7c50ccf804a363e8282581e51c95faf7eb05a8ec7ded2a003bdee93cb",
+    "sourceHash": "b1532c299bd4046f67349fad70debf0452edb60e3319e7dcfbe55d03099e5cf0",
     "status": "machine",
     "title": "WordPress Site Health: loopback request failed",
     "description": "The page fitness tool cannot make a call back to its own domain.",
-    "intro": "The page fitness tool cannot make a call back to its own domain. The cause needs to be checked in the real environment.",
+    "intro": "The page fitness tool cannot make a call back to its own domain.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -14576,11 +14576,11 @@
     ]
   },
   "wordpress-wp-sitemap-duplicate-seo-plugin": {
-    "sourceHash": "c292bb010d4636078bf873353493b5978fe77f7f4d61ea5d9ad7a4c76f3be9a3",
+    "sourceHash": "cc46a6a120f71bbc074fbf12df40e86046f4147c6cb49ece243f97607ca986b5",
     "status": "machine",
     "title": "WordPress: two site maps after installing the SEO plugin",
     "description": "The site provides both wp-sitemap.xml and separate sitemap index.xml from the plugin.",
-    "intro": "The site provides both wp-sitemap.xml and separate sitemap index.xml from the plugin. The cause needs to be checked in the real environment.",
+    "intro": "The site provides both wp-sitemap.xml and separate sitemap index.xml from the plugin.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -14611,11 +14611,11 @@
     ]
   },
   "wordpress-wpadmin-403-htaccess": {
-    "sourceHash": "0721bce19545f4295bd5f5a930a33a937dbd9beebec6d92483deb03ec05fa387",
+    "sourceHash": "dbb3da0678d29d78e08703340c49d864362631375aa7b3b15f8705fef736b5aa",
     "status": "machine",
     "title": "WordPress: wp-admin returns 403 despite the correct role",
     "description": "The administrator cannot open the panel, but the public website remains available.",
-    "intro": "The administrator cannot open the panel, but the public website remains available. The cause needs to be checked in the real environment.",
+    "intro": "The administrator cannot open the panel, but the public website remains available.",
     "serviceLabel": "WordPress",
     "sections": [
       {
@@ -14646,11 +14646,11 @@
     ]
   },
   "wordpress-wpjson-404-after-rewrite": {
-    "sourceHash": "6bc85ff98f53de6503ef674d03bbc7509e9ec0aebb706373c8b05532b0fe921c",
+    "sourceHash": "4bfbe6c13062a35f0889e5dd9bfc00a1ed09b26a8e9ebc3d660d1172903f4fa0",
     "status": "machine",
     "title": "WordPress: /wp-json/ returns 404 despite a running blog",
     "description": "REST API WordPress does not respond under standard path, although the subpages look correct.",
-    "intro": "REST API WordPress does not respond under standard path, although the subpages look correct. The cause needs to be checked in the real environment.",
+    "intro": "REST API WordPress does not respond under standard path, although the subpages look correct.",
     "serviceLabel": "WordPress",
     "sections": [
       {
