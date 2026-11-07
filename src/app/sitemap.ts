@@ -41,6 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       alternates:{languages:{"pl-PL":`${siteUrl}/poradniki/${guide.slug}`,en:`${siteUrl}/en/guides/${guide.slug}`}}
     })),
     { url: siteUrl + "/case-studies/re-energy-meta-ads", changeFrequency: "monthly", priority: 0.9 },
+    { url: siteUrl + "/rozwoj-biznesu", changeFrequency: "monthly", priority: 0.9 },
     { url: siteUrl + "/reklamy-meta-ads-dla-firm", changeFrequency: "monthly", priority: 0.9 },
     {
       url: siteUrl,
