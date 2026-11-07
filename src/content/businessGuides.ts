@@ -1,3 +1,4 @@
+import { industryGuideArticles } from "./industryGuides";
 /**
  * Carefully scoped general business education. No individualized tax, customs,
  * accounting or legal advice. English is authored alongside Polish, not generated
@@ -213,6 +214,7 @@ export const businessArticles = [
       ]
     }
   }
+  ...industryGuideArticles,
 ] as const;
 
 export const businessGuides = businessArticles.map(article => ({
