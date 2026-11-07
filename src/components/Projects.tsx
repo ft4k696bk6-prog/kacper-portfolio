@@ -6,7 +6,7 @@ import { realizations } from "@/content/realizations";
 import { InteractiveImageAccordion } from "@/components/ui/interactive-image-accordion";
 
 const realizationCovers: Record<string, { image: string; alt: string; href?: string }> = {
- "isto-kebab-strona": {image:"https://s0.wp.com/mshots/v1/https%3A%2F%2Fisto.bernecki.dev%2F?vpw=1440&vph=940&w=1200",alt:"Zrzut autentycznej strony Isto Kebab, z publicznego wdrożenia",href:"/realizacje/isto-kebab-strona"},
+ "isto-kebab-strona": {image:"https://s0.wp.com/mshots/v1/https%3A%2F%2Ftest-test-kebab-berni.vercel.app%2F?vpw=1440&vph=940&w=1200",alt:"Zrzut autentycznej strony Isto Kebab, z publicznego wdrożenia",href:"/realizacje/isto-kebab-strona"},
  "b-code": {image:"b-code-editorial.jpg",alt:"Ilustracja kodu — autorski projekt B-Code"},
  "reenergy-strona": {image:"reenergy-website-live.jpg",alt:"Zrzut działającej strony Re-energy System"},
  "reenergy-rozwoj-marki": {image:"reenergy-campaign-results.jpg",alt:"Case study Re-energy — budżet reklamowy i opis wyników",href:"/case-studies/re-energy-meta-ads"},
