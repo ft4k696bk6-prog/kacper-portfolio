@@ -22,7 +22,7 @@ export function HomeStudio() {
         <p className={styles.intro}>{c.intro}</p>
         <div className={styles.actions}><a className={styles.primary} href="#projects">{c.projects}<ArrowUpRight size={18}/></a><a className={styles.secondary} href="#contact">{c.call}<ArrowUpRight size={18}/></a></div>
       </div>
-      <div className={styles.portrait}><Image src="/images/profile-2-cutout.png" alt={c.portrait} width={1122} height={1402} priority sizes="(min-width:1024px) 480px, 90vw"/></div>
+      <div className={styles.portrait}><Image src="/images/profile-3-cutout.png" alt={lang === "pl" ? "Kacper Bernecki — portret z założonymi rękami" : "Kacper Bernecki — portrait with arms crossed"} width={1122} height={1402} priority sizes="(min-width:1024px) 480px, 90vw"/></div>
     </section>
     <ClientMarquee/>
     <Projects/>
