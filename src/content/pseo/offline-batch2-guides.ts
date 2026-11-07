@@ -63,12 +63,12 @@ const evidenceHints: Record<string,string> = {
 export const offlineBatchTwoGuides = offlineBatchTwoCases.map((item) => {
   const [service, serviceLabel] = services[item.category] ?? ["/crm-i-aplikacje-webowe","Aplikacje internetowe"];
   const note: string = ("warning" in item && typeof item.warning === "string") ? item.warning : (safetyNotes[item.category] ?? "Nie publikuj prywatnych danych ani sekretów.");
-  const cause: string = ("cause" in item && typeof item.cause === "string") ? item.cause : "Przyczyna wymaga sprawdzenia w rzeczywistym środowisku.";
+  const cause: string = ("cause" in item && typeof item.cause === "string") ? item.cause : "";
   return {
     slug: item.slug,
     title: item.title,
     description: item.symptom,
-    intro: item.symptom + " " + cause,
+    intro: [item.symptom, cause].filter(Boolean).join(" "),
     service,serviceLabel,
     category: item.category,
     offlinePseo: true as const,
