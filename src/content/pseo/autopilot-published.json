@@ -1,1 +1,227 @@
-[]
+[
+  {
+    "slug": "pixel-dwukrotne-zliczanie-potwierdzenie",
+    "title": "Pixel i Conversions API zliczają tę samą transakcję dwukrotnie na stronie potwierdzenia",
+    "description": "Opis diagnozy, różnicowania przyczyn i bezpiecznych kroków naprawczych gdy pixel i Conversions API rejestrują tę samą sprzedaż dwukrotnie na stronie potwierdzenia. Zawiera testy weryfikacyjne i typowe pomyłki do uniknięcia.",
+    "intro": "Problem: na stronie potwierdzenia zamówienia (order confirmation / thank-you) obserwujesz, że konwersja jest raportowana dwa razy w narzędziach Meta (Facebook/Meta Ads). Najczęściej przyczyną nie jest „bug” samego pixela ani API, lecz nakładające się źródła zdarzeń: front-endowy Meta Pixel wysyła event purchase oraz backendowy Conversions API przesyła ten sam event bez korelacji. Celem tej instrukcji jest przedstawienie metodycznej diagnostyki różnicowej, lista konkretnych kroków naprawczych, oraz testy, które potwierdzą usunięcie podwójnego zliczania. Nie zakładamy jedynej przyczyny — przeanalizujemy co zwykle występuje w konfiguracjach SPA, serwerów pośredniczących i integracji e-commerce.",
+    "diagnostics": [
+      "Najczęstszy scenariusz: na stronie potwierdzenia zarówno klient (przeglądarka) wywołuje Meta Pixel (fbq('track','Purchase',...)), jak i serwer wysyła Conversions API z tym samym identyfikatorem transakcji. Brak deduplikacji po stronie Meta (event_id lub deduplication parameters) powoduje powielenie. Sprawdź, czy event_id jest generowany i przekazywany identycznie z front-endu i backendu.",
+      "Inne możliwe przyczyny: wielokrotne ładowanie skryptu pixela (np. SPA bez kontroli routingu), retry logiki na serwerze wysyłającej ponownie CAPI przy błędach, lub integracje pośrednie (np. tag manager lub wtyczka sklepu) które wysyłają dodatkowe zdarzenia Purchase. Zidentyfikuj źródło każdego zdarzenia w Event Managerze według 'Event source' i 'Event source detail'."
+    ],
+    "steps": [
+      "Krok 1 — Zidentyfikuj czas i identyfikator zdarzeń: w Meta Events Manager wybierz przykładowe zduplikowane zdarzenie i zanotuj timestamp, event_name, oraz event_id (jeśli dostępny). Ustal, czy oba wpisy mają ten sam event_id.",
+      "Krok 2 — Przejrzyj frontend: otwórz stronę potwierdzenia w trybie deweloperskim, monitoruj konsolę i Network. Sprawdź czy fbq('track','Purchase') jest wywoływane więcej niż raz oraz czy event_id jest dołączone jako parametr custom_data.event_id lub event_id w request payload.",
+      "Krok 3 — Przejrzyj backend/serwer: sprawdź logi serwera lub mechanizm wysyłki Conversions API. Znajdź payload wysyłany do /events z pola event_name=Purchase i sprawdź, czy przesyłany jest ten sam event_id lub identyfikator transakcji order_id. Jeśli brak event_id, wprowadź generowanie spójnego event_id.",
+      "Krok 4 — Wdrożenie deduplikacji: jeśli chcesz stosować oba źródła, upewnij się, że front-end generuje unikalny event_id (UUID v4) i przekazuje go do backendu razem z zamówieniem, a backend wysyła ten sam event_id w polu 'event_id' w Conversions API.",
+      "Krok 5 — Blokowanie duplikatów po stronie klienta: jeśli nie używasz CAPI lub wolisz wyłączyć pixel, dodaj warunek na stronie potwierdzenia, który wysyła pixel tylko jeśli zamówienie nie było wcześniej zarejestrowane w sesji (np. flaga sessionStorage 'purchase_sent').",
+      "Krok 6 — Sprawdzenie integracji pośrednich: przejrzyj konfiguracje Tag Managera, wtyczek sklepowych (Shopify/ WooCommerce), i middleware CDN, by upewnić się, że żadne narzędzie nie wysyła dodatkowego Purchase. Wyłącz pojedynczo podejrzane reguły i obserwuj zdarzenia.",
+      "Krok 7 — Testuj retry i idempotencję: jeśli backend retryuje wysyłkę przy błędach, upewnij się że retry używa tego samego event_id, a nie generuje nowego. W przeciwnym wypadku Meta potraktuje retry jako nową konwersję."
+    ],
+    "verification": [
+      "Test 1 — Odwzorowanie: wykonaj testowe zamówienie z unikalnym event_id, następnie w Events Manager sprawdź, że tylko jedno zdarzenie Purchase pojawia się z tym event_id. Upewnij się, że czas stempla front i backend pasuje do ruchu.",
+      "Test 2 — A/B: tymczasowo wyłącz wysyłkę backendu (CAPI) i zrób zamówienie: powinno pozostać pojedyncze zdarzenie z source 'Pixel'. Potem wyłącz pixel i włącz tylko CAPI — znów powinno być jedno zdarzenie. To potwierdzi które źródło generuje duplikat."
+    ],
+    "mistakes": [
+      "Ostrzeżenie 1 — Nie polegaj wyłącznie na order_id z systemu sklepowego: Meta używa pola event_id do deduplikacji; order_id może być różny formatowo i nie gwarantuje deduplikacji, jeśli nie mapujesz go na event_id.",
+      "Ostrzeżenie 2 — Nie generuj nowych event_id przy retry: jeśli retry tworzy nowy event_id, Meta potraktuje to jako odrębną konwersję. Zaimplementuj przechowywanie event_id na poziomie zapisu zamówienia.",
+      "Ostrzeżenie 3 — Unikaj usuwania pixela bez planu: gruntowne wyłączenie pixela może przerwać inne zdarzenia marketingowe (ViewContent, AddToCart). Lepiej deduplikować niż arbitralnie wyłączać źródła."
+    ],
+    "sources": [
+      {
+        "label": "Meta for Developers — Marketing API / Conversions API",
+        "url": "https://developers.facebook.com/docs/marketing-api/conversions-api/"
+      },
+      {
+        "label": "Meta for Developers — Meta Pixel Overview",
+        "url": "https://developers.facebook.com/docs/meta-pixel"
+      }
+    ],
+    "status": "published",
+    "service": "/marketing-i-reklamy",
+    "serviceLabel": "Reklamy i marketing",
+    "autoGenerated": true,
+    "generatedAt": "2026-11-07",
+    "originTopic": "Pixel: zakup liczony dwukrotnie na stronie potwierdzenia"
+  },
+  {
+    "slug": "vercel-zmienna-srodowiskowa-ustawiona-w-panelu-ale-nie-dziala-w-aplikacji",
+    "title": "Vercel: zmienna środowiskowa ustawiona w panelu, ale nie działa w aplikacji",
+    "description": "Diagnostyka krok po kroku dla sytuacji, gdy zmienna środowiskowa jest widoczna w panelu Vercel, lecz aplikacja jej nie odczytuje podczas budowy lub runtime — możliwe przyczyny i konkretne testy naprawcze.",
+    "intro": "Problem: w panelu Vercel widzisz ustawioną zmienną środowiskową (Environment Variable), ale aplikacja zwraca brak wartości lub starą wartość, albo różnice między buildem a runtime. Przyczyny bywają techniczne i proceduralne: różne zakresy (Environment, Preview, Production), brak rebuildu po zmianie, użycie niewłaściwego mechanizmu odczytu (np. process.env w kliencie bez prefiksu NEXT_PUBLIC_), lokalne cache lub build cache Vercel, a także literówki w nazwie zmiennej. Zdiagnozowanie wymaga oddzielnego sprawdzenia fazy buildu i fazy runtime oraz potwierdzenia, że zmienna jest dostępna w tej fazie i dla tego projektu/gałęzi. Wersje frameworków (Next.js) i konfiguracje build-step też wpływają: Next.js wstawia wartości podczas buildu do kodu statycznego — zmiana zmiennej po buildzie nie zmieni już wygenerowanych plików statycznych bez ponownego deploya.\n\nZ tego powodu proponuję podejście systematyczne: (1) sprawdź scope zmiennej w panelu Vercel (Environment: Production/Preview/Development), (2) upewnij się, że wykonałeś deploy po każdej zmianie wartości, (3) zweryfikuj, czy używasz poprawnej konwencji (np. NEXT_PUBLIC_ dla wartości dostępnych w przeglądarce), (4) oceń, czy problem występuje podczas buildu czy runtime — logi builda i zmienne w logach serwera pomogą. Dalsze kroki obejmują odbudowę projektu z czyszczeniem cache, test z prostym-endpointem, który zwraca wartość process.env, oraz lokalne odtwarzanie ustawień przez vercel dev lub przez eksport zmiennych do środowiska uruchomieniowego. W poniższej diagnostyce podałem warianty przyczyn, konkretne kroki do wykonania i krótkie testy weryfikujące, które warunki eliminują potencjalne źródło błędu.",
+    "diagnostics": [
+      "Sprawdź zakres zmiennej w Panelu Vercel: każda zmienna ma Environment (Development, Preview, Production). Jeśli deployujesz na produkcji, ale zmienna ustawiona jest tylko dla Preview, aplikacja jej nie zobaczy. W panelu Projects → Settings → Environment Variables sprawdź, czy wpis znajduje się w oczekiwanym scope i dla właściwego projektu.",
+      "Rozróżnij build vs runtime: frameworki (np. Next.js) osadzają process.env w czasie buildu dla kodu client-side. Jeśli zmienna zmieniła się po ostatnim buildzie, należy wymusić nowy deploy. Dodatkowo cache builda może trzymać starą wartość — użyj opcji redeploy/purge cache.",
+      "Sprawdź nazewnictwo i dostępność client-side: zmienne używane w przeglądarce muszą mieć prefiks zgodny z frameworkiem (w Next.js NEXT_PUBLIC_). Zdarza się też literówka lub niewłaściwe odczytanie (np. użycie import.meta.env w projekcie, który nie wspiera tego)."
+    ],
+    "steps": [
+      "Zweryfikuj w Panelu Vercel: Projects → Settings → Environment Variables — potwierdź nazwę (case-sensitive), wartość oraz Environment (Production/Preview/Development). Zrób zrzut nazwy i porównaj dokładnie z tym, czego oczekuje kod.",
+      "Wykonaj ręczny redeploy (Deployments → Redeploy) dla środowiska, gdzie problem występuje, wybierając opcję 'Redeploy with Clear Cache' jeśli dostępna. Czekaj aż pojawią się pełne logi builda i przeanalizuj je pod kątem wypisanych wartości lub komunikatów o brakujących zmiennych.",
+      "Dodaj tymczasowy endpoint lub pole testowe w aplikacji serwerowej, które zwróci raw process.env['NAZWA_ZMIENNEJ'] podczas runtime. Upewnij się, że endpoint działa w tym samym environment co problem i nie wysyła wartości do klienta, jeśli to tajne.",
+      "Jeśli używasz frameworku typu Next.js i potrzebujesz zmiennej po stronie klienta, upewnij się, że nazwa zaczyna się od NEXT_PUBLIC_. Zmiana nazwy wymaga rebuild i redeploy; nie wystarczy tylko edycja kodu klienta.",
+      "Uruchom lokalnie vercel dev z tymi samymi zmiennymi (export NAZWA=wartosc lub użyj .env lokalnego) i potwierdź, czy problem jest reprodukowalny lokalnie. Jeśli lokalnie działa, porównaj logi builda i wersję Node/Builder używaną przez Vercel.",
+      "Sprawdź pliki build-step i konfiguracje w vercel.json (jeśli występuje) — niektóre custom buildery mogą izolować środowisko i nie przekazywać zmiennych do procesu builda. Usuń niestandardowe cache lub dodaj jawne env do build command jeśli potrzeba.",
+      "Jeżeli wszystko zawodzi, skopiuj nazwę zmiennej do prostego skryptu 'console.log(process.env.NAZWA)' uruchomionego jako serverless function w Vercel i sprawdź logi funkcji — to oddziela problem aplikacji od platformy."
+    ],
+    "verification": [
+      "Test 1 — log builda: po redeploy sprawdź w zakładce Deployments pełny log builda. Powinien zawierać brak błędów typu 'undefined variable' i, jeśli w kodzie umieścisz tymczasowy console.log(process.env.NAZWA), będzie widoczny w logach builda.",
+      "Test 2 — runtime function: wdroż prostą serverless function (api/test.js) zwracającą process.env.NAZWA. Wywołaj endpoint po deployu i porównaj zwróconą wartość z tą w panelu; różnica wskaże problem fazy runtime vs build.",
+      "Test 3 — klient vs server: w aplikacji client-side wypisz valor NEXT_PUBLIC_NAZWA do konsoli przeglądarki po załadowaniu strony. Jeśli undefined, sprawdź czy zmienna ma prefiks i czy deploy był rebuildem — to odróżni problem exposingu od scope."
+    ],
+    "mistakes": [
+      "Nie robienie redeploy po zmianie wartości: zmienne osadzone w buildzie wymagają pełnego rebuild; jedynie edytowanie wartości w panelu bez redeploy nie zaktualizuje statycznych artefaktów.",
+      "Używanie zmiennych tajnych po stronie klienta bez prefiksu: ujawnianie sekretów do frontendu to błąd; brak prefiksu powoduje też, że framework nie udostępnia zmiennej dla client-side.",
+      "Zakres ustawiony w niewłaściwym environment: ustawienie zmiennej tylko dla Preview nie wystarczy dla Production — sprawdź scope zgodny z aktywnym deployem."
+    ],
+    "sources": [
+      {
+        "label": "Vercel Docs – Environment Variables",
+        "url": "https://vercel.com/docs/environment-variables"
+      },
+      {
+        "label": "Vercel Docs – Projects and Deployments settings",
+        "url": "https://vercel.com/docs/platform/projects"
+      }
+    ],
+    "status": "published",
+    "service": "/tworzenie-stron-internetowych",
+    "serviceLabel": "Strony i hosting",
+    "autoGenerated": true,
+    "generatedAt": "2026-11-07",
+    "originTopic": "Vercel: nie działa zmienna środowiskowa mimo ustawienia w panelu"
+  },
+  {
+    "slug": "vercel-brak-funkcji-node-na-edge",
+    "title": "Aplikacja działa lokalnie, na Vercel brak funkcji Node.js przy Edge Functions",
+    "description": "Po wdrożeniu aplikacja działa poprawnie lokalnie, ale funkcje wymagające Node.js (fs, child_process, net, process native APIs) nie działają na Vercel — podejrzenie uruchomienia kodu jako Edge Function zamiast jako Serverless/Node runtime.",
+    "intro": "Problem: kod, który używa natywnych API Node.js (np. filesystem, sockety, moduły binarne lub procesy potomne) działa lokalnie w środowisku Node, ale po wdrożeniu na Vercel kończy się błędem lub cichym brakiem efektów. Najczęstsza przyczyna to niezamierzone uruchomienie danej cząstki (endpointu, middleware, funkcji) w środowisku Edge (V8 Isolates) zamiast w runtime Node/Serverless. Edge Functions mają ograniczenia: brak pełnego API Node, brak dostępu do systemu plików i modułów binarnych oraz inne różnice zachowania. Trzeba rozróżnić: czy plik/endpoint został oznaczony jako Edge (np. przez eksplicytne ustawienie runtime lub przez wybór frameworka/konwencji), czy build/artifact został przeniesiony do innego typu funkcji podczas deployu. Ten dokument opisuje diagnostykę różnicową, konkretne kroki sprawdzające, warianty przyczyn i test naprawy, tak aby bez zgadywania ustalić, czy to limit Edge Functions czy błąd konfiguracji deploymentu.",
+    "diagnostics": [
+      "Sprawdź, czy dany endpoint jest faktycznie Edge Function: w Next.js to ustawienie runtime: 'edge' (np. eksport config runtime) lub użycie middleware/edge API; w Vercel Functions sprawdź, czy plik trafia do katalogu oznaczonego dla Edge. Jeśli runtime jest Edge, brak obsługi natywnych modułów Node jest oczekiwany.",
+      "Jeśli nie ma jawnego ustawienia Edge, zbadaj proces builda i output: logi deploya zawierają informację, czy konkretny plik został utworzony jako Edge Function czy jako Serverless Function. Różnica w zachowaniu może wynikać z automatycznej klasyfikacji przez builder (np. pliki w katalogu pages/api w Next.js mogą być mapowane różnie w zależności od wersji)."
+    ],
+    "steps": [
+      "Otwórz logi deploymentu w panelu Vercel dla konkretnego wdrożenia i znajdź wpisy dotyczące budowy funkcji; szukaj linii 'Edge Function' lub 'Serverless Function' przypisanej do twojego endpointu.",
+      "W kodzie źródłowym sprawdź, czy plik/endpoint zawiera jawne ustawienie runtime (np. export const config = { runtime: 'edge' } w Next.js) lub czy framework-dedykowane pliki (middleware, edge API) nie zostały użyte omyłkowo.",
+      "Uruchom prosty testowy endpoint na Vercel: utwórz najprostszy plik, który próbuje użyć process.version lub require('fs'), wdroż go i przeanalizuj odpowiedź oraz logi błędu — brak lub wyjątek wskaże ograniczenia środowiska.",
+      "Porównaj lokalny build: wygeneruj production build lokalnie (np. next build) i przejrzyj .vercel/output lub build manifest, aby ustalić, jak builder klasyfikuje tę funkcję przed wysłaniem na platformę.",
+      "Sprawdź ustawienia projektu w dashboardzie Vercel: czy wybrany target framework, ustawienia build & output, lub custom builders mogą przeklasyfikować funkcje na Edge. Skonfrontuj wersję buildera z dokumentacją.",
+      "Jeśli potrzebujesz Node API, zmień konfigurację tak, by endpoint trafił do runtime Node/Serverless: usuń deklarację Edge, przenieś kod do odpowiedniego katalogu/ścieżki akceptowanej jako Serverless Function i ponownie wdroż.",
+      "Po zmianie wdrożenia obserwuj logi i odpowiedzi, sprawdź czy importy natywnych modułów teraz przebiegają bez błędów; w razie problemów przeanalizuj błędy stack trace w logach deployu."
+    ],
+    "verification": [
+      "Test 1: Wdróż testowy endpoint, który zwraca typeof process и process.version; jeśli otrzymasz wersję Node — endpoint działa w Node runtime, brak lub undefined oznacza Edge.",
+      "Test 2: Wdróż endpoint używający require('fs').readdirSync('.') — jeśli wywołanie zwraca listing plików, masz dostęp do filesystem; jeśli pojawi się błąd o braku modułu lub niedozwolonej operacji, działa Edge."
+    ],
+    "mistakes": [
+      "Nie zakładaj, że brak błędu w przeglądarce oznacza działanie Node — błędy mogą być swallowowane; zawsze sprawdź logi deploymentu i odpowiedź endpointu (status, body).",
+      "Nie próbuj używać modułów binarnych/child_process w Edge Functions; to nie kwestia konfiguracji, tylko ograniczeń runtime - migracja do Serverless/Node jest konieczna."
+    ],
+    "sources": [
+      {
+        "label": "Vercel — Edge Functions",
+        "url": "https://vercel.com/docs/concepts/functions/edge-functions"
+      },
+      {
+        "label": "Vercel — Serverless Functions (runtimes)",
+        "url": "https://vercel.com/docs/concepts/functions/serverless-functions"
+      }
+    ],
+    "status": "published",
+    "service": "/tworzenie-stron-internetowych",
+    "serviceLabel": "Strony i hosting",
+    "autoGenerated": true,
+    "generatedAt": "2026-11-07",
+    "originTopic": "Vercel: aplikacja działa lokalnie, ale brak funkcji Node na Edge"
+  },
+  {
+    "slug": "supabase-refresh-token-wygasl-diagnostyka-i-naprawa",
+    "title": "Supabase: odświeżanie sesji nie działa — diagnostyka przy wygasłym tokenie refresh",
+    "description": "Instrukcja diagnostyczna dotycząca sytuacji, gdy token odświeżania (refresh token) Supabase wygasł lub jest odrzucony. Zawiera różnicową listę przyczyn, konkretne testy i kroki naprawcze oraz metody weryfikacji działania po poprawce.",
+    "intro": "Ten dokument opisuje szczegółowo przypadek, gdy aplikacja korzystająca z Supabase zaczyna zwracać błędy autoryzacji związane z odświeżaniem sesji: np. 401/403 przy próbie użycia refresh token, logowanie przerywane po krótkim czasie lub brak odświeżania po restarcie serwera. Nie zakładam jednej przyczyny — przygotowałem listę możliwych źródeł problemu (konfiguracja klienta, polityka wygasania po stronie Supabase, wycieki / zmiany kluczy, błędy implementacji cookie/localStorage, problemy z proxy lub CORS). Dla każdego wariantu podaję jak go jednoznacznie przetestować i co poprawić. Instrukcje są praktyczne: wykonasz je w środowisku deweloperskim i produkcyjnym bez ryzyka utraty danych użytkownika.",
+    "diagnostics": [
+      "Sprawdź, czy problem dotyczy tylko refresh tokenów czy też całego flow auth. Użyj konsoli sieci w przeglądarce lub narzędzia curl, aby wywołać endpoint /auth/v1/token z grant_type=refresh_token i obserwuj odpowiedź. Jeśli serwer zwraca 401 z komunikatem o nieważnym tokenie, to najprawdopodobniej token wygasł lub został odwołany po stronie Supabase.",
+      "Zweryfikuj konfigurację JWT i polityki wygasania (JWT expiry) w panelu Supabase: jeśli refresh token przyznawany był z krótkim TTL albo opcja 'Enable Refresh Token Rotation' została zmieniona, to istnieje scenariusz, że rotation unieważnił poprzedni token. Również sprawdź, czy klucz serwisowy lub anon/public key nie został zresetowany — to unieważnia sesje.",
+      "Nie pomijaj warstwy klienckiej: błędy w zapisie refresh tokena do cookie (HttpOnly, path, domain, secure), lub nadpisywanie localStorage/sessionStorage mogą powodować, że aplikacja wysyła nieaktualny token. Przy aplikacjach serwerowych sprawdź, czy nie używasz jednocześnie wielu instancji SupabaseClient z różnymi ustawieniami."
+    ],
+    "steps": [
+      "Zaloguj się testowym kontem i zapisz wartości access_token i refresh_token z odpowiedzi /auth/v1/token. Wykonaj żądanie POST /auth/v1/token z grant_type=refresh_token używając curl: curl -X POST 'https://<project>.supabase.co/auth/v1/token' -d 'grant_type=refresh_token&refresh_token=<token>' i zapisz odpowiedź oraz kod HTTP.",
+      "Jeżeli żądanie zwraca 200, porównaj issuance time i expires_in w odpowiedzi z tym, co robi klient SDK. Upewnij się, że SDK otrzymuje i zachowuje oba tokeny — nie nadpisuj refresh_token nowym access_token. W przypadku SDK JS sprawdź supabase.auth.getSession() i supabase.auth.onAuthStateChange().",
+      "Jeżeli żądanie zwraca 401 lub 400 z powodem 'invalid_grant' lub 'token_revoked', sprawdź w panelu Supabase: czy nie było rotacji kluczy (Project Settings -> API -> Keys) lub ręcznego wyrejestrowania sesji. Zmiana klucza serwisowego unieważnia sesje — odtwórz sesję po wygenerowaniu nowych kluczy.",
+      "Sprawdź politykę refresh rotation: jeżeli rotation jest włączone, każdy refresh wypisuje nowy refresh_token i unieważnia poprzedni. Przetestuj przepływ sekwencyjnie: wykonaj 2 kolejne refreshy używając tego samego tokena — drugi powinien zostać odrzucony. Jeśli aplikacja równolegle wywołuje refreshy, dodaj lock/mutex, żeby wykonywać je sekwencyjnie.",
+      "Przy aplikacjach SSR lub proxy: sprawdź, czy cookie z refresh_token nie jest skracane przez pośrednika (SameSite, path, domain). W narzędziach devtools sprawdź obecność HttpOnly cookie i jego wartość po restarcie serwera. Dla Next.js/Node upewnij się, że przy SSR odczyt i zapis cookie są wykonywane z tego samego domenowego scope.",
+      "Jeżeli używasz custom JWT lub zewnętrznego provider'a OAuth, upewnij się, że callbacky poprawnie mapują i zapisują refresh_token. W przypadku providerów (Google, GitHub) czasami refresh_token jest wydawany tylko przy pierwszym autoryzowaniu — przetestuj pełny flow OAuth i loguj odebrane tokeny.",
+      "Jeśli problem występuje nieregularnie, włącz logowanie request/response przy refreshu (tylko w środowisku testowym) i porównaj trace-id/headers. Sprawdź, czy proxy lub CDN nie cache'uje endpointu auth — endpointy autoryzacji nie powinny być cache'owane."
+    ],
+    "verification": [
+      "Test 1: Ręczny refresh przez curl powinien zwracać 200 i nowy access_token oraz refresh_token (jeśli rotation włączone). Powtórz natychmiastowe ponowne użycie starego refresh_token — jeśli rotation on działa, drugie wywołanie powinno zwrócić błąd.",
+      "Test 2: Odtwórz scenariusz produkcyjny: wyloguj się i zaloguj ponownie, potem zrestartuj backend/SSR i spróbuj wykonać operację wymagającą odświeżonej sesji. Monitoruj logi serwera: jeśli aplikacja wysyła poprawny aktualny refresh_token, operacja powinna przejść bez 401.",
+      "Test 3: Symulacja równoległych refreshy — wywołaj kilka równoczesnych requestów refresh z tym samym tokenem. Jeśli aplikacja nie serializuje refreshy, spodziewaj się, że tylko pierwszy przejdzie; po naprawie wszystkie żądania powinny skorzystać z jednego sekwencyjnego procesu odświeżania."
+    ],
+    "mistakes": [
+      "Nie loguj ani nie wystawiaj refresh_tokenów w logach produkcyjnych; loguj jedynie statusy i trace-id. Wycieki tokenów umożliwiają przejęcie sesji.",
+      "Nie spodziewaj się, że refresh_token będzie trwały wiecznie — sprawdź TTL i polityki rotacji zamiast zakładać niewyczerpalność.",
+      "Unikanie serializacji operacji refresh (równoległe refreshy) to częsta przyczyna nagłego odrzucenia tokenów przy rotation — stosuj mutex/queue."
+    ],
+    "sources": [
+      {
+        "label": "Supabase Auth guides",
+        "url": "https://supabase.com/docs/guides/auth"
+      },
+      {
+        "label": "Supabase Auth API reference",
+        "url": "https://supabase.com/docs/reference/javascript/auth-api"
+      }
+    ],
+    "status": "published",
+    "service": "/crm-i-aplikacje-webowe",
+    "serviceLabel": "Aplikacje webowe",
+    "autoGenerated": true,
+    "generatedAt": "2026-11-07",
+    "originTopic": "Supabase: token odświeżania sesji wygasł"
+  },
+  {
+    "slug": "crm-admin-role-possible-bypass-endpoint",
+    "title": "Potencjalne obejście roli administratora przez endpointy w CRM — diagnostyka i naprawa",
+    "description": "Analiza przypadków, w których endpointy lub funkcje API umożliwiają użytkownikom eskalację uprawnień do roli administratora w CRM. Zawiera różnicową diagnostykę, konkretne kroki naprawcze, testy weryfikacyjne i typowe błędy do uniknięcia.",
+    "intro": "Ten dokument opisuje możliwe ścieżki obejścia roli administratora w systemach CRM korzystających z Postgres + RLS (row-level security) i zewnętrznego mechanizmu uwierzytelniania (np. Supabase/Auth). Nie traktuj tytułu jako dowodu przyczyny — sprawa wymaga ścisłej weryfikacji. Skupiam się na technicznych mechanizmach: nieprawidłowe polityki RLS, niewłaściwie napisane funkcje SQL z SECURITY DEFINER, akceptacja roli z tokena JWT bez walidacji oraz nadmierne uprawnienia kluczy publicznych. Dokument przedstawia konkretną diagnostykę różnicową z podziałem na przyczyny, szczegółowe kroki naprawcze, testy do wykonania po poprawce oraz ostrzeżenia, jakie błędy popełniono najczęściej. Każdy krok opisany jest tak, aby dał konkretne polecenie do wykonania na serwerze lub w repozytorium polityk RLS i funkcji.",
+    "diagnostics": [
+      "Polityki RLS istnieją, ale odwołują się do roli z pola jwt.claims.role bez dodatkowej walidacji lub używają tylko current_setting('jwt.claims.role', true) co pozwala na manipulację, jeśli JWT nie jest wiarygodnie podpisany albo proxy zamienia nagłówki. Sprawdź, czy policy używa auth.uid() (wiarygodna identyfikacja) lub sprawdza owner_id wiersza.",
+      "Funkcje SQL lub procedury wykonywane z uprawnieniami SECURITY DEFINER mogą wykonywać operacje jako użytkownik właściciel funkcji (często superuser lub admin). Jeśli endpoint wywołuje taką funkcję bez dodatkowych kontroli wejścia, może to umożliwić eskalację uprawnień. Przejrzyj definicje funkcji i uprawnienia EXECUTE.",
+      "Publiczne lub serwisowe klucze (anon/public) używane bez ograniczeń pozwalają klientowi wywołać endpointy, które omijają RLS przez wywołania po stronie serwera lub expose'owane RPC. Sprawdź, które klucze mają SELECT/INSERT/UPDATE/EXECUTE oraz czy są ograniczenia sieciowe i polityki row-level przechwytywania."
+    ],
+    "steps": [
+      "Zbierz listę wszystkich polityk RLS na dotkniętych tabelach: SELECT policyname, permissive, roles, cmd, qual, with_check FROM pg_policies WHERE tablename = 'nazwa_tabeli'; porównaj pola qual i with_check z oczekiwanymi warunkami odwołującymi do auth.uid() lub owner_id.",
+      "Sprawdź JWT: zweryfikuj podpis tokenów używanych przez aplikację (alg, kid) i porównaj claims.role z faktycznym id użytkownika. Użyj narzędzia openssl lub jwt.io (lokalnie) do dekodowania i sprawdzenia sygnatury oraz expiration; odrzuć trusts na podstawie nagłówków proxy.",
+      "Przejrzyj wszystkie funkcje/procedury z SECURITY DEFINER: SELECT n.nspname, p.proname, p.provolatile, p.prosecdef FROM pg_proc p JOIN pg_namespace n ON p.pronamespace=n.oid WHERE p.prosecdef=true; Dla każdej funkcji ogranicz uprawnienia EXECUTE i dodaj walidację caller IS_ROLE('expected') lub dodatkowe kontrole wejścia.",
+      "Przywróć polityki RLS tam, gdzie zostały czasowo wyłączone, i zastąp warunki opartymi na auth.uid() oraz with_check sprawdzającym owner_id = auth.uid(). Usuń polityki, które zezwalają roli public/anon na write/execute bez warunków.",
+      "Zamknij dostęp kluczy publicznych: usuń niepotrzebne publiczne API-keys, ogranicz ich uprawnienia i wprowadź ograniczenia domen/client IP. Wygeneruj nowe klucze app/service po uściśleniu polityk i rotacji.",
+      "Dodaj logowanie audytowe: wprowadź trigger AFTER INSERT/UPDATE/DELETE, który zapisuje actor_id (auth.uid()), source (api/function) i przed/po wartości, aby móc odtworzyć eskalacje. Zapisy kieruj do oddzielnej, chronionej tabeli.",
+      "Przeprowadź code review endpointów serwerowych i klienta: upewnij się, że żaden endpoint nie ustawia roli w tokenie po stronie klienta i że backend waliduje role na podstawie sygnatury JWT oraz sprawdza uprawnienia przed wywołaniem funkcji SQL."
+    ],
+    "verification": [
+      "Próbuj wywołać podatny endpoint z tokenem, w którym zamienisz claim role na 'admin' lokalnie (ale bez poprawnej sygnatury) — żądanie musi być odrzucone przez weryfikację sygnatury JWT. Weryfikuj odpowiedź 401/403 zamiast 200.",
+      "Utwórz test integracyjny, który wykonuje operacje wymagające uprawnień admin przy użyciu konta o niższych uprawnieniach; operacja powinna zwracać błąd RLS/permission denied. Powtórz test po wyłączeniu public/anon kluczy i po rotacji kluczy.",
+      "Spróbuj wywołać funkcję SECURITY DEFINER z kontrolowanymi parametrami w testowym środowisku; upewnij się, że funkcja odrzuca żądania, gdy caller nie jest właścicielem/oczekiwaną usługą i że nie ujawnia danych admina."
+    ],
+    "mistakes": [
+      "Nie wyłączaj Row-Level Security na produkcji jako „szybkiego” fixu. Wyłączenie RLS usuwa warstwę kontroli i ukrywa problem tylko tymczasowo; zamiast tego popraw polityki by wymuszały auth.uid() i with_check.",
+      "Nie ufaj roli przesyłanej z klienta bez sprawdzenia podpisu JWT i uprawnień klucza. Akceptowanie roli z nagłówka lub pola body pozwala na prostą eskalację uprawnień przez dowolnego klienta.",
+      "Nie pozostawiaj funkcji SQL z SECURITY DEFINER bez kontroli wejścia i ograniczeń EXECUTE: to typowy mechanizm eskalacji. Zamiast tego nadaj minimalne uprawnienia i waliduj caller_id oraz argumenty."
+    ],
+    "sources": [
+      {
+        "label": "Supabase — Row Level Security guide",
+        "url": "https://supabase.com/docs/guides/database/postgres/row-level-security"
+      },
+      {
+        "label": "PostgreSQL — Row Security Policies (official docs)",
+        "url": "https://www.postgresql.org/docs/current/ddl-rowsecurity.html"
+      }
+    ],
+    "status": "published",
+    "service": "/crm-i-aplikacje-webowe",
+    "serviceLabel": "Aplikacje webowe",
+    "autoGenerated": true,
+    "generatedAt": "2026-11-07",
+    "originTopic": "CRM: rolę administratora można obejść przez endpoint"
+  }
+]
