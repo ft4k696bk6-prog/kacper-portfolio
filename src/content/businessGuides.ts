@@ -215,7 +215,7 @@ export const businessArticles = [
         ]}
       ]
     }
-  }
+  },
   ...industryGuideArticles,
   ...taxGuideArticles,
   ...companyGuideArticles,
