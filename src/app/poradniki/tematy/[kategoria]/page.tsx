@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCategory, getGuideCounts, guideCategories, listGuides } from "@/lib/guide-directory";
 import { serviceMetadata } from "@/lib/seo";
+import { englishCategoryCounts } from "@/lib/guide-i18n";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -30,7 +31,10 @@ export async function generateMetadata({ params, searchParams }: Props) {
   );
   return {
     ...metadata,
-    alternates: { canonical: `https://bernecki.dev/poradniki/tematy/${kategoria}${page > 1 ? `?strona=${page}` : ""}` },
+    alternates: {
+      canonical: `https://bernecki.dev/poradniki/tematy/${kategoria}${page > 1 ? `?strona=${page}` : ""}`,
+      ...(page===1&&englishCategoryCounts().some(c=>c.slug===kategoria&&c.count>0)?{languages:{"pl-PL":`https://bernecki.dev/poradniki/tematy/${kategoria}`,en:`https://bernecki.dev/en/guides/topics/${kategoria}`}}:{})
+    },
     robots: { index: true, follow: true }
   };
 }
