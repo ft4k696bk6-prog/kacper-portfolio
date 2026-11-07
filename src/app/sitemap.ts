@@ -3,6 +3,7 @@ import { allGuides, getGuideCounts } from "../lib/guide-directory";
 import { getEnglishGuide, getEnglishGuides, englishCategoryCounts } from "../lib/guide-i18n";
 import { realizations } from "../content/realizations";
 import { englishServices, englishRealizations } from "../content/english-business";
+import {blogPosts, BLOG_PUBLISHED_DATE} from "../content/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = "https://bernecki.dev";
@@ -19,6 +20,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return [
+    {url:siteUrl+"/blog",lastModified:new Date(BLOG_PUBLISHED_DATE),alternates:{languages:{"pl-PL":siteUrl+"/blog",en:siteUrl+"/en/blog"}}},
+    {url:siteUrl+"/en/blog",lastModified:new Date(BLOG_PUBLISHED_DATE),alternates:{languages:{"pl-PL":siteUrl+"/blog",en:siteUrl+"/en/blog"}}},
+    ...blogPosts.flatMap(post=>{
+      const pl=siteUrl+"/blog/"+post.slug;
+      const en=siteUrl+"/en/blog/"+post.slug;
+      const alternates={languages:{"pl-PL":pl,en}};
+      return [
+        {url:pl,lastModified:new Date(BLOG_PUBLISHED_DATE),alternates},
+        {url:en,lastModified:new Date(BLOG_PUBLISHED_DATE),alternates}
+      ];
+    }),
     ...realizations.map(item => ({
       url: `${siteUrl}/realizacje/${item.slug}`,
       alternates:{languages:{"pl-PL":`${siteUrl}/realizacje/${item.slug}`,en:`${siteUrl}/en/projects/${item.slug}`}}
