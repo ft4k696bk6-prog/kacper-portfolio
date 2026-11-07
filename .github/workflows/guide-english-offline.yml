@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 65
     concurrency:
-      group: guide-en-translation-${{ github.head_ref }}
+      group: guide-en-translation-v2-${{ github.head_ref }}
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
