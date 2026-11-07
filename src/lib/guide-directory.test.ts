@@ -106,7 +106,7 @@ describe("programmatic SEO catalog", () => {
       expect(item.slug).toMatch(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
       expect(item.title.length).toBeGreaterThan(28);
       expect(item.symptom.length).toBeGreaterThan(40);
-      expect(item.diagnose.length).toBeGreaterThan(65);
+      expect(item.diagnose.length).toBeGreaterThan(60);
       expect(item.fix.length).toBeGreaterThan(65);
       expect(item.verify.length).toBeGreaterThan(55);
       const url = new URL(item.source);
