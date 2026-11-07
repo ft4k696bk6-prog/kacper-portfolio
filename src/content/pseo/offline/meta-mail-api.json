@@ -67,7 +67,7 @@
       "Zbieraj większe zakresy danych w sposób stronicowany i unikaj wielokrotnego pobierania niezmienionych statystyk."
     ],
     "verify": "Po obniżeniu obciążenia poprawne żądania przechodzą, a opóźnienia nie blokują całego CRM.",
-    "warning": "Nie ponawiaj natychmiast każdego 429 lub 613 w ciasnej pętli.",
+    "warning": "Nie ponawiaj natychmiast każdego 429 lub 613 w ciasnej pętli. Każde kolejne żądanie też zużywa dostępny limit i może wydłużyć okres ograniczenia.",
     "source": "https://developers.facebook.com/docs/graph-api/overview/rate-limiting/",
     "category": "meta-ads"
   },
@@ -135,11 +135,11 @@
       "Sprawdź wymagane mechanizmy include dla wszystkich usług rzeczywiście wysyłających wiadomości."
     ],
     "fix": [
-      "Scal do jednego poprawnego rekordu SPF z wymaganymi include i świadomą polityką końcową.",
+      "Scal do jednego poprawnego rekordu SPF z wymaganymi include i świadomą polityką końcową. Sprawdź także, czy zewnętrzny provider nie dodał drugiego TXT automatycznie podczas konfiguracji nowej integracji.",
       "Przetestuj składnię i liczbę odwołań DNS oraz sprawdź wynik SPF w nagłówku testowej wiadomości."
     ],
     "verify": "Odbiorca raportuje SPF pass dla dozwolonego nadawcy i nie zgłasza PermError.",
-    "warning": "Nie dodawaj osobnego rekordu SPF dla każdego kolejnego dostawcy.",
+    "warning": "Nie dodawaj osobnego rekordu SPF dla każdego kolejnego dostawcy. Dwa wpisy TXT v=spf1 na tej samej nazwie nie łączą się automatycznie w jedną politykę.",
     "source": "https://www.rfc-editor.org/rfc/rfc7208",
     "category": "domeny-poczta"
   },
@@ -153,10 +153,10 @@
       "Porównaj rekord DNS selektora z kluczem skonfigurowanym u dostawcy wysyłki."
     ],
     "fix": [
-      "Opublikuj dokładny rekord DKIM wskazany przez aktywnego dostawcę i przetestuj po propagacji.",
+      "Opublikuj dokładny rekord DKIM wskazany przez aktywnego dostawcę i przetestuj po propagacji. Porównaj wynik wysyłki z tego samego nadawcy do dwóch niezależnych odbiorców, by wykluczyć problem lokalnego filtra.",
       "Wyłącz zbędne modyfikacje treści po podpisie lub skonfiguruj podpisywanie w ostatnim etapie transportu."
     ],
-    "verify": "Nowy email pokazuje dkim=pass i podpisuje go oczekiwana domena.",
+    "verify": "Nowy email pokazuje dkim=pass i podpisuje go oczekiwana domena. Sprawdź też, czy podpis obejmuje oczekiwaną domenę nadawczą i nie jest zastępowany podpisem pośrednika.",
     "warning": "Nie kopiuj cudzego klucza prywatnego DKIM do rekordu publicznego DNS.",
     "source": "https://www.rfc-editor.org/rfc/rfc6376",
     "category": "domeny-poczta"
@@ -171,7 +171,7 @@
       "Przeczytaj rekord _dmarc domeny i ustawienia adkim/aspf, odróżniając zgodność relaxed od strict."
     ],
     "fix": [
-      "Skonfiguruj dostawcę tak, by przynajmniej jeden mechanizm uwierzytelnienia był zgodny z domeną From.",
+      "Skonfiguruj dostawcę tak, by przynajmniej jeden mechanizm uwierzytelnienia był zgodny z domeną From. Jeżeli dostawca wysyła przez domenę techniczną, skonfiguruj własną domenę podpisu zgodną z adresem From.",
       "Monitoruj raporty DMARC przed zaostrzeniem polityki, aby nie zablokować legalnych nadawców."
     ],
     "verify": "Testowa wiadomość pokazuje dmarc=pass i zgodność z rzeczywistą domeną nadawczą.",
@@ -207,7 +207,7 @@
       "Wyślij test z niezależnej skrzynki i zweryfikuj spam i filtry poczty."
     ],
     "fix": [
-      "Popraw przypisanie odbiorcy przekierowania i upewnij się, że alias nie został dezaktywowany.",
+      "Popraw przypisanie odbiorcy przekierowania i upewnij się, że alias nie został dezaktywowany. W pierwszym teście wyślij wiadomość o unikalnym temacie i bez załączników, żeby rozpoznać ją w filtrach.",
       "Dla ważnej korespondencji rozważ bezpośredni adres własnej domeny, jeśli nie wymaga zachowania anonimowości."
     ],
     "verify": "Testowy email jest przekazywany do właściwej skrzynki bez ręcznego logowania na alias.",
@@ -261,7 +261,7 @@
       "Porównaj typ deklarowany przez API z parserem użytym po stronie serwera."
     ],
     "fix": [
-      "Dla JSON ustaw application/json i wyślij rzeczywisty JSON.stringify obiektu.",
+      "Dla JSON ustaw application/json i wyślij rzeczywisty JSON.stringify obiektu. Rozdziel przesyłanie zwykłych pól od plików; większość bibliotek inaczej serializuje FormData niż obiekty JSON.",
       "Dla FormData nie ustawiaj ręcznie boundary; pozwól przeglądarce utworzyć poprawny nagłówek multipart."
     ],
     "verify": "Serwer prawidłowo parsuje oba przewidziane formaty albo jasno odrzuca nieobsługiwany typ.",
@@ -279,7 +279,7 @@
       "Oceń, które operacje można cacheować, a które wymagają kolejki i idempotencji."
     ],
     "fix": [
-      "Wprowadź exponential backoff z losowym jitter oraz ograniczoną liczbą ponowień.",
+      "Wprowadź exponential backoff z losowym jitter oraz ograniczoną liczbą ponowień. W metrykach kontroluj też odsetek odrzuconych żądań, a nie tylko średni czas odpowiedzi po retry.",
       "Dla kosztownych operacji zmniejsz częstotliwość zapytań i zbieraj dane grupowo, gdy API na to pozwala."
     ],
     "verify": "Po ustaniu limitu requesty wracają do normalnego stanu bez lawiny duplikatów.",
@@ -297,11 +297,11 @@
       "Porównaj schemat klienta i serwera, zwłaszcza enum, daty, wymagane pola i typy liczb."
     ],
     "fix": [
-      "Popraw mapowanie pól i waliduj dane przed wysłaniem bez osłabiania reguł serwera.",
+      "Popraw mapowanie pól i waliduj dane przed wysłaniem bez osłabiania reguł serwera. Przy formularzach wieloetapowych porównaj również dane po przejściu między krokami, bo klient może gubić ukryte pola.",
       "Pokaż błąd użytkownikowi przy odpowiednim polu i zachowaj wprowadzone dane do poprawienia."
     ],
     "verify": "Poprawne dane tworzą rekord, a nieprawidłowe dostają zrozumiałe 422 bez częściowego zapisu.",
-    "warning": "Nie zamieniaj każdego 422 w ogólny komunikat „brak połączenia”.",
+    "warning": "Nie zamieniaj każdego 422 w ogólny komunikat „brak połączenia”. Klient powinien zachować pola formularza, aby nie wymagać ponownego wpisywania wszystkich danych.",
     "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422",
     "category": "formularze-api"
   },
