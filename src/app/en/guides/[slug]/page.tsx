@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { guideScreenshots } from "@/content/guideScreenshots";
 import { getRelatedGuides } from "@/lib/guide-directory";
 import { getEnglishGuide, getEnglishGuides, englishGuideCategory, englishCategory, englishCategoryCounts } from "@/lib/guide-i18n";
+import { VatComparison } from "@/components/VatComparison";
 
 type Props={params:Promise<{slug:string}>};
 export const dynamicParams=true;
@@ -47,6 +48,7 @@ export default async function EnglishGuidePage({params}:Props){
    <h1 className="mt-8 break-words text-4xl leading-tight md:text-5xl">{guide.title}</h1>
    <p className="mt-5 text-sm leading-6 text-white/65"><Link className="underline underline-offset-4" href={`/poradniki/${slug}`}>Read this guide in Polish</Link></p>
    <p className="surface-card mt-8 rounded-2xl border border-white/25 bg-[var(--brand-black)] p-6 text-lg leading-8 text-white">{guide.intro}</p>
+   {slug === "zwrot-vat-8-23-przyklad-50000" ? <VatComparison lang="en" /> : null}
    {screenshot.length>0&&<section className="mt-10" aria-label="Example error screen">
     <h2 className="text-2xl">Example error screen</h2>
     <p className="mt-3 text-white/70">A sample of the issue in the application interface. Use the diagnostic steps below to identify the cause.</p>
