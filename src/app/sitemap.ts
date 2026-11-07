@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { guides } from "@/content/guides";
+import { allGuides, getGuideCounts } from "@/lib/guide-directory";
 import { realizations } from "@/content/realizations";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -19,7 +19,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...realizations.map(item => ({url: `${siteUrl}/realizacje/${item.slug}`})),
     { url: `${siteUrl}/poradniki` },
-    ...guides.map((guide) => ({ url: `${siteUrl}/poradniki/${guide.slug}` })),
+    ...getGuideCounts().filter((category) => category.count > 0).map((category) => ({ url: `${siteUrl}/poradniki/tematy/${category.slug}` })),
+    ...allGuides.map((guide) => ({ url: `${siteUrl}/poradniki/${guide.slug}` })),
     { url: siteUrl + "/case-studies/re-energy-meta-ads", changeFrequency: "monthly", priority: 0.9 },
     { url: siteUrl + "/reklamy-meta-ads-dla-firm", changeFrequency: "monthly", priority: 0.9 },
     {
