@@ -57,8 +57,8 @@ export const enCaseStudies: CaseStudiesContent = {
     features: "Key features",
     decisions: "Technical decisions",
     learned: "What I learned",
-    next: "Next improvements",
-    limitations: "Limitations",
+    next: "Further development",
+    limitations: "Project scope",
   },
   items: [
     {
@@ -130,7 +130,7 @@ export const enCaseStudies: CaseStudiesContent = {
         "Add a safe demo reset/seed script for repeatable presentations.",
       ],
       limitations:
-        "B-CRM is a portfolio demo with production-like patterns. It still needs broader e2e coverage, monitoring, security review and UX hardening before real production use.",
+        "B-CRM is a working demonstration of role-based lead management, team workflows and Supabase integration. A dedicated production implementation is tailored to the company's processes and access requirements.",
     },
     {
       "slug": "motomizer",
@@ -197,7 +197,7 @@ export const enCaseStudies: CaseStudiesContent = {
         "Improve availability form analytics.",
         "Consider checkout only when sales are enabled."
       ],
-      "limitations": "This is a product showcase, not a complete online store. The availability action does not represent a purchase or payment. Screenshot captured from the public live site."
+      "limitations": "A product landing page focused on the diffuser's design, features and colour variants. Ordering and payment features belong to a separate e-commerce stage."
     },
     {
       "slug": "starcars",
@@ -266,7 +266,7 @@ export const enCaseStudies: CaseStudiesContent = {
         "Increase calculator test coverage for edge cases.",
         "Further optimize 3D performance on lower-end devices."
       ],
-      "limitations": "The calculator is indicative, not a binding offer. Rates and taxes must be checked and updated. Screenshot captured from the public live site."
+      "limitations": "The calculator helps customers estimate import costs before contacting StarCars. Final pricing depends on the vehicle, shipping, taxes and individual arrangements."
     },
     {
       "slug": "beatmarket",
@@ -338,7 +338,7 @@ export const enCaseStudies: CaseStudiesContent = {
         "Add security tests for uploads and producer permissions.",
         "Further develop playback, discovery and catalog analytics."
       ],
-      "limitations": "The platform is actively developed. Actual inventory, payments and downloads depend on approved listings and current integrations. It is not presented as a finished marketplace. Screenshots show the public live site."
+      "limitations": "BeatMarket is being developed in stages, from music discovery and producer profiles to licensing, payments and file delivery."
     },
     {
       slug: "interactive-portfolio",
@@ -390,7 +390,7 @@ export const enCaseStudies: CaseStudiesContent = {
         "Reduce video payload where possible without hurting the effect.",
       ],
       limitations:
-        "This is a secondary experimental portfolio. It is intentionally more playful than the main business web app portfolio and should be reviewed as an interactive UI project.",
+        "An experimental portfolio exploring animation, interaction and unconventional navigation. It complements the primary business-focused website.",
     },
     {
       slug: "kalkulator-leasingu",
@@ -438,7 +438,7 @@ export const enCaseStudies: CaseStudiesContent = {
         "Improve accessibility of controls.",
       ],
       limitations:
-        "The calculator is informational and simplified. It is not a financial offer and results may differ from real leasing proposals.",
+        "The calculator provides an initial estimate. Leasing terms and the final instalment depend on the individual offer from a financing provider.",
     },
     {
       slug: "berni-rush",
@@ -487,7 +487,7 @@ export const enCaseStudies: CaseStudiesContent = {
         "Add focused tests for pure balancing and save helpers where practical.",
       ],
       limitations:
-        "This is a playable prototype and side project. It is not presented as a finished commercial game.",
+        "A playable game prototype focused on mechanics, interaction and an engaging first version of the experience.",
     },
     {
       slug: "unreal-gameplay-prototype",
@@ -539,7 +539,7 @@ export const enCaseStudies: CaseStudiesContent = {
         "Document the Blueprint structure before expanding the prototype.",
       ],
       limitations:
-        "This is a local experimental prototype. It has no public demo or repository and is included as a technical/gameplay preview, not a finished game.",
+        "An Unreal Engine gameplay prototype used to develop vehicle handling, interactions and mission mechanics.",
     },
     {
       slug: "portfolio",
@@ -588,7 +588,7 @@ export const enCaseStudies: CaseStudiesContent = {
         "Review Core Web Vitals after design changes.",
       ],
       limitations:
-        "The portfolio is an active project. Screenshots, browser smoke tests and analytics events still need more coverage.",
+        "A continuously developed portfolio combining completed projects, business services, contact tools and responsive interfaces.",
     },
   ],
 };
@@ -609,8 +609,8 @@ export const plCaseStudies: CaseStudiesContent = {
     features: "Najważniejsze funkcje",
     decisions: "Decyzje techniczne",
     learned: "Czego się nauczyłem",
-    next: "Co poprawiłbym dalej",
-    limitations: "Ograniczenia",
+    next: "Dalszy rozwój",
+    limitations: "Zakres projektu",
   },
   items: [
     {
@@ -682,7 +682,7 @@ export const plCaseStudies: CaseStudiesContent = {
         "Dodać bezpieczny skrypt resetu/seedowania demo do powtarzalnych prezentacji.",
       ],
       limitations:
-        "B-CRM jest demo portfolio z wzorcami production-like. Przed realnym użyciem produkcyjnym wymaga szerszych testów e2e, monitoringu, przeglądu bezpieczeństwa i dopracowania UX.",
+        "B-CRM to działająca wersja demonstracyjna zarządzania leadami, rolami i pracą zespołu z wykorzystaniem Supabase. Wdrożenie dla konkretnej firmy dopasowuję do jej procesów i wymaganych uprawnień.",
     },
     {
       "slug": "motomizer",
@@ -749,7 +749,7 @@ export const plCaseStudies: CaseStudiesContent = {
         "Rozwinąć pomiary formularza zainteresowania.",
         "Dodać opcjonalny checkout, gdy sprzedaż będzie uruchomiona."
       ],
-      "limitations": "To witryna produktowa, a nie kompletny sklep. Przycisk dostępności nie oznacza możliwości złożenia lub opłacenia zamówienia. Zrzuty przedstawiają publiczną wersję strony."
+      "limitations": "Strona produktowa prezentuje wygląd, funkcje i warianty kolorystyczne dyfuzora. Obsługa zamówień i płatności należy do odrębnego etapu e-commerce."
     },
     {
       "slug": "starcars",
@@ -818,7 +818,7 @@ export const plCaseStudies: CaseStudiesContent = {
         "Rozbudować testy kalkulatora dla nietypowych parametrów.",
         "Optymalizować wczytywanie elementów 3D na słabszych urządzeniach."
       ],
-      "limitations": "Kalkulator jest estymacją, nie ofertą ani gwarancją ceny końcowej. Stawki i podatki wymagają aktualizacji. Zrzuty przedstawiają publiczną wersję strony."
+      "limitations": "Kalkulator pomaga wstępnie oszacować koszt importu samochodu. Ostateczna cena zależy od auta, transportu, podatków i indywidualnych ustaleń."
     },
     {
       "slug": "beatmarket",
@@ -890,7 +890,7 @@ export const plCaseStudies: CaseStudiesContent = {
         "Dodać testy bezpieczeństwa uploadu oraz uprawnień producenta.",
         "Rozbudować odsłuch, wyszukiwanie i analitykę katalogu."
       ],
-      "limitations": "Platforma jest rozwijana; dostępność beatów, płatności i pobierania zależy od aktualnej konfiguracji, zatwierdzonej oferty i integracji. Nie przedstawiam jej jako ukończonego marketplace'u. Zrzuty przedstawiają publiczną wersję strony."
+      "limitations": "BeatMarket rozwijam etapami: od katalogu muzyki i profili producentów po licencjonowanie, płatności i pobieranie plików."
     },
     {
       slug: "interactive-portfolio",
@@ -942,7 +942,7 @@ export const plCaseStudies: CaseStudiesContent = {
         "Zmniejszyć wagę wideo tam, gdzie nie popsuje to efektu.",
       ],
       limitations:
-        "To dodatkowe portfolio eksperymentalne. Celowo jest bardziej interaktywne niż główna strona o aplikacjach biznesowych i powinno być oceniane jako projekt UI.",
+        "Eksperymentalne portfolio oparte na animacji, interakcji i niestandardowej nawigacji. Uzupełnia główną stronę poświęconą projektom biznesowym.",
     },
     {
       slug: "kalkulator-leasingu",
@@ -990,7 +990,7 @@ export const plCaseStudies: CaseStudiesContent = {
         "Poprawić dostępność kontrolek formularza.",
       ],
       limitations:
-        "Kalkulator ma charakter informacyjny i uproszczony. Nie jest ofertą finansową, a wyniki mogą różnić się od realnych propozycji leasingowych.",
+        "Kalkulator pozwala wstępnie oszacować ratę leasingu. Końcowe warunki i wysokość raty zależą od indywidualnej oferty finansowania.",
     },
     {
       slug: "berni-rush",
@@ -1039,7 +1039,7 @@ export const plCaseStudies: CaseStudiesContent = {
         "Dodać testy czystych helperów balansu i zapisu, gdzie ma to sens.",
       ],
       limitations:
-        "To grywalny prototyp i side project. Nie jest przedstawiany jako skończona gra komercyjna.",
+        "Grywalny prototyp skupiony na mechanice rozgrywki, interakcjach i pierwszej wersji doświadczenia gracza.",
     },
     {
       slug: "unreal-gameplay-prototype",
@@ -1091,7 +1091,7 @@ export const plCaseStudies: CaseStudiesContent = {
         "Opisać strukturę Blueprintów przed rozbudową prototypu.",
       ],
       limitations:
-        "To lokalny prototyp eksperymentalny. Nie ma publicznego demo ani repozytorium i jest pokazany jako preview techniczne/gameplayowe, nie skończona gra.",
+        "Prototyp rozgrywki w Unreal Engine rozwijający sterowanie pojazdem, interakcje i mechanikę misji.",
     },
     {
       slug: "portfolio",
@@ -1140,7 +1140,7 @@ export const plCaseStudies: CaseStudiesContent = {
         "Sprawdzić Core Web Vitals po zmianach layoutu.",
       ],
       limitations:
-        "Portfolio jest aktywnie rozwijane. Screenshoty, testy przeglądarkowe i eventy analytics nadal wymagają szerszego pokrycia.",
+        "Portfolio łączy realizacje, ofertę usług, narzędzia kontaktu i responsywne prezentacje projektów; całość rozwijam wraz z nowymi wdrożeniami.",
     },
   ],
 };
