@@ -24,8 +24,7 @@ export default async function EnglishGuideCatalog({searchParams}:Props){
   <header className="mt-10">
    <p className="page-eyebrow">Technical knowledge base · practical solutions</p>
    <h1 className="mt-5 max-w-5xl text-4xl leading-tight md:text-6xl">Not working? Find the cause and fix it.</h1>
-   <p className="mt-6 max-w-3xl text-lg leading-8 text-white/75">Explore practical troubleshooting guides for Next.js, React, TypeScript, Supabase, PostgreSQL, WordPress, Meta Ads, CRM systems and APIs. Every English article is based on a corresponding Polish guide and has its own source documentation.</p>
-   <p className="mt-4 text-sm text-white/60">Machine-translated articles are labeled and should be checked against official documentation for security-critical changes.</p>
+   <p className="mt-6 max-w-3xl text-lg leading-8 text-white/75">Explore practical troubleshooting guides for Next.js, React, TypeScript, Supabase, PostgreSQL, WordPress, Meta Ads, CRM systems and APIs. Each guide covers a specific issue, diagnostic steps, a practical fix and a way to verify the result.</p>
    <form role="search" action="/en/guides" method="get" className="mt-8 flex max-w-3xl flex-wrap gap-3">
     <label htmlFor="english-guide-search" className="sr-only">Search technical guides</label>
     <input id="english-guide-search" name="q" type="search" defaultValue={query} maxLength={100} placeholder="e.g. React hooks, RLS, sitemap..." className="min-w-0 flex-1 rounded-xl border border-white/25 bg-[var(--brand-black)] px-5 py-4 text-white placeholder:text-white/55"/>
