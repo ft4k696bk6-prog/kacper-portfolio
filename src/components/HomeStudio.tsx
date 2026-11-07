@@ -15,17 +15,7 @@ export function HomeStudio() {
   const { lang, t } = useLanguage();
   const c = homepageCopy[lang];
   return <main className={`${styles.studio} portfolio-content`}>
-    <section
-      id="home"
-      className={`${styles.hero} hero-night`}
-      aria-labelledby="hero-title"
-      onPointerMove={event => {
-        if(event.pointerType !== "mouse" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-        const box = event.currentTarget.getBoundingClientRect();
-        event.currentTarget.style.setProperty("--spot-x", ((event.clientX-box.left)/box.width*100).toFixed(1)+"%");
-        event.currentTarget.style.setProperty("--spot-y", ((event.clientY-box.top)/box.height*100).toFixed(1)+"%");
-      }}
-    >
+    <section id="home" className={`${styles.hero} hero-night`} aria-labelledby="hero-title">
       <div className={styles.heroCopy}>
         <p className={styles.eyebrow}>{c.signature}</p>
         <h1 id="hero-title">{c.title.map(line => <span key={line}>{line}</span>)}</h1>
@@ -40,20 +30,28 @@ export function HomeStudio() {
           <span>{lang === "pl" ? "Technologia i sprzedaż" : "Technology & sales"}</span>
         </div>
       </div>
-      <div className={styles.heroScene} aria-label={lang === "pl" ? "Właściciel i wybrane realizacje" : "Founder and selected projects"}>
-        <div className={styles.sceneGlow} aria-hidden="true" />
+      <div className={styles.heroScene} aria-label={lang === "pl" ? "Wybrane projekty i zdjęcie autora" : "Selected projects and founder portrait"}>
+        <div className={styles.portraitLight} aria-hidden="true" />
         <div className={styles.portrait}>
-          <Image src="/images/profile-3-cutout.png" alt={c.portrait} width={1122} height={1402} priority sizes="(min-width:1024px) 380px, 56vw" />
+          <Image src="/images/profile-3-cutout.png" alt={c.portrait} width={1122} height={1402} priority sizes="(min-width:1024px) 490px, 73vw"/>
         </div>
-        <Link href="/case-studies/b-crm" className={styles.sceneShowcase}>
-          <div className={styles.sceneScreen}>
-            <Image src="/images/projects/bcrm-admin-dashboard.jpg" alt={lang === "pl" ? "Panel aplikacji B-CRM" : "B-CRM application dashboard"} width={960} height={600} sizes="(min-width:1024px) 370px, 65vw" />
+        <Link href="/case-studies/starcars" className={`${styles.heroTile} ${styles.tileStarCars}`}>
+          <div className={styles.tileVisual}>
+            <Image src="/images/projects/starcars-live-current.jpg" alt={lang === "pl" ? "Rzeczywista strona StarCars" : "Real StarCars website"} width={640} height={380} sizes="(min-width:1024px) 300px, 44vw" />
           </div>
-          <div className={styles.sceneProjectMeta}><span><strong>B-CRM</strong><small>{lang === "pl" ? "Aplikacje i procesy" : "Apps and workflows"}</small></span><ArrowUpRight size={17}/></div>
+          <div className={styles.tileCaption}><strong>StarCars</strong><ArrowUpRight size={16}/></div>
         </Link>
-        <Link href="/case-studies/starcars" className={styles.sceneSecondary}>
-          <Image src="/images/projects/starcars-live-current.jpg" alt={lang === "pl" ? "Strona projektu StarCars" : "StarCars website"} width={270} height={140} sizes="(min-width:1024px) 230px, 44vw"/>
-          <span>StarCars <ArrowUpRight size={13}/></span>
+        <Link href="/case-studies/isto-kebab" className={`${styles.heroTile} ${styles.tileIsto}`}>
+          <div className={styles.tileVisual}>
+            <img src="https://s0.wp.com/mshots/v1/https%3A%2F%2Fisto.bernecki.dev%2F?vpw=1440&vph=940&w=1200" alt={lang === "pl" ? "Zrzut rzeczywistej strony Isto Kebab" : "Screenshot of the real Isto Kebab website"} width={1200} height={784} loading="lazy" decoding="async" />
+          </div>
+          <div className={styles.tileCaption}><strong>Isto Kebab</strong><ArrowUpRight size={16}/></div>
+        </Link>
+        <Link href="/case-studies/b-crm" className={`${styles.heroTile} ${styles.tileCrm}`}>
+          <div className={styles.tileVisual}>
+            <Image src="/images/projects/bcrm-admin-dashboard.jpg" alt={lang === "pl" ? "Rzeczywisty panel B-CRM" : "Real B-CRM dashboard"} width={960} height={600} sizes="(min-width:1024px) 400px, 68vw" />
+          </div>
+          <div className={styles.tileCaption}><strong>B-CRM</strong><ArrowUpRight size={16}/></div>
         </Link>
       </div>
     </section>
