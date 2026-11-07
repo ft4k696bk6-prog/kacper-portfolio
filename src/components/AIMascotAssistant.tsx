@@ -178,8 +178,8 @@ export function AIMascotAssistant() {
     ? "bottom-[calc(100%+0.8rem)] right-0 w-[min(26rem,calc(100vw-1.5rem))]"
     : "bottom-[calc(100%+0.9rem)] right-0 w-[28rem]";
   const companionPanelSizeClass = isCompactViewport
-    ? "h-[min(22rem,calc(100vh-19rem))]"
-    : "h-[min(34rem,calc(100vh-7rem))]";
+    ? "h-[min(22rem,calc(100dvh-8rem))]"
+    : "h-[min(34rem,calc(100dvh-7rem))]";
   useEffect(() => {
     setMounted(true);
     const hiddenUntil = Number(localStorage.getItem(HIDDEN_UNTIL_KEY) || 0);
