@@ -1,6 +1,10 @@
 name: pSEO Autopilot — verified article publishing
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/pseo-autopilot.yml'
   schedule:
     - cron: '23 3 * * *'
       timezone: 'Europe/Warsaw'
