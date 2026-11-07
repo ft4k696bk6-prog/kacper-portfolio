@@ -3,7 +3,7 @@ const topics = [
     "slug": "icloud-wlasna-domena-maile-nie-dochodza",
     "title": "iCloud Mail: wiadomości na adres we własnej domenie nie dochodzą",
     "description": "Masz e-mail @twojadomena.pl w iCloud+, ale nic nie przychodzi? Sprawdź MX, DKIM, alias i przekazywanie.",
-    "symptom": "Adres w domenie jest dodany do iCloud+, ale wiadomości od nadawców zewnętrznych nie pojawiają się w skrzynce. Taki problem wystąpił podczas konfiguracji poczty przy bernecki.dev.",
+    "symptom": "Adres w domenie jest dodany do iCloud+, ale wiadomości od nadawców zewnętrznych nie pojawiają się w skrzynce. Najczęściej trzeba sprawdzić rekordy DNS, aktywację adresu i konfigurację konta.",
     "cause": "Samo dodanie domeny do konta Apple nie kończy konfiguracji DNS i konkretnych adresów. Błędy MX, konflikt starego hostingu lub brak aktywnego adresu blokują odbiór.",
     "steps": [
       "Otwórz iCloud+ i sprawdź, czy domena oraz konkretny adres e-mail mają status aktywny.",
@@ -292,7 +292,7 @@ const topics = [
     "slug": "formularz-strona-nie-dziala-500",
     "title": "Formularz na stronie nie wysyła wiadomości — co sprawdzić w API?",
     "description": "Klikasz Wyślij i nic się nie dzieje? Jak prześledzić formularz od przeglądarki przez API po e-mail lub CRM.",
-    "symptom": "Formularz wygląda poprawnie, ale klient nie otrzymuje potwierdzenia, a zgłoszenie nie trafia do firmy. Taki problem występował podczas testów formularza strony usługowej.",
+    "symptom": "Formularz wygląda poprawnie, ale klient nie otrzymuje potwierdzenia, a zgłoszenie nie trafia do firmy. Najpierw sprawdź, czy żądanie trafia do serwera, czy zapisuje zgłoszenie i czy zwraca prawdziwy wynik wysyłki.",
     "cause": "Błąd może leżeć w walidacji, endpointcie, ENV, dostawcy e-mail lub w samym UI, które wyświetla sukces bez potwierdzenia zapisu.",
     "steps": [
       "W DevTools Network sprawdź, czy po kliknięciu wysyłane jest żądanie i jaki kod HTTP wraca.",
