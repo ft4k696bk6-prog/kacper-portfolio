@@ -1,0 +1,130 @@
+{
+  "purpose": "Zestaw zweryfikowanych incydentów i wyraźnie oznaczonych zgłoszeń użytkownika. Nie są jeszcze opublikowanymi poradnikami.",
+  "verifiedAt": "2026-11-07",
+  "privacy": "Przed publikacją usunąć dane klientów, dane osobowe, tokeny i sekrety.",
+  "cases": [
+    {
+      "key": "portfolio-nextjs-typing-guide-slug",
+      "status": "log-confirmed",
+      "category": "nextjs-react",
+      "symptom": "Next.js build failed: Type error Property 'slug' does not exist on type...",
+      "location": "src/app/poradniki/[slug]/page.tsx, generateStaticParams",
+      "evidence": {
+        "source": "Vercel build events",
+        "deploymentId": "dpl_FWLhhAUbiXcdeazhxPduvjk2aUDY"
+      },
+      "publishNote": "Porównać ostatni kod i poprawkę. Nie przypisywać przyczyny samemu TypeScript bez zbadania struktury typów."
+    },
+    {
+      "key": "crm-usesearchparams-suspense-not-found",
+      "status": "log-confirmed",
+      "category": "nextjs-react",
+      "symptom": "useSearchParams() should be wrapped in a suspense boundary at page '/404'; prerender /_not-found failed",
+      "location": "B-CRM Next.js App Router build",
+      "evidence": {
+        "source": "Vercel build events",
+        "deploymentId": "dpl_DDcJikNXPXJRRQRoBWENPXwgibwt"
+      },
+      "publishNote": "Opisać wpływ współdzielonego layoutu i komponentów. Rozróżnić Suspense i force dynamic; sprawdzić wersję Next.js."
+    },
+    {
+      "key": "crm-conditional-react-usememo",
+      "status": "log-confirmed",
+      "category": "nextjs-react",
+      "symptom": "React Hook 'useMemo' is called conditionally",
+      "location": "components/mandatory-work-gate.tsx:132:32",
+      "evidence": {
+        "source": "Vercel build events",
+        "deploymentId": "dpl_1SD8RG8yE5pXT8sXwTwHN4FSrxfN"
+      },
+      "publishNote": "Użyć publicznie bezpiecznego wycinka kodu; sprawdzić commit naprawczy i zasady Rules of Hooks."
+    },
+    {
+      "key": "google-search-console-invalid-sitemap",
+      "status": "image-confirmed",
+      "category": "seo-google",
+      "symptom": "Nieprawidłowy adres mapy witryny w Google Search Console przy wpisanym sitemap.xml",
+      "location": "Search Console > Mapy witryn",
+      "evidence": {
+        "source": "Existing user's Library screenshot",
+        "filename": "IMG_1613.png",
+        "date": "2026-11-05"
+      },
+      "publishNote": "Samo powiadomienie nie dowodzi przyczyny; w poradniku wyjaśnić property typu domena vs URL prefix i prawidłowy względny/bezwzględny adres; zanonimizować screen."
+    },
+    {
+      "key": "google-search-console-sitemap-submission-context",
+      "status": "image-confirmed",
+      "category": "seo-google",
+      "symptom": "Formularz 'Dodaj nową mapę witryny' i brak zapisanych map",
+      "location": "Search Console > Mapy witryn",
+      "evidence": {
+        "source": "Existing user's Library screenshot",
+        "filename": "IMG_1612.png",
+        "date": "2026-11-05"
+      },
+      "publishNote": "Ten obraz jest kontekstem poprzedniego przypadku, nie wystarczającym dowodem na niezależny błąd."
+    },
+    {
+      "key": "google-business-video-only-verification",
+      "status": "image-confirmed",
+      "category": "seo-google",
+      "symptom": "Profil Firmy Google oferuje 'Prześlij film pokazujący firmę' jako sposób weryfikacji",
+      "location": "Profil Firmy Google",
+      "evidence": {
+        "source": "Existing user's Library screenshot",
+        "filename": "IMG_1614.png",
+        "date": "2026-11-05"
+      },
+      "publishNote": "Wskazać, że inne metody weryfikacji mogą być niedostępne; nie obiecywać możliwości ominięcia wymaganej weryfikacji."
+    },
+    {
+      "key": "crm-lead-counter-vs-visible-list",
+      "status": "user-reported",
+      "category": "crm-leady",
+      "symptom": "Pracownik widzi licznik około 180 leadów, lecz nie wszystkie rekordy na liście",
+      "location": "B-CRM",
+      "evidence": {
+        "source": "User's prior conversation",
+        "date": "2026-11-04"
+      },
+      "publishNote": "Nie deklarować konkretnej przyczyny ani naprawienia bez badań bazy, RLS i filtrów. Chronić dane klientów."
+    },
+    {
+      "key": "crm-leads-invisible-after-unlock",
+      "status": "user-reported",
+      "category": "crm-leady",
+      "symptom": "Leady po zdjęciu blokady nie pojawiają się w panelu pracownika",
+      "location": "B-CRM",
+      "evidence": {
+        "source": "User's prior conversation",
+        "date": "2026-11-04"
+      },
+      "publishNote": "Zweryfikować role, statusy, cache, filtry i API; nie identyfikować pracownika w publicznym artykule."
+    },
+    {
+      "key": "icloud-hide-my-email-missing-forwarding",
+      "status": "user-reported",
+      "category": "domeny-poczta",
+      "symptom": "Wiadomości nie docierają z aliasów iCloud Hide My Email mimo deklarowanego przekierowania",
+      "location": "iCloud Mail",
+      "evidence": {
+        "source": "User's prior conversation",
+        "date": "2026-11-04"
+      },
+      "publishNote": "Oddzielić aliasy Hide My Email, własną domenę i konfigurację MX. Bez ujawniania prawdziwych adresów."
+    },
+    {
+      "key": "crm-vercel-deployment-paused",
+      "status": "user-reported",
+      "category": "vercel-hosting",
+      "symptom": "This deployment is temporarily paused na stronie logowania CRM",
+      "location": "Vercel",
+      "evidence": {
+        "source": "User's prior conversation",
+        "date": "2026-11-04"
+      },
+      "publishNote": "Sprawdzić powód w obecnym panelu billing/limits; nie przyjmować bez dowodu jednej przyczyny."
+    }
+  ]
+}
