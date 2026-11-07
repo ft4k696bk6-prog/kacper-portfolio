@@ -42,10 +42,6 @@ export const offlineGuides = offlineCases.map((caseFile) => {
     offlinePseo: true as const,
     sections: [
       {
-        title: "Objaw i możliwa przyczyna",
-        paragraphs: [caseFile.symptom, caseFile.cause]
-      },
-      {
         title: "Jak ustalić źródło błędu",
         paragraphs: [...caseFile.inspect]
       },
