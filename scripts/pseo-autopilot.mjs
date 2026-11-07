@@ -51,8 +51,8 @@ const existingTitles=records.map(x=>x.title),existingSlugs=new Set(records.map(x
 for(const folder of ["src/content","src/content/pseo"]){
  for(const f of readdirSync(join(root,folder)).filter(x=>x.endsWith("Guides.ts")||x==="guides.ts")){
   const txt=readFileSync(join(root,folder,f),"utf8");
-  for(const m of txt.matchAll(/\bslug:\s*["']([^"']+)["']/g))existingSlugs.add(m[1]);
-  for(const m of txt.matchAll(/\btitle:\s*["']([^"']+)["']/g))existingTitles.push(m[1]);
+  for(const m of txt.matchAll(/["']?slug["']?\s*:\s*["']([^"']+)["']/g))existingSlugs.add(m[1]);
+  for(const m of txt.matchAll(/["']?title["']?\s*:\s*["']([^"']+)["']/g))existingTitles.push(m[1]);
  }
 }
 const duplicate=s=>existingTitles.some(x=>normalize(x)===normalize(s)||sim(x,s)>=.78);
