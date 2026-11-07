@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 /* Static checks; never publish Polish placeholders as indexed English pages. */
 const fs=require("node:fs");
 const raw=JSON.parse(fs.readFileSync(process.argv[2]||"/tmp/bernecki-guide-source-pl.json","utf8"));
