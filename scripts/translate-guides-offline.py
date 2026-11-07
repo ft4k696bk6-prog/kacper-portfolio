@@ -129,20 +129,20 @@ editorial_path = Path("src/content/pseo/english-title-overrides.json")
 editorial = json.loads(editorial_path.read_text("utf8")) if editorial_path.exists() else {}
 
 glossary = [
-    (r"\\bSubabase\\b", "Supabase"),
-    (r"\\bSubbase\\b", "Supabase"),
-    (r"\\bConversations API\\b", "Conversions API"),
-    (r"\\bleady\\b", "leads"),
-    (r"\\bleades\\b", "leads"),
-    (r"\\bdefloyment\\b", "deployment"),
-    (r"\\bdefloy\\b", "deploy"),
-    (r"\\btraders\\b", "sales representatives"),
-    (r"\\btrader\\b", "sales representative"),
-    (r"\\bmerchants\\b", "sales representatives"),
-    (r"\\bmerchant\\b", "sales representative"),
-    (r"\\bEscapulate\\b", "Escape"),
-    (r"\\bbushes\\b", "garbled characters"),
-    (r"\\bunique contrast\\b", "unique constraint"),
+    (r"\bSubabase\b", "Supabase"),
+    (r"\bSubbase\b", "Supabase"),
+    (r"\bConversations API\b", "Conversions API"),
+    (r"\bleady\b", "leads"),
+    (r"\bleades\b", "leads"),
+    (r"\bdefloyment\b", "deployment"),
+    (r"\bdefloy\b", "deploy"),
+    (r"\btraders\b", "sales representatives"),
+    (r"\btrader\b", "sales representative"),
+    (r"\bmerchants\b", "sales representatives"),
+    (r"\bmerchant\b", "sales representative"),
+    (r"\bEscapulate\b", "Escape"),
+    (r"\bbushes\b", "garbled characters"),
+    (r"\bunique contrast\b", "unique constraint"),
 ]
 def polish_technical_terminology(value):
     for pattern, replacement in glossary:
