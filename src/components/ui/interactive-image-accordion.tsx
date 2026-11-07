@@ -36,7 +36,7 @@ export function InteractiveImageAccordion({items,active,onSelect,locale="pl"}:{i
  <div className="book-identity" aria-hidden="true"><span className="book-identity-mark">{p.mark}</span><span className={"book-identity-title"+(p.logoOnly?" brand-only":"")}>{p.title}</span></div>
  <div className="project-book-content" aria-hidden={!selected}>
  <p className="book-category">{p.category}</p><h3 className="book-project-title">{p.title}</h3><p>{p.description}</p>
- <div className="project-book-links"><Link href={p.href} tabIndex={selected?0:-1}>{locale==="pl"?"Zobacz realizację":"View project"} <ArrowUpRight size={14}/></Link>{p.demo&&<a href={p.demo} target="_blank" rel="noopener noreferrer" tabIndex={selected?0:-1}>Live <ExternalLink size={13}/></a>}</div>
+ <div className="project-book-links"><Link href={p.href} tabIndex={selected?0:-1}>{locale==="pl"?"Zobacz realizację":"View project"} <ArrowUpRight size={14}/></Link>{p.href==="/case-studies/b-crm"?<Link href="/#contact" tabIndex={selected?0:-1}>{locale==="pl"?"Umów demo":"Book a demo"} <ArrowUpRight size={13}/></Link>:p.demo&&<a href={p.demo} target="_blank" rel="noopener noreferrer" tabIndex={selected?0:-1}>Live <ExternalLink size={13}/></a>}</div>
  </div></article>;
  })}</div></>;
 }

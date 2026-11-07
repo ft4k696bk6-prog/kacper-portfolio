@@ -17,8 +17,8 @@
 .primary:hover { background:#d2c3a9; }
 .secondary { border:1px solid #ffffff30; }
 .secondary:hover { background:#151515; }
-.portrait { background:#151515; border-radius:8px; overflow:hidden; aspect-ratio:4/5; }
-.portrait img { width:100%; height:100%; object-fit:cover; object-position:center 18%; }
+.portrait { background:transparent; border-radius:0; overflow:hidden; aspect-ratio:4/5; display:flex; align-items:flex-end; justify-content:center; }
+.portrait img { width:100%; height:100%; object-fit:contain; object-position:center bottom; }
 .offer { display:grid; grid-template-columns:1fr 1fr; column-gap:56px; margin-top:32px; }
 .offer a { position:relative; padding:26px 36px 26px 0; border-top:1px solid #ffffff25; }
 .offer p,.bio { font-size:15px; line-height:1.8; color:#b4b0aa; margin-top:14px; max-width:52ch; }
@@ -77,8 +77,8 @@
  .eyebrow { font-size:9px; letter-spacing:.13em; }
  .actions { gap:10px; margin-top:22px; }
  .primary,.secondary { padding:13px 12px; gap:8px; font-size:12px; flex:1; }
- .portrait { aspect-ratio:auto; height:clamp(260px,76vw,320px); }
- .portrait img { object-position:center 17%; }
+ .portrait { aspect-ratio:auto; height:clamp(300px,96vw,480px); }
+ .portrait img { object-position:center bottom; }
  .studio h2 { font-size:32px; }
  .studio h3 { font-size:21px; }
  .offer { grid-template-columns:1fr; margin-top:26px; }
@@ -103,3 +103,13 @@
  .studio :global(.editorial-cover p) { font-size:11px; margin-top:10px; }
 }
 @media(prefers-reduced-motion:reduce) { .studio * { transition:none!important; scroll-behavior:auto!important; } }
+
+/* Short landscape phones should keep both the call-to-action and portrait visible. */
+@media (max-width:767px) and (max-height:500px) and (orientation:landscape) {
+ .hero { flex-direction:row; align-items:center; gap:20px; padding-top:94px; }
+ .heroCopy { flex:1.15; min-width:0; }
+ .hero h1 { font-size:clamp(25px,4vw,34px); margin:10px 0; }
+ .intro { font-size:12px; line-height:1.5; }
+ .actions { margin-top:14px; }
+ .portrait { flex:0.85; min-width:0; aspect-ratio:4/5; height:min(280px,calc(100dvh - 105px)); }
+}
