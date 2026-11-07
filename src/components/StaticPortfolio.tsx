@@ -11,9 +11,9 @@ const jsonLd = {
       "@type": "WebSite",
       "@id": "https://bernecki.dev/#website",
       url: "https://bernecki.dev/",
-      name: "Kacper Bernecki — strony internetowe, CRM i aplikacje webowe",
+      name: "Kacper Bernecki — rozwój biznesu, technologia i marketing",
       description:
-        "Strony internetowe, CRM-y i aplikacje webowe tworzone bezpośrednio przez Kacpra Berneckiego.",
+        "Rozwój biznesu, sourcing produktów, strony internetowe, aplikacje CRM i marketing realizowane bezpośrednio z Kacprem Berneckim.",
       inLanguage: ["pl-PL", "en-US"],
       publisher: { "@id": "https://bernecki.dev/#person" },
     },
@@ -22,9 +22,9 @@ const jsonLd = {
       "@id": "https://bernecki.dev/#person",
       name: "Kacper Bernecki",
       url: "https://bernecki.dev/",
-      jobTitle: "Frontend / Web App Developer",
+      jobTitle: "Business and Web App Developer",
       description:
-        "Independent Polish developer building websites, CRM systems and practical business web apps.",
+        "Polish entrepreneur supporting practical business development, sourcing, websites, CRM systems and marketing.",
       address: { "@type": "PostalAddress", addressCountry: "PL" },
       sameAs: [
         "https://github.com/ft4k696bk6-prog",
@@ -32,6 +32,8 @@ const jsonLd = {
       ],
       image: "https://bernecki.dev/images/profile-3-cutout.png",
       knowsAbout: [
+        "Business development",
+        "Product sourcing",
         "Website development",
         "CRM systems",
         "Business web applications",
@@ -47,11 +49,13 @@ const jsonLd = {
     {
       "@type": "Service",
       "@id": "https://bernecki.dev/#service",
-      name: "Kacper Bernecki — strony internetowe, CRM i web app",
+      name: "Kacper Bernecki — rozwój biznesu, strony i systemy",
       url: "https://bernecki.dev/",
       provider: { "@id": "https://bernecki.dev/#person" },
       areaServed: "PL",
       serviceType: [
+        "Business development",
+        "Product sourcing",
         "Website development",
         "CRM development",
         "Business web application development",
@@ -61,6 +65,7 @@ const jsonLd = {
         "@type": "OfferCatalog",
         name: "Usługi Kacpra Berneckiego",
         itemListElement: [
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Rozwój biznesu i koordynacja wdrożeń", url: "https://bernecki.dev/rozwoj-biznesu" } },
           {
             "@type": "Offer",
             itemOffered: {
