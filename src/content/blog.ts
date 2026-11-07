@@ -9,8 +9,7 @@ export const blogPosts: BlogPost[] = [
     "slug": "od-reklamy-do-sprzedazy-meta-ads-crm",
     "topic": "marketing",
     "guideCategories": [
-      "meta-ads",
-      "crm-leady"
+      "meta-ads"
     ],
     "service": {
       "pl": "/marketing-i-reklamy",
@@ -101,9 +100,7 @@ export const blogPosts: BlogPost[] = [
     "slug": "crm-dla-firmy-od-arkusza-do-systemu",
     "topic": "crm",
     "guideCategories": [
-      "crm-leady",
-      "supabase-bazy",
-      "automatyzacje"
+      "crm-leady"
     ],
     "service": {
       "pl": "/crm-i-aplikacje-webowe",
@@ -194,8 +191,7 @@ export const blogPosts: BlogPost[] = [
     "slug": "indeksacja-google-mapa-witryny-linkowanie",
     "topic": "seo",
     "guideCategories": [
-      "seo-google",
-      "wordpress"
+      "seo-google"
     ],
     "service": {
       "pl": "/tworzenie-stron-internetowych",
@@ -283,9 +279,7 @@ export const blogPosts: BlogPost[] = [
     "topic": "websites",
     "guideCategories": [
       "strony-ux",
-      "formularze-api",
-      "nextjs-react",
-      "vercel-hosting"
+      "formularze-api"
     ],
     "service": {
       "pl": "/tworzenie-stron-internetowych",
