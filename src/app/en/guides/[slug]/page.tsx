@@ -45,14 +45,14 @@ export default async function EnglishGuidePage({params}:Props){
   <p className="mt-5 text-sm text-white/65">Category: <Link className="underline underline-offset-4" href={`/en/guides/topics/${categorySlug}`}>{category?.label}</Link></p>
   <article>
    <h1 className="mt-8 break-words text-4xl leading-tight md:text-5xl">{guide.title}</h1>
-   <p className="mt-5 text-sm leading-6 text-white/65">English edition of the original Polish guide. {guide.status==="machine"?"Machine translated; technical terminology and instructions should be checked against the linked documentation.":"Translation reviewed."} <Link className="underline underline-offset-4" href={`/poradniki/${slug}`}>Read the Polish version.</Link></p>
+   <p className="mt-5 text-sm leading-6 text-white/65"><Link className="underline underline-offset-4" href={`/poradniki/${slug}`}>Read this guide in Polish</Link></p>
    <p className="surface-card mt-8 rounded-2xl border border-white/25 bg-[var(--brand-black)] p-6 text-lg leading-8 text-white">{guide.intro}</p>
-   {screenshot.length>0&&<section className="mt-10" aria-label="Real screenshots">
-    <h2 className="text-2xl">Real screenshots from the reported issue</h2>
-    <p className="mt-3 text-white/70">Screenshots originate from the Polish-language interface. Identifying account information has been cropped out.</p>
+   {screenshot.length>0&&<section className="mt-10" aria-label="Example error screen">
+    <h2 className="text-2xl">Example error screen</h2>
+    <p className="mt-3 text-white/70">A sample of the issue in the application interface. Use the diagnostic steps below to identify the cause.</p>
     <div className="mt-5 flex flex-wrap gap-5">{screenshot.map(shot=><figure key={shot.src} className="surface-card w-full max-w-xl overflow-hidden rounded-2xl border border-white/15">
-     <a href={shot.src} target="_blank" rel="noopener noreferrer"><Image src={shot.src} alt="Screenshot of the original Polish-language interface" width={shot.width} height={shot.height} sizes="(max-width:640px) 100vw,540px" className="h-auto w-full object-contain"/></a>
-     <figcaption className="px-5 py-4 text-sm text-white/70">Authentic screenshot; personal details removed.</figcaption>
+     <a href={shot.src} target="_blank" rel="noopener noreferrer"><Image src={shot.src} alt="Example of an error message in the application interface" width={shot.width} height={shot.height} sizes="(max-width:640px) 100vw,540px" className="h-auto w-full object-contain"/></a>
+     <figcaption className="px-5 py-4 text-sm text-white/70">Example error message.</figcaption>
     </figure>)}</div>
    </section>}
    <nav aria-label="Table of contents" className="surface-card my-10 rounded-xl border border-white/10 p-6"><h2 className="mb-4 text-lg">In this guide</h2>
