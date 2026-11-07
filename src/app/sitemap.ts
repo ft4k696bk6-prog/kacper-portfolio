@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
-import { allGuides, getGuideCounts } from "@/lib/guide-directory";
-import { getEnglishGuide, getEnglishGuides, englishCategoryCounts } from "@/lib/guide-i18n";
-import { realizations } from "@/content/realizations";
-import { englishServices, englishRealizations } from "@/content/english-business";
+import { allGuides, getGuideCounts } from "../lib/guide-directory";
+import { getEnglishGuide, getEnglishGuides, englishCategoryCounts } from "../lib/guide-i18n";
+import { realizations } from "../content/realizations";
+import { englishServices, englishRealizations } from "../content/english-business";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = "https://bernecki.dev";
