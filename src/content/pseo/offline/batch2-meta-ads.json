@@ -1,0 +1,202 @@
+[
+  {
+    "slug": "meta-ads-account-payment-declined",
+    "title": "Meta Ads: Payment failed zatrzymuje aktywną kampanię",
+    "symptom": "Zestawy reklam nie wydają budżetu, a konto pokazuje problem z płatnością.",
+    "diagnose": "Sprawdź status płatności w Billing, limit konta i ważność wybranej metody płatniczej.",
+    "fix": "Ureguluj rzeczywiste zaległości bez przekazywania danych karty poza bezpiecznym panelem Meta.",
+    "verify": "Konto odzyskuje możliwość emisji po rozliczeniu i nie tworzy nowych zaległości.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-ad-rejected-policy",
+    "title": "Meta Ads: reklama odrzucona z powodu zasad reklamowych",
+    "symptom": "Nowa kreacja jest oznaczona jako Rejected mimo działającej grupy i budżetu.",
+    "diagnose": "Sprawdź konkretną zasadę naruszenia, treść kreacji, obietnice i landing page.",
+    "fix": "Popraw rzeczywisty problem z komunikatem lub skorzystaj z przewidzianego odwołania, jeśli decyzja jest błędna.",
+    "verify": "Poprawiona reklama przechodzi weryfikację i nie powtarza niezgodnych obietnic.",
+    "source": "https://transparency.meta.com/policies/ad-standards/",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-account-restricted-security-check",
+    "title": "Meta: konto reklamowe ograniczone po kontroli bezpieczeństwa",
+    "symptom": "Konto nie może tworzyć nowych kampanii, choć użytkownik widzi reklamy historyczne.",
+    "diagnose": "Sprawdź Account Quality, powód ograniczenia oraz wymagane działania bezpieczeństwa.",
+    "fix": "Ukończ wskazaną przez platformę weryfikację i zabezpiecz konta administratorów MFA.",
+    "verify": "Po rozpatrzeniu uprawniony użytkownik może wykonywać dozwolone działania reklamowe.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-ads-budget-spent-no-impressions",
+    "title": "Meta Ads: budżet jest ustawiony, ale brak wyświetleń",
+    "symptom": "Zestaw ma status Active, lecz widoczny zasięg pozostaje bliski zeru.",
+    "diagnose": "Sprawdź poziom kampanii, zestawu i reklamy: harmonogram, odbiorców, licytację i ograniczenia płatności.",
+    "fix": "Usuń faktyczną blokadę emisji lub dostosuj wybrane ustawienia zgodnie z możliwościami grupy.",
+    "verify": "Po zmianie w panelu pojawiają się realne wyświetlenia, a nie tylko status Active.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-ads-audience-overlap",
+    "title": "Meta Ads: zestawy reklam konkurują o tych samych odbiorców",
+    "symptom": "Kilka podobnych zestawów ma niestabilny koszt wyniku, choć kreacje są różne.",
+    "diagnose": "Sprawdź obszary, grupy odbiorców i zakres wykluczeń oraz dane o nakładaniu się segmentów.",
+    "fix": "Uprość strukturę i testuj większe, rozdzielone grupy tam, gdzie zwiększa to sensowną liczbę konwersji.",
+    "verify": "Porównanie kontrolowane pokazuje stabilne wyniki bez sztucznego mnożenia zestawów.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-ads-frequency-high",
+    "title": "Meta Ads: rosnąca częstotliwość i spadek CTR",
+    "symptom": "Odbiorcy wielokrotnie widzą tę samą reklamę i coraz rzadziej w nią klikają.",
+    "diagnose": "Sprawdź frequency, CPM, CTR i wyniki w kolejnych okresach przy podobnym budżecie.",
+    "fix": "Odśwież kreacje lub rozszerz prawidłową grupę docelową po analizie zasięgu.",
+    "verify": "Częstotliwość i koszt konwersji stabilizują się w porównywalnym okresie.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-leadform-privacy-policy-missing",
+    "title": "Meta Lead Ads: nie można opublikować formularza bez polityki prywatności",
+    "symptom": "Instant Form zatrzymuje publikację i prosi o prawidłowy link do zasad prywatności.",
+    "diagnose": "Sprawdź, czy URL polityki otwiera się publicznie po HTTPS i odpowiada faktycznemu procesowi danych.",
+    "fix": "Wstaw działający link oraz informacje o administratorze danych i obsłudze formularza zgodne z działalnością.",
+    "verify": "Formularz zostaje opublikowany z dostępną polityką bez fikcyjnych informacji.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-leadform-quality-vs-volume",
+    "title": "Meta Lead Ads: tanie formularze bez odbierających klientów",
+    "symptom": "Panel raportuje dużo leadów, ale CRM ma wiele błędnych numerów i przypadkowych zgłoszeń.",
+    "diagnose": "Porównaj CPL z odsetkiem połączeń odebranych i liczbą kwalifikowanych klientów.",
+    "fix": "Dodaj potrzebne pytania kwalifikacyjne i testuj wariant formularza o wyższym zamiarze.",
+    "verify": "Spada udział pustych zgłoszeń bez utraty wartościowych kontaktów.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-pixel-domain-not-verified",
+    "title": "Meta Pixel: domena niezweryfikowana przy konfiguracji zdarzeń",
+    "symptom": "Panel wymaga potwierdzenia własności strony przed wybraną operacją z domeną.",
+    "diagnose": "Sprawdź nazwę domeny w portfolio biznesowym i dostępne metody DNS/HTML verification.",
+    "fix": "Dodaj rzeczywisty rekord w autorytatywnej strefie DNS lub wskazany meta tag na właściwej stronie.",
+    "verify": "Domena jest zweryfikowana na właściwym koncie i zdarzenia mogą być poprawnie skonfigurowane.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-pixel-pageview-duplicate",
+    "title": "Meta Pixel: PageView liczy się dwukrotnie na jednej podstronie",
+    "symptom": "Jedno otwarcie adresu daje dwa niezależne zdarzenia PageView w Events Manager.",
+    "diagnose": "Sprawdź, czy pixel jest jednocześnie w kodzie strony i przez Google Tag Manager lub wtyczkę.",
+    "fix": "Pozostaw jedną ścieżkę inicjalizacji i świadomie zarządzaj zdarzeniami przy zmianie trasy SPA.",
+    "verify": "Test jednego wejścia powoduje jedną zamierzoną rejestrację PageView.",
+    "source": "https://developers.facebook.com/docs/meta-pixel/",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-events-domain-blocked",
+    "title": "Meta Events Manager: zdarzenia z nieoczekiwanej domeny",
+    "symptom": "System zgłasza ruch zdarzeń pochodzących spoza docelowej strony lub domeny testowej.",
+    "diagnose": "Sprawdź adresy źródłowe zdarzeń i konfigurację dozwolonych domen danych źródłowych.",
+    "fix": "Dopasuj allowlist do rzeczywistych domen produkcyjnych i rozdziel test od produkcji.",
+    "verify": "Podgląd zdarzeń wskazuje poprawny host bez nieautoryzowanych źródeł.",
+    "source": "https://developers.facebook.com/docs/meta-pixel/",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-capi-event-time-outside-window",
+    "title": "Meta CAPI: event_time poza dopuszczalnym zakresem",
+    "symptom": "Server Event jest odrzucany lub oznaczony jako spóźniony mimo poprawnego tokenu.",
+    "diagnose": "Sprawdź wartość event_time w sekundach Unix i czas serwera, odróżniając sekundy od milisekund.",
+    "fix": "Wysyłaj faktyczny czas zdarzenia w prawidłowym formacie, bez przypisywania mu wymyślonej aktualnej daty.",
+    "verify": "Zdarzenia z prawidłowym czasem są akceptowane, a starych nie fałszujesz.",
+    "source": "https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/server-event",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-capi-user-data-hash-wrong",
+    "title": "Meta CAPI: email_hash nie poprawia dopasowania zdarzeń",
+    "symptom": "Zdarzenia dochodzą, ale dane użytkownika mają nieprawidłową normalizację przed hashowaniem.",
+    "diagnose": "Porównaj sposób trim, lowercase i SHA-256 z dokumentacją pól user_data.",
+    "fix": "Normalizuj tylko odpowiednio do konkretnego parametru i haszuj zgodnie z kontraktem API.",
+    "verify": "Testowe dane mają poprawny format bez przesyłania jawnych informacji w logach.",
+    "source": "https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/customer-information-parameters",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-capi-currency-value-invalid",
+    "title": "Meta CAPI: zdarzenie Purchase ma niepoprawną walutę lub value",
+    "symptom": "Zakup jest wysyłany, ale raport lub diagnostyka pokazuje błędne dane wartości.",
+    "diagnose": "Sprawdź literalną wartość currency w ISO i typ liczbowy value przesyłany dla Purchase.",
+    "fix": "Przekazuj prawidłowy kod waluty i konkretną wartość transakcji zgodną z potwierdzonym zamówieniem.",
+    "verify": "Raport pokazuje zgodne kwoty bez przypadkowej konwersji na inną walutę.",
+    "source": "https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/server-event",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-ads-report-attribution-diff",
+    "title": "Meta Ads: więcej konwersji w Menedżerze reklam niż w CRM",
+    "symptom": "Platforma przypisuje więcej wyników niż liczba faktycznie podpisanych umów.",
+    "diagnose": "Sprawdź wybrane okno atrybucji, typ raportowanego zdarzenia i opóźnienie danych.",
+    "fix": "Rozdziel lead, kontakt, kwalifikację i klienta w raportowaniu zamiast porównywać różne metryki.",
+    "verify": "Liczby są opisane według definicji i zakresu dat, bez nazywania formularza sprzedażą.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-ads-campaign-schedule-timezone",
+    "title": "Meta Ads: reklamy wyświetlają się w innych godzinach niż zaplanowano",
+    "symptom": "Kampania ma harmonogram, ale raportowane godziny nie odpowiadają lokalnemu czasowi firmy.",
+    "diagnose": "Sprawdź strefę czasową konta reklamowego i faktyczne ustawienie schedule dla zestawu.",
+    "fix": "Zaplanuj godziny według strefy konta, uwzględniając zmianę czasu, i sprawdź wyniki z konkretnych dni.",
+    "verify": "Emisja odpowiada ustalonemu oknu w prawidłowej strefie czasowej.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-ad-catalog-products-rejected",
+    "title": "Meta Catalog: produkty odrzucone przez nieprawidłowe zdjęcia",
+    "symptom": "Feed jest pobierany, ale część produktów nie kwalifikuje się do reklamy katalogowej.",
+    "diagnose": "Sprawdź diagnostykę danych, URL zdjęć, dostępność i zgodność opisu z ofertą.",
+    "fix": "Zaktualizuj rzeczywiste dane produktu i obraz dostępny anonimowo po HTTPS.",
+    "verify": "Feed przechodzi kontrolę dla poprawionych produktów bez sztucznych stanów magazynowych.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-ads-instagram-account-disconnected",
+    "title": "Meta Ads: reklama nie może użyć konta Instagram",
+    "symptom": "Podczas wyboru tożsamości reklamy brakuje profilu Instagram firmy.",
+    "diagnose": "Sprawdź połączenie IG ze stroną Facebook i uprawnienia do właściwego portfolio biznesowego.",
+    "fix": "Połącz właściwe konto i przypisz niezbędne zasoby osobie zarządzającej reklamami.",
+    "verify": "Profil jest dostępny przy tworzeniu reklamy bez używania cudzego konta.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-ads-pixel-event-priority-conflict",
+    "title": "Meta Pixel: Purchase nie jest właściwie priorytetyzowany",
+    "symptom": "Raport zdarzeń pokazuje konflikt konfiguracji i niespójne dane w kampaniach sprzedażowych.",
+    "diagnose": "Sprawdź konfigurację zdarzeń i zmiany związane z pomiarem w wybranych systemach reklamowych.",
+    "fix": "Dopasuj zdarzenia optymalizacji do rzeczywistych konwersji i aktualnych zasad platformy.",
+    "verify": "Zdarzenia są mierzone zgodnie z ich definicją, bez fałszywego przypisywania sprzedaży.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-ads-creative-text-overlay-crop",
+    "title": "Meta Ads: reklama wygląda źle w Stories mimo poprawnego podglądu",
+    "symptom": "Tekst i logo są obcinane po wyświetleniu kreacji w pionowych placementach.",
+    "diagnose": "Sprawdź podgląd każdej lokalizacji emisji i safe zone dla 9:16 i 1:1.",
+    "fix": "Przygotuj odrębne proporcje materiałów i przesuń ważny tekst poza elementy interfejsu Stories.",
+    "verify": "Kreacja jest czytelna na telefonie we wszystkich aktywnych placementach.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  }
+]
