@@ -72,21 +72,21 @@
     "category": "meta-ads"
   },
   {
-    "slug": "meta-conversions-api-event-id-dedupe",
-    "title": "Meta Pixel i Conversions API: jak uniknąć podwójnego zakupu",
-    "symptom": "Jedno zdarzenie Purchase jest wysyłane przez Pixel i API serwerowe, ale platforma liczy je niezależnie.",
-    "cause": "Do deduplikacji potrzeba zgodnej nazwy zdarzenia i identyfikatora event_id dla tej samej konwersji.",
+    "slug": "meta-capi-test-event-code-no-events",
+    "title": "Meta Conversions API: Test Events nie pokazuje zdarzenia mimo HTTP 200",
+    "symptom": "Zapytanie do Conversions API zwraca HTTP 200, ale w zakładce Test Events nie pojawia się wysłane zdarzenie.",
+    "cause": "Poprawna odpowiedź HTTP na wysłanie zdarzenia nie oznacza, że trafiło ono do wybranego podglądu testów; ważny jest test_event_code i właściwy identyfikator źródła danych.",
     "inspect": [
-      "W narzędziu Events Manager porównaj event_name i event_id dla jednego testowego zamówienia.",
-      "Sprawdź, czy event_id powstaje raz dla transakcji, czy za każdym odświeżeniem strony tworzona jest nowa wartość."
+      "Sprawdź, czy event jest wysyłany do właściwego dataset/pixel ID i czy w payloadzie jest aktualny test_event_code z panelu Events Manager.",
+      "Porównaj odpowiedź Graph API, nazwę zdarzenia, event_time i czas wejścia do panelu; upewnij się, że integracja nie wysyła zdarzeń wyłącznie na produkcyjny tor."
     ],
     "fix": [
-      "Generuj stabilny identyfikator zdarzenia przypisany do pojedynczej transakcji i prześlij go zarówno w Pixel, jak i CAPI.",
-      "Przesyłaj zdarzenie tylko po faktycznym potwierdzeniu zakupu; zadbaj o idempotencję ponownych webhooków."
+      "W trybie testowym wyślij poprawny payload z aktualnym kodem z Events Manager oraz minimalnymi wymaganymi polami tego zdarzenia.",
+      "Po potwierdzeniu dostarczenia usuń kod testowy z normalnych wywołań i pozostaw produkcyjną walidację oraz bezpieczne logowanie statusów."
     ],
-    "verify": "Test jednej transakcji nie tworzy dwóch odrębnych konwersji o innych identyfikatorach.",
-    "warning": "Nie używaj jednego stałego event_id dla wszystkich zakupów, bo połączy różne transakcje.",
-    "source": "https://developers.facebook.com/docs/marketing-api/conversions-api/deduplicate-pixel-and-server-events/",
+    "verify": "Właściwy testowy event pojawia się w wybranym źródle danych, a produkcyjne wywołania nie korzystają z przypadkowego kodu testowego.",
+    "warning": "Nie utożsamiaj obecności eventu w Test Events z prawidłową atrybucją kampanii ani nie loguj danych identyfikujących klientów w konsoli.",
+    "source": "https://developers.facebook.com/docs/marketing-api/conversions-api/using-the-api/",
     "category": "meta-ads"
   },
   {
