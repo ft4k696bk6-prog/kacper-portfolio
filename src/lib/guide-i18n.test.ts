@@ -1,5 +1,5 @@
 import {describe,it,expect} from "vitest";
-import englishRecords from "@/content/pseo/guide-translations.en.json";
+import englishRecords from "../content/pseo/guide-translations.en.json";
 import {allGuides,getGuide} from "./guide-directory";
 import {getEnglishGuide,getEnglishGuides,guideSourceHash,englishCategoryCounts,listEnglishGuides} from "./guide-i18n";
 
