@@ -3,7 +3,7 @@ const topics = [
     "slug": "crm-licznik-leadow-nie-zgadza-sie-z-lista",
     "title": "CRM pokazuje 180 leadów, ale na liście jest mniej — jak to naprawić?",
     "description": "Licznik kontaktów w CRM nie zgadza się z listą? Sprawdź filtry, paginację, uprawnienia RLS i zapytania zliczające.",
-    "symptom": "Panel pokazuje 180 kontaktów, ale handlowiec widzi tylko część. Taki problem pojawił się przy analizie działania B-CRM. Sam licznik nie dowodzi, że wszystkie rekordy są dostępne dla zalogowanej osoby.",
+    "symptom": "Panel pokazuje 180 kontaktów, ale handlowiec widzi tylko część. Przyczyną bywa różnica między sposobem liczenia rekordów a filtrami i uprawnieniami listy.",
     "cause": "Licznik może pochodzić z innego zapytania niż lista: uwzględniać archiwum, nie stosować filtrów, korzystać z innego zakresu RLS albo liczyć wszystkie rekordy mimo paginacji. Najpierw ustal, co dokładnie reprezentuje liczba.",
     "steps": [
       "Zapisz rolę, identyfikator zalogowanego użytkownika, aktywną zakładkę oraz filtry. Porównuj te same warunki w liczniku i liście.",
@@ -20,7 +20,7 @@ const topics = [
     "slug": "crm-odblokowany-lead-nadal-niewidoczny",
     "title": "Odblokowuję lead w CRM, ale handlowiec go nie widzi",
     "description": "Co sprawdzić, gdy po zdjęciu blokady lead nie wraca na listę handlowca: status, przypisanie, RLS i odświeżanie.",
-    "symptom": "Administrator odblokowuje kontakt, a u handlowca nie pojawia się on w panelu. W B-CRM zgłaszano podobny objaw dla kolejki i blokady kontaktów.",
+    "symptom": "Administrator odblokowuje kontakt, ale handlowiec nadal nie widzi go w panelu. Warto oddzielnie sprawdzić przypisanie, widoczność rekordu i odświeżenie danych.",
     "cause": "Odblokowanie jest zmianą jednej flagi. Kontakt może mieć inne przypisanie, ukryty status, być poza oknem paginacji albo lista może korzystać ze starej pamięci podręcznej.",
     "steps": [
       "Sprawdź zapis w bazie po zdjęciu blokady: identyfikator rekordu, flagę blokady, status oraz aktualnego opiekuna.",
