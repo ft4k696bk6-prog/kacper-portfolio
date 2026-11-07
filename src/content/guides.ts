@@ -1,6 +1,10 @@
 import { errorGuides } from "./errorGuides";
+import { crmProblemGuides } from "./crmProblemGuides";
+import { deployProblemGuides } from "./deployProblemGuides";
+import { integrationProblemGuides } from "./integrationProblemGuides";
+import { searchMarketingProblemGuides } from "./searchMarketingProblemGuides";
 import { practicalGuides } from "./practicalGuides";
-export const guides = [...practicalGuides, ...errorGuides,
+export const guides = [...crmProblemGuides, ...deployProblemGuides, ...integrationProblemGuides, ...searchMarketingProblemGuides, ...practicalGuides, ...errorGuides,
   {
     slug: "ile-kosztuje-strona-internetowa",
     title: "Ile kosztuje strona internetowa dla małej firmy?",

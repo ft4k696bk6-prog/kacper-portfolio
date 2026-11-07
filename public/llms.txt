@@ -42,6 +42,15 @@ Kacper is not a large corporation or anonymous agency. Clients work directly wit
 
 ## Practical guides in Polish
 
+- All practical guides (100): https://bernecki.dev/poradniki — problem-specific diagnostics and repairs grouped into CRM/Supabase, Next.js/Vercel, email/integrations/security, SEO and Meta Ads.
+- CRM list count does not match visible leads: https://bernecki.dev/poradniki/crm-licznik-leadow-nie-zgadza-sie-z-lista
+- Unblocked CRM lead is invisible: https://bernecki.dev/poradniki/crm-odblokowany-lead-nadal-niewidoczny
+- Vercel deployment temporarily paused: https://bernecki.dev/poradniki/vercel-this-deployment-is-temporarily-paused
+- iCloud custom-domain email is not receiving: https://bernecki.dev/poradniki/icloud-wlasna-domena-maile-nie-dochodza
+- Meta leads missing from CRM: https://bernecki.dev/poradniki/meta-lead-ads-formularz-jest-crm-pusty
+- Google sitemap submitted but page not indexed: https://bernecki.dev/poradniki/google-sitemap-zgloszona-a-strony-brak
+
+
 - Website pricing and scope: https://bernecki.dev/poradniki/ile-kosztuje-strona-internetowa
 - Custom vs off-the-shelf CRM: https://bernecki.dev/poradniki/crm-na-zamowienie-czy-gotowy
 - Local business advertising: https://bernecki.dev/poradniki/reklama-lokalnej-firmy-strona-i-social-media
