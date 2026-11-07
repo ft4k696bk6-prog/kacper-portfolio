@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 #!/usr/bin/env node
 /* Static checks; never publish Polish placeholders as indexed English pages. */
 const fs=require("node:fs");
