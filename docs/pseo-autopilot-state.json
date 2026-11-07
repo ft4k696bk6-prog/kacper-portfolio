@@ -7,58 +7,7 @@
     "Supabase: token odświeżania sesji wygasł",
     "CRM: rolę administratora można obejść przez endpoint"
   ],
-  "rejectedTopics": [
-    "Meta Ads: reklama zatwierdzona, ale nie ma wyświetleń",
-    "Meta Ads: odrzucenie płatności mimo środków na karcie",
-    "Facebook: osoba nie widzi strony w tożsamości reklamy",
-    "Meta Business Suite: brak dostępu do leadów po zmianie administratora",
-    "Lead Ads: formularz nie pozwala pobrać CSV",
-    "Lead Ads: webhook odbiera tylko część zgłoszeń",
-    "Meta: testowe leady działają, prawdziwe nie docierają",
-    "Conversions API: Event Match Quality spada",
-    "Meta: zmiana właściciela strony blokuje reklamowanie",
-    "Meta Ads: kampania zablokowana przez limit wydatków",
-    "Meta: reklama ma wysoki CTR i zero kontaktów",
-    "Vercel: podgląd działa, ale produkcja wyświetla stary commit",
-    "Vercel: Deployment Protection blokuje dostęp klientowi",
-    "Vercel: wyświetla się 404 na własnej domenie",
-    "Vercel: domena przypisana do innego projektu",
-    "Vercel: Function Invocation Timeout w formularzu",
-    "Vercel: Edge Function zwraca 500 tylko na produkcji",
-    "Vercel: webhook deploymentu nie uruchamia się po push",
-    "Vercel: build zatrzymuje brakujący import zależności",
-    "Vercel: przekroczono limit zasobów i projekt jest wstrzymany",
-    "Supabase: RLS blokuje SELECT mimo zalogowania",
-    "Supabase: insert narusza WITH CHECK",
-    "Supabase: duplikaty rekordów po ponowieniu webhooka",
-    "Supabase: brak rekordów po zmianie roli użytkownika",
-    "Supabase: błędny klucz obcy blokuje usunięcie użytkownika",
-    "Supabase: signed URL pliku przestaje działać",
-    "Supabase: query count różni się od liczby widocznych wierszy",
-    "Supabase: limit 1000 rekordów w odpowiedzi",
-    "Supabase: realtime nie aktualizuje listy leadów",
-    "Supabase: migracja bazy rozjeżdża schemat produkcyjny",
-    "Next.js: Hydration failed przez datę i strefę czasową",
-    "Next.js: useSearchParams wymaga Suspense",
-    "Next.js: metadata canonical wskazuje na stronę główną",
-    "Next.js: obraz w Image ucina twarz na mobile",
-    "Next.js: notFound działa w dev, ale 404 po buildzie",
-    "React: useEffect wywołuje zapytanie dwa razy",
-    "React: lista z nieprawidłowym key miesza rekordy",
-    "TypeScript: Property does not exist on type never",
-    "Next.js: server action nie działa po wdrożeniu",
-    "React: formularz traci dane po przejściu między krokami",
-    "Next.js: błędne importy client component i server component",
-    "CRM: licznik przypisanych leadów różni się od listy",
-    "CRM: po zdjęciu blokady handlowiec nadal nie widzi leada",
-    "CRM: powiadomienia PWA nie działają na iPhonie",
-    "CRM: callbacki znikają po zmianie strefy czasowej",
-    "CRM: dashboard liczy anulowane umowy do wyniku",
-    "CRM: filtr przypisania utrzymuje nieaktualną listę",
-    "CRM: import CSV powoduje duplikaty telefonów",
-    "CRM: archiwalne leady nie powinny trafiać do kolejki",
-    "CRM: status leadu nie synchronizuje się między zakładkami"
-  ],
+  "rejectedTopics": [],
   "seenIssueUrls": [],
   "lastRun": "2026-11-07T16:07:56.338Z",
   "runCount": 1,
@@ -67,5 +16,258 @@
     "approved": 5,
     "rejected": 55,
     "cost": 0.2676
-  }
+  },
+  "failureHistory": {
+    "Meta Ads: reklama zatwierdzona, ale nie ma wyświetleń": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Meta Ads: odrzucenie płatności mimo środków na karcie": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Facebook: osoba nie widzi strony w tożsamości reklamy": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Meta Business Suite: brak dostępu do leadów po zmianie administratora": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Lead Ads: formularz nie pozwala pobrać CSV": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Lead Ads: webhook odbiera tylko część zgłoszeń": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Meta: testowe leady działają, prawdziwe nie docierają": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Conversions API: Event Match Quality spada": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Meta: zmiana właściciela strony blokuje reklamowanie": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Meta Ads: kampania zablokowana przez limit wydatków": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Meta: reklama ma wysoki CTR i zero kontaktów": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Vercel: podgląd działa, ale produkcja wyświetla stary commit": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Vercel: Deployment Protection blokuje dostęp klientowi": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Vercel: wyświetla się 404 na własnej domenie": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Vercel: domena przypisana do innego projektu": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Vercel: Function Invocation Timeout w formularzu": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Vercel: Edge Function zwraca 500 tylko na produkcji": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Vercel: webhook deploymentu nie uruchamia się po push": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Vercel: build zatrzymuje brakujący import zależności": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Vercel: przekroczono limit zasobów i projekt jest wstrzymany": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Supabase: RLS blokuje SELECT mimo zalogowania": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Supabase: insert narusza WITH CHECK": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Supabase: duplikaty rekordów po ponowieniu webhooka": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Supabase: brak rekordów po zmianie roli użytkownika": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Supabase: błędny klucz obcy blokuje usunięcie użytkownika": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Supabase: signed URL pliku przestaje działać": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Supabase: query count różni się od liczby widocznych wierszy": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Supabase: limit 1000 rekordów w odpowiedzi": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Supabase: realtime nie aktualizuje listy leadów": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Supabase: migracja bazy rozjeżdża schemat produkcyjny": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Next.js: Hydration failed przez datę i strefę czasową": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Next.js: useSearchParams wymaga Suspense": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Next.js: metadata canonical wskazuje na stronę główną": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Next.js: obraz w Image ucina twarz na mobile": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Next.js: notFound działa w dev, ale 404 po buildzie": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "React: useEffect wywołuje zapytanie dwa razy": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "React: lista z nieprawidłowym key miesza rekordy": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "TypeScript: Property does not exist on type never": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Next.js: server action nie działa po wdrożeniu": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "React: formularz traci dane po przejściu między krokami": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "Next.js: błędne importy client component i server component": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "CRM: licznik przypisanych leadów różni się od listy": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "CRM: po zdjęciu blokady handlowiec nadal nie widzi leada": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "CRM: powiadomienia PWA nie działają na iPhonie": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "CRM: callbacki znikają po zmianie strefy czasowej": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "CRM: dashboard liczy anulowane umowy do wyniku": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "CRM: filtr przypisania utrzymuje nieaktualną listę": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "CRM: import CSV powoduje duplikaty telefonów": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "CRM: archiwalne leady nie powinny trafiać do kolejki": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    },
+    "CRM: status leadu nie synchronizuje się między zakładkami": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:07:56.338Z",
+      "reason": "first-run rejection; retry allowed"
+    }
+  },
+  "migratedInitialRejections": 50
 }
