@@ -11,7 +11,6 @@ const navItems = [
   { href: "#services", key: "home" },
   { href: "#about", key: "about" },
   { href: "#projects", key: "projects" },
-  { href: "#faq", key: "techStack" },
   { href: "#contact", key: "contact" },
 ] as const;
 
@@ -23,6 +22,7 @@ export function LanguageSwitcher() {
   // Every static business route has a real English counterpart, not just translated menu labels.
   const bilingualRoutes: Record<string,string> = {
     "/case-studies": "/en/case-studies",
+    "/rozwoj-biznesu": "/en/business",
     "/case-studies/re-energy-meta-ads": "/en/case-studies/re-energy-meta-ads",
     "/reklamy-meta-ads-dla-firm": "/en/meta-ads",
     "/tworzenie-stron-internetowych": "/en/services/websites",
@@ -73,7 +73,7 @@ export function LanguageSwitcher() {
     if (pathname.startsWith("/en/") && lang !== "en") setLang("en");
     if ((pathname.startsWith("/poradniki") || pathname.startsWith("/realizacje/") ||
       ["/case-studies","/case-studies/re-energy-meta-ads","/reklamy-meta-ads-dla-firm",
-       "/tworzenie-stron-internetowych","/crm-i-aplikacje-webowe","/marketing-i-reklamy"].includes(pathname)) &&
+       "/tworzenie-stron-internetowych","/crm-i-aplikacje-webowe","/marketing-i-reklamy","/rozwoj-biznesu"].includes(pathname)) &&
        lang !== "pl") setLang("pl");
   }, [pathname, lang, setLang]);
 
@@ -131,6 +131,7 @@ export function LanguageSwitcher() {
               {t.nav[item.key]}
             </a>
           ))}
+          <Link href={lang === "en" ? "/en/business" : "/rozwoj-biznesu"} className="ui-nav rounded-md px-4 py-2 text-sm">{lang === "pl" ? "Rozwój biznesu" : "Business"}</Link>
           <Link href={lang === "en" ? "/en/guides" : "/poradniki"} className="ui-nav rounded-md px-4 py-2 text-sm">{lang === "pl" ? "Poradniki" : "Guides"}</Link>
         </nav>
 
@@ -191,6 +192,7 @@ export function LanguageSwitcher() {
                 {t.nav[item.key]}
               </a>
             ))}
+            <Link href={lang === "en" ? "/en/business" : "/rozwoj-biznesu"} className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang === "pl" ? "Rozwój biznesu" : "Business development"}</Link>
             <Link href={lang === "en" ? "/en/guides" : "/poradniki"} className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang === "pl" ? "Poradniki" : "Guides"}</Link>
             <div className="mt-3 flex items-center justify-between gap-3">
               <a

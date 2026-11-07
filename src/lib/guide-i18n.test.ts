@@ -1,5 +1,6 @@
 import {describe,it,expect} from "vitest";
 import englishRecords from "../content/pseo/guide-translations.en.json";
+import { businessArticles } from "../content/businessGuides";
 import {allGuides,getGuide} from "./guide-directory";
 import {getEnglishGuide,getEnglishGuides,guideSourceHash,englishCategoryCounts,listEnglishGuides} from "./guide-i18n";
 
@@ -7,7 +8,7 @@ describe("fully translated PL/EN guides",()=>{
  it("has a complete and source-matched English edition for every published Polish guide",()=>{
   const en=getEnglishGuides();
   expect(en.length).toBe(allGuides.length);
-  expect(Object.keys(englishRecords).length).toBe(allGuides.length);
+  expect(Object.keys(englishRecords).length+businessArticles.length).toBe(allGuides.length);
   const slugs=new Set<string>();
   for(const original of allGuides){
    const english=getEnglishGuide(original.slug);

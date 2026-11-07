@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import englishCorpus from "../content/pseo/guide-translations.en.json";
+import { businessArticles } from "../content/businessGuides";
 import { allGuides, getGuide, guideCategories, guideCategory } from "./guide-directory";
 
 export type EnglishSection = {title:string;paragraphs:string[]};
@@ -23,7 +24,16 @@ export type EnglishGuide = {
   sources?: readonly {label:string;url:string}[];
   status:"machine"|"reviewed";
 };
-const english = englishCorpus as Record<string,EnglishEdition>;
+const english:Record<string,EnglishEdition> = {
+  ...(englishCorpus as Record<string,EnglishEdition>),
+  ...Object.fromEntries(businessArticles.map(article=>[article.slug,{
+    status:"reviewed" as const,
+    sourceHash:guideSourceHash({...article.pl,serviceLabel:"Rozwój biznesu"}),
+    title:article.en.title,description:article.en.description,intro:article.en.intro,
+    serviceLabel:"Business development",
+    sections:article.en.sections.map(section=>({title:section.title,paragraphs:[...section.paragraphs]}))
+  }]))
+};
 
 export function guideSourceHash(guide: {
   title:string; description:string; intro:string; serviceLabel:string;
@@ -63,6 +73,7 @@ const categoryLabels:Record<string,readonly [string,string]>={
   "wordpress":["WordPress","Plugins, website configuration, WooCommerce and WordPress issues."],
   "strony-ux":["Websites and UX","Mobile layout, images, navigation, performance and accessibility."],
   "automatyzacje":["Automation","Scheduled jobs, integrations, CI/CD workflows and alerts."],
+  "biznes-podatki":["Business and taxes","General VAT education, starting a business and managing business costs."],
   "inne":["Other guides","Practical fixes for business websites and web applications."]
 };
 export function englishCategory(slug:string) {

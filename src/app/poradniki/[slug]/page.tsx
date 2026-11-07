@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { allGuides, getGuide, guideCategory, getCategory, getRelatedGuides, getGuideCounts } from "@/lib/guide-directory";
 import { serviceMetadata } from "@/lib/seo";
 import { getEnglishGuide } from "@/lib/guide-i18n";
+import { VatComparison } from "@/components/VatComparison";
 
 type Props = { params: Promise<{ slug: string }> };
 export const dynamicParams = true;
@@ -46,8 +47,9 @@ export default async function GuidePage({params}: Props) {
     <p className="mt-5 text-sm text-white/65">Kategoria: <Link className="underline underline-offset-4" href={`/poradniki/tematy/${guideCategory(guide)}`}>{getCategory(guideCategory(guide))?.label}</Link></p>
     <article>
       <h1 className="mt-8 text-4xl leading-tight md:text-5xl">{guide.title.split(/([_/])/).map((part,i)=><Fragment key={i}>{part}{part==="_"||part==="/"?<wbr/>:null}</Fragment>)}</h1>
-      <p className="mt-5 text-sm text-white/70">Poradnik techniczny · <Link href="/#about" className="underline underline-offset-4">Kacper Bernecki</Link></p>
+      <p className="mt-5 text-sm text-white/70">{currentCategory === "biznes-podatki" ? "Poradnik dla przedsiębiorców" : "Poradnik techniczny"} · <Link href="/#about" className="underline underline-offset-4">Kacper Bernecki</Link></p>
       <p className="surface-card mt-8 rounded-2xl border border-white/25 bg-[var(--brand-black)] p-6 text-lg leading-8 text-white">{guide.intro}</p>
+      {slug === "zwrot-vat-8-23-przyklad-50000" ? <VatComparison lang="pl" /> : null}
       {screenshots.length > 0 && <section className="mt-10" aria-labelledby="real-screenshots-heading">
         <h2 id="real-screenshots-heading" className="text-2xl text-white">Przykład komunikatu błędu</h2>
         <p className="mt-3 leading-7 text-white/70">Tak może wyglądać problem w panelu. Dokładną przyczynę ustalisz, wykonując poniższe kroki diagnostyczne.</p>

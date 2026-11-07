@@ -2,9 +2,10 @@ import { guides as existingGuides } from "../content/guides";
 import { pseoGuides } from "../content/pseo/guides";
 import { offlineGuides } from "../content/pseo/offline-guides";
 import { offlineBatchTwoGuides } from "../content/pseo/offline-batch2-guides";
+import { businessGuides } from "../content/businessGuides";
 
 /** Jeden katalog: zachowuje wszystkie poradniki tworzone równolegle w guides.ts. */
-export const allGuides = [...existingGuides, ...pseoGuides, ...offlineGuides, ...offlineBatchTwoGuides];
+export const allGuides = [...existingGuides, ...pseoGuides, ...offlineGuides, ...offlineBatchTwoGuides, ...businessGuides];
 export type Guide = (typeof allGuides)[number];
 
 export const guideCategories = [
@@ -19,6 +20,7 @@ export const guideCategories = [
   { slug: "wordpress", label: "WordPress", description: "Wtyczki, konfiguracja, adresy i problemy stron WordPress." },
   { slug: "strony-ux", label: "Strony i UX", description: "Wygląd mobilny, obrazy, nawigacja, szybkość i dostępność." },
   { slug: "automatyzacje", label: "Automatyzacje", description: "Automatyczne procesy, harmonogramy, integracje i alerty." },
+  { slug: "biznes-podatki", label: "Biznes i podatki", description: "Edukacja dla przedsiębiorców: podstawy VAT, stawki, dostawcy, koszty i zakładanie firmy." },
   { slug: "inne", label: "Pozostałe poradniki", description: "Praktyczne rozwiązania problemów z projektami internetowymi." }
 ] as const;
 

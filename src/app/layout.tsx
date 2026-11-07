@@ -18,13 +18,17 @@ const siteUrl = "https://bernecki.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Strony internetowe, CRM i aplikacje webowe | Kacper Bernecki",
+    default: "Rozwój biznesu, strony, CRM i marketing | Kacper Bernecki",
     template: "%s | Kacper Bernecki",
   },
   description:
-    "Strony internetowe, landing page i CRM-y dla firm. Bezpośrednia współpraca z Kacprem Berneckim — od pomysłu i projektu po wdrożenie.",
+    "Rozwój biznesu, produkty, dostawcy, strony, CRM i marketing. Od pomysłu do działającego przedsięwzięcia z Kacprem Berneckim.",
   keywords: [
     "Kacper Bernecki",
+    "rozwój biznesu",
+    "sourcing produktów",
+    "wdrożenia biznesowe",
+    "marketing i sprzedaż",
     "Frontend Developer",
     "Web App Developer",
     "React Developer",
@@ -41,9 +45,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Kacper Bernecki" }],
   creator: "Kacper Bernecki",
   openGraph: {
-    title: "Kacper Bernecki — strony internetowe, CRM i aplikacje webowe",
+    title: "Kacper Bernecki — rozwój biznesu, technologia i marketing",
     description:
-      "Strony internetowe, landing page i CRM-y dla firm. Od pomysłu i projektu po wdrożenie — bezpośrednio z Kacprem Berneckim.",
+      "Pomysły biznesowe, produkty, dostawcy, strony, CRM i marketing. Praktyczne wsparcie od planu po wdrożenie.",
     url: siteUrl,
     siteName: "Kacper Bernecki Portfolio",
     type: "website",
@@ -60,9 +64,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kacper Bernecki — strony internetowe, CRM i aplikacje webowe",
+    title: "Kacper Bernecki — rozwój biznesu, technologia i marketing",
     description:
-      "Strony internetowe, landing page i CRM-y dla firm. Od pomysłu i projektu po wdrożenie — bezpośrednio z Kacprem Berneckim.",
+      "Pomysły biznesowe, produkty, dostawcy, strony, CRM i marketing. Praktyczne wsparcie od planu po wdrożenie.",
     images: ["/opengraph-image?brand=studio-20261107"],
   },
   alternates: {
