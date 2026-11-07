@@ -62,11 +62,13 @@ const evidenceHints: Record<string,string> = {
 
 export const offlineBatchTwoGuides = offlineBatchTwoCases.map((item) => {
   const [service, serviceLabel] = services[item.category] ?? ["/crm-i-aplikacje-webowe","Aplikacje internetowe"];
+  const note: string = ("warning" in item && typeof item.warning === "string") ? item.warning : (safetyNotes[item.category] ?? "Nie publikuj prywatnych danych ani sekretów.");
+  const cause: string = ("cause" in item && typeof item.cause === "string") ? item.cause : "Przyczyna wymaga sprawdzenia w rzeczywistym środowisku.";
   return {
     slug: item.slug,
     title: item.title,
     description: item.symptom,
-    intro: item.symptom + ("cause" in item ? " "+item.cause : " Opis dotyczy typowej przyczyny i wymaga potwierdzenia na rzeczywistych danych."),
+    intro: item.symptom + " " + cause,
     service,serviceLabel,
     category: item.category,
     offlinePseo: true as const,
@@ -74,7 +76,7 @@ export const offlineBatchTwoGuides = offlineBatchTwoCases.map((item) => {
       {title:"Jak rozpoznać źródło problemu",paragraphs:[item.diagnose,evidenceHints[item.category] ?? "Zapisz dokładny komunikat, wersję środowiska oraz warunki wystąpienia problemu."]},
       {title:"Kroki naprawcze",paragraphs:[item.fix]},
       {title:"Jak przetestować rozwiązanie",paragraphs:[item.verify]},
-      {title:"Bezpieczeństwo i ograniczenia",paragraphs:[("warning" in item ? item.warning : safetyNotes[item.category]) ?? "Nie publikuj prywatnych danych ani sekretów i testuj zmiany przed wdrożeniem produkcyjnym."]}
+      {title:"Bezpieczeństwo i ograniczenia",paragraphs:[note]}
     ],
     sources:[{label:"Dokumentacja producenta lub oficjalny standard",url:item.source}]
   };
