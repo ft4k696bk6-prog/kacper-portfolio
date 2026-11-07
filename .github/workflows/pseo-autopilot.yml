@@ -1,0 +1,73 @@
+name: pSEO Autopilot — verified article publishing
+
+on:
+  schedule:
+    - cron: '23 3 * * *'
+      timezone: 'Europe/Warsaw'
+  workflow_dispatch:
+    inputs:
+      batch:
+        description: 'Articles to publish this run (1–100, default 12)'
+        required: false
+        type: string
+        default: '12'
+
+permissions:
+  contents: write
+  issues: read
+
+concurrency:
+  group: pseo-autopilot-main
+  cancel-in-progress: false
+
+jobs:
+  research-write-review-publish:
+    if: github.repository == 'ft4k696bk6-prog/kacper-portfolio'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      PSEO_MODEL: ${{ vars.PSEO_MODEL || 'openai/gpt-5-mini' }}
+      PSEO_DAILY_LIMIT: ${{ inputs.batch || vars.PSEO_DAILY_LIMIT || '12' }}
+      PSEO_MAX_RUN_COST_USD: ${{ vars.PSEO_MAX_RUN_COST_USD || '4' }}
+      VERCEL_DEPLOY_HOOK: ${{ secrets.PSEO_VERCEL_DEPLOY_HOOK }}
+    steps:
+      - name: Checkout fresh production branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - name: Install Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Research topics, draft articles, independent QA
+        run: node scripts/pseo-autopilot.mjs
+      - name: Validate all generated content and unique routes
+        run: |
+          npm run pseo:qa
+          npm run pseo:check
+          npm run typecheck
+          npm run lint
+          npm run build
+      - name: Publish only when at least one accepted article changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- src/content/pseo/autopilot-published.json; then
+            echo 'No approved new articles; no deployment or commit.'
+            exit 0
+          fi
+          git config user.name 'bernecki-pseo-autopilot[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/content/pseo/autopilot-published.json docs/pseo-autopilot-state.json
+          git commit -m 'content(pseo): publish AI-reviewed troubleshooting guides'
+          git push origin HEAD:main
+          if [ -n "${VERCEL_DEPLOY_HOOK:-}" ]; then
+            curl --fail --silent --show-error --max-time 20 -X POST "$VERCEL_DEPLOY_HOOK"
+          fi
+          echo 'Published accepted articles; Vercel Git integration should deploy the main branch.'
