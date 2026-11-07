@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getGuideCounts, guideCategory, getCategory, listGuides } from "@/lib/guide-directory";
 import { serviceMetadata } from "@/lib/seo";
+import { getEnglishGuides } from "@/lib/guide-i18n";
 
 type Props = { searchParams: Promise<{ q?: string; strona?: string }> };
 
@@ -15,7 +16,10 @@ export async function generateMetadata({ searchParams }: Props) {
   const page = Number.isSafeInteger(pageNumber) && pageNumber > 1 ? pageNumber : 1;
   return {
     ...metadata,
-    alternates: { canonical: `https://bernecki.dev/poradniki${!params.q && page > 1 ? `?strona=${page}` : ""}` },
+    alternates: {
+      canonical: `https://bernecki.dev/poradniki${!params.q && page > 1 ? `?strona=${page}` : ""}`,
+      ...(getEnglishGuides().length>0&&!params.q&&page===1?{languages:{"pl-PL":"https://bernecki.dev/poradniki",en:"https://bernecki.dev/en/guides"}}:{})
+    },
     robots: params.q ? { index: false, follow: true } : { index: true, follow: true }
   };
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { CalendarDays, Cookie, Mail } from "lucide-react";
 import { motion } from "framer-motion";
@@ -19,6 +19,39 @@ export function LanguageSwitcher() {
   const { lang, setLang, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  // Guides have separate, indexable EN URLs; a localStorage toggle alone would leave Polish text visible.
+  const guideLanguagePath = (target: "pl" | "en") => {
+    if (pathname.startsWith("/poradniki/tematy/")) {
+      const suffix = pathname.slice("/poradniki/tematy/".length);
+      return target === "en" ? `/en/guides/topics/${suffix}` : pathname;
+    }
+    if (pathname.startsWith("/en/guides/topics/")) {
+      const suffix = pathname.slice("/en/guides/topics/".length);
+      return target === "pl" ? `/poradniki/tematy/${suffix}` : pathname;
+    }
+    if (pathname.startsWith("/poradniki/")) {
+      const slug = pathname.slice("/poradniki/".length);
+      return target === "en" ? `/en/guides/${slug}` : pathname;
+    }
+    if (pathname.startsWith("/en/guides/")) {
+      const slug = pathname.slice("/en/guides/".length);
+      return target === "pl" ? `/poradniki/${slug}` : pathname;
+    }
+    if (pathname === "/poradniki" || pathname === "/en/guides")
+      return target === "en" ? "/en/guides" : "/poradniki";
+    return null;
+  };
+  const switchLanguage = (next: "pl"|"en") => {
+    setLang(next);
+    const path = guideLanguagePath(next);
+    if (path && path !== pathname) router.push(path);
+  };
+  useEffect(() => {
+    if (pathname.startsWith("/en/guides") && lang !== "en") setLang("en");
+    if (pathname.startsWith("/poradniki") && lang !== "pl") setLang("pl");
+  }, [pathname, lang, setLang]);
+
   const [dark, setDark] = useState(true);
   useEffect(() => {
     const update = () => { const hero = document.getElementById("home"); setDark(!hero || hero.classList.contains("hero-night") || scrollY > hero.offsetHeight * .52); };
@@ -30,7 +63,7 @@ export function LanguageSwitcher() {
 
   const languageButton = (value: "pl" | "en", label: string) => (
     <button
-      onClick={() => setLang(value)}
+      onClick={() => switchLanguage(value)}
       className={`h-9 min-w-10 rounded-md px-3 text-sm transition-all ${
         lang === value
           ? "brand-selected"
@@ -73,7 +106,7 @@ export function LanguageSwitcher() {
               {t.nav[item.key]}
             </a>
           ))}
-          <Link href="/poradniki" className="ui-nav rounded-md px-4 py-2 text-sm">{lang === "pl" ? "Poradniki" : "Guides"}</Link>
+          <Link href={lang === "en" ? "/en/guides" : "/poradniki"} className="ui-nav rounded-md px-4 py-2 text-sm">{lang === "pl" ? "Poradniki" : "Guides"}</Link>
         </nav>
 
         <div className="hidden items-center gap-3 xl:flex">{cookies}
@@ -133,7 +166,7 @@ export function LanguageSwitcher() {
                 {t.nav[item.key]}
               </a>
             ))}
-            <Link href="/poradniki" className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang === "pl" ? "Poradniki" : "Guides"}</Link>
+            <Link href={lang === "en" ? "/en/guides" : "/poradniki"} className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang === "pl" ? "Poradniki" : "Guides"}</Link>
             <div className="mt-3 flex items-center justify-between gap-3">
               <a
                 href={anchorHref("#contact")}

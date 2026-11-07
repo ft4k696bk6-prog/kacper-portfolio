@@ -5,6 +5,7 @@ import { Fragment } from "react";
 import { notFound } from "next/navigation";
 import { allGuides, getGuide, guideCategory, getCategory, getRelatedGuides, getGuideCounts } from "@/lib/guide-directory";
 import { serviceMetadata } from "@/lib/seo";
+import { getEnglishGuide } from "@/lib/guide-i18n";
 
 type Props = { params: Promise<{ slug: string }> };
 export const dynamicParams = true;
@@ -14,7 +15,16 @@ export async function generateMetadata({params}: Props) {
   const {slug} = await params;
   const guide = getGuide(slug);
   if (!guide) notFound();
-  return serviceMetadata(guide.title, guide.description, `poradniki/${slug}`);
+  const metadata = serviceMetadata(guide.title, guide.description, `poradniki/${slug}`);
+  const englishEdition = getEnglishGuide(slug);
+  const polishUrl = `https://bernecki.dev/poradniki/${slug}`;
+  return {
+    ...metadata,
+    alternates: {
+      canonical: polishUrl,
+      ...(englishEdition ? { languages: { "pl-PL":polishUrl, en:`https://bernecki.dev/en/guides/${slug}` } } : {})
+    }
+  };
 }
 export default async function GuidePage({params}: Props) {
   const {slug} = await params;
