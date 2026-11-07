@@ -1,20 +1,20 @@
 [
   {
-    "slug": "supabase-rls-select-only-own-rows",
-    "title": "Supabase: SELECT widzi zero rekordów mimo poprawnego logowania",
-    "symptom": "Zalogowany użytkownik otwiera listę własnych danych, ale API zwraca pustą tablicę bez błędu.",
-    "cause": "RLS potrafi odfiltrować rekordy w SELECT, jeżeli żadna polityka nie dopuszcza ich odczytu dla bieżącej roli.",
+    "slug": "supabase-view-security-invoker-rls-leak",
+    "title": "Supabase: widok SQL pokazuje cudze dane mimo włączonego RLS",
+    "symptom": "Zapytanie bezpośrednio do tabeli respektuje polityki RLS, ale API widoku SQL zwraca użytkownikowi wiersze innych osób.",
+    "cause": "Widoki PostgreSQL standardowo sprawdzają uprawnienia właściciela widoku; widok utworzony przez uprzywilejowaną rolę może ominąć polityki RLS bazowych tabel.",
     "inspect": [
-      "Sprawdź, czy użytkownik ma rzeczywisty JWT i auth.uid() zwraca jego identyfikator.",
-      "Porównaj właściciela rekordów z warunkiem USING w polityce SELECT oraz grantami na tabeli."
+      "Sprawdź, czy endpoint odczytuje tabelę czy VIEW oraz jaką rolą utworzono widok. Przetestuj ten sam filtr bezpośrednio na tabeli.",
+      "Zweryfikuj wersję Postgres i opcję security_invoker widoku, a potem porównaj wyniki dla dwóch niezależnych tokenów użytkownika."
     ],
     "fix": [
-      "Włącz RLS i przygotuj jawne reguły odczytu powiązane z identyfikatorem właściciela lub przypisaniem w osobnej tabeli.",
-      "Przetestuj zapytania z tokenami dwóch różnych kont, a nie tylko z uprawnieniami service_role."
+      "W PostgreSQL 15 lub nowszym ustaw na właściwym widoku security_invoker=true, żeby sprawdzać uprawnienia roli wywołującej oraz reguły RLS.",
+      "W starszym PostgreSQL lub przy prywatnym widoku ogranicz GRANT dla anon/authenticated i trzymaj widok w schemacie niewystawionym przez Data API."
     ],
-    "verify": "Właściciel widzi swoje dane, inne konto ich nie widzi, a brak zalogowania nie daje szerokiego dostępu.",
-    "warning": "Nie wyłączaj RLS jako rozwiązania produkcyjnego problemu z pustą listą.",
-    "source": "https://supabase.com/docs/guides/database/postgres/row-level-security",
+    "verify": "Po zmianie każdy użytkownik widzi wyłącznie dopuszczone wiersze, a anonimowe zapytanie do prywatnych danych nie daje dostępu do widoku.",
+    "warning": "Nie zakładaj, że włączenie RLS wyłącznie na tabeli chroni wszystkie utworzone nad nią widoki lub funkcje SECURITY DEFINER.",
+    "source": "https://supabase.com/docs/guides/database/views",
     "category": "supabase-bazy"
   },
   {
@@ -144,21 +144,21 @@
     "category": "supabase-bazy"
   },
   {
-    "slug": "postgres-23503-foreign-key",
-    "title": "PostgreSQL: 23503 foreign key violation przy usuwaniu klienta",
-    "symptom": "Usuwanie rekordu klienta zatrzymuje się błędem SQLSTATE 23503, bo odwołuje się do niego inna tabela.",
-    "cause": "Foreign key chroni spójność relacji, na przykład umów lub komentarzy powiązanych z klientem.",
+    "slug": "postgres-40p01-deadlock-detected",
+    "title": "PostgreSQL: 40P01 deadlock detected podczas równoczesnego zapisu",
+    "symptom": "Podczas równoległego zapisywania dwóch rekordów jedna transakcja kończy się błędem deadlock detected, choć pojedyncze zapisy działają.",
+    "cause": "Dwie transakcje czekają na blokady trzymane przez siebie nawzajem; PostgreSQL przerywa jedną, by rozwiązać cykl zależności.",
     "inspect": [
-      "Sprawdź nazwę constraint w komunikacie oraz tabele i kolumny uczestniczące w zależności.",
-      "Ustal, czy biznesowo należy archiwizować klienta, przenieść dane zależne czy usuwać również dzieci."
+      "Sprawdź szczegóły deadlock w logach Postgres: PID transakcji, relacje i statementy oczekujące na blokadę.",
+      "Porównaj kolejność UPDATE dwóch tabel w konkurujących operacjach i sprawdź długość transakcji, szczególnie przy callbackach CRM."
     ],
     "fix": [
-      "W większości CRM bezpieczniej oznaczyć rekord jako nieaktywny i zachować historię, niż kasować automatycznie zależne umowy.",
-      "Dopiero gdy wymagania są jednoznaczne, rozważ odpowiednie ON DELETE i przetestuj skutki na kopii bazy."
+      "Ustal spójny porządek pobierania blokad i modyfikowania tabel dla wszystkich kodowych ścieżek tego samego procesu.",
+      "Skróć transakcje, a SQLSTATE 40P01 obsłuż ograniczonym retry całej transakcji z idempotentnym zapisem skutków ubocznych."
     ],
-    "verify": "Po zmianie proces działa zgodnie z retencją danych, a relacje nie pozostawiają osieroconych rekordów.",
-    "warning": "Nie dodawaj ON DELETE CASCADE do wszystkich tabel tylko po to, by pozbyć się błędu.",
-    "source": "https://www.postgresql.org/docs/current/ddl-constraints.html",
+    "verify": "Równoległe testy obciążeniowe kończą się poprawnymi wynikami bez utraty aktualizacji oraz bez podwójnych webhooków i powtórnych płatności.",
+    "warning": "Nie zwiększaj wyłącznie lock_timeout jako rozwiązania, ponieważ nie usuwa to cyklicznej zależności blokad między transakcjami.",
+    "source": "https://www.postgresql.org/docs/current/explicit-locking.html",
     "category": "supabase-bazy"
   },
   {
