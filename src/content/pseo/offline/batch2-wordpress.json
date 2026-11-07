@@ -1,0 +1,202 @@
+[
+  {
+    "slug": "wordpress-database-connection-error",
+    "title": "WordPress: Error establishing a database connection",
+    "symptom": "Cała strona i panel WordPress pokazują komunikat o braku połączenia z bazą.",
+    "diagnose": "Sprawdź DB_HOST, DB_NAME, DB_USER i DB_PASSWORD w wp-config.php bez publikowania haseł.",
+    "fix": "Przywróć prawidłowe połączenie, sprawdź status serwera MySQL i uprawnienia konta DB.",
+    "verify": "Frontend i wp-admin działają, a błędne hasło nadal jest blokowane przez bazę.",
+    "source": "https://wordpress.org/documentation/article/common-wordpress-errors/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-login-redirect-back-to-login",
+    "title": "WordPress: wp-admin wraca na ekran logowania po podaniu hasła",
+    "symptom": "Hasło jest akceptowane, ale po chwili użytkownik ponownie widzi formularz loginu.",
+    "diagnose": "Sprawdź cookies sesji, HTTPS i rozbieżność wartości Site URL oraz WordPress URL.",
+    "fix": "Ujednolić adresy domeny i ustawienia ciasteczek oraz usuń konfliktującą regułę proxy.",
+    "verify": "Zalogowanie utrzymuje sesję na właściwej domenie bez pętli.",
+    "source": "https://wordpress.org/documentation/article/login-trouble/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-wpadmin-403-htaccess",
+    "title": "WordPress: wp-admin zwraca 403 mimo poprawnej roli",
+    "symptom": "Administrator nie może otworzyć panelu, lecz strona publiczna pozostaje dostępna.",
+    "diagnose": "Sprawdź logi WAF, reguły .htaccess i zabezpieczenia IP dla katalogu wp-admin.",
+    "fix": "Przywróć dostęp uprawnionemu adresowi przez kontrolowaną regułę zamiast wyłączać całą ochronę.",
+    "verify": "Panel działa dla administratora, a anonimowy użytkownik nie uzyskuje uprawnień.",
+    "source": "https://wordpress.org/documentation/article/common-wordpress-errors/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-wpjson-404-after-rewrite",
+    "title": "WordPress: /wp-json/ zwraca 404 mimo działającego bloga",
+    "symptom": "REST API WordPress nie odpowiada pod standardową ścieżką, chociaż podstrony wyglądają poprawnie.",
+    "diagnose": "Sprawdź reguły rewrite, permalinki i odpowiedź endpointu z parametrem rest_route.",
+    "fix": "Przywróć odpowiednie reguły przepisywania adresów i sprawdź konfigurację webserwera.",
+    "verify": "REST index zwraca prawidłowy JSON, a prywatne operacje wymagają uwierzytelnienia.",
+    "source": "https://developer.wordpress.org/rest-api/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-block-editor-invalid-json",
+    "title": "WordPress Gutenberg: aktualizacja nie powiodła się — nieprawidłowa odpowiedź JSON",
+    "symptom": "Edytor blokowy nie zapisuje zmian, choć zwykła strona działa.",
+    "diagnose": "Sprawdź w Network żądanie do REST API i czy serwer zamiast JSON zwraca HTML błędu lub przekierowanie.",
+    "fix": "Popraw problem REST, permalinków, proxy lub autoryzacji i przetestuj zapis prostego wpisu.",
+    "verify": "Edytor zapisuje treść, a API odpowiada poprawnym JSON bez dodatkowego HTML.",
+    "source": "https://developer.wordpress.org/block-editor/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-ajax-400-bad-request",
+    "title": "WordPress admin-ajax.php zwraca 400 po kliknięciu wtyczki",
+    "symptom": "Część funkcji zaplecza nie działa, a Network wskazuje HTTP 400 dla admin-ajax.php.",
+    "diagnose": "Sprawdź parametr action, nonce oraz czy handler jest zarejestrowany dla właściwego kontekstu.",
+    "fix": "Dopasuj nazwę action i implementację callbacku, walidując nonce i uprawnienia roli.",
+    "verify": "Prawidłowa akcja działa, a żądanie bez wymaganej autoryzacji jest odrzucane.",
+    "source": "https://developer.wordpress.org/plugins/javascript/ajax/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-media-http-error-upload",
+    "title": "WordPress: HTTP error podczas przesyłania zdjęcia",
+    "symptom": "Upload małego pliku działa, a większy obraz zatrzymuje się z ogólnym błędem HTTP.",
+    "diagnose": "Sprawdź limity PHP upload_max_filesize, post_max_size oraz logi serwera podczas żądania.",
+    "fix": "Dopasuj rozsądne limity i upewnij się, że katalog uploads ma prawidłowe prawa zapisu.",
+    "verify": "Plik zgodny z limitem trafia do biblioteki, a przekroczony limit ma czytelny komunikat.",
+    "source": "https://wordpress.org/documentation/article/media-library-screen/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-image-processing-failed",
+    "title": "WordPress: The server cannot process the image przy dużym zdjęciu",
+    "symptom": "Zdjęcie wgrywa się częściowo, ale WordPress nie tworzy wymaganych miniatur.",
+    "diagnose": "Sprawdź format, wymiary i pamięć PHP oraz dostępność GD lub Imagick na hostingu.",
+    "fix": "Konwertuj ekstremalnie duże pliki przed uploadem i skonfiguruj obsługiwany moduł obrazów.",
+    "verify": "Miniatury powstają dla zgodnych zdjęć bez zawieszenia edytora.",
+    "source": "https://wordpress.org/documentation/article/image-optimization/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-maintenance-mode-stuck",
+    "title": "WordPress: Briefly unavailable for scheduled maintenance nie znika",
+    "symptom": "Po aktualizacji wtyczki cała witryna pozostaje w trybie konserwacji.",
+    "diagnose": "Sprawdź, czy proces aktualizacji faktycznie zakończył się i czy pozostał plik .maintenance.",
+    "fix": "Po potwierdzeniu zakończenia update usuń osierocony plik i ponownie skontroluj spójność wtyczek.",
+    "verify": "Strona działa bez trybu maintenance, a nieukończona aktualizacja została poprawiona.",
+    "source": "https://wordpress.org/documentation/article/wordpress-maintenance-mode/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-site-health-loopback-failed",
+    "title": "WordPress Site Health: loopback request failed",
+    "symptom": "Narzędzie kondycji strony nie może wykonać połączenia zwrotnego do własnej domeny.",
+    "diagnose": "Sprawdź blokadę wyjścia HTTP na hostingu, certyfikat SSL i odpowiedź lokalnego endpointu.",
+    "fix": "Przywróć dozwolone loopback requests dla potrzebnych funkcji, zachowując bezpieczeństwo.",
+    "verify": "Site Health wykonuje test, a zadania WP-Cron nie zatrzymują się przez blokadę.",
+    "source": "https://wordpress.org/documentation/article/site-health-screen/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-search-engine-visibility-noindex",
+    "title": "WordPress nie pojawia się w Google przez ustawienie „Zniechęcaj wyszukiwarki”",
+    "symptom": "Nowa witryna ma poprawną mapę i treść, ale generuje dyrektywę noindex.",
+    "diagnose": "Sprawdź Ustawienia → Czytanie i finalne meta robots w HTML publicznych stron.",
+    "fix": "Wyłącz celową blokadę po publikacji, zachowując noindex dla prywatnego staging.",
+    "verify": "Strony publiczne nie mają noindex, a staging pozostaje wyłączony z indeksacji.",
+    "source": "https://wordpress.org/documentation/article/settings-reading-screen/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-plugin-update-ftp-credentials",
+    "title": "WordPress: aktualizacja wtyczki prosi o dane FTP",
+    "symptom": "Instalowanie aktualizacji nie działa bez ręcznego podawania konta FTP.",
+    "diagnose": "Sprawdź właściciela katalogów WP i możliwości bezpośredniego zapisu wtyczek przez PHP.",
+    "fix": "Skonfiguruj bezpieczne uprawnienia do plików i właściwy mechanizm aktualizacji dla hostingu.",
+    "verify": "Zaufane aktualizacje przebiegają bez udostępniania haseł FTP w formularzu.",
+    "source": "https://wordpress.org/documentation/article/changing-file-permissions/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-php-upgrade-breaks-theme",
+    "title": "WordPress: motyw przestaje działać po zmianie wersji PHP",
+    "symptom": "Po aktualizacji PHP pojawia się fatal error ze starego pliku motywu.",
+    "diagnose": "Sprawdź log PHP, kompatybilność motywu i wersje używanych wtyczek na staging.",
+    "fix": "Zaktualizuj niezgodny kod lub motyw, wykonując testy przed kolejnym przełączeniem produkcji.",
+    "verify": "Wspierana wersja PHP renderuje stronę i panel bez nowych błędów fatal.",
+    "source": "https://wordpress.org/documentation/article/requirements/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-database-prefix-changed",
+    "title": "WordPress: po migracji prosi o ponowną instalację mimo istniejącej bazy",
+    "symptom": "W bazie są wpisy, ale aplikacja nie widzi tabel instalacji.",
+    "diagnose": "Sprawdź table_prefix w wp-config.php i rzeczywiste nazwy tabel w bazie danych.",
+    "fix": "Popraw prefix zgodnie z faktycznym schematem, nie nadpisując istniejących tabel nową instalacją.",
+    "verify": "Wpisy i konta wracają po poprawnym połączeniu, bez kasowania zawartości.",
+    "source": "https://developer.wordpress.org/advanced-administration/wordpress/wp-config/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-wp-sitemap-duplicate-seo-plugin",
+    "title": "WordPress: dwie mapy witryny po instalacji wtyczki SEO",
+    "symptom": "Witryna udostępnia zarówno wp-sitemap.xml, jak i osobną sitemap_index.xml z wtyczki.",
+    "diagnose": "Sprawdź, które adresy Google rzeczywiście odczytuje i czy obie mapy zawierają te same kanoniczne URL.",
+    "fix": "Wybierz jeden zarządzany generator map i upewnij się, że zgłoszony adres jest prawidłowy.",
+    "verify": "Mapa i sitemap index są spójne, bez zgłoszeń nieaktualnych podstron.",
+    "source": "https://wordpress.org/documentation/article/wordpress-sitemaps/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-post-schedule-missed",
+    "title": "WordPress: Missed schedule przy publikacji zaplanowanego wpisu",
+    "symptom": "Wpis po planowanym terminie pozostaje nieopublikowany w panelu.",
+    "diagnose": "Sprawdź WP-Cron, timezone witryny i czy hosting uruchamia zadania przy niskim ruchu.",
+    "fix": "Zastosuj wiarygodne uruchamianie cron i kontrolę błędów publikacji, zachowując datę wpisu.",
+    "verify": "Zaplanowany artykuł pojawia się po właściwej godzinie bez podwójnego wpisu.",
+    "source": "https://developer.wordpress.org/plugins/cron/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "wordpress-rest-nonce-expired",
+    "title": "WordPress REST API: cookie is invalid lub nonce wygasł",
+    "symptom": "Po dłuższym czasie edycji zapis wpisu nie działa mimo wcześniejszego zalogowania.",
+    "diagnose": "Sprawdź ważność sesji i nagłówek X-WP-Nonce wysyłany przez klienta REST.",
+    "fix": "Odśwież nonce w zaufanym kontekście użytkownika lub poproś o ponowne zalogowanie.",
+    "verify": "Edytor zapisuje po odnowieniu sesji, a żądanie bez ważnego nonce jest blokowane.",
+    "source": "https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "woocommerce-no-shipping-methods",
+    "title": "WooCommerce: brak dostępnych metod dostawy w koszyku",
+    "symptom": "Klient widzi produkty, ale checkout informuje o braku opcji wysyłki.",
+    "diagnose": "Sprawdź strefy wysyłkowe, kraj i kod pocztowy oraz klasę wysyłkową produktów.",
+    "fix": "Dostosuj właściwą strefę i metodę dla obsługiwanego obszaru bez fikcyjnych stawek.",
+    "verify": "Dla adresu objętego dostawą checkout pokazuje właściwą metodę i koszt.",
+    "source": "https://woocommerce.com/document/setting-up-shipping-zones/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "woocommerce-coupon-does-not-apply",
+    "title": "WooCommerce: kod rabatowy jest ważny, ale rabat nie nalicza się",
+    "symptom": "Klient wpisuje kupon, lecz koszyk pokazuje komunikat o niespełnionych warunkach.",
+    "diagnose": "Sprawdź daty ważności, produkty wykluczone, minimalną kwotę i warunki indywidualnego użycia.",
+    "fix": "Zmień konfigurację kuponu tylko zgodnie z zamierzoną promocją i przetestuj kilka koszyków.",
+    "verify": "Kupon działa dla uprawnionego zamówienia i nie obniża cen poza warunkami akcji.",
+    "source": "https://woocommerce.com/document/coupon-management/",
+    "category": "wordpress"
+  },
+  {
+    "slug": "woocommerce-webhook-order-duplicate",
+    "title": "WooCommerce: webhook zamówienia tworzy dwa rekordy CRM",
+    "symptom": "Po zakupie integracja otrzymuje powtórne powiadomienie i zapisuje zlecenie drugi raz.",
+    "diagnose": "Sprawdź logi webhooków i identyfikator zamówienia WooCommerce oraz retry dostawcy.",
+    "fix": "Wprowadź idempotencję po order ID i loguj rezultat przetworzenia każdego zdarzenia.",
+    "verify": "Wielokrotne powiadomienie aktualizuje jeden rekord bez podwójnego zlecenia.",
+    "source": "https://woocommerce.com/document/webhooks/",
+    "category": "wordpress"
+  }
+]
