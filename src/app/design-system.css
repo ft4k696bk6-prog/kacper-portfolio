@@ -1,4 +1,4 @@
-/* Black + warm white, with one quiet champagne accent for actions and selection. */
+/* One unified neutral system: black, warm-neutral white and silver-grey interactive emphasis. */
 :root, .dark {
   color-scheme: dark;
   --background: var(--brand-black);
