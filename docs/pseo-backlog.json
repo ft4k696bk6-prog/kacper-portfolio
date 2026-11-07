@@ -1,0 +1,870 @@
+{
+  "purpose": "Kolejka tematyczna. Tematy nie są publikowane ani umieszczane w sitemap przed przygotowaniem konkretnego, zweryfikowanego artykułu.",
+  "target": 5000,
+  "entries": [
+    {
+      "category": "meta-ads",
+      "query": "Meta Ads: reklama zatwierdzona, ale nie ma wyświetleń",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "meta-ads",
+      "query": "Meta Ads: odrzucenie płatności mimo środków na karcie",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "meta-ads",
+      "query": "Facebook: osoba nie widzi strony w tożsamości reklamy",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "meta-ads",
+      "query": "Meta Business Suite: brak dostępu do leadów po zmianie administratora",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "meta-ads",
+      "query": "Lead Ads: formularz nie pozwala pobrać CSV",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "meta-ads",
+      "query": "Lead Ads: webhook odbiera tylko część zgłoszeń",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "meta-ads",
+      "query": "Meta: testowe leady działają, prawdziwe nie docierają",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "meta-ads",
+      "query": "Conversions API: Event Match Quality spada",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "meta-ads",
+      "query": "Pixel: zakup liczony dwukrotnie na stronie potwierdzenia",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "meta-ads",
+      "query": "Meta: zmiana właściciela strony blokuje reklamowanie",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "meta-ads",
+      "query": "Meta Ads: kampania zablokowana przez limit wydatków",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "meta-ads",
+      "query": "Meta: reklama ma wysoki CTR i zero kontaktów",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "vercel-hosting",
+      "query": "Vercel: podgląd działa, ale produkcja wyświetla stary commit",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "vercel-hosting",
+      "query": "Vercel: Deployment Protection blokuje dostęp klientowi",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "vercel-hosting",
+      "query": "Vercel: wyświetla się 404 na własnej domenie",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "vercel-hosting",
+      "query": "Vercel: domena przypisana do innego projektu",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "vercel-hosting",
+      "query": "Vercel: Function Invocation Timeout w formularzu",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "vercel-hosting",
+      "query": "Vercel: Edge Function zwraca 500 tylko na produkcji",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "vercel-hosting",
+      "query": "Vercel: nie działa zmienna środowiskowa mimo ustawienia w panelu",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "vercel-hosting",
+      "query": "Vercel: webhook deploymentu nie uruchamia się po push",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "vercel-hosting",
+      "query": "Vercel: build zatrzymuje brakujący import zależności",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "vercel-hosting",
+      "query": "Vercel: aplikacja działa lokalnie, ale brak funkcji Node na Edge",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "vercel-hosting",
+      "query": "Vercel: certyfikat SSL nie jest wydawany dla domeny",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "vercel-hosting",
+      "query": "Vercel: przekroczono limit zasobów i projekt jest wstrzymany",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "supabase-bazy",
+      "query": "Supabase: RLS blokuje SELECT mimo zalogowania",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "supabase-bazy",
+      "query": "Supabase: insert narusza WITH CHECK",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "supabase-bazy",
+      "query": "Supabase: duplikaty rekordów po ponowieniu webhooka",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "supabase-bazy",
+      "query": "Supabase: brak rekordów po zmianie roli użytkownika",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "supabase-bazy",
+      "query": "Supabase: błędny klucz obcy blokuje usunięcie użytkownika",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "supabase-bazy",
+      "query": "Supabase: token odświeżania sesji wygasł",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "supabase-bazy",
+      "query": "Supabase: Storage policy odrzuca upload zdjęcia",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "supabase-bazy",
+      "query": "Supabase: signed URL pliku przestaje działać",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "supabase-bazy",
+      "query": "Supabase: query count różni się od liczby widocznych wierszy",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "supabase-bazy",
+      "query": "Supabase: limit 1000 rekordów w odpowiedzi",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "supabase-bazy",
+      "query": "Supabase: realtime nie aktualizuje listy leadów",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "supabase-bazy",
+      "query": "Supabase: migracja bazy rozjeżdża schemat produkcyjny",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "nextjs-react",
+      "query": "Next.js: Hydration failed przez datę i strefę czasową",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "nextjs-react",
+      "query": "Next.js: generateStaticParams nie zawiera nowych slugów",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "nextjs-react",
+      "query": "Next.js: useSearchParams wymaga Suspense",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "nextjs-react",
+      "query": "Next.js: metadata canonical wskazuje na stronę główną",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "nextjs-react",
+      "query": "Next.js: obraz w Image ucina twarz na mobile",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "nextjs-react",
+      "query": "Next.js: notFound działa w dev, ale 404 po buildzie",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "nextjs-react",
+      "query": "React: useEffect wywołuje zapytanie dwa razy",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "nextjs-react",
+      "query": "React: lista z nieprawidłowym key miesza rekordy",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "nextjs-react",
+      "query": "TypeScript: Property does not exist on type never",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "nextjs-react",
+      "query": "Next.js: server action nie działa po wdrożeniu",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "nextjs-react",
+      "query": "React: formularz traci dane po przejściu między krokami",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "nextjs-react",
+      "query": "Next.js: błędne importy client component i server component",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "crm-leady",
+      "query": "CRM: licznik przypisanych leadów różni się od listy",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "crm-leady",
+      "query": "CRM: po zdjęciu blokady handlowiec nadal nie widzi leada",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "crm-leady",
+      "query": "CRM: dwie osoby edytują lead i nadpisują komentarze",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "crm-leady",
+      "query": "CRM: powiadomienia PWA nie działają na iPhonie",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "crm-leady",
+      "query": "CRM: callbacki znikają po zmianie strefy czasowej",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "crm-leady",
+      "query": "CRM: dashboard liczy anulowane umowy do wyniku",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "crm-leady",
+      "query": "CRM: filtr przypisania utrzymuje nieaktualną listę",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "crm-leady",
+      "query": "CRM: import CSV powoduje duplikaty telefonów",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "crm-leady",
+      "query": "CRM: rolę administratora można obejść przez endpoint",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "crm-leady",
+      "query": "CRM: archiwalne leady nie powinny trafiać do kolejki",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "crm-leady",
+      "query": "CRM: pliki klienta widoczne dla nieuprawnionej osoby",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "crm-leady",
+      "query": "CRM: status leadu nie synchronizuje się między zakładkami",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "seo-google",
+      "query": "Google Search Console: wykryto, obecnie nie zindeksowano",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "seo-google",
+      "query": "Google Search Console: zindeksowano, choć zablokowano robots.txt",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "seo-google",
+      "query": "Google Search Console: canonical inny niż wybrany przez Google",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "seo-google",
+      "query": "Sitemap XML: URL jest poprawny, ale nie ma go w wynikach",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "seo-google",
+      "query": "IndexNow: zgłoszenie przyjęte, ale strona nie jest indeksowana",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "seo-google",
+      "query": "SEO: podstrony usług mają takie same title i description",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "seo-google",
+      "query": "SEO: Google pokazuje inny opis niż meta description",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "seo-google",
+      "query": "SEO: spadek kliknięć bez spadku liczby wyświetleń",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "seo-google",
+      "query": "SEO: tag noindex pozostał po wersji testowej",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "seo-google",
+      "query": "SEO: Googlebot otrzymuje 403, użytkownik 200",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "seo-google",
+      "query": "Open Graph: stara miniatura po zmianie logo",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "seo-google",
+      "query": "Google: podstrony nie mają linków wewnętrznych",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "domeny-poczta",
+      "query": "iCloud+: własna domena skonfigurowana, ale poczta nie dochodzi",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "domeny-poczta",
+      "query": "iCloud: Ukryj mój adres e-mail nie przekazuje wiadomości",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "domeny-poczta",
+      "query": "iCloud Mail: dodany adres bez osobnego hasła do skrzynki",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "domeny-poczta",
+      "query": "DNS: podwójny SPF powoduje błąd uwierzytelnienia",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "domeny-poczta",
+      "query": "DNS: nieprawidłowe MX kierują pocztę do starego hostingu",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "domeny-poczta",
+      "query": "DMARC: wiadomości z domeny lądują w spamie",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "domeny-poczta",
+      "query": "DKIM: podpis nie przechodzi weryfikacji mimo ustawienia rekordu",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "domeny-poczta",
+      "query": "Cloudflare: proxy DNS psuje weryfikację subdomeny",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "domeny-poczta",
+      "query": "DNS: subdomena CRM kieruje do złego projektu",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "domeny-poczta",
+      "query": "SSL: przeglądarka wyświetla ERR_CERT_COMMON_NAME_INVALID",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "domeny-poczta",
+      "query": "Poczta: formularz wysyła 200, ale wiadomość nie dociera",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "domeny-poczta",
+      "query": "DNS: propagacja zmian trwa dłużej niż planowano",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "formularze-api",
+      "query": "Formularz kontaktowy: wysyła się bez błędu, lecz nie ma maila",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "formularze-api",
+      "query": "Formularz: Turnstile token wygasa przed wysłaniem",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "formularze-api",
+      "query": "API: 401 Unauthorized po odświeżeniu strony",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "formularze-api",
+      "query": "API: CORS blocked by policy na domenie produkcyjnej",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "formularze-api",
+      "query": "Webhook: serwer zwraca 200, ale zapis nie występuje",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "formularze-api",
+      "query": "Webhook: ten sam event przychodzi wielokrotnie",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "formularze-api",
+      "query": "Formularz: spam mimo honeypota i rate limitu",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "formularze-api",
+      "query": "API: rate limit 429 po krótkim czasie",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "formularze-api",
+      "query": "API: 413 Payload Too Large przy przesyłaniu zdjęć",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "formularze-api",
+      "query": "Formularz: walidacja nie pokazuje błędnego pola",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "formularze-api",
+      "query": "API: błędne odświeżanie access tokena integracji",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "formularze-api",
+      "query": "API: różnica content-type psuje parsowanie JSON",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "wordpress",
+      "query": "WordPress: biała strona po aktualizacji wtyczki",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "wordpress",
+      "query": "WordPress: 404 na wpisach po zmianie permalinków",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "wordpress",
+      "query": "WordPress: mieszana zawartość HTTP i HTTPS",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "wordpress",
+      "query": "WordPress: formularz nie wysyła wiadomości przez SMTP",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "wordpress",
+      "query": "WordPress: cache nie pokazuje zmian w edytorze",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "wordpress",
+      "query": "WordPress: menu mobilne przysłania ekran",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "wordpress",
+      "query": "WordPress: konflikt dwóch wtyczek SEO",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "wordpress",
+      "query": "WordPress: zniknęły obrazki po migracji domeny",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "wordpress",
+      "query": "WooCommerce: checkout nie kończy zamówienia",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "wordpress",
+      "query": "WordPress: przekroczenie limitu pamięci PHP",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "wordpress",
+      "query": "WordPress: nie da się wgrać pliku .webp",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "wordpress",
+      "query": "WordPress: spam w komentarzach po wyłączeniu moderacji",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "strony-ux",
+      "query": "Mobile: tekst nachodzi na zdjęcie osoby",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "strony-ux",
+      "query": "Mobile: poziomy scroll przez element z position absolute",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "strony-ux",
+      "query": "Mobile: przycisk telefon jest za duży w nawigacji",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "strony-ux",
+      "query": "CSS: object-fit przycina zdjęcie produktu",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "strony-ux",
+      "query": "CSS: fixed header zasłania początek artykułu",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "strony-ux",
+      "query": "UX: slider projektów nie daje się przesuwać palcem",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "strony-ux",
+      "query": "WWW: logo z białym tłem na ciemnej stronie",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "strony-ux",
+      "query": "WWW: za duża pusta przestrzeń nad hero",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "strony-ux",
+      "query": "WWW: znikające ikony po aktualizacji biblioteki",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "strony-ux",
+      "query": "WWW: brak alt przy ważnych zdjęciach",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "strony-ux",
+      "query": "WWW: błędy CLS przez obraz bez wymiarów",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "strony-ux",
+      "query": "WWW: formularz niewygodny na ekranie 320 px",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "automatyzacje",
+      "query": "Cron: zadanie na Vercel nie wykonuje się w oczekiwanej godzinie",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "automatyzacje",
+      "query": "Cron: webhook odpala się dwa razy i tworzy duplikaty",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "automatyzacje",
+      "query": "GitHub Actions: workflow nie uruchamia się po merge",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "automatyzacje",
+      "query": "GitHub Actions: brak sekretu w deployu z pull requesta",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "automatyzacje",
+      "query": "Automatyzacja: utracony token Google Drive zatrzymuje synchronizację",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "automatyzacje",
+      "query": "Automatyzacja: powiadomienia wysyłane na zły adres",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "automatyzacje",
+      "query": "Automatyzacja: brak retry po błędzie API 503",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "automatyzacje",
+      "query": "Automatyzacja: logi nie pozwalają powiązać zdarzenia z leadem",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "automatyzacje",
+      "query": "Automatyzacja: przypomnienia CRM wysyłają się po terminie",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "automatyzacje",
+      "query": "Automatyzacja: kolejka zadań nie odbiera nowej wiadomości",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "automatyzacje",
+      "query": "Automatyzacja: synchronizacja nadpisuje ręczne zmiany",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "automatyzacje",
+      "query": "Automatyzacja: raport dzienny pomija błędy w weekend",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "inne",
+      "query": "Git: odrzucony push non-fast-forward",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "inne",
+      "query": "Git: przypadkowo dodany plik .env do commita",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "inne",
+      "query": "Git: konflikt merge przy równoległej pracy na stronie",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "inne",
+      "query": "GitHub: repozytorium prywatne niewidoczne w integracji",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "inne",
+      "query": "GitHub: pobrany projekt nie ma node_modules",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "inne",
+      "query": "Node.js: npm ci nie działa przez brak package-lock",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "inne",
+      "query": "Node.js: lokalna wersja różni się od tej na serwerze",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "inne",
+      "query": "OAuth: callback URL nie pasuje do konfiguracji",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "inne",
+      "query": "Google Drive: utrata uprawnień aplikacji po wycofaniu tokena",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "inne",
+      "query": "GitHub: klonowanie repo pyta o hasło zamiast tokena",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "inne",
+      "query": "Security: klucz API trafił do publicznego bundla",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    },
+    {
+      "category": "inne",
+      "query": "Security: podejrzane logowania pojawiają się w różnych regionach",
+      "status": "backlog",
+      "kind": "problem-resolution"
+    }
+  ]
+}
