@@ -5,7 +5,7 @@ const ContentSecurityPolicy = `
   script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://challenges.cloudflare.com;
   script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com;
   style-src 'self' 'unsafe-inline';
-  img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com;
+  img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://s0.wp.com;
   connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://challenges.cloudflare.com;
   frame-src https://www.googletagmanager.com https://challenges.cloudflare.com;
   font-src 'self' data:;
@@ -25,7 +25,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   outputFileTracingRoot: process.cwd(),
   images: {
-    remotePatterns: [],
+    remotePatterns: [{ protocol: "https", hostname: "s0.wp.com", pathname: "/mshots/v1/**" }],
   },
   async headers() {
     return [
