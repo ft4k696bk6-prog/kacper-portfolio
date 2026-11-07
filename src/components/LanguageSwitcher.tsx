@@ -11,7 +11,6 @@ const navItems = [
   { href: "#services", key: "home" },
   { href: "#about", key: "about" },
   { href: "#projects", key: "projects" },
-  { href: "#faq", key: "techStack" },
   { href: "#contact", key: "contact" },
 ] as const;
 
@@ -106,6 +105,7 @@ export function LanguageSwitcher() {
               {t.nav[item.key]}
             </a>
           ))}
+          <Link href="/rozwoj-biznesu" className="ui-nav rounded-md px-4 py-2 text-sm">{lang === "pl" ? "Rozwój biznesu" : "Business"}</Link>
           <Link href={lang === "en" ? "/en/guides" : "/poradniki"} className="ui-nav rounded-md px-4 py-2 text-sm">{lang === "pl" ? "Poradniki" : "Guides"}</Link>
         </nav>
 
@@ -166,6 +166,7 @@ export function LanguageSwitcher() {
                 {t.nav[item.key]}
               </a>
             ))}
+            <Link href="/rozwoj-biznesu" className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang === "pl" ? "Rozwój biznesu" : "Business development"}</Link>
             <Link href={lang === "en" ? "/en/guides" : "/poradniki"} className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang === "pl" ? "Poradniki" : "Guides"}</Link>
             <div className="mt-3 flex items-center justify-between gap-3">
               <a
