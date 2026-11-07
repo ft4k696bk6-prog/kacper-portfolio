@@ -17,5 +17,7 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run test
+      - run: node --check scripts/pseo-autopilot.mjs
+      - run: node scripts/pseo-autopilot.mjs --dry-run
       - run: npm run pseo:qa
       - run: npm run build
