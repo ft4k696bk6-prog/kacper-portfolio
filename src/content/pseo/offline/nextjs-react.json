@@ -1,0 +1,380 @@
+[
+  {
+    "slug": "nextjs-suspense-searchparams-static-404",
+    "title": "Next.js: useSearchParams psuje statyczną stronę błędu 404",
+    "symptom": "Podczas next build występuje komunikat o brakującej granicy Suspense na /_not-found, chociaż strona główna działa.",
+    "cause": "Hook odczytujący query string może być renderowany przez wspólny layout, nawet gdy nie ma go w samym pliku strony błędu.",
+    "inspect": [
+      "Przejrzyj layout.tsx i wszystkie współdzielone elementy nagłówka lub menu korzystające z useSearchParams.",
+      "Uruchom produkcyjny build i odczytaj pełny trace, aby znaleźć komponent powodujący wyłączenie statycznego renderowania."
+    ],
+    "fix": [
+      "Wydziel komponent kliencki z hookiem i otocz go Suspense jak najbliżej miejsca użycia, pozostawiając resztę strony renderowaną na serwerze.",
+      "Jeżeli strona naprawdę ma być dynamiczna, wybierz świadomie dynamic rendering zamiast sztucznie wyłączać reguły buildu."
+    ],
+    "verify": "Build kończy się bez błędu /_not-found, a obsługa 404 i wyszukiwanie w menu działają po przeładowaniu.",
+    "warning": "Nie usuwaj całego mechanizmu routingu ani nie ukrywaj problemu przez wyłączenie lintowania.",
+    "source": "https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-next-redirect-caught-exception",
+    "title": "Next.js: NEXT_REDIRECT trafia do catch i przekierowanie nie działa",
+    "symptom": "Po wywołaniu redirect() użytkownik zostaje na stronie, a w logu pojawia się NEXT_REDIRECT.",
+    "cause": "Funkcja redirect rzuca wewnętrzny wyjątek sterujący nawigacją; szeroki try/catch potrafi go połknąć.",
+    "inspect": [
+      "Wyszukaj redirect() wewnątrz bloków try/catch w Server Action i Server Component.",
+      "Sprawdź czy catch zwraca komunikat albo obiekt błędu zamiast dopuścić do przekierowania."
+    ],
+    "fix": [
+      "Wykonaj operację zapisu w try, a redirect() wywołaj dopiero po wyjściu z bloku, gdy zapis został zakończony.",
+      "Oddziel błędy walidacji i bazy od zmiany nawigacji; do zwracania błędów formularza użyj kontrolowanej wartości stanu."
+    ],
+    "verify": "Po poprawnym zapisie następuje właściwe przekierowanie, a błąd zapisu nadal daje czytelną informację w formularzu.",
+    "warning": "Nie traktuj NEXT_REDIRECT jak zwykłego błędu serwera i nie zwracaj kodu 500.",
+    "source": "https://nextjs.org/docs/app/api-reference/functions/redirect",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-await-params-next15",
+    "title": "Next.js 15: odczyt params.slug bez await generuje błąd",
+    "symptom": "Po aktualizacji Next.js dynamiczna trasa zaczyna zgłaszać, że params należy odczytać asynchronicznie.",
+    "cause": "W nowszym App Router params są przekazywane jako wartość typu Promise w odpowiednich funkcjach strony.",
+    "inspect": [
+      "Sprawdź wersję Next.js i wszystkie miejsca odczytu params w page, layout i generateMetadata.",
+      "Porównaj typ Props z rzeczywistym kontraktem funkcji frameworka, zamiast dopisywać rzutowanie any."
+    ],
+    "fix": [
+      "Zdefiniuj params: Promise<{slug:string}> i odczytaj const {slug}=await params we właściwej funkcji asynchronicznej.",
+      "Dla wielu segmentów popraw wszystkie miejsca użycia; przygotuj test otwierający konkretny adres dynamiczny."
+    ],
+    "verify": "Typecheck i build przechodzą, a wpisanie adresu /poradniki/przyklad otwiera właściwe dane bez ostrzeżeń.",
+    "warning": "Nie kopiuj sygnatur z dokumentacji starszej głównej wersji bez sprawdzenia wersji projektu.",
+    "source": "https://nextjs.org/docs/app/api-reference/file-conventions/dynamic-routes",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-cookies-readonly-server",
+    "title": "Next.js: cookies().set nie działa w Server Component",
+    "symptom": "Próba ustawienia ciasteczka bezpośrednio podczas renderowania strony zwraca błąd ograniczenia zapisu cookies.",
+    "cause": "Odczyt i zapis cookies mają inne reguły; zapis jest dozwolony tylko w odpowiednim kontekście odpowiedzi serwera.",
+    "inspect": [
+      "Sprawdź, czy setter jest wywoływany w page.tsx, w Route Handler czy w Server Action.",
+      "Zweryfikuj, czy mutacja ciasteczka następuje przed wysłaniem odpowiedzi HTTP."
+    ],
+    "fix": [
+      "Przenieś zapis cookie do Server Action lub Route Handler, a komponent strony pozostaw do odczytu danych.",
+      "Dla sesji sprawdź atrybuty HttpOnly, Secure, SameSite i ścieżkę; uruchom test po czystym logowaniu."
+    ],
+    "verify": "Po żądaniu mutującym odpowiedź zawiera właściwy nagłówek Set-Cookie, a nowa sesja jest odczytywana prawidłowo.",
+    "warning": "Nie zapisuj sekretów sesji przez dostępny klientowi kod JavaScript, jeśli wymagają ochrony HttpOnly.",
+    "source": "https://nextjs.org/docs/app/api-reference/functions/cookies",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-env-client-undefined",
+    "title": "Next.js: process.env działa na serwerze, ale undefined w przeglądarce",
+    "symptom": "Zmienna API istnieje podczas renderowania serwera, a w Client Component odczyt daje undefined.",
+    "cause": "Next.js nie udostępnia zwykłych server-only variables do kodu przeglądarki; publiczne muszą być jawnie oznaczone.",
+    "inspect": [
+      "Sprawdź, czy odczyt odbywa się w pliku z dyrektywą use client i czy nazwa zaczyna się od NEXT_PUBLIC_.",
+      "Zweryfikuj docelowe środowisko build oraz to, czy nowa wartość została uwzględniona w nowym deploymencie."
+    ],
+    "fix": [
+      "Nie przenoś sekretnego klucza do klienta; jeśli trzeba, odczytaj go w Route Handler i zwróć wyłącznie potrzebny wynik.",
+      "Dla jawnej konfiguracji interfejsu ustaw NEXT_PUBLIC_ przed buildem i przebuduj aplikację."
+    ],
+    "verify": "Publiczna wartość jest dostępna w nowym bundle, a tajny klucz nie występuje w kodzie JavaScript pobieranym przez przeglądarkę.",
+    "warning": "Nie dodawaj prefiksu NEXT_PUBLIC_ do kluczy prywatnych; oznacza to ich ujawnienie.",
+    "source": "https://nextjs.org/docs/app/guides/environment-variables",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-image-400-optimizer",
+    "title": "Next.js Image zwraca 400 mimo poprawnego zdjęcia",
+    "symptom": "Zwykły URL obrazu działa, ale żądanie /_next/image kończy się HTTP 400.",
+    "cause": "Optymalizator sprawdza źródło, parametry URL i dozwolone hosty, dlatego problem może być inny niż brak samego pliku.",
+    "inspect": [
+      "W Network przejrzyj URL /_next/image, parametr url, w i q, a także pełną treść odpowiedzi błędu.",
+      "Sprawdź konfigurację images.remotePatterns i czy zdalny serwer poprawnie zwraca Content-Type obrazu."
+    ],
+    "fix": [
+      "Dopasuj dozwolony host, protokół i pathname wyłącznie do zaufanego źródła; nie otwieraj wszystkich domen bez potrzeby.",
+      "Jeśli źródło blokuje fetch optymalizatora, skonfiguruj poprawny dostęp do pliku lub świadomie użyj unoptimized dla wybranej grafiki."
+    ],
+    "verify": "Grafika ładuje się na telefonie i desktopie, a żądanie optymalizatora nie zwraca 400.",
+    "warning": "Nie wyłączaj ochrony hostów na całej witrynie tylko po to, by naprawić pojedyncze zdjęcie.",
+    "source": "https://nextjs.org/docs/app/api-reference/components/image",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-middleware-login-loop",
+    "title": "Next.js Middleware tworzy pętlę przekierowań na /login",
+    "symptom": "Przeglądarka informuje o zbyt wielu przekierowaniach, a trasa logowania nie otwiera się.",
+    "cause": "Matcher lub warunek auth może przechwytywać także stronę logowania albo zasoby potrzebne do wykonania przekierowania.",
+    "inspect": [
+      "Sprawdź w Network sekwencję statusów 307 i adresów Location, zapisując pierwszy URL i URL końcowy.",
+      "Porównaj matcher z /login, /api/auth i zasobami _next; sprawdź czy sesja jest rzeczywiście odczytywana."
+    ],
+    "fix": [
+      "Wyłącz publiczną trasę logowania z przekierowania do niej samej oraz wydziel reguły dla gościa i użytkownika zalogowanego.",
+      "Zamiast porównywać samą obecność cookie, waliduj sesję po stronie właściwego serwera, uwzględniając wygasanie."
+    ],
+    "verify": "Z okna incognito wejście na trasę chronioną kończy się jednym przekierowaniem, a wejście na login działa bez pętli.",
+    "warning": "Nie ustawiaj matcher obejmującego niekontrolowanie wszystkie zasoby statyczne.",
+    "source": "https://nextjs.org/docs/app/api-reference/file-conventions/middleware",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-route-handler-body-used",
+    "title": "Next.js Route Handler: Body is unusable przy drugim odczycie request.json()",
+    "symptom": "Endpoint zwraca błąd Body is unusable albo stream already read, gdy próbuje ponownie odczytać dane POST.",
+    "cause": "Strumień ciała Request można konsumować tylko raz, o ile wcześniej nie wykonano jego klonowania.",
+    "inspect": [
+      "Sprawdź, czy middleware, logowanie debugowe lub walidacja wykonują request.text() przed request.json().",
+      "Zapisz kolejność operacji na obiekcie Request w jednym wywołaniu endpointu."
+    ],
+    "fix": [
+      "Odczytaj request.json() dokładnie raz i zachowaj sparsowany obiekt do walidacji i logiki biznesowej.",
+      "Jeśli konieczny jest podgląd surowej treści, użyj z rozmysłem request.clone() przed konsumpcją i ogranicz rozmiar payloadu."
+    ],
+    "verify": "Endpoint przyjmuje prawidłowy JSON, a malformed JSON zwraca kontrolowane 400 zamiast wyjątku.",
+    "warning": "Nie zapisuj całej surowej treści żądań z danymi klientów do publicznych logów.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/API/Request/json",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-server-action-body-size",
+    "title": "Next.js Server Action odrzuca większy formularz lub załącznik",
+    "symptom": "Mały formularz działa, a przesłanie większej liczby pól lub pliku kończy się błędem limitu rozmiaru żądania.",
+    "cause": "Server Actions mają ustawienia ograniczające rozmiar przesyłanych danych i nie są automatycznie najlepszą drogą do dużych plików.",
+    "inspect": [
+      "Sprawdź rozmiar faktycznego body w Network i treść błędu na serwerze.",
+      "Ustal, czy w payloadzie jest plik, base64 lub powtarzany duży JSON zamiast samych pól."
+    ],
+    "fix": [
+      "Przenieś duży upload do odpowiednio zabezpieczonego storage lub osobnego endpointu; w Server Action przekazuj identyfikator pliku.",
+      "Jeśli to uzasadniony mały wzrost danych, skonfiguruj odpowiedni limit po ocenie ryzyka i dodaj walidację rozmiaru."
+    ],
+    "verify": "Formularz z prawidłowym rozmiarem przechodzi, a przekroczenie limitu daje czytelny komunikat zamiast błędu 500.",
+    "warning": "Nie podnoś globalnie limitu do dowolnej wartości, bo zwiększa to koszt i powierzchnię ataku.",
+    "source": "https://nextjs.org/docs/app/api-reference/config/next-config-js/serverActions",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-error-event-handlers-server",
+    "title": "Next.js: Event handlers cannot be passed to Client Component props",
+    "symptom": "Podczas renderowania pojawia się błąd o przekazaniu onClick z Server Component do komponentu klienta.",
+    "cause": "Funkcje obsługi zdarzeń przeglądarki muszą istnieć w kontekście klienckim; nie można serializować dowolnego callbacku przez granicę serwer–klient.",
+    "inspect": [
+      "Znajdź komponent z przekazanym onClick, onChange lub funkcją w obiekcie props.",
+      "Sprawdź położenie dyrektywy use client i czy importowany komponent faktycznie jest granicą kliencką."
+    ],
+    "fix": [
+      "Przenieś interaktywny przycisk i handler do małego Client Component, zachowując pobieranie danych po stronie serwera.",
+      "Przekazuj do klienta jedynie serializowalne dane i identyfikatory niezbędne do zdarzenia."
+    ],
+    "verify": "Build kończy się bez błędu serializacji, a kliknięcie nadal wywołuje oczekiwane działanie.",
+    "warning": "Nie dodawaj use client do całego layoutu tylko dlatego, że jeden przycisk ma onClick.",
+    "source": "https://nextjs.org/docs/app/getting-started/server-and-client-components",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-window-not-defined-ssr",
+    "title": "Next.js: window is not defined podczas SSR komponentu",
+    "symptom": "Aplikacja działa przy nawigacji klienta, lecz odświeżenie strony kończy się błędem window is not defined.",
+    "cause": "Obiekt window nie istnieje w środowisku renderowania serwerowego; import biblioteki może wykonywać kod natychmiast.",
+    "inspect": [
+      "Sprawdź, czy odczyt window następuje w górnym zakresie modułu, podczas renderowania lub wewnątrz biblioteki.",
+      "Zlokalizuj import, po którym zaczyna się błąd, i sprawdź jego zgodność z SSR."
+    ],
+    "fix": [
+      "Przenieś kod wymagający window do useEffect uruchamianego w przeglądarce albo do komponentu ładowanego wyłącznie po stronie klienta.",
+      "Jeśli biblioteka nie wspiera SSR, rozdziel jej integrację od reszty strony i dodaj bezpieczny widok zastępczy."
+    ],
+    "verify": "Bezpośrednie otwarcie i odświeżenie strony działa bez błędu; funkcja przeglądarkowa nadal działa po hydracji.",
+    "warning": "Nie używaj typeof window w przypadkowych miejscach, jeśli sam import powoduje wyjątek wcześniej.",
+    "source": "https://nextjs.org/docs/app/guides/lazy-loading",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "nextjs-generate-metadata-duplicate-title",
+    "title": "Next.js: dwa tytuły i błędny canonical po migracji do Metadata API",
+    "symptom": "HTML zawiera podwójny tytuł lub canonical, bo część metadanych generuje App Router, a część stary komponent Head.",
+    "cause": "Niejednoznaczne metadane mogą pochodzić z równoległego wykorzystania nowego i starego sposobu zarządzania head.",
+    "inspect": [
+      "W HTML strony sprawdź liczbę elementów title, link canonical oraz metatagów description.",
+      "Przejrzyj layout.tsx, page.tsx, generateMetadata i wszelkie ręczne tagi head w komponentach."
+    ],
+    "fix": [
+      "Przenieś metadane do jednego źródła opartego o Metadata API i zapewnij metadataBase dla względnych adresów.",
+      "Ujednolić dziedziczenie metadanych między layoutem i stroną, jawnie definiując tytuł podstrony i canonical."
+    ],
+    "verify": "W HTML jest jeden poprawny tytuł i canonical wskazujący właściwy produkcyjny URL.",
+    "warning": "Nie ustawiaj każdej podstronie canonical strony głównej — utrudnia to indeksowanie konkretnych treści.",
+    "source": "https://nextjs.org/docs/app/getting-started/metadata-and-og-images",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-input-controlled-uncontrolled",
+    "title": "React: A component is changing an uncontrolled input to be controlled",
+    "symptom": "Po pobraniu danych formularz loguje ostrzeżenie o zmianie uncontrolled input na controlled.",
+    "cause": "W pierwszym renderze value może być undefined, a po załadowaniu staje się stringiem, co zmienia sposób zarządzania polem.",
+    "inspect": [
+      "Sprawdź stan początkowy useState oraz wartości przekazywane do value i checked.",
+      "Porównaj render przed odpowiedzią API z renderem po jego zakończeniu."
+    ],
+    "fix": [
+      "Nadaj stanowi wejściowemu stabilną wartość, np. pusty string dla pola tekstowego, i użyj value={value ?? ''} tam, gdzie to właściwe.",
+      "Dla checkboxa kontroluj boolean, a dla niekontrolowanego formularza użyj świadomie defaultValue zamiast mieszać podejścia."
+    ],
+    "verify": "Ostrzeżenie znika po pierwszym renderze i wprowadzone dane nie resetują się po aktualizacji stanu.",
+    "warning": "Nie łataj problemu przypisaniem przypadkowego tekstu undefined do inputu.",
+    "source": "https://react.dev/reference/react-dom/components/input",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-hooks-rendered-fewer",
+    "title": "React: Rendered fewer hooks than expected po zmianie warunku",
+    "symptom": "Po ukryciu fragmentu formularza React rzuca błąd o mniejszej liczbie wywołanych hooks.",
+    "cause": "Komponent wywołuje hooki w innej kolejności między renderami, często przez return przed useMemo lub useEffect.",
+    "inspect": [
+      "Zlokalizuj wszystkie wczesne return i instrukcje if przed ostatnim hookiem komponentu.",
+      "Sprawdź, czy wywołanie hooka występuje w pętli, warunku lub funkcji pomocniczej uruchamianej tylko czasami."
+    ],
+    "fix": [
+      "Przenieś wszystkie hooki na najwyższy poziom komponentu i umieść warunki wewnątrz ich callbacków lub po deklaracjach.",
+      "Dla warunkowego fragmentu interfejsu wydziel osobny komponent z własnym niezmiennym zestawem hooków."
+    ],
+    "verify": "Zmienianie warunku wielokrotnie nie generuje błędów i nie gubi stanu formularza.",
+    "warning": "Nie wyciszaj eslint-plugin-react-hooks, bo usunie ostrzeżenie bez naprawy błędu działania.",
+    "source": "https://react.dev/reference/rules/rules-of-hooks",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-maximum-update-depth",
+    "title": "React: Maximum update depth exceeded przy useEffect",
+    "symptom": "Po otwarciu strony CPU rośnie, komponent renderuje się w pętli i pojawia się błąd maximum update depth.",
+    "cause": "Efekt zmienia stan, od którego sam zależy, albo każdorazowo otrzymuje nowy obiekt zależności.",
+    "inspect": [
+      "Sprawdź listę dependencies useEffect i każdą funkcję setState wywoływaną wewnątrz efektu.",
+      "Z pomocą licznika renderów ustal, czy dependency to nowy obiekt, tablica lub callback w każdym renderze."
+    ],
+    "fix": [
+      "Usuń redundantny stan, jeśli wartość można wyliczyć podczas renderowania; w innym wypadku ogranicz aktualizację do rzeczywistej zmiany.",
+      "Stabilizuj potrzebne referencje za pomocą useMemo lub useCallback tylko wtedy, gdy rozwiązuje to konkretną przyczynę."
+    ],
+    "verify": "Liczba renderów stabilizuje się, a zmiana wejściowych danych nadal aktualizuje widok zgodnie z oczekiwaniem.",
+    "warning": "Nie dodawaj pustego [] bez analizy, bo możesz zamrozić potrzebne synchronizacje.",
+    "source": "https://react.dev/reference/react/useEffect",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-key-duplicate-list",
+    "title": "React: Encountered two children with the same key w liście rekordów",
+    "symptom": "Po aktualizacji lub filtrowaniu elementy listy mylą się, a konsola ostrzega o identycznych kluczach.",
+    "cause": "React używa key do zachowania tożsamości elementów; dwa rekordy o takim samym kluczu zrywają to dopasowanie.",
+    "inspect": [
+      "Porównaj identyfikatory zwrócone z API oraz wartości używane jako key przy mapowaniu listy.",
+      "Sprawdź, czy ta sama pozycja nie jest dokładana dwa razy wskutek paginacji lub nieidempotentnego fetch."
+    ],
+    "fix": [
+      "Wybierz stabilny unikalny identyfikator z danych, a gdy go brakuje, napraw model danych lub usuń faktyczny duplikat.",
+      "Przy stronicowaniu łącz wyniki po ID, nie przez ślepe doklejanie wszystkich odpowiedzi."
+    ],
+    "verify": "Po filtrowaniu, sortowaniu i aktualizacji każdy element zachowuje właściwą tożsamość i stan.",
+    "warning": "Nie używaj Math.random() ani indeksu tablicy do dynamicznej listy, która zmienia kolejność.",
+    "source": "https://react.dev/learn/rendering-lists",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-stale-state-handler",
+    "title": "React: setState nie zwiększa licznika po kilku szybkich kliknięciach",
+    "symptom": "Trzykrotne kliknięcie zwiększa licznik tylko raz, chociaż handler wywołał setState wielokrotnie.",
+    "cause": "Wszystkie aktualizacje w tej samej paczce mogły odczytać tę samą wartość stanu z zamknięcia funkcji.",
+    "inspect": [
+      "Sprawdź, czy handler zapisuje setCount(count + 1) kilka razy i porównaj wartości użyte w każdym wywołaniu.",
+      "Zweryfikuj czy kolejne zdarzenia faktycznie wywołują ten sam handler, czy problem leży w batching."
+    ],
+    "fix": [
+      "Zastosuj aktualizację funkcyjną setCount(prev => prev + 1), gdy nowa wartość zależy od poprzedniej.",
+      "Oddziel obliczenie nowego stanu od efektów ubocznych i unikaj bezpośredniej mutacji obiektu useState."
+    ],
+    "verify": "Każde zaplanowane zwiększenie jest widoczne po renderze i nie ginie przy szybkim wykonaniu handlera.",
+    "warning": "Nie próbuj naprawiać batching przez setTimeout bez zrozumienia aktualizacji funkcyjnych.",
+    "source": "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "react-effect-fetch-stale-response",
+    "title": "React: starsza odpowiedź fetch nadpisuje nowsze wyniki wyszukiwania",
+    "symptom": "Po szybkim wpisaniu nowego zapytania lista pokazuje odpowiedź dla poprzedniego tekstu.",
+    "cause": "Asynchroniczne requesty mogą zakończyć się w innej kolejności niż zostały wysłane.",
+    "inspect": [
+      "Zapisz kolejność startu i zakończenia żądań dla kolejnych wartości zapytania.",
+      "Sprawdź, czy funkcja cleanup efektu anuluje poprzednie żądanie lub ignoruje jego rezultat."
+    ],
+    "fix": [
+      "Użyj AbortController i przerwij poprzedni fetch przy zmianie zależności efektu, albo zastosuj numer kolejnego żądania.",
+      "Aktualizuj stan wyłącznie dla aktualnego zapytania i obsłuż AbortError osobno od rzeczywistej awarii API."
+    ],
+    "verify": "Po szybkim wpisywaniu znaków wynik odpowiada ostatniemu zapytaniu, niezależnie od kolejności odpowiedzi serwera.",
+    "warning": "Nie rozwiązuj wyścigu samym debounce — zmniejsza liczbę żądań, lecz nie daje gwarancji kolejności.",
+    "source": "https://react.dev/reference/react/useEffect",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "typescript-import-type-verbatim-module",
+    "title": "TypeScript: import must be type-only przy verbatimModuleSyntax",
+    "symptom": "Kompilator odrzuca import interfejsu, który miał być używany wyłącznie jako typ.",
+    "cause": "Przy verbatimModuleSyntax TypeScript wymaga poprawnego rozdzielenia importów wartości i typów.",
+    "inspect": [
+      "Sprawdź tsconfig pod kątem verbatimModuleSyntax i pliki wskazane przez TS1484.",
+      "Ustal, czy importowany symbol istnieje w runtime czy jest tylko aliasem lub interfejsem."
+    ],
+    "fix": [
+      "Zamień odpowiedni import na import type { ... } from '...' lub oznacz pojedyncze nazwy jako type.",
+      "Zostaw zwykłe importy dla wartości wykorzystywanych podczas działania JavaScriptu."
+    ],
+    "verify": "Typecheck nie zgłasza TS1484, a wynikowy JavaScript nie zawiera importów nieistniejących typów.",
+    "warning": "Nie wyłączaj konfiguracji TS tylko po to, by uniknąć poprawienia kilku importów.",
+    "source": "https://www.typescriptlang.org/tsconfig/verbatimModuleSyntax.html",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "typescript-no-overload-matches-call",
+    "title": "TypeScript: No overload matches this call w handlerze zdarzeń",
+    "symptom": "Komunikat TS2769 pojawia się przy wywołaniu funkcji z kilkoma sygnaturami, mimo pozornie zgodnych argumentów.",
+    "cause": "Żadna z dostępnych przeciążeń nie pasuje do całego zestawu przekazanych argumentów jednocześnie.",
+    "inspect": [
+      "W komunikacie kompilatora przeczytaj błąd dla każdego overload zamiast analizować tylko pierwszy wiersz.",
+      "Sprawdź union typów, opcjonalność parametrów oraz czy handler React otrzymuje event zamiast oczekiwanej wartości."
+    ],
+    "fix": [
+      "Zawęź typ wejścia przez warunek lub type guard przed wywołaniem przeciążonej funkcji.",
+      "Jeżeli to Twoje API, dodaj właściwą implementację obsługującą union lub wspólne przeciążenie zgodne z rzeczywistymi danymi."
+    ],
+    "verify": "Kompilacja przechodzi bez as any, a testy obejmują każdy dopuszczalny typ argumentu.",
+    "warning": "Nie używaj bezwarunkowego as unknown as, bo ukrywa niezgodność i może prowadzić do wyjątku runtime.",
+    "source": "https://www.typescriptlang.org/docs/handbook/2/functions.html",
+    "category": "nextjs-react"
+  },
+  {
+    "slug": "typescript-tsconfig-paths-runtime",
+    "title": "TypeScript: alias paths działa w edytorze, ale Node nie znajduje modułu",
+    "symptom": "TS i IDE rozwiązują @/lib/config, lecz uruchomiony skrypt Node zgłasza MODULE_NOT_FOUND.",
+    "cause": "paths w tsconfig służą do rozwiązywania typów i nie gwarantują zamiany importów w wygenerowanym kodzie Node.",
+    "inspect": [
+      "Sprawdź rozbieżność między ts-node, bundlerem, tsc i node uruchamiając dokładnie komendę produkcyjną.",
+      "Podejrzyj wygenerowane pliki JS, aby zobaczyć, czy alias pozostał w specyfikatorze importu."
+    ],
+    "fix": [
+      "Skonfiguruj zgodne aliasy w narzędziu runtime/bundlera lub użyj bezpośrednich importów względnych.",
+      "Dla kodu ESM rozważ poprawne package imports i spójną konfigurację eksportów pakietu."
+    ],
+    "verify": "Skrypt po zbudowaniu uruchamia się bez dodatkowych hacków, a moduł jest rozwiązywany tak samo na CI i lokalnie.",
+    "warning": "Nie zakładaj, że samo baseUrl/paths w tsconfig zmienia działanie importów w czystym Node.js.",
+    "source": "https://www.typescriptlang.org/tsconfig/paths.html",
+    "category": "nextjs-react"
+  }
+]
