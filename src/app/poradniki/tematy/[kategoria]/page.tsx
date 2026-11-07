@@ -31,7 +31,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
   return {
     ...metadata,
     alternates: { canonical: `https://bernecki.dev/poradniki/tematy/${kategoria}${page > 1 ? `?strona=${page}` : ""}` },
-    robots: page > 1 ? { index: false, follow: true } : { index: true, follow: true }
+    robots: { index: true, follow: true }
   };
 }
 
@@ -40,6 +40,8 @@ export default async function GuideCategoryPage({ params, searchParams }: Props)
   const category = getCategory(kategoria);
   if (!category) notFound();
   const { items, total, page, pages } = listGuides({ category: kategoria, page: parsePage(search.strona) });
+  const numericStart = Math.max(1, Math.min(pages - 4, page - 2));
+  const pageNumbers = [...new Set([1, ...Array.from({length: Math.min(5,pages)}, (_,i)=>numericStart+i), pages])].filter(n=>n>=1 && n<=pages).sort((a,b)=>a-b);
   if (!total) notFound();
   const url = `https://bernecki.dev/poradniki/tematy/${kategoria}`;
   const jsonLd = {
@@ -81,7 +83,7 @@ export default async function GuideCategoryPage({ params, searchParams }: Props)
     </section>
     {pages > 1 && <nav aria-label="Strony kategorii" className="mt-10 flex flex-wrap items-center justify-between gap-4 text-sm">
       {page > 1 ? <Link className="underline underline-offset-4" href={page === 2 ? `/poradniki/tematy/${kategoria}` : `/poradniki/tematy/${kategoria}?strona=${page - 1}`}>Poprzednia</Link> : <span />}
-      <span className="text-white/65">Strona {page} z {pages}</span>
+      <div className="flex flex-wrap items-center gap-2">{pageNumbers.map(n=><Link key={n} href={n===1 ? `/poradniki/tematy/${kategoria}` : `/poradniki/tematy/${kategoria}?strona=${n}`} aria-current={page===n ? "page" : undefined} className={`rounded-lg border px-3 py-2 ${page===n?"border-white/70 bg-white/15":"border-white/20"}`}>{n}</Link>)}</div>
       {page < pages ? <Link className="underline underline-offset-4" href={`/poradniki/tematy/${kategoria}?strona=${page + 1}`}>Następna</Link> : <span />}
     </nav>}
     <div className="mt-12"><Link href="/poradniki" className="underline underline-offset-4">Wróć do wszystkich poradników</Link></div>

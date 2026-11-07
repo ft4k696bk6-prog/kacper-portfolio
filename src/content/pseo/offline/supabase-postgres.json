@@ -1,0 +1,380 @@
+[
+  {
+    "slug": "supabase-view-security-invoker-rls-leak",
+    "title": "Supabase: widok SQL pokazuje cudze dane mimo włączonego RLS",
+    "symptom": "Zapytanie bezpośrednio do tabeli respektuje polityki RLS, ale API widoku SQL zwraca użytkownikowi wiersze innych osób.",
+    "cause": "Widoki PostgreSQL standardowo sprawdzają uprawnienia właściciela widoku; widok utworzony przez uprzywilejowaną rolę może ominąć polityki RLS bazowych tabel.",
+    "inspect": [
+      "Sprawdź, czy endpoint odczytuje tabelę czy VIEW oraz jaką rolą utworzono widok. Przetestuj ten sam filtr bezpośrednio na tabeli.",
+      "Zweryfikuj wersję Postgres i opcję security_invoker widoku, a potem porównaj wyniki dla dwóch niezależnych tokenów użytkownika."
+    ],
+    "fix": [
+      "W PostgreSQL 15 lub nowszym ustaw na właściwym widoku security_invoker=true, żeby sprawdzać uprawnienia roli wywołującej oraz reguły RLS.",
+      "W starszym PostgreSQL lub przy prywatnym widoku ogranicz GRANT dla anon/authenticated i trzymaj widok w schemacie niewystawionym przez Data API."
+    ],
+    "verify": "Po zmianie każdy użytkownik widzi wyłącznie dopuszczone wiersze, a anonimowe zapytanie do prywatnych danych nie daje dostępu do widoku.",
+    "warning": "Nie zakładaj, że włączenie RLS wyłącznie na tabeli chroni wszystkie utworzone nad nią widoki lub funkcje SECURITY DEFINER.",
+    "source": "https://supabase.com/docs/guides/database/views",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-rls-insert-with-check",
+    "title": "Supabase: new row violates row-level security policy przy INSERT",
+    "symptom": "Próba zapisania nowego rekordu zwraca błąd row-level security policy, choć SELECT działa.",
+    "cause": "INSERT ocenia warunek WITH CHECK dla nowego rekordu, nie sam warunek USING odczytu.",
+    "inspect": [
+      "Zapisz wartości owner_id i auth.uid() dla użytkownika wykonującego wstawienie w bezpiecznym środowisku testowym.",
+      "Sprawdź, czy tabela ma politykę FOR INSERT TO authenticated oraz czy klient nie wysyła pustego pola właściciela."
+    ],
+    "fix": [
+      "Przygotuj WITH CHECK wymuszający poprawne powiązanie właściciela z bieżącą tożsamością.",
+      "Ustaw owner_id na serwerze lub przez bezpieczny default oparty o tożsamość zamiast ufać dowolnej wartości klienta."
+    ],
+    "verify": "Poprawny rekord daje się dodać, a próba zapisania go dla innego właściciela jest nadal odrzucana.",
+    "warning": "Nie ustawiaj WITH CHECK (true) tylko po to, by uciszyć błąd uprawnień.",
+    "source": "https://supabase.com/docs/guides/database/postgres/row-level-security",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-update-using-with-check",
+    "title": "Supabase: UPDATE kończy się bez błędu, ale niczego nie zmienia",
+    "symptom": "Wywołanie update().eq() zwraca pusty wynik, chociaż rekord istnieje w bazie.",
+    "cause": "Polityka RLS dla UPDATE może nie dopuszczać aktualizowanego wiersza; ważna jest też widoczność przez SELECT i warunek WITH CHECK nowych wartości.",
+    "inspect": [
+      "Porównaj filtry eq i wartości kolumn, a następnie sprawdź rolę JWT i polityki dla UPDATE oraz SELECT.",
+      "Zbadaj, czy modyfikujesz kolumnę, która po zmianie przestanie spełniać WITH CHECK."
+    ],
+    "fix": [
+      "Dopasuj osobno warunki USING dla wierszy możliwych do zmiany i WITH CHECK dla wyniku aktualizacji.",
+      "Poproś o return danych lub liczby zmienionych wierszy i obsłuż przypadek zero zamiast zakładać sukces."
+    ],
+    "verify": "Aktualizacja własnego rekordu działa, a próba zmiany rekordu innej osoby nadal nie przechodzi.",
+    "warning": "Nie traktuj samego statusu HTTP 204 jako dowodu zmiany konkretnego rekordu.",
+    "source": "https://supabase.com/docs/guides/database/postgres/row-level-security",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-delete-rls-zero-rows",
+    "title": "Supabase: DELETE nie usuwa rekordu, chociaż zwraca sukces",
+    "symptom": "Po kliknięciu usuń element pozostaje w bazie, a zapytanie delete() nie zgłasza wyjątku.",
+    "cause": "DELETE podlega uprawnieniom i regułom widoczności RLS, więc żadne wiersze mogą nie pasować do warunków operacji.",
+    "inspect": [
+      "Zweryfikuj ID przesłane z formularza oraz czy użytkownik ma prawo odczytać i usunąć wskazany rekord.",
+      "Sprawdź istniejącą politykę FOR DELETE i to, czy soft delete nie jest właściwym procesem biznesowym."
+    ],
+    "fix": [
+      "Wprowadź regułę usuwania dla uprawnionego właściciela lub administratora z kontrolą po stronie bazy.",
+      "Dla danych wymagających historii zastosuj archiwizowanie i dziennik zmian zamiast fizycznego DELETE."
+    ],
+    "verify": "Wywołanie zwraca informację o usuniętej pozycji, rekord znika z dozwolonej listy, a cudze dane pozostają nietknięte.",
+    "warning": "Nie używaj service_role w przeglądarce do obchodzenia polityk usuwania.",
+    "source": "https://supabase.com/docs/guides/database/postgres/row-level-security",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-permission-denied-schema-public",
+    "title": "Supabase: permission denied for schema public pomimo policy RLS",
+    "symptom": "Żądanie API kończy się permission denied for schema public, chociaż polityki RLS wyglądają poprawnie.",
+    "cause": "Uprawnienia GRANT do schematu i obiektów są sprawdzane niezależnie od filtrów row-level security.",
+    "inspect": [
+      "Sprawdź grant USAGE ON SCHEMA i odpowiednie uprawnienia tabel dla ról używanych przez Data API.",
+      "Oddziel odmowę na poziomie schematu od braku prawa do konkretnego wiersza."
+    ],
+    "fix": [
+      "Przywróć wyłącznie wymagane granty dla wybranych schematów i tabel zgodnie z rolą użytkownika.",
+      "Zweryfikuj polityki RLS po zmianie grantów, bo poprawne GRANT bez RLS może poszerzyć dostęp bardziej niż planowano."
+    ],
+    "verify": "Uprawnione żądania działają, a rola anon nie uzyskuje dostępu do prywatnych tabel.",
+    "warning": "Nie nadaj publicznego USAGE i SELECT wszystkim rolom bez audytu exposed schemas.",
+    "source": "https://supabase.com/docs/guides/database/postgres/row-level-security",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-pgrst116-single-no-rows",
+    "title": "Supabase: PGRST116 przy .single(), gdy nie ma żadnego wiersza",
+    "symptom": "Wywołanie .single() zwraca PGRST116 i komunikat o braku pojedynczego obiektu.",
+    "cause": "Metoda .single() oczekuje dokładnie jednego rekordu, ale query mogło zwrócić zero lub więcej niż jeden.",
+    "inspect": [
+      "Sprawdź filtr kolumn i wynik tego samego zapytania bez .single().",
+      "Porównaj założenie unikalności rekordu z faktycznymi danymi oraz politykami RLS."
+    ],
+    "fix": [
+      "Jeżeli zero rekordów jest dopuszczalne biznesowo, zastosuj .maybeSingle() z osobną obsługą null.",
+      "Jeżeli rekord musi istnieć dokładnie jeden, napraw dane lub dodaj odpowiednie ograniczenie unikalności w bazie."
+    ],
+    "verify": "Pusty wynik nie generuje nieobsłużonego wyjątku, a dwa rekordy dla unikalnego identyfikatora są wykrywane.",
+    "warning": "Nie wyciszaj każdego PGRST116 jako null, jeżeli brak rekordu oznacza utratę danych.",
+    "source": "https://supabase.com/docs/reference/javascript/maybesingle",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-pgrst202-schema-cache",
+    "title": "Supabase: PGRST202 Could not find the function in schema cache",
+    "symptom": "Nowo utworzona funkcja SQL nie jest dostępna przez rpc(), choć wykonuje się w SQL Editor.",
+    "cause": "PostgREST korzysta z metadanych schematu i może wymagać ich odświeżenia po zmianie sygnatury funkcji.",
+    "inspect": [
+      "Sprawdź nazwę, schemat, typy argumentów oraz ich nazwy wysyłane w rpc().",
+      "Zweryfikuj, czy wybrana funkcja jest w schemacie dostępnym dla API i ma odpowiednie granty EXECUTE."
+    ],
+    "fix": [
+      "Dopasuj definicję funkcji do rzeczywistej sygnatury wywołania, bez kopiowania starego zestawu parametrów.",
+      "Po zmianach funkcji zaktualizuj cache schematu PostgREST zgodnie z dokumentacją platformy."
+    ],
+    "verify": "Wywołanie rpc działa dla prawidłowych argumentów, a nieprawidłowa rola nadal nie dostaje niedozwolonego dostępu.",
+    "warning": "Nie zmieniaj rutynowo SECURITY INVOKER na DEFINER bez analizy konsekwencji uprawnień.",
+    "source": "https://postgrest.org/en/stable/references/api/functions.html",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "postgres-23505-duplicate-key",
+    "title": "PostgreSQL: 23505 duplicate key value violates unique constraint",
+    "symptom": "Wstawienie lub synchronizacja danych zatrzymuje się na SQLSTATE 23505.",
+    "cause": "Indeks UNIQUE lub PRIMARY KEY wykrył powtórzoną wartość, którą model danych uznaje za unikalną.",
+    "inspect": [
+      "Przeczytaj nazwę naruszonego constraint i kolumny podane w szczegółach błędu.",
+      "Sprawdź, czy to prawdziwy duplikat, ponowienie webhooka czy konflikt numeracji identyfikatorów."
+    ],
+    "fix": [
+      "Dla idempotentnych importów zastosuj jawne ON CONFLICT z konkretnym kluczem biznesowym i właściwą semantyką aktualizacji.",
+      "Jeżeli dane nie powinny być unikalne w tym zakresie, przeprojektuj indeks po sprawdzeniu wymagań zamiast wyłączać wszystkie ograniczenia."
+    ],
+    "verify": "Ponowne przetworzenie tej samej wiadomości nie tworzy duplikatu i nie niszczy wcześniejszych danych.",
+    "warning": "Nie stosuj ON CONFLICT DO NOTHING dla wszystkich błędów bez ich rejestrowania.",
+    "source": "https://www.postgresql.org/docs/current/errcodes-appendix.html",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "postgres-40p01-deadlock-detected",
+    "title": "PostgreSQL: 40P01 deadlock detected podczas równoczesnego zapisu",
+    "symptom": "Podczas równoległego zapisywania dwóch rekordów jedna transakcja kończy się błędem deadlock detected, choć pojedyncze zapisy działają.",
+    "cause": "Dwie transakcje czekają na blokady trzymane przez siebie nawzajem; PostgreSQL przerywa jedną, by rozwiązać cykl zależności.",
+    "inspect": [
+      "Sprawdź szczegóły deadlock w logach Postgres: PID transakcji, relacje i statementy oczekujące na blokadę.",
+      "Porównaj kolejność UPDATE dwóch tabel w konkurujących operacjach i sprawdź długość transakcji, szczególnie przy callbackach CRM."
+    ],
+    "fix": [
+      "Ustal spójny porządek pobierania blokad i modyfikowania tabel dla wszystkich kodowych ścieżek tego samego procesu.",
+      "Skróć transakcje, a SQLSTATE 40P01 obsłuż ograniczonym retry całej transakcji z idempotentnym zapisem skutków ubocznych."
+    ],
+    "verify": "Równoległe testy obciążeniowe kończą się poprawnymi wynikami bez utraty aktualizacji oraz bez podwójnych webhooków i powtórnych płatności.",
+    "warning": "Nie zwiększaj wyłącznie lock_timeout jako rozwiązania, ponieważ nie usuwa to cyklicznej zależności blokad między transakcjami.",
+    "source": "https://www.postgresql.org/docs/current/explicit-locking.html",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "postgres-22p02-invalid-uuid",
+    "title": "PostgreSQL: 22P02 invalid input syntax for type uuid",
+    "symptom": "API zwraca SQLSTATE 22P02, gdy filtr lub INSERT otrzymał tekst niebędący prawidłowym UUID.",
+    "cause": "Kolumna typu uuid wymaga poprawnego formatu identyfikatora, a frontend może przesyłać pusty string lub tekst undefined.",
+    "inspect": [
+      "Zapisz typ wartości przesyłanej do endpointu i sprawdź, czy parametr trasy naprawdę zawiera ID.",
+      "Zweryfikuj, czy formularz nie zastępuje brakującego UUID pustym ciągiem zamiast null."
+    ],
+    "fix": [
+      "Dodaj walidację identyfikatora po stronie serwera przed wywołaniem bazy i rozróżniaj brak ID od błędnego formatu.",
+      "Nie używaj rzutowania wszystkich wartości na tekst; przenoś identyfikator z odpowiedniego pola rekordu."
+    ],
+    "verify": "Nieprawidłowy identyfikator daje kontrolowane 400, a poprawny przechodzi do właściwego zapytania.",
+    "warning": "Nie konstruuj filtrów SQL przez konkatenację niesprawdzonego parametru z URL.",
+    "source": "https://www.postgresql.org/docs/current/datatype-uuid.html",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "postgres-22001-string-too-long",
+    "title": "PostgreSQL: 22001 value too long for type character varying",
+    "symptom": "Zapis dłuższego opisu kończy się błędem 22001 zamiast utworzeniem rekordu.",
+    "cause": "Kolumna varchar(n) ma limit długości, który może być mniejszy niż rzeczywista treść formularza.",
+    "inspect": [
+      "Porównaj długość wysyłanej wartości z definicją kolumny w schemacie bazy.",
+      "Sprawdź, czy API nie dopisuje dodatkowego prefiksu lub JSON do pola przeznaczonego na krótki tekst."
+    ],
+    "fix": [
+      "Jeżeli pole przechowuje pełny opis, rozważ typ text i walidację limitu biznesowego na poziomie aplikacji.",
+      "Jeżeli limit jest celowy, pokaż licznik znaków w formularzu i waliduj długość po stronie serwera."
+    ],
+    "verify": "Dłuższy, dopuszczalny tekst zapisuje się, a ponadlimitowy dostaje jasny komunikat walidacyjny.",
+    "warning": "Nie obcinaj po cichu danych klienta bez poinformowania użytkownika.",
+    "source": "https://www.postgresql.org/docs/current/datatype-character.html",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "postgres-57014-statement-timeout",
+    "title": "PostgreSQL: 57014 canceling statement due to statement timeout",
+    "symptom": "Zapytanie do bazy zostaje przerwane kodem 57014, szczególnie przy większej tabeli.",
+    "cause": "Baza przerwała wykonanie po przekroczeniu limitu czasu lub na żądanie anulowania.",
+    "inspect": [
+      "Przejrzyj plan EXPLAIN ANALYZE w bezpiecznym środowisku i czas wykonania z filtrami produkcyjnymi.",
+      "Sprawdź indeksy kolumn używanych w WHERE, kolejność złączeń i czy aplikacja nie pobiera niepotrzebnie całej tabeli."
+    ],
+    "fix": [
+      "Dodaj indeks pasujący do rzeczywistego predykatu lub zmniejsz zakres zapytania przez paginację i selekcję kolumn.",
+      "Rozważ zwiększenie timeoutu dopiero po pomiarze i wykluczeniu problemu wydajnościowego."
+    ],
+    "verify": "Zapytanie wykonuje się w wymaganym czasie i zwraca taką samą poprawną liczbę rekordów.",
+    "warning": "Nie ustawiaj bezterminowego timeoutu dla każdego endpointu w odpowiedzi na pojedynczy wolny raport.",
+    "source": "https://www.postgresql.org/docs/current/runtime-config-client.html",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "postgres-40001-serialization-failure",
+    "title": "PostgreSQL: 40001 could not serialize access due to concurrent update",
+    "symptom": "Dwie operacje na tych samych danych kończą się błędem SQLSTATE 40001 przy wyższym poziomie izolacji.",
+    "cause": "Transakcja nie mogła zostać bezpiecznie zatwierdzona zgodnie z wymogami izolacji i musi zostać powtórzona jako całość.",
+    "inspect": [
+      "Sprawdź poziom izolacji i czy zapis następuje w kilku oddzielnych transakcjach zamiast jednej.",
+      "Zidentyfikuj konflikty występujące przy równoczesnym edytowaniu konkretnej umowy."
+    ],
+    "fix": [
+      "Ponów kompletną transakcję z ograniczoną liczbą prób i narastającym opóźnieniem, zachowując idempotentność.",
+      "Rozważ ograniczenie długości transakcji i spójny porządek modyfikacji rekordów."
+    ],
+    "verify": "Dwie równoległe operacje kończą się prawidłowym wynikiem bez podwójnego wykonania skutków ubocznych.",
+    "warning": "Nie powtarzaj tylko ostatniego INSERT wewnątrz uszkodzonej transakcji.",
+    "source": "https://www.postgresql.org/docs/current/transaction-iso.html",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "postgres-42p01-relation-does-not-exist",
+    "title": "PostgreSQL: 42P01 relation does not exist po migracji",
+    "symptom": "Aplikacja zgłasza 42P01, choć tabela była tworzona w środowisku developerskim.",
+    "cause": "Baza nie znajduje relacji pod podaną nazwą lub w aktywnym search_path.",
+    "inspect": [
+      "Sprawdź identyfikator bazy produkcyjnej, używany schemat i aktualne search_path sesji.",
+      "Porównaj wykonane migracje z plikami w repozytorium, zamiast tworzyć tabelę ręcznie bez historii."
+    ],
+    "fix": [
+      "Uruchom brakujące, przetestowane migracje na właściwym środowisku z kopią zapasową.",
+      "Jeśli tabela istnieje w innym schemacie, użyj poprawnej kwalifikacji schemat.nazwa i upewnij się, że rola ma uprawnienia."
+    ],
+    "verify": "Zapytanie do docelowej bazy działa zarówno lokalnie, jak i na produkcji, a migracje mają tę samą wersję.",
+    "warning": "Nie resetuj produkcyjnej bazy w odpowiedzi na brak jednej relacji.",
+    "source": "https://www.postgresql.org/docs/current/ddl-schemas.html",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-storage-private-403",
+    "title": "Supabase Storage: 403 przy pobraniu prywatnego pliku",
+    "symptom": "Plik istnieje w buckecie, ale publiczny adres Storage zwraca odmowę dostępu.",
+    "cause": "Bucket prywatny wymaga uwierzytelnionego dostępu lub podpisanego URL, a polityka Storage może dodatkowo ograniczać operacje.",
+    "inspect": [
+      "Zweryfikuj public/private ustawienie bucketa i rolę użytkownika pobierającego plik.",
+      "Sprawdź polityki na storage.objects, ścieżkę folderu i przypisanie właściciela."
+    ],
+    "fix": [
+      "Dla prywatnych plików generuj signed URL o ograniczonym czasie życia na zaufanym serwerze albo pobieraj przez autoryzowane SDK.",
+      "Przekazuj w URL jedynie ścieżkę do uprawnionego pliku i sprawdzaj uprawnienia jeszcze przed wygenerowaniem podpisu."
+    ],
+    "verify": "Autoryzowany użytkownik pobiera plik, osoba bez dostępu dostaje odmowę, a URL wygasa zgodnie z ustawieniem.",
+    "warning": "Nie przełączaj całego bucketa klientów na publiczny tylko po to, by obraz był widoczny.",
+    "source": "https://supabase.com/docs/guides/storage/buckets/fundamentals",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-storage-upload-conflict-409",
+    "title": "Supabase Storage: 409 Asset Already Exists podczas ponownego uploadu",
+    "symptom": "Drugi upload pliku pod identyczną ścieżką zwraca konflikt zamiast nadpisania.",
+    "cause": "Domyślne zachowanie operacji tworzenia pliku może nie zezwalać na nadpisanie istniejącego obiektu.",
+    "inspect": [
+      "Zapisz dokładną nazwę bucketa i ścieżkę obiektu, a nie samą nazwę lokalnego pliku.",
+      "Sprawdź, czy ponowne wysłanie jest celowe oraz czy użytkownik ma odpowiednie prawa do INSERT i UPDATE."
+    ],
+    "fix": [
+      "Jeżeli pliki mają być wersjonowane, twórz unikalne bezpieczne ścieżki i zapisuj referencję do aktualnej wersji.",
+      "Jeśli nadpisanie jest wymogiem, użyj świadomie upsert z właściwymi politykami i kontrolą kolizji."
+    ],
+    "verify": "Wielokrotne przesłanie pliku zachowuje ustaloną politykę wersji, a dane innego klienta nie są nadpisywane.",
+    "warning": "Nie ustawiaj upsert=true bez sprawdzenia skutków dla istniejących załączników.",
+    "source": "https://supabase.com/docs/guides/storage/uploads/standard-uploads",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-email-redirect-not-allowed",
+    "title": "Supabase Auth: magic link wraca na zły adres po kliknięciu",
+    "symptom": "Link logowania przekierowuje na localhost lub nieoczekiwany adres zamiast na produkcyjną aplikację.",
+    "cause": "Adres redirectTo i lista dozwolonych adresów w konfiguracji Auth muszą się zgadzać z prawdziwą domeną.",
+    "inspect": [
+      "Sprawdź Site URL, Redirect URLs oraz redirectTo przekazywany przy generowaniu linku.",
+      "Rozróżnij domenę preview od produkcyjnej i zweryfikuj protokół HTTPS i końcową ścieżkę callbacka."
+    ],
+    "fix": [
+      "Dodaj dokładny adres produkcyjnego callbacka do allowlist i ustaw poprawny Site URL dla wdrożenia.",
+      "W kodzie obsługi callbacka bezpiecznie wymień kod na sesję, potem przekieruj do ograniczonego zestawu dozwolonych tras."
+    ],
+    "verify": "Po kliknięciu nowego linku użytkownik trafia na właściwą domenę i jest zalogowany.",
+    "warning": "Nie stosuj otwartego przekierowania na dowolny URL dostarczony przez użytkownika.",
+    "source": "https://supabase.com/docs/guides/auth/redirect-urls",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-auth-otp-expired",
+    "title": "Supabase Auth: OTP expired po dłuższym czekaniu z logowaniem",
+    "symptom": "Po otwarciu emaila z linkiem logowania system pokazuje expired lub invalid token.",
+    "cause": "Token jednorazowy ma ograniczoną ważność i może też zostać wcześniej zużyty.",
+    "inspect": [
+      "Sprawdź czas wygenerowania linku i czy ten sam link nie był już otwarty w innym oknie lub skanerze poczty.",
+      "Zweryfikuj konfigurację ważności OTP oraz sposób obsługi callbacka w aplikacji."
+    ],
+    "fix": [
+      "Pokaż użytkownikowi przycisk do wygenerowania nowego linku i jasny komunikat o wygaśnięciu. Sprawdź szczególnie, czy prefetch linków w skrzynce nie zużywa tokenu przed kliknięciem użytkownika.",
+      "Nie próbuj odzyskiwać zużytego tokenu; nowa próba powinna utworzyć nowy, niezależny proces logowania."
+    ],
+    "verify": "Nowy token pozwala zalogować się tylko raz, a stary pozostaje nieważny.",
+    "warning": "Nie wydłużaj bez potrzeby czasu życia tokenów logowania kosztem bezpieczeństwa.",
+    "source": "https://supabase.com/docs/guides/auth/auth-email-passwordless",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-realtime-subscriber-no-events",
+    "title": "Supabase Realtime: subskrypcja działa, ale nie ma zmian w tabeli",
+    "symptom": "Kanał realtime pokazuje stan SUBSCRIBED, lecz INSERT i UPDATE nie odświeżają listy.",
+    "cause": "Subskrypcja kanału nie gwarantuje publikowania zmian tabeli ani dostępu do nich przez RLS.",
+    "inspect": [
+      "Sprawdź, czy tabela jest dodana do właściwej publikacji zmian Postgres oraz czy klient subskrybuje poprawny schemat i event.",
+      "Zweryfikuj, czy token i polityki SELECT pozwalają użytkownikowi zobaczyć zmienione rekordy."
+    ],
+    "fix": [
+      "Włącz potrzebną publikację zmian na właściwej tabeli i ogranicz zakres subskrypcji do rzeczywiście wymaganych danych.",
+      "Dodaj mechanizm ponownego pobrania danych po reconnect i aktualizuj listę po identyfikatorze rekordu."
+    ],
+    "verify": "Zmiany pojawiają się u dwóch uprawnionych użytkowników, a nieuprawniony nie dostaje informacji o cudzych rekordach.",
+    "warning": "Nie traktuj Realtime jako trwałej kolejki gwarantującej dostarczenie każdego zdarzenia offline.",
+    "source": "https://supabase.com/docs/guides/realtime/postgres-changes",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-edge-function-invalid-jwt",
+    "title": "Supabase Edge Function: Invalid JWT przy wywołaniu z aplikacji",
+    "symptom": "Funkcja zwraca 401 lub Invalid JWT, podczas gdy zwykłe zapytanie do bazy działa.",
+    "cause": "Żądanie funkcji może wymagać poprawnego tokenu użytkownika lub innej konfiguracji weryfikacji JWT niż użyta przez klienta.",
+    "inspect": [
+      "Sprawdź nagłówek Authorization oraz czy przekazywany jest aktualny user access token, a nie publiczny anon key jako sesja.",
+      "Zweryfikuj ustawienie verify_jwt dla tej konkretnej funkcji i wymagany model autoryzacji."
+    ],
+    "fix": [
+      "Wywołuj funkcję przez SDK z aktualnym kontekstem sesji lub przekazuj prawidłowy token z zaufanego serwera.",
+      "Jeśli endpoint ma być publiczny, wyłącz weryfikację tylko świadomie i z własnym mechanizmem kontroli operacji."
+    ],
+    "verify": "Autoryzowane żądanie działa, a wygasły lub nieprawidłowy token nie otwiera prywatnej funkcji.",
+    "warning": "Nie wyłączaj weryfikacji dla całego projektu tylko w reakcji na pojedyncze 401.",
+    "source": "https://supabase.com/docs/guides/functions/auth",
+    "category": "supabase-bazy"
+  },
+  {
+    "slug": "supabase-postgres-connection-pool-exhausted",
+    "title": "Supabase: too many clients already przy połączeniu z PostgreSQL",
+    "symptom": "Aplikacja okresowo przestaje łączyć się z bazą i loguje too many clients already.",
+    "cause": "Liczba bezpośrednich połączeń przekracza limit instancji, często gdy każde żądanie serwerless otwiera nową sesję.",
+    "inspect": [
+      "Sprawdź aktywne połączenia i ich źródła w metrykach oraz pg_stat_activity.",
+      "Zweryfikuj, czy kod tworzy nowego klienta na każde zapytanie i czy połączenia są odpowiednio zwalniane."
+    ],
+    "fix": [
+      "Dopasuj sposób łączenia do modelu serverless, korzystając z zalecanego poolera i współdzielenia klientów tam, gdzie jest bezpieczne.",
+      "Wprowadź rozsądne limity równoległości i timeouty; rozważ większy plan dopiero po pomiarach."
+    ],
+    "verify": "Przy typowym ruchu liczba połączeń pozostaje stabilna, a zapytania nie otrzymują błędu przeciążenia.",
+    "warning": "Nie rozwiązywaj wycieku połączeń wyłącznie zwiększeniem limitu instancji.",
+    "source": "https://supabase.com/docs/guides/database/connecting-to-postgres",
+    "category": "supabase-bazy"
+  }
+]

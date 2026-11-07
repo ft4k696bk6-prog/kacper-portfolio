@@ -1,0 +1,362 @@
+[
+  {
+    "slug": "vercel-build-node-version-mismatch",
+    "title": "Vercel: build działa lokalnie, ale pada przez inną wersję Node.js",
+    "symptom": "Projekt buduje się na komputerze, a na Vercel log pokazuje błąd składni albo niezgodność wersji runtime.",
+    "cause": "Lokalny i produkcyjny Node mogą mieć inne możliwości języka, modułów i zależności binarnych.",
+    "inspect": [
+      "Zapisz wersję node --version lokalnie oraz wersję Node wybraną w ustawieniach projektu Vercel.",
+      "Sprawdź pole engines w package.json i wymagania rzeczywistych zależności."
+    ],
+    "fix": [
+      "Ustal wspieraną wersję Node dla frameworka i ujednolić ją w package.json, CI i projekcie Vercel.",
+      "Po aktualizacji wykonaj czystą instalację npm ci i nowy build, a nie samo ponowienie starego deploymentu."
+    ],
+    "verify": "Identyczna wersja Node przechodzi wszystkie testy i build zarówno lokalnie, jak i w Vercel.",
+    "warning": "Nie wybieraj najnowszej wersji bez sprawdzenia zgodności natywnych pakietów.",
+    "source": "https://vercel.com/docs/functions/runtimes/node-js",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-monorepo-root-directory",
+    "title": "Vercel: nie znaleziono package.json w monorepo",
+    "symptom": "Wdrożenie monorepo nie widzi package.json lub uruchamia build niewłaściwej aplikacji.",
+    "cause": "Root Directory projektu może wskazywać katalog repozytorium zamiast folderu konkretnej aplikacji.",
+    "inspect": [
+      "Sprawdź strukturę apps/, packages/ oraz miejsce faktycznego package.json dla aplikacji.",
+      "Porównaj Root Directory i polecenia install/build z katalogiem, z którego wykonywane są w Vercel."
+    ],
+    "fix": [
+      "Ustaw Root Directory na rzeczywistą aplikację lub skonfiguruj monorepo zgodnie z używanym workspace managerem.",
+      "Upewnij się, że zależności współdzielonych pakietów są dostępne przy buildzie i że konfiguracja nie odcina potrzebnych plików."
+    ],
+    "verify": "Podgląd PR i produkcja budują tę samą aplikację, a wynikowy adres pokazuje poprawne komponenty.",
+    "warning": "Nie przenoś package.json do katalogu głównego na ślepo, jeśli repo obsługuje kilka aplikacji.",
+    "source": "https://vercel.com/docs/monorepos",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-output-directory-wrong",
+    "title": "Vercel: wdrożenie READY, ale strona pokazuje pusty katalog",
+    "symptom": "Build kończy się sukcesem, lecz domena zwraca 404 albo pusty widok po publikacji.",
+    "cause": "Ustawiony Output Directory lub preset frameworka może wskazywać katalog inny niż rzeczywisty rezultat buildu.",
+    "inspect": [
+      "Sprawdź framework preset, Build Command i Output Directory projektu.",
+      "Porównaj artefakty lokalnego buildu z oczekiwaniami wybranego frameworka, np. Next.js vs statyczne Vite."
+    ],
+    "fix": [
+      "Usuń przestarzałe ręczne ustawienie output, jeśli framework zarządza nim automatycznie.",
+      "Dla statycznego generatora ustaw rzeczywisty katalog wynikowy i przebuduj projekt."
+    ],
+    "verify": "Adres produkcyjny zwraca poprawny HTML i ładuje JS/CSS, a nie tylko status READY w panelu.",
+    "warning": "Nie traktuj udanego deploymentu jako testu działania strony dla odwiedzających.",
+    "source": "https://vercel.com/docs/deployments/configure-a-build",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-cron-endpoint-401",
+    "title": "Vercel Cron Jobs: endpoint odpowiada 401 po uruchomieniu zadania",
+    "symptom": "Zadanie cron jest widoczne w panelu, ale wywołanie trasy API nie przechodzi autoryzacji.",
+    "cause": "Endpoint może wymagać właściwego nagłówka Authorization dla CRON_SECRET albo ruch jest blokowany przez osobne middleware.",
+    "inspect": [
+      "Sprawdź logi pojedynczego wywołania Cron Job i status odpowiedzi endpointu.",
+      "Zweryfikuj, czy tajny token jest skonfigurowany w odpowiednim środowisku oraz czy trasa nie przekierowuje na login."
+    ],
+    "fix": [
+      "Skonfiguruj endpoint do weryfikowania nagłówka Bearer i porównywania go z serwerowym CRON_SECRET.",
+      "Oddziel autoryzację automatu od sesji użytkownika i nie wystawiaj otwartej trasy wykonującej kosztowne operacje."
+    ],
+    "verify": "Zadanie uruchamia się z uprawnieniem cron, a niezalogowane żądanie bez sekretu dostaje 401.",
+    "warning": "Nie wpisuj sekretu cron do publicznego URL ani do kodu klienta. Trasa wykonywana bez ważnego tokenu musi pozostać niedostępna nawet po poznaniu jej adresu.",
+    "source": "https://vercel.com/docs/cron-jobs",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-function-timeout-external-api",
+    "title": "Vercel Function timed out przy wolnym zewnętrznym API",
+    "symptom": "Funkcja serwerowa zwraca timeout, gdy czeka na odpowiedź dostawcy zamiast wykonać logikę biznesową.",
+    "cause": "Czas oczekiwania na zewnętrzne żądanie może zużyć cały budżet wykonania funkcji.",
+    "inspect": [
+      "Z logów odczytaj czas trwania requestu i ustal, która integracja odpowiada najwolniej.",
+      "Sprawdź, czy timeout dotyczy funkcji Vercel, fetch do dostawcy czy połączenia z bazą."
+    ],
+    "fix": [
+      "Dodaj własny AbortSignal.timeout dla wywołań zewnętrznych i jasno obsłuż przekroczenie limitu.",
+      "Dłuższe zadania oddziel od krótkiej odpowiedzi HTTP przez kolejkowanie i mechanizm retry, jeśli proces na to pozwala."
+    ],
+    "verify": "Przekroczenie czasu zewnętrznego API daje kontrolowany błąd, a zwykłe żądania nie przekraczają limitu.",
+    "warning": "Nie wydłużaj bez końca jednego żądania klienta, jeśli operacja powinna działać asynchronicznie.",
+    "source": "https://vercel.com/docs/functions",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-deployment-ready-old-content",
+    "title": "Vercel: domena pokazuje poprzednią wersję mimo nowego deploymentu",
+    "symptom": "Nowy deployment ma status READY, ale użytkownik nadal widzi starą wersję strony.",
+    "cause": "Projekt może wdrażać niewłaściwą gałąź, a CDN/przeglądarka mogą przechowywać starsze odpowiedzi.",
+    "inspect": [
+      "Porównaj SHA aktualnego deploymentu produkcyjnego z SHA nowego commita w GitHubie.",
+      "Sprawdź w panelu przypisaną domenę, production branch i nagłówki cache dla zmienionej trasy."
+    ],
+    "fix": [
+      "Zweryfikuj, czy nowa zmiana trafiła do gałęzi produkcyjnej; jeśli nie, scal ją zgodnie z procesem CI.",
+      "Dla danych odświeżanych przez ISR przeanalizuj revalidate i cache; nie myl opóźnionej aktualizacji z błędnym deploymentem."
+    ],
+    "verify": "Nowy SHA jest aktywny pod docelową domeną, a zewnętrzna przeglądarka widzi nową treść.",
+    "warning": "Nie wyłączaj globalnego cache bez zidentyfikowania warstwy powodującej różnicę.",
+    "source": "https://vercel.com/docs/deployments",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-preview-protection-401",
+    "title": "Vercel: podgląd PR zwraca 401 dla niezalogowanego klienta",
+    "symptom": "Adres preview wyświetla stronę logowania Vercel albo HTTP 401 zamiast zawartości.",
+    "cause": "Deployment Protection może ograniczać dostęp do podglądów dla członków zespołu.",
+    "inspect": [
+      "Sprawdź, czy adres jest deploymentem preview i jaką ma politykę dostępu w panelu projektu.",
+      "Porównaj dostęp jako zalogowany członek zespołu i w oknie incognito."
+    ],
+    "fix": [
+      "Udostępnij uprawniony link podglądu lub użyj właściwego mechanizmu zapraszania do projektu. Najpierw ustal, czy klient potrzebuje stałego środowiska demonstracyjnego, czy jednorazowego podglądu zmiany.",
+      "Jeśli trzeba dać klientowi publiczne demo, rozważ osobne środowisko z celowo ustawionym dostępem i bez sekretów testowych."
+    ],
+    "verify": "Klient otwiera przewidziany adres, a wrażliwe preview nadal są chronione.",
+    "warning": "Nie wyłączaj zabezpieczeń całego zespołu tylko po to, by komuś pokazać jedną stronę.",
+    "source": "https://vercel.com/docs/deployment-protection",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-custom-domain-dns-pending",
+    "title": "Vercel: domena nadal Pending Verification po zmianie DNS",
+    "symptom": "Po podpięciu domeny panel nadal wymaga weryfikacji lub wskazuje niezgodny rekord DNS.",
+    "cause": "Rzeczywiste rekordy DNS mogą różnić się od instrukcji Vercel albo domena jest zarządzana przez inny serwer nazw.",
+    "inspect": [
+      "Sprawdź autorytatywne nameservers i rekordy A/CNAME/TXT zamiast oceniać tylko panel rejestratora.",
+      "Porównaj dokładny host rekordu z instrukcją dla domeny głównej i subdomeny."
+    ],
+    "fix": [
+      "Usuń sprzeczne rekordy dla tego samego hosta i skonfiguruj wymagane wartości we właściwej strefie DNS.",
+      "Jeśli Vercel wymaga dowodu własności, dodaj wskazany rekord TXT i poczekaj na propagację, nie tworząc fikcyjnych rekordów."
+    ],
+    "verify": "Domena przechodzi w stan zweryfikowany i zwraca właściwą stronę po HTTPS.",
+    "warning": "Nie zakładaj, że zmiana rekordu w nieautorytatywnej strefie ma wpływ na publiczny DNS.",
+    "source": "https://vercel.com/docs/domains",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-ssl-certificate-pending",
+    "title": "Vercel: certyfikat SSL pozostaje Pending dla nowej domeny",
+    "symptom": "Domena działa czasem po HTTP, ale HTTPS pokazuje błąd certyfikatu lub panel nie kończy jego wydawania.",
+    "cause": "Proces wystawienia certyfikatu wymaga poprawnego wskazania DNS i możliwości weryfikacji domeny.",
+    "inspect": [
+      "Sprawdź status domeny w Vercel oraz wynik publicznego DNS dla wszystkich przypiętych hostów.",
+      "Zweryfikuj, czy rekordy CAA nie ograniczają dopuszczalnych wystawców certyfikatów."
+    ],
+    "fix": [
+      "Popraw konfigurację domeny i usuń błędne rekordy kierujące na inny hosting.",
+      "Po naprawie DNS pozwól platformie dokończyć automatyczny proces certyfikacji i obserwuj status."
+    ],
+    "verify": "HTTPS działa bez ostrzeżeń certyfikatu dla poprawnego hosta oraz jego używanych subdomen.",
+    "warning": "Nie wklejaj przypadkowego ręcznego certyfikatu, gdy domena jest obsługiwana przez automatyczne TLS.",
+    "source": "https://vercel.com/docs/domains/working-with-ssl",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "vercel-404-on-rewrite",
+    "title": "Vercel: rewrite kieruje żądania na 404 zamiast do aplikacji",
+    "symptom": "Po dodaniu rewrite część tras lub API pokazuje 404 mimo istnienia odpowiednich stron.",
+    "cause": "Reguły routingowe mogą przechwytywać żądania w złej kolejności lub kierować do nieistniejącej ścieżki.",
+    "inspect": [
+      "Zapisz oryginalny URL i końcowy URL żądania w odpowiedzi oraz kolejność reguł.",
+      "Sprawdź konfigurację rewrites, redirects i obsługę tras w frameworku."
+    ],
+    "fix": [
+      "Zawęź pattern rewrite do właściwego prefixu i skieruj go na rzeczywiście istniejącą trasę.",
+      "Dodaj test dla zwykłych stron, API i plików statycznych, aby jedna reguła nie pochłaniała całej aplikacji."
+    ],
+    "verify": "Każda przewidziana trasa zwraca prawidłową zawartość, a pozostałe nadal dają oczekiwane 404.",
+    "warning": "Nie ustawiaj uniwersalnego rewrite na stronę główną, bo może to maskować nieistniejące URL.",
+    "source": "https://vercel.com/docs/rewrites",
+    "category": "vercel-hosting"
+  },
+  {
+    "slug": "github-actions-fork-secrets-missing",
+    "title": "GitHub Actions: sekrety nie działają w pull request z forka",
+    "symptom": "Test PR z zewnętrznego forka nie widzi sekretu, choć workflow main działa poprawnie.",
+    "cause": "GitHub ogranicza dostęp niezaufanych workflow pull_request do wrażliwych sekretów.",
+    "inspect": [
+      "Sprawdź event uruchomienia, pochodzenie gałęzi i poziom uprawnień tokenu w tym jobie.",
+      "Porównaj bezpieczny workflow testowy z jobem deploymentowym korzystającym z sekretów."
+    ],
+    "fix": [
+      "Oddziel testy wykonywane bez sekretów od zaufanych etapów wdrożenia wykonywanych po zatwierdzeniu.",
+      "Jeśli potrzebna jest integracja w testach, użyj odpowiednio ograniczonego środowiska lub mocków."
+    ],
+    "verify": "PR z forka przechodzi testy publiczne bez ujawnienia sekretów, a deploy uruchamia się dopiero na zaufanym kodzie.",
+    "warning": "Nie używaj pull_request_target do wykonania niezaufanego kodu z uprawnionym tokenem.",
+    "source": "https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-github-token-403",
+    "title": "GitHub Actions: git push kończy się błędem 403 Resource not accessible",
+    "symptom": "Job przechodzi testy, lecz nie może zapisać commita do repozytorium.",
+    "cause": "GITHUB_TOKEN może mieć tylko read permissions lub reguły ochrony gałęzi blokują zapis.",
+    "inspect": [
+      "Sprawdź permissions workflow i rzeczywiste uprawnienia tokenu w uruchomionym jobie.",
+      "Zweryfikuj branch protection i politykę PR względem automatycznych zapisów na main."
+    ],
+    "fix": [
+      "Dla dozwolonego commita dodaj minimalne permissions: contents: write albo publikuj zmianę przez PR, gdy main jest chroniony.",
+      "Używaj actions/checkout z odpowiednim uwierzytelnieniem i wypychaj tylko do właściwego repo i gałęzi."
+    ],
+    "verify": "Automat zapisuje zmianę wyłącznie tam, gdzie ma uprawnienie, a chronione reguły repo pozostają aktywne.",
+    "warning": "Nie wyłączaj ochrony main tylko po to, by skrypt omijał review. Jeśli reguły wymagają PR, nie należy wykonywać obejścia przez osobisty token o szerszych prawach.",
+    "source": "https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-schedule-not-starting",
+    "title": "GitHub Actions: harmonogram schedule nie uruchamia się codziennie",
+    "symptom": "Workflow z cron działa przez Run workflow, ale nie pojawia się uruchomienie o zaplanowanej porze.",
+    "cause": "Schedule może być opóźniany, wymaga obecności pliku workflow na gałęzi domyślnej i podlega ustawieniom repo.",
+    "inspect": [
+      "Sprawdź, czy workflow jest na default branch i czy Actions są włączone.",
+      "Zweryfikuj poprawność składni cron oraz rzeczywistą strefę czasową i godzinę uruchomienia."
+    ],
+    "fix": [
+      "Nie projektuj krytycznego procesu w oparciu o dokładną minutę startu; dodaj idempotencję i odczyt zaległych zadań.",
+      "Jeżeli workflow jest wyłączony, włącz go zgodnie z uprawnieniami i uruchom próbny dispatch."
+    ],
+    "verify": "Kolejne zaplanowane przebiegi są widoczne w Actions, a ponowienie nie tworzy duplikatów.",
+    "warning": "Nie myl UTC z czasem lokalnym bez sprawdzenia obsługi timezone w konkretnej wersji platformy.",
+    "source": "https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-job-stuck-queued",
+    "title": "GitHub Actions: job długo pozostaje w queued i nie startuje",
+    "symptom": "W panelu Actions job ma stan queued znacznie dłużej niż zwykły przebieg.",
+    "cause": "Przyczyną mogą być niedostępne runnery, limity równoległości albo aktywna grupa concurrency.",
+    "inspect": [
+      "Sprawdź dostępność odpowiednich runnerów, plan konta i limity minut.",
+      "Zobacz, czy poprzedni workflow zajmuje tę samą grupę concurrency i kiedy skończy pracę."
+    ],
+    "fix": [
+      "Dostosuj concurrency do zakresu zadań; krytyczne publikacje uruchamiaj kolejno bez przypadkowego cancel-in-progress. W szczególności sprawdź, czy etykieta runs-on odpowiada runnerowi online, a nie runnerowi dawno wyłączonemu.",
+      "Dla self-hosted runner sprawdź online status i wymagane etykiety."
+    ],
+    "verify": "Job startuje po zwolnieniu zasobów, a kolejka nie narasta bez końca.",
+    "warning": "Nie usuwaj wszystkich limitów równoległości przy procesie, który zapisuje do tych samych plików.",
+    "source": "https://docs.github.com/en/actions/using-jobs/using-concurrency",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-artifact-not-found",
+    "title": "GitHub Actions: artifact not found w kolejnym jobie",
+    "symptom": "Build zapisuje plik, ale następny job nie może go pobrać lub pobiera nieaktualny artefakt.",
+    "cause": "Artefakty są powiązane z konkretnym workflow run, nazwą i okresami retencji.",
+    "inspect": [
+      "Sprawdź, czy upload-artifact ukończył się pomyślnie w tym samym przebiegu i jaką nazwę przypisano.",
+      "Ustal, czy wywołanie download-artifact wskazuje poprawny run ID i dostępne permissions."
+    ],
+    "fix": [
+      "Ujednolić nazwę artefaktu między jobami i przekaż dependencies przez needs, aby download nie startował przed uploadem.",
+      "Przy pobieraniu z innego workflow podaj jawnie token i odpowiedni identyfikator przebiegu z właściwego repo."
+    ],
+    "verify": "Kolejny job odczytuje dokładnie artefakt obecnego buildu i nie wyciąga przypadkowych starych plików.",
+    "warning": "Nie zastępuj artefaktów publikowaniem tokenów ani prywatnych danych w logu.",
+    "source": "https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-cache-node-stale",
+    "title": "GitHub Actions: npm cache nie naprawia błędu po zmianie lockfile",
+    "symptom": "Po zmianie package-lock.json CI nadal zgłasza błędy zależności, a diagnostyka skupia się na cache.",
+    "cause": "Cache przyspiesza pobieranie pakietów, ale nie zastępuje poprawnego lockfile ani zgodności wersji Node.",
+    "inspect": [
+      "Sprawdź klucz cache i czy hash lockfile rzeczywiście zmienił się po aktualizacji zależności.",
+      "Uruchom npm ci, przeanalizuj pierwszy rzeczywisty błąd instalacji i wersję Node runnera."
+    ],
+    "fix": [
+      "Napraw niespójny package.json/package-lock i nie opieraj się na przypadkowej zawartości node_modules.",
+      "Jeśli cache jest uszkodzony, unieważnij go świadomie i pozwól CI odtworzyć poprawne zależności."
+    ],
+    "verify": "Czysty runner instaluje paczki i przechodzi testy niezależnie od lokalnego katalogu node_modules.",
+    "warning": "Nie usuwaj lockfile na oślep, aby stworzyć przypadkowo działający zestaw wersji.",
+    "source": "https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-oidc-audience-mismatch",
+    "title": "GitHub OIDC: token jest poprawny, ale audience mismatch",
+    "symptom": "Wywołanie usługi po otrzymaniu tokenu OIDC kończy się 401 z błędem audience lub issuer.",
+    "cause": "Wystawca może podpisać token prawidłowo, lecz aud nie odpowiada wartości oczekiwanej przez usługę.",
+    "inspect": [
+      "Odczytaj bez ujawniania tokenu wartości iss, aud i workflow_ref z payloadu JWT w bezpiecznym środowisku.",
+      "Sprawdź konfigurację audience przy pobieraniu tokenu oraz wartość wymaganą przez serwer weryfikujący."
+    ],
+    "fix": [
+      "Zażądaj tokenu z właściwą wartością audience i waliduj po stronie usługi także podpis, issuer, exp, repo i ref.",
+      "Ogranicz uprawnienie id-token: write do potrzebnego joba i zaufanej gałęzi."
+    ],
+    "verify": "Zaufany workflow przechodzi, a token z obcego repo lub nieprawidłowym audience jest odrzucany.",
+    "warning": "Nie akceptuj dowolnego JWT tylko na podstawie dającego się odczytać payloadu bez sprawdzenia podpisu.",
+    "source": "https://docs.github.com/en/actions/concepts/security/openid-connect",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-merge-conflict-automation",
+    "title": "GitHub Actions: automatyczny commit przegrywa z nową zmianą na main",
+    "symptom": "Automat utworzył commit na starym stanie repozytorium i git push zgłasza non-fast-forward.",
+    "cause": "Między checkout a publikacją ktoś dopisał nowe commity do main i historia gałęzi się rozeszła.",
+    "inspect": [
+      "Porównaj SHA bazowy automatu z aktualnym SHA main i listę zmienionych plików.",
+      "Sprawdź, czy obie zmiany edytują katalog treści, ten sam JSON albo inne wspólne zasoby."
+    ],
+    "fix": [
+      "Zatrzymaj publikację, pobierz świeży main i wykonaj kontrolowane połączenie zmian z ponownymi testami jakości.",
+      "Jeśli publikacja jest automatyczna, użyj PR i testów zamiast siłowego nadpisania aktualnego main."
+    ],
+    "verify": "Po scaleniu obecne są artykuły obu stron, testy przechodzą i historia nie traci istniejących commitów.",
+    "warning": "Nie używaj git push --force na gałęzi produkcyjnej, aby ominąć konflikt.",
+    "source": "https://docs.github.com/en/get-started/using-git/dealing-with-non-fast-forward-errors",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-env-secret-empty",
+    "title": "GitHub Actions: env z secrets ma pustą wartość mimo ustawienia nazwy",
+    "symptom": "Workflow pokazuje pustą zmienną środowiskową, a kod zgłasza brak klucza API.",
+    "cause": "Sekret może być ustawiony w złym scope, środowisku lub nie jest udostępniony danemu typowi zdarzenia.",
+    "inspect": [
+      "Sprawdź nazwę sekretu, poziom repo/organization/environment i przypisanie joba do environment.",
+      "Zweryfikuj event PR z forka i uprawnienia organizacji, nie wypisując wartości sekretu w logach."
+    ],
+    "fix": [
+      "Przypisz sekret do właściwego repo i środowiska oraz ustaw kontrolę obecności bez ujawniania klucza.",
+      "Dla integracji usługowych rozważ OIDC jako alternatywę dla długotrwałych kluczy, jeżeli dostawca to wspiera."
+    ],
+    "verify": "Zaufany job widzi niepustą wartość i wykonuje integrację; nieuprawniony PR nadal nie ma do niej dostępu.",
+    "warning": "Nie publikuj tokenu na ekranie ani w komunikacie błędu w celu diagnostyki.",
+    "source": "https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions",
+    "category": "automatyzacje"
+  },
+  {
+    "slug": "github-actions-workflow-duplicate-runs",
+    "title": "GitHub Actions: jeden push uruchamia workflow dwa razy",
+    "symptom": "Po jednym scaleniu pojawiają się dwa niemal identyczne przebiegi i mogą publikować ten sam plik.",
+    "cause": "Workflow może nasłuchiwać równocześnie push i pull_request albo kilka workflow wykonuje podobny krok.",
+    "inspect": [
+      "Sprawdź event każdego przebiegu i które pliki YAML definiują publikację.",
+      "Zobacz, czy osobne workflow mają tę samą grupę concurrency lub ingerują w ten sam branch."
+    ],
+    "fix": [
+      "Ogranicz publikację do zaufanego eventu na main, a testy PR przenieś do osobnego joba.",
+      "Dodaj grupę concurrency i idempotentny identyfikator treści, aby dwa równoległe przebiegi nie powielały danych."
+    ],
+    "verify": "Jeden produkcyjny commit daje jedną publikację, a kilka testowych buildów nie tworzy nadmiarowych artykułów.",
+    "warning": "Nie usuwaj testów PR tylko dlatego, że ich statusy w panelu wyglądają podobnie.",
+    "source": "https://docs.github.com/en/actions/using-jobs/using-concurrency",
+    "category": "automatyzacje"
+  }
+]

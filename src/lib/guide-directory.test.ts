@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { guideScreenshots } from "../content/guideScreenshots";
+import { offlineCases } from "../content/pseo/offline-guides";
 import { publishedEntries } from "../content/pseo/guides";
 import {
   allGuides,
@@ -51,7 +52,7 @@ describe("programmatic SEO catalog", () => {
   it("recommends relevant articles without producing thousands of links", () => {
     const slug = "supabase-storage-413-entity-too-large-upload";
     const related = getRelatedGuides(slug);
-    expect(related.length).toBeLessThanOrEqual(6);
+    expect(related.length).toBeLessThanOrEqual(10);
     expect(related.every((guide) => guide.slug !== slug)).toBe(true);
     expect(guideCategory(getGuide(slug)!)).toBe("supabase-bazy");
   });
@@ -67,6 +68,32 @@ describe("programmatic SEO catalog", () => {
         expect(shot.width).toBeGreaterThan(400);
       }
     }
+  });
+
+  it("adds exactly 100 distinct offline troubleshooting problems without API generation", () => {
+    expect(offlineCases).toHaveLength(100);
+    const slugSet = new Set<string>();
+    const titleSet = new Set<string>();
+    for (const item of offlineCases) {
+      expect(item.slug).toMatch(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+      expect(item.source).toMatch(/^https:\/\//);
+      expect(item.title.length).toBeGreaterThan(28);
+      expect(item.symptom.length).toBeGreaterThan(60);
+      expect(item.cause.length).toBeGreaterThan(65);
+      expect(item.inspect).toHaveLength(2);
+      expect(item.fix).toHaveLength(2);
+      expect(item.verify.length).toBeGreaterThan(65);
+      expect(item.warning.length).toBeGreaterThan(65);
+      const total = [item.symptom,item.cause,...item.inspect,...item.fix,item.verify,item.warning].join(" ").length;
+      expect(total).toBeGreaterThan(700);
+      expect(slugSet.has(item.slug)).toBe(false);
+      expect(titleSet.has(normalizeGuideText(item.title))).toBe(false);
+      slugSet.add(item.slug);
+      titleSet.add(normalizeGuideText(item.title));
+      expect(getGuide(item.slug)).toBeDefined();
+      expect(guideCategory(getGuide(item.slug)!)).toBe(item.category);
+    }
+    expect(new Set(allGuides.map(x=>x.slug)).size).toBe(allGuides.length);
   });
 
 });

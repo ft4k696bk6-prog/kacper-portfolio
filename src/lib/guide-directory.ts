@@ -1,8 +1,9 @@
 import { guides as existingGuides } from "../content/guides";
 import { pseoGuides } from "../content/pseo/guides";
+import { offlineGuides } from "../content/pseo/offline-guides";
 
 /** Jeden katalog: zachowuje wszystkie poradniki tworzone równolegle w guides.ts. */
-export const allGuides = [...existingGuides, ...pseoGuides];
+export const allGuides = [...existingGuides, ...pseoGuides, ...offlineGuides];
 export type Guide = (typeof allGuides)[number];
 
 export const guideCategories = [
@@ -47,6 +48,9 @@ export function normalizeGuideText(text: string) {
 }
 
 export function guideCategory(guide: Pick<Guide, "slug" | "title" | "service">): GuideCategorySlug {
+  if ("category" in guide && typeof guide.category === "string" && guideCategories.some((item) => item.slug === guide.category)) {
+    return guide.category as GuideCategorySlug;
+  }
   const text = normalizeGuideText(`${guide.slug} ${guide.title}`);
   for (const [category, pattern] of categoryRules) {
     if (pattern.test(text)) return category;
@@ -91,7 +95,7 @@ function keywords(guide: Guide) {
   return new Set(normalizeGuideText(`${guide.slug} ${guide.title}`).split(" ").filter((word) => word.length > 3 && !stopWords.has(word)));
 }
 
-export function getRelatedGuides(slug: string, limit = 6) {
+export function getRelatedGuides(slug: string, limit = 10) {
   const current = getGuide(slug);
   if (!current) return [];
   const currentKeywords = keywords(current);
@@ -102,6 +106,6 @@ export function getRelatedGuides(slug: string, limit = 6) {
       return { guide, score: (guideCategory(guide) === currentCategory ? 10 : 0) + shared };
     })
     .sort((a, b) => b.score - a.score || a.guide.title.localeCompare(b.guide.title, "pl"))
-    .slice(0, Math.max(0, Math.min(12, limit)))
+    .slice(0, Math.max(0, Math.min(16, limit)))
     .map(({ guide }) => guide);
 }

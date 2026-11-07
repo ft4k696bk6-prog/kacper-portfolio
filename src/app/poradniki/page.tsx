@@ -11,7 +11,13 @@ export async function generateMetadata({ searchParams }: Props) {
     "Praktyczne poradniki rozwiązywania błędów w programowaniu, reklamach, CRM, SEO i integracjach. Diagnostyka, rozwiązanie i test poprawności.",
     "poradniki"
   );
-  return { ...metadata, robots: params.q || params.strona ? { index: false, follow: true } : { index: true, follow: true } };
+  const pageNumber = Number(params.strona ?? "1");
+  const page = Number.isSafeInteger(pageNumber) && pageNumber > 1 ? pageNumber : 1;
+  return {
+    ...metadata,
+    alternates: { canonical: `https://bernecki.dev/poradniki${!params.q && page > 1 ? `?strona=${page}` : ""}` },
+    robots: params.q ? { index: false, follow: true } : { index: true, follow: true }
+  };
 }
 
 export default async function GuidesPage({ searchParams }: Props) {
@@ -23,6 +29,8 @@ export default async function GuidesPage({ searchParams }: Props) {
     page: Number.isSafeInteger(parsedPage) ? parsedPage : 1
   });
   const categories = getGuideCounts().filter((category) => category.count > 0);
+  const start = Math.max(1, Math.min(pages - 4, page - 2));
+  const numbers = [...new Set([1, ...Array.from({length: Math.min(5, pages)}, (_, i) => start + i), pages])].filter(n => n >= 1 && n <= pages).sort((a,b)=>a-b);
   const pageUrl = (next: number) => {
     const search = new URLSearchParams();
     if (query) search.set("q", query);
@@ -70,7 +78,9 @@ export default async function GuidesPage({ searchParams }: Props) {
           </div>}
       {pages > 1 && <nav aria-label="Strony wyników" className="mt-9 flex flex-wrap items-center justify-between gap-4 text-sm">
         <div>{page > 1 ? <Link className="underline underline-offset-4" href={pageUrl(page - 1)}>Poprzednia strona</Link> : <span className="text-white/40">Poprzednia strona</span>}</div>
-        <span className="text-white/65">Strona {page} z {pages}</span>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {numbers.map(n => <Link key={n} href={pageUrl(n)} aria-current={page === n ? "page" : undefined} className={`rounded-lg border px-3 py-2 ${page === n ? "border-white/70 bg-white/15 text-white" : "border-white/20 text-white/75 hover:border-white/60"}`}>{n}</Link>)}
+        </div>
         <div>{page < pages ? <Link className="underline underline-offset-4" href={pageUrl(page + 1)}>Następna strona</Link> : <span className="text-white/40">Następna strona</span>}</div>
       </nav>}
     </section>
