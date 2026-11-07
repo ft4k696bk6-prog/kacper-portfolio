@@ -73,7 +73,7 @@ export default async function EnglishGuidePage({params}:Props){
    <div className="mt-6 flex flex-wrap gap-5"><a href={`mailto:kacper@bernecki.dev?subject=${encodeURIComponent(guide.title)}`} className="rounded-lg brand-action px-5 py-3 text-black">Contact me</a><Link href={guide.service} className="py-3 text-white">{guide.serviceLabel} (PL) →</Link></div>
   </aside>
   <nav aria-label="Related English guides" className="mt-14">
-   <h2 className="text-2xl">Related troubleshooting guides</h2>
+   <h2 className="text-2xl">Related guides</h2>
    <div className="mt-6 grid gap-3 md:grid-cols-2">{related.map(item=><Link key={item.slug} href={`/en/guides/${item.slug}`} className="surface-card rounded-xl border border-white/15 p-4 transition-colors hover:border-white/50">
     <span className="text-xs text-white/60">{englishCategory(englishGuideCategory(item))?.label}</span>
     <h3 className="mt-2 font-medium leading-snug text-white">{item.title}</h3>
