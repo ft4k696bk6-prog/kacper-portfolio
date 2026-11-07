@@ -67,7 +67,7 @@
       "Oddziel autoryzację automatu od sesji użytkownika i nie wystawiaj otwartej trasy wykonującej kosztowne operacje."
     ],
     "verify": "Zadanie uruchamia się z uprawnieniem cron, a niezalogowane żądanie bez sekretu dostaje 401.",
-    "warning": "Nie wpisuj sekretu cron do publicznego URL ani do kodu klienta.",
+    "warning": "Nie wpisuj sekretu cron do publicznego URL ani do kodu klienta. Trasa wykonywana bez ważnego tokenu musi pozostać niedostępna nawet po poznaniu jej adresu.",
     "source": "https://vercel.com/docs/cron-jobs",
     "category": "vercel-hosting"
   },
@@ -117,7 +117,7 @@
       "Porównaj dostęp jako zalogowany członek zespołu i w oknie incognito."
     ],
     "fix": [
-      "Udostępnij uprawniony link podglądu lub użyj właściwego mechanizmu zapraszania do projektu.",
+      "Udostępnij uprawniony link podglądu lub użyj właściwego mechanizmu zapraszania do projektu. Najpierw ustal, czy klient potrzebuje stałego środowiska demonstracyjnego, czy jednorazowego podglądu zmiany.",
       "Jeśli trzeba dać klientowi publiczne demo, rozważ osobne środowisko z celowo ustawionym dostępem i bez sekretów testowych."
     ],
     "verify": "Klient otwiera przewidziany adres, a wrażliwe preview nadal są chronione.",
@@ -211,7 +211,7 @@
       "Używaj actions/checkout z odpowiednim uwierzytelnieniem i wypychaj tylko do właściwego repo i gałęzi."
     ],
     "verify": "Automat zapisuje zmianę wyłącznie tam, gdzie ma uprawnienie, a chronione reguły repo pozostają aktywne.",
-    "warning": "Nie wyłączaj ochrony main tylko po to, by skrypt omijał review.",
+    "warning": "Nie wyłączaj ochrony main tylko po to, by skrypt omijał review. Jeśli reguły wymagają PR, nie należy wykonywać obejścia przez osobisty token o szerszych prawach.",
     "source": "https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication",
     "category": "automatyzacje"
   },
@@ -243,7 +243,7 @@
       "Zobacz, czy poprzedni workflow zajmuje tę samą grupę concurrency i kiedy skończy pracę."
     ],
     "fix": [
-      "Dostosuj concurrency do zakresu zadań; krytyczne publikacje uruchamiaj kolejno bez przypadkowego cancel-in-progress.",
+      "Dostosuj concurrency do zakresu zadań; krytyczne publikacje uruchamiaj kolejno bez przypadkowego cancel-in-progress. W szczególności sprawdź, czy etykieta runs-on odpowiada runnerowi online, a nie runnerowi dawno wyłączonemu.",
       "Dla self-hosted runner sprawdź online status i wymagane etykiety."
     ],
     "verify": "Job startuje po zwolnieniu zasobów, a kolejka nie narasta bez końca.",
