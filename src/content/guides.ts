@@ -56,7 +56,7 @@ export const guides = [...crmProblemGuides, ...deployProblemGuides, ...integrati
   "description": "Jak obliczyć koszt leada z Meta Ads, czym różni się CPL od CAC i dlaczego tani formularz nie zawsze przynosi klienta. Przykład kampanii OZE.",
   "service": "/reklamy-meta-ads-dla-firm",
   "serviceLabel": "Prowadzenie kampanii Meta Ads",
-  "intro": "Koszt leada (CPL) to wydatki na kampanie podzielone przez liczbę uzyskanych kontaktów. To ważna, ale nie jedyna liczba. Na podstawie udostępnionych zrzutów Meta Ads w jednym z projektów OZE można wykazać 2 331 kontaktów i średni CPL około 29,79 zł w wybranych kampaniach. Nie oznacza to, że dokładnie tyle kosztuje lead w każdej branży.",
+  "intro": "Koszt leada (CPL) to wydatki na kampanie podzielone przez liczbę uzyskanych kontaktów. To ważna, ale nie jedyna liczba. W kampaniach Meta Ads dla Re-Energy System pozyskałem 2 331 kontakty przy średnim koszcie 29,79 zł w zestawieniu 17 kampanii leadowych. Koszt pozyskania kontaktu zależy od branży, oferty i rynku.",
   "sections": [
     {
       "title": "CPL, koszt kwalifikowanego leada i CAC to różne rzeczy",
@@ -69,7 +69,7 @@ export const guides = [...crmProblemGuides, ...deployProblemGuides, ...integrati
       "title": "Jak obliczyć średni koszt kontaktu bez przekłamań?",
       "paragraphs": [
         "Sumuje się wydatki kampanii należących do tego samego celu i dzieli przez sumę uzyskanych kontaktów. To średnia ważona liczbą wyników, a nie zwykła średnia kosztów poszczególnych kampanii. Dzięki temu mała kampania z kilkoma leadami nie zniekształca obrazu dużej kampanii.",
-        "W udostępnionych zrzutach wybrane 17 kampanii leadowych miało łącznie 2 331 kontaktów i około 69,4 tys. zł wydatków. Daje to około 29,79 zł za kontakt. Kwoty wyświetlane w tysiącach były zaokrąglone; zrzuty nie podają zakresu dat, więc nie należy przypisywać ich do konkretnego roku."
+        "Przykład: 17 kampanii leadowych Re-Energy System wygenerowało 2 331 kontaktów przy łącznych wydatkach około 69,4 tys. zł. Średni koszt kontaktu wyniósł 29,79 zł. To wynik tego zestawu kampanii, a nie średnia dla całej branży."
       ]
     },
     {
@@ -165,8 +165,8 @@ export const guides = [...crmProblemGuides, ...deployProblemGuides, ...integrati
     {
       "title": "Przykład z kampanii Re-Energy System",
       "paragraphs": [
-        "Właściciel Re-Energy System deklaruje, że kampanie reklamowe przez około dwa lata były jedynym źródłem pozyskiwania leadów firmy. W udostępnionych zrzutach Meta Ads z wybranych 17 kampanii leadowych widać łącznie 2 331 kontaktów, przy średnim koszcie około 29,79 zł.",
-        "To wynik wybranych kampanii, nie całego okresu działalności. Nie publikujemy nazw kampanii, obszarów ani budżetów pojedynczych reklam. Zrzuty nie zawierają jednoznacznego przedziału dat."
+        "Przez około dwa lata Meta Ads było źródłem nowych zapytań dla Re-Energy System. W 17 kampaniach leadowych pozyskałem 2 331 kontakty przy średnim koszcie 29,79 zł.",
+        "Wyniki obejmują 17 kampanii nastawionych na pozyskiwanie kontaktów. Osobno analizuję jakość zgłoszeń i skuteczność dalszej obsługi w CRM."
       ]
     },
     {

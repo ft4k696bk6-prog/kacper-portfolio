@@ -3,7 +3,7 @@ const topics = [
     "slug": "vercel-this-deployment-is-temporarily-paused",
     "title": "Vercel: This deployment is temporarily paused — co oznacza i jak przywrócić stronę?",
     "description": "Na stronie widzisz This deployment is temporarily paused? Sprawdź stan projektu, limit planu i ostatnie wdrożenie.",
-    "symptom": "Strona lub CRM przestaje się otwierać, a wszyscy widzą komunikat This deployment is temporarily paused. Podobny przypadek dotyczył wdrożenia B-CRM.",
+    "symptom": "Strona lub CRM nie otwiera się, a zamiast aplikacji pojawia się komunikat This deployment is temporarily paused. Najpierw trzeba ustalić status projektu w Vercel.",
     "cause": "To komunikat warstwy hostingu, a nie standardowy błąd Reacta. Przyczynę trzeba ustalić w panelu Vercel: status projektu, rozliczenia, limity i konkretne wdrożenie.",
     "steps": [
       "Otwórz Vercel Dashboard, wybierz właściwy zespół i projekt; sprawdź komunikaty o wstrzymaniu i rozliczeniach.",
@@ -207,7 +207,7 @@ const topics = [
     "slug": "mobile-viewport-przeskakuje-przewijanie",
     "title": "Strona na telefonie przeskakuje przy przewijaniu — przyczyny CSS",
     "description": "Mobilny viewport skacze przy przewijaniu, animacjach lub wysuwanym pasku Safari. Jak diagnozować 100vh i layout shifts.",
-    "symptom": "Na iPhone tło lub sekcje strony przeskakują, podczas gdy desktop wygląda normalnie. Taki problem pojawiał się przy dopracowywaniu portfolio.",
+    "symptom": "Na iPhone tło lub sekcje strony przeskakują, podczas gdy desktop wygląda normalnie. Na urządzeniach mobilnych wysokość widocznego obszaru zmienia się podczas przewijania i chowania paska przeglądarki.",
     "cause": "100vh nie zawsze zachowuje się tak jak wysokość widocznego obszaru przy pojawianiu się paska przeglądarki. Dodatkowo obrazy bez wymiarów i animacje mogą powodować CLS.",
     "steps": [
       "Odtwórz problem na realnym telefonie i rozróżnij zmianę wysokości viewportu od przesuwania elementów.",

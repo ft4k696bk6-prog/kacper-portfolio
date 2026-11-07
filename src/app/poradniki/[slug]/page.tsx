@@ -36,13 +36,13 @@ export default async function GuidePage({params}: Props) {
     <p className="mt-5 text-sm text-white/65">Kategoria: <Link className="underline underline-offset-4" href={`/poradniki/tematy/${guideCategory(guide)}`}>{getCategory(guideCategory(guide))?.label}</Link></p>
     <article>
       <h1 className="mt-8 text-4xl leading-tight md:text-5xl">{guide.title.split(/([_/])/).map((part,i)=><Fragment key={i}>{part}{part==="_"||part==="/"?<wbr/>:null}</Fragment>)}</h1>
-      {"offlinePseo" in guide && guide.offlinePseo ? <p className="mt-5 text-sm text-white/70">Opracowanie techniczne: bernecki.dev · Odrębny scenariusz diagnostyczny z odnośnikiem do dokumentacji. Materiały dostępne bez połączeń z API generatywnej AI.</p> : isAuto ? <p className="mt-5 text-sm text-white/70">Opracowanie: bernecki.dev · Treść wspomagana AI, poddana automatycznej kontroli źródeł, jakości i duplikatów. Nie zastępuje testu w konkretnym środowisku.</p> : <p className="mt-5 text-sm text-white/70">Autor: <Link href="/#about" className="underline">Kacper Bernecki</Link> · Strony, aplikacje i marketing dla firm</p>}
+      <p className="mt-5 text-sm text-white/70">Poradnik techniczny · <Link href="/#about" className="underline underline-offset-4">Kacper Bernecki</Link></p>
       <p className="surface-card mt-8 rounded-2xl border border-white/25 bg-[var(--brand-black)] p-6 text-lg leading-8 text-white">{guide.intro}</p>
       {screenshots.length > 0 && <section className="mt-10" aria-labelledby="real-screenshots-heading">
-        <h2 id="real-screenshots-heading" className="text-2xl text-white">Autentyczny ekran z opisywanym problemem</h2>
-        <p className="mt-3 leading-7 text-white/70">To fragment rzeczywistego zrzutu z panelu, a nie wygenerowana grafika. Usunięto elementy identyfikujące konto. Sam obraz pokazuje objaw, nie dowodzi konkretnej przyczyny.</p>
+        <h2 id="real-screenshots-heading" className="text-2xl text-white">Przykład komunikatu błędu</h2>
+        <p className="mt-3 leading-7 text-white/70">Tak może wyglądać problem w panelu. Dokładną przyczynę ustalisz, wykonując poniższe kroki diagnostyczne.</p>
         <div className="mt-5 flex flex-wrap gap-5">{screenshots.map((shot) => <figure key={shot.src} className="surface-card w-full max-w-xl overflow-hidden rounded-2xl border border-white/15 bg-[var(--brand-black)]">
-          <a href={shot.src} target="_blank" rel="noopener noreferrer" aria-label="Otwórz oryginalny kadr zrzutu ekranu">
+          <a href={shot.src} target="_blank" rel="noopener noreferrer" aria-label="Powiększ przykład komunikatu błędu">
             <Image src={shot.src} alt={shot.alt} width={shot.width} height={shot.height} sizes="(max-width: 640px) 100vw, 540px" className="h-auto w-full object-contain" />
           </a>
           <figcaption className="px-5 py-4 text-sm leading-6 text-white/70">{shot.caption}</figcaption>

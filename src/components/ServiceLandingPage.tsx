@@ -198,7 +198,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           <div className="surface-card rounded-2xl border border-white/20 bg-white/[0.035] p-6 md:p-10">
             <p className="text-xs uppercase tracking-[0.2em] text-white/65">Z praktyki · Re-Energy System</p>
             <h2 className="mt-4 max-w-3xl text-3xl text-white md:text-4xl">Kampanie, które przez około 2 lata są źródłem zapytań dla firmy OZE.</h2>
-            <p className="mt-5 max-w-3xl leading-8 text-white/75">Z udostępnionych zrzutów Meta Ads wynika 2 331 kontaktów przy średnim koszcie około 29,79 zł w 17 wybranych kampaniach. Właściciel deklaruje około 90 tys. zł wydatków reklamowych w całym okresie i wielomilionowy obrót firmy. Nie są to statystyki zamkniętych sprzedaży ani ROAS.</p>
+            <p className="mt-5 max-w-3xl leading-8 text-white/75">Współpraca z Re-Energy System obejmuje około 2 lata kampanii Meta Ads, 90 837 zł budżetu reklamowego i wsparcie procesu sprzedaży. W 17 kampaniach nastawionych na zapytania pozyskano 2 331 kontaktów przy średnim koszcie 29,79 zł. Firma osiągnęła w tym okresie 6 mln zł obrotu.</p>
             <div className="mt-6 flex flex-wrap gap-4">
               <Link href="/case-studies/re-energy-meta-ads" className="inline-flex items-center gap-2 rounded-lg brand-outline px-5 py-3 text-white">Zobacz pełne case study <ArrowRight className="h-4 w-4" /></Link>
               <Link href="/reklamy-meta-ads-dla-firm" className="inline-flex items-center gap-2 px-5 py-3 text-white/80">Jak prowadzę kampanie Meta Ads <ArrowRight className="h-4 w-4" /></Link>

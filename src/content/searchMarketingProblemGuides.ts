@@ -3,7 +3,7 @@ const topics = [
     "slug": "google-sitemap-zgloszona-a-strony-brak",
     "title": "Sitemap wysłana do Google, ale strony nadal nie ma w wynikach",
     "description": "Google Search Console przyjęło sitemap.xml, lecz domena nie pojawia się w wyszukiwarce. Co sprawdzić dalej?",
-    "symptom": "Search Console pokazuje pomyślne przesłanie mapy, ale po wpisaniu nazwy nowej strony trudno znaleźć wynik. Taka sytuacja była analizowana przy witrynach firmowych.",
+    "symptom": "Search Console pokazuje pomyślne przesłanie mapy, ale po wpisaniu nazwy nowej strony trudno znaleźć wynik. Status mapy witryny i obecność strony w indeksie to dwa różne etapy wyszukiwania.",
     "cause": "Mapa strony wskazuje robotowi adresy, ale nie jest obietnicą ich indeksowania. Google analizuje dostępność, duplikację, jakość i znaczenie treści.",
     "steps": [
       "W Search Console sprawdź Inspekcję URL dla konkretnego adresu, a nie tylko status sitemap.",
