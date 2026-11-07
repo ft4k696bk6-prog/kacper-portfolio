@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { StaticPortfolio } from "@/components/StaticPortfolio";
 
 export const metadata: Metadata = {
-  title: { absolute: "Strony internetowe, CRM i aplikacje webowe | Kacper Bernecki" },
+  title: { absolute: "Rozwój biznesu, strony, CRM i marketing | Kacper Bernecki" },
   description:
-    "Strony internetowe, landing page i CRM-y dla firm. Kacper Bernecki — bezpośredni kontakt, dopracowany wygląd i wycena dopasowana do zakresu.",
+    "Od pomysłu do działającego biznesu. Sourcing produktów, strony, CRM, marketing i sprzedaż — praktyczne wdrożenia z Kacprem Berneckim.",
 };
 
 export default function Home() {
