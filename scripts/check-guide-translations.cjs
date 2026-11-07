@@ -23,5 +23,13 @@ for(const g of raw){
  });
 }
 for(const slug of Object.keys(output)){if(!raw.some(g=>g.slug===slug))errors.push("Orphan English edition: "+slug)}
+const suspiciousMachineEnglish = /\\b(?:Subabase|Subbase|Conversations API|leady|leades|defloy(?:ment)?|Escapulate|bushes)\\b/i;
+for(const [slug, entry] of Object.entries(output)){
+  const fields = [entry.title,entry.description,entry.intro,entry.serviceLabel,...(entry.sections||[]).flatMap(section=>[section.title,...section.paragraphs])];
+  for(const value of fields){
+    if(suspiciousMachineEnglish.test(value||""))errors.push(slug+": English technical terminology needs correction");
+  }
+}
+
 if(errors.length){console.error(errors.slice(0,40).join("\n"));process.exit(1)}
 console.log("Validated "+raw.length+" distinct, complete, version-matched EN editions with no placeholders.");
