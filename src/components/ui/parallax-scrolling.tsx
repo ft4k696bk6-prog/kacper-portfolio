@@ -31,8 +31,6 @@ export function ParallaxComponent({ title, portraitAlt }: ParallaxProps) {
         });
         timeline.to(element.querySelector('[data-parallax-layer="1"]'), {
           yPercent: 30, ease: "none",
-        }, 0).to(element.querySelector('[data-parallax-layer="2"]'), {
-          yPercent: 12, ease: "none",
         }, 0);
 
         // Preserve native mobile scrolling and horizontal drag galleries.
@@ -59,17 +57,19 @@ export function ParallaxComponent({ title, portraitAlt }: ParallaxProps) {
   return (
     <section id="home" ref={root} className="hero-night scenic-parallax" aria-labelledby="hero-title">
       <div className="scenic-scene">
-      <p className="scenic-signature">Kacper Bernecki</p>
-      <h1 id="hero-title" className="scenic-title">{title.split(" ").map(word => <span key={word}>{word} </span>)}</h1>
-      <div className="scenic-backdrop" data-parallax-layer="1" aria-hidden="true">
-        <Image src="/images/hero-alpine-landscape.jpg" alt="" fill priority sizes="100vw" />
-      </div>
-      <div className="scenic-portrait-stage">
-        <Image src="/images/profile-1-cutout.png" alt={portraitAlt} width={1122} height={1402}
-          priority sizes="(min-width: 768px) 620px, 94vw" className="scenic-portrait" />
-      </div>
-      <div className="scenic-terrain" data-parallax-layer="2" aria-hidden="true" />
-      <div className="scenic-fade" aria-hidden="true" />
+        <p className="scenic-signature">Kacper Bernecki</p>
+        <h1 id="hero-title" className="scenic-title">{title.split(" ").map(word => <span key={word}>{word} </span>)}</h1>
+        {/* The mask belongs to a stationary clipping window, never the moving image.
+            This prevents scenery from escaping below the portrait during scroll. */}
+        <div className="scenic-backdrop-window" aria-hidden="true">
+          <div className="scenic-backdrop" data-parallax-layer="1">
+            <Image src="/images/hero-alpine-landscape.jpg" alt="" fill priority sizes="100vw" />
+          </div>
+        </div>
+        <div className="scenic-portrait-stage">
+          <Image src="/images/profile-1-cutout.png" alt={portraitAlt} width={1122} height={1402}
+            priority sizes="(min-width: 768px) 620px, 94vw" className="scenic-portrait" />
+        </div>
       </div>
     </section>
   );

@@ -27,7 +27,7 @@ export function Profile() {
               const Icon = icons[index] ?? BriefcaseBusiness;
               return (
                 <div key={item.title} className="profile-highlight border-t border-white/15 pt-5">
-                  <Icon className="mb-4 h-5 w-5 text-[var(--brand-gold)]" aria-hidden="true"/>
+                  <Icon className="mb-4 h-5 w-5 text-[var(--brand-accent)]" aria-hidden="true"/>
                   <h3 className="text-base text-white">{item.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-white/70">{item.description}</p>
                 </div>

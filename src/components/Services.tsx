@@ -61,10 +61,10 @@ export function Services() {
             <Link
               key={s.href}
               href={s.href}
-              className="group flex flex-col rounded-2xl border border-white/10 bg-[var(--brand-black)] p-7 transition hover:border-[var(--brand-gold)] hover:bg-[var(--brand-black)]"
+              className="group flex flex-col rounded-2xl border border-white/10 bg-[var(--brand-black)] p-7 transition hover:border-[var(--brand-accent)] hover:bg-[var(--brand-black)]"
             >
               <div className="flex items-center justify-between">
-                <Icon className="h-7 w-7 text-[var(--brand-gold)]" />
+                <Icon className="h-7 w-7 text-[var(--brand-accent)]" />
                 <span className="text-xs text-white/70">0{i + 1}</span>
               </div>
               <h3 className="mt-9 text-2xl tracking-tight">{s.title}</h3>

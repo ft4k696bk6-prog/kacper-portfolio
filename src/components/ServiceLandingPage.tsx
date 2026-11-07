@@ -150,7 +150,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--brand-black)] text-white">
+    <main className="site-page min-h-screen bg-[var(--brand-black)] text-white">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -161,19 +161,19 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
             href="/"
             className="mb-10 inline-flex items-center gap-2 text-sm text-white hover:text-white"
           >
-            <span className="grid h-8 w-8 place-items-center rounded-md border border-white/40 bg-[var(--brand-black)] text-xs">
+            <span className="grid h-8 w-8 place-items-center rounded-md brand-outline bg-[var(--brand-black)] text-xs">
               KB
             </span>
             Kacper Bernecki
           </Link>
-          <p className="mb-5 flex items-center gap-2 text-sm uppercase tracking-[0.18em] text-white">
+          <p className="page-eyebrow mb-5 flex items-center gap-2">
             <Sparkles className="h-4 w-4" />
             {page.eyebrow}
           </p>
           <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">
             {page.heading}
           </h1>
-          <p className="mt-7 max-w-3xl text-lg leading-8 text-white">
+          <p className="page-intro mt-7 max-w-3xl text-lg">
             {page.intro}
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -185,7 +185,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
             </Link>
             <Link
               href={page.proofHref}
-              className="glass-action inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-6 py-3 text-white transition hover:border-[var(--brand-gold)] hover:text-white"
+              className="glass-action inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-6 py-3 text-white transition hover:border-[var(--brand-accent)] hover:text-white"
             >
               {page.proof} <ArrowRight className="h-4 w-4" />
             </Link>
@@ -195,12 +195,12 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
 
       {kind === "marketing" && (
         <section className="mx-auto max-w-6xl px-5 py-12 md:px-8">
-          <div className="rounded-2xl border border-white/20 bg-white/[0.035] p-6 md:p-10">
+          <div className="surface-card rounded-2xl border border-white/20 bg-white/[0.035] p-6 md:p-10">
             <p className="text-xs uppercase tracking-[0.2em] text-white/65">Z praktyki · Re-Energy System</p>
             <h2 className="mt-4 max-w-3xl text-3xl text-white md:text-4xl">Kampanie, które przez około 2 lata są źródłem zapytań dla firmy OZE.</h2>
             <p className="mt-5 max-w-3xl leading-8 text-white/75">Z udostępnionych zrzutów Meta Ads wynika 2 331 kontaktów przy średnim koszcie około 29,79 zł w 17 wybranych kampaniach. Właściciel deklaruje około 90 tys. zł wydatków reklamowych w całym okresie i wielomilionowy obrót firmy. Nie są to statystyki zamkniętych sprzedaży ani ROAS.</p>
             <div className="mt-6 flex flex-wrap gap-4">
-              <Link href="/case-studies/re-energy-meta-ads" className="inline-flex items-center gap-2 rounded-lg border border-white/40 px-5 py-3 text-white">Zobacz pełne case study <ArrowRight className="h-4 w-4" /></Link>
+              <Link href="/case-studies/re-energy-meta-ads" className="inline-flex items-center gap-2 rounded-lg brand-outline px-5 py-3 text-white">Zobacz pełne case study <ArrowRight className="h-4 w-4" /></Link>
               <Link href="/reklamy-meta-ads-dla-firm" className="inline-flex items-center gap-2 px-5 py-3 text-white/80">Jak prowadzę kampanie Meta Ads <ArrowRight className="h-4 w-4" /></Link>
             </div>
           </div>
@@ -219,7 +219,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           {page.bullets.map((bullet) => (
             <div
               key={bullet}
-              className="flex gap-3 rounded-xl border border-white/10 bg-[var(--brand-black)] p-4 text-white"
+              className="surface-card flex gap-3 rounded-xl border border-white/10 bg-[var(--brand-black)] p-4 text-white"
             >
               <Check className="mt-0.5 h-5 w-5 shrink-0 text-white" />
               <span>{bullet}</span>
@@ -253,7 +253,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
             ].map(([Icon, title, description]) => (
               <div
                 key={title as string}
-                className="rounded-2xl border border-white/10 bg-[var(--brand-black)] p-6"
+                className="surface-card rounded-2xl border border-white/10 bg-[var(--brand-black)] p-6"
               >
                 <Icon className="h-6 w-6 text-white" />
                 <h3 className="mt-5 text-xl">{title as string}</h3>
@@ -275,7 +275,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
             <Link
               key={example.slug}
               href={`/case-studies/${example.slug}`}
-              className="glass-action group overflow-hidden rounded-2xl border border-white/10 bg-[var(--brand-black)] transition hover:border-[var(--brand-gold)]"
+              className="surface-card group overflow-hidden rounded-2xl border border-white/10 bg-[var(--brand-black)] transition hover:border-[var(--brand-accent)]"
             >
               <Image
                 src={`/images/projects/${example.image}`}
@@ -295,7 +295,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
       </section>
       <section className="mx-auto max-w-6xl px-5 py-12 md:px-8">
         <h2 className="text-3xl">Przygotuj się do rozmowy</h2>
-        {guides.filter(g => g.service === `/${slug}`).map(g => <Link key={g.slug} href={`/poradniki/${g.slug}`} className="glass-action mt-6 block rounded-xl border border-white/30 p-6">
+        {guides.filter(g => g.service === `/${slug}`).map(g => <Link key={g.slug} href={`/poradniki/${g.slug}`} className="surface-card mt-6 block rounded-xl border border-white/30 p-6">
           <h3 className="text-xl text-white">{g.title} →</h3><p className="mt-3 leading-7 text-white/70">{g.description}</p>
         </Link>)}
         {kind === "marketing" && <div className="mt-6 flex flex-wrap gap-3 text-sm"><Link href="/poradniki/ile-kosztuje-lead-z-facebook-ads" className="underline underline-offset-4">Koszt leada i CPL →</Link><Link href="/poradniki/facebook-lead-ads-integracja-z-crm" className="underline underline-offset-4">Leady Meta i CRM →</Link><Link href="/poradniki/reklamy-oze-magazyny-energii" className="underline underline-offset-4">Marketing OZE →</Link></div>}

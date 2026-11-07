@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
+import { brand } from "@/lib/brand";
 
 /**
- * Rasterize the silver KB mark used by /favicon-silver.svg for platforms
+ * Rasterize the shared KB mark used by /favicon.svg for platforms
  * that require PNG icons (home screen and PWA installations).
  */
 export function renderBrandIcon(size: number) {
@@ -13,7 +14,7 @@ export function renderBrandIcon(size: number) {
         display: "flex",
         width: "100%",
         height: "100%",
-        background: "#080808",
+        background: brand.background,
         padding: 5 * scale,
         borderRadius: 14 * scale,
         alignItems: "stretch",
@@ -23,9 +24,9 @@ export function renderBrandIcon(size: number) {
         style={{
           display: "flex",
           flex: 1,
-          border: `${2 * scale}px solid rgba(203,213,225,0.85)`,
+          border: `${2 * scale}px solid ${brand.accent}`,
           borderRadius: 11 * scale,
-          background: "#080808",
+          background: brand.background,
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -33,7 +34,7 @@ export function renderBrandIcon(size: number) {
         <span
           style={{
             display: "flex",
-            color: "#cbd5e1",
+            color: brand.foreground,
             fontSize: 22 * scale,
             fontWeight: 700,
             letterSpacing: 1.5 * scale,

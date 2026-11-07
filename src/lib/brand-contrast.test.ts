@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { brand } from "./brand";
 
 const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
 
@@ -23,20 +24,21 @@ function contrast(first: string, second: string) {
 }
 
 describe("three-color visual system", () => {
-  it("has one gold accent, with no separate silver or gradient gold palette", () => {
-    expect(token("--brand-black")).toBe("#080808");
-    expect(token("--brand-white")).toBe("#ffffff");
-    expect(token("--brand-gold")).toBe("#d4af6a");
+  it("shares the same three colors with browser icons and link previews", () => {
+    expect(token("--brand-black")).toBe(brand.background);
+    expect(token("--brand-white")).toBe(brand.foreground);
+    expect(token("--brand-accent")).toBe(brand.accent);
+    expect(css).toContain("--brand-gold: var(--brand-accent)");
     expect(css).not.toContain("--brand-metal");
     expect(css).not.toContain("--brand-gold-hover");
   });
   it("keeps dark CTA text at AAA contrast", () => {
-    expect(contrast(token("--brand-gold"), token("--brand-black"))).toBeGreaterThanOrEqual(7);
+    expect(contrast(token("--brand-accent"), token("--brand-black"))).toBeGreaterThanOrEqual(7);
   });
 
   it("keeps small gold labels readable against the dark section surfaces", () => {
     for (const background of ["#070707", "#0b0b0b", "#101010"]) {
-      expect(contrast(token("--brand-gold"), background)).toBeGreaterThanOrEqual(7);
+      expect(contrast(token("--brand-accent"), background)).toBeGreaterThanOrEqual(7);
     }
   });
 });

@@ -30,7 +30,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
 
   if (!study) {
     return (
-      <main className="min-h-screen bg-[var(--brand-black)] px-5 py-32 text-white md:px-8">
+      <main className="site-page min-h-screen bg-[var(--brand-black)] px-5 py-32 text-white md:px-8">
         <div className="mx-auto max-w-4xl">
           <BackLink label={t.caseStudies.projectsBackLabel} />
           <h1 className="mt-10 text-4xl md:text-5xl">{t.caseStudies.notFoundTitle}</h1>
@@ -41,7 +41,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-[var(--brand-black)] px-5 py-28 text-white md:px-8">
+    <main className="site-page min-h-screen bg-[var(--brand-black)] px-5 py-28 text-white md:px-8">
       <div className="mx-auto max-w-6xl">
         <BackLink label={t.caseStudies.projectsBackLabel} />
 
@@ -52,7 +52,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
           <h1 className="mt-5 max-w-5xl text-4xl leading-tight text-white md:text-6xl">
             {study.title}
           </h1>
-          <p className="mt-6 max-w-4xl text-lg leading-8 text-white">
+          <p className="page-intro mt-6 max-w-4xl text-lg">
             {study.subtitle}
           </p>
 
@@ -73,7 +73,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
                 href={study.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass-action inline-flex items-center gap-2 rounded-md border border-white/15 px-5 py-3 text-sm text-white transition-colors hover:border-[var(--brand-gold)] hover:text-white"
+                className="glass-action inline-flex items-center gap-2 rounded-md border border-white/15 px-5 py-3 text-sm text-white transition-colors hover:border-[var(--brand-accent)] hover:text-white"
               >
                 <Github className="h-4 w-4" />
                 {t.caseStudies.repoLabel}
@@ -92,7 +92,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
             {study.images.map((image, index) => (
               <div
                 key={image.src}
-                className="overflow-hidden rounded-xl border border-white/10 bg-[var(--brand-black)] first:lg:col-span-2"
+                className="surface-card overflow-hidden rounded-xl border border-white/10 bg-[var(--brand-black)] first:lg:col-span-2"
               >
                 <Image
                   src={image.src}
@@ -117,7 +117,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
           <SummaryCard title={t.projects.statusLabel} body={study.status} />
         </section>
 
-        <section className="mt-8 rounded-md border border-white/10 bg-[var(--brand-black)] p-5 md:p-6">
+        <section className="surface-card mt-8 rounded-md border border-white/10 bg-[var(--brand-black)] p-5 md:p-6">
           <h2 className="text-sm uppercase tracking-[0.24em] text-white">
             {t.caseStudies.stackLabel}
           </h2>
@@ -134,11 +134,11 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
         </section>
 
         {study.roles.length > 0 && (
-          <section className="mt-8 rounded-md border border-white/10 bg-[var(--brand-black)] p-5 md:p-6">
+          <section className="surface-card mt-8 rounded-md border border-white/10 bg-[var(--brand-black)] p-5 md:p-6">
             <h2 className="text-3xl text-white">{t.caseStudies.sections.roles}</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {study.roles.map((role) => (
-                <article key={role.name} className="rounded-md border border-white/10 bg-black/20 p-4">
+                <article key={role.name} className="surface-card rounded-md border border-white/10 bg-black/20 p-4">
                   <h3 className="text-lg text-white">{role.name}</h3>
                   <p className="mt-3 text-sm leading-7 text-white">{role.description}</p>
                 </article>
@@ -154,7 +154,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
           <InfoList title={t.caseStudies.sections.next} items={study.next} />
         </section>
 
-        <section className="mt-8 rounded-md border border-white/25 bg-[var(--brand-black)] p-5 md:p-6">
+        <section className="surface-card mt-8 rounded-md border border-white/25 bg-[var(--brand-black)] p-5 md:p-6">
           <h2 className="text-2xl text-white">{t.caseStudies.sections.limitations}</h2>
           <p className="mt-4 text-sm leading-7 text-white">{study.limitations}</p>
         </section>
@@ -174,7 +174,7 @@ function BackLink({ label }: { label: string }) {
       onClick={() => {
         window.location.assign("/#projects");
       }}
-      className="brand-action glass-action inline-flex items-center gap-2 rounded-md  px-4 py-2 text-sm text-black transition-all hover:-translate-y-0.5 hover:shadow-none"
+      className="brand-outline inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm transition-all hover:-translate-y-0.5"
     >
       <ArrowLeft className="h-4 w-4" />
       {label}
@@ -184,7 +184,7 @@ function BackLink({ label }: { label: string }) {
 
 function SummaryCard({ title, body }: { title: string; body: string }) {
   return (
-    <article className="rounded-md border border-white/10 bg-[var(--brand-black)] p-5">
+    <article className="surface-card rounded-md border border-white/10 bg-[var(--brand-black)] p-5">
       <h2 className="text-xl text-white">{title}</h2>
       <p className="mt-3 text-sm leading-7 text-white">{body}</p>
     </article>
@@ -193,12 +193,12 @@ function SummaryCard({ title, body }: { title: string; body: string }) {
 
 function InfoList({ title, items }: Pick<CaseStudyItem, "title"> & { items: string[] }) {
   return (
-    <article className="rounded-md border border-white/10 bg-[var(--brand-black)] p-5 md:p-6">
+    <article className="surface-card rounded-md border border-white/10 bg-[var(--brand-black)] p-5 md:p-6">
       <h2 className="text-2xl text-white">{title}</h2>
       <ul className="mt-5 space-y-3">
         {items.map((item) => (
           <li key={item} className="flex gap-3 text-sm leading-7 text-white">
-            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--brand-black)]" />
+            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--brand-accent)]" />
             {item}
           </li>
         ))}

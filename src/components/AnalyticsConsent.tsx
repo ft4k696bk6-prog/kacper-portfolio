@@ -63,7 +63,7 @@ export function AnalyticsConsent() {
             <button
               type="button"
               onClick={() => choose("rejected")}
-              className="glass-action rounded-md border border-white/15 px-4 py-2 text-sm text-white transition hover:border-[var(--brand-gold)] hover:text-white"
+              className="glass-action rounded-md border border-white/15 px-4 py-2 text-sm text-white transition hover:border-[var(--brand-accent)] hover:text-white"
             >
               {t.consent.reject}
             </button>

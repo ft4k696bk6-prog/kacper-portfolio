@@ -3,7 +3,7 @@
   "short_name": "Kacper",
   "icons": [
     {
-      "src": "/favicon-silver.svg",
+      "src": "/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
@@ -21,7 +21,7 @@
       "purpose": "any"
     }
   ],
-  "theme_color": "#090909",
-  "background_color": "#090909",
+  "theme_color": "#080808",
+  "background_color": "#080808",
   "display": "standalone"
 }

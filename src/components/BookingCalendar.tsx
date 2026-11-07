@@ -236,7 +236,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
                     type="button"
                     onClick={() => void selectDay(day)}
                     aria-label={`${copy.chooseDayLabel}: ${day.date}`}
-                    className="glass-action min-h-[76px] rounded-md border border-white/10 bg-black/20 p-2 text-left text-white transition-all hover:border-[var(--brand-gold)] hover:bg-[var(--brand-black)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-gold)]"
+                    className="glass-action min-h-[76px] rounded-md border border-white/10 bg-black/20 p-2 text-left text-white transition-all hover:border-[var(--brand-accent)] hover:bg-[var(--brand-black)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-accent)]"
                   >
                     <span className="block text-[0.65rem] uppercase tracking-[0.14em]">
                       {formattedDay.weekday}
@@ -262,7 +262,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
               <button
                 type="button"
                 onClick={backToDays}
-                className="glass-action inline-flex items-center gap-2 rounded-md border border-white/10 bg-[var(--brand-black)] px-3 py-2 text-sm text-white transition-colors hover:border-[var(--brand-gold)] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-gold)]"
+                className="glass-action inline-flex items-center gap-2 rounded-md border border-white/10 bg-[var(--brand-black)] px-3 py-2 text-sm text-white transition-colors hover:border-[var(--brand-accent)] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-accent)]"
               >
                 <ArrowLeft className="h-4 w-4 text-white" />
                 {copy.backToDaysLabel}
@@ -294,10 +294,10 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
                       setState("idle");
                     }}
                     className={[
-                      "rounded-md border px-3 py-3 text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-gold)]",
+                      "rounded-md border px-3 py-3 text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-accent)]",
                       selectedSlot?.start === slot.start
                         ? "brand-action"
-                        : "border-white/10 bg-black/20 text-white hover:border-[var(--brand-gold)]",
+                        : "border-white/10 bg-black/20 text-white hover:border-[var(--brand-accent)]",
                     ].join(" ")}
                   >
                     {slot.label}
@@ -322,7 +322,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
                 name="bookingName"
                 required
                 minLength={2}
-                className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[var(--brand-gold)]"
+                className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[var(--brand-accent)]"
               />
             </label>
             <label className="grid gap-2 text-sm text-white">
@@ -331,7 +331,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
                 name="bookingEmail"
                 required
                 type="email"
-                className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[var(--brand-gold)]"
+                className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[var(--brand-accent)]"
               />
             </label>
           </div>
@@ -339,7 +339,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
             {copy.bookingCompanyLabel}
             <input
               name="bookingCompany"
-              className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[var(--brand-gold)]"
+              className="rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm text-white outline-none transition-colors focus:border-[var(--brand-accent)]"
             />
           </label>
           <label className="mt-3 grid gap-2 text-sm text-white">
@@ -347,7 +347,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
             <textarea
               name="bookingMessage"
               rows={3}
-              className="resize-none rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm leading-6 text-white outline-none transition-colors focus:border-[var(--brand-gold)]"
+              className="resize-none rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm leading-6 text-white outline-none transition-colors focus:border-[var(--brand-accent)]"
             />
           </label>
           <input
@@ -395,7 +395,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
           className={[
             "mt-4 rounded-md border p-3 text-sm",
             state === "success"
-              ? "border-[var(--brand-gold)] bg-[var(--brand-black)] text-white"
+              ? "border-[var(--brand-accent)] bg-[var(--brand-black)] text-white"
               : "border-white/40 bg-[var(--brand-black)] text-white",
           ].join(" ")}
         >

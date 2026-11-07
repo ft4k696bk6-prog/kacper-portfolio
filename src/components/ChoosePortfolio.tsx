@@ -18,7 +18,7 @@ export function ChoosePortfolio() {
     "pointer-events-auto inline-flex h-8 items-center gap-1.5 rounded-md border border-white/45 bg-[var(--brand-black)]/92 px-2 text-[11px] text-white shadow-[0_16px_38px_rgba(0,0,0,0.42)] backdrop-blur-xl";
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[var(--brand-black)] text-white">
+    <main className="site-page relative min-h-screen overflow-hidden bg-[var(--brand-black)] text-white">
 
       <section className="relative mx-auto flex min-h-screen max-w-7xl flex-col items-center px-5 pb-8 pt-28 text-center sm:pt-24 md:px-8 lg:pt-24">
         <motion.div
@@ -85,7 +85,7 @@ export function ChoosePortfolio() {
 
           <Link
             href="/#contact"
-            className="relative z-20 mt-4 inline-flex items-center gap-2 rounded-md border border-white/15 bg-[var(--brand-black)] px-4 py-2 text-sm text-white transition-colors hover:border-[var(--brand-gold)] hover:text-white"
+            className="relative z-20 mt-4 inline-flex items-center gap-2 rounded-md border border-white/15 bg-[var(--brand-black)] px-4 py-2 text-sm text-white transition-colors hover:border-[var(--brand-accent)] hover:text-white"
           >
             <Mail className="h-4 w-4" />
             {t.choose.contactCta}

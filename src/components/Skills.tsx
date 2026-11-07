@@ -43,7 +43,7 @@ export function Skills() {
                   transition: { duration: 0.35, ease: "easeOut" },
                 },
               }}
-              className="min-h-40 rounded-md border border-white/10 bg-[var(--brand-black)] p-5 text-white transition-colors hover:border-[var(--brand-gold)] hover:text-white"
+              className="min-h-40 rounded-md border border-white/10 bg-[var(--brand-black)] p-5 text-white transition-colors hover:border-[var(--brand-accent)] hover:text-white"
             >
               <div className="mb-4 flex items-center gap-3">
                 <CheckCircle2 className="h-5 w-5 shrink-0 text-white" />

@@ -22,10 +22,11 @@ export function DustReveal({ text }: { text: string }) {
     const from = sample("Odsłoń kontakt"), to = sample(text);
     if (!from.length || !to.length) return;
     const particles = Array.from({ length: Math.min(650, to.length) }, (_, i) => ({ from: from[i % from.length], to: to[i % to.length], dx: Math.sin(i * 13.7) * 60, dy: Math.cos(i * 7.3) * 40 }));
+    const accent = getComputedStyle(document.documentElement).getPropertyValue("--brand-accent").trim();
     let frame = 0; const start = performance.now();
     const draw = (now: number) => {
       const t = Math.min(1, (now - start) / 1000), ease = t * t * (3 - 2 * t), scatter = Math.sin(t * Math.PI);
-      ctx.clearRect(0, 0, w, h); ctx.fillStyle = "#d4af6a";
+      ctx.clearRect(0, 0, w, h); ctx.fillStyle = accent;
       for (const p of particles) { const x = p.from[0] + (p.to[0] - p.from[0]) * ease + p.dx * scatter, y = p.from[1] + (p.to[1] - p.from[1]) * ease + p.dy * scatter; ctx.fillRect(x, y, .8, .8); }
       if (t < 1) frame = requestAnimationFrame(draw); else ctx.clearRect(0, 0, w, h);
     };

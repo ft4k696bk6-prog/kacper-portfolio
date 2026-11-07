@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { brand } from "@/lib/brand";
 
 export const alt =
   "Kacper Bernecki — strony internetowe, CRM i aplikacje webowe";
@@ -17,12 +18,12 @@ export default async function OpenGraphImage() {
         display: "flex",
         width: "100%",
         height: "100%",
-        background: "#0c0c0c",
-        color: "#fafafa",
+        background: brand.background,
+        color: brand.foreground,
         padding: "64px 72px",
         flexDirection: "column",
         justifyContent: "space-between",
-        border: "2px solid #303030",
+        border: `2px solid ${brand.accent}`,
       }}
     >
       <div
@@ -37,13 +38,13 @@ export default async function OpenGraphImage() {
           style={{
             display: "flex",
             fontSize: 24,
-            color: "#f4f4f5",
+            color: brand.foreground,
             letterSpacing: 4,
           }}
         >
           KACPER BERNECKI / BERNECKI.DEV
         </div>
-        {/* Silver KB badge matches /favicon-silver.svg. */}
+        {/* The same mark and palette as the browser icon and navigation. */}
         <div
           style={{
             display: "flex",
@@ -51,8 +52,8 @@ export default async function OpenGraphImage() {
             height: 84,
             padding: 7,
             borderRadius: 18,
-            background: "#090909",
-            border: "2px solid #cbd5e1",
+            background: brand.background,
+            border: `2px solid ${brand.accent}`,
           }}
         >
           <div
@@ -63,9 +64,8 @@ export default async function OpenGraphImage() {
               alignItems: "center",
               justifyContent: "center",
               borderRadius: 12,
-              background: "#111111",
-              border: "2px solid rgba(203,213,225,0.85)",
-              color: "#cbd5e1",
+              background: brand.background,
+              color: brand.foreground,
               fontSize: 27,
               fontWeight: 700,
               letterSpacing: 2,
@@ -85,9 +85,10 @@ export default async function OpenGraphImage() {
         }}
       >
         <span>Strony internetowe.</span>
-        <span style={{ color: "#f4f4f5" }}>CRM i aplikacje webowe.</span>
+        <span>Aplikacje i CRM.</span>
+        <span style={{ color: brand.accent }}>Marketing.</span>
       </div>
-      <div style={{ display: "flex", fontSize: 24, color: "#a1a1aa" }}>
+      <div style={{ display: "flex", fontSize: 24, color: brand.foreground, opacity: 0.7 }}>
         Od pomysłu do wdrożenia. Bezpośrednio ze mną.
       </div>
     </div>,

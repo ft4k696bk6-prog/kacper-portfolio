@@ -26,7 +26,7 @@ export function InteractiveImageAccordion({items,active,onSelect}:{items:Accordi
  <button type="button" className="project-book-toggle" aria-label={"Rozwiń: "+p.title} aria-expanded={selected} onClick={e=>select(p.href,e.currentTarget)} onMouseEnter={e=>{if(!drag.current&&matchMedia("(hover:hover)").matches)select(p.href,e.currentTarget);}} onFocus={()=>{if(!drag.current)onSelect(p.href);}}><span className="book-expand-symbol" aria-hidden="true"><Plus size={20}/></span></button>
  <div className="book-identity" aria-hidden="true"><span className="book-identity-mark">{p.mark}</span><span className={"book-identity-title"+(p.logoOnly?" brand-only":"")}>{p.title}</span></div>
  <div className="project-book-content" aria-hidden={!selected}>
- <p className="text-xs text-[var(--brand-gold)]">{p.category}</p><h3 className="sr-only">{p.title}</h3><p>{p.description}</p>
+ <p className="text-xs text-[var(--brand-accent)]">{p.category}</p><h3 className="sr-only">{p.title}</h3><p>{p.description}</p>
  <div className="project-book-links"><Link href={p.href} tabIndex={selected?0:-1}>Zakres i rezultaty <ArrowUpRight size={14}/></Link>{p.demo&&<a href={p.demo} target="_blank" rel="noopener noreferrer" tabIndex={selected?0:-1}>Live <ExternalLink size={13}/></a>}</div>
  </div></article>;
  })}</div></>;

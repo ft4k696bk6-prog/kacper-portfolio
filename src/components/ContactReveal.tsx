@@ -117,7 +117,7 @@ export function ContactReveal({ copy }: ContactRevealProps) {
       )}
 
       {message && state === "error" && (
-        <p className="mt-4 rounded-md border border-[var(--brand-gold)] bg-[var(--brand-black)] p-3 text-sm text-white">
+        <p className="mt-4 rounded-md border border-[var(--brand-accent)] bg-[var(--brand-black)] p-3 text-sm text-white">
           {message}
         </p>
       )}

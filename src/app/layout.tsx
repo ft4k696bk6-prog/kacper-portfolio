@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import "./globals.css";
+import "./design-system.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LanguageMetadataSync } from "@/components/LanguageMetadataSync";
@@ -9,6 +10,7 @@ import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { AIMascotAssistant } from "@/components/AIMascotAssistant";
 import { Geist } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
+import { brand } from "@/lib/brand";
 
 const geist = Geist({ subsets: ["latin", "latin-ext"], variable: "--font-sans" });
 const siteUrl = "https://bernecki.dev";
@@ -49,10 +51,10 @@ export const metadata: Metadata = {
     alternateLocale: "en_US",
     images: [
       {
-        url: "/opengraph-image?brand=silver-kb-2026",
+        url: "/opengraph-image?brand=studio-20261107",
         width: 1200,
         height: 630,
-        alt: "Kacper Bernecki — srebrne logo KB, strony internetowe, CRM i aplikacje",
+        alt: "Kacper Bernecki — strony internetowe, aplikacje i marketing",
       },
     ],
   },
@@ -61,7 +63,7 @@ export const metadata: Metadata = {
     title: "Kacper Bernecki — strony internetowe, CRM i aplikacje webowe",
     description:
       "Strony internetowe, landing page i CRM-y dla firm. Od pomysłu i projektu po wdrożenie — bezpośrednio z Kacprem Berneckim.",
-    images: ["/opengraph-image?brand=gold-kb-2026"],
+    images: ["/opengraph-image?brand=studio-20261107"],
   },
   alternates: {
     canonical: siteUrl,
@@ -69,10 +71,10 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   icons: {
     icon: [
-      { url: "/favicon-silver.svg", type: "image/svg+xml" },
+      { url: "/favicon.svg?v=studio-20261107", type: "image/svg+xml" },
       { url: "/icon", type: "image/png", sizes: "512x512" },
     ],
-    shortcut: [{ url: "/favicon-silver.svg", type: "image/svg+xml" }],
+    shortcut: [{ url: "/favicon.svg?v=studio-20261107", type: "image/svg+xml" }],
     apple: [{ url: "/apple-icon", type: "image/png", sizes: "180x180" }],
   },
   robots: {
@@ -90,7 +92,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#070707",
+  themeColor: brand.background,
 };
 
 export default function RootLayout({

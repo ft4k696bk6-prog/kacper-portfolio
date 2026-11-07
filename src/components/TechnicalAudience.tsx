@@ -72,20 +72,20 @@ export function TechnicalAudience() {
                 href="https://github.com/ft4k696bk6-prog/B-CRM"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[var(--brand-gold)] hover:text-white"
+                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[var(--brand-accent)] hover:text-white"
               >
                 <Github className="h-4 w-4" />
                 {t.technicalAudience.links.repo}
               </a>
               <Link
                 href="/case-studies/b-crm"
-                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[var(--brand-gold)] hover:text-white"
+                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[var(--brand-accent)] hover:text-white"
               >
                 {t.technicalAudience.links.caseStudy}
               </Link>
               <Link
                 href="#contact"
-                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[var(--brand-gold)] hover:text-white"
+                className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-[var(--brand-accent)] hover:text-white"
               >
                 {t.technicalAudience.links.contact}
               </Link>

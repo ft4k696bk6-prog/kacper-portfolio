@@ -1,0 +1,102 @@
+/* Black + warm white, with one quiet champagne accent for actions and selection. */
+:root, .dark {
+  color-scheme: dark;
+  --background: var(--brand-black);
+  --foreground: var(--brand-white);
+  --card: var(--surface);
+  --card-foreground: var(--brand-white);
+  --popover: var(--surface-raised);
+  --popover-foreground: var(--brand-white);
+  --primary: var(--brand-accent);
+  --primary-foreground: var(--brand-black);
+  --secondary: var(--surface-raised);
+  --secondary-foreground: var(--brand-white);
+  --muted: var(--surface);
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--surface-raised);
+  --accent-foreground: var(--brand-white);
+  --border: var(--line);
+  --input: var(--line);
+  --input-background: var(--brand-black);
+  --switch-background: var(--surface-raised);
+  --ring: var(--brand-accent);
+  --sidebar: var(--brand-black);
+  --sidebar-foreground: var(--brand-white);
+  --sidebar-primary: var(--brand-accent);
+  --sidebar-primary-foreground: var(--brand-black);
+  --sidebar-accent: var(--surface-raised);
+  --sidebar-accent-foreground: var(--brand-white);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--brand-accent);
+}
+
+body { color: var(--brand-white); background: var(--brand-black); }
+::selection { color: var(--brand-black); background: var(--brand-accent); }
+.brand-action, .studio-cta {
+  background: var(--brand-accent);
+  color: var(--brand-black);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .16);
+  font-weight: 600;
+  transition: transform .25s, filter .25s;
+}
+.brand-action:not(:disabled):is(:hover,:focus-visible,:active), .studio-cta:is(:hover,:focus-visible,:active) {
+  color: var(--brand-black);
+  filter: brightness(1.06);
+}
+.brand-action::after, .glass-action::after { display: none; }
+.brand-mark, .brand-outline {
+  border-color: var(--line);
+  color: var(--brand-white);
+  background: transparent;
+}
+.brand-outline:is(:hover,:focus-visible,:active) {
+  border-color: var(--brand-accent);
+  color: var(--brand-white);
+  background: var(--surface);
+}
+.brand-selected {
+  color: var(--brand-accent);
+  border-color: var(--brand-accent);
+  background: color-mix(in srgb, var(--brand-accent) 10%, var(--brand-black));
+}
+.brand-eyebrow { color: var(--text-secondary); font-size: 11px; letter-spacing: .2em; }
+.ui-panel { border-color: var(--line); background: var(--surface); border-radius: 14px; }
+.ui-icon { color: var(--brand-white); border-color: var(--line); background: transparent; }
+.contact-icon-trigger { color: var(--brand-white); }
+.contact-icon-trigger:hover { color: var(--brand-accent); }
+.book-controls button { border-color: var(--line); color: var(--brand-white); }
+.book-controls button:hover { background: var(--surface-raised); }
+.project-book-links a { border-color: var(--line); color: var(--brand-white); border-radius: 8px; }
+.site-nav[data-dark="true"] { background: rgb(8 8 8 / .78)!important; border-color: var(--line)!important; color: var(--brand-white); }
+.site-footer { border-color: var(--line); }
+.site-footer nav a:hover, .site-footer > div > div a:hover { color: var(--brand-accent); }
+
+.site-page { color: var(--brand-white); overflow-wrap: anywhere; }
+.site-page h1 {
+  font-size: clamp(2.1rem, 4.5vw, 4.25rem);
+  font-weight: 550;
+  line-height: 1.1;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+.site-page h2, .site-page h3 { line-height: 1.25; letter-spacing: -.025em; }
+.page-intro { color: var(--text-secondary); line-height: 1.85; }
+.page-eyebrow { color: var(--text-muted); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; }
+.page-breadcrumb { color: var(--text-muted); }
+.page-breadcrumb a:hover { color: var(--brand-white); }
+.surface-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+a.surface-card { transition: border-color .25s, background-color .25s; }
+a.surface-card:hover { border-color: var(--brand-accent); background: var(--surface-raised); }
+.editorial-page article > section > p { color: var(--text-secondary); line-height: 1.9; }
+.editorial-page article > section { scroll-margin-top: 110px; }
+.text-link { color: var(--brand-white); text-decoration: underline; text-underline-offset: 5px; }
+.text-link:hover { color: var(--brand-accent); }
+@media (prefers-reduced-motion: reduce) {
+  .brand-action, .studio-cta, a.surface-card { transition: none; }
+}
