@@ -12,16 +12,15 @@ Każdego dnia o **03:23 czasu Europe/Warsaw** GitHub Actions uruchamia `scripts/
 6. Uruchamia testy pSEO, walidację TypeScript, lint i produkcyjny build. Dopiero po przejściu całości commit trafia na `main`; z niego powinno uruchomić się wdrożenie Vercel.
 7. Raport przebiegu pokazuje próbę, zatwierdzone, odrzucone, koszt szacunkowy. Zatrzymuje się po osiągnięciu 5000 łącznych poradników.
 
-## Wymagane JEDNORAZOWE podłączenie
+## Uwierzytelnianie bez dodatkowego klucza (GitHub OIDC → Vercel)
 
-Do działania generatora wymagany jest klucz OpenRouter jako **GitHub Actions repository secret**:
+W domyślnej konfiguracji **nie trzeba niczego kopiować do GitHub Secrets**. Automat uzyskuje krótkotrwały token GitHub Actions OIDC (uprawnienie `id-token: write`) i przesyła go tylko do `https://bernecki.dev/api/pseo-bridge`. Serwer Vercel weryfikuje podpis JWT oraz dokładną tożsamość repozytorium, gałęzi `main` i pliku workflow; dopiero wtedy wywołuje OpenRouter za pomocą istniejącej serwerowej zmiennej `OPENROUTER_API_KEY`. **Klucz nigdy nie trafia do GitHub Actions ani odpowiedzi API.**
 
-- Otwórz [repozytorium — Actions secrets](https://github.com/ft4k696bk6-prog/kacper-portfolio/settings/secrets/actions).
-- Wybierz **New repository secret**.
-- Nazwa: `OPENROUTER_API_KEY`. Wartość: klucz z [OpenRouter](https://openrouter.ai/settings/keys).
-- **Nie** wpisuj klucza do kodu, PR ani dyskusji. Zmienna Vercel nie jest automatycznie widoczna w GitHub Actions.
+To działa tylko wtedy, gdy na Vercel **rzeczywiście jest skonfigurowany i aktywny** istniejący klucz OpenRouter. Sam chatbot na stronie ma awaryjne odpowiedzi offline, więc działający widżet nie jest dowodem, że klucz jest poprawny. Pierwszy przebieg automatu jest testem end-to-end. Przy braku klucza na Vercel API zwróci status 503 i treści nie będą publikowane.
 
-Jeśli klucz nie jest dodany, próba uruchomienia **kończy się błędem bez publikowania**. To zamierzone zabezpieczenie, nie awaria strony.
+Alternatywnie, jeśli ktoś chce niezależny klucz dla generatora, może dodać do GitHub Actions repository secret `OPENROUTER_API_KEY` — wtedy skrypt użyje bezpośrednio OpenRouter bez mostka OIDC. **Nie ma takiej potrzeby, gdy klucz Vercel działa.**
+
+Źródło modelu bezpieczeństwa: https://docs.github.com/en/actions/reference/security/oidc
 
 ### Opcjonalne ustawienia bez sekretów
 

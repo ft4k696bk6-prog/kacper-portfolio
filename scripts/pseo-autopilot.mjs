@@ -81,17 +81,44 @@ function validate(x){
  if(/osobiście naprawiłem|w naszym rzeczywistym wdrożeniu/i.test(body))return "unsupported experience";
  return null;
 }
+const oidcAudience = "bernecki.dev:pseo:v1";
+async function oidcToken(){
+ const url=process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
+ const requestToken=process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
+ if(!url||!requestToken)throw new Error("Missing GitHub Actions OIDC credentials; workflow needs id-token: write.");
+ const endpoint=new URL(url);
+ endpoint.searchParams.set("audience",oidcAudience);
+ const res=await fetch(endpoint,{headers:{Authorization:"bearer "+requestToken},signal:AbortSignal.timeout(12000)});
+ if(!res.ok)throw new Error("GitHub OIDC HTTP "+res.status);
+ const payload=await res.json();
+ if(typeof payload.value!=="string")throw new Error("GitHub OIDC returned no JWT");
+ return payload.value;
+}
 async function ai(system,user,max_tokens){
- const res=await fetch("https://openrouter.ai/api/v1/chat/completions",{
-  method:"POST",signal:AbortSignal.timeout(110000),
-  headers:{Authorization:"Bearer "+key,"Content-Type":"application/json","HTTP-Referer":"https://bernecki.dev","X-OpenRouter-Title":"bernecki.dev pSEO"},
-  body:JSON.stringify({model,temperature:.2,response_format:{type:"json_object"},max_tokens,messages:[{role:"system",content:system},{role:"user",content:user}]})
- });
- if(!res.ok)throw new Error("OpenRouter HTTP "+res.status+" "+(await res.text()).slice(0,120).replaceAll(key,"[REDACTED]"));
+ const viaBridge=!key;
+ let res;
+ for(let attempt=0;attempt<4;attempt++){
+  const jwt=viaBridge?await oidcToken():null;
+  res=await fetch(viaBridge?"https://bernecki.dev/api/pseo-bridge":"https://openrouter.ai/api/v1/chat/completions",{
+   method:"POST",signal:AbortSignal.timeout(112000),
+   headers:viaBridge?
+    {Authorization:"Bearer "+jwt,"Content-Type":"application/json"}:
+    {Authorization:"Bearer "+key,"Content-Type":"application/json","HTTP-Referer":"https://bernecki.dev","X-OpenRouter-Title":"bernecki.dev pSEO"},
+   body:JSON.stringify({model,temperature:.2,response_format:{type:"json_object"},max_tokens,messages:[{role:"system",content:system},{role:"user",content:user}]})
+  });
+  if(viaBridge&&[404,502,503].includes(res.status)&&attempt<3){
+   await res.body?.cancel();
+   await new Promise(resolve=>setTimeout(resolve,15000));
+   continue;
+  }
+  break;
+ }
+ if(!res?.ok)throw new Error((viaBridge?"Vercel AI bridge HTTP ":"OpenRouter HTTP ")+(res?.status||"unknown")+" "+(await res?.text()||"").slice(0,150));
  const json=await res.json(),u=json.usage||{};
  cost+=typeof u.cost==="number"?u.cost:((u.prompt_tokens||0)*.25+(u.completion_tokens||0)*2)/1000000;
  return JSON.parse(json.choices?.[0]?.message?.content||"null");
 }
+
 async function* discover(){
  const used=new Set(state.usedTopics),denied=new Set(state.rejectedTopics);
  for(const b of backlog)if(!used.has(b.query)&&!denied.has(b.query)&&docs[b.category])
@@ -141,7 +168,7 @@ function publishReport(){
 }
 async function main(){
  if(process.argv.includes("--dry-run")){audit.push("Dry run: "+existingSlugs.size+" existing slugów, "+backlog.length+" backlog topics");publishReport();return;}
- if(!key)throw new Error("BRAK OPENROUTER_API_KEY: skonfiguruj jako repozytoryjny secret GitHub Actions (klucz w Vercel nie przechodzi automatycznie).");
+ if(!key&&(!process.env.ACTIONS_ID_TOKEN_REQUEST_URL||!process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN))throw new Error("No OpenRouter key and no GitHub OIDC context. Add id-token: write to the workflow.");
  if(existingSlugs.size>=target){audit.push("Osiągnięto limit 5000");publishReport();return;}
  const count=Math.min(limit,target-existingSlugs.size);
  const seen=new Set(state.usedTopics),denied=new Set(state.rejectedTopics);
