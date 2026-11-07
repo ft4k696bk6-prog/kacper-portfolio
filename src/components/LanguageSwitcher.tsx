@@ -20,8 +20,30 @@ export function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  // Every static business route has a real English counterpart, not just translated menu labels.
+  const bilingualRoutes: Record<string,string> = {
+    "/case-studies": "/en/case-studies",
+    "/case-studies/re-energy-meta-ads": "/en/case-studies/re-energy-meta-ads",
+    "/reklamy-meta-ads-dla-firm": "/en/meta-ads",
+    "/tworzenie-stron-internetowych": "/en/services/websites",
+    "/crm-i-aplikacje-webowe": "/en/services/crm",
+    "/marketing-i-reklamy": "/en/services/marketing"
+  };
   // Guides have separate, indexable EN URLs; a localStorage toggle alone would leave Polish text visible.
   const guideLanguagePath = (target: "pl" | "en") => {
+    if (pathname.startsWith("/realizacje/")) {
+      const slug=pathname.slice("/realizacje/".length);
+      return target==="en" ? `/en/projects/${slug}` : pathname;
+    }
+    if (pathname.startsWith("/en/projects/")) {
+      const slug=pathname.slice("/en/projects/".length);
+      return target==="pl" ? `/realizacje/${slug}` : pathname;
+    }
+    if (target==="en" && bilingualRoutes[pathname])return bilingualRoutes[pathname];
+    if (target==="pl") {
+      const source=Object.entries(bilingualRoutes).find(([,english])=>english===pathname);
+      if (source)return source[0];
+    }
     if (pathname.startsWith("/poradniki/tematy/")) {
       const suffix = pathname.slice("/poradniki/tematy/".length);
       return target === "en" ? `/en/guides/topics/${suffix}` : pathname;
@@ -48,8 +70,11 @@ export function LanguageSwitcher() {
     if (path && path !== pathname) router.push(path);
   };
   useEffect(() => {
-    if (pathname.startsWith("/en/guides") && lang !== "en") setLang("en");
-    if (pathname.startsWith("/poradniki") && lang !== "pl") setLang("pl");
+    if (pathname.startsWith("/en/") && lang !== "en") setLang("en");
+    if ((pathname.startsWith("/poradniki") || pathname.startsWith("/realizacje/") ||
+      ["/case-studies","/case-studies/re-energy-meta-ads","/reklamy-meta-ads-dla-firm",
+       "/tworzenie-stron-internetowych","/crm-i-aplikacje-webowe","/marketing-i-reklamy"].includes(pathname)) &&
+       lang !== "pl") setLang("pl");
   }, [pathname, lang, setLang]);
 
   const [dark, setDark] = useState(true);

@@ -6,7 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export function SiteFooter() {
   const {lang} = useLanguage();
   const pathname = usePathname();
-  const english = pathname.startsWith("/en/guides") || (!pathname.startsWith("/poradniki") && lang === "en");
+  const english = pathname.startsWith("/en/") || (!pathname.startsWith("/poradniki") && lang === "en");
   return <footer className="site-footer relative z-10 border-t border-white/10 bg-[var(--brand-black)] px-5 py-14 md:px-8">
     <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-3">
       <div>
@@ -18,13 +18,13 @@ export function SiteFooter() {
       </div>
       <nav aria-label={english?"Services":"Oferta"} className="space-y-4 text-white">
         <p className="text-xs uppercase tracking-widest text-white/70">{english?"Services":"Oferta"}</p>
-        <Link className="block" href="/tworzenie-stron-internetowych">{english?"Website development":"Tworzenie stron internetowych"}</Link>
-        <Link className="block" href="/crm-i-aplikacje-webowe">{english?"CRM and web applications":"CRM i aplikacje webowe"}</Link>
-        <Link className="block" href="/marketing-i-reklamy">{english?"Marketing, advertising and social media":"Marketing, reklamy i social media"}</Link>
+        <Link className="block" href={english?"/en/services/websites":"/tworzenie-stron-internetowych"}>{english?"Website development":"Tworzenie stron internetowych"}</Link>
+        <Link className="block" href={english?"/en/services/crm":"/crm-i-aplikacje-webowe"}>{english?"CRM and web applications":"CRM i aplikacje webowe"}</Link>
+        <Link className="block" href={english?"/en/services/marketing":"/marketing-i-reklamy"}>{english?"Marketing, advertising and social media":"Marketing, reklamy i social media"}</Link>
       </nav>
       <nav aria-label={english?"Before we talk":"Poznaj współpracę"} className="space-y-4 text-white">
         <p className="text-xs uppercase tracking-widest text-white/70">{english?"Before we talk":"Przed rozmową"}</p>
-        <Link className="block" href="/case-studies">{english?"Case studies and live projects":"Realizacje i działające projekty"}</Link>
+        <Link className="block" href={english?"/en/case-studies":"/case-studies"}>{english?"Case studies and live projects":"Realizacje i działające projekty"}</Link>
         <Link className="block" href="/#collaborations">{english?"Client collaborations":"Współprace z firmami"}</Link>
         <Link className="block" href={english?"/en/guides":"/poradniki"}>{english?"Practical troubleshooting guides":"Poradniki dla przedsiębiorców"}</Link>
         <Link className="block" href="/#faq">{english?"Questions about collaboration":"Pytania o współpracę"}</Link>
