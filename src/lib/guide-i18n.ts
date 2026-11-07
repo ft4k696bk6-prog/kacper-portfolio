@@ -73,6 +73,8 @@ const categoryLabels:Record<string,readonly [string,string]>={
   "wordpress":["WordPress","Plugins, website configuration, WooCommerce and WordPress issues."],
   "strony-ux":["Websites and UX","Mobile layout, images, navigation, performance and accessibility."],
   "automatyzacje":["Automation","Scheduled jobs, integrations, CI/CD workflows and alerts."],
+  "branze-pkd":["Business ideas and activity codes","Hairdresser, barber, tattoo and renovation business guides with cost models."],
+  "spolki-cit":["Companies, CIT and owner payouts","Corporate income tax, dividends, contracts, and shareholders."],
   "biznes-podatki":["Business and taxes","General VAT education, starting a business and managing business costs."],
   "inne":["Other guides","Practical fixes for business websites and web applications."]
 };

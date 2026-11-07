@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { wrapMarqueePosition } from "@/lib/marquee";
 const clients = [
+  { name:"Isto Kebab", detail:"Jabłonka", url:"https://isto.bernecki.dev", logo:"/images/brands/isto-kebab.svg" },
   { name:"Motomizer", detail:"motomizer.pl", url:"https://motomizer.pl", logo:null },
   { name:"Jalapeno Kebab", detail:"Niemce", url:"https://www.instagram.com/jalapeno_kebab/", logo:"/images/brands/jalapeno.jpg" },
   { name:"Re-energy System", detail:"OZE", url:"https://re-energysystem.pl/", logo:"/images/brands/re-energy.png" },

@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 @custom-variant dark (&:is(.dark *));
 
-/* The primary page is static by default. No canvas or continuous animation. */
+/* Uniform black, white and neutral-silver UI across all pages. */
 .portfolio-scene {position:relative;isolation:isolate;background:var(--brand-black);overflow:clip}
 .portfolio-content {position:relative;z-index:1}
 .portfolio-content > section {background:var(--brand-black)}
@@ -32,8 +32,8 @@
 .menu-morph.is-open i:last-child{transform:translateY(-7.6px) rotate(-45deg)}
 :root {
   --brand-black: #080808;
-  --brand-white: #f5f2ec;
-  --brand-accent: #c5b394;
+  --brand-white: #f2f2f2;
+  --brand-accent: #dedede;
   --brand-gold: var(--brand-accent);
   --surface: color-mix(in srgb, var(--brand-white) 3%, var(--brand-black));
   --surface-raised: color-mix(in srgb, var(--brand-white) 6%, var(--brand-black));
@@ -227,7 +227,7 @@
   --chart-5: oklch(0.269 0 0);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary: oklch(0.82 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);

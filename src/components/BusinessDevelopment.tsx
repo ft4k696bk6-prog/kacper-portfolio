@@ -65,20 +65,27 @@ const content={
 const examples=[
   {image:"/images/projects/reenergy-website-live.jpg",name:"Re-Energy System",href:"/case-studies/re-energy-meta-ads",detail:"Strona · marketing · CRM"},
   {image:"/images/projects/starcars-live-current.jpg",name:"StarCars",href:"/case-studies/starcars",detail:"Oferta · import · kalkulacja"},
+  {image:"https://s0.wp.com/mshots/v1/https%3A%2F%2Ftest-test-kebab-berni.vercel.app%2F?vpw=1440&vph=940&w=1200",name:"Isto Kebab",href:"/realizacje/isto-kebab-strona",detail:"Strona · menu · zamówienia"},
   {image:"/images/projects/motomizer-live.jpg",name:"Motomizer",href:"/case-studies/motomizer",detail:"Produkt · marka · e-commerce"}
 ];
 const guides=[
   {slug:"zwrot-vat-8-23-przyklad-50000",pl:"Zwrot VAT 8% i 23% na przykładzie 50 000 zł",en:"8% vs 23% VAT refund: PLN 50,000"},
   {slug:"kiedy-vat-8-budownictwo-oze-klimatyzacja-fryzjer",pl:"Kiedy usługa może mieć 8% VAT?",en:"When can services use 8% VAT?"},
+  {slug:"fryzjerka-pkd-2025-vat-ryczalt-koszty",pl:"Salon fryzjerski: podatki, koszty i marża",en:"Hair salon: tax, costs and margin"},
+  {slug:"barber-pkd-2025-vat-8-ryczalt-koszty",pl:"Barber: PKD, VAT i ryczałt",en:"Barbershop: VAT and lump-sum tax"},
+  {slug:"wykonczeniowka-pkd-2025-55-ryczalt-vat-8",pl:"Wykończeniówka: 5,5% ryczałtu i VAT 8%",en:"Renovation: 5.5% income tax, 8% VAT"},
+  {slug:"studio-tatuazu-pkd-9699-vat-ryczalt-koszty",pl:"Studio tatuażu: PKD i koszty",en:"Tattoo studio: codes and costs"},
+  {slug:"spolka-zoo-cit-9-19-dywidenda-przyklad",pl:"Spółka z o.o.: CIT 9% i dywidenda",en:"Limited company: CIT and dividend"},
+  {slug:"czy-oplaca-sie-vat-czynny-w-2026",pl:"Czy opłaca się być VAT-owcem?",en:"Is VAT registration worth it?"},
   {slug:"od-pomyslu-do-firmy-pierwsze-kroki",pl:"Od pomysłu do firmy — pierwsze kroki",en:"From idea to business — first steps"}
 ];
 
 export function BusinessDevelopment(){
   const {lang}=useLanguage();
   const c=content[lang];
-  return <main className="site-page bg-[#090b0e] text-white">
+  return <main className="site-page bg-[#080808] text-white">
     <section className="relative isolate overflow-hidden px-5 pb-20 pt-36 md:px-8 md:pb-24 md:pt-44">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_65%_at_83%_30%,rgba(92,120,139,.15),transparent_75%)]"/>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_65%_at_83%_30%,rgba(255,255,255,.045),transparent_75%)]"/>
       <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.2fr_.8fr]">
         <div>
           <p className="text-xs font-medium uppercase tracking-[.2em] text-white/55">{c.eyebrow}</p>
@@ -87,7 +94,7 @@ export function BusinessDevelopment(){
           <div className="mt-9 flex flex-wrap gap-3"><Link href="/#contact" className="brand-action inline-flex items-center gap-2 rounded-lg px-5 py-3 font-medium text-black">{c.cta}<ArrowUpRight size={17}/></Link>
             <Link href="/#projects" className="inline-flex items-center gap-2 rounded-lg border border-white/25 px-5 py-3 text-white hover:border-white/60">{c.other}<ArrowRight size={17}/></Link></div>
         </div>
-        <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 bg-[#151b20]">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 bg-[#151515]">
           <Image src="/images/projects/bcrm-admin-dashboard.jpg" alt={lang==="pl"?"Rzeczywisty projekt panelu B-CRM":"B-CRM dashboard project"} fill sizes="(min-width:1024px) 38vw, 90vw" className="object-cover object-left-top opacity-90"/>
           <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-transparent to-transparent"/>
           <p className="absolute bottom-6 left-6 right-6 text-sm text-white/90">B-CRM · {lang==="pl"?"system do obsługi sprzedaży":"sales workflow system"}</p>
@@ -97,23 +104,23 @@ export function BusinessDevelopment(){
     <section className="border-t border-white/10 px-5 py-20 md:px-8"><div className="mx-auto max-w-7xl">
       <h2 className="text-3xl font-medium tracking-tight md:text-5xl">{c.scope}</h2>
       <div className="mt-10 grid gap-4 md:grid-cols-2">{c.cards.map(card=><div key={card.title} className="rounded-2xl border border-white/15 bg-white/[.025] p-7">
-        <card.Icon size={24} className="text-[#b7c7ce]"/><h3 className="mt-5 text-2xl">{card.title}</h3><p className="mt-4 max-w-xl leading-7 text-white/70">{card.text}</p>
+        <card.Icon size={24} className="text-[#d6d6d6]"/><h3 className="mt-5 text-2xl">{card.title}</h3><p className="mt-4 max-w-xl leading-7 text-white/70">{card.text}</p>
       </div>)}</div>
     </div></section>
     <section className="border-t border-white/10 px-5 py-20 md:px-8"><div className="mx-auto max-w-7xl">
       <h2 className="max-w-3xl text-3xl font-medium tracking-tight md:text-5xl">{c.processTitle}</h2>
-      <div className="mt-10 grid gap-8 md:grid-cols-3">{c.process.map(([n,title,text])=><div key={n} className="border-t border-white/20 pt-6"><span className="text-sm text-[#b7c7ce]">{n}</span><h3 className="mt-5 text-xl">{title}</h3><p className="mt-3 leading-7 text-white/70">{text}</p></div>)}</div>
+      <div className="mt-10 grid gap-8 md:grid-cols-3">{c.process.map(([n,title,text])=><div key={n} className="border-t border-white/20 pt-6"><span className="text-sm text-[#d6d6d6]">{n}</span><h3 className="mt-5 text-xl">{title}</h3><p className="mt-3 leading-7 text-white/70">{text}</p></div>)}</div>
     </div></section>
     <section className="border-t border-white/10 px-5 py-20 md:px-8"><div className="mx-auto max-w-7xl">
       <h2 className="text-3xl font-medium tracking-tight md:text-5xl">{c.examples}</h2><p className="mt-4 max-w-2xl leading-7 text-white/70">{c.examplesIntro}</p>
-      <div className="mt-9 grid gap-5 md:grid-cols-3">{examples.map(item=><Link key={item.name} href={item.href} className="group overflow-hidden rounded-xl border border-white/15 bg-[#13171a] hover:border-white/45">
+      <div className="mt-9 grid gap-5 md:grid-cols-2 xl:grid-cols-4">{examples.map(item=><Link key={item.name} href={item.href} className="group overflow-hidden rounded-xl border border-white/15 bg-[#151515] hover:border-white/45">
         <div className="relative aspect-[16/10] overflow-hidden"><Image src={item.image} alt={item.name} fill sizes="(min-width:768px) 30vw, 90vw" className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.035]"/></div>
         <div className="p-5"><h3 className="flex items-center justify-between text-xl">{item.name}<ArrowUpRight size={17}/></h3><p className="mt-2 text-sm text-white/65">{item.detail}</p></div></Link>)}</div>
     </div></section>
     <section className="border-t border-white/10 px-5 py-20 md:px-8"><div className="mx-auto max-w-7xl">
-      <div className="flex items-start gap-4"><ShieldCheck size={26} className="mt-1 shrink-0 text-[#b7c7ce]"/><div className="max-w-4xl">
+      <div className="flex items-start gap-4"><ShieldCheck size={26} className="mt-1 shrink-0 text-[#d6d6d6]"/><div className="max-w-4xl">
         <h2 className="text-2xl font-medium md:text-3xl">{c.legalTitle}</h2><p className="mt-5 leading-8 text-white/75">{c.legalText}</p>
-        <a href="https://eli.sejm.gov.pl/eli/DU/2026/1274/ogl" target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 text-sm text-[#b7c7ce] underline underline-offset-4">{c.law}<ArrowUpRight size={14}/></a>
+        <a href="https://eli.sejm.gov.pl/eli/DU/2026/1274/ogl" target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 text-sm text-[#d6d6d6] underline underline-offset-4">{c.law}<ArrowUpRight size={14}/></a>
       </div></div>
     </div></section>
     <section className="border-t border-white/10 px-5 py-20 md:px-8"><div className="mx-auto max-w-7xl">
