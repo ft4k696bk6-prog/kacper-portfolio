@@ -71,6 +71,12 @@ const examples=[
 const guides=[
   {slug:"zwrot-vat-8-23-przyklad-50000",pl:"Zwrot VAT 8% i 23% na przykładzie 50 000 zł",en:"8% vs 23% VAT refund: PLN 50,000"},
   {slug:"kiedy-vat-8-budownictwo-oze-klimatyzacja-fryzjer",pl:"Kiedy usługa może mieć 8% VAT?",en:"When can services use 8% VAT?"},
+  {slug:"fryzjerka-pkd-2025-vat-ryczalt-koszty",pl:"Salon fryzjerski: podatki, koszty i marża",en:"Hair salon: tax, costs and margin"},
+  {slug:"barber-pkd-2025-vat-8-ryczalt-koszty",pl:"Barber: PKD, VAT i ryczałt",en:"Barbershop: VAT and lump-sum tax"},
+  {slug:"wykonczeniowka-pkd-2025-55-ryczalt-vat-8",pl:"Wykończeniówka: 5,5% ryczałtu i VAT 8%",en:"Renovation: 5.5% income tax, 8% VAT"},
+  {slug:"studio-tatuazu-pkd-9699-vat-ryczalt-koszty",pl:"Studio tatuażu: PKD i koszty",en:"Tattoo studio: codes and costs"},
+  {slug:"spolka-zoo-cit-9-19-dywidenda-przyklad",pl:"Spółka z o.o.: CIT 9% i dywidenda",en:"Limited company: CIT and dividend"},
+  {slug:"czy-oplaca-sie-vat-czynny-w-2026",pl:"Czy opłaca się być VAT-owcem?",en:"Is VAT registration worth it?"},
   {slug:"od-pomyslu-do-firmy-pierwsze-kroki",pl:"Od pomysłu do firmy — pierwsze kroki",en:"From idea to business — first steps"}
 ];
 
@@ -107,7 +113,7 @@ export function BusinessDevelopment(){
     </div></section>
     <section className="border-t border-white/10 px-5 py-20 md:px-8"><div className="mx-auto max-w-7xl">
       <h2 className="text-3xl font-medium tracking-tight md:text-5xl">{c.examples}</h2><p className="mt-4 max-w-2xl leading-7 text-white/70">{c.examplesIntro}</p>
-      <div className="mt-9 grid gap-5 md:grid-cols-3">{examples.map(item=><Link key={item.name} href={item.href} className="group overflow-hidden rounded-xl border border-white/15 bg-[#151515] hover:border-white/45">
+      <div className="mt-9 grid gap-5 md:grid-cols-2 xl:grid-cols-4">{examples.map(item=><Link key={item.name} href={item.href} className="group overflow-hidden rounded-xl border border-white/15 bg-[#151515] hover:border-white/45">
         <div className="relative aspect-[16/10] overflow-hidden"><Image src={item.image} alt={item.name} fill sizes="(min-width:768px) 30vw, 90vw" className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.035]"/></div>
         <div className="p-5"><h3 className="flex items-center justify-between text-xl">{item.name}<ArrowUpRight size={17}/></h3><p className="mt-2 text-sm text-white/65">{item.detail}</p></div></Link>)}</div>
     </div></section>
