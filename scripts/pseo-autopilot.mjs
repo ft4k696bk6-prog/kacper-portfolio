@@ -140,8 +140,8 @@ function publishReport(){
  if(process.env.GITHUB_STEP_SUMMARY)writeFileSync(process.env.GITHUB_STEP_SUMMARY,report,{flag:"a"});
 }
 async function main(){
- if(!key)throw new Error("BRAK OPENROUTER_API_KEY: skonfiguruj jako repozytoryjny secret GitHub Actions (klucz w Vercel nie przechodzi automatycznie).");
  if(process.argv.includes("--dry-run")){audit.push("Dry run: "+existingSlugs.size+" existing slugów, "+backlog.length+" backlog topics");publishReport();return;}
+ if(!key)throw new Error("BRAK OPENROUTER_API_KEY: skonfiguruj jako repozytoryjny secret GitHub Actions (klucz w Vercel nie przechodzi automatycznie).");
  if(existingSlugs.size>=target){audit.push("Osiągnięto limit 5000");publishReport();return;}
  const count=Math.min(limit,target-existingSlugs.size);
  const seen=new Set(state.usedTopics),denied=new Set(state.rejectedTopics);
@@ -169,7 +169,7 @@ async function main(){
    if(topic.source.startsWith("GitHub issue"))state.seenIssueUrls.push(topic.url);
    approved++;audit.push("PUBLISHED "+entry.slug+" score="+review.score);
   }catch(e){
-   audit.push("ERROR "+topic.query+": "+String(e.message||e).replaceAll(key,"[REDACTED]").slice(0,130));
+   audit.push("ERROR "+topic.query+": "+(key?String(e.message||e).replaceAll(key,"[REDACTED]"):String(e.message||e)).slice(0,130));
    rejected++;if(/OpenRouter HTTP (401|402|403|429)/.test(String(e)))break;
   }
  }
