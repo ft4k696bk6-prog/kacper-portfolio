@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 #!/usr/bin/env node
 /**
  * Export actual published guide data for offline PL→EN translation.
