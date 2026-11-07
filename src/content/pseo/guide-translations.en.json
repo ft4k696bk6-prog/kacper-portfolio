@@ -319,7 +319,7 @@
   "api-http-408-request-timeout": {
     "sourceHash": "161e52577cdd30081663c86a40aa62190d5e099d774a22875645d760a705adae",
     "status": "machine",
-    "title": "HTTP 408 Request Timeout when sending free request",
+    "title": "HTTP 408 Request Timeout During a Slow Upload",
     "description": "The server closes the request before the customer can send the whole body.",
     "intro": "The server closes the request before the customer can send the whole body.",
     "serviceLabel": "Integration and APIs",
@@ -354,7 +354,7 @@
   "api-http-409-resource-conflict": {
     "sourceHash": "bc43cac23d54bcf3b3e98922ea03aa7cd531f0fcc6b48e8d5bc7719438d685dd",
     "status": "machine",
-    "title": "HTTP 409 Conflict after resetting the record",
+    "title": "HTTP 409 Conflict When Creating an Existing Record",
     "description": "A resubmit form tries to save an existing order ID.",
     "intro": "A resubmit form tries to save an existing order ID.",
     "serviceLabel": "Integration and APIs",
@@ -459,7 +459,7 @@
   "api-http-415-unsupported-media": {
     "sourceHash": "0d7e37b2d5a73ab5714203cf396cd0da2adce81466d46bf84f1b6130709ec7bc",
     "status": "machine",
-    "title": "HTTP 415 Unsupported Media Type on sending form",
+    "title": "HTTP 415 Unsupported Media Type When Submitting a Form",
     "description": "The server rejects the correct data form with status 415 before moving to validation of content.",
     "intro": "The server rejects the correct data form with status 415 before moving to validation of content. Endpoint expects a different Content-Type than declared by the client, e.g. JSON vs multipart/form-data.",
     "serviceLabel": "Forms and APIs",
@@ -495,7 +495,7 @@
   "api-http-422-validation-error": {
     "sourceHash": "e843a57b0f2633d07e47161eb2eb50bfc75a409cafee1f4d1ea8b940ead8a1ab",
     "status": "machine",
-    "title": "HTTP 422 Unprocessable Content at correct JSON",
+    "title": "HTTP 422 Unprocessable Content Despite Valid JSON",
     "description": "POST is syntaxally correct, but endpoint returns 422 and does not create a record.",
     "intro": "POST is syntaxally correct, but endpoint returns 422 and does not create a record. The server understands the request format, but data values do not meet business validation rules.",
     "serviceLabel": "Forms and APIs",
@@ -531,7 +531,7 @@
   "api-http-429-retry-after": {
     "sourceHash": "d3a06690a4224bd17b50a36f7895c2f00471e54a69fa12d61dfee2b136c58d3c",
     "status": "machine",
-    "title": "HTTP 429 Too Many Requests — How to Renew Questions safely",
+    "title": "HTTP 429 Too Many Requests: How to Retry Safely",
     "description": "Integration receives 429 and begins to perform more and more repetitions instead of regaining action.",
     "intro": "Integration receives 429 and begins to perform more and more repetitions instead of regaining action. The server limits traffic and aggressive retras of all customers increases overload.",
     "serviceLabel": "Forms and APIs",
@@ -602,7 +602,7 @@
   "api-http-500-unhandled-exception": {
     "sourceHash": "170812dea913fd42198f9505e98886938d107f0a72ad403e46506fe51227e334",
     "status": "machine",
-    "title": "HTTP 500 Internal Server Error without user information",
+    "title": "HTTP 500 Internal Server Error: How to Find the Cause",
     "description": "The form displays a general write error, and backend throws an unserviced exception.",
     "intro": "The form displays a general write error, and backend throws an unserviced exception.",
     "serviceLabel": "Integration and APIs",
@@ -742,7 +742,7 @@
   "api-multipart-boundary-missing": {
     "sourceHash": "01f0a8909832d7ffc401e7900ea07d33acaa493060a1142aea81c4b2a2551cba",
     "status": "machine",
-    "title": "Upload multiplepart: No Boundary in Content-Type",
+    "title": "Multipart Upload Fails: Missing Boundary in Content-Type",
     "description": "Endpoint does not recognize FormData and returns file parsing error.",
     "intro": "Endpoint does not recognize FormData and returns file parsing error.",
     "serviceLabel": "Integration and APIs",
@@ -812,7 +812,7 @@
   "api-sse-response-buffered": {
     "sourceHash": "ca179d4383d39038f1adb1652fec1b3ab1adc99b756941c6fa0330aab5eda802",
     "status": "machine",
-    "title": "Server-Sent Events: messages come all at the end",
+    "title": "Server-Sent Events Arrive All at Once: Fix Response Buffering",
     "description": "The EventSource client does not receive events for long and then gets them in one package.",
     "intro": "The EventSource client does not receive events for long and then gets them in one package.",
     "serviceLabel": "Integration and APIs",
@@ -984,7 +984,7 @@
   "asystent-ai-wymysla-projekty-portfolio": {
     "sourceHash": "baeb9cb9b6bd3f668198c6c41cfdf50e218a6bc713bca2a4a583c81d4992ee51",
     "status": "machine",
-    "title": "AI’s portfolio assistant makes up realizations — how can this be limited?",
+    "title": "AI Portfolio Assistant Invents Projects: How to Prevent Hallucinations",
     "description": "How to build a chatbot knowledge base so that it does not invent prices, customers, campaign results and project functions.",
     "intro": "The assistant corresponds smoothly, but assigns to the owner of the site unconfirmed executions or promises functions that are not there.",
     "serviceLabel": "CRM and integration",
@@ -1017,7 +1017,7 @@
   "conversions-api-event-match-quality-spada": {
     "sourceHash": "2902dc6cf88a472c452e8d62a7f02146322e2e83844b2581bb77c13e9e0334f8",
     "status": "machine",
-    "title": "Event Match Quality drop in Conversations API — diagnostics and corrective steps",
+    "title": "Meta Conversions API: Event Match Quality Is Dropping",
     "description": "A diagnostic guide for situations where the Event Match Quality (EMQ) indicator falls after the implementation of the Conversions API. Includes specific hypotheses, comparative tests, corrective steps and validation of pixel and server data.",
     "intro": "This document describes a specific diagnostic path when in Event Manager Meta you observe the downgrading of Event Match Quality (EMQ) after switching some traffic to Conversions API (CAPI) or after changes in implementation. EMQ depends on the quality and completeness of user identification data (e.g. email, phone, client ip address, fbp, fbc) and how these fields are to be hashed and transmitted. The quality decline is usually due to one or a combination: missing/incompatible identification field, wrong hashing (PHP/JS vs SHA256 raw bytes), non-compliance time stamp (differences >24h), duplication of events without proper deduplication (pixel + CAPI without event id) or filters and privacy rules in the advertising panel that cut or map fields. Below you will find an orderly differential diagnosis with step-by-step tests, specific commands in Meta logs and tools, and ways of verifying effect after corrections. We do not assume the cause — every point must be checked and eliminated sequentially.",
     "serviceLabel": "Advertising and marketing",
@@ -1039,7 +1039,7 @@
           "4 . Verify event id and event time: Force the sending of an identical event id from Pixel and CAPI in the test example; if pixel does not generate event id, generate a compatible identifier at the client and send it to both sources.",
           "5 . Check delays: Measure the time between the event in the browser and the CAPI request; if >5–10s check queues, batching and retry; if >24h, check Joby cron and ETL, because such delays reduce EMQ.",
           "6 . Browse the privacy configurations and field mapping in Event Manager: make sure that the fields are not mapped to custom labels or filtered by privacy rules that could cut the email/phone.",
-          "7 . Enter one amendment at a time (hashing or sending event id) and observe EMQ changes within 24–72 hours; document each defloy and implementation time."
+          "7 . Enter one amendment at a time (hashing or sending event id) and observe EMQ changes within 24–72 hours; document each deploy and implementation time."
         ]
       },
       {
@@ -1093,7 +1093,7 @@
   "crm-admin-role-possible-bypass-endpoint": {
     "sourceHash": "7207c95c8b76192b4af1ea5609b847b904881645eba1ffee55ca53404ac9add9",
     "status": "machine",
-    "title": "Potential bypassing endpoints in CRM — diagnostics and repair",
+    "title": "CRM Admin Role: How to Detect and Fix Authorization Bypasses",
     "description": "Analysis of cases where endpoints or API functions allow users to escalate the role of administrator in CRM. Includes differential diagnostics, specific corrective steps, verification tests and typical errors to avoid.",
     "intro": "This document describes possible paths to circumvent the role of administrator in CRM systems using Postgres + RLS (row-level security) and external authentication mechanism (e.g. Supabase/Auth). Do not treat the title as proof of cause — the case needs a close review. I focus on technical mechanisms: incorrect RLS policies, incorrectly written SQL functions with SECURITY DEFINITION, acceptance of role with JWT token without validation and excessive public key permissions. The document presents a specific differential diagnosis with a breakdown by reason, detailed corrective steps, post-amendment tests and warnings that were most frequently made. Each step is described to give a specific command to execute on the server or in the RLS policy repository and functions.",
     "serviceLabel": "Web applications",
@@ -1174,7 +1174,7 @@
   "crm-assignment-race-two-salespeople": {
     "sourceHash": "cfa7ec0d8fbec4234417a8bf4a21d3076c6ea97e96f7811c3d45fe1b9c27de4a",
     "status": "machine",
-    "title": "CRM: Two traders take over the same lead",
+    "title": "CRM: Two Sales Reps Claim the Same Lead",
     "description": "The simultaneous click “Take” allows you to assign one record to two people.",
     "intro": "The simultaneous click “Take” allows you to assign one record to two people.",
     "serviceLabel": "CRM and Lead support",
@@ -1195,7 +1195,7 @@
       {
         "title": "How to Test Solution",
         "paragraphs": [
-          "Only one trader receives an effective assignment, and the other sees the information about the occupation."
+          "Only one sales representative receives an effective assignment, and the other sees the information about the occupation."
         ]
       },
       {
@@ -1209,9 +1209,9 @@
   "crm-callback-timezone-dst": {
     "sourceHash": "7f7cfd5654b7a2e21753bceda812c6d42deb8663cdea184d50fee08a6d3af83d",
     "status": "machine",
-    "title": "CRM: callback scheduled at 10:00 p.m. appears an hour later",
-    "description": "Tasks scheduled before the change of time are displayed at another time at the trader.",
-    "intro": "Tasks scheduled before the change of time are displayed at another time at the trader.",
+    "title": "CRM: A Callback Scheduled for 10:00 Appears One Hour Later",
+    "description": "Tasks scheduled before the change of time are displayed at another time at the sales representative.",
+    "intro": "Tasks scheduled before the change of time are displayed at another time at the sales representative.",
     "serviceLabel": "CRM and Lead support",
     "sections": [
       {
@@ -1244,7 +1244,7 @@
   "crm-csv-formula-injection": {
     "sourceHash": "56ccd0f810353e752213f4e50aa16e7ce4da9f329ddc827798ecb3f914887795",
     "status": "machine",
-    "title": "CRM: CSV export allows you to execute formula from customer field",
+    "title": "CRM: Prevent Formula Injection in CSV Exports",
     "description": "The text field starting with = or + is interpreted by the sheet as a formula.",
     "intro": "The text field starting with = or + is interpreted by the sheet as a formula.",
     "serviceLabel": "CRM and Lead support",
@@ -1259,7 +1259,7 @@
       {
         "title": "Repair steps",
         "paragraphs": [
-          "Escapulate dangerous cell prefixes according to the selected format and validate data import."
+          "Escape dangerous cell prefixes according to the selected format and validate data import."
         ]
       },
       {
@@ -1279,7 +1279,7 @@
   "crm-csv-utf8-polish-characters": {
     "sourceHash": "170139fd8b5ae2b9a374d6528e56b61ab055e3eaa9f8ccc92d6653fa13bba8de",
     "status": "machine",
-    "title": "CRM: CSV export displays bushes instead of Polish letters",
+    "title": "CRM: CSV Export Shows Garbled Polish Characters",
     "description": "The export file opens in Excel with incorrect characters in the town names and names.",
     "intro": "The export file opens in Excel with incorrect characters in the town names and names.",
     "serviceLabel": "CRM and Lead support",
@@ -1314,7 +1314,7 @@
   "crm-dashboard-count-diff-filter": {
     "sourceHash": "f0146503ec102ccb04b27c22f2245e80c8330a27cf858dfca8a3e4a4b40ea7c9",
     "status": "machine",
-    "title": "CRM: counter 180 lead and list shows 120",
+    "title": "CRM Shows 180 Leads but Only 120 on the List",
     "description": "The panel header and the paged table give different number of contacts.",
     "intro": "The panel header and the paged table give different number of contacts.",
     "serviceLabel": "CRM and Lead support",
@@ -1349,7 +1349,7 @@
   "crm-duplikaty-leadow-webhook": {
     "sourceHash": "03c4de1f7b3bd409408b121fad99a457ef9f6afae926cd4cea8ac8128f779ae3",
     "status": "machine",
-    "title": "CRM creates two leades from one form — how to fix it?",
+    "title": "CRM Creates Duplicate Leads from One Form Submission",
     "description": "Webhook can be delivered more than once. Also a rerun after timeout can create a second record, even though the first request saved the data. Pow support",
     "intro": "Webhook can be delivered more than once. Also a rerun after timeout can create a second record, even though the first request saved the data. Repeat handling should be part of integration.",
     "serviceLabel": "Let's talk about a solution.",
@@ -1375,7 +1375,7 @@
   "crm-eksport-leadow-zgody-i-uprawnienia": {
     "sourceHash": "df3b84805f96fac24df5e671badfee83d9b1ac85a38b8ce4f75777c956819dd4",
     "status": "machine",
-    "title": "Export lead from CRM: how to avoid missing and leaking data?",
+    "title": "CRM Lead Export: Consent, Permissions and Data Protection",
     "description": "Secure CSV/XLSX exports from CRM including permissions, filters, coding and data protection.",
     "intro": "The export of the file covers only the visible record page or allows you to download the data of the entire company through a simple account.",
     "serviceLabel": "CRM and web applications",
@@ -1408,7 +1408,7 @@
   "crm-file-attachment-preview-unauthorized": {
     "sourceHash": "4b478bf9cd018a26d10f5322ac099f52a818885ea1a039f36620a7fe942cc290",
     "status": "machine",
-    "title": "CRM: Appendix thumbnail available without login",
+    "title": "CRM: Attachment Preview Accessible Without Login",
     "description": "A private client document opens after a direct URL from the browser history.",
     "intro": "A private client document opens after a direct URL from the browser history.",
     "serviceLabel": "CRM and Lead support",
@@ -1429,7 +1429,7 @@
       {
         "title": "How to Test Solution",
         "paragraphs": [
-          "An anonymous person does not download a file, and an authorized trader has access to his own record."
+          "An anonymous person does not download a file, and an authorized sales representative has access to his own record."
         ]
       },
       {
@@ -1443,7 +1443,7 @@
   "crm-filtry-ukrywaja-leady": {
     "sourceHash": "9b233649fe35ebe9ff43f486c90196e433c0f768efccc213de03030b006f3f5b",
     "status": "machine",
-    "title": "Leady disappeared from CRM after changing filters — what to check?",
+    "title": "CRM Leads Disappear After Changing Filters",
     "description": "Invisible contacts after filtering status, region, date or queue? Diagnostics of conditions in the interface and API.",
     "intro": "CRM seems empty after switching the view, even though the database still contains contacts.",
     "serviceLabel": "CRM and web applications",
@@ -1476,7 +1476,7 @@
   "crm-google-drive-zalaczniki-token-wygasl": {
     "sourceHash": "245ca39a1a3fde2f24b3f6e36f735909a123a6ab8bb85f09d2ce2b4733370ad5",
     "status": "machine",
-    "title": "Google Drive at CRM stopped working: expired or undone token",
+    "title": "Google Drive Integration in CRM Stops Working: Expired or Revoked Token",
     "description": "Google Drive attachments do not open in CRM. What to check with invalid grant, retracted tokens and OAuth.",
     "intro": "After months of operation, the integration of the Disk does not download or save files, although before everything worked.",
     "serviceLabel": "CRM and web applications",
@@ -1575,9 +1575,9 @@
   "crm-lead-niewidoczny-po-usunieciu-blokady-rls": {
     "sourceHash": "6065be7fa456cac4690f03c874b3445e1e3460e35c43d3b4ae69d988acc2efcf",
     "status": "machine",
-    "title": "The trader can't see the lead after removing the lock — RLS diagnostics and permissions",
-    "description": "After removing the lead lock still invisible to the trader. The most common causes: RLS policies (USING/WIGHT CHECK), inappropriate claims JWT/role, no GRANT SELECT or frontend filter. Specific tests and corrective steps.",
-    "intro": "Problem: After removing the blocked field or status flag in CRM, the trader still does not see the record. This is a typical symptom of the Row-Level Security layer, incorrect permissions or discrepancies between the user token and the policy condition. Instead of just unlocking the record, you need to check the RLS policies in the database, assigning the record owner, mapping claims in the JWT token used by the application and whether there are additional filters on the API/ORM side. The following text leads through differential analysis, specific diagnostic steps and tests in the Supabase/Postgres environment and a list of typical traps to check.",
+    "title": "CRM: Sales Rep Cannot See a Lead After It Is Unblocked",
+    "description": "After removing the lead lock still invisible to the sales representative. The most common causes: RLS policies (USING/WIGHT CHECK), inappropriate claims JWT/role, no GRANT SELECT or frontend filter. Specific tests and corrective steps.",
+    "intro": "Problem: After removing the blocked field or status flag in CRM, the sales representative still does not see the record. This is a typical symptom of the Row-Level Security layer, incorrect permissions or discrepancies between the user token and the policy condition. Instead of just unlocking the record, you need to check the RLS policies in the database, assigning the record owner, mapping claims in the JWT token used by the application and whether there are additional filters on the API/ORM side. The following text leads through differential analysis, specific diagnostic steps and tests in the Supabase/Postgres environment and a list of typical traps to check.",
     "serviceLabel": "Web applications",
     "sections": [
       {
@@ -1592,10 +1592,10 @@
         "title": "Step by step solution",
         "paragraphs": [
           "1. Confirm that RLS is enabled: in psql run SELECT remotesecurity FROM pg class WHERE relname='leads'; if true, continue; if false, check GRANT permissions and application logic.",
-          "2 . Log in as a merchant in the context of the database (simulate JWT/SET ROLE). In Supabase, use policy test tool or in psql: SET LOCAL role = 'anon' is not enough – instead, run a query with the appropriate jwt claims or use RLS-tables test hardness. Read current setting('jwt.claims') if used.",
+          "2 . Log in as a sales representative in the context of the database (simulate JWT/SET ROLE). In Supabase, use policy test tool or in psql: SET LOCAL role = 'anon' is not enough – instead, run a query with the appropriate jwt claims or use RLS-tables test hardness. Read current setting('jwt.claims') if used.",
           "3 . Read RLS policies: SELECT pol.polname, pol.polpermissive, pg get expr(pol.polqual, pol.polrelid) AS using, pg get expr(pol.polwithcheck, pol.polrelid) AS withcheck FROM pg policy pol JOIN pg class c ON polrelid=c.oid WHERE c.relname='leads'; Analyze USING and WITH CHECK expressions with respect to blocked field and owner id.",
           "4 . Compare Owner id/assigned to in line with values in token: SELECT id, owner id, assigned to, blocked FROM leads WHERE id = <ilead>; then verify jwt.claims.sub and /or roles in token. If the values don't match, or the politics refer to another field, that's the reason.",
-          "5 . Check if the Token trader has current roles: in Subabase -> Authentication -> See JWT or syslogs. If the role has been changed recently, force a refresh of the token (re-login). Test: Make a request with a new token and compare the response.",
+          "5 . Check if the Token sales representative has current roles: in Supabase -> Authentication -> See JWT or syslogs. If the role has been changed recently, force a refresh of the token (re-login). Test: Make a request with a new token and compare the response.",
           "6 . Test queries without RLS: temporarily disable RLS for this table or perform the query as superuser: SET ROLE postgres; SELECT ... FROM leads WHERE id=...; if the record is visible, cause is RLS policy; if still invisible, check application filtering or record status.",
           "7 . Check the application layer: in backend logs identify SQL queries generated by ORM (e.g. Prisma, Hasura); make sure there is no extra WHE (assigned to = null) or pagination, and that there is no wrong projection that hides records."
         ]
@@ -1603,7 +1603,7 @@
       {
         "title": "How to see if the problem is gone",
         "paragraphs": [
-          "Test 1: Manual simulation — sign in as a trader, refresh the token, run SELECT id FROM leads WHERE id=< problem> in the context of this token (or use a supabase policy simulator). The result should change from empty to one line; if not, check the USING expression.",
+          "Test 1: Manual simulation — sign in as a sales representative, refresh the token, run SELECT id FROM leads WHERE id=< problem> in the context of this token (or use a supabase policy simulator). The result should change from empty to one line; if not, check the USING expression.",
           "Test 2: superuser bypass — perform SELECT as superuser (SET ROLE postgres) to confirm that the record exists and the field blocked set correctly. If the superuser sees the record, the error concerns RLS/policy/claims; if he can't see, the data or transaction side issue."
         ]
       },
@@ -1611,7 +1611,7 @@
         "title": "What to do",
         "paragraphs": [
           "Do not assume that the blocked field photo removes other policy conditions — USING policy can check assigned to or related status; changing one field does not guarantee visibility.",
-          "Don’t just test with the admin account — the superuser always sees the record, it’s a false sense of solution. Test with real JWT trader or policy simulator.",
+          "Don’t just test with the admin account — the superuser always sees the record, it’s a false sense of solution. Test with real JWT sales representative or policy simulator.",
           "Don’t forget about caches and tokens — no JWT refresh after changing roles or caching frontend answers can mask the repair effect."
         ]
       }
@@ -1620,7 +1620,7 @@
   "crm-lead-pagination-stale-cursor": {
     "sourceHash": "988124ce0825eeba03729740b02698ad39e4a393238b7a10d4848523287ddf17",
     "status": "machine",
-    "title": "CRM: After scrolling further leads are omitted",
+    "title": "CRM Pagination Skips Leads When Scrolling",
     "description": "List Pagination changes the score when adding new leads and some records are lost.",
     "intro": "List Pagination changes the score when adding new leads and some records are lost.",
     "serviceLabel": "CRM and Lead support",
@@ -1655,7 +1655,7 @@
   "crm-lead-stage-history-missing": {
     "sourceHash": "86a51b2805a628e568c4e01d53a08973d23a01556ed374ec1df86dda60c8b41d",
     "status": "machine",
-    "title": "CRM: Lead status changes, but history does not save author",
+    "title": "CRM Status Changes but the Audit Trail Does Not Record the Author",
     "description": "The employee moves the case to the next stage, and after a week, no one knows who did it.",
     "intro": "The employee moves the case to the next stage, and after a week, no one knows who did it.",
     "serviceLabel": "CRM and Lead support",
@@ -1690,9 +1690,9 @@
   "crm-licznik-leadow-nie-zgadza-sie-z-lista": {
     "sourceHash": "18fcfe8dceeff0bf4ceec8337807ff333e561f76b0d9da2cb2efbbde25c69131",
     "status": "machine",
-    "title": "CRM shows 180 lead, but there is less on the list — how to fix it?",
+    "title": "CRM Lead Count Does Not Match the Visible List",
     "description": "The CRM contact counter disagrees with the list? Check filters, pagination, RLS permissions and counting queries.",
-    "intro": "The panel shows 180 contacts, but the trader sees only part. The reason is the difference between the way records are counted and the filters and list permissions.",
+    "intro": "The panel shows 180 contacts, but the sales representative sees only part. The reason is the difference between the way records are counted and the filters and list permissions.",
     "serviceLabel": "CRM and web applications",
     "sections": [
       {
@@ -1707,8 +1707,8 @@
           "1. Save the role, user login ID, active tab and filters. Compare the same conditions in the counter and leaves.",
           "2 . Disable search, status filter, hiding locked and archive. See if the list recovers the missing positions.",
           "3 . Examine pagination: Does the interface only download the first 50 or 100 records and the numerator shows all? Check the following pages and limit the API response.",
-          "4 . Compare the request count with the list request, including the conditions for assigning the trader and RLS policy. Do not circumvent RLS key service roles in your browser.",
-          "5 . Add integration test: a merchant, manager and administrator account sees the right records and a consistent counter at the same filter."
+          "4 . Compare the request count with the list request, including the conditions for assigning the sales representative and RLS policy. Do not circumvent RLS key service roles in your browser.",
+          "5 . Add integration test: a sales representative, manager and administrator account sees the right records and a consistent counter at the same filter."
         ]
       },
       {
@@ -1723,7 +1723,7 @@
   "crm-na-zamowienie-czy-gotowy": {
     "sourceHash": "07580efe1992c477987057084dc1e21147609a8e35733f6a8b0f8b35c843abd4",
     "status": "machine",
-    "title": "CRM on request or ready system — what to choose?",
+    "title": "Custom CRM or Off-the-Shelf System: Which Is Better?",
     "description": "When you need a ready-to-use CRM, when it is worth building your own and how to check your costs, permissions and data migration.",
     "intro": "Ready CRM is a good start when a company needs a standard contact list, sales stages and reminders. A custom system is worth considering when specific processes, roles or integrations are difficult to map in available tools. The fact that the sheet has become uncomfortable does not mean the need to build your own application.",
     "serviceLabel": "CRM and web applications",
@@ -1768,9 +1768,9 @@
   "crm-odblokowany-lead-nadal-niewidoczny": {
     "sourceHash": "fb41012f1c2012ec1c939896b08035ae52438614c5dd33a263c50647915756b4",
     "status": "machine",
-    "title": "I unlock the lead at CRM, but the trader can't see it.",
-    "description": "What to check when after removing the lead lock does not return to the merchant list: status, assignment, RLS and refresh.",
-    "intro": "The administrator unlocks the contact, but the trader still does not see it in the panel. It is worth checking separately the assignment, record visibility and refresh.",
+    "title": "CRM: Unblocked Lead Is Still Invisible to the Sales Rep",
+    "description": "What to check when after removing the lead lock does not return to the sales representative list: status, assignment, RLS and refresh.",
+    "intro": "The administrator unlocks the contact, but the sales representative still does not see it in the panel. It is worth checking separately the assignment, record visibility and refresh.",
     "serviceLabel": "CRM and web applications",
     "sections": [
       {
@@ -1783,8 +1783,8 @@
         "title": "Step by step solution",
         "paragraphs": [
           "1. Check the database record after removing the lock: record ID, lock flag, status and current maintainer.",
-          "2 . Compare the trader list request with the administrator request. Establish which WHERE terms exclude the record.",
-          "3 . Check SELECT RLS policy for the target user. The UPDATE itself made by the administrator does not mean that the trader can now perform SELECT.",
+          "2 . Compare the sales representative list request with the administrator request. Establish which WHERE terms exclude the record.",
+          "3 . Check SELECT RLS policy for the target user. The UPDATE itself made by the administrator does not mean that the sales representative can now perform SELECT.",
           "4 . Refresh the data from the server after mutation or cancel the query cache. Also test the full reloading of the page.",
           "5 . Add flow test: locking, unlocking, reassigning, commercial entry and visibility in the right queue."
         ]
@@ -1792,7 +1792,7 @@
       {
         "title": "How do I check the score?",
         "paragraphs": [
-          "The trader sees the unlocked lead without manual mixing with filters, and another trader without permission does not see it.",
+          "The sales representative sees the unlocked lead without manual mixing with filters, and another sales representative without permission does not see it.",
           "Do not extend RLS policies to all records just to make a given lead appear."
         ]
       }
@@ -1826,7 +1826,7 @@
         "title": "How do I check the score?",
         "paragraphs": [
           "The last test set record is available and the search finds it without having to scroll all pages.",
-          "Check the default limits and configuration of a particular project in the Subbase panel. Do not assume that every installation has an identical limit."
+          "Check the default limits and configuration of a particular project in the Supabase panel. Do not assume that every installation has an identical limit."
         ]
       }
     ]
@@ -1834,7 +1834,7 @@
   "crm-phone-e164-invalid-country-code": {
     "sourceHash": "f8cccc9022671670c68019c109f382db7bc5f6d98f2bfff94bb16a9fb7a55c78",
     "status": "machine",
-    "title": "CRM: phone number from Poland does not work when calling back automatically",
+    "title": "CRM: Polish Phone Number Fails in Automated Calling",
     "description": "The number is recorded in the database, but telephone integration rejects the format without country code.",
     "intro": "The number is recorded in the database, but telephone integration rejects the format without country code.",
     "serviceLabel": "CRM and Lead support",
@@ -1869,9 +1869,9 @@
   "crm-powtorne-przypisanie-tworzy-duplikat": {
     "sourceHash": "c6c31cdcd4acbc0e5bbe9a76fd9005f4da3f22230fcdcab0856360f8dc6db1e9",
     "status": "machine",
-    "title": "Reassigning a lead creates a duplicate — how do I find an error?",
+    "title": "CRM: Reassigning a Lead Creates a Duplicate",
     "description": "Instead of updating the CRM maintainer, it creates a second record. How to separate INSERT and UPDATE and allocation history.",
-    "intro": "After the customer is transferred between traders, two similar positions or two telephone tasks are created.",
+    "intro": "After the customer is transferred between sales representatives, two similar positions or two telephone tasks are created.",
     "serviceLabel": "CRM and web applications",
     "sections": [
       {
@@ -1902,8 +1902,8 @@
   "crm-przypisanie-leadow-nie-aktualizuje-listy": {
     "sourceHash": "c17981abba1ce0c86b6c863598a3a02d61cb5994d48bd3c1ecf41d7e5bc8c6e1",
     "status": "machine",
-    "title": "I assigned the lead to the employee, but he can't see them — 5 checks",
-    "description": "How to diagnose misalignment of lead in CRM and dispersal between the administrator panel and the trader.",
+    "title": "CRM: Assigned Lead Is Not Visible to the Employee",
+    "description": "How to diagnose misalignment of lead in CRM and dispersal between the administrator panel and the sales representative.",
     "intro": "After manually assigning a group of leads, the employee counter grows, but there are no new contacts on his list.",
     "serviceLabel": "CRM and web applications",
     "sections": [
@@ -1917,7 +1917,7 @@
         "title": "Step by step solution",
         "paragraphs": [
           "1. Check the owner id and assignee id database on one specific lead. Compare them to the employee account ID.",
-          "2 . Determine whether the allocation is recorded in the correct field used by the trader list.",
+          "2 . Determine whether the allocation is recorded in the correct field used by the sales representative list.",
           "3 . Test one lead, then the party. Collect the number of successful and unsuccessful updates for mass operations.",
           "4 . Verify access conditions and filter for hiding archival or locked records.",
           "5 . When assigned, force refresh of the list and counter and show the administrator the actual result of the operation."
@@ -1935,9 +1935,9 @@
   "crm-pwa-powiadomienia-nie-przychodza": {
     "sourceHash": "38e576bc6dde13278b88357da7186349a7edad8811a88dd943d7ffe06eeec191",
     "status": "machine",
-    "title": "PWA notifications do not come on the phone — CRM and Web Push",
+    "title": "CRM PWA: Push Notifications Do Not Arrive on the Phone",
     "description": "No push in the PWA app? Check permissions, service worker, subscription token and iOS behavior.",
-    "intro": "CRM works in the browser, but the trader does not receive notifications of new tasks or calls back.",
+    "intro": "CRM works in the browser, but the sales representative does not receive notifications of new tasks or calls back.",
     "serviceLabel": "CRM and web applications",
     "sections": [
       {
@@ -1992,7 +1992,7 @@
       {
         "title": "How do I check the score?",
         "paragraphs": [
-          "The resignation is not visible in the current line of the trader, but the authorized administrator can find its story.",
+          "The resignation is not visible in the current line of the sales representative, but the authorized administrator can find its story.",
           "The archive does not mean the right to retain personal data without time."
         ]
       }
@@ -2001,7 +2001,7 @@
   "crm-termin-montazu-nie-widoczny": {
     "sourceHash": "8e8f2d8737a3f2e70f5fb03c6205f605c7576b11c866dc40e1252ffe99ef3665",
     "status": "machine",
-    "title": "The timing of the assembly is in CRM, but the trader can't see it",
+    "title": "CRM: Installation Date Is Not Visible to the Sales Rep",
     "description": "How to separate contract rights, schedule and assembly fields without hiding the necessary dates.",
     "intro": "The administrator sets the deadline, but the person leading the client does not see the current date.",
     "serviceLabel": "CRM and web applications",
@@ -2009,13 +2009,13 @@
       {
         "title": "Why is this happening?",
         "paragraphs": [
-          "The rules for hiding fields are often too broad: the entire implementation panel hidden from the trader also hides the information he needs."
+          "The rules for hiding fields are often too broad: the entire implementation panel hidden from the sales representative also hides the information he needs."
         ]
       },
       {
         "title": "Step by step solution",
         "paragraphs": [
-          "1. List which fields are purely administrative and which traders should have read only.",
+          "1. List which fields are purely administrative and which sales representatives should have read only.",
           "2 . Check if the date comes from the same record or link that updates the administrator.",
           "3 . Separate the date reading from the editing option; hiding the button cannot be the only recording lock.",
           "4 . Verify SELECT and UPDATE rights on the server and the range of data returned in the API.",
@@ -2025,7 +2025,7 @@
       {
         "title": "How do I check the score?",
         "paragraphs": [
-          "The trader sees the current date without access to hidden administrative checkboxes and without the possibility of unauthorized editing.",
+          "The sales representative sees the current date without access to hidden administrative checkboxes and without the possibility of unauthorized editing.",
           "Do not copy the term to the second manually updated field, because there will quickly be discrepancies."
         ]
       }
@@ -2069,7 +2069,7 @@
   "dns-dkim-selector-not-found": {
     "sourceHash": "4d130dbe4bfb8cbc5402e0b98f2b2d36daeafe320fbe379ae7bc125c675ff535",
     "status": "machine",
-    "title": "DKIM: selector not found after connecting a new supplier",
+    "title": "DKIM Selector Not Found After Switching Email Providers",
     "description": "The email contains DKIM-Signature, but resolver does not find the key record.",
     "intro": "The email contains DKIM-Signature, but resolver does not find the key record.",
     "serviceLabel": "Domains and Mail",
@@ -2104,7 +2104,7 @@
   "dns-dmarc-report-mailbox-bounces": {
     "sourceHash": "7fe0087761f8106da84a5e41120fe9e098841d2ce651c201d6533073ba86f074",
     "status": "machine",
-    "title": "DMARC: Aggregate reports do not come to the report box",
+    "title": "DMARC Aggregate Reports Are Not Arriving",
     "description": "Record  dmarc ma rua, but the owner does not receive the planned collective reports.",
     "intro": "Record  dmarc ma rua, but the owner does not receive the planned collective reports.",
     "serviceLabel": "Domains and Mail",
@@ -2139,7 +2139,7 @@
   "dns-dnssec-servfail-after-ns-change": {
     "sourceHash": "743fb424b7639545bc97b973a8b0195dc1e967b3255b64ebe1dd73ec5d5f513d",
     "status": "machine",
-    "title": "DNSSEC SERVICE after changing names servers",
+    "title": "DNSSEC SERVFAIL After Changing Nameservers",
     "description": "Some users cannot open the domain even though the A records look good.",
     "intro": "Some users cannot open the domain even though the A records look good.",
     "serviceLabel": "Domains and Mail",
@@ -2174,7 +2174,7 @@
   "dns-spf-too-many-lookups": {
     "sourceHash": "552699a7d339f75e6049d0186a60952036517d7f545df57debf3f44e295df1cf",
     "status": "machine",
-    "title": "SPF PermError: DNS appeal limit exceeded",
+    "title": "SPF PermError: DNS Lookup Limit Exceeded",
     "description": "Messages are rejected despite the existence of one SPF record with multiple include.",
     "intro": "Messages are rejected despite the existence of one SPF record with multiple include.",
     "serviceLabel": "Domains and Mail",
@@ -2209,7 +2209,7 @@
   "domena-email-spf-dkim-dmarc-problemy": {
     "sourceHash": "756aac83575e88ee2a7ac8ac492db53a1e29d5bf55a44e6861b6a8d8f5d60dea",
     "status": "machine",
-    "title": "SPF, DKIM, DMARC: domain sends emails, but recipients have spam",
+    "title": "SPF, DKIM and DMARC: Why Business Emails Go to Spam",
     "description": "How to check SPF, DKIM and DMARC records when messages from their own domain do not reach or reach spam.",
     "intro": "The messages come out of the company domain, but the recipients do not get them or see warnings about the sender.",
     "serviceLabel": "CRM and integration",
@@ -2277,7 +2277,7 @@
   "email-mail-forward-loop": {
     "sourceHash": "a641c5d5c0c3f68770ca8b8cb7f2146fbea4000a0523832742b0a733154c6163",
     "status": "machine",
-    "title": "Mail: Forward between two boxes creates a loop",
+    "title": "Email Forwarding Loop Between Two Mailboxes",
     "description": "Automatic redirect returns to the previous address and the message goes to the bounce.",
     "intro": "Automatic redirect returns to the previous address and the message goes to the bounce.",
     "serviceLabel": "Domains and Mail",
@@ -2312,7 +2312,7 @@
   "email-mx-priority-backup-delivery": {
     "sourceHash": "fa95edd167cdacfec759f64992e4cc0d4408b546034bd218c1c812f733bf72e5",
     "status": "machine",
-    "title": "MX priority: mail goes to inactive mailserver backup",
+    "title": "MX Priority: Mail Reaches an Obsolete Backup Server",
     "description": "Part of the message returns as undelivered after changing the mail operator.",
     "intro": "Part of the message returns as undelivered after changing the mail operator.",
     "serviceLabel": "Domains and Mail",
@@ -2382,7 +2382,7 @@
   "email-smtp-connection-587-timeout": {
     "sourceHash": "445f4f3f9e85fa1df26ae44a0299752db5dc3f0f480d3d5559f6a4736819de79",
     "status": "machine",
-    "title": "SMTP: timeout on shipment via port 587",
+    "title": "SMTP Connection Timeout on Port 587",
     "description": "The website saves the form, but the server does not establish a connection with the mail provider.",
     "intro": "The website saves the form, but the server does not establish a connection with the mail provider.",
     "serviceLabel": "Domains and Mail",
@@ -2417,7 +2417,7 @@
   "facebook-ads-jak-obliczyc-sredni-cpl-kampanii": {
     "sourceHash": "9d8295ea584e78184eb84eb34f5aa2a108fce7309044c877b87d5577b38bdb6a",
     "status": "machine",
-    "title": "How do I calculate the average CPL of Meta Ads 10 campaign without error?",
+    "title": "How to Calculate Average CPL Across Meta Ads Campaigns",
     "description": "Average cost of lead calculated by weighted method. Why a simple CPL average from the campaign can mislead.",
     "intro": "The report includes several campaigns with different budgets and lead numbers; the average of their CPL yields a confusing result.",
     "serviceLabel": "Pages, SEO and advertising",
@@ -2450,9 +2450,9 @@
   "facebook-lead-ads-integracja-z-crm": {
     "sourceHash": "d6f0a9e7c0b3a998f49be4178986c4c110da71c18aeb721ab280cfc65782f1ae",
     "status": "machine",
-    "title": "Facebook Lead Ads and CRM — How Can You Don't Lose Advertising Contacts?",
+    "title": "Facebook Lead Ads to CRM Integration: How to Avoid Losing Leads",
     "description": "Transmission of Meta Lead Ads forms to CRM: allowances, duplicates, statuses, contact time and permission control. Practical guide for companies.",
-    "intro": "After sending the advertising form, the work is just beginning. The contact should be in the place where the trader sees him, calls and records the result. Manual copying leads from Meta to sheet makes it difficult to control and increases the risk of omissions.",
+    "intro": "After sending the advertising form, the work is just beginning. The contact should be in the place where the sales representative sees him, calls and records the result. Manual copying leads from Meta to sheet makes it difficult to control and increases the risk of omissions.",
     "serviceLabel": "CRM and web applications",
     "sections": [
       {
@@ -2463,10 +2463,10 @@
         ]
       },
       {
-        "title": "How does assigning lead to traders work?",
+        "title": "How does assigning lead to sales representatives work?",
         "paragraphs": [
           "The company can distribute contacts by location, type of product, on-call or manual decision of the manager. It is important that the rules are written, and the change of attribution does not remove contact and comment history.",
-          "The trader should see his tasks and behind affairs, and the supervisor should see the collective state of the queue. Access to customer data is limited to roles that really need it."
+          "The sales representative should see his tasks and behind affairs, and the supervisor should see the collective state of the queue. Access to customer data is limited to roles that really need it."
         ]
       },
       {
@@ -2528,7 +2528,7 @@
   "formularz-meta-ads-czy-landing-page": {
     "sourceHash": "ea40fdeb45eb24ec766784df87d589bcfa4558c381fdb9ff39a6a76ecdfc8589",
     "status": "machine",
-    "title": "Meta Lead Ads Form or Landing Page — What Better for the Company?",
+    "title": "Meta Lead Form vs. Landing Page: Which Works Better?",
     "description": "Comparison of Facebook and Instagram Ads forms with Landing page: contact cost, quality of applications, analyst, speed and CRM integration.",
     "intro": "The advertising form makes it easy to quickly send a query without leaving Facebook or Instagram. Landing page gives more room to explain the offer and show the execution. The choice depends on the purpose and the sales process.",
     "serviceLabel": "Meta Ads for Business",
@@ -2739,7 +2739,7 @@
   "github-actions-checkout-shallow-history": {
     "sourceHash": "e5e3ae9fd50d58fc3a992ce296ff18a54d7002029c522e2539243bf561be2cb4",
     "status": "machine",
-    "title": "GitHub Actions: git merge-base does not work by Shallow clone",
+    "title": "GitHub Actions: git merge-base Fails with a Shallow Clone",
     "description": "The change analysis script cannot determine a common branch ancestor, even though repo works locally.",
     "intro": "The change analysis script cannot determine a common branch ancestor, even though repo works locally.",
     "serviceLabel": "Automation",
@@ -2774,7 +2774,7 @@
   "github-actions-concurrency-cancel-main": {
     "sourceHash": "27bcb1b39dc6f0a33d5696b5bc402f9031c4410908507b44a1220276eaf597a0",
     "status": "machine",
-    "title": "GitHub Actions: The older build cancels newer in the competitive group",
+    "title": "GitHub Actions: Concurrency Settings Cancel the Wrong Build",
     "description": "After the push series one launch is canned and there is no publication.",
     "intro": "After the push series one launch is canned and there is no publication.",
     "serviceLabel": "Automation",
@@ -2809,7 +2809,7 @@
   "github-actions-env-secret-empty": {
     "sourceHash": "00fb28a128f69212f21b589be91a8bd9e151657f896ac138961647db27f08baf",
     "status": "machine",
-    "title": "GitHub Actions: env with secrets has an empty value despite setting the name",
+    "title": "GitHub Actions: Secret Environment Variable Is Empty",
     "description": "Workflow shows an empty environment variable and the code reports no API key.",
     "intro": "Workflow shows an empty environment variable and the code reports no API key. The secret can be set in a bad view, environment or not made available to the event type.",
     "serviceLabel": "Integration and automation",
@@ -2853,7 +2853,7 @@
       {
         "title": "How to identify the source of the problem",
         "paragraphs": [
-          "Check whether the job has assigned environment and whether the required reviewer has approved the defloyment.",
+          "Check whether the job has assigned environment and whether the required reviewer has approved the deployment.",
           "Check the workflow event type, permissions joba, run ID and first failed step."
         ]
       },
@@ -2880,7 +2880,7 @@
   "github-actions-fork-secrets-missing": {
     "sourceHash": "ff056db190d6fabc6b5e44a9b03d76fb1a616a8baee104e39eb02af2d12686c1",
     "status": "machine",
-    "title": "GitHub Actions: Secrets don't work in pull request from forka",
+    "title": "GitHub Actions: Secrets Unavailable in Forked Pull Requests",
     "description": "The PR test from the outside fork does not see the secret, although the workflow main works properly.",
     "intro": "The PR test from the outside fork does not see the secret, although the workflow main works properly. GitHub restricts untrusted workflow pull request access to sensitive secrets.",
     "serviceLabel": "Integration and automation",
@@ -2889,7 +2889,7 @@
         "title": "How to determine the source of the error",
         "paragraphs": [
           "Check running event, branch origin and token permission level in this job.",
-          "Compare a safe test workflow with a defloyment job using secrets."
+          "Compare a safe test workflow with a deployment job using secrets."
         ]
       },
       {
@@ -2902,7 +2902,7 @@
       {
         "title": "How to check the score",
         "paragraphs": [
-          "PR from the fork passes public tests without revealing secrets, and defloy only starts on a trusted code."
+          "PR from the fork passes public tests without revealing secrets, and deploy only starts on a trusted code."
         ]
       },
       {
@@ -2987,7 +2987,7 @@
   "github-actions-job-stuck-queued": {
     "sourceHash": "badb5b8542ca6344a04ebde448356aa1a0b3e42b41c07093d0327213f4b45e8f",
     "status": "machine",
-    "title": "GitHub Actions: Job long stays in queued and does not run",
+    "title": "GitHub Actions: Job Stuck in Queued State",
     "description": "In the Actions job panel, it has a state ofqueued much longer than normal run.",
     "intro": "In the Actions job panel, it has a state ofqueued much longer than normal run. The cause may be inaccessible Runners, parallel limits or an active group of competitors.",
     "serviceLabel": "Integration and automation",
@@ -3023,7 +3023,7 @@
   "github-actions-matrix-fail-fast-cancels": {
     "sourceHash": "b3eaa7cd003f7a472cc184515c76ddaa81ff23a20c366dd9c3c31cd0719211e5",
     "status": "machine",
-    "title": "GitHub Actions: matrix fail-fast completes all tests after one error",
+    "title": "GitHub Actions: Matrix Fail-Fast Cancels Remaining Tests",
     "description": "One combination of Node and the operating system fails and the other tests do not finish.",
     "intro": "One combination of Node and the operating system fails and the other tests do not finish.",
     "serviceLabel": "Automation",
@@ -3058,7 +3058,7 @@
   "github-actions-merge-conflict-automation": {
     "sourceHash": "9784646b3d0027b547f0794bbafb8aa58f07c702c3cb08c855472eb9bc340297",
     "status": "machine",
-    "title": "GitHub Actions: automatic commit loses with new change to main",
+    "title": "GitHub Actions: Automated Commit Conflicts with Changes to Main",
     "description": "The machine created a commit on the old repository state and git push reports non-fast-forward.",
     "intro": "The machine created a commit on the old repository state and git push reports non-fast-forward. Between checkout and publication someone added new commits to the main and the branch history spread.",
     "serviceLabel": "Integration and automation",
@@ -3094,7 +3094,7 @@
   "github-actions-node-cache-misses": {
     "sourceHash": "45027a0c36b2cae11cb01bc64083adcfa7d8fcba51d382d3bae88bf0e7f51aec",
     "status": "machine",
-    "title": "GitHub Actions: cache emp always has Cache miss",
+    "title": "GitHub Actions: npm Cache Misses on Every Run",
     "description": "Another run re-downloads all dependencies despite the configured cache.",
     "intro": "Another run re-downloads all dependencies despite the configured cache.",
     "serviceLabel": "Automation",
@@ -3305,7 +3305,7 @@
   "github-actions-schedule-not-starting": {
     "sourceHash": "269ac54915ca6b35796eb906c634b7613fe9303fd44bcf8c069801507d86cdfe",
     "status": "machine",
-    "title": "GitHub Actions: schedule schedule does not run every day",
+    "title": "GitHub Actions: Scheduled Workflow Is Not Running",
     "description": "Workflow with cron runs through Run workflow, but does not appear running at scheduled time.",
     "intro": "Workflow with cron runs through Run workflow, but does not appear running at scheduled time. Schedule can be delayed, requires a workflow file on the default branch and is subject to repo settings.",
     "serviceLabel": "Integration and automation",
@@ -3452,7 +3452,7 @@
   "google-business-weryfikacja-wideo-brak-filmu": {
     "sourceHash": "e056b278a21e0891512df496912d1c422c5a0f5b75058ce9b20b03bce5f84e6c",
     "status": "machine",
-    "title": "Google wants to verify my video card, and I don't have a movie — what to do?",
+    "title": "Google Business Profile Requires Video Verification: What Can You Do?",
     "description": "Verification of the Company Profile in Google via video. How to check available methods and required evidence.",
     "intro": "The panel requests a video recording, but the owner of the company does not have a recording or can not easily present the headquarters.",
     "serviceLabel": "Pages, SEO and advertising",
@@ -3485,7 +3485,7 @@
   "google-business-wizytowka-bez-adresu-weryfikacja": {
     "sourceHash": "c8ffbecbb51d7cd664af784e7f09a376715d540f6bcb2b5d521cb03baf3a14ee",
     "status": "machine",
-    "title": "Google without an address: how to verify a service company?",
+    "title": "Google Business Profile Without a Public Address: Verification Guide",
     "description": "Google Company Profile without public office. Area of operation, hidden address and possible verification methods.",
     "intro": "The company serves customers at their premises, does not run a place accessible to visitors and does not want to enter an address in a business card.",
     "serviceLabel": "Pages, SEO and advertising",
@@ -3584,7 +3584,7 @@
   "google-search-console-nieprawidlowy-adres-mapy-witryny": {
     "sourceHash": "dac50d8de7461f537a44419bc1fd8209899ec1d9d28710e209bd823a2fd7ab4e",
     "status": "machine",
-    "title": "Google Search Console: Invalid site map address — check what?",
+    "title": "Google Search Console: Invalid Sitemap Address",
     "description": "Search Console rejects sitemap.xml with an incorrect address message? Check service type, map path and XML availability.",
     "intro": "The message “The incorrect address of the site map” may appear already when you try to add a map in Google Search Console. On the authentic screenshot from the panel you can see the listed sitemap.xml and a warning requiring the correct path. The image itself confirms the message, but does not determine the cause. Start with the type of service in Search Console and whether the map is publicly available at the address assigned to the appropriate site.",
     "serviceLabel": "Websites and SEO",
@@ -3602,7 +3602,7 @@
         "paragraphs": [
           "1. Enter Google Search Console and select the correct service from the list on the left. Open the Indexing section → Site Maps. Do not try to report a map for another domain or accidental version of the site.",
           "2 . In the Add Map box see if the interface shows a part of the address. If so, specify the remaining correct path, such as sitemap.xml. If full URL is expected, enter the actual HTTPS address of the map. Don't duplicate the domain fragment.",
-          "3 . Verify the presence of file or route /sitemap.xml on the server. In Next.js App Router, the map can be generated by app/sitemap.ts; after changing the code, make sure the production defloyment includes a new route.",
+          "3 . Verify the presence of file or route /sitemap.xml on the server. In Next.js App Router, the map can be generated by app/sitemap.ts; after changing the code, make sure the production deployment includes a new route.",
           "4 . Check that the map content is a valid XML with an address or canonical address of the actual subpages. The map must not only indicate non-existent addresses or the preview environment instead of production.",
           "5 . If a map is available, but the form still rejects the value, switch to the right service, verify its type and try the correct full address or path corresponding to the field. Separate the validation problem of the form from the robot download error.",
           "6 . After you have added the map correctly, go to the table of uploaded site maps, open its details and check the download status. Use the URL Inspection separately for one subpage to verify its indexing."
@@ -3752,7 +3752,7 @@
   "google-zeskanowano-ale-nie-zindeksowano": {
     "sourceHash": "c5a9c2ca36eaa925d9217737adad6a813cf90cd05b6f74129fd1149e5699b0d3",
     "status": "machine",
-    "title": "Google: Scanned but not indexed — What can I improve?",
+    "title": "Google: Crawled – Currently Not Indexed",
     "description": "Crawled - currently not indexed. How to recognize a problem of content, duplication or low value of the subpage.",
     "intro": "Google downloaded the subpage, but did not add it to the index.",
     "serviceLabel": "Pages, SEO and advertising",
@@ -3785,7 +3785,7 @@
   "icloud-custom-domain-nie-ma-hasla": {
     "sourceHash": "96d452e626e1100fd60a56b52ea46b3ecf8b8060f696cc76349af795ff4a7bdb",
     "status": "machine",
-    "title": "E -The email in iCloud's own domain does not have a separate password — how do I add it to Mac?",
+    "title": "iCloud Custom Email Domain Has No Separate Password: How to Set Up Mail",
     "description": "Custom iCloud+ address without new login and password. How an Apple account works and an app password for mail.",
     "intro": "The created address @twojadomena.pl acts as an alias iCloud, but when adding it to the email client there is a question about login and password.",
     "serviceLabel": "CRM and integration",
@@ -3818,7 +3818,7 @@
   "icloud-hide-my-email-nie-przekazuje": {
     "sourceHash": "5781c237535460d3af73c46b293d8efb85b0e0211e83bf2010cabc90a35465cd",
     "status": "machine",
-    "title": "Hide my email address Apple does not send a message — what to check?",
+    "title": "Apple Hide My Email Is Not Forwarding Messages",
     "description": "Alias Hide My Email does not transmit to Gmail or iCloud? Check your account, address and alias status.",
     "intro": "There are many random Apple addresses on the phone, but correspondence on some of them does not go to the expected box.",
     "serviceLabel": "CRM and integration",
@@ -3911,10 +3911,10 @@
         ]
       },
       {
-        "title": "What to check when Meta shows cheap leady and sales stand?",
+        "title": "What to check when Meta shows cheap leads and sales stand?",
         "paragraphs": [
           "Start with the percentage of calls received, contact speed, number updates and user expectations compliance with the offer. Then compare the advertising content with the questions of the form and the script of the first conversation.",
-          "If advertising works, but traders do not contact lead on time, the mere increase in the budget will probably not solve the problem. It is worth combining the forms with CRM and regularly analyze the service stages."
+          "If advertising works, but sales representatives do not contact lead on time, the mere increase in the budget will probably not solve the problem. It is worth combining the forms with CRM and regularly analyze the service stages."
         ]
       },
       {
@@ -4047,7 +4047,7 @@
   "mail-icloud-custom-domain-missing-address": {
     "sourceHash": "1f806c52203dc8398e68458971dffd804a356e2608d7ae7d7018ea40e3c21ab4",
     "status": "machine",
-    "title": "iCloud Mail: The own domain is connected, but the address does not receive",
+    "title": "iCloud Mail: Custom Domain Is Connected but Address Receives No Mail",
     "description": "The domain appears in iCloud+ settings, but the letters to the new address reflect or do not come.",
     "intro": "The domain appears in iCloud+ settings, but the letters to the new address reflect or do not come. Uplinking the domain and creating a specific mail address are separate steps of configuration.",
     "serviceLabel": "Domains and Mail",
@@ -4083,7 +4083,7 @@
   "mail-icloud-hide-my-email-forwarding": {
     "sourceHash": "7e73e12e1c71ebed015b19e35be84a7315c57ea7379db60a5a141d749a23f089",
     "status": "machine",
-    "title": "iCloud Hide My Email: hidden address does not send messages",
+    "title": "iCloud Hide My Email: Forwarding Is Not Working",
     "description": "Alias exists in the settings, but the message does not reach the main box.",
     "intro": "Alias exists in the settings, but the message does not reach the main box. Alias Hide My Email has its own transfer configuration, independent of the address from its own domain.",
     "serviceLabel": "Domains and Mail",
@@ -4227,7 +4227,7 @@
   "meta-account-restricted-security-check": {
     "sourceHash": "2f259d9b2bd88e504cbef6d0a2661cdab720032e9e90b9ddc6a7cc93a978bcf5",
     "status": "machine",
-    "title": "Meta: advertising account limited after screening",
+    "title": "Meta Ads Account Restricted After a Security Review",
     "description": "The account cannot create new campaigns, although the user sees historical ads.",
     "intro": "The account cannot create new campaigns, although the user sees historical ads.",
     "serviceLabel": "Advertising and marketing",
@@ -4262,7 +4262,7 @@
   "meta-ad-catalog-products-rejected": {
     "sourceHash": "64e7ddd8979d693833516b7a07160c13b8bb93c400d8764ee01fd7d36cc42964",
     "status": "machine",
-    "title": "Meta Catalog: Products rejected by abnormal photos",
+    "title": "Meta Catalog Rejects Products Because of Their Images",
     "description": "Feed is downloaded, but some products are not eligible for catalogue advertising.",
     "intro": "Feed is downloaded, but some products are not eligible for catalogue advertising.",
     "serviceLabel": "Advertising and marketing",
@@ -4297,7 +4297,7 @@
   "meta-ad-rejected-policy": {
     "sourceHash": "18ccde4fee757a41c1a7d55e484f7a14585bdfb13c5acf7de55f3f5b3934fa43",
     "status": "machine",
-    "title": "Meta Ads: advertising rejected due to advertising rules",
+    "title": "Meta Ads: Ad Rejected for Policy Violations",
     "description": "The new creation is marked as Rejected despite the working group and budget.",
     "intro": "The new creation is marked as Rejected despite the working group and budget.",
     "serviceLabel": "Advertising and marketing",
@@ -4367,7 +4367,7 @@
   "meta-ads-audience-overlap": {
     "sourceHash": "1edee8acdc11c9ffbce52c5b9c1c5d4151a81202be2d0315b39245763151ce72",
     "status": "machine",
-    "title": "Meta Ads: Advertising sets compete for the same customers",
+    "title": "Meta Ads: Ad Sets Compete for the Same Audience",
     "description": "Several similar sets have an unstable result cost, although the creations are different.",
     "intro": "Several similar sets have an unstable result cost, although the creations are different.",
     "serviceLabel": "Advertising and marketing",
@@ -4402,7 +4402,7 @@
   "meta-ads-budget-spent-no-impressions": {
     "sourceHash": "8ea36894bccf462d921a5c85adc77863eeb9a32e3338626e050c23ab7092026a",
     "status": "machine",
-    "title": "Meta Ads: budget is set, but no views",
+    "title": "Meta Ads: Campaign Is Active but Has No Impressions",
     "description": "The set has Active status, but the visible range remains close to zero.",
     "intro": "The set has Active status, but the visible range remains close to zero.",
     "serviceLabel": "Advertising and marketing",
@@ -4472,7 +4472,7 @@
   "meta-ads-creative-text-overlay-crop": {
     "sourceHash": "0929fc8233397d1cef713c02b3942857cc2e9a1e191ef7c45b015a8c8c6292a4",
     "status": "machine",
-    "title": "Meta Ads: advertising looks bad in Stories despite correct preview",
+    "title": "Meta Ads: Text Gets Cropped in Instagram Stories",
     "description": "Text and logo are cut off after displaying creations in vertical placements.",
     "intro": "Text and logo are cut off after displaying creations in vertical placements.",
     "serviceLabel": "Advertising and marketing",
@@ -4542,7 +4542,7 @@
   "meta-ads-instagram-account-disconnected": {
     "sourceHash": "e501c8bb07b0e41be75efe0f524c1378807a5ac2f1aa87c26ace254d32818bf0",
     "status": "machine",
-    "title": "Meta Ads: advertising cannot use Instagram",
+    "title": "Meta Ads: Instagram Account Unavailable When Creating an Ad",
     "description": "The company's Instagram profile is missing when selecting the advertising identity.",
     "intro": "The company's Instagram profile is missing when selecting the advertising identity.",
     "serviceLabel": "Advertising and marketing",
@@ -4577,7 +4577,7 @@
   "meta-ads-pixel-event-priority-conflict": {
     "sourceHash": "a4108138912328a36943a446fc2baf91f6676d81044c747a4304a388e0fdf80e",
     "status": "machine",
-    "title": "Pixel Meta: Purchase is not properly prioritised",
+    "title": "Meta Pixel: Purchase Event Is Not Prioritized Correctly",
     "description": "The event report shows a configuration conflict and inconsistent data in sales campaigns.",
     "intro": "The event report shows a configuration conflict and inconsistent data in sales campaigns.",
     "serviceLabel": "Advertising and marketing",
@@ -4612,7 +4612,7 @@
   "meta-ads-reklama-aktywna-zero-wyswietlen": {
     "sourceHash": "6a74eaa9522cc293892664427a4262fcc2899c02a6795839149e91c35a1be44c",
     "status": "machine",
-    "title": "Meta Ads: active advertising, but has zero views",
+    "title": "Meta Ads: Ad Is Active but Has Zero Impressions",
     "description": "The status is active, and the advertising doesn't reach people. What to check: schedule, budget, group, payments and status.",
     "intro": "The panel shows green status active, but views statistics do not grow.",
     "serviceLabel": "Pages, SEO and advertising",
@@ -4645,7 +4645,7 @@
   "meta-ads-reklama-odrzucona-co-robic": {
     "sourceHash": "c7b77039bdacea5464456f1940c62869c335b865cde30cd6ab9feafe8a1073e3",
     "status": "machine",
-    "title": "Meta Ads rejected the commercial — where to check the reason?",
+    "title": "Meta Ads: Advertisement Rejected — How to Appeal",
     "description": "Advertising rejected at Meta. How to check the rules, improve content and lodge an appeal without breaking the rules again.",
     "intro": "The advertisement was working or was just created, but the panel shows rejection and the campaign does not move.",
     "serviceLabel": "Pages, SEO and advertising",
@@ -4678,7 +4678,7 @@
   "meta-ads-report-attribution-diff": {
     "sourceHash": "c39c03c0bbe9c9b2da969d9bdbf6f4618bb14d49c20f6441334bd27ec9eb33ef",
     "status": "machine",
-    "title": "Meta Ads: more conversion in Advertising Manager than in CRM",
+    "title": "Meta Ads Reports More Conversions Than Your CRM",
     "description": "The platform shall attribute more results than the number of contracts actually signed.",
     "intro": "The platform shall attribute more results than the number of contracts actually signed.",
     "serviceLabel": "Advertising and marketing",
@@ -4779,7 +4779,7 @@
   "meta-adset-no-delivery-learning-limited": {
     "sourceHash": "6016f87d39a32f7937a5228e6c5f83a419a5846d33c50ec60a0d396d678e7dd7",
     "status": "machine",
-    "title": "Meta Ads: a set of ads has Learning Limited and is hardly displayed",
+    "title": "Meta Ads: Ad Set Is Stuck in Learning Limited",
     "description": "A set of ads spends little money and shows a limited learning stage despite correct creation.",
     "intro": "A set of ads spends little money and shows a limited learning stage despite correct creation. The cause may be a small number of optimization events or too fragmented structure of advertising sets.",
     "serviceLabel": "Marketing and advertising",
@@ -4885,9 +4885,9 @@
   "meta-capi-test-event-code-no-events": {
     "sourceHash": "2b0af55067dfa7aaf10428effb767c1781bbcb85f7e0e0d5724dcbd6cde3d91b",
     "status": "machine",
-    "title": "Meta Conversations API: Test Events does not show event despite HTTP 200",
-    "description": "Query to Conversations API returns HTTP 200, but the sent event does not appear on the Test Events page.",
-    "intro": "Query to Conversations API returns HTTP 200, but the sent event does not appear on the Test Events page. The correct HTTP response to sending an event does not mean that it went to the selected test preview; the test event code and the appropriate data source identifier are important.",
+    "title": "Meta Conversions API: Test Events Shows Nothing Despite HTTP 200",
+    "description": "Query to Conversions API returns HTTP 200, but the sent event does not appear on the Test Events page.",
+    "intro": "Query to Conversions API returns HTTP 200, but the sent event does not appear on the Test Events page. The correct HTTP response to sending an event does not mean that it went to the selected test preview; the test event code and the appropriate data source identifier are important.",
     "serviceLabel": "Marketing and advertising",
     "sections": [
       {
@@ -4956,7 +4956,7 @@
   "meta-duplikaty-pixel-conversions-api": {
     "sourceHash": "f9a6991784b92e3591ba1a96b70b97c015830c7e10c4ff5cdfc3e76cf8dc1e29",
     "status": "machine",
-    "title": "Pixel and Conversations API count the same conversion twice",
+    "title": "Meta Pixel and Conversions API Count the Same Conversion Twice",
     "description": "The viewer and server can report the same event. Without a common identifier Meta can treat them as two different results. Do not turn off immediately",
     "intro": "The viewer and server can report the same event. Without a common identifier Meta can treat them as two different results. Do not immediately disable the entire server measurement.",
     "serviceLabel": "Let's talk about a solution.",
@@ -5053,7 +5053,7 @@
   "meta-lead-ads-access-token-expired": {
     "sourceHash": "20beef724696837ab2b202e2cb42af9ef2654be8354793788ec4d543f754bc3d",
     "status": "machine",
-    "title": "Meta Lead Ads: expired access token and leady do not go to CRM",
+    "title": "Meta Lead Ads: Expired Access Token Stops CRM Lead Delivery",
     "description": "Meta's active integration suddenly stopped receiving contacts? Token, permission and webhook diagnostics.",
     "intro": "The forms continue to collect queries, but the automatic upload to CRM has stopped working.",
     "serviceLabel": "CRM and integration",
@@ -5086,9 +5086,9 @@
   "meta-lead-ads-formularz-jest-crm-pusty": {
     "sourceHash": "2e074ce4202d153d28a7de72fa51a1afb9e7d03a640e231ee8646122f190e9b6",
     "status": "machine",
-    "title": "Meta shows lead, but there is no lead in CRM — step by step integration",
+    "title": "Meta Leads Are Missing from CRM: Integration Checklist",
     "description": "How to check missing contact between Facebook form, webhook and CRM database.",
-    "intro": "There's a new report in the Advertising Manager, but the trader can't see him in line.",
+    "intro": "There's a new report in the Advertising Manager, but the sales representative can't see him in line.",
     "serviceLabel": "CRM and integration",
     "sections": [
       {
@@ -5103,8 +5103,8 @@
           "1. Save form identifier and leadgen id without distributing customer data.",
           "2 . Check the log for webhook event reception and API response when downloading data.",
           "3 . Verify the form field mapping to fields in the database, including phone numbers and optional responses.",
-          "4 . Check transaction record, deduplication and assignment to the trader.",
-          "5 . Finally test the list and counter under the trader's account and alert for each failed stage."
+          "4 . Check transaction record, deduplication and assignment to the sales representative.",
+          "5 . Finally test the list and counter under the sales representative's account and alert for each failed stage."
         ]
       },
       {
@@ -5145,7 +5145,7 @@
   "meta-leadads-access-no-download": {
     "sourceHash": "9491baa9ed4a5255c9aaf7ec2997db3f8a8d2c4cfb1faae403ff30b613719a9c",
     "status": "machine",
-    "title": "Meta Lead Ads: form has leady, but cannot be downloaded",
+    "title": "Meta Lead Ads: Form Has Leads but Download Is Blocked",
     "description": "The panel shows contacts from the form, but downloading CSV or access in CRM ends with refusal.",
     "intro": "The panel shows contacts from the form, but downloading CSV or access in CRM ends with refusal. Access to the site and access to lead are separate allowances managed in the Meta ecosystem.",
     "serviceLabel": "Marketing and advertising",
@@ -5216,7 +5216,7 @@
   "meta-leadform-quality-vs-volume": {
     "sourceHash": "b16732feeb319b8739646167224de3790d9f80e33feb0fa74c23c709cfea8695",
     "status": "machine",
-    "title": "Meta Lead Ads: Cheap forms without receiving customers",
+    "title": "Meta Lead Ads: Low-Cost Forms Produce Poor-Quality Leads",
     "description": "The panel reports a lot of lead, but CRM has a lot of wrong numbers and random reports.",
     "intro": "The panel reports a lot of lead, but CRM has a lot of wrong numbers and random reports.",
     "serviceLabel": "Advertising and marketing",
@@ -5251,7 +5251,7 @@
   "meta-leady-duplikaty-po-retry-webhook": {
     "sourceHash": "8761cf814d436ed96349e0fd89bdf8e2317dd380c018527e7755fccb90f5b131",
     "status": "machine",
-    "title": "Meta sent webhook again and CRM has a double lead",
+    "title": "Meta Webhook Retry Creates Duplicate Leads in CRM",
     "description": "Idempotence of Meta webhooks and safe reopening demands not to create customer doubles.",
     "intro": "The same contact appears twice after the problem with merging or resuming integration.",
     "serviceLabel": "CRM and integration",
@@ -5286,7 +5286,7 @@
     "status": "machine",
     "title": "Cheap Leads from Meta Ads do not answer their phone — how to improve quality?",
     "description": "When the CPL drops, but the number of customers does not increase. How to analyze forms, reaction time and qualification.",
-    "intro": "The campaign generates many cheap queries, and traders report lack of contact or lack of interest.",
+    "intro": "The campaign generates many cheap queries, and sales representatives report lack of contact or lack of interest.",
     "serviceLabel": "Pages, SEO and advertising",
     "sections": [
       {
@@ -5300,7 +5300,7 @@
         "paragraphs": [
           "1. Specify the definition of qualified contact and the reason for rejection of lead.",
           "2 . Check the time from sending the form to the first attempt to connect.",
-          "3 . Compare the content of advertising, form and actual offer provided by the trader.",
+          "3 . Compare the content of advertising, form and actual offer provided by the sales representative.",
           "4 . Test the additional qualifying question, but monitor the impact on the number and quality of applications.",
           "5 . Rate campaign on CRM data: connections, offers, contracts, not CPL itself."
         ]
@@ -5317,7 +5317,7 @@
   "meta-nie-widze-strony-w-menadzerze-reklam": {
     "sourceHash": "ab425d5bbdededc11dd226ca1da84fd079013ea2cd5cd61b7d269d9f1e2bb002",
     "status": "machine",
-    "title": "I don't see the website in Meta Advertising Manager — where to check access?",
+    "title": "Meta Ads Manager: Business Page Is Missing from Ad Identity",
     "description": "You can publish on the fanpage, but do not choose it as the identity of the advertisement. Access to the website, corporate portfolio and advertising account are separate permissions",
     "intro": "You can publish on the fanpage, but do not choose it as the identity of the advertisement. Access to the website, company portfolio and advertising account are separate permissions. Just logging into the right profile is not enough.",
     "serviceLabel": "Let's talk about a solution.",
@@ -5343,7 +5343,7 @@
   "meta-pixel-capi-brak-zdarzen": {
     "sourceHash": "09a563ad3a6c6bab242948799dd9943ec687e975fe21b206cfed2324d3d39c57",
     "status": "machine",
-    "title": "Meta Pixel and Conversations API: Why no events in Manager?",
+    "title": "Meta Pixel and Conversions API: Missing Events in Events Manager",
     "description": "Pixel and CAPI don't record conversions? How to check configuration, consent, event test and event ID.",
     "intro": "Users send forms, but Event Manager does not show the expected conversion.",
     "serviceLabel": "Pages, SEO and advertising",
@@ -5472,7 +5472,7 @@
   "meta-reklama-edycja-tekstu-brak-efektu": {
     "sourceHash": "0656aaf154327fcf6838c248a7a212ece43b8bd193347e93562c9407b9187915",
     "status": "machine",
-    "title": "I changed the text in Meta's commercial, but I don't see why.",
+    "title": "Meta Ads: Edited Ad Copy Is Not Showing",
     "description": "The changed header or creation is not displayed as in the editor. Previews, dynamic creation and acceptance process.",
     "intro": "After editing the copy, the user still sees an old version of the advertisement or another variant of the text.",
     "serviceLabel": "Pages, SEO and advertising",
@@ -5607,7 +5607,7 @@
   "mobile-menu-biale-tlo-zmiana-stylu": {
     "sourceHash": "4c139ee539ebed6e46d7911618f2dffd5b127842c5be0223f6250009705a6966",
     "status": "machine",
-    "title": "The mobile menu has a white background despite the dark side — how do you find style?",
+    "title": "Mobile Menu Has a White Background on a Dark Website",
     "description": "The navigation bar doesn't match the dark theme? CSS helmet, browser styles, select and backdrop.",
     "intro": "The whole page is dark, but the header or drop-down menu on the phone still has a white beam.",
     "serviceLabel": "Website creation",
@@ -5640,7 +5640,7 @@
   "mobile-tekst-nachodzi-na-twarz-zdjecie": {
     "sourceHash": "996c48aaf8c3c37e4c97bec39d5fb320fb0aef67f2a23b3d57603dd3654e533f",
     "status": "machine",
-    "title": "The text comes to your face on your phone — how do you design a hero?",
+    "title": "Mobile Hero Text Overlaps the Person in the Photo",
     "description": "The photo of the person and the inscriptions in the hero overlap. CSS solutions for desktop and mobile without editing the photo.",
     "intro": "Desktop looks good, but after lowering the screen, the header lands on the face or disappears outside the frame.",
     "serviceLabel": "Website creation",
@@ -5673,7 +5673,7 @@
   "mobile-viewport-przeskakuje-przewijanie": {
     "sourceHash": "4ed3e53d80c995f35256c89f660a822f49bf5b50851e12fcee62edb3329a7aa4",
     "status": "machine",
-    "title": "Phone page jumps when scrolling — CSS causes",
+    "title": "Mobile Viewport Jumps During Scrolling: CSS Fixes",
     "description": "A mobile viewport jumps when scrolling, animations, or an extended Safari bar. How to diagnose 100vh and layout shifts.",
     "intro": "On iPhone, the background or sections of the page jump while desktop looks normal. On mobile devices, the height of the visible area changes when scrolling and hiding the browser bar.",
     "serviceLabel": "Website creation",
@@ -5706,7 +5706,7 @@
   "next-image-obraz-znika-po-resize": {
     "sourceHash": "63572197f639d5d1d396b888626a7f94293fb5ecd647d4a2d334d00945a352f3",
     "status": "machine",
-    "title": "Next/Image: image disappears or unscales when window is changed",
+    "title": "Next.js Image Disappears or Resizes Incorrectly",
     "description": "Next/image errors and responsive photos: fill, sizes, parent positioning and container height.",
     "intro": "The picture disappears in the part of breakpoints or looks like an empty rectangle after changing orientation.",
     "serviceLabel": "Website creation",
@@ -5775,7 +5775,7 @@
   "nextjs-basepath-static-assets-404": {
     "sourceHash": "c9988ce413436022c229bda4af62ffa69d6f281cf9a9c95ea834ad1375a18deb",
     "status": "machine",
-    "title": "Next.js: After setting basePath resources  next return 404",
+    "title": "Next.js: Static Assets Return 404 After Setting basePath",
     "description": "The application in the subdirectory /panel opens HTML, but styles and JavaScript are loaded from invalid paths.",
     "intro": "The application in the subdirectory /panel opens HTML, but styles and JavaScript are loaded from invalid paths. BasePath and assetPrefix configuration may not match reverse proxy or target subdirectory.",
     "serviceLabel": "Internet applications",
@@ -6035,14 +6035,14 @@
       {
         "title": "How to identify the source of the problem",
         "paragraphs": [
-          "Read the dynamicParams value in the route file and the service list returned by generationStaticParams. Compare SHA of the production defloyment with the addition of the article and determine whether the new slug was in the build.",
+          "Read the dynamicParams value in the route file and the service list returned by generationStaticParams. Compare SHA of the production deployment with the addition of the article and determine whether the new slug was in the build.",
           "Compare the message from the console with the result of the production compilation and the condition after the page has been refreshed."
         ]
       },
       {
         "title": "Repair steps",
         "paragraphs": [
-          "For a site that publishes new services without full rebuild, set consciously dynamicParams=true and proper cache. If you are using fully static exports, generate all the necessary parameters when building and start a new defloyment after publication."
+          "For a site that publishes new services without full rebuild, set consciously dynamicParams=true and proper cache. If you are using fully static exports, generate all the necessary parameters when building and start a new deployment after publication."
         ]
       },
       {
@@ -6134,7 +6134,7 @@
   "nextjs-form-server-action-origin-mismatch": {
     "sourceHash": "81ef5b8ace931ebe2c7f9dd4fd135802cbac2c92b1f4883db0dfe522853a6ffa",
     "status": "machine",
-    "title": "Next.js Server Action: Invalid Server Actions request original mismatch",
+    "title": "Next.js Server Action: Origin Mismatch Error",
     "description": "Writing through the form does not work only behind reverse proxy or custom domain and a message about origin mismatch appears.",
     "intro": "Writing through the form does not work only behind reverse proxy or custom domain and a message about origin mismatch appears. Server Actions verify the origin of the request, and proxy can transmit Host and X-Forwarded-Host incompatible with Origin.",
     "serviceLabel": "Internet applications",
@@ -6284,7 +6284,7 @@
   "nextjs-hydration-failed-jak-naprawic": {
     "sourceHash": "10d6f7c0ee53b3fe8c2ff8bd7b283282ce0c1a7f4384178515f716b597910103",
     "status": "machine",
-    "title": "Next.js: Hydration failed — How to find and fix a mistake?",
+    "title": "Next.js: How to Debug and Fix Hydration Failed",
     "description": "Hydration failed, server rendered HTML didn't match the client. List of causes and step-by-step checking in Next.js and React.",
     "intro": "The Hydration failed message means that the HTML generated on the server differs from the first React rendering in the browser. Do not start by turning off SSR: Find an item that has a different value on the first render.",
     "serviceLabel": "CRM and web applications",
@@ -6497,7 +6497,7 @@
   "nextjs-next-redirect-caught-exception": {
     "sourceHash": "4867e3b869bc94e126933297d8e95e26965200b9f5d9b6aecd1fd8ac1e1f3ace",
     "status": "machine",
-    "title": "Next.js: NEXT REDIRECT goes to catch and redirect is not working",
+    "title": "Next.js: NEXT_REDIRECT Is Caught by try/catch",
     "description": "After calling redirect(), the user stays on the page, and NEXT REDIRECT appears in the log.",
     "intro": "After calling redirect(), the user stays on the page, and NEXT REDIRECT appears in the log. The redirect function throws an internal navigation control exception; a wide tri/catch can swallow it.",
     "serviceLabel": "Internet applications",
@@ -6671,7 +6671,7 @@
   "nextjs-output-export-dynamic-route-error": {
     "sourceHash": "9ef5e860b62e5131608c0f7fb62c331c48e1b65635f4d59d8b4ecb3df70e42ad",
     "status": "machine",
-    "title": "Next.js output export: dynamic route missing generationStaticParams",
+    "title": "Next.js Static Export: Dynamic Route Missing generateStaticParams",
     "description": "Output project: export is built until it passes through the dynamic route and reports missing generationStaticParams.",
     "intro": "Output project: export is built until it passes through the dynamic route and reports missing generationStaticParams. Static export cannot generate new pages on demand, so it needs a set of addresses known during the build.",
     "serviceLabel": "Internet applications",
@@ -6741,7 +6741,7 @@
   "nextjs-revalidatepath-wrong-url": {
     "sourceHash": "c7209aefd49fed979957fcc1db3bac65d145ade5835c0b2fbfe25acf4629846e",
     "status": "machine",
-    "title": "Next.js validatePath does not refresh a particular subpage",
+    "title": "Next.js revalidatePath Does Not Refresh a Specific Page",
     "description": "After performing the revalidatePath action, the user still sees a buffered version of the order details.",
     "intro": "After performing the revalidatePath action, the user still sees a buffered version of the order details. The path to be cancelled may not correspond to the actual route or dynamic reference.",
     "serviceLabel": "Internet applications",
@@ -7125,7 +7125,7 @@
   "nextjs-trailing-slash-redirect-loop": {
     "sourceHash": "6de80003badd0baf7630a30a4639890bab16f8f2661ea0d66da3c67abc40b609",
     "status": "machine",
-    "title": "Next.js: traileringSlash creates redirections between /offer and /offer/",
+    "title": "Next.js trailingSlash Causes a Redirect Loop",
     "description": "Request /offer passes through another 308 and returns to the previous address.",
     "intro": "Request /offer passes through another 308 and returns to the previous address. Next.js and external reverse proxy can enforce conflicting Slash rules at the end of URL.",
     "serviceLabel": "Internet applications",
@@ -7196,7 +7196,7 @@
   "node-npm-ci-eresolve-lockfile-bledy-build": {
     "sourceHash": "96a158a225d8e7e772b00e2421b39ea184248960b205fed58d106292a5484b9b",
     "status": "machine",
-    "title": "nm does not work on CI: package-lock incompatible with package.json",
+    "title": "npm ci Fails in CI Because the Lockfile Is Incompatible",
     "description": "You end up with a bug in GitHub Actions or Vercel, and an example install locally? Check lockfile, Node version and dependency.",
     "intro": "The e.g. command is intentionally more stringent than e.g. install. In the production pipeline requires consistent package.json and package-lock.json and does not repair them in flight. Therefore, the project may operate locally but not build in CI.",
     "serviceLabel": "Programming and implementation",
@@ -7303,7 +7303,7 @@
     "sourceHash": "56b3d9fc59a2b2e88be297d0b0d793c1a4a63a364994d4bff82aa7d3bfc1b72a",
     "status": "machine",
     "title": "Openrouter on Vercel: ENV variable is set, but API does not work",
-    "description": "AI API error after defloy. Preview and Production Difference, variable name and need for new implementation.",
+    "description": "AI API error after deploy. Preview and Production Difference, variable name and need for new implementation.",
     "intro": "The AI assistant works on localhost, but after publication does not get answers and logs suggest no configuration.",
     "serviceLabel": "CRM and integration",
     "sections": [
@@ -7401,9 +7401,9 @@
   "pixel-dwukrotne-zliczanie-potwierdzenie": {
     "sourceHash": "fccbebf6fa2981ba6b489ba5411697628385c5c8632d6cc86645d2f62fe51c3a",
     "status": "machine",
-    "title": "Pixel and Conversations API count the same transaction twice on the confirmation page",
-    "description": "Description of diagnosis, differentiation of causes and safe corrective steps when pixel and Conversations API register the same sales twice on the confirmation page. Includes verification tests and typical mistakes to avoid.",
-    "intro": "Problem: on the order confirmation / thank-you page, you see that the conversion is reported twice in Meta (Facebook/Meta Ads) tools. The most common cause is not the “bug” of the pixel itself or the API, but overlapping sources of events: the front-end Meta Pixel sends the event purchase and backend Conversations API sends the same event without correlation. The purpose of this instruction is to provide methodological differential diagnosis, a list of specific corrective steps, and tests that will confirm the removal of double counting. We do not assume the only reason — we will examine what usually occurs in SPA configurations, intermediate servers and integration of e-commerce.",
+    "title": "Pixel and Conversions API count the same transaction twice on the confirmation page",
+    "description": "Description of diagnosis, differentiation of causes and safe corrective steps when pixel and Conversions API register the same sales twice on the confirmation page. Includes verification tests and typical mistakes to avoid.",
+    "intro": "Problem: on the order confirmation / thank-you page, you see that the conversion is reported twice in Meta (Facebook/Meta Ads) tools. The most common cause is not the “bug” of the pixel itself or the API, but overlapping sources of events: the front-end Meta Pixel sends the event purchase and backend Conversions API sends the same event without correlation. The purpose of this instruction is to provide methodological differential diagnosis, a list of specific corrective steps, and tests that will confirm the removal of double counting. We do not assume the only reason — we will examine what usually occurs in SPA configurations, intermediate servers and integration of e-commerce.",
     "serviceLabel": "Advertising and marketing",
     "sections": [
       {
@@ -7418,8 +7418,8 @@
         "paragraphs": [
           "1. Step 1 — Identify time and event identifier: in Meta Events Manager, select an example duplicated event and note down timestamp, event name, and event id (if available). Determine whether both entries have the same event id.",
           "2 . Step 2 — View frontend: Open the confirmation page in development mode, monitor the console and Network. Check that fbq('track','Purchase') is called more than once and that event id is included as custom data.event id or event id parameter in request payoad.",
-          "3 . Step 3 — View backend/server: check server logs or the forwarding mechanism Conversations API. Find payload sent to /events from event name=Purchase field and see if the same event id or order id transaction identifier is sent. If there is no event id, enter a coherent event id.",
-          "4 . Step 4 — Deduplication implementation: if you want to use both sources, make sure the front-end generates a unique event id (UUID v4) and transmits it to the backend together with the order, and backend sends the same event id in the field 'event id' in Conversations API.",
+          "3 . Step 3 — View backend/server: check server logs or the forwarding mechanism Conversions API. Find payload sent to /events from event name=Purchase field and see if the same event id or order id transaction identifier is sent. If there is no event id, enter a coherent event id.",
+          "4 . Step 4 — Deduplication implementation: if you want to use both sources, make sure the front-end generates a unique event id (UUID v4) and transmits it to the backend together with the order, and backend sends the same event id in the field 'event id' in Conversions API.",
           "5 . Step 5 — Blocking duplicates on the client side: if you do not use CAPI or prefer to disable pixel, add a condition on the confirmation page that sends pixel only if the order was not previously registered in session (e.g. session flagStorage 'purchase sent').",
           "6 . Step 6 — Check intermediate integrations: view Tag Manager configurations, shop plugins (Shopify/ WooCommerce), and middleware CDN to make sure no tool sends an additional Purchase. Disable the suspicious rules individually and watch the events.",
           "7 . Step 7 — Test retry and idempotence: if backend retrys the shipment at errors, make sure the retry uses the same event id, rather than generating a new one. Otherwise Meta will treat retra as a new conversion."
@@ -7445,7 +7445,7 @@
   "postgres-22001-string-too-long": {
     "sourceHash": "e2d90ad21af24df425243f4c85012c983e32d0a401920131c8ae60d9086a7d2e",
     "status": "machine",
-    "title": "PostgreSQL: 22001 value too long for type character variety",
+    "title": "PostgreSQL 22001: Value Too Long for Column Type",
     "description": "Writing a longer description ends with a 22001 error instead of creating a record.",
     "intro": "Writing a longer description ends with a 22001 error instead of creating a record. The varchar(n) column has a length limit which may be less than the actual content of the form.",
     "serviceLabel": "CRM and databases",
@@ -7517,7 +7517,7 @@
   "postgres-23505-duplicate-key": {
     "sourceHash": "010c1471d39a7e0194b2aee052c313ace08f76911e15cc7d45a0a62a942cc0ff",
     "status": "machine",
-    "title": "PostgreSQL: 23505 duplicate key value Violates unique contrast",
+    "title": "PostgreSQL 23505: Duplicate Key Violates Unique Constraint",
     "description": "Data insertion or synchronization stops at SQLSTATE 23505.",
     "intro": "Data insertion or synchronization stops at SQLSTATE 23505. The UNIQUE or PRIMARY KEY index detected a repeated value which the data model considers to be unique.",
     "serviceLabel": "CRM and databases",
@@ -7553,7 +7553,7 @@
   "postgres-40001-serialization-failure": {
     "sourceHash": "2399868822f2c444e5fc05868aa5593a4982fee3c542e9e577c414a3babea6e7",
     "status": "machine",
-    "title": "PostgreSQL: 40001 could not serialize access due to conventional update",
+    "title": "PostgreSQL 40001: Serialization Failure from Concurrent Updates",
     "description": "Two operations on the same data end in SQLSTATE 40001 error at a higher level of isolation.",
     "intro": "Two operations on the same data end in SQLSTATE 40001 error at a higher level of isolation. The transaction could not be safely approved in accordance with isolation requirements and must be repeated as a whole.",
     "serviceLabel": "CRM and databases",
@@ -7589,7 +7589,7 @@
   "postgres-40p01-deadlock-detected": {
     "sourceHash": "a50cc702ac69ad1f57ba82aea482ec21b8e2c79fba27548f958e8e3237fc5ea3",
     "status": "machine",
-    "title": "PostgreSQL: 40P01 deadlock detected during simultaneous recording",
+    "title": "PostgreSQL 40P01: Deadlock Detected During Concurrent Writes",
     "description": "During parallel recording of two records, one transaction ends with a deadlock detected error, although individual records work.",
     "intro": "During parallel recording of two records, one transaction ends with a deadlock detected error, although individual records work. Two transactions await each other's locks; PostgreSQL interrupts one to resolve the dependency cycle.",
     "serviceLabel": "CRM and databases",
@@ -7768,7 +7768,7 @@
   "react-effect-interval-memory-leak": {
     "sourceHash": "89efd4e23e2304fb2ed75ef64425f21844fff3e3e000067b19944e6269e39f14",
     "status": "machine",
-    "title": "React: setInterval multiplies queries after switching bookmarks",
+    "title": "React: setInterval Creates Duplicate Requests After Switching Tabs",
     "description": "Each reopening of the panel leads to another timer and an increasing number of API requests.",
     "intro": "Each reopening of the panel leads to another timer and an increasing number of API requests. The effect is created by the interval, but does not slow it down when the component is dependent or unmounted.",
     "serviceLabel": "Internet applications",
@@ -7873,7 +7873,7 @@
   "react-hooks-rendered-fewer": {
     "sourceHash": "72cf402f96d9428720edb617753cc218b33bb77064b594f4abd4f686ef6ea14f",
     "status": "machine",
-    "title": "React: Rendered five hooks than expected after changing the condition",
+    "title": "React: Rendered Fewer Hooks Than Expected",
     "description": "After hiding a fragment of the React form, it throws a smaller number of hooks.",
     "intro": "After hiding a fragment of the React form, it throws a smaller number of hooks. The component induces hooks in a different order between renders, often by return before useMemo or useEfect.",
     "serviceLabel": "Internet applications",
@@ -7981,7 +7981,7 @@
   "react-maximum-update-depth": {
     "sourceHash": "802a13ba2f586ee0e623b992a43bdde24133eef38e915cd8f733b9739d75338c",
     "status": "machine",
-    "title": "React: Maximum update depth enhanced at useEffect",
+    "title": "React: Maximum Update Depth Exceeded in useEffect",
     "description": "Once the CPU page is opened, the component renders itself in the loop and a maximum update depth error appears.",
     "intro": "Once the CPU page is opened, the component renders itself in the loop and a maximum update depth error appears. The effect changes the state on which it depends, or each time it receives a new object of dependence.",
     "serviceLabel": "Internet applications",
@@ -8017,7 +8017,7 @@
   "react-portal-modal-focus-lost": {
     "sourceHash": "e4c0de33e1aa7393c859a918d5b98213256bca9c9aa7116ab2c7e01e91b5c133",
     "status": "machine",
-    "title": "React: modal through portal loses focus keyboard",
+    "title": "React: Modal Loses Keyboard Focus",
     "description": "When the Tab dialog is opened, it goes to items under modal, and Escape does not close the window.",
     "intro": "When the Tab dialog is opened, it goes to items under modal, and Escape does not close the window. The transfer of a DOM through createPortal does not automatically provide a full mechanism for the availability of dialogue.",
     "serviceLabel": "Internet applications",
@@ -8087,7 +8087,7 @@
   "react-stale-state-handler": {
     "sourceHash": "107b5a4ebf15586374ef6b6749009bd580e79c3ce20fa6a457f4369c7ffa79fe",
     "status": "machine",
-    "title": "React: SetState does not increase the counter after a few quick clicks",
+    "title": "React setState Does Not Increment After Rapid Clicks",
     "description": "Three clicks increases the counter only once, although the carrier has called setState multiple times.",
     "intro": "Three clicks increases the counter only once, although the carrier has called setState multiple times. All updates in the same package could read the same status value from the closing function.",
     "serviceLabel": "Internet applications",
@@ -8263,7 +8263,7 @@
   "reklama-lokalnej-firmy-strona-i-social-media": {
     "sourceHash": "43be643b3cd412a58fc03e684a8d088d656758f8f7708d38bfa89ddc9a446f10",
     "status": "machine",
-    "title": "Local company advertising: website, social media and surveying",
+    "title": "Local Business Advertising: Website, Social Media and Analytics",
     "description": "How to prepare a local company for the campaign: offer, profile, target page, budget and customer queries handling.",
     "intro": "Before launching the ad, determine the service you promote, who you show it to and what the person you want to do. For catering it can be a transition to the menu, for the living room booking, and for the service company a conversation about valuation. Each of these situations requires a different path from advertising to action.",
     "serviceLabel": "Marketing, advertising and social media",
@@ -8308,7 +8308,7 @@
   "reklamy-oze-magazyny-energii": {
     "sourceHash": "ed1fd8ef8d0f4bf12d50de637822d5668504483b74532aa96deb64ebb58ca97b",
     "status": "machine",
-    "title": "RES Advertising and Energy Magazines — How to Get Customers?",
+    "title": "Renewable Energy Ads: How to Find Customers for Energy Storage",
     "description": "How to conduct Meta Ads campaigns for photovoltaics and energy storage: communications, contact qualification, salesmen's service and CPL measurement.",
     "intro": "In the RES industry, contact with a person interested in energy storage is only the beginning. It counts for consistency of the message, correct customer expectations, quick response and technical qualification of the query.",
     "serviceLabel": "Marketing and advertising",
@@ -8323,7 +8323,7 @@
       {
         "title": "Creation should lead to a precise form",
         "paragraphs": [
-          "The information on the offer should be consistent with what the trader can actually propose. Well selected questions help identify the location, status of the installation and main needs without creating an excessively long form.",
+          "The information on the offer should be consistent with what the sales representative can actually propose. Well selected questions help identify the location, status of the installation and main needs without creating an excessively long form.",
           "It is worth testing several versions of the message, but compare not only the number of applications, but also the percentage of contacts useful for sales."
         ]
       },
@@ -8338,7 +8338,7 @@
         "title": "In RES, efficient lead handling is necessary",
         "paragraphs": [
           "With a large influx of calls, you need assignments, contact queues, callback dates and call history. Unserviced forms can impair the effectiveness of even a well-optimized campaign.",
-          "The CRM system should show what happened to the lead after the acquisition. Trader work and Meta Ads results are two elements of one process."
+          "The CRM system should show what happened to the lead after the acquisition. sales representative work and Meta Ads results are two elements of one process."
         ]
       },
       {
@@ -8449,7 +8449,7 @@
   "seo-article-schema-jsonld": {
     "sourceHash": "dd75be84cb42adab86ad2523dda584896ecc11234c87b5b13ab6c483fbd556b4",
     "status": "machine",
-    "title": "Article scheme JSON-LD: Does adding structural data improve SEO?",
+    "title": "Article Schema JSON-LD: Does It Help SEO?",
     "description": "How to correctly mark the article: headline, autohor, canonical, date and what the scheme is not.",
     "intro": "The page has a guide, but there is no clear data about the author and type of publication in the code.",
     "serviceLabel": "Pages, SEO and advertising",
@@ -8482,7 +8482,7 @@
   "seo-breadcrumb-jsonld-wrong-positions": {
     "sourceHash": "a9a1c3b20204f9728a84202b0861f003fc6bdff23dffbb91a6b011a699b6b2cb",
     "status": "machine",
-    "title": "BreadcrumbList: abnormal position in structural data",
+    "title": "BreadcrumbList: Invalid Position Values in Structured Data",
     "description": "Rich Results Test reports an error in the article's navigation path.",
     "intro": "Rich Results Test reports an error in the article's navigation path.",
     "serviceLabel": "SEO and Pages",
@@ -8552,7 +8552,7 @@
   "seo-chatgpt-ai-overviews-cytowanie-strony": {
     "sourceHash": "a9d7f347334043c28ee6828abce898d87a39605022133a2952de6f9fa223404c",
     "status": "machine",
-    "title": "How do I increase the chance of AI quoting my guidebook?",
+    "title": "How to Improve Your Chances of Being Cited by AI Search",
     "description": "SEO questions users and AI citation. Specific answers, sources, author and limitations.",
     "intro": "The guide is in Google, but the answers generated by the assistants do not indicate the page as the source.",
     "serviceLabel": "Pages, SEO and advertising",
@@ -8585,7 +8585,7 @@
   "seo-faq-rich-results-not-shown": {
     "sourceHash": "b7b69f88f2ea21cacf88b14ebb52236db81bee5b2ec4c5d03d4ddede7c816bfc",
     "status": "machine",
-    "title": "FAQPage scheme: no drop-down questions seen in Google",
+    "title": "FAQPage Schema: Why Google Does Not Show FAQ Rich Results",
     "description": "The page has the correct FAQPage JSON-LD, but the organic result does not show the FAQ extension.",
     "intro": "The page has the correct FAQPage JSON-LD, but the organic result does not show the FAQ extension.",
     "serviceLabel": "SEO and Pages",
@@ -8901,7 +8901,7 @@
   "seo-infinite-scroll-no-pagination-links": {
     "sourceHash": "e5b1641995e117222c46bcc648c89eeec049045375ae3d4661ba3c92c10b3293",
     "status": "machine",
-    "title": "SEO: Infinite scroll hides further articles from the robot",
+    "title": "SEO: Infinite Scroll Hides Articles from Search Crawlers",
     "description": "The directory charges entries only after scrolling and there are no links to subsequent sets.",
     "intro": "The directory charges entries only after scrolling and there are no links to subsequent sets.",
     "serviceLabel": "SEO and Pages",
@@ -9005,7 +9005,7 @@
   "seo-llms-txt-czy-ai-cytuje": {
     "sourceHash": "e62b608bebde1ce2a58b7af8a69ad0a70a7e45a7e3e64d6b4ebe56e5127fea71",
     "status": "machine",
-    "title": "Will llms.txt make ChatGPT quote my site?",
+    "title": "Does llms.txt Help AI Assistants Cite Your Website?",
     "description": "What is llms.txt and does it guarantee presence in ChatGPT or other AI assistants? Facts and limitations.",
     "intro": "The owner publishes llms.txt with a service description and expects AI to automatically start recommending his company.",
     "serviceLabel": "Pages, SEO and advertising",
@@ -9180,7 +9180,7 @@
   "seo-paginated-category-orphan-pages": {
     "sourceHash": "dfff006501bd8bc8f0e474e555452d68de33609f3bd58cb530553e8d9794199f",
     "status": "machine",
-    "title": "SEO: articles from further parts of the categories are orphaned",
+    "title": "SEO: Articles on Later Category Pages Are Orphaned",
     "description": "There are URLs in the sitemap, but many new guides cannot be reached from the menu.",
     "intro": "There are URLs in the sitemap, but many new guides cannot be reached from the menu.",
     "serviceLabel": "SEO and Pages",
@@ -9248,7 +9248,7 @@
   "seo-product-schema-wrong-price": {
     "sourceHash": "5bc5cf1c6f7d0e53cec877345be51174b97805bec8a932dd88c07f0ed250d13c",
     "status": "machine",
-    "title": "Product scheme: different price in JSON-LD than on site",
+    "title": "Product Schema: Structured Data Price Differs from the Page",
     "description": "In the structural code is the old product price and the user sees the current offer.",
     "intro": "In the structural code is the old product price and the user sees the current offer.",
     "serviceLabel": "SEO and Pages",
@@ -9390,7 +9390,7 @@
   "seo-search-console-property-url-prefix": {
     "sourceHash": "fadea250aadf255f13d8344d90779008958f6750acd438237fc6f3e10c3b5ff3",
     "status": "machine",
-    "title": "Search Console: map reported to the wrong domain prefix",
+    "title": "Search Console: Sitemap Submitted to the Wrong URL Prefix",
     "description": "Sitemap for HTTPS works, but an account opens HTTP service or preview subdomain.",
     "intro": "Sitemap for HTTPS works, but an account opens HTTP service or preview subdomain.",
     "serviceLabel": "SEO and Pages",
@@ -9496,7 +9496,7 @@
   "seo-sitemap-gzip-invalid-response": {
     "sourceHash": "a66f0aa243e45578e5f19835f66c0aa364d7da31fb1adc695f2d17033bcccd65",
     "status": "machine",
-    "title": "Sitemap.xml.gz: a robot can't unpack a map",
+    "title": "Sitemap.xml.gz: Google Cannot Decompress the Sitemap",
     "description": "The browser downloads the file, but the search engine reports a format error.",
     "intro": "The browser downloads the file, but the search engine reports a format error.",
     "serviceLabel": "SEO and Pages",
@@ -9531,7 +9531,7 @@
   "seo-sitemap-index-child-404": {
     "sourceHash": "4ec83d60c7f12635f614a2071c5c795e2f4087b3687292242f2eb7dd7db3069e",
     "status": "machine",
-    "title": "Sitemap index: The submap returns 404",
+    "title": "Sitemap Index: A Child Sitemap Returns 404",
     "description": "The main sitemap index is downloaded, but some of these maps do not exist.",
     "intro": "The main sitemap index is downloaded, but some of these maps do not exist.",
     "serviceLabel": "SEO and Pages",
@@ -9566,7 +9566,7 @@
   "seo-sitemap-over-50000": {
     "sourceHash": "77839284eec3c28f5c1fc4133f0de58a06c17e8a7e66e3e379a1aba7a880dc5a",
     "status": "machine",
-    "title": "Sitemap.xml: too many addresses in one file",
+    "title": "Sitemap.xml Exceeds the 50,000-URL Limit",
     "description": "The service map generator creates XML exceeding the limit of the sitemap protocol.",
     "intro": "The service map generator creates XML exceeding the limit of the sitemap protocol.",
     "serviceLabel": "SEO and Pages",
@@ -9664,7 +9664,7 @@
     "sourceHash": "45c469e5e2003ccfa5e22c1b72fe4b89c7b6527bd7fac1a6534987019a88c48b",
     "status": "machine",
     "title": "Supabase: Administrator sees record, user not — RLS diagnosis",
-    "description": "How to compare SELECT roles and principles in the Subabase when the admin panel works and the trader's account shows voidness.",
+    "description": "How to compare SELECT roles and principles in the Supabase when the admin panel works and the sales representative's account shows voidness.",
     "intro": "After logging in as an administrator, everything works, but a regular employee doesn't see the cases assigned to him.",
     "serviceLabel": "CRM and web applications",
     "sections": [
@@ -9766,7 +9766,7 @@
   "supabase-auth-anonymous-rls-access": {
     "sourceHash": "18ffc57d2a81b59afaf5903e64dbd38b1171265c03e41c6ad5bef4674694e73e",
     "status": "machine",
-    "title": "Subabase Auth: anonymous user sees ordinary account resources",
+    "title": "Supabase Auth: anonymous user sees ordinary account resources",
     "description": "The application treats an anonymously logged account as a full authenticated account.",
     "intro": "The application treats an anonymously logged account as a full authenticated account.",
     "serviceLabel": "CRM and databases",
@@ -9942,7 +9942,7 @@
   "supabase-auth-invalid-login-credentials": {
     "sourceHash": "304edad193efc429d3a6ff352fc3bd356d91a20b6ebc26ef847b2cf99f694add",
     "status": "machine",
-    "title": "Supabase Auth: Invalid login creditials for existing account",
+    "title": "Supabase Auth: Invalid Login Credentials for an Existing Account",
     "description": "Password login ends with refusal, although the form accepts entered data.",
     "intro": "Password login ends with refusal, although the form accepts entered data.",
     "serviceLabel": "CRM and databases",
@@ -10152,7 +10152,7 @@
   "supabase-auth-otp-expired": {
     "sourceHash": "72c7f456c782fc2325bcd3ebb23a145ae4ee5c636de948198c53fc5a2abc5cf1",
     "status": "machine",
-    "title": "Subabase Auth: OTP expired after longer wait with login",
+    "title": "Supabase Auth: OTP Has Expired",
     "description": "After opening an email with a login link, the system shows expired or invalid token.",
     "intro": "After opening an email with a login link, the system shows expired or invalid token. The one-off token has limited validity and can also be used earlier.",
     "serviceLabel": "CRM and databases",
@@ -10188,7 +10188,7 @@
   "supabase-auth-password-recovery-no-session": {
     "sourceHash": "979fc4ea82f34d173ed10de38e22212140bdae82fd4965c65bea0c1bd25bfe7c",
     "status": "machine",
-    "title": "Subabase: password recovery opens page without session",
+    "title": "Supabase: Password Recovery Opens Without a Session",
     "description": "Upon clicking the password change link, the page does not recognize recovery mode.",
     "intro": "Upon clicking the password change link, the page does not recognize recovery mode.",
     "serviceLabel": "CRM and databases",
@@ -10293,7 +10293,7 @@
   "supabase-auth-session-ssr-missing": {
     "sourceHash": "9d342c4f09d136d8b46bc6d131d44f0d1dd4b7e1975b40d6a08b41e9bbf7866e",
     "status": "machine",
-    "title": "SSR Subbase: server does not see session, although the client is logged",
+    "title": "Supabase SSR: Server Cannot Read the Logged-In Session",
     "description": "Client Component recognizes user, but Server Component returns guest view.",
     "intro": "Client Component recognizes user, but Server Component returns guest view.",
     "serviceLabel": "CRM and databases",
@@ -10433,7 +10433,7 @@
   "supabase-bledny-klucz-obcy-blokuje-usuniecie-uzytkownika": {
     "sourceHash": "fe3c7540e15ac87ed445133747607f6ef80726e0b8d04f07436f40d8cd98b763",
     "status": "machine",
-    "title": "Invalid alien key blocks user removal in Supabase/Postgres — diagnostics and repair",
+    "title": "Supabase/PostgreSQL: Foreign Key Constraint Blocks User Deletion",
     "description": "Description of the diagnosis and repair procedure when an attempt to remove the user ends with a reference error: how to find dependent tables, check constraints, RLS policies and triggers, and safely remove or migrate the data.",
     "intro": "Typical symptom: DELETE FROM auth.users WHERE id = '...'; returns an error of the \"update or delete on table \\\"users\\\" Violates foreign key contrast \\\"...\\\" and the operation failed. The reason is not usually a Supabase per se error, but reference restrictions in Postgres — no ON DELETE CASCADE, latent records in related tables, anonymous triggers, or RLS policies preventing visibility/removement of dependence. This document leads step by step: how to locate the contraint, make sure that the restriction is expected, evaluate safe solutions (cascade, soft deletion, data migration) and how to verify correctness repair without loss of data integrity.",
     "serviceLabel": "Web applications",
@@ -10476,7 +10476,7 @@
   "supabase-connection-ipv4-incompatibility": {
     "sourceHash": "7a435c1b099d46946658504e9c41336bd3b1e7edc67f0727d7ab5551521c9c47",
     "status": "machine",
-    "title": "Subbase: IPv4 client does not connect to direct database",
+    "title": "Supabase: IPv4 Client Cannot Use Direct Database Connection",
     "description": "The driver outside the host reports a timeout at direct connection, even though the credentials are correct.",
     "intro": "The driver outside the host reports a timeout at direct connection, even though the credentials are correct.",
     "serviceLabel": "CRM and databases",
@@ -10581,7 +10581,7 @@
   "supabase-db-webhook-recursive-updates": {
     "sourceHash": "af24d149e75f1869c611350bd2f5b38b7c1e07654dd56920d267ac89933bbab0",
     "status": "machine",
-    "title": "Supreme Database Webhooks: Update launches in loop",
+    "title": "Supabase Database Webhook Triggers an Update Loop",
     "description": "Webhook since status change saves the same record and generates a series of consecutive webhooks.",
     "intro": "Webhook since status change saves the same record and generates a series of consecutive webhooks.",
     "serviceLabel": "CRM and databases",
@@ -10652,7 +10652,7 @@
   "supabase-edge-function-invalid-jwt": {
     "sourceHash": "c334185002b8a51a1557c3404bb157efbe1c8e64017672c9091bf1214a726a05",
     "status": "machine",
-    "title": "Subbase Edge Function: Invalid JWT when calling from the application",
+    "title": "Supabase Edge Function: Invalid JWT",
     "description": "The function returns 401 or Invalid JWT, while a simple query to the database works.",
     "intro": "The function returns 401 or Invalid JWT, while a simple query to the database works. A function request may require a correct user token or a different JWT verification configuration than that used by the client.",
     "serviceLabel": "CRM and databases",
@@ -10688,7 +10688,7 @@
   "supabase-email-rate-limit-429": {
     "sourceHash": "a8c62bd1dc96a49d39cd46981043d9b6f35865c5d1c5343478fa29f100eb4b69",
     "status": "machine",
-    "title": "Supabase Auth: rate limit enhanced when sending codes",
+    "title": "Supabase Auth: Rate Limit Exceeded When Sending Codes",
     "description": "Multiple click “Send Code” ends with the refusal of another email.",
     "intro": "Multiple click “Send Code” ends with the refusal of another email.",
     "serviceLabel": "CRM and databases",
@@ -10723,7 +10723,7 @@
   "supabase-insert-dziala-select-pusty": {
     "sourceHash": "d1e32f22d149edafa41f83c6edb3048053508e583bf12abcceb79ae028b52f28",
     "status": "machine",
-    "title": "Subbase: INSERT works, but SELECT returns an empty list",
+    "title": "Supabase: INSERT Succeeds but SELECT Returns No Rows",
     "description": "Record saved, but invisible after refresh? Check separate INSERT and SELECT, Owner id and JWT policies.",
     "intro": "The form saves the record without error, then the user sees an empty table.",
     "serviceLabel": "CRM and web applications",
@@ -10758,7 +10758,7 @@
     "status": "machine",
     "title": "Supabase RLS: Record counter is different from user list",
     "description": "The difference between SELECT, count and administrator access in Supabase. How to test the counter without leaking data.",
-    "intro": "The administrator sees many records, the trader has a smaller list, but the header suggests the same number for both accounts.",
+    "intro": "The administrator sees many records, the sales representative has a smaller list, but the header suggests the same number for both accounts.",
     "serviceLabel": "CRM and web applications",
     "sections": [
       {
@@ -10789,7 +10789,7 @@
   "supabase-limit-1000-recordow-odpowiedz": {
     "sourceHash": "94afc042cb71b58d1fef64ca8243ebd24005e0da84bdce6e9baf2f6fc5d62c1a",
     "status": "machine",
-    "title": "Why Subabase returns up to 1000 records — diagnostics and tests",
+    "title": "Why Supabase Returns a Maximum of 1,000 Rows",
     "description": "Analysis of the reasons for receiving up to 1000 records in the Supabase/PostgREST response. Includes differentiation of causes (customer, server, Range/LIMIT headers, middleware), specific test steps and ways to repair pagination.",
     "intro": "Problem: the query to the Supabase (PostgREST) returns only to 1000 records, even when there are more records in the database. This is not a single reason: the limitation may result from PostgREST server settings, proxy configuration, default supabase-js client behavior, or the use of Range/Preference headers (e.g. max-rows). In practice, you need to check the source of the limitation step by step — from SQL and LIMIT queries, through the HTTP headers used by the library, to the Supabase/Edge instance setting. The following procedure gives a specific list of tests to perform, diagnostic variants (if LIMIT in the query, if PostgREST, if proxies) and proven corrective steps, including the use of key-by-key pagination, cursors or change server settings whenever possible.",
     "serviceLabel": "Web applications",
@@ -10797,7 +10797,7 @@
       {
         "title": "How to Recognize Cause",
         "paragraphs": [
-          "Client: check that the code has not been set explicitly .limit(1000) or the default limit. The subbase-js library allows you to connect .select() to .limit(); check the source query code and network logs in the browser/CLI if the LIMIT parameter is not included.",
+          "Client: check that the code has not been set explicitly .limit(1000) or the default limit. The Supabase-js library allows you to connect .select() to .limit(); check the source query code and network logs in the browser/CLI if the LIMIT parameter is not included.",
           "PostgREST/server: PostgREST can use performance limits based on server configuration (e.g. max-rows) or API Gateway proxy can cut answers. If the query directly to PostgREST (e.g. curl) also returns 1000 records, then the limit is on the server/configuration side."
         ]
       },
@@ -10810,7 +10810,7 @@
           "4 . Check server logs/API Gateway: if you have access to the Supabase dashboard or proxy layers, check request logs and possible response limits, timeouts or 413/206 multi-part statuses that may suggest cutting answers.",
           "5 . Alternative key pagination: if the database is large, implement indexed column pagination (WHERE id > last id LIMIT 1000); this bypasses the global limit and gives some repetitive parts of the results.",
           "6 . Test directly on DB (psql): if you have permissions, run SELECT COUNT(*) and SELECT * LIMIT 1500; if psql returns >1000, a problem in the HTTP/PostgREST layer, not in the database.",
-          "7 . Verify version and documentation: confirm PostgREST/Subbase version in the instance used and compare with documentation on default limits — if the limit results from the host instance configuration, report to support or apply pagination."
+          "7 . Verify version and documentation: confirm PostgREST/Supabase version in the instance used and compare with documentation on default limits — if the limit results from the host instance configuration, report to support or apply pagination."
         ]
       },
       {
@@ -10869,7 +10869,7 @@
   "supabase-permission-denied-schema-public": {
     "sourceHash": "505c7ec3f91ae5d70229a86aa4834573d63f0b63e3d356671fdf14c1631ee30e",
     "status": "machine",
-    "title": "Subabase: permission denied for scheme public despite RLS policy",
+    "title": "Supabase: Permission Denied for Schema public",
     "description": "The API request ends with a permission denied for scheme public, although RLS policies look correct.",
     "intro": "The API request ends with a permission denied for scheme public, although RLS policies look correct. GRANT permissions for the scheme and objects are checked independently of row-level security filters.",
     "serviceLabel": "CRM and databases",
@@ -10905,7 +10905,7 @@
   "supabase-pgrst116-single-no-rows": {
     "sourceHash": "114a038a5ea6b4a4895e3cc713125d82205e8f6ae6356a2f69cabb714911662e",
     "status": "machine",
-    "title": "Supabase: PGRST116 at .single() when there is no line",
+    "title": "Supabase PGRST116: .single() Returns No Rows",
     "description": "Call .single() returns PGRST116 and no single object message.",
     "intro": "Call .single() returns PGRST116 and no single object message. The .single() method expects exactly one record, but the query could return zero or more than one.",
     "serviceLabel": "CRM and databases",
@@ -10941,7 +10941,7 @@
   "supabase-pgrst202-schema-cache": {
     "sourceHash": "c553aa8e9fdcde3f818604576db8611082035d4f26c27639ed0caa9be72b2f4a",
     "status": "machine",
-    "title": "Supabase: PGRST202 Could not find the function in scheme cache",
+    "title": "Supabase PGRST202: Function Missing from Schema Cache",
     "description": "The newly created SQL function is not accessible by rpc(), although it is performed in SQL Editor.",
     "intro": "The newly created SQL function is not accessible by rpc(), although it is performed in SQL Editor. PostgREST uses schematic metadata and may need to be refreshed after changing the function signature.",
     "serviceLabel": "CRM and databases",
@@ -10977,7 +10977,7 @@
   "supabase-pgvector-embedding-dimension": {
     "sourceHash": "82132ad5153a9a2a7aaf6d43d1c9b5834235585ba39c6b57a749d34f06842f5f",
     "status": "machine",
-    "title": "pgvector: different vector distinctions when searching",
+    "title": "pgvector: Vector Dimension Mismatch",
     "description": "Semantic search rejects the question, because the dimension of the vector differs from the dimension of the column.",
     "intro": "Semantic search rejects the question, because the dimension of the vector differs from the dimension of the column.",
     "serviceLabel": "CRM and databases",
@@ -11047,7 +11047,7 @@
   "supabase-postgres-connection-pool-exhausted": {
     "sourceHash": "6735eb2ddc678368f0b0c87708af21864926ab07fd2e8cb8ab4a6d80499a8b88",
     "status": "machine",
-    "title": "Subabase: too many clients already connected to PostgreSQL",
+    "title": "Supabase: too many clients already connected to PostgreSQL",
     "description": "The application periodically stops connecting to the database and logs in too many clients already.",
     "intro": "The application periodically stops connecting to the database and logs in too many clients already. The number of direct connections exceeds the instance limit, often when each serverless request opens a new session.",
     "serviceLabel": "CRM and databases",
@@ -11118,7 +11118,7 @@
   "supabase-realtime-nie-odswieza-listy": {
     "sourceHash": "065bed27bc6460374e05348b42abac6aebb8e90c6f31f2c5e1c037f2799e8b4f",
     "status": "machine",
-    "title": "Subabase Realtime does not update the list without refresh",
+    "title": "Supabase Realtime does not update the list without refresh",
     "description": "Database changes don't appear in React? Check table publication, subscription, filters and RLS.",
     "intro": "The second user changes the status or assignment, but the open CRM card still displays the previous data.",
     "serviceLabel": "CRM and web applications",
@@ -11151,7 +11151,7 @@
   "supabase-realtime-reconnect-dropped-updates": {
     "sourceHash": "8d98d18cb7b6ee469052d3b28d071a485618bd5e8d318976fa5f9f7047b87c9d",
     "status": "machine",
-    "title": "Subabase Realtime: After losing the internet, the list does not make up for changes",
+    "title": "Supabase Realtime: Missing Updates After Reconnection",
     "description": "After reconnecting WebSocket UI retains an older set of records.",
     "intro": "After reconnecting WebSocket UI retains an older set of records.",
     "serviceLabel": "CRM and databases",
@@ -11186,7 +11186,7 @@
   "supabase-realtime-subscriber-no-events": {
     "sourceHash": "caf3287b67c5ee70d5597cdd7acf5e606c547619f77154e03a9fc466c23d631f",
     "status": "machine",
-    "title": "Subabase Realtime: subscription works, but there are no changes in the table",
+    "title": "Supabase Realtime: subscription works, but there are no changes in the table",
     "description": "The realtime channel shows the status of SUBSCRIBED, but INSERT and UPDATE do not refresh the list.",
     "intro": "The realtime channel shows the status of SUBSCRIBED, but INSERT and UPDATE do not refresh the list. The channel subscription does not guarantee that the table changes are published or accessed by RLS.",
     "serviceLabel": "CRM and databases",
@@ -11222,7 +11222,7 @@
   "supabase-refresh-token-wygasl-diagnostyka-i-naprawa": {
     "sourceHash": "bf46ad8cf3f171089419422f0ab76849bc724f694c9493dad8e21d0f731ab0ff",
     "status": "machine",
-    "title": "Supabase: refresh session not working — diagnostics with expired fresh token",
+    "title": "Supabase: Refresh Token Expired — Troubleshooting",
     "description": "Diagnostic instruction regarding the situation when token refresh (refresh token) Supabase expired or is rejected. Includes a differential list of causes, specific tests and corrective steps, and methods of post-amendment performance verification.",
     "intro": "This document describes in detail the case when an application using Supabase starts returning authorization errors related to refresh of the session: e.g. 401/403 when trying to use a fresh token, log-in interrupted after a short time or no refresh after rebooting the server. I do not assume one reason: I have prepared a list of possible sources of the problem (customer configuration, supabase-side expiry policy, leaks/key changes, cookie/local implementation errorsStorage, problems with proxy or CORS). For each variant I specify how to test it clearly and what to improve. The instructions are practical: you will perform them in a development and production environment without the risk of losing user data.",
     "serviceLabel": "Web applications",
@@ -11231,7 +11231,7 @@
         "title": "How to Recognize Cause",
         "paragraphs": [
           "See if the problem is just about fresh tokens or the whole flow auth. Use the network console in your browser or curl tool to call endpoint /auth/v1/token with grant type=refresh token and follow the answer. If the server returns 401 with an invalid token message, it is likely that the token expired or was cancelled on the Supabase side.",
-          "Verify the JWT configuration and expire policy (JWT expiri) in the Subabase panel: if the fresh token was awarded with a short TTL or the 'Enable Fresh Token Rotation' option has been changed, then there is a scenario that rotation invalidated the previous token. Also check that the service key or anon/public key has not been reset — this cancels the sessions.",
+          "Verify the JWT configuration and expire policy (JWT expiri) in the Supabase panel: if the fresh token was awarded with a short TTL or the 'Enable Fresh Token Rotation' option has been changed, then there is a scenario that rotation invalidated the previous token. Also check that the service key or anon/public key has not been reset — this cancels the sessions.",
           "Do not miss the client layer: errors in writing a fresh token to cookie (HttpOnly, path, domain, security), or overwriting localStorage/sessionStorage can cause the application to send an outdated token. For server applications, check if you do not use multiple SubbaseClient instances with different settings."
         ]
       },
@@ -11240,7 +11240,7 @@
         "paragraphs": [
           "1. Log in with the test account and save the access token and refresh token values from the answers /auth/v1/token. Follow POST /auth/v1/token request with grant type=refresh token using curl: curl -X POST 'https://<project>.supabase.co/auth/v1/token' -d 'grant type=refresh token&refresh token=<token>' and save the answer and the code HTTP.",
           "2 . If the request returns 200, compare the issue time and expires in in response to what the SDK client does. Make sure SDK receives and retains both tokens — do not overwrite fresh token new access token. For SDK JS, check supabase.auth.getSession() and supabase.auth.onAuthStateChange().",
-          "3 . If the request returns 401 or 400 with the reason 'invalid grant' or 'token revoked', check in the Subabase panel: there was no key rotation (Project Settings -> API -> Keys) or manual deregistration of the session. Change the service key cancels the sessions — play the session after generating new keys.",
+          "3 . If the request returns 401 or 400 with the reason 'invalid grant' or 'token revoked', check in the Supabase panel: there was no key rotation (Project Settings -> API -> Keys) or manual deregistration of the session. Change the service key cancels the sessions — play the session after generating new keys.",
           "4 . Check the refresh rotation policy: if rotation is enabled, each refresh prints a new fresh token and cancels the previous one. Test the flow sequentially: perform 2 more refreshes using the same token — the other should be rejected. If a parallel application calls refreshy, add lock/mutex to execute it sequentially.",
           "5 . For SSR or proxy applications: check that the cookie with fresh token is not shortened by the proxy (SameSite, path, domain). In devtools check the presence of HttpOnly cookie and its value after server reboot. For Next.js/Node, make sure that the SSR reads and writes cookies from the same domain view.",
           "6 . If you use JWT custom or external provider OAuth, make sure callbacks correctly map and save refresh token. In the case of providers (Google, GitHub) sometimes refresh token is only issued on first authorisation — test full flow OAuth and log in the received tokens.",
@@ -11268,7 +11268,7 @@
   "supabase-rls-blokuje-select-pomimo-zalogowania": {
     "sourceHash": "f1f6bf5cf64d8ec0bd0971e0c8656a06923e0decf635efcc76636ab7455524c7",
     "status": "machine",
-    "title": "Subabase: SELECT returns empty results despite valid authorization — RLS diagnostic",
+    "title": "Supabase: SELECT returns empty results despite valid authorization — RLS diagnostic",
     "description": "Analysis of the reasons why Row Level Security (RLS) in Supabase blocks SELECT queries despite the visible user session. It includes differentiation of rules, permission limits, verification of jwt and policies, and specific test steps for repair.",
     "intro": "Problem: the user sees an active session in the Supabase client, token is present, but SELECT on the table returns empty results or 0 lines. The reasons are usually in the RLS configuration (no policy, incorrect expression, USING/ WITH CHECK, roles anon/auth) or in the authentication layer (token does not contain expected claims, incorrect audience/issuer, or request performed as service role). This document runs through controlled tests: role confirmation, policy inspection, SQL editor simulation of the query, JWT claim check and indicates specific corrections and minimum verification test before implementation of changes.",
     "serviceLabel": "Web applications",
@@ -11314,7 +11314,7 @@
   "supabase-rls-insert-with-check": {
     "sourceHash": "956f379632b56613286df92ffce51aa8b233e42f07283dbad1fab8f9180aede2",
     "status": "machine",
-    "title": "Subabase: new row Violates row-level security policy at INSERT",
+    "title": "Supabase: new row Violates row-level security policy at INSERT",
     "description": "Trying to save a new record returns a row-level security policy error, although SELECT works.",
     "intro": "Trying to save a new record returns a row-level security policy error, although SELECT works. INSERT evaluates WITH CHECK condition for a new record, not the USING condition for reading.",
     "serviceLabel": "CRM and databases",
@@ -11350,7 +11350,7 @@
   "supabase-rls-pusta-lista-po-logowaniu": {
     "sourceHash": "9cd958be37f8ce5545d3e54eabbe010e595a8921aefec5f0e17852930eaebc52",
     "status": "machine",
-    "title": "Subabase returns an empty list after logging in — check RLS",
+    "title": "Supabase returns an empty list after logging in — check RLS",
     "description": "No records on a valid query need not mean an empty table. Row Level Security policy can hide poems from a specific user. You",
     "intro": "No records on a valid query need not mean an empty table. Row Level Security policy can hide poems from a specific user. Disabling RLS is not a permission amendment.",
     "serviceLabel": "Let's talk about a solution.",
@@ -11424,7 +11424,7 @@
       {
         "title": "Step by step solution",
         "paragraphs": [
-          "1. Locate the object in the Subabase Storage panel: confirm file presence, path and metadata. If a file exists, save the exact path and size; if not, play it from backup or confirm who and when deleted.",
+          "1. Locate the object in the Supabase Storage panel: confirm file presence, path and metadata. If a file exists, save the exact path and size; if not, play it from backup or confirm who and when deleted.",
           "2 . Generate a new signed URL on the server (not in the browser) using service role or server key in the short term and set TTL to a short value (e.g. 60s). Compare generated URLs and expires parameters with those that do not work.",
           "3 . Follow curl -v \"<signed url>\" and note the answer: status code, body, Cache-Control headers, Age, X-Cache and Server-Timing. No body + 403 indicates authorization policy; 404 indicates no object. Register exact error messages.",
           "4 . Check the roles and rules of the bucket: if the bucket is private, make sure you use the signed URL generated by the server. If new RLS/Policies policies are set against storage.objects, temporarily switch to a simple test policy and try again.",
@@ -11438,7 +11438,7 @@
         "paragraphs": [
           "Test 1 — instant access: after generating the new signed URL run curl -I and curl --max-time 10 and confirm code 200 and correct Content-Type and size. If 200 — the problem was in expiration or cache.",
           "Test 2 — Expiration test: Generate the URL from TTL 10s, access immediately (expected 200), wait 15s and call again — should return 403 or 404. This test confirms that the TTL mechanism is working properly.",
-          "Test 3 — comparison without CDN: make a direct request to the Subabase with the cleared browser cache and the cachebust parameter, and omit any CDN (if possible). No difference indicates a problem on the Storage/ACL side."
+          "Test 3 — comparison without CDN: make a direct request to the Supabase with the cleared browser cache and the cachebust parameter, and omit any CDN (if possible). No difference indicates a problem on the Storage/ACL side."
         ]
       },
       {
@@ -11490,7 +11490,7 @@
     "title": "Supabase Storage 413 EntityTooLarge on photo or video upload",
     "description": "Supabase returns HTTP 413 at upload? Set global limit and bucket limit, check file size and upload method.",
     "intro": "HTTP 413 EntityTooLarge means exceeding the size limit during transmission. This is not a typical RLS permission error. Start by comparing the actual file size with project limits and a specific tray.",
-    "serviceLabel": "Subabase and applications",
+    "serviceLabel": "Supabase and applications",
     "sections": [
       {
         "title": "How to Recognize Cause",
@@ -11562,7 +11562,7 @@
   "supabase-storage-cdn-old-object": {
     "sourceHash": "92104bf5f1cbb79427fb5d8975eba967166ed0ebbf7d5422ab23edc1b83f2dfd",
     "status": "machine",
-    "title": "Subabase Storage: CDN shows old image after swapping",
+    "title": "Supabase Storage: CDN Shows an Outdated Image",
     "description": "The image under the same URL does not change immediately after saving a new version.",
     "intro": "The image under the same URL does not change immediately after saving a new version.",
     "serviceLabel": "CRM and databases",
@@ -11597,7 +11597,7 @@
   "supabase-storage-file-size-limit": {
     "sourceHash": "1bcb3ebdb7209227ab89c43d5e62744270dab83dc0d49b5fd7a4f457be6a8f0e",
     "status": "machine",
-    "title": "Subabase Storage: upload file size enhanced despite free space",
+    "title": "Supabase Storage: Upload Exceeds File Size Limit",
     "description": "Loading a larger attachment ends with a size limit error.",
     "intro": "Loading a larger attachment ends with a size limit error.",
     "serviceLabel": "CRM and databases",
@@ -11667,7 +11667,7 @@
   "supabase-storage-mime-not-allowed": {
     "sourceHash": "1529393d97804a270cc03ae443fbf5f71ae9df7171eadbff93b69cccdd063ab2",
     "status": "machine",
-    "title": "Subabase Storage: MIME type not allowed during upload",
+    "title": "Supabase Storage: MIME Type Not Allowed",
     "description": "The HEIC or PDF attachment is rejected before saving the file.",
     "intro": "The HEIC or PDF attachment is rejected before saving the file.",
     "serviceLabel": "CRM and databases",
@@ -11702,7 +11702,7 @@
   "supabase-storage-path-case-sensitive": {
     "sourceHash": "7b60cd26b459d1cf604c02af106f98935517e1ad391a16b6736e5fe5a4e2b0cc",
     "status": "machine",
-    "title": "Supabase Storage: file is, but download gives 404 by letter size",
+    "title": "Supabase Storage: File Download 404 Caused by Case Sensitivity",
     "description": "The user sees the file name, but the download from its own path returns Not Found.",
     "intro": "The user sees the file name, but the download from its own path returns Not Found.",
     "serviceLabel": "CRM and databases",
@@ -11808,7 +11808,7 @@
   "supabase-storage-signed-upload-token": {
     "sourceHash": "3e8a8b795f482fa44e1731887ef1e086b29c9157f897c6de0c67d921f3cdc3b2",
     "status": "machine",
-    "title": "Supabase Storage: signed upload URL rejects shipment",
+    "title": "Supabase Storage: Signed Upload URL Rejects the File",
     "description": "The client gets a signed address to upload, but the request cannot add a file.",
     "intro": "The client gets a signed address to upload, but the request cannot add a file.",
     "serviceLabel": "CRM and databases",
@@ -11878,7 +11878,7 @@
   "supabase-storage-tus-resume-fails": {
     "sourceHash": "27e71cb8a049a657680ab748bf64d32fb8a8fe3784ec98314a80f45309766e9b",
     "status": "machine",
-    "title": "Subabase Storage: TUS resumeable upload stops after network break",
+    "title": "Supabase Storage: Resumable Upload Stops After Connection Loss",
     "description": "After the shipment is discontinued, the viewer starts the file again or reports a conflict.",
     "intro": "After the shipment is discontinued, the viewer starts the file again or reports a conflict.",
     "serviceLabel": "CRM and databases",
@@ -11913,7 +11913,7 @@
   "supabase-storage-upload-conflict-409": {
     "sourceHash": "156f1abe10eeccefe0695b7c652c7a04d9f70dc7f53784c745a1d33c02c6754f",
     "status": "machine",
-    "title": "Subabase Storage: 409 Asset Already Exists during re-upload",
+    "title": "Supabase Storage: 409 Asset Already Exists during re-upload",
     "description": "The second upload of a file under the identical path returns the conflict instead of overwriting.",
     "intro": "The second upload of a file under the identical path returns the conflict instead of overwriting. The default file creation operation behavior may not allow the existing object to be overwritten.",
     "serviceLabel": "CRM and databases",
@@ -11949,7 +11949,7 @@
   "supabase-update-using-with-check": {
     "sourceHash": "8117d6dc155bd396d0589525f2f371206ade1d3ae806e09afb216d914f2401c3",
     "status": "machine",
-    "title": "Subabase: UPDATE ends without error, but does not change anything",
+    "title": "Supabase: UPDATE ends without error, but does not change anything",
     "description": "Calling update().eq() returns an empty result, although the record exists in the database.",
     "intro": "Calling update().eq() returns an empty result, although the record exists in the database. RLS policy for UPDATE may not allow updated line; SELECT visibility and WITH CHECK condition of new values are also important.",
     "serviceLabel": "CRM and databases",
@@ -12292,7 +12292,7 @@
   "typescript-ts2307-cannot-find-module-types": {
     "sourceHash": "85b11ada4391e3a6c25ac5fd1516f5cbd2db48347ffc672d982bca253f8a401e",
     "status": "machine",
-    "title": "TypeScript TS2307 Cannot find module despite successful installation e.g.",
+    "title": "TypeScript TS2307: Cannot Find Module Despite Installation",
     "description": "The editor or build reports the TS2307 for a library that appears in node modules.",
     "intro": "The editor or build reports the TS2307 for a library that appears in node modules. The reason may be the wrong moduleResolution, no declaration of types or different import name.",
     "serviceLabel": "Internet applications",
@@ -12327,7 +12327,7 @@
   "typescript-ts2322-type-not-assignable": {
     "sourceHash": "149d42deea142579ae2737426618aa8a6f3d4c003bcc7d0fe42b90f42bfbede2",
     "status": "machine",
-    "title": "TypeScript TS2322: string is not assignable to number after downloading the form",
+    "title": "TypeScript TS2322: String Is Not Assignable to Number",
     "description": "After reading the numeric field from HTML TypeScript does not allow to assign its value to the number.",
     "intro": "After reading the numeric field from HTML TypeScript does not allow to assign its value to the number. Value input.value is a string regardless of type=\"number\", and an empty entry does not represent the correct number.",
     "serviceLabel": "Internet applications",
@@ -12362,7 +12362,7 @@
   "typescript-ts2532-object-possibly-undefined": {
     "sourceHash": "f55ae6e40b28a13dd3867fbfebe6aa7a41c9eb80dea596ff11a43a1b118b92fa",
     "status": "machine",
-    "title": "TypeScript TS2532: Object is possible undefined in API data",
+    "title": "TypeScript TS2532: Object Is Possibly Undefined",
     "description": "Typecheck reports the possibility undefined when reading the property of an asynchronous object.",
     "intro": "Typecheck reports the possibility undefined when reading the property of an asynchronous object. The type allows no value, so unconditional reading can actually cause an error in runtime.",
     "serviceLabel": "Internet applications",
@@ -12611,7 +12611,7 @@
     "status": "machine",
     "title": "Application works locally, on Vercel no Node.js function at Edge Functions",
     "description": "After implementation, the application works locally, but features requiring Node.js (fs, child process, net, process native APIs) do not work on Vercel — suspected to run the code as Edge Function instead of as Serverless/Node runtime.",
-    "intro": "Problem: The code that uses native Node.js APIs (e.g. filesystem, sockets, binary modules or progeny processes) works locally in the Node environment, but after implementation on Vercel ends with a mistake or silent lack of effects. The most common cause is the unintentional start-up of a given particle (endpoint, middleware, function) in Edge (V8 Isolates) instead of runtime Node/Serverless. Edge Functions have limits: no full Node API, no access to the file system and binary modules, and other behavioral differences. You have to distinguish: whether the/endpoint file has been marked Edge (e.g. by an explicative runtime setting or by selecting a framework/convention), whether the build/artifact has been moved to another type of function during deployu. This document describes differential diagnostics, specific checking steps, cause variants and repair test so that without guessing it is a Edge Functions limit or defloyment configuration error.",
+    "intro": "Problem: The code that uses native Node.js APIs (e.g. filesystem, sockets, binary modules or progeny processes) works locally in the Node environment, but after implementation on Vercel ends with a mistake or silent lack of effects. The most common cause is the unintentional start-up of a given particle (endpoint, middleware, function) in Edge (V8 Isolates) instead of runtime Node/Serverless. Edge Functions have limits: no full Node API, no access to the file system and binary modules, and other behavioral differences. You have to distinguish: whether the/endpoint file has been marked Edge (e.g. by an explicative runtime setting or by selecting a framework/convention), whether the build/artifact has been moved to another type of function during deployu. This document describes differential diagnostics, specific checking steps, cause variants and repair test so that without guessing it is a Edge Functions limit or deployment configuration error.",
     "serviceLabel": "Pages and hosting",
     "sections": [
       {
@@ -12660,8 +12660,8 @@
       {
         "title": "How to identify the source of the problem",
         "paragraphs": [
-          "Compare SHA lockfile and installation log with the current commit to defloyment.",
-          "Compare SHA commit, the status of defloyment and HTTP response under the final domain, not the very status of READY."
+          "Compare SHA lockfile and installation log with the current commit to deployment.",
+          "Compare SHA commit, the status of deployment and HTTP response under the final domain, not the very status of READY."
         ]
       },
       {
@@ -12679,7 +12679,7 @@
       {
         "title": "Security and restrictions",
         "paragraphs": [
-          "Keep the previous active defloyment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
+          "Keep the previous active deployment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
         ]
       }
     ]
@@ -12687,7 +12687,7 @@
   "vercel-build-node-version-mismatch": {
     "sourceHash": "14b4716d8c729c9b759b0ff958e913d5adc19da87c21ba968d1fec7324c76e76",
     "status": "machine",
-    "title": "Vercel: build works locally, but falls through another version of Node.js",
+    "title": "Vercel: Build Fails Because of a Different Node.js Version",
     "description": "The project is built on a computer, and the Vercel log shows a syntax error or a runtime non-compliance.",
     "intro": "The project is built on a computer, and the Vercel log shows a syntax error or a runtime non-compliance. Local and production Node may have other language, modules and binary dependencies.",
     "serviceLabel": "Parties and implementation",
@@ -12703,7 +12703,7 @@
         "title": "What to do step by step",
         "paragraphs": [
           "1. Set up a supported Node version for the framework and unify it in package.json, CI and Vercel project.",
-          "2 . After the upgrade, perform a clean installation, e.g., and a new build, not just re-establishing the old defloyment."
+          "2 . After the upgrade, perform a clean installation, e.g., and a new build, not just re-establishing the old deployment."
         ]
       },
       {
@@ -12723,7 +12723,7 @@
   "vercel-cache-immutable-public-file": {
     "sourceHash": "2888e918230f8b620d3c95044fa2efc8a3186358cb7f5c958a1a43300de46d03",
     "status": "machine",
-    "title": "Vercel: Public file with the same name does not update with the user",
+    "title": "Vercel: Cached Public File Does Not Update After Deployment",
     "description": "After replacing the image under the permanent name, some browsers still show the old graphics.",
     "intro": "After replacing the image under the permanent name, some browsers still show the old graphics.",
     "serviceLabel": "Implementation and hosting",
@@ -12732,7 +12732,7 @@
         "title": "How to identify the source of the problem",
         "paragraphs": [
           "Check Cache-Control and ETag for resource and CDN cache policy.",
-          "Compare SHA commit, the status of defloyment and HTTP response under the final domain, not the very status of READY."
+          "Compare SHA commit, the status of deployment and HTTP response under the final domain, not the very status of READY."
         ]
       },
       {
@@ -12750,7 +12750,7 @@
       {
         "title": "Security and restrictions",
         "paragraphs": [
-          "Keep the previous active defloyment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
+          "Keep the previous active deployment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
         ]
       }
     ]
@@ -12758,7 +12758,7 @@
   "vercel-cron-endpoint-401": {
     "sourceHash": "005a91ec04386e45e2dfe8a2858511d322e5f9ae97f66da4b9dd32f120a5a6cc",
     "status": "machine",
-    "title": "Vercel Cron Jobs: endpoint corresponds to 401 when the task starts",
+    "title": "Vercel Cron Jobs: Endpoint Returns 401",
     "description": "The cron task is visible in the panel, but calling the API route is not authorized.",
     "intro": "The cron task is visible in the panel, but calling the API route is not authorized. Endpoint may require an appropriate Authorization header for CRON SECRET or movement is blocked by separate middleware.",
     "serviceLabel": "Parties and implementation",
@@ -12831,28 +12831,28 @@
     "sourceHash": "b7ca2054668f9a6e587a700472f3d2de179d357230a4b30c2bcbc638a400755a",
     "status": "machine",
     "title": "Vercel DEPLOYMENT NOT FOUND (404) — what to check in turn?",
-    "description": "The page on Vercel shows DEPLOYMENT NOT FOUND? Check the domain, defloyment, alias and production status step by step.",
-    "intro": "Error 404 DEPLOYMENT NOT FOUND indicates that the request was sent to a defloyment address that Vercel is not finding. This is different from a simple 404 error of a specific application subpage.",
+    "description": "The page on Vercel shows DEPLOYMENT NOT FOUND? Check the domain, deployment, alias and production status step by step.",
+    "intro": "Error 404 DEPLOYMENT NOT FOUND indicates that the request was sent to a deployment address that Vercel is not finding. This is different from a simple 404 error of a specific application subpage.",
     "serviceLabel": "Website creation",
     "sections": [
       {
-        "title": "1. Differentiate no defloyment from no side",
+        "title": "1. Differentiate no deployment from no side",
         "paragraphs": [
-          "If the message contains DEPLOYMENT NOT FOUND, first check the exact hostname from the address bar. The old link to the preview or the outdated defloyment address may not exist. Open the Vercel project panel and compare the address with the current, running implementation.",
-          "If the home page is running and 404 only applies to one path, it is likely that the problem is routing or configuration of the application, rather than the non-existent defloyment."
+          "If the message contains DEPLOYMENT NOT FOUND, first check the exact hostname from the address bar. The old link to the preview or the outdated deployment address may not exist. Open the Vercel project panel and compare the address with the current, running implementation.",
+          "If the home page is running and 404 only applies to one path, it is likely that the problem is routing or configuration of the application, rather than the non-existent deployment."
         ]
       },
       {
         "title": "2 . Check implementation status and domain assignment",
         "paragraphs": [
-          "In Vercel open Project → Deployments. Find the last production defloyment and see if it has Ready status. If build has failed, open Build Logs and repair the first major error, not only the final build executed with 1.",
+          "In Vercel open Project → Deployments. Find the last production deployment and see if it has Ready status. If build has failed, open Build Logs and repair the first major error, not only the final build executed with 1.",
           "Then go to Settings → Domains. Make sure your domain is assigned to the right design and that DNS is verified. If several projects had a similar name, also check the project identifier to avoid diagnosing an unrelated application."
         ]
       },
       {
         "title": "3 . Secure Page Restoration",
         "paragraphs": [
-          "If the production implementation is not working, select the known correct defloyment and use the restore function or prepare a new implementation with the revised code. Don't turn DNS blind. Changing the domain address without understanding the cause may make availability worse.",
+          "If the production implementation is not working, select the known correct deployment and use the restore function or prepare a new implementation with the revised code. Don't turn DNS blind. Changing the domain address without understanding the cause may make availability worse.",
           "Finally, check the website under your own domain, not only at .vercel.app, both on your computer and on your phone."
         ]
       }
@@ -12861,9 +12861,9 @@
   "vercel-deployment-ready-old-content": {
     "sourceHash": "a12739bf31b836f9b013ad1e4959ad1039e0cfc2a07cdf62059d55e60a490e91",
     "status": "machine",
-    "title": "Vercel: domain shows the previous version despite new defloyment",
-    "description": "The new defloyment has the status of READY, but the user still sees the old version of the site.",
-    "intro": "The new defloyment has the status of READY, but the user still sees the old version of the site. The project may implement the wrong branch and the CDN/viewer may hold older responses.",
+    "title": "Vercel: Domain Still Shows Old Content After Deployment",
+    "description": "The new deployment has the status of READY, but the user still sees the old version of the site.",
+    "intro": "The new deployment has the status of READY, but the user still sees the old version of the site. The project may implement the wrong branch and the CDN/viewer may hold older responses.",
     "serviceLabel": "Parties and implementation",
     "sections": [
       {
@@ -12877,7 +12877,7 @@
         "title": "What to do step by step",
         "paragraphs": [
           "1. Verify whether the new change has entered the production branch; if not, merge it according to the CI process.",
-          "2 . For refreshed data by the ISR, analyze the revalidate and cache; do not confuse the delayed update with the incorrect defloyment."
+          "2 . For refreshed data by the ISR, analyze the revalidate and cache; do not confuse the delayed update with the incorrect deployment."
         ]
       },
       {
@@ -12897,7 +12897,7 @@
   "vercel-dns-propagacja-nie-dziala": {
     "sourceHash": "0a75c2bea0c98db5aea9fceac7db542253b9a2d48d19fd5afc004765abc57dba",
     "status": "machine",
-    "title": "Domain after plug-in to Vercel does not work — DNS step by step",
+    "title": "Vercel Domain Is Not Working: DNS Troubleshooting",
     "description": "How to check DNS, CNAME, A record, web conflict and setting at the domain recorder.",
     "intro": "After changing DNS some see a new page and others see an old page or a connection error.",
     "serviceLabel": "Website creation",
@@ -12972,7 +12972,7 @@
         "title": "How to identify the source of the problem",
         "paragraphs": [
           "Check the Production, Preview and Development ranges of each environmental variable.",
-          "Compare SHA commit, the status of defloyment and HTTP response under the final domain, not the very status of READY."
+          "Compare SHA commit, the status of deployment and HTTP response under the final domain, not the very status of READY."
         ]
       },
       {
@@ -12990,7 +12990,7 @@
       {
         "title": "Security and restrictions",
         "paragraphs": [
-          "Keep the previous active defloyment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
+          "Keep the previous active deployment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
         ]
       }
     ]
@@ -12998,7 +12998,7 @@
   "vercel-error-500-po-publikacji": {
     "sourceHash": "d43cf854991b83acb453da853c45265ce78a21963f261fae2a38b28315186760",
     "status": "machine",
-    "title": "Next.js at Vercel: Error 500 only after implementation",
+    "title": "Next.js on Vercel: HTTP 500 Only After Deployment",
     "description": "Localhost runs, Vercel runs 500. Diagnostics runtime logs, ENV, execution time and server.",
     "intro": "The page works locally, but the production subpage or API returns 500 Internal Server Error.",
     "serviceLabel": "Website creation",
@@ -13031,16 +13031,16 @@
   "vercel-function-size-limit": {
     "sourceHash": "c2cc81bd3d923b6fafbd3b46cc501face411bbc79e4678facafd36e405d85d6b",
     "status": "machine",
-    "title": "Vercel: Function size limit exceeded at defloy",
-    "description": "The Build bundles too much function and the defloyment is rejected.",
-    "intro": "The Build bundles too much function and the defloyment is rejected.",
+    "title": "Vercel Function Size Limit Exceeded During Deployment",
+    "description": "The Build bundles too much function and the deployment is rejected.",
+    "intro": "The Build bundles too much function and the deployment is rejected.",
     "serviceLabel": "Implementation and hosting",
     "sections": [
       {
         "title": "How to identify the source of the problem",
         "paragraphs": [
           "Check Bundle features and dependencies attached to Route Handler, especially large libraries.",
-          "Compare SHA commit, the status of defloyment and HTTP response under the final domain, not the very status of READY."
+          "Compare SHA commit, the status of deployment and HTTP response under the final domain, not the very status of READY."
         ]
       },
       {
@@ -13058,7 +13058,7 @@
       {
         "title": "Security and restrictions",
         "paragraphs": [
-          "Keep the previous active defloyment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
+          "Keep the previous active deployment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
         ]
       }
     ]
@@ -13066,7 +13066,7 @@
   "vercel-function-timeout-external-api": {
     "sourceHash": "835847ac3a2cd5d05ad6f29afc8f09cea0b229e5f7ab4d5b916eb4a495111e76",
     "status": "machine",
-    "title": "Vercel Function timed out at free external API",
+    "title": "Vercel Function Times Out While Waiting for an External API",
     "description": "The server function returns the timeout when waiting for the supplier's response instead of doing business logic.",
     "intro": "The server function returns the timeout when waiting for the supplier's response instead of doing business logic. The waiting time for an external request may use the entire budget for the performance of the function.",
     "serviceLabel": "Parties and implementation",
@@ -13103,14 +13103,14 @@
     "sourceHash": "93776f16a8307e70414562e7297d5728f07cead9937cf974092aaea5109b6552",
     "status": "machine",
     "title": "I put a commit in GitHub, and Vercel shows the old page",
-    "description": "Commit's on GitHub, but production doesn't change. How to find branch, design, defloy and cache.",
+    "description": "Commit's on GitHub, but production doesn't change. How to find branch, design, deploy and cache.",
     "intro": "The code in the repository has been corrected and the user still sees the old version of the page.",
     "serviceLabel": "Website creation",
     "sections": [
       {
         "title": "Where's the problem coming from?",
         "paragraphs": [
-          "The change could hit another branch, Vercel could have implemented another commit or defloy was not completed. Sometimes a browser or CDN cache occurs."
+          "The change could hit another branch, Vercel could have implemented another commit or deploy was not completed. Sometimes a browser or CDN cache occurs."
         ]
       },
       {
@@ -13118,7 +13118,7 @@
         "paragraphs": [
           "1. Compare SHA commit in GitHub with SHA visible at the production depot Vercel.",
           "2 . Check production branches and repository attached to the project.",
-          "3 . If defloy has ERROR status, open build logs and correct the real cause.",
+          "3 . If deploy has ERROR status, open build logs and correct the real cause.",
           "4 . If READY, open the exact implementation URL and compare to your own domain.",
           "5 . With the current code, check resource cache, service worker and downloaded API data."
         ]
@@ -13135,7 +13135,7 @@
   "vercel-logs-missing-source-maps": {
     "sourceHash": "1bd4d7bdcb6ae56605c745848ae7e95353e72edc6b8afe0873437d5475adff13",
     "status": "machine",
-    "title": "Vercel: runtime logs show a minified stack track track",
+    "title": "Vercel Runtime Logs Show Minified Stack Traces",
     "description": "A function error is difficult to connect to a specific TypeScript source line.",
     "intro": "A function error is difficult to connect to a specific TypeScript source line.",
     "serviceLabel": "Implementation and hosting",
@@ -13144,7 +13144,7 @@
         "title": "How to identify the source of the problem",
         "paragraphs": [
           "Check whether the sourcemaps are generated and how the stack trace is displayed.",
-          "Compare SHA commit, the status of defloyment and HTTP response under the final domain, not the very status of READY."
+          "Compare SHA commit, the status of deployment and HTTP response under the final domain, not the very status of READY."
         ]
       },
       {
@@ -13162,7 +13162,7 @@
       {
         "title": "Security and restrictions",
         "paragraphs": [
-          "Keep the previous active defloyment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
+          "Keep the previous active deployment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
         ]
       }
     ]
@@ -13206,7 +13206,7 @@
   "vercel-output-directory-wrong": {
     "sourceHash": "ff727c6201d05e6d09bff38763619f7d5cc7ba88251f97f3e768e14525d598a7",
     "status": "machine",
-    "title": "Vercel: implementation of READY, but page shows an empty directory",
+    "title": "Vercel Deployment Is READY but the Site Is Empty",
     "description": "The building ends in success, but the domain returns 404 or an empty view after publication.",
     "intro": "The building ends in success, but the domain returns 404 or an empty view after publication. Set Output Directory or preset framework can indicate a directory other than the actual build result.",
     "serviceLabel": "Parties and implementation",
@@ -13234,7 +13234,7 @@
       {
         "title": "What to do",
         "paragraphs": [
-          "Do not treat a successful defloyment as a website performance test for visitors."
+          "Do not treat a successful deployment as a website performance test for visitors."
         ]
       }
     ]
@@ -13275,7 +13275,7 @@
   "vercel-preview-protection-401": {
     "sourceHash": "dc7f527e1e7c8e538da85ad3fd3336dd45a8ba2efb5ae304ba5ace99725c590b",
     "status": "machine",
-    "title": "Vercel: PR preview returns 401 to unincorporated client",
+    "title": "Vercel Preview Returns HTTP 401 to Unauthenticated Visitors",
     "description": "The preview address displays the Vercel or HTTP 401 login page instead of the content.",
     "intro": "The preview address displays the Vercel or HTTP 401 login page instead of the content. Deployment Protection may restrict access to previews for team members.",
     "serviceLabel": "Parties and implementation",
@@ -13283,7 +13283,7 @@
       {
         "title": "How to determine the source of the error",
         "paragraphs": [
-          "Check whether the address is a preview defloyment and what access policy it has in the project panel.",
+          "Check whether the address is a preview deployment and what access policy it has in the project panel.",
           "Compare access as a logged team member and incognito window."
         ]
       },
@@ -13311,7 +13311,7 @@
   "vercel-production-branch-incorrect": {
     "sourceHash": "78cf82879413c1775e236b94f315c98462d41ce3ccdedcbef704ee928cd36985",
     "status": "machine",
-    "title": "Vercel: push to main implements preview instead of production",
+    "title": "Vercel: Push to Main Creates a Preview Instead of Production Deployment",
     "description": "The new commit is READY, but does not appear under its own domain service.",
     "intro": "The new commit is READY, but does not appear under its own domain service.",
     "serviceLabel": "Implementation and hosting",
@@ -13320,13 +13320,13 @@
         "title": "How to identify the source of the problem",
         "paragraphs": [
           "Check Production Branch of the project and whether Git Integration is observing proper repo and branch.",
-          "Compare SHA commit, the status of defloyment and HTTP response under the final domain, not the very status of READY."
+          "Compare SHA commit, the status of deployment and HTTP response under the final domain, not the very status of READY."
         ]
       },
       {
         "title": "Repair steps",
         "paragraphs": [
-          "Set the correct production branch and verify the alias of the assigned domain after the new defloyment."
+          "Set the correct production branch and verify the alias of the assigned domain after the new deployment."
         ]
       },
       {
@@ -13338,7 +13338,7 @@
       {
         "title": "Security and restrictions",
         "paragraphs": [
-          "Keep the previous active defloyment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
+          "Keep the previous active deployment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
         ]
       }
     ]
@@ -13355,7 +13355,7 @@
         "title": "How to identify the source of the problem",
         "paragraphs": [
           "Check domain assignment in Vercel and DNS records for active zone.",
-          "Compare SHA commit, the status of defloyment and HTTP response under the final domain, not the very status of READY."
+          "Compare SHA commit, the status of deployment and HTTP response under the final domain, not the very status of READY."
         ]
       },
       {
@@ -13367,13 +13367,13 @@
       {
         "title": "How to Test Solution",
         "paragraphs": [
-          "The own domain shows the same version of the project as the correct defloyment preview."
+          "The own domain shows the same version of the project as the correct deployment preview."
         ]
       },
       {
         "title": "Security and restrictions",
         "paragraphs": [
-          "Keep the previous active defloyment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
+          "Keep the previous active deployment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
         ]
       }
     ]
@@ -13390,7 +13390,7 @@
         "title": "How to identify the source of the problem",
         "paragraphs": [
           "Check the redirect rules and the destination URL in Location for the query with the test parameter.",
-          "Compare SHA commit, the status of defloyment and HTTP response under the final domain, not the very status of READY."
+          "Compare SHA commit, the status of deployment and HTTP response under the final domain, not the very status of READY."
         ]
       },
       {
@@ -13408,7 +13408,7 @@
       {
         "title": "Security and restrictions",
         "paragraphs": [
-          "Keep the previous active defloyment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
+          "Keep the previous active deployment until the new one is confirmed under your own domain. Avoid writing secrets in logs."
         ]
       }
     ]
@@ -13485,9 +13485,9 @@
   "vercel-this-deployment-is-temporarily-paused": {
     "sourceHash": "2e23a451716176962e7df4cb3f9f471946e7eca5f2c4b0f4624616a8abb6ae12",
     "status": "machine",
-    "title": "Vercel: This defloyment is temporally paused — what does it mean and how do we restore the site?",
-    "description": "On the page you see This deposit is temporally paused? Check project status, plan limit and final implementation.",
-    "intro": "The page or CRM does not open and instead of the application, a message appears This deposit is temporally paused. First we need to establish the status of the project in Vercel.",
+    "title": "Vercel: This Deployment Is Temporarily Paused",
+    "description": "On the page you see This deposit is temporarily paused? Check project status, plan limit and final implementation.",
+    "intro": "The page or CRM does not open and instead of the application, a message appears This deposit is temporarily paused. First we need to establish the status of the project in Vercel.",
     "serviceLabel": "Website creation",
     "sections": [
       {
@@ -13579,14 +13579,14 @@
     "status": "machine",
     "title": "Vercel: environmental variable set in panel, but not working in application",
     "description": "Step by step diagnostics for situations where the environmental variable is visible in the Vercel panel, but the application does not read it during construction or runtime — possible causes and specific repair tests.",
-    "intro": "Problem: In the Vercel panel, you see an environment variable (Environment Variable), but the application returns no value or old value, or differences between build and runtime. Causes may be technical and procedural: different ranges (Environment, Preview, Production), no rebuild after change, the use of an incorrect reading mechanism (e.g. process.env in a client without NEXT PUBLAC  prefix), local cache or build cache Vercel, as well as typos in variable name. Diagnosis requires separate testing of the build and runtime phase and confirmation that the variable is available in this phase and for this design/branch. Framework versions (Next.js) and build-step configurations also influence: Next.js inserts values during build into static code — changing the variable after build will not change the generated static files without re-deploya. For this reason, I propose a systematic approach: (1) check the view of the variable in the Vercel panel (Environment: Production/Preview/Development), (2) make sure that you perform defloy after each change in value, (3) verify, whether you use the correct convention (e.g. NEXT PUBLC  for the values available in the browser), (4) evaluate whether the problem occurs during build or runtime — build logs and variables in server logs will help. Further steps include rebuilding a cache-cleaning project, a simple-endpoint test that returns the process.env value, and local playback of settings by vercel dev or by exporting variables to the environment It's running. In the following diagnostics, I have given options of causes, concrete steps to perform and short verification tests, which conditions eliminate potential source of error.",
+    "intro": "Problem: In the Vercel panel, you see an environment variable (Environment Variable), but the application returns no value or old value, or differences between build and runtime. Causes may be technical and procedural: different ranges (Environment, Preview, Production), no rebuild after change, the use of an incorrect reading mechanism (e.g. process.env in a client without NEXT PUBLAC  prefix), local cache or build cache Vercel, as well as typos in variable name. Diagnosis requires separate testing of the build and runtime phase and confirmation that the variable is available in this phase and for this design/branch. Framework versions (Next.js) and build-step configurations also influence: Next.js inserts values during build into static code — changing the variable after build will not change the generated static files without re-deploya. For this reason, I propose a systematic approach: (1) check the view of the variable in the Vercel panel (Environment: Production/Preview/Development), (2) make sure that you perform deploy after each change in value, (3) verify, whether you use the correct convention (e.g. NEXT PUBLC  for the values available in the browser), (4) evaluate whether the problem occurs during build or runtime — build logs and variables in server logs will help. Further steps include rebuilding a cache-cleaning project, a simple-endpoint test that returns the process.env value, and local playback of settings by vercel dev or by exporting variables to the environment It's running. In the following diagnostics, I have given options of causes, concrete steps to perform and short verification tests, which conditions eliminate potential source of error.",
     "serviceLabel": "Pages and hosting",
     "sections": [
       {
         "title": "How to Recognize Cause",
         "paragraphs": [
           "Check the Vercel Panel variable range: each variable has Environment (Development, Preview, Production). If you deploy on production, but the variable is set only for Preview, the application will not see it. In the Project → Settings panel → Environment Variables check whether the entry is in the desired view and for the right design.",
-          "Distinguish build vs runtime: frames (e.g. Next.js) settle process.env at build time for client-side code. If the variable has changed after the last build, force a new defloy. In addition, cache builda can hold an old value — use redeploy/purge cache.",
+          "Distinguish build vs runtime: frames (e.g. Next.js) settle process.env at build time for client-side code. If the variable has changed after the last build, force a new deploy. In addition, cache builda can hold an old value — use redeploy/purge cache.",
           "Check name and availability client-side: variables used in the browser must have a framework prefix (in Next.js NEXT PUBLIC ). There is also a typo or incorrect reading (e.g. using import.meta.env in a project that does not support it)."
         ]
       },
@@ -13606,8 +13606,8 @@
         "title": "How to see if the problem is gone",
         "paragraphs": [
           "Test 1 — log build: after redeploy check in the Deployments full log build tab. It should contain no errors such as 'undefined variable' and, if you put temporary console.log(process.env.NAZWA) in the code, it will be visible in build logs.",
-          "Test 2 — runtime function: implement a simple serverless function (api/test.js) returning process.env.NAZWA. Call endpoint after defloy and compare the returned value with the one in the panel; the difference will indicate the runtime vs build phase problem.",
-          "Test 3 — client vs server: in the client-side application, write the value value NEXT PUBLUC NAZWA to the browser console after loading the page. If undefined, check if the variable has a prefix and if the defloy was a rebuild — it will distinguish the problem of exposing from the scope."
+          "Test 2 — runtime function: implement a simple serverless function (api/test.js) returning process.env.NAZWA. Call endpoint after deploy and compare the returned value with the one in the panel; the difference will indicate the runtime vs build phase problem.",
+          "Test 3 — client vs server: in the client-side application, write the value value NEXT PUBLUC NAZWA to the browser console after loading the page. If undefined, check if the variable has a prefix and if the deploy was a rebuild — it will distinguish the problem of exposing from the scope."
         ]
       },
       {
@@ -13615,7 +13615,7 @@
         "paragraphs": [
           "Do not redeploy after changing values: the variables embedded in the build require full rebuild; only editing the values in the panel without redeploy will not update static artifacts.",
           "Using secret variables on the client side without a prefix: revealing secrets to the frontend is an error; no prefix also causes the framework to not provide a variable for client-side.",
-          "The range set in the wrong environment: setting the variable only for Preview is not enough for Production — check the image compatible with the active defloy."
+          "The range set in the wrong environment: setting the variable only for Preview is not enough for Production — check the image compatible with the active deploy."
         ]
       }
     ]
@@ -13763,7 +13763,7 @@
   "wordpress-block-editor-invalid-json": {
     "sourceHash": "18cdcc9c2eccb0f2dddb5f6daf3d16d7fdbf667c78a36eb06599bf4966b93cf1",
     "status": "machine",
-    "title": "WordPress Gutenberg: update failed — JSON's incorrect response",
+    "title": "WordPress Gutenberg: Update Failed Due to Invalid JSON Response",
     "description": "The block editor does not save changes, although the normal page works.",
     "intro": "The block editor does not save changes, although the normal page works.",
     "serviceLabel": "WordPress",
@@ -13905,7 +13905,7 @@
   "wordpress-database-prefix-changed": {
     "sourceHash": "fb192ae4177214c7628cf122ae9c8e121405224f21bbb48efac93ec5a2d6ca48",
     "status": "machine",
-    "title": "WordPress: After migration, request reinstall despite existing database",
+    "title": "WordPress Requests a Fresh Install After Migration",
     "description": "There are entries in the database, but the application does not see installation tables.",
     "intro": "There are entries in the database, but the application does not see installation tables.",
     "serviceLabel": "WordPress",
@@ -13976,7 +13976,7 @@
   "wordpress-image-processing-failed": {
     "sourceHash": "d40da2a74668bd8c2d109413b19d222bc9b0e7b42685bd9c93e831c5ef0560bf",
     "status": "machine",
-    "title": "WordPress: The server cannot process the image at large photo",
+    "title": "WordPress Cannot Process Large Images",
     "description": "The photo is uploaded in part, but WordPress does not create the required miniatures.",
     "intro": "The photo is uploaded in part, but WordPress does not create the required miniatures.",
     "serviceLabel": "WordPress",
@@ -14295,7 +14295,7 @@
   "wordpress-plugin-update-ftp-credentials": {
     "sourceHash": "8d0380c4a1835bc284e663864a7e21f927d061cf85f4454977edbbb1bb9d6369",
     "status": "machine",
-    "title": "WordPress: Update plugin requests FTP data",
+    "title": "WordPress Plugin Update Asks for FTP Credentials",
     "description": "Installing updates does not work without manually providing an FTP account.",
     "intro": "Installing updates does not work without manually providing an FTP account.",
     "serviceLabel": "WordPress",
@@ -14365,7 +14365,7 @@
   "wordpress-rest-api-403-security-plugin": {
     "sourceHash": "a19e5ff5d26d9b5b928a6dbbc3dfa39dbec5f6ba585a622ca44901c36903dc89",
     "status": "machine",
-    "title": "WordPress REST API: /wp-json returns 403 by collateral",
+    "title": "WordPress REST API Returns 403 Because of a Security Plugin",
     "description": "Public endpoints REST APIs stop operating after installing the safety plugin.",
     "intro": "Public endpoints REST APIs stop operating after installing the safety plugin. Firewall or plugin can filter requests before WordPress processes a specific route.",
     "serviceLabel": "Websites",
@@ -14436,7 +14436,7 @@
   "wordpress-search-engine-visibility-noindex": {
     "sourceHash": "f009fef558ac6f9d1a0ccc7b59c508af44362f2d1f2160ba578c667bf8642dd1",
     "status": "machine",
-    "title": "WordPress does not appear in Google by setting “Distort Search”",
+    "title": "WordPress Is Not Indexed Because of Search Engine Visibility Setting",
     "description": "The new site has a correct map and content, but generates a noindex directive.",
     "intro": "The new site has a correct map and content, but generates a noindex directive.",
     "serviceLabel": "WordPress",
@@ -14542,7 +14542,7 @@
   "wordpress-wp-mail-form-no-email": {
     "sourceHash": "7d6c9fec53b0b6b624f54f47b967651a86ab337e263ea83b91c72a03741d84ee",
     "status": "machine",
-    "title": "WordPress: the form shows success, but wp mail does not deliver messages",
+    "title": "WordPress Form Shows Success but wp_mail Does Not Deliver Email",
     "description": "The user sees the message confirmation and there is no notification in the recipient box.",
     "intro": "The user sees the message confirmation and there is no notification in the recipient box. Calling wp mail does not guarantee delivery of the message; the problem may be in the transport or domain authorization.",
     "serviceLabel": "Websites",
