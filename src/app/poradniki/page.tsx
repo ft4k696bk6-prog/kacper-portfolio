@@ -48,6 +48,7 @@ export default async function GuidesPage({ searchParams }: Props) {
       <p className="page-eyebrow">Baza rozwiązań • praktyczne problemy</p>
       <h1 className="mt-5 max-w-5xl text-4xl leading-tight md:text-6xl">Nie działa? Znajdź przyczynę i napraw.</h1>
       <p className="mt-6 max-w-3xl text-lg leading-8 text-white/75">Praktyczne rozwiązania problemów ze stronami internetowymi, CRM, reklamami Meta, SEO, WordPressem i integracjami. Wybierz temat, sprawdź możliwe przyczyny, wykonaj kolejne kroki i przetestuj rezultat.</p>
+      <p className="mt-5 text-sm text-white/70">Chcesz zobaczyć szerszy kontekst? <Link href="/blog" className="text-white underline underline-offset-4">Przeczytaj blog o marketingu, CRM i SEO</Link>.</p>
       <form role="search" action="/poradniki" method="get" className="mt-8 flex max-w-3xl flex-wrap gap-3">
         <label htmlFor="guide-search" className="sr-only">Szukaj rozwiązania lub komunikatu błędu</label>
         <input id="guide-search" name="q" type="search" maxLength={100} defaultValue={query} placeholder="Np. Vercel deployment, RLS, formularz..." className="min-w-0 flex-1 rounded-xl border border-white/25 bg-[var(--brand-black)] px-5 py-4 text-white placeholder:text-white/55" />

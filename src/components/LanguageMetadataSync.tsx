@@ -14,7 +14,7 @@ export function LanguageMetadataSync() {
       "/tworzenie-stron-internetowych",
       "/crm-i-aplikacje-webowe",
       "/marketing-i-reklamy",
-    ].includes(pathname) || pathname.startsWith("/poradniki") || pathname.startsWith("/realizacje") || pathname === "/case-studies/re-energy-meta-ads" || pathname === "/reklamy-meta-ads-dla-firm";
+    ].includes(pathname) || pathname.startsWith("/blog") || pathname.startsWith("/poradniki") || pathname.startsWith("/realizacje") || pathname === "/case-studies/re-energy-meta-ads" || pathname === "/reklamy-meta-ads-dla-firm";
     document.documentElement.lang = englishGuide ? "en" : (servicePage || pathname === "/case-studies" ? "pl" : lang);
     if (englishGuide || servicePage || pathname === "/case-studies" || pathname === "/choose")
       return;

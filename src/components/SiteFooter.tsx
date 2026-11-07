@@ -6,7 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export function SiteFooter() {
   const {lang} = useLanguage();
   const pathname = usePathname();
-  const english = pathname.startsWith("/en/") || (!pathname.startsWith("/poradniki") && lang === "en");
+  const english = pathname.startsWith("/en/") || (!pathname.startsWith("/poradniki") && !pathname.startsWith("/blog") && lang === "en");
   return <footer className="site-footer relative z-10 border-t border-white/10 bg-[var(--brand-black)] px-5 py-14 md:px-8">
     <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-3">
       <div>
@@ -28,6 +28,7 @@ export function SiteFooter() {
         <Link className="block" href={english?"/en/case-studies":"/case-studies"}>{english?"Case studies and live projects":"Realizacje i działające projekty"}</Link>
         <Link className="block" href="/#collaborations">{english?"Client collaborations":"Współprace z firmami"}</Link>
         <Link className="block" href={english?"/en/guides":"/poradniki"}>{english?"Practical troubleshooting guides":"Poradniki dla przedsiębiorców"}</Link>
+        <Link className="block" href={english?"/en/blog":"/blog"}>{english?"Articles and insights":"Blog i artykuły"}</Link>
         <Link className="block" href="/#faq">{english?"Questions about collaboration":"Pytania o współpracę"}</Link>
         <Link className="block" href="/#contact">{english?"Book a conversation":"Umów rozmowę"}</Link>
       </nav>
