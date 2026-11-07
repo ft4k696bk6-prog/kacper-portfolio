@@ -411,3 +411,27 @@
 .project-book[data-active="true"] .book-expand-symbol svg path:nth-child(2){opacity:0;transform:scaleY(0)}
 .project-book[data-active="true"] .book-identity-title.brand-only{display:none}
 .image-books .project-book:after{background:linear-gradient(180deg,transparent 0%,#08080811 38%,#080808e6 72%,#080808 100%)}
+
+/* Photographic first plan dissolves into the exact black of the next section. */
+.portfolio-content > .scenic-parallax{position:relative;isolation:isolate;overflow:hidden;background:#080808;height:140svh;min-height:1100px;max-height:1450px}
+.scenic-backdrop{position:absolute;z-index:0;inset:-8% 0 0;mask-image:linear-gradient(#000 0%,#000 48%,#0008 73%,transparent 100%)}
+.scenic-backdrop img{object-fit:cover;object-position:center 60%;filter:saturate(.16) brightness(.63)}
+.scenic-portrait-stage{position:absolute;z-index:1;inset:0}
+.scenic-portrait{position:absolute;top:90px;left:50%;transform:translateX(-50%);width:620px;height:auto;max-width:none;mask-image:linear-gradient(#000 0%,#000 90%,transparent 100%)}
+.scenic-foreground{position:absolute;z-index:2;left:0;right:0;top:54%;bottom:-8%;background:url('/images/hero-rock-foreground.webp') center bottom / auto 280% no-repeat;filter:saturate(.12) brightness(.75);mask-image:linear-gradient(transparent 0%,#000 12%,#000 50%,transparent 100%);pointer-events:none}
+.scenic-fade{position:absolute;z-index:3;inset:0;pointer-events:none;background:linear-gradient(180deg,#08080833 0%,transparent 20%,transparent 53%,#08080844 68%,#080808dd 88%,#080808 100%)}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+@media(max-width:767px){
+ .portfolio-content > .scenic-parallax{height:135svh;min-height:940px;max-height:1200px}
+ .scenic-portrait{top:155px;width:min(94vw,470px)}
+ .scenic-backdrop img{object-position:58% center}
+ .scenic-foreground{top:45%;background-size:auto 280%}
+}
+@media(max-width:767px) and (orientation:portrait){
+ .contact-reveal-card:first-child .contact-icon-trigger{margin-left:0;margin-right:auto}
+ .contact-reveal-card:last-child .contact-icon-trigger{margin-left:auto;margin-right:0}
+ .contact-reveal-card:first-child .contact-revealed-value{justify-content:flex-start;text-align:left}
+ .contact-reveal-card:last-child .contact-revealed-value{justify-content:flex-end;text-align:right}
+}

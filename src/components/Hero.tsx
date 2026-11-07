@@ -1,13 +1,11 @@
 "use client";
-import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ParallaxComponent } from "@/components/ui/parallax-scrolling";
 
 export function Hero() {
   const { lang } = useLanguage();
-  return <section id="home" className="hero-depth hero-night">
-    <div className="hero-depth-stage">
-      <h1 className="hero-depth-title"><span>{lang === "pl" ? "Twoja firma." : "Your business."}</span><span>{lang === "pl" ? "Moje doświadczenie." : "My experience."}</span></h1>
-      <Image src="/images/profile-1-cutout.png" alt="Kacper Bernecki, stojący bokiem z dłońmi w kieszeniach" width={1122} height={1402} priority sizes="(min-width:1024px) 620px, 94vw" className="hero-depth-portrait"/>
-    </div>
-  </section>;
+  return <ParallaxComponent
+    title={lang === "pl" ? "Kacper Bernecki — strony internetowe, aplikacje i marketing dla firm" : "Kacper Bernecki — websites, applications and business marketing"}
+    portraitAlt={lang === "pl" ? "Kacper Bernecki, stojący bokiem z dłońmi w kieszeniach" : "Kacper Bernecki standing with his hands in his pockets"}
+  />;
 }
