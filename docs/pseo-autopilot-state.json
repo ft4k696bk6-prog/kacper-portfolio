@@ -5,268 +5,286 @@
     "Vercel: nie działa zmienna środowiskowa mimo ustawienia w panelu",
     "Vercel: aplikacja działa lokalnie, ale brak funkcji Node na Edge",
     "Supabase: token odświeżania sesji wygasł",
-    "CRM: rolę administratora można obejść przez endpoint"
+    "CRM: rolę administratora można obejść przez endpoint",
+    "Conversions API: Event Match Quality spada",
+    "Supabase: RLS blokuje SELECT mimo zalogowania",
+    "Supabase: błędny klucz obcy blokuje usunięcie użytkownika",
+    "Supabase: signed URL pliku przestaje działać",
+    "Supabase: limit 1000 rekordów w odpowiedzi",
+    "Next.js: Hydration failed przez datę i strefę czasową",
+    "Next.js: błędne importy client component i server component",
+    "CRM: po zdjęciu blokady handlowiec nadal nie widzi leada"
   ],
   "rejectedTopics": [],
   "seenIssueUrls": [],
-  "lastRun": "2026-11-07T16:07:56.338Z",
-  "runCount": 1,
+  "lastRun": "2026-11-07T16:55:45.036Z",
+  "runCount": 2,
   "lastSummary": {
     "attempts": 60,
-    "approved": 5,
-    "rejected": 55,
-    "cost": 0.2676
+    "approved": 8,
+    "rejected": 52,
+    "cost": 0.2794
   },
   "failureHistory": {
     "Meta Ads: reklama zatwierdzona, ale nie ma wyświetleń": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:32:13.663Z",
+      "reason": "editorial length"
     },
     "Meta Ads: odrzucenie płatności mimo środków na karcie": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:32:37.511Z",
+      "reason": "editorial length"
     },
     "Facebook: osoba nie widzi strony w tożsamości reklamy": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:32:56.324Z",
+      "reason": "source"
     },
     "Meta Business Suite: brak dostępu do leadów po zmianie administratora": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:33:15.535Z",
+      "reason": "editorial length"
     },
     "Lead Ads: formularz nie pozwala pobrać CSV": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:33:40.107Z",
+      "reason": "independent QA"
     },
     "Lead Ads: webhook odbiera tylko część zgłoszeń": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:33:58.518Z",
+      "reason": "editorial length"
     },
     "Meta: testowe leady działają, prawdziwe nie docierają": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
-    },
-    "Conversions API: Event Match Quality spada": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:34:26.651Z",
+      "reason": "independent QA"
     },
     "Meta: zmiana właściciela strony blokuje reklamowanie": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:35:18.464Z",
+      "reason": "editorial length"
     },
     "Meta Ads: kampania zablokowana przez limit wydatków": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:35:41.306Z",
+      "reason": "source"
     },
     "Meta: reklama ma wysoki CTR i zero kontaktów": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:36:19.136Z",
+      "reason": "independent QA"
     },
     "Vercel: podgląd działa, ale produkcja wyświetla stary commit": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:36:42.600Z",
+      "reason": "editorial length"
     },
     "Vercel: Deployment Protection blokuje dostęp klientowi": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:37:07.317Z",
+      "reason": "editorial length"
     },
     "Vercel: wyświetla się 404 na własnej domenie": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:37:25.644Z",
+      "reason": "editorial length"
     },
     "Vercel: domena przypisana do innego projektu": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:37:47.732Z",
+      "reason": "link broken"
     },
     "Vercel: Function Invocation Timeout w formularzu": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:38:22.107Z",
+      "reason": "independent QA"
     },
     "Vercel: Edge Function zwraca 500 tylko na produkcji": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:38:44.473Z",
+      "reason": "editorial length"
     },
     "Vercel: webhook deploymentu nie uruchamia się po push": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:39:03.951Z",
+      "reason": "link broken"
     },
     "Vercel: build zatrzymuje brakujący import zależności": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:39:22.152Z",
+      "reason": "editorial length"
     },
     "Vercel: przekroczono limit zasobów i projekt jest wstrzymany": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
-    },
-    "Supabase: RLS blokuje SELECT mimo zalogowania": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:40:06.926Z",
+      "reason": "editorial length"
     },
     "Supabase: insert narusza WITH CHECK": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:40:55.487Z",
+      "reason": "editorial length"
     },
     "Supabase: duplikaty rekordów po ponowieniu webhooka": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:41:15.202Z",
+      "reason": "editorial length"
     },
     "Supabase: brak rekordów po zmianie roli użytkownika": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
-    },
-    "Supabase: błędny klucz obcy blokuje usunięcie użytkownika": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
-    },
-    "Supabase: signed URL pliku przestaje działać": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:41:37.805Z",
+      "reason": "editorial length"
     },
     "Supabase: query count różni się od liczby widocznych wierszy": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
-    },
-    "Supabase: limit 1000 rekordów w odpowiedzi": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:43:30.396Z",
+      "reason": "editorial length"
     },
     "Supabase: realtime nie aktualizuje listy leadów": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:44:19.018Z",
+      "reason": "editorial length"
     },
     "Supabase: migracja bazy rozjeżdża schemat produkcyjny": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
-    },
-    "Next.js: Hydration failed przez datę i strefę czasową": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:44:44.513Z",
+      "reason": "editorial length"
     },
     "Next.js: useSearchParams wymaga Suspense": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:45:58.322Z",
+      "reason": "link broken"
     },
     "Next.js: metadata canonical wskazuje na stronę główną": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:46:19.639Z",
+      "reason": "editorial length"
     },
     "Next.js: obraz w Image ucina twarz na mobile": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:46:42.045Z",
+      "reason": "editorial length"
     },
     "Next.js: notFound działa w dev, ale 404 po buildzie": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:47:07.609Z",
+      "reason": "editorial length"
     },
     "React: useEffect wywołuje zapytanie dwa razy": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:47:26.402Z",
+      "reason": "source"
     },
     "React: lista z nieprawidłowym key miesza rekordy": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:47:45.139Z",
+      "reason": "editorial length"
     },
     "TypeScript: Property does not exist on type never": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:48:05.652Z",
+      "reason": "editorial length"
     },
     "Next.js: server action nie działa po wdrożeniu": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:48:28.406Z",
+      "reason": "link broken"
     },
     "React: formularz traci dane po przejściu między krokami": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
-    },
-    "Next.js: błędne importy client component i server component": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:48:49.427Z",
+      "reason": "source"
     },
     "CRM: licznik przypisanych leadów różni się od listy": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
-    },
-    "CRM: po zdjęciu blokady handlowiec nadal nie widzi leada": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:49:49.657Z",
+      "reason": "editorial length"
     },
     "CRM: powiadomienia PWA nie działają na iPhonie": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:51:15.468Z",
+      "reason": "editorial length"
     },
     "CRM: callbacki znikają po zmianie strefy czasowej": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:51:39.553Z",
+      "reason": "editorial length"
     },
     "CRM: dashboard liczy anulowane umowy do wyniku": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:52:02.208Z",
+      "reason": "editorial length"
     },
     "CRM: filtr przypisania utrzymuje nieaktualną listę": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:52:27.179Z",
+      "reason": "editorial length"
     },
     "CRM: import CSV powoduje duplikaty telefonów": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:52:48.179Z",
+      "reason": "editorial length"
     },
     "CRM: archiwalne leady nie powinny trafiać do kolejki": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "count": 2,
+      "lastAt": "2026-11-07T16:53:07.756Z",
+      "reason": "editorial length"
     },
     "CRM: status leadu nie synchronizuje się między zakładkami": {
+      "count": 2,
+      "lastAt": "2026-11-07T16:53:54.643Z",
+      "reason": "editorial length"
+    },
+    "Vercel: certyfikat SSL nie jest wydawany dla domeny": {
       "count": 1,
-      "lastAt": "2026-11-07T16:07:56.338Z",
-      "reason": "first-run rejection; retry allowed"
+      "lastAt": "2026-11-07T16:39:44.094Z",
+      "reason": "editorial length"
+    },
+    "Supabase: Storage policy odrzuca upload zdjęcia": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:42:37.837Z",
+      "reason": "link broken"
+    },
+    "Next.js: generateStaticParams nie zawiera nowych slugów": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:45:34.770Z",
+      "reason": "editorial length"
+    },
+    "CRM: dwie osoby edytują lead i nadpisują komentarze": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:50:46.970Z",
+      "reason": "editorial length"
+    },
+    "CRM: pliki klienta widoczne dla nieuprawnionej osoby": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:53:32.742Z",
+      "reason": "editorial length"
+    },
+    "Google Search Console: wykryto, obecnie nie zindeksowano": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:54:22.434Z",
+      "reason": "editorial length"
+    },
+    "Google Search Console: zindeksowano, choć zablokowano robots.txt": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:54:41.779Z",
+      "reason": "editorial length"
+    },
+    "Google Search Console: canonical inny niż wybrany przez Google": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:55:02.999Z",
+      "reason": "editorial length"
+    },
+    "Sitemap XML: URL jest poprawny, ale nie ma go w wynikach": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:55:20.607Z",
+      "reason": "editorial length"
+    },
+    "IndexNow: zgłoszenie przyjęte, ale strona nie jest indeksowana": {
+      "count": 1,
+      "lastAt": "2026-11-07T16:55:45.036Z",
+      "reason": "editorial length"
     }
   },
   "migratedInitialRejections": 50
