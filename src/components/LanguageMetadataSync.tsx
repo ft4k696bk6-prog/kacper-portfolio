@@ -9,13 +9,14 @@ export function LanguageMetadataSync() {
   const { lang, t } = useLanguage();
 
   useEffect(() => {
+    const englishGuide = pathname.startsWith("/en/guides");
     const servicePage = [
       "/tworzenie-stron-internetowych",
       "/crm-i-aplikacje-webowe",
       "/marketing-i-reklamy",
     ].includes(pathname) || pathname.startsWith("/poradniki") || pathname.startsWith("/realizacje") || pathname === "/case-studies/re-energy-meta-ads" || pathname === "/reklamy-meta-ads-dla-firm";
-    document.documentElement.lang = servicePage || pathname === "/case-studies" ? "pl" : lang;
-    if (servicePage || pathname === "/case-studies" || pathname === "/choose")
+    document.documentElement.lang = englishGuide ? "en" : (servicePage || pathname === "/case-studies" ? "pl" : lang);
+    if (englishGuide || servicePage || pathname === "/case-studies" || pathname === "/choose")
       return;
 
     const caseStudySlug = pathname.match(/^\/case-studies\/([^/]+)/)?.[1];
