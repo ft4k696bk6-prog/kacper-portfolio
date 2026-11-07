@@ -4,7 +4,7 @@ const url = "https://bernecki.dev/reklamy-meta-ads-dla-firm";
 export const metadata: Metadata = {
   title: "Reklamy Meta Ads dla firm — Facebook, Instagram i leady",
   description: "Prowadzenie kampanii Meta Ads z celem pozyskiwania klientów: oferta, reklamy, formularze leadowe, mierzenie jakości zapytań i obsługa w CRM. Case study OZE.",
-  alternates: { canonical: url },
+  alternates: { canonical:url, languages:{"pl-PL":url,en:"https://bernecki.dev/en/meta-ads"} },
   openGraph: { title: "Kampanie Meta Ads i pozyskiwanie leadów — Kacper Bernecki", description: "Reklamy Facebook i Instagram dla firm. Zobacz proces i case study z branży OZE.", url, type: "website", locale: "pl_PL" },
 };
 const stages = [

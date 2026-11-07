@@ -19,8 +19,31 @@ export function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  // Every static business route has a real English counterpart, not just translated menu labels.
+  const bilingualRoutes: Record<string,string> = {
+    "/case-studies": "/en/case-studies",
+    "/rozwoj-biznesu": "/en/business",
+    "/case-studies/re-energy-meta-ads": "/en/case-studies/re-energy-meta-ads",
+    "/reklamy-meta-ads-dla-firm": "/en/meta-ads",
+    "/tworzenie-stron-internetowych": "/en/services/websites",
+    "/crm-i-aplikacje-webowe": "/en/services/crm",
+    "/marketing-i-reklamy": "/en/services/marketing"
+  };
   // Guides have separate, indexable EN URLs; a localStorage toggle alone would leave Polish text visible.
   const guideLanguagePath = (target: "pl" | "en") => {
+    if (pathname.startsWith("/realizacje/")) {
+      const slug=pathname.slice("/realizacje/".length);
+      return target==="en" ? `/en/projects/${slug}` : pathname;
+    }
+    if (pathname.startsWith("/en/projects/")) {
+      const slug=pathname.slice("/en/projects/".length);
+      return target==="pl" ? `/realizacje/${slug}` : pathname;
+    }
+    if (target==="en" && bilingualRoutes[pathname])return bilingualRoutes[pathname];
+    if (target==="pl") {
+      const source=Object.entries(bilingualRoutes).find(([,english])=>english===pathname);
+      if (source)return source[0];
+    }
     if (pathname.startsWith("/poradniki/tematy/")) {
       const suffix = pathname.slice("/poradniki/tematy/".length);
       return target === "en" ? `/en/guides/topics/${suffix}` : pathname;
@@ -47,8 +70,11 @@ export function LanguageSwitcher() {
     if (path && path !== pathname) router.push(path);
   };
   useEffect(() => {
-    if (pathname.startsWith("/en/guides") && lang !== "en") setLang("en");
-    if (pathname.startsWith("/poradniki") && lang !== "pl") setLang("pl");
+    if (pathname.startsWith("/en/") && lang !== "en") setLang("en");
+    if ((pathname.startsWith("/poradniki") || pathname.startsWith("/realizacje/") ||
+      ["/case-studies","/case-studies/re-energy-meta-ads","/reklamy-meta-ads-dla-firm",
+       "/tworzenie-stron-internetowych","/crm-i-aplikacje-webowe","/marketing-i-reklamy","/rozwoj-biznesu"].includes(pathname)) &&
+       lang !== "pl") setLang("pl");
   }, [pathname, lang, setLang]);
 
   const [dark, setDark] = useState(true);
@@ -105,7 +131,7 @@ export function LanguageSwitcher() {
               {t.nav[item.key]}
             </a>
           ))}
-          <Link href="/rozwoj-biznesu" className="ui-nav rounded-md px-4 py-2 text-sm">{lang === "pl" ? "Rozwój biznesu" : "Business"}</Link>
+          <Link href={lang === "en" ? "/en/business" : "/rozwoj-biznesu"} className="ui-nav rounded-md px-4 py-2 text-sm">{lang === "pl" ? "Rozwój biznesu" : "Business"}</Link>
           <Link href={lang === "en" ? "/en/guides" : "/poradniki"} className="ui-nav rounded-md px-4 py-2 text-sm">{lang === "pl" ? "Poradniki" : "Guides"}</Link>
         </nav>
 
@@ -166,7 +192,7 @@ export function LanguageSwitcher() {
                 {t.nav[item.key]}
               </a>
             ))}
-            <Link href="/rozwoj-biznesu" className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang === "pl" ? "Rozwój biznesu" : "Business development"}</Link>
+            <Link href={lang === "en" ? "/en/business" : "/rozwoj-biznesu"} className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang === "pl" ? "Rozwój biznesu" : "Business development"}</Link>
             <Link href={lang === "en" ? "/en/guides" : "/poradniki"} className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang === "pl" ? "Poradniki" : "Guides"}</Link>
             <div className="mt-3 flex items-center justify-between gap-3">
               <a

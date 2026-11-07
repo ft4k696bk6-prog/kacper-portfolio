@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
-import { allGuides, getGuideCounts } from "@/lib/guide-directory";
-import { getEnglishGuide, getEnglishGuides, englishCategoryCounts } from "@/lib/guide-i18n";
-import { realizations } from "@/content/realizations";
+import { allGuides, getGuideCounts } from "../lib/guide-directory";
+import { getEnglishGuide, getEnglishGuides, englishCategoryCounts } from "../lib/guide-i18n";
+import { realizations } from "../content/realizations";
+import { englishServices, englishRealizations } from "../content/english-business";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = "https://bernecki.dev";
@@ -18,7 +19,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return [
-    ...realizations.map(item => ({url: `${siteUrl}/realizacje/${item.slug}`})),
+    ...realizations.map(item => ({
+      url: `${siteUrl}/realizacje/${item.slug}`,
+      alternates:{languages:{"pl-PL":`${siteUrl}/realizacje/${item.slug}`,en:`${siteUrl}/en/projects/${item.slug}`}}
+    })),
+    ...Object.keys(englishRealizations).map(slug=>({
+      url: `${siteUrl}/en/projects/${slug}`,
+      alternates:{languages:{"pl-PL":`${siteUrl}/realizacje/${slug}`,en:`${siteUrl}/en/projects/${slug}`}}
+    })),
     {url: `${siteUrl}/poradniki`, alternates:{languages:{"pl-PL":`${siteUrl}/poradniki`,en:`${siteUrl}/en/guides`}}},
     {url: `${siteUrl}/en/guides`, alternates:{languages:{"pl-PL":`${siteUrl}/poradniki`,en:`${siteUrl}/en/guides`}}},
     ...getGuideCounts().filter(category=>category.count>0).map(category=>{
@@ -40,34 +48,35 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url:`${siteUrl}/en/guides/${guide.slug}`,
       alternates:{languages:{"pl-PL":`${siteUrl}/poradniki/${guide.slug}`,en:`${siteUrl}/en/guides/${guide.slug}`}}
     })),
-    { url: siteUrl + "/case-studies/re-energy-meta-ads", changeFrequency: "monthly", priority: 0.9 },
-    { url: siteUrl + "/rozwoj-biznesu", changeFrequency: "monthly", priority: 0.9 },
-    { url: siteUrl + "/reklamy-meta-ads-dla-firm", changeFrequency: "monthly", priority: 0.9 },
+    { url: siteUrl + "/case-studies/re-energy-meta-ads",changeFrequency:"monthly",priority:0.9,
+      alternates:{languages:{"pl-PL":siteUrl+"/case-studies/re-energy-meta-ads",en:siteUrl+"/en/case-studies/re-energy-meta-ads"}} },
+    { url: siteUrl + "/en/case-studies/re-energy-meta-ads",changeFrequency:"monthly",priority:0.9,
+      alternates:{languages:{"pl-PL":siteUrl+"/case-studies/re-energy-meta-ads",en:siteUrl+"/en/case-studies/re-energy-meta-ads"}} },
+    { url: siteUrl + "/rozwoj-biznesu",changeFrequency:"monthly",priority:0.9,
+      alternates:{languages:{"pl-PL":siteUrl+"/rozwoj-biznesu",en:siteUrl+"/en/business"}} },
+    { url: siteUrl + "/en/business",changeFrequency:"monthly",priority:0.9,
+      alternates:{languages:{"pl-PL":siteUrl+"/rozwoj-biznesu",en:siteUrl+"/en/business"}} },
+    { url: siteUrl + "/reklamy-meta-ads-dla-firm",changeFrequency:"monthly",priority:0.9,
+      alternates:{languages:{"pl-PL":siteUrl+"/reklamy-meta-ads-dla-firm",en:siteUrl+"/en/meta-ads"}} },
+    { url: siteUrl + "/en/meta-ads",changeFrequency:"monthly",priority:0.9,
+      alternates:{languages:{"pl-PL":siteUrl+"/reklamy-meta-ads-dla-firm",en:siteUrl+"/en/meta-ads"}} },
     {
       url: siteUrl,
       changeFrequency: "monthly",
       priority: 1,
     },
-    {
-      url: `${siteUrl}/case-studies`,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/tworzenie-stron-internetowych`,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${siteUrl}/crm-i-aplikacje-webowe`,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${siteUrl}/marketing-i-reklamy`,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
+    {url:`${siteUrl}/case-studies`,changeFrequency:"monthly",priority:0.8,
+      alternates:{languages:{"pl-PL":`${siteUrl}/case-studies`,en:`${siteUrl}/en/case-studies`}}},
+    {url:`${siteUrl}/en/case-studies`,changeFrequency:"monthly",priority:0.8,
+      alternates:{languages:{"pl-PL":`${siteUrl}/case-studies`,en:`${siteUrl}/en/case-studies`}}},
+    ...Object.entries(englishServices).flatMap(([kind,service])=>{
+      const pl=siteUrl+service.original;
+      const en=`${siteUrl}/en/services/${kind}`;
+      return [
+        {url:pl,changeFrequency:"monthly" as const,priority:0.9,alternates:{languages:{"pl-PL":pl,en}}},
+        {url:en,changeFrequency:"monthly" as const,priority:0.9,alternates:{languages:{"pl-PL":pl,en}}}
+      ];
+    }),
     ...caseStudySlugs.map((slug) => ({
       url: `${siteUrl}/case-studies/${slug}`,
       changeFrequency: "monthly",

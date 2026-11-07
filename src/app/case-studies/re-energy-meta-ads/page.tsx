@@ -5,7 +5,7 @@ const canonical = "https://bernecki.dev/case-studies/re-energy-meta-ads";
 export const metadata: Metadata = {
   title: "Re-Energy System — case study Meta Ads i pozyskiwania leadów",
   description: "Około 2 lata kampanii Meta Ads dla firmy OZE: 90 837 zł budżetu reklamowego, 2 331 pozyskanych kontaktów w wybranych kampaniach i 6 mln zł obrotu firmy.",
-  alternates: { canonical },
+  alternates: { canonical, languages:{"pl-PL":canonical,en:"https://bernecki.dev/en/case-studies/re-energy-meta-ads"} },
   openGraph: { title: "Re-Energy System | Case study Meta Ads — Kacper Bernecki", description: "Pozyskiwanie kontaktów dla firmy OZE: kampanie Meta Ads, formularze, obsługa leadów i wyniki Re-Energy System.", url: canonical, type: "article", locale: "pl_PL" },
 };
 
