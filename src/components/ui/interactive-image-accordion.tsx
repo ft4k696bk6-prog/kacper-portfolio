@@ -8,6 +8,7 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, ExternalLink, Plus } from "lucide-
 export type AccordionProject = {
  title:string; description:string; image:string; imageAlt?:string;
  href:string; category:string; demo?:string; mark:ReactNode; logoOnly?:boolean;
+ editorial?: { heading:string; detail:string };
 };
 
 /** Adapted from the supplied 21st.dev interaction, with touch and keyboard support. */
@@ -30,7 +31,7 @@ export function InteractiveImageAccordion({items,active,onSelect,locale="pl"}:{i
  return <><div className="book-controls"><button type="button" aria-label="Poprzednie projekty" onClick={()=>ref.current?.scrollBy({left:-400,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'})}><ArrowLeft size={18}/></button><button type="button" aria-label="Kolejne projekty" onClick={()=>ref.current?.scrollBy({left:400,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'})}><ArrowRight size={18}/></button></div><div ref={ref} className="project-accordion image-books mt-4" onPointerDown={e=>{if(e.pointerType==='mouse'&&e.button===0){drag.current={x:e.clientX,scroll:e.currentTarget.scrollLeft};dragged.current=false;}}} onPointerMove={e=>{if(!drag.current)return;if(Math.abs(e.clientX-drag.current.x)>5){dragged.current=true;e.currentTarget.setPointerCapture(e.pointerId);}if(dragged.current){e.preventDefault();e.currentTarget.scrollLeft=drag.current.scroll-(e.clientX-drag.current.x);}}} onPointerUp={()=>{drag.current=null;}} onLostPointerCapture={()=>{drag.current=null;}} onPointerLeave={e=>{if(!e.currentTarget.hasPointerCapture(e.pointerId))drag.current=null;}} onClickCapture={e=>{if(dragged.current){e.preventDefault();e.stopPropagation();dragged.current=false;}}}>{items.map(p=>{
  const selected=active===p.href;
  return <article key={p.href} className="project-book" data-active={selected}>
- <div className="project-book-preview"><Image src={p.image} alt={p.imageAlt||p.title} draggable={false} width={1440} height={1000} sizes="(min-width:768px) 580px, 85vw" className="project-book-image"/></div>
+ <div className="project-book-preview">{p.editorial ? <div className="editorial-cover"><span>{p.category}</span><strong>{p.editorial.heading}</strong><p>{p.editorial.detail}</p></div> : <Image src={p.image} alt={p.imageAlt||p.title} draggable={false} width={1440} height={1000} sizes="(min-width:768px) 580px, 85vw" className="project-book-image"/>}</div>
  <button type="button" className="project-book-toggle" aria-label={(locale==="pl"?"Rozwiń: ":"Expand: ")+p.title} aria-expanded={selected} onClick={e=>select(p.href,e.currentTarget)} onMouseEnter={e=>{if(!drag.current&&matchMedia("(hover:hover)").matches)select(p.href,e.currentTarget,false);}} onFocus={e=>{if(!drag.current)select(p.href,e.currentTarget);}}><span className="book-expand-symbol" aria-hidden="true"><Plus size={20}/></span></button>
  <div className="book-identity" aria-hidden="true"><span className="book-identity-mark">{p.mark}</span><span className={"book-identity-title"+(p.logoOnly?" brand-only":"")}>{p.title}</span></div>
  <div className="project-book-content" aria-hidden={!selected}>

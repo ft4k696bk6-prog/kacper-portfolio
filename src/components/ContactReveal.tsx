@@ -21,9 +21,10 @@ type RevealState = "idle" | "checking" | "error";
 
 type ContactRevealProps = {
   copy: RevealCopy;
+  plain?: boolean;
 };
 
-export function ContactReveal({ copy }: ContactRevealProps) {
+export function ContactReveal({ copy, plain = false }: ContactRevealProps) {
   const [activeTarget, setActiveTarget] = useState<RevealTarget | null>(null);
   const [humanCheckTarget, setHumanCheckTarget] = useState<RevealTarget | null>(null);
   const [revealed, setRevealed] = useState<Partial<Record<RevealTarget, string>>>({});
@@ -83,6 +84,7 @@ export function ContactReveal({ copy }: ContactRevealProps) {
     <div className="contact-reveal-pair">
       <div className="contact-reveal-grid">
         <RevealButton
+          plain={plain}
           icon={<Phone aria-hidden="true" />}
           label={copy.phoneLabel}
           buttonLabel={copy.phoneButton}
@@ -92,6 +94,7 @@ export function ContactReveal({ copy }: ContactRevealProps) {
           onClick={() => requestReveal("phone")}
         />
         <RevealButton
+          plain={plain}
           icon={<Mail aria-hidden="true" />}
           label={copy.emailLabel}
           buttonLabel={copy.emailButton}
@@ -126,6 +129,7 @@ export function ContactReveal({ copy }: ContactRevealProps) {
 }
 
 function RevealButton({
+  plain,
   icon,
   label,
   buttonLabel,
@@ -134,6 +138,7 @@ function RevealButton({
   loading,
   onClick,
 }: {
+  plain: boolean;
   icon: ReactNode;
   label: string;
   buttonLabel: string;
@@ -153,18 +158,18 @@ function RevealButton({
           href={href}
           className="contact-revealed-value"
         >
-          <DustReveal text={value}/><span>{value}</span>
+          {!plain && <DustReveal text={value}/>}<span>{value}</span>
         </a>
       ) : (
         <button
           type="button"
           onClick={onClick}
           disabled={loading}
-          className="contact-reveal-button contact-icon-trigger"
+          className={"contact-reveal-button" + (plain ? "" : " contact-icon-trigger")}
           aria-label={buttonLabel}
         >
           {loading ? <Loader2 className="animate-spin" aria-hidden="true" /> : icon}
-          <span className="sr-only">{buttonLabel}</span>
+          <span className={plain ? undefined : "sr-only"}>{buttonLabel}</span>
         </button>
       )}
     </div>

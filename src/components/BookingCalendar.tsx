@@ -44,9 +44,10 @@ type BookingCopy = {
 type BookingCalendarProps = {
   copy: BookingCopy;
   locale: "pl-PL" | "en-US";
+  emptyMessage?: string;
 };
 
-export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
+export function BookingCalendar({ copy, locale, emptyMessage }: BookingCalendarProps) {
   const [days, setDays] = useState<AvailableBookingDay[]>([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
@@ -186,7 +187,7 @@ export function BookingCalendar({ copy, locale }: BookingCalendarProps) {
   }
 
   if (state !== "loading-days" && days.length === 0) {
-    return null;
+    return emptyMessage ? <div className="ui-panel rounded-md p-5 text-sm leading-7 text-white/70" role="status">{emptyMessage}</div> : null;
   }
 
   return (
