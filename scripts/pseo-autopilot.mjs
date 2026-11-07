@@ -55,6 +55,16 @@ for(const folder of ["src/content","src/content/pseo"]){
   for(const m of txt.matchAll(/["']?title["']?\s*:\s*["']([^"']+)["']/g))existingTitles.push(m[1]);
  }
 }
+// Offline pSEO is published by deterministic, versioned cases; protect it from AI topic duplication.
+for (const offlineFile of [
+ "nextjs-react.json","supabase-postgres.json","vercel-github.json","seo-wordpress.json","meta-mail-api.json"
+]) {
+ const cases = read("src/content/pseo/offline/" + offlineFile);
+ for (const entry of cases) {
+  existingSlugs.add(entry.slug);
+  existingTitles.push(entry.title);
+ }
+}
 const duplicate=s=>existingTitles.some(x=>normalize(x)===normalize(s)||sim(x,s)>=.78);
 const safeUrl=s=>{try{const u=new URL(s);return u.protocol==="https:"&&!u.username&&!u.password&&hostnames.some(h=>u.hostname===h||u.hostname.endsWith("."+h))&&!/token=|secret=/i.test(s);}catch{return false;}};
 async function checkLinks(sources){
