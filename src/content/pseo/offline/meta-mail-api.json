@@ -1,0 +1,326 @@
+[
+  {
+    "slug": "meta-leadads-access-no-download",
+    "title": "Meta Lead Ads: formularz ma leady, ale nie można ich pobrać",
+    "symptom": "Panel pokazuje kontakty z formularza, lecz pobieranie CSV albo dostęp w CRM kończy się odmową.",
+    "cause": "Dostęp do strony i dostęp do leadów są osobnymi uprawnieniami zarządzanymi w ekosystemie Meta.",
+    "inspect": [
+      "Sprawdź, czy konto ma właściwą rolę do strony i czy w Menedżerze firmy ma przypisany dostęp do potencjalnych klientów.",
+      "Porównaj uprawnienia osoby pobierającej CSV i system user wykorzystywanego przez integrację API."
+    ],
+    "fix": [
+      "Przyznaj minimalne wymagane uprawnienia w odpowiednim portfolio biznesowym i odśwież autoryzację integracji.",
+      "Przetestuj pobranie świeżego formularza i osobno testowy przepływ do CRM z odpowiednimi zgodami."
+    ],
+    "verify": "Uprawniony pracownik pobiera zgłoszenia, a osoba bez dostępu nadal nie ma widoczności danych leadów.",
+    "warning": "Nie nadaj pełnego administratora całego Business Managera tylko z powodu braku jednego raportu.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-webhook-test-only-real-leads",
+    "title": "Meta Lead Ads: testowe leady dochodzą, ale prawdziwe nie trafiają do CRM",
+    "symptom": "Przycisk testu integracji działa, ale zgłoszenia osób z reklam nie są zapisywane w systemie.",
+    "cause": "Ścieżka testowa może omijać część rzeczywistej konfiguracji uprawnień i subskrypcji strony.",
+    "inspect": [
+      "Sprawdź subskrypcję strony do leadgen i status rzeczywistego webhooka na docelowym endpointcie.",
+      "Porównaj tokeny, identyfikator strony i formularza oraz autoryzację pobierania danych kontaktowych."
+    ],
+    "fix": [
+      "Skonfiguruj subskrypcję właściwej strony, ważny token i uprawnienia aplikacji dla rzeczywistych zdarzeń.",
+      "Dodaj trwałą kolejkę i retry po błędzie HTTP, a każdy otrzymany lead zapisuj idempotentnie po jego ID."
+    ],
+    "verify": "Test oraz prawdziwe zgłoszenie przechodzą pełną drogę od Meta do CRM, bez podwójnego rekordu.",
+    "warning": "Nie uznawaj jednego testowego webhooka za dowód poprawności produkcyjnej integracji.",
+    "source": "https://developers.facebook.com/docs/graph-api/webhooks/",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-access-token-expired-190",
+    "title": "Meta Graph API: OAuthException code 190 po wygaśnięciu tokenu",
+    "symptom": "Żądania do API zaczynają zwracać OAuthException z kodem 190, chociaż wcześniej działały.",
+    "cause": "Token dostępu mógł wygasnąć, zostać cofnięty lub nie pasuje już do przypisanej aplikacji i zasobów.",
+    "inspect": [
+      "Odczytaj szczegóły komunikatu błędu bez logowania samego tokenu.",
+      "Sprawdź ważność, rodzaj tokenu i przypisane uprawnienia w narzędziu Access Token Debugger."
+    ],
+    "fix": [
+      "Odśwież token zgodnie z obsługiwanym przepływem autoryzacji i zapisz go wyłącznie po stronie serwera.",
+      "Dodaj monitorowanie wygaśnięcia i obsługę bezpiecznej ponownej autoryzacji przy odmowie."
+    ],
+    "verify": "Wywołanie działa z nowym tokenem, a po wygaśnięciu system zgłasza kontrolowaną potrzebę ponownego połączenia.",
+    "warning": "Nie generuj sekretnego tokenu strony bezpośrednio w kodzie frontendu.",
+    "source": "https://developers.facebook.com/docs/facebook-login/guides/access-tokens/",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-graph-api-rate-limit-613",
+    "title": "Meta Graph API: code 613 przy zbyt dużej liczbie żądań",
+    "symptom": "Integracja odczytu reklam nagle otrzymuje błąd 613 lub odpowiedź wskazującą ograniczenie API.",
+    "cause": "Aplikacja przekroczyła dopuszczalną liczbę wywołań w określonym czasie lub dla danego zasobu.",
+    "inspect": [
+      "Zapisz częstotliwość żądań, zakres danych i odpowiedzi limitujące, nie rejestrując danych prywatnych.",
+      "Sprawdź, czy wiele instancji automatu nie odpytało tych samych zasobów w tym samym momencie."
+    ],
+    "fix": [
+      "Wprowadź kolejkę z kontrolą szybkości, cache danych i opóźnienia przy ponawianiu żądań zgodne z komunikatem dostawcy.",
+      "Zbieraj większe zakresy danych w sposób stronicowany i unikaj wielokrotnego pobierania niezmienionych statystyk."
+    ],
+    "verify": "Po obniżeniu obciążenia poprawne żądania przechodzą, a opóźnienia nie blokują całego CRM.",
+    "warning": "Nie ponawiaj natychmiast każdego 429 lub 613 w ciasnej pętli.",
+    "source": "https://developers.facebook.com/docs/graph-api/overview/rate-limiting/",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-conversions-api-event-id-dedupe",
+    "title": "Meta Pixel i Conversions API: jak uniknąć podwójnego zakupu",
+    "symptom": "Jedno zdarzenie Purchase jest wysyłane przez Pixel i API serwerowe, ale platforma liczy je niezależnie.",
+    "cause": "Do deduplikacji potrzeba zgodnej nazwy zdarzenia i identyfikatora event_id dla tej samej konwersji.",
+    "inspect": [
+      "W narzędziu Events Manager porównaj event_name i event_id dla jednego testowego zamówienia.",
+      "Sprawdź, czy event_id powstaje raz dla transakcji, czy za każdym odświeżeniem strony tworzona jest nowa wartość."
+    ],
+    "fix": [
+      "Generuj stabilny identyfikator zdarzenia przypisany do pojedynczej transakcji i prześlij go zarówno w Pixel, jak i CAPI.",
+      "Przesyłaj zdarzenie tylko po faktycznym potwierdzeniu zakupu; zadbaj o idempotencję ponownych webhooków."
+    ],
+    "verify": "Test jednej transakcji nie tworzy dwóch odrębnych konwersji o innych identyfikatorach.",
+    "warning": "Nie używaj jednego stałego event_id dla wszystkich zakupów, bo połączy różne transakcje.",
+    "source": "https://developers.facebook.com/docs/marketing-api/conversions-api/deduplicate-pixel-and-server-events/",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "meta-adset-no-delivery-learning-limited",
+    "title": "Meta Ads: zestaw reklam ma Learning Limited i prawie nie wyświetla się",
+    "symptom": "Zestaw reklam wydaje mało środków i pokazuje ograniczony etap uczenia mimo poprawnej kreacji.",
+    "cause": "Przyczyną może być mała liczba zdarzeń optymalizacyjnych lub zbyt rozdrobniona struktura zestawów reklam.",
+    "inspect": [
+      "Sprawdź wybrane zdarzenie optymalizacyjne, wyniki tygodniowe i rzeczywisty rozmiar grupy docelowej.",
+      "Porównaj liczbę podobnych zestawów rywalizujących o te same konwersje i ograniczenia budżetu."
+    ],
+    "fix": [
+      "Uprość strukturę kampanii, zredukuj zbędne nakładanie się zestawów i dobierz cel do realnie mierzonego zdarzenia.",
+      "Testuj zmiany pojedynczo i oceń wyniki w dłuższym przedziale zamiast codziennie resetować uczenie."
+    ],
+    "verify": "Kampania dostarcza reklamę stabilniej i ma mierzalny wolumen konwersji odpowiadający celowi.",
+    "warning": "Nie gwarantuj wyjścia z Learning Limited samym zwiększeniem wydatków.",
+    "source": "https://www.facebook.com/business/help",
+    "category": "meta-ads"
+  },
+  {
+    "slug": "mail-mx-record-points-old-host",
+    "title": "Domena: przychodząca poczta trafia do starego dostawcy po migracji",
+    "symptom": "Po zmianie hostingu wiadomości nadal trafiają na stary serwer lub wracają z błędem doręczenia.",
+    "cause": "Publiczne rekordy MX mogą wskazywać poprzedni system pocztowy niezależnie od ustawienia domeny strony.",
+    "inspect": [
+      "Sprawdź autorytatywną strefę DNS i rekordy MX wraz z priorytetami dla właściwej domeny.",
+      "Porównaj je z dokumentacją nowego dostawcy poczty oraz sprawdź czas propagacji rekordów."
+    ],
+    "fix": [
+      "Ustaw wyłącznie właściwe MX zgodnie z instrukcją dostawcy, zachowując potrzebne rekordy SPF, DKIM i DMARC.",
+      "Nie usuwaj starych skrzynek ani nie kieruj nowych wiadomości w próżnię, zanim nie wykonasz testów migracji."
+    ],
+    "verify": "Nowa skrzynka odbiera wiadomości z dwóch niezależnych domen, a odpowiedzi wracają prawidłowo.",
+    "warning": "Nie myl rekordów MX z rekordami A dla strony internetowej; obsługują różne usługi.",
+    "source": "https://www.cloudflare.com/learning/dns/dns-records/dns-mx-record/",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "mail-spf-permerror-multiple-records",
+    "title": "SPF PermError: domena ma dwa rekordy v=spf1",
+    "symptom": "Część odbiorców odrzuca wiadomości, mimo że DNS pozornie zawiera poprawne wpisy SPF.",
+    "cause": "Publikacja więcej niż jednego rekordu SPF dla tej samej nazwy domeny powoduje błąd polityki.",
+    "inspect": [
+      "Wykonaj zapytanie TXT dla domeny i policz osobne wartości zaczynające się od v=spf1.",
+      "Sprawdź wymagane mechanizmy include dla wszystkich usług rzeczywiście wysyłających wiadomości."
+    ],
+    "fix": [
+      "Scal do jednego poprawnego rekordu SPF z wymaganymi include i świadomą polityką końcową.",
+      "Przetestuj składnię i liczbę odwołań DNS oraz sprawdź wynik SPF w nagłówku testowej wiadomości."
+    ],
+    "verify": "Odbiorca raportuje SPF pass dla dozwolonego nadawcy i nie zgłasza PermError.",
+    "warning": "Nie dodawaj osobnego rekordu SPF dla każdego kolejnego dostawcy.",
+    "source": "https://www.rfc-editor.org/rfc/rfc7208",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "mail-dkim-signature-fail",
+    "title": "DKIM fail po zmianie systemu wysyłki wiadomości",
+    "symptom": "Wiadomości wychodzą, ale odbiorca w Authentication-Results pokazuje dkim=fail.",
+    "cause": "Podpis może być weryfikowany innym kluczem niż opublikowany w DNS albo treść została zmieniona po podpisaniu.",
+    "inspect": [
+      "Sprawdź domenę d= i selector s= z nagłówka DKIM-Signature testowej wiadomości.",
+      "Porównaj rekord DNS selektora z kluczem skonfigurowanym u dostawcy wysyłki."
+    ],
+    "fix": [
+      "Opublikuj dokładny rekord DKIM wskazany przez aktywnego dostawcę i przetestuj po propagacji.",
+      "Wyłącz zbędne modyfikacje treści po podpisie lub skonfiguruj podpisywanie w ostatnim etapie transportu."
+    ],
+    "verify": "Nowy email pokazuje dkim=pass i podpisuje go oczekiwana domena.",
+    "warning": "Nie kopiuj cudzego klucza prywatnego DKIM do rekordu publicznego DNS.",
+    "source": "https://www.rfc-editor.org/rfc/rfc6376",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "mail-dmarc-alignment-fail",
+    "title": "DMARC fail mimo SPF pass i DKIM pass",
+    "symptom": "Nagłówki pokazują zaliczone SPF/DKIM, ale DMARC nadal nie przechodzi.",
+    "cause": "DMARC wymaga zgodności domeny w From z domeną używaną przez SPF lub DKIM; same wyniki pass nie wystarczają.",
+    "inspect": [
+      "Sprawdź adres From, domenę Return-Path oraz podpis d= dla DKIM.",
+      "Przeczytaj rekord _dmarc domeny i ustawienia adkim/aspf, odróżniając zgodność relaxed od strict."
+    ],
+    "fix": [
+      "Skonfiguruj dostawcę tak, by przynajmniej jeden mechanizm uwierzytelnienia był zgodny z domeną From.",
+      "Monitoruj raporty DMARC przed zaostrzeniem polityki, aby nie zablokować legalnych nadawców."
+    ],
+    "verify": "Testowa wiadomość pokazuje dmarc=pass i zgodność z rzeczywistą domeną nadawczą.",
+    "warning": "Nie ustawiaj od razu p=reject, jeśli nie masz pełnej listy systemów wysyłających pocztę.",
+    "source": "https://www.rfc-editor.org/rfc/rfc7489",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "mail-icloud-custom-domain-missing-address",
+    "title": "iCloud Mail: własna domena jest podłączona, ale adres nie odbiera",
+    "symptom": "Domena widnieje w ustawieniach iCloud+, ale listy na nowy adres odbijają się lub nie przychodzą.",
+    "cause": "Podpięcie domeny i utworzenie konkretnego adresu pocztowego to osobne kroki konfiguracji.",
+    "inspect": [
+      "Sprawdź, czy wybrany adres istnieje pod właściwym Apple ID lub grupą rodzinną.",
+      "Porównaj wymagane rekordy DNS iCloud z publiczną strefą domeny i rzeczywistą skrzynką odbiorczą."
+    ],
+    "fix": [
+      "Utwórz wymagany adres w konfiguracji niestandardowej domeny i pozwól na propagację wskazanych rekordów.",
+      "Przetestuj odbiór oraz wysyłkę ze skrzynki Apple Mail, a potem z niezależnego nadawcy."
+    ],
+    "verify": "Poczta nowego adresu dociera do zamierzonej skrzynki i można z niej wysłać odpowiedź.",
+    "warning": "Nie zakładaj, że własna domena w iCloud automatycznie tworzy dowolną liczbę loginów i haseł.",
+    "source": "https://support.apple.com/guide/icloud/what-is-a-custom-email-domain-mma473945269/icloud",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "mail-icloud-hide-my-email-forwarding",
+    "title": "iCloud Hide My Email: ukryty adres nie przekazuje wiadomości",
+    "symptom": "Alias istnieje w ustawieniach, lecz wiadomość nie dociera na skrzynkę główną.",
+    "cause": "Alias Hide My Email ma własną konfigurację przekazywania, niezależną od adresu z własnej domeny.",
+    "inspect": [
+      "Sprawdź status konkretnego aliasu oraz docelowy adres przekazywania w ustawieniach iCloud.",
+      "Wyślij test z niezależnej skrzynki i zweryfikuj spam i filtry poczty."
+    ],
+    "fix": [
+      "Popraw przypisanie odbiorcy przekierowania i upewnij się, że alias nie został dezaktywowany.",
+      "Dla ważnej korespondencji rozważ bezpośredni adres własnej domeny, jeśli nie wymaga zachowania anonimowości."
+    ],
+    "verify": "Testowy email jest przekazywany do właściwej skrzynki bez ręcznego logowania na alias.",
+    "warning": "Nie traktuj Hide My Email jak zwykłego konta IMAP z osobnym hasłem.",
+    "source": "https://support.apple.com/guide/icloud/what-is-hide-my-email-mm9d9012c9e8/icloud",
+    "category": "domeny-poczta"
+  },
+  {
+    "slug": "api-cors-preflight-options-fails",
+    "title": "CORS: preflight OPTIONS kończy się 403 przed wysłaniem POST",
+    "symptom": "Formularz z przeglądarki nie wysyła POST, bo najpierw żądanie OPTIONS jest blokowane.",
+    "cause": "CORS wymaga poprawnej odpowiedzi preflight dla origin, metody i nagłówków użytych w żądaniu.",
+    "inspect": [
+      "W DevTools odszukaj OPTIONS i jego status, a nie tylko komunikat z konsoli JavaScript.",
+      "Sprawdź Access-Control-Allow-Origin, -Methods oraz -Headers w odpowiedzi serwera dla konkretnego origin."
+    ],
+    "fix": [
+      "Dodaj obsługę OPTIONS na endpointzie oraz ograniczoną allowlist dozwolonych domen i nagłówków.",
+      "Jeśli endpoint wymaga cookie, skonfiguruj credentials i origin jawnie, bez wildcard przy credentialed requests."
+    ],
+    "verify": "Przeglądarka wysyła POST po udanym preflight, a nieuprawniona domena nadal nie ma zgody CORS.",
+    "warning": "Nie próbuj naprawiać serwera przez mode: no-cors — ukryje odpowiedź przed aplikacją.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-webhook-signature-invalid",
+    "title": "Webhook: podpis HMAC nie pasuje, mimo że sekret jest poprawny",
+    "symptom": "Endpoint odrzuca prawdziwe webhooki z invalid signature, a testowy JSON w konsoli działa.",
+    "cause": "Podpis jest liczony z surowego body, które może różnić się od JSON ponownie zserializowanego przez parser.",
+    "inspect": [
+      "Sprawdź dokładne bajty wejściowe żądania i dokumentację podpisu konkretnego dostawcy.",
+      "Zweryfikuj nagłówek podpisu, timestamp oraz czy system nie modyfikuje treści przed weryfikacją."
+    ],
+    "fix": [
+      "Weryfikuj HMAC na surowym body przed JSON.parse, porównując podpisy w stałym czasie.",
+      "Dodaj ochronę przed replay przez ograniczenie wieku timestamp i idempotentny identyfikator zdarzenia."
+    ],
+    "verify": "Prawdziwe zdarzenie z poprawnym podpisem jest akceptowane, a zmienione body i stary timestamp są odrzucane.",
+    "warning": "Nie wyłączaj podpisu webhooka na produkcji tylko po to, by przepuścić zdarzenia.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/sign",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-415-unsupported-media",
+    "title": "HTTP 415 Unsupported Media Type przy wysyłaniu formularza",
+    "symptom": "Serwer odrzuca poprawne dane formularza statusem 415 zanim przejdzie do walidacji treści.",
+    "cause": "Endpoint oczekuje innego Content-Type niż deklarowany przez klienta, np. JSON vs multipart/form-data.",
+    "inspect": [
+      "Sprawdź nagłówek Content-Type oraz faktyczny format payloadu w Network.",
+      "Porównaj typ deklarowany przez API z parserem użytym po stronie serwera."
+    ],
+    "fix": [
+      "Dla JSON ustaw application/json i wyślij rzeczywisty JSON.stringify obiektu.",
+      "Dla FormData nie ustawiaj ręcznie boundary; pozwól przeglądarce utworzyć poprawny nagłówek multipart."
+    ],
+    "verify": "Serwer prawidłowo parsuje oba przewidziane formaty albo jasno odrzuca nieobsługiwany typ.",
+    "warning": "Nie ustawiaj Content-Type: application/json dla surowego obiektu FormData.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/415",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-429-retry-after",
+    "title": "HTTP 429 Too Many Requests — jak bezpiecznie ponawiać zapytania",
+    "symptom": "Integracja otrzymuje 429 i zaczyna wykonywać coraz więcej ponowień, zamiast odzyskać działanie.",
+    "cause": "Serwer limituje ruch, a agresywny retry wszystkich klientów zwiększa przeciążenie.",
+    "inspect": [
+      "Sprawdź nagłówek Retry-After, ograniczenia planu i liczbę równoległych requestów.",
+      "Oceń, które operacje można cacheować, a które wymagają kolejki i idempotencji."
+    ],
+    "fix": [
+      "Wprowadź exponential backoff z losowym jitter oraz ograniczoną liczbą ponowień.",
+      "Dla kosztownych operacji zmniejsz częstotliwość zapytań i zbieraj dane grupowo, gdy API na to pozwala."
+    ],
+    "verify": "Po ustaniu limitu requesty wracają do normalnego stanu bez lawiny duplikatów.",
+    "warning": "Nie ponawiaj POST tworzących rekord bez idempotency key lub mechanizmu wykrywania duplikatów.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-http-422-validation-error",
+    "title": "HTTP 422 Unprocessable Content przy poprawnym JSON",
+    "symptom": "POST jest składniowo prawidłowy, lecz endpoint zwraca 422 i nie tworzy rekordu.",
+    "cause": "Serwer rozumie format żądania, ale wartości danych nie spełniają reguł walidacji biznesowej.",
+    "inspect": [
+      "Sprawdź body odpowiedzi walidacyjnej i wskaż konkretne pole oraz warunek odrzucenia.",
+      "Porównaj schemat klienta i serwera, zwłaszcza enum, daty, wymagane pola i typy liczb."
+    ],
+    "fix": [
+      "Popraw mapowanie pól i waliduj dane przed wysłaniem bez osłabiania reguł serwera.",
+      "Pokaż błąd użytkownikowi przy odpowiednim polu i zachowaj wprowadzone dane do poprawienia."
+    ],
+    "verify": "Poprawne dane tworzą rekord, a nieprawidłowe dostają zrozumiałe 422 bez częściowego zapisu.",
+    "warning": "Nie zamieniaj każdego 422 w ogólny komunikat „brak połączenia”.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422",
+    "category": "formularze-api"
+  },
+  {
+    "slug": "api-fetch-abort-timeout",
+    "title": "fetch: AbortError po przekroczeniu czasu zewnętrznego API",
+    "symptom": "Żądanie kończy się AbortError lub TimeoutError, choć endpoint po chwili odpowiada.",
+    "cause": "Przerwanie przez AbortController i rzeczywista awaria sieci to odmienne sytuacje wymagające innej reakcji.",
+    "inspect": [
+      "Sprawdź skonfigurowany timeout i czas odpowiedzi API w logach obu stron.",
+      "Zweryfikuj, czy kontroler anulowania nie jest współdzielony między niezależnymi żądaniami."
+    ],
+    "fix": [
+      "Dostosuj limit czasu do charakteru operacji i obsłuż oddzielnie timeout oraz błąd HTTP.",
+      "Dla długich operacji zastosuj kolejkę i odpytywanie statusu, zamiast trzymać otwarte żądanie użytkownika."
+    ],
+    "verify": "Przekroczenie limitu zwraca przyjazny komunikat, a krótkie operacje wykonują się bez wyścigów.",
+    "warning": "Nie interpretuj anulowanego żądania jako dowodu, że operacja po stronie serwera nie została wykonana.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal/timeout_static",
+    "category": "formularze-api"
+  }
+]
