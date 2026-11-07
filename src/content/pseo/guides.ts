@@ -135,7 +135,41 @@ export const publishedEntries: readonly PseoEntry[] = [
       "Nie dopisuj node_modules do repozytorium i nie usuwaj package-lock.json tylko po to, by wyłączyć konflikt. Stracisz odtwarzalność instalacji."
     ],
     sources: [{ label: "npm CLI — npm ci", url: "https://docs.npmjs.com/cli/v11/commands/npm-ci" }]
-  }
+  },
+  {
+    status: "published",
+    slug: "google-search-console-nieprawidlowy-adres-mapy-witryny",
+    title: "Google Search Console: Nieprawidłowy adres mapy witryny — co sprawdzić?",
+    description: "Search Console odrzuca sitemap.xml komunikatem o nieprawidłowym adresie? Sprawdź typ usługi, ścieżkę mapy oraz dostępność XML.",
+    intro: "Komunikat „Nieprawidłowy adres mapy witryny” może pojawić się już przy próbie dodania mapy w Google Search Console. Na autentycznym zrzucie ekranu z panelu widać wpisane sitemap.xml i ostrzeżenie wymagające poprawnej ścieżki. Sam obraz potwierdza komunikat, ale nie rozstrzyga przyczyny. Zacznij od rodzaju usługi w Search Console oraz od tego, czy mapa jest publicznie dostępna pod adresem przypisanym do właściwej witryny.",
+    service: "/tworzenie-stron-internetowych",
+    serviceLabel: "Strony internetowe i SEO",
+    diagnostics: [
+      "Sprawdź dokładny adres usługi w selektorze właściwości Search Console. Usługa typu Domena obejmuje protokoły i subdomeny inaczej niż usługa z prefiksem adresu URL. Zwróć uwagę, czy pole dodawania mapy ma już wyświetlony fragment adresu bazowego.",
+      "Otwórz w nowym oknie pełny adres mapy, na przykład https://twoja-domena.pl/sitemap.xml. Sprawdź, czy przeglądarka pokazuje XML mapy, a serwer zwraca HTTP 200, nie 404, przekierowanie na ekran logowania ani stronę HTML z błędem.",
+      "Porównaj domenę i protokół mapy z faktyczną domeną witryny. Sprawdź wariant www, ewentualne przekierowania HTTP→HTTPS oraz czy witryna nie znajduje się pod innym prefiksem, niż aktualnie wybrany w Search Console."
+    ],
+    steps: [
+      "Wejdź do Google Search Console i wybierz prawidłową usługę z listy po lewej stronie. Otwórz sekcję Indeksowanie → Mapy witryn. Nie próbuj zgłaszać mapy dla innej domeny lub przypadkowej wersji witryny.",
+      "W polu dodawania mapy zobacz, czy interfejs pokazuje już część adresu. Jeśli tak, podaj pozostałą poprawną ścieżkę, na przykład sitemap.xml. Jeżeli pole oczekuje pełnego URL, wpisz rzeczywisty adres HTTPS mapy. Nie duplikuj fragmentu domeny.",
+      "Na serwerze zweryfikuj obecność pliku lub trasy /sitemap.xml. W Next.js App Router mapa może być generowana przez app/sitemap.ts; po zmianie kodu upewnij się, że produkcyjny deployment zawiera nową trasę.",
+      "Sprawdź, czy zawartość mapy jest prawidłowym XML z adresem lub adresami kanonicznymi faktycznie działających podstron. Mapa nie może wskazywać tylko nieistniejących adresów ani środowiska preview zamiast produkcyjnego.",
+      "Jeśli mapa jest dostępna, ale formularz wciąż odrzuca wartość, przełącz się na właściwą usługę, zweryfikuj jej typ i spróbuj poprawnego pełnego adresu lub ścieżki odpowiadającej polu. Rozdziel problem walidacji formularza od błędu pobierania pliku przez robota.",
+      "Po prawidłowym dodaniu mapy przejdź do tabeli przesłanych map witryn, otwórz jej szczegóły i sprawdzaj status pobrania. Osobno użyj Inspekcji URL dla jednej podstrony, aby zweryfikować jej indeksowanie."
+    ],
+    verification: [
+      "Pole formularza akceptuje prawidłową ścieżkę, mapa trafia do listy przesłanych map, a jej pełny adres można otworzyć bez logowania. To potwierdza przyjęcie zgłoszenia, nie indeksację wszystkich stron.",
+      "Po kolejnym odczycie Search Console nie powinno pokazywać błędu pobrania samej mapy. Jeśli status nadal jest błędny, sprawdź raport szczegółowy oraz odpowiedź serwera, a nie zakładaj, że problem dotyczy treści całej witryny."
+    ],
+    mistakes: [
+      "Nie myl ostrzeżenia o niepoprawnym adresie wpisanym w formularzu z późniejszym statusem „Nie udało się pobrać”. To dwa różne etapy diagnostyki.",
+      "Nie przesyłaj wielu kopii tej samej mapy z losowymi prefiksami i nie obiecuj natychmiastowej indeksacji po zaakceptowaniu pliku."
+    ],
+    sources: [
+      {label: "Google Search Console — raport Mapy witryn",url:"https://support.google.com/webmasters/answer/7451001"},
+      {label: "Google Search Central — tworzenie i przesyłanie mapy",url:"https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap"}
+    ]
+  },
 ];
 
 export const pseoGuides = [...publishedEntries, ...(autopilotEntries as unknown as PseoEntry[])].map((entry) => ({

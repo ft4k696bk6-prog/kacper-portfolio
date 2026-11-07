@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { guideScreenshots } from "../content/guideScreenshots";
 import { publishedEntries } from "../content/pseo/guides";
 import {
   allGuides,
@@ -54,4 +55,18 @@ describe("programmatic SEO catalog", () => {
     expect(related.every((guide) => guide.slug !== slug)).toBe(true);
     expect(guideCategory(getGuide(slug)!)).toBe("supabase-bazy");
   });
+  it("shows authentic cropped screenshots only on existing relevant guides", () => {
+    const names = Object.keys(guideScreenshots);
+    expect(names).toHaveLength(2);
+    for (const slug of names) {
+      expect(getGuide(slug)).toBeDefined();
+      for (const shot of guideScreenshots[slug]) {
+        expect(shot.src).toMatch(/^\/poradniki\/[a-z0-9-]+\.webp$/);
+        expect(shot.alt.length).toBeGreaterThan(50);
+        expect(shot.caption).toContain("Rzeczywisty ekran");
+        expect(shot.width).toBeGreaterThan(400);
+      }
+    }
+  });
+
 });
