@@ -18,7 +18,7 @@ export async function generateMetadata({params}: Props) {
   const {slug} = await params;
   const guide = getGuide(slug);
   if (!guide) notFound();
-  const metadata = serviceMetadata(guide.title, guide.description, `poradniki/${slug}`);
+  const metadata = serviceMetadata(guide.title, guide.description, `poradniki/${slug}`, guide.intro);
   const englishEdition = getEnglishGuide(slug);
   const polishUrl = `https://bernecki.dev/poradniki/${slug}`;
   return {
