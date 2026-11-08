@@ -3,7 +3,7 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const collaborations = [
-  { name: "Majka Szado Walter", person: null, url: "https://rzeszow-adwokat.pl/", pl: "Współpraca z kancelarią adwokacką w Rzeszowie.", en: "Collaboration with a law firm in Rzeszów." },
+  { name: "Majka Szado Walter", person: null, url: null, pl: "Współpraca z kancelarią adwokacką w Rzeszowie.", en: "Collaboration with a law firm in Rzeszów." },
   {
     name: "Jalapeno Kebab Niemce",
     person: "Arek",
