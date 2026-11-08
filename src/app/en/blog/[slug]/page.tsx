@@ -8,7 +8,7 @@ export function generateStaticParams(){return blogPosts.map(({slug})=>({slug}));
 export async function generateMetadata({params}:Props):Promise<Metadata>{
  const {slug}=await params,post=getBlogPost(slug);if(!post)notFound();
  const url=`https://bernecki.dev/en/blog/${slug}`;
- return {title:`${post.en.title} | Kacper Bernecki`,description:post.en.excerpt,
+ return {title:{absolute:`${post.en.title} | Kacper Bernecki`},description:post.en.excerpt,
   alternates:{canonical:url,languages:{"pl-PL":`https://bernecki.dev/blog/${slug}`,en:url}},
   openGraph:{title:post.en.title,description:post.en.excerpt,url,locale:"en_US",type:"article"}};
 }
