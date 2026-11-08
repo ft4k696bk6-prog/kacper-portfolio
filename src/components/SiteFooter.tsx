@@ -18,7 +18,7 @@ export function SiteFooter() {
       </div>
       <nav aria-label={english?"Services":"Oferta"} className="space-y-4 text-white">
         <p className="text-xs uppercase tracking-widest text-white/70">{english?"Services":"Oferta"}</p>
-        <Link className="block" href="/zewnetrzny-dyrektor">{english?"Fractional growth & operations director":"Zewnętrzny dyrektor marketingu i operacji"}</Link>
+        <Link className="block" href="/partner-w-rozwoju-biznesu">{english?"Growth and business operations partner":"Partner w rozwoju biznesu"}</Link>
         <Link className="block" href={english?"/en/business":"/rozwoj-biznesu"}>{english?"Business development and sourcing":"Rozwój biznesu i sourcing"}</Link>
         <Link className="block" href={english?"/en/services/websites":"/tworzenie-stron-internetowych"}>{english?"Website development":"Tworzenie stron internetowych"}</Link>
         <Link className="block" href={english?"/en/services/crm":"/crm-i-aplikacje-webowe"}>{english?"CRM and web applications":"CRM i aplikacje webowe"}</Link>
