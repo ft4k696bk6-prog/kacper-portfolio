@@ -18,7 +18,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
  if(!guide)notFound();
  const url=`https://bernecki.dev/en/guides/${slug}`;
  return {
-  title:`${guide.title} | Kacper Bernecki`,description:guide.description,
+  title:{absolute:`${guide.title} | Kacper Bernecki`},description:guide.description,
   alternates:{canonical:url,languages:{"pl-PL":`https://bernecki.dev/poradniki/${slug}`,"en":url}},
   openGraph:{title:guide.title,description:guide.description,url,type:"article",locale:"en_US",alternateLocale:["pl_PL"],siteName:"Kacper Bernecki",images:[{url:"/opengraph-image",width:1200,height:630}]},
   robots:{index:true,follow:true}
