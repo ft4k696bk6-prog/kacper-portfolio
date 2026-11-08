@@ -469,3 +469,11 @@ html.lenis,html.lenis body{height:auto}
  }
 }
 @keyframes bookSiteBreathing{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+
+/* Site captures in the detailed Isto/StarCars realizations get the same restrained
+   movement as the smaller covers, without loading an external page or iframe. */
+.site-preview-detail {isolation:isolate}
+@media(prefers-reduced-motion:no-preference) {
+ .site-preview-detail img {animation:detailSiteBreathing 13s ease-in-out infinite;transform-origin:center 26%}
+}
+@keyframes detailSiteBreathing {0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
