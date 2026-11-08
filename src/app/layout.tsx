@@ -58,10 +58,10 @@ export const metadata: Metadata = {
     alternateLocale: "en_US",
     images: [
       {
-        url: "/opengraph-image?brand=studio-20261107",
+        url: "/opengraph-image?hero=20261108-01",
         width: 1200,
         height: 630,
-        alt: "Kacper Bernecki — strony internetowe, aplikacje i marketing",
+        alt: "Kacper Bernecki na tle rzeczywistych realizacji StarCars, Isto Kebab i B-CRM",
       },
     ],
   },
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     title: "Kacper Bernecki — rozwój biznesu, AI i technologia",
     description:
       "Pomysły biznesowe, produkty, dostawcy, strony, CRM i marketing. Praktyczne wsparcie od planu po wdrożenie.",
-    images: ["/opengraph-image?brand=studio-20261107"],
+    images: ["/opengraph-image?hero=20261108-01"],
   },
   alternates: {
     canonical: siteUrl,
@@ -78,10 +78,10 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   icons: {
     icon: [
-      { url: "/favicon.svg?v=studio-20261107", type: "image/svg+xml" },
+      { url: "/favicon.svg?v=silver-20261108-01", type: "image/svg+xml" },
       { url: "/icon", type: "image/png", sizes: "512x512" },
     ],
-    shortcut: [{ url: "/favicon.svg?v=studio-20261107", type: "image/svg+xml" }],
+    shortcut: [{ url: "/favicon.svg?v=silver-20261108-01", type: "image/svg+xml" }],
     apple: [{ url: "/apple-icon", type: "image/png", sizes: "180x180" }],
   },
   robots: {

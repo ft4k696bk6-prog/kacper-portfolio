@@ -1,9 +1,9 @@
 {
   "name": "Kacper Bernecki Portfolio",
-  "short_name": "Kacper",
+  "short_name": "KB",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "/favicon.svg?v=silver-20261108-01",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
