@@ -45,7 +45,7 @@
 @media(min-width:1024px) and (prefers-reduced-motion:no-preference) {
  .tileStarCars {animation:heroDriftStar 11s ease-in-out infinite}
  .tileIsto {animation:heroDriftIsto 13s ease-in-out -4s infinite}
- .tileCrm {animation:heroDriftCrm 12s ease-in-out -6s infinite}
+ .tileCrm {animation:heroDriftStar 11s ease-in-out infinite}
  .heroTile:hover,.heroTile:focus-visible {animation-play-state:paused}
 }
 @keyframes heroDriftStar {0%,100%{translate:0 0}50%{translate:0 -5px}}
@@ -207,9 +207,9 @@
 
 /* Low-cost motion of genuine website screenshots, not embedded iframes. */
 @media(prefers-reduced-motion:no-preference) {
- .tileStarCars .tileVisual img {animation:sitePreviewZoom 12s ease-in-out infinite}
+ .tileStarCars .tileVisual img,.tileCrm .tileVisual img {animation:sitePreviewZoom 12s ease-in-out infinite}
  .tileIsto .tileVisual img {animation:sitePreviewZoom 10s ease-in-out -3s infinite}
- .tileStarCars .tileVisual:after,.tileIsto .tileVisual:after {
+ .tileStarCars .tileVisual:after,.tileIsto .tileVisual:after,.tileCrm .tileVisual:after {
   content:"";position:absolute;inset:0;width:35%;pointer-events:none;
   background:linear-gradient(105deg,transparent 10%,rgba(255,255,255,.12) 49%,transparent 85%);
   translate:-380% 0;animation:sitePreviewGlimmer 11s ease-in-out infinite;
@@ -238,52 +238,4 @@
 /* Desktop only: StarCars clears the B-CRM card. Portrait/landscape mobile preserved. */
 @media(min-width:1024px){
  .tileStarCars{top:13%}
-}
-/* Make the CRM card feel as alive as the other two, without changing its position. */
-@media(prefers-reduced-motion:no-preference){
- .tileCrm .tileVisual img{animation:sitePreviewZoomCrm 13s ease-in-out infinite}
-}
-@keyframes sitePreviewZoomCrm{0%,100%{transform:scale(1)}50%{transform:scale(1.024)}}
-@media(max-width:1023px) and (orientation:portrait) and (prefers-reduced-motion:no-preference){
- .tileCrm{animation:heroDriftCrm 10s ease-in-out -2s infinite}
-}
-
-
-/* B-CRM uses exactly the same quiet light sweep as StarCars and Isto. */
-@media(prefers-reduced-motion:no-preference){
- .tileCrm .tileVisual{position:relative;isolation:isolate}
- .tileCrm .tileVisual:after{
-  content:"";position:absolute;inset:0;width:35%;pointer-events:none;
-  background:linear-gradient(105deg,transparent 10%,rgba(255,255,255,.12) 49%,transparent 85%);
-  translate:-380% 0;animation:sitePreviewGlimmer 11s ease-in-out -6s infinite;
- }
-}
-
-
-/* iOS-friendly visible CRM sheen. The underlying preview remains the genuine screenshot. */
-@media(prefers-reduced-motion:no-preference){
- .tileCrm .tileVisual:after{
-   position:absolute;
-   z-index:3;
-   top:-8%;
-   bottom:-8%;
-   left:-70%;
-   right:auto;
-   width:70%;
-   height:auto;
-   opacity:1;
-   pointer-events:none;
-   background:linear-gradient(103deg,
-     transparent 4%,rgba(19,27,39,.15) 34%,
-     rgba(255,255,255,.92) 49%,rgba(24,31,42,.14) 65%,
-     transparent 94%);
-   translate:none;
-   transform:translate3d(0,0,0) skewX(-10deg);
-   animation:crmMobileSheen 6.2s linear infinite;
-   will-change:transform;
- }
-}
-@keyframes crmMobileSheen{
-  0%,13%{transform:translate3d(0,0,0) skewX(-10deg)}
-  59%,100%{transform:translate3d(245%,0,0) skewX(-10deg)}
 }
