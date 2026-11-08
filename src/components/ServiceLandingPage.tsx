@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { guides } from "@/content/guides";
 import Image from "next/image";
 import {
   ArrowRight,
@@ -82,6 +81,11 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
     websites: "tworzenie-stron-internetowych",
     apps: "crm-i-aplikacje-webowe",
     marketing: "marketing-i-reklamy",
+  }[kind];
+  const contactHref={
+    websites:"/kontakt?usluga=Strona%20internetowa%20lub%20sklep",
+    apps:"/kontakt?usluga=CRM%20i%20aplikacja",
+    marketing:"/kontakt?usluga=Marketing%20i%20reklamy",
   }[kind];
   const examples =
     kind === "apps"
@@ -178,7 +182,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
-              href="/#contact"
+              href={contactHref}
               className="brand-action glass-action inline-flex items-center justify-center gap-2 rounded-md  px-6 py-3 text-black transition hover:-translate-y-0.5"
             >
               Porozmawiajmy o projekcie <ArrowRight className="h-4 w-4" />
@@ -310,14 +314,6 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           ))}
         </div>
       </section>
-      <section className="mx-auto max-w-6xl px-5 py-12 md:px-8">
-        <h2 className="text-3xl">Przygotuj się do rozmowy</h2>
-        {guides.filter(g => g.service === `/${slug}`).map(g => <Link key={g.slug} href={`/poradniki/${g.slug}`} className="surface-card mt-6 block rounded-xl border border-white/30 p-6">
-          <h3 className="text-xl text-white">{g.title} →</h3><p className="mt-3 leading-7 text-white/70">{g.description}</p>
-        </Link>)}
-        {kind === "marketing" && <div className="mt-6 flex flex-wrap gap-3 text-sm"><Link href="/poradniki/ile-kosztuje-lead-z-facebook-ads" className="underline underline-offset-4">Koszt leada i CPL →</Link><Link href="/poradniki/facebook-lead-ads-integracja-z-crm" className="underline underline-offset-4">Leady Meta i CRM →</Link><Link href="/poradniki/reklamy-oze-magazyny-energii" className="underline underline-offset-4">Marketing OZE →</Link></div>}
-        <p className="mt-6 leading-7 text-white/70">{kind === "marketing" ? "Budżet reklamowy i koszt obsługi ustalamy osobno. Przed startem uzgadniamy ofertę, kanały, materiały i sposób oceny zapytań." : "Do rozmowy przygotuj cel projektu, najważniejsze funkcje, dostępne materiały i oczekiwany termin. Zakres i wycenę ustalamy przed rozpoczęciem prac."}</p>
-      </section>
       <section className="mx-auto max-w-4xl px-5 py-16 md:px-8 md:py-24">
         <p className="text-sm uppercase tracking-[0.18em] text-white">
           Najczęstsze pytania
@@ -332,11 +328,22 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
         </div>
         <div className="mt-10 text-center">
           <Link
-            href="/#contact"
+            href={contactHref}
             className="brand-action glass-action inline-flex items-center gap-2 rounded-md  px-6 py-3 text-black transition hover:-translate-y-0.5"
           >
             Opisz, czego potrzebujesz <ArrowRight className="h-4 w-4" />
           </Link>
+        </div>
+      </section>
+      <section className="mx-auto max-w-6xl px-5 pb-20 pt-6 md:px-8">
+        <div className="rounded-xl border border-white/15 bg-white/[0.025] p-6">
+          <p className="text-xs uppercase tracking-[.16em] text-white/55">Dodatkowe materiały</p>
+          <h2 className="mt-3 text-xl font-semibold">Poradniki są osobno od oferty</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-white/65">Jeśli chcesz rozwiązać problem samodzielnie, zobacz instrukcje. Jeśli szukasz wykonawcy, skorzystaj z formularza.</p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link href="/poradniki" className="inline-flex items-center gap-2 rounded-lg border border-white/25 px-4 py-3 text-sm text-white">Przejdź do poradników <ArrowRight size={15}/></Link>
+            <Link href={contactHref} className="brand-action inline-flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-black">Zapytaj o wycenę <ArrowRight size={15}/></Link>
+          </div>
         </div>
       </section>
     </main>

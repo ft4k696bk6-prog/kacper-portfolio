@@ -202,7 +202,7 @@
 
   /* Requested portrait-only composition: the upper cards stay behind the person. */
   .tileStarCars {left:-2%;top:15%;width:45%;z-index:2}
-  .tileIsto {left:auto;right:-2%;top:9%;width:35%;z-index:2}
+  .tileIsto {left:auto;right:-2%;top:22%;width:35%;z-index:2}
 }
 
 /* Low-cost motion of genuine website screenshots, not embedded iframes. */
@@ -225,3 +225,11 @@
  /* B-CRM intentionally remains stationary in portrait view. */
  .heroTile:focus-visible {animation-play-state:paused}
 }
+
+
+/* Screenshots stay real; gentle tint unifies their brightness with portrait and backdrop. */
+.tileStarCars .tileVisual img{filter:brightness(.87) saturate(.9)}
+.tileIsto .tileVisual img{filter:brightness(.76) saturate(.85)}
+.tileCrm .tileVisual img{filter:brightness(.68) saturate(.8)}
+.heroTile:focus-visible .tileVisual img{filter:brightness(.9) saturate(.95)}
+@media(max-width:767px){.contact{gap:32px}.contactCopy{margin-bottom:28px}}

@@ -42,7 +42,7 @@ type BookingState = {
   message: string;
 };
 
-type LocalAction = "projects" | "bcrm" | "book" | "contact";
+type LocalAction = "projects" | "services" | "bcrm" | "book" | "contact";
 type MascotMood = "idle" | "curious" | "joking" | "listening" | "thinking";
 
 type MascotBehaviorState = {
@@ -110,6 +110,9 @@ function detectLocalAction(question: string): LocalAction | null {
     return "book";
   }
 
+  if (wantsNavigation && /\b(service|services|uslug|ofert)\b/.test(value)) {
+    return "services";
+  }
   if (wantsNavigation && /\b(projects|projekty|realizacje)\b/.test(value)) {
     return "projects";
   }
@@ -175,11 +178,11 @@ export function AIMascotAssistant() {
     ? "bottom-[14.5rem] right-4 md:bottom-4"
     : "bottom-4 right-4";
   const companionPanelPositionClass = isCompactViewport
-    ? "bottom-[calc(100%+0.8rem)] right-0 w-[min(26rem,calc(100vw-1.5rem))]"
-    : "bottom-[calc(100%+0.9rem)] right-0 w-[28rem]";
+    ? "bottom-[calc(100%+0.7rem)] right-0 w-[min(21.5rem,calc(100vw-1.25rem))]"
+    : "bottom-[calc(100%+0.9rem)] right-0 w-[24rem]";
   const companionPanelSizeClass = isCompactViewport
-    ? "h-[min(22rem,calc(100dvh-8rem))]"
-    : "h-[min(34rem,calc(100dvh-7rem))]";
+    ? "h-[min(36rem,calc(100dvh-8.5rem))]"
+    : "h-[min(36rem,calc(100dvh-7rem))]";
   useEffect(() => {
     setMounted(true);
     const hiddenUntil = Number(localStorage.getItem(HIDDEN_UNTIL_KEY) || 0);
@@ -260,7 +263,7 @@ export function AIMascotAssistant() {
     window.setTimeout(() => inputRef.current?.focus(), 80);
   }
 
-  function scrollToStaticSection(hash: "#projects" | "#contact") {
+  function scrollToStaticSection(hash: "#projects" | "#services" | "#contact") {
     setOpen(false);
 
     if (pathname !== "/") {
@@ -391,13 +394,19 @@ export function AIMascotAssistant() {
     void sendMessage();
   }
 
-  function handleQuickAction(action: "projects" | "bcrm" | "book" | "contact" | "code") {
+  function handleQuickAction(action: "projects" | "services" | "bcrm" | "book" | "contact" | "code") {
     setError("");
     setBehavior((current) => ({ ...current, mood: "joking" }));
 
     if (action === "projects") {
       setMessages((current) => [...current, createMessage("assistant", t.aiMascot.actionReplies.projects)]);
       scrollToStaticSection("#projects");
+      return;
+    }
+
+    if (action === "services") {
+      setMessages((current) => [...current, createMessage("assistant", lang==="pl"?"Pokazuję zakres usług. Możesz opisać mi też własny pomysł.":"Here are the available services. You can also describe your project.")]);
+      scrollToStaticSection("#services");
       return;
     }
 
@@ -547,12 +556,10 @@ export function AIMascotAssistant() {
   const quickActions = useMemo(
     () => [
       { key: "projects" as const, label: t.aiMascot.quickActions.projects },
-      { key: "bcrm" as const, label: t.aiMascot.quickActions.bcrm },
+      { key: "services" as const, label: lang==="pl"?"Dostępne usługi":"Services" },
       { key: "book" as const, label: t.aiMascot.quickActions.book },
-      { key: "contact" as const, label: t.aiMascot.quickActions.contact },
-      { key: "code" as const, label: t.aiMascot.quickActions.code },
     ],
-    [t.aiMascot.quickActions],
+    [t.aiMascot.quickActions,lang],
   );
 
   if (!mounted || cookieBannerVisible) return null;
@@ -712,7 +719,7 @@ export function AIMascotAssistant() {
                             }}
                             placeholder={dictationSupported ? t.aiMascot.placeholderDictation : t.aiMascot.placeholder}
                             rows={1}
-                            maxLength={1400}
+                            maxLength={250}
                             className="max-h-28 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-6 text-white outline-none placeholder:text-white/70"
                           />
                           {dictationSupported ? (

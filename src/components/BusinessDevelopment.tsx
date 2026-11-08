@@ -95,7 +95,7 @@ export function BusinessDevelopment(){
           <p className="text-xs font-medium uppercase tracking-[.2em] text-white/55">{c.eyebrow}</p>
           <h1 className="mt-6 max-w-4xl text-4xl font-medium leading-[1.06] tracking-[-.05em] md:text-6xl lg:text-[66px]">{c.title}</h1>
           <p className="mt-7 max-w-2xl text-base leading-8 text-white/70 md:text-lg">{c.intro}</p>
-          <div className="mt-9 flex flex-wrap gap-3"><Link href="/#contact" className="brand-action inline-flex items-center gap-2 rounded-lg px-5 py-3 font-medium text-black">{c.cta}<ArrowUpRight size={17}/></Link>
+          <div className="mt-9 flex flex-wrap gap-3"><Link href="/kontakt?usluga=Rozw%C3%B3j%20biznesu" className="brand-action inline-flex items-center gap-2 rounded-lg px-5 py-3 font-medium text-black">{c.cta}<ArrowUpRight size={17}/></Link>
             <Link href="/#projects" className="inline-flex items-center gap-2 rounded-lg border border-white/25 px-5 py-3 text-white hover:border-white/60">{c.other}<ArrowRight size={17}/></Link></div>
         </div>
         <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 bg-[#151515]">
@@ -134,7 +134,7 @@ export function BusinessDevelopment(){
     </div></section>
     <section className="border-t border-white/10 px-5 pb-24 pt-20 md:px-8"><div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 md:flex-row md:items-center">
       <div><h2 className="text-3xl font-medium tracking-tight md:text-5xl">{c.finalTitle}</h2><p className="mt-4 max-w-2xl leading-7 text-white/70">{c.finalText}</p></div>
-      <Link href="/#contact" className="brand-action inline-flex shrink-0 items-center gap-2 rounded-lg px-6 py-4 text-black">{c.cta}<ArrowUpRight size={18}/></Link>
+      <Link href="/kontakt?usluga=Rozw%C3%B3j%20biznesu" className="brand-action inline-flex shrink-0 items-center gap-2 rounded-lg px-6 py-4 text-black">{c.cta}<ArrowUpRight size={18}/></Link>
     </div></section>
   </main>;
 }

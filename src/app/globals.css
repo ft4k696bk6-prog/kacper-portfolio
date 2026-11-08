@@ -477,3 +477,25 @@ html.lenis,html.lenis body{height:auto}
  .site-preview-detail img {animation:detailSiteBreathing 13s ease-in-out infinite;transform-origin:center 26%}
 }
 @keyframes detailSiteBreathing {0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+
+
+/* Click-to-expand services: offer and education live in separate sections. */
+.offer-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:30px}
+.offer-card{min-width:0;border:1px solid #ffffff24;border-radius:15px;background:linear-gradient(145deg,#ffffff09,#ffffff02);transition:border-color .2s,background .2s}
+.offer-card:hover,.offer-card[open]{border-color:#ffffff66;background:#ffffff0c}
+.offer-card-summary{display:flex;align-items:center;gap:14px;min-height:116px;padding:22px;cursor:pointer;list-style:none}
+.offer-card-summary::-webkit-details-marker{display:none}
+.offer-card-icon{display:grid;place-items:center;flex-shrink:0;width:43px;height:43px;border:1px solid #ffffff30;border-radius:11px;color:#eee}
+.offer-card-title{min-width:0;flex:1;font-size:clamp(17px,2vw,22px);font-weight:550;letter-spacing:-.025em;line-height:1.3}
+.offer-card-toggle{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;color:#bbbbbb}
+.offer-card-toggle small{font-size:11px}
+.offer-card[open] .offer-card-toggle svg{transform:rotate(180deg)}
+.offer-card-body{padding:0 22px 22px 79px}
+.offer-card-body p{max-width:65ch;color:#bcbcbc;font-size:14px;line-height:1.75}
+.offer-card-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.offer-card-more,.offer-card-contact{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 14px;border-radius:8px;font-size:13px;font-weight:600;min-height:43px}
+.offer-card-more{background:#e1e1e1;color:#080808}
+.offer-card-contact{border:1px solid #ffffff50;color:white}
+.offer-card-more:hover{background:#fff}
+.offer-card-contact:hover{border-color:#fff}
+@media(max-width:767px){.offer-card-grid{grid-template-columns:1fr;gap:10px}.offer-card-summary{min-height:78px;padding:16px}.offer-card-icon{width:38px;height:38px}.offer-card-title{font-size:18px}.offer-card-body{padding:0 16px 18px 68px}.offer-card-toggle small{font-size:10px}}

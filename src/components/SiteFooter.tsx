@@ -22,6 +22,7 @@ export function SiteFooter() {
         <Link className="block" href={english?"/en/services/websites":"/tworzenie-stron-internetowych"}>{english?"Website development":"Tworzenie stron internetowych"}</Link>
         <Link className="block" href={english?"/en/services/crm":"/crm-i-aplikacje-webowe"}>{english?"CRM and web applications":"CRM i aplikacje webowe"}</Link>
         <Link className="block" href={english?"/en/services/marketing":"/marketing-i-reklamy"}>{english?"Marketing, advertising and social media":"Marketing, reklamy i social media"}</Link>
+        <Link className="block" href="/wdrozenia-ai-dla-firm">{english?"AI and process automation":"AI i automatyzacje dla firm"}</Link>
       </nav>
       <nav aria-label={english?"Before we talk":"Poznaj współpracę"} className="space-y-4 text-white">
         <p className="text-xs uppercase tracking-widest text-white/70">{english?"Before we talk":"Przed rozmową"}</p>
@@ -30,7 +31,7 @@ export function SiteFooter() {
         <Link className="block" href={english?"/en/guides":"/poradniki"}>{english?"Practical troubleshooting guides":"Poradniki dla przedsiębiorców"}</Link>
         <Link className="block" href={english?"/en/blog":"/blog"}>{english?"Articles and insights":"Blog i artykuły"}</Link>
         <Link className="block" href="/#faq">{english?"Questions about collaboration":"Pytania o współpracę"}</Link>
-        <Link className="block" href="/#contact">{english?"Book a conversation":"Umów rozmowę"}</Link>
+        <Link className="block" href="/kontakt">{english?"Contact and booking":"Kontakt i wycena"}</Link>
       </nav>
     </div>
   </footer>;
