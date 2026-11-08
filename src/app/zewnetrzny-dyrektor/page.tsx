@@ -10,8 +10,8 @@ export const metadata:Metadata={
  openGraph:{title:"Zewnętrzny dyrektor marketingu, sprzedaży i operacji",description:"Jedna osoba do diagnozy problemów i koordynowania działań marketingowych, sprzedażowych i operacyjnych.",url,type:"website"}
 };
 const packages=[
- {id:"audyt",name:"Audyt i plan działania",price:"3 900 zł",period:"jednorazowo, od",summary:"Na początek: gdzie firma traci szanse i co poprawić najpierw.",points:["Przegląd pozyskiwania zapytań, strony, reklam i obsługi kontaktów","Mapa wąskich gardeł i kosztów w procesie sprzedaży","Lista priorytetów z planem na najbliższe 30 dni"],hint:"Wdrożenie zmian jest wyceniane oddzielnie."},
- {id:"partner",name:"Partner ds. wzrostu",price:"7 900 zł",period:"miesięcznie, od",summary:"Stała opieka nad marketingiem i procesem pozyskiwania klientów.",points:["Regularna analiza wyników, kosztów i jakości leadów","Kierunek dla reklam, strony, SEO i komunikacji","Koordynacja wybranych zmian z zespołem i wykonawcami"],hint:"Zakres operacyjny i liczba kanałów są ustalane indywidualnie."},
+ {id:"audyt",name:"Audyt i plan działania",price:"3 900 zł",period:"jednorazowo",summary:"Na początek: gdzie firma traci szanse i co poprawić najpierw.",points:["Przegląd pozyskiwania zapytań, strony, reklam i obsługi kontaktów","Mapa wąskich gardeł i kosztów w procesie sprzedaży","Lista priorytetów z planem na najbliższe 30 dni"],hint:"Wdrożenie zmian jest wyceniane oddzielnie."},
+ {id:"partner",name:"Partner ds. wzrostu",price:"7 900 zł",period:"miesięcznie",summary:"Stała opieka nad marketingiem i procesem pozyskiwania klientów.",points:["Regularna analiza wyników, kosztów i jakości leadów","Kierunek dla reklam, strony, SEO i komunikacji","Koordynacja wybranych zmian z zespołem i wykonawcami"],hint:"Zakres operacyjny i liczba kanałów są ustalane indywidualnie."},
  {id:"dyrektor",name:"Dyrektor na wynajęcie",price:"12 900 zł",period:"miesięcznie, od",summary:"Szersze wsparcie właściciela: marketing, sprzedaż i operacje.",points:["Przegląd lejka sprzedaży, CRM, raportów i odpowiedzialności w zespole","Ustalenie KPI, priorytetów i rytmu kontroli wyników","Nadzór nad wdrożeniami, automatyzacjami i wykonawcami"],hint:"Nie oznacza przejęcia formalnej funkcji członka zarządu ani odpowiedzialności pracodawcy."},
 ] as const;
 const areas=[
@@ -61,7 +61,7 @@ export default function FractionalDirectorPage(){
     <h2 className="mt-3 text-3xl font-semibold md:text-4xl">Wiesz, od jakiego budżetu zaczynamy.</h2>
     <p className="mt-5 max-w-3xl leading-7 text-white/70">Ceny orientacyjne netto. Ostateczna wycena zależy od liczby marek, ludzi, kanałów, dostępu do danych i czasu potrzebnego na nadzór. Budżety reklamowe, narzędzia i duże wdrożenia są rozliczane osobno.</p>
     <div className="mt-9 grid gap-4 lg:grid-cols-3">{packages.map((p,i)=><article key={p.id} className={`flex flex-col rounded-2xl border p-6 ${i===2?"border-white/40 bg-white/[.065]":"border-white/15 bg-white/[.025]"}`}>
-     <p className="text-sm font-semibold text-white/80">{p.name}</p><div className="mt-6"><p className="text-3xl font-semibold tracking-tight">{p.price}</p><p className="mt-1 text-xs text-white/60">{p.period} · netto</p></div>
+     <p className="text-sm font-semibold text-white/80">{p.name}</p><div className="mt-6"><p className="text-3xl font-semibold tracking-tight">od {p.price}</p><p className="mt-1 text-xs text-white/60">{p.period} · netto</p></div>
      <p className="mt-5 min-h-20 text-sm leading-7 text-white/75">{p.summary}</p>
      <ul className="mt-5 flex-1 space-y-4 border-t border-white/10 pt-6">{p.points.map(point=><li key={point} className="flex items-start gap-3 text-sm leading-6 text-white/80"><Check className="mt-1 h-4 w-4 shrink-0"/>{point}</li>)}</ul>
      <p className="mt-6 text-xs leading-5 text-white/50">{p.hint}</p>
