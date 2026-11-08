@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import Script from "next/script";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { GoogleTagManager } from "@/components/GoogleTagManager";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
@@ -43,10 +45,23 @@ export function AnalyticsConsent() {
 
 
   const analyticsEnabled = loaded && consent === "accepted";
+  useEffect(() => {
+    const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-9T1ZPCK96T";
+    (window as unknown as Record<string, boolean>)[`ga-disable-${measurementId}`] = !analyticsEnabled;
+  }, [analyticsEnabled]);
 
   return (
     <>
-      {analyticsEnabled ? <GoogleTagManager /> : null}
+      {analyticsEnabled ? (
+        <>
+          <Suspense fallback={null}><GoogleAnalytics /></Suspense>
+          <GoogleTagManager />
+          <Script id="vercel-analytics-bootstrap" strategy="afterInteractive">
+            {`window.va = window.va || function(){(window.vaq = window.vaq || []).push(arguments);};`}
+          </Script>
+          <Script src="/_vercel/insights/script.js" strategy="afterInteractive" />
+        </>
+      ) : null}
 
       {loaded && consent === null ? (
         <div className="fixed bottom-4 left-4 right-4 z-[70] mx-auto max-w-2xl rounded-md border border-white/35 bg-[var(--brand-black)]/95 p-4 text-sm text-white shadow-[0_22px_70px_rgba(0,0,0,0.42)] backdrop-blur-xl md:left-5 md:right-auto md:mx-0 md:max-w-md">
