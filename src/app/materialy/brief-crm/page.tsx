@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PrintChecklistButton } from "@/components/PrintChecklistButton";
+import { BriefPrintStyles } from "@/components/BriefPrintStyles";
 
 const url = "https://bernecki.dev/materialy/brief-crm";
 export const metadata: Metadata = {
@@ -17,7 +18,8 @@ const sections = [
   { title: "Bezpieczeństwo i wdrożenie", items: ["Kto jest administratorem danych, kto ma je przetwarzać i jak długo?", "Jakie są wymagania dotyczące uprawnień, kopii zapasowych i audytu zmian?", "Co jest konieczne w pierwszej wersji, a co można dobudować po pilotażu?"] },
 ];
 export default function CrmBrief() {
- return <main className="site-page min-h-screen bg-[var(--brand-black)] px-5 pb-24 pt-32 text-white md:px-8 md:pt-40">
+ return <main className="printable-brief site-page min-h-screen bg-[var(--brand-black)] px-5 pb-24 pt-32 text-white md:px-8 md:pt-40">
+    <BriefPrintStyles />
   <div className="mx-auto max-w-4xl">
    <Link href="/crm-dla-firm-handlowych" className="print:hidden text-sm text-white/65 underline">← Oferta CRM</Link>
    <p className="mt-9 text-xs uppercase tracking-[.2em] text-white/55">Bezpłatny materiał · bez rejestracji</p>
