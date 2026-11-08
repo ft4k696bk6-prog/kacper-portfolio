@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import "./globals.css";
-import "./design-system.css";
+import "../globals.css";
+import "../design-system.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LanguageMetadataSync } from "@/components/LanguageMetadataSync";
@@ -16,11 +16,11 @@ const siteUrl = "https://bernecki.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Rozwój biznesu, AI, strony, CRM i marketing | Kacper Bernecki",
+    default: "Business Growth, AI, Websites, CRM & Marketing | Kacper Bernecki",
     template: "%s | Kacper Bernecki",
   },
   description:
-    "Rozwój biznesu, wdrożenia AI, produkty, dostawcy, strony, CRM i marketing. Od pomysłu do działającego przedsięwzięcia z Kacprem Berneckim.",
+    "Business growth, websites, CRM, AI and marketing. Practical technical and business solutions by Kacper Bernecki.",
   keywords: [
     "Kacper Bernecki",
     "rozwój biznesu",
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: "Kacper Bernecki Portfolio",
     type: "website",
-    locale: "pl_PL",
-    alternateLocale: "en_US",
+    locale: "en_US",
+    alternateLocale: "pl_PL",
     images: [
       {
         url: "/opengraph-image?hero=20261108-01",
@@ -70,9 +70,7 @@ export const metadata: Metadata = {
       "Pomysły biznesowe, produkty, dostawcy, strony, CRM i marketing. Praktyczne wsparcie od planu po wdrożenie.",
     images: ["/opengraph-image?hero=20261108-01"],
   },
-  alternates: {
-    canonical: siteUrl,
-  },
+
   manifest: "/site.webmanifest",
   icons: {
     icon: [
@@ -106,7 +104,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pl" className={`scroll-smooth font-sans ${geist.variable}`}>
+    <html lang="en" className={`scroll-smooth font-sans ${geist.variable}`}>
       <body>
         <LanguageProvider>
           <AnalyticsConsent />
