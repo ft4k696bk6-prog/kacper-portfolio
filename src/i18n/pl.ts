@@ -376,11 +376,11 @@ export const pl: Translations = {
         ],
         technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Cal.com API", "Turnstile", "Vercel"],
         status: "Active development",
-        demoUrl: "https://kacper-portfolio.vercel.app",
+        demoUrl: "https://bernecki.dev",
         repoUrl: "https://github.com/ft4k696bk6-prog/kacper-portfolio",
         caseStudyUrl: "/case-studies/portfolio",
         image: {
-          src: "/images/projects/portfolio-home.jpg",
+          src: "https://s0.wp.com/mshots/v1/https%3A%2F%2Fbernecki.dev?vpw=1440&vph=1100&w=1200&requeue=true",
           alt: "Preview strony portfolio",
         },
       },

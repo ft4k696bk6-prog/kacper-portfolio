@@ -15,7 +15,9 @@ const content={
       {title:"Pomysł, strategia i start",text:"Analiza oferty, klienta, modelu działania, kosztów i kolejności decyzji. Pomoc organizacyjna przy przygotowaniu działalności.",Icon:ClipboardList},
       {title:"Produkt, dostawcy i import",text:"Poszukiwanie producentów, porównanie ofert, próbki, kalkulacja dostawy i koordynacja zaopatrzenia. Kwestie celne i zgodność produktu wymagają odrębnej weryfikacji.",Icon:Boxes},
       {title:"Strona, sklep i systemy",text:"Witryny, sklepy, CRM, automatyzacja i integracje dopasowane do tego, jak naprawdę działa Twój biznes.",Icon:MonitorSmartphone},
-      {title:"Marketing i sprzedaż",text:"Oferta, kampanie, pozyskiwanie zapytań, pomiar konwersji i poprawa procesów sprzedaży w oparciu o wyniki.",Icon:ChartNoAxesCombined}
+      {title:"Marketing i sprzedaż",text:"Oferta, kampanie, pozyskiwanie zapytań, pomiar konwersji i poprawa procesów sprzedaży w oparciu o wyniki.",Icon:ChartNoAxesCombined},
+      {title:"AI i automatyzacja procesów",text:"Asystenci AI, analiza firmowych danych, chatboty na bazie wiedzy, integracje API i pilotaże przed większym wdrożeniem.",Icon:MonitorSmartphone},
+      {title:"Koszty, podatki i model biznesowy",text:"Porównanie scenariuszy, struktury kosztów i edukacyjne wyjaśnienie VAT czy form działalności. Indywidualne porady podatkowe należą do uprawnionych specjalistów.",Icon:ClipboardList}
     ],
     processTitle:"Nie sprzedaję jednej recepty każdej firmie.",
     process:[
@@ -42,7 +44,9 @@ const content={
       {title:"Idea, strategy and setup",text:"Review the offer, customer, business model, costs and decision order. Practical organizational support for getting started.",Icon:ClipboardList},
       {title:"Product, suppliers and imports",text:"Research suppliers, compare quotes, organize samples, estimate landed costs and coordinate sourcing. Customs and product compliance require separate verification.",Icon:Boxes},
       {title:"Websites, shops and systems",text:"Websites, shops, CRM systems, automation and integrations fitted to how the business actually works.",Icon:MonitorSmartphone},
-      {title:"Marketing and sales",text:"Offers, campaigns, lead generation, conversion analytics and better sales processes measured against results.",Icon:ChartNoAxesCombined}
+      {title:"Marketing and sales",text:"Offers, campaigns, lead generation, conversion analytics and better sales processes measured against results.",Icon:ChartNoAxesCombined},
+      {title:"AI and process automation",text:"AI assistants, document search, data analysis, controlled pilots and API integrations for everyday business work.",Icon:MonitorSmartphone},
+      {title:"Costs, tax education and planning",text:"Compare costs, business models and general VAT scenarios without replacing regulated professional tax advice.",Icon:ClipboardList}
     ],
     processTitle:"No single formula fits every business.",
     process:[
@@ -107,6 +111,7 @@ export function BusinessDevelopment(){
         <card.Icon size={24} className="text-[#d6d6d6]"/><h3 className="mt-5 text-2xl">{card.title}</h3><p className="mt-4 max-w-xl leading-7 text-white/70">{card.text}</p>
       </div>)}</div>
     </div></section>
+    <section className="border-t border-white/10 px-5 py-16 md:px-8"><div className="mx-auto max-w-7xl rounded-2xl border border-white/15 bg-white/[.025] p-7 md:p-10"><h2 className="text-2xl font-medium md:text-3xl">{lang==="pl"?"Automatyzacje i AI w praktyce":"Practical AI and automation"}</h2><p className="mt-4 max-w-3xl leading-8 text-white/70">{lang==="pl"?"Chcesz analizować marże, uporządkować obsługę klientów lub zautomatyzować przepływ zamówień? Najpierw sprawdzamy dane i proces, a dopiero potem dobieramy narzędzie AI.":"Want to analyse margins, improve support or automate order handling? Start with the data and process, then select an AI tool where it brings value."}</p><Link href="/wdrozenia-ai-dla-firm" className="mt-6 inline-flex items-center gap-2 font-medium underline underline-offset-4">{lang==="pl"?"Poznaj ofertę wdrożeń AI":"Explore AI implementations"} <ArrowRight size={17}/></Link></div></section>
     <section className="border-t border-white/10 px-5 py-20 md:px-8"><div className="mx-auto max-w-7xl">
       <h2 className="max-w-3xl text-3xl font-medium tracking-tight md:text-5xl">{c.processTitle}</h2>
       <div className="mt-10 grid gap-8 md:grid-cols-3">{c.process.map(([n,title,text])=><div key={n} className="border-t border-white/20 pt-6"><span className="text-sm text-[#d6d6d6]">{n}</span><h3 className="mt-5 text-xl">{title}</h3><p className="mt-3 leading-7 text-white/70">{text}</p></div>)}</div>

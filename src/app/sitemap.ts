@@ -20,6 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return [
+    { url: siteUrl + "/wdrozenia-ai-dla-firm", changeFrequency: "monthly", priority: 0.9 },
     { url: siteUrl + "/crm-dla-firm-handlowych", changeFrequency: "monthly", priority: 0.9 },
     { url: siteUrl + "/automatyzacja-leadow-i-sprzedazy", changeFrequency: "monthly", priority: 0.9 },
     {url:siteUrl+"/blog",lastModified:new Date(BLOG_PUBLISHED_DATE),alternates:{languages:{"pl-PL":siteUrl+"/blog",en:siteUrl+"/en/blog"}}},

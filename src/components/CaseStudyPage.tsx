@@ -96,6 +96,7 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
               >
                 <Image
                   src={image.src}
+                  unoptimized={image.src.startsWith("https://")}
                   alt={image.alt}
                   width={1600}
                   height={900}

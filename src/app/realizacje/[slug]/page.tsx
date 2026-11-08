@@ -11,4 +11,4 @@ export default async function Page({params}:{params:Promise<{slug:string}>}){con
     <figcaption className="p-4 text-xs text-white/65">Isto Kebab — strona internetowa i menu.</figcaption>
   </figure>}
   {slug === "isto-kebab-strona" && <a href="https://isto.bernecki.dev" target="_blank" rel="noopener noreferrer" className="mt-6 inline-block rounded-lg border border-white/25 px-5 py-3 text-sm">Otwórz działającą stronę ↗</a>}
-  {item.details.map(p=><p key={p} className="mt-8 leading-8 text-white/75">{p}</p>)}<Link href="/#contact" className="brand-action mt-10 inline-block rounded-lg px-5 py-3">Porozmawiajmy o Twojej firmie</Link></main>}
+  {item.details.map(p=><p key={p} className="mt-8 leading-8 text-white/75">{p}</p>)}{slug === "b-code" && <Link href="/wdrozenia-ai-dla-firm" className="mt-8 inline-flex items-center rounded-lg border border-white/20 px-5 py-3 text-white hover:border-white/50">Zobacz ofertę wdrożeń AI dla firm →</Link>}<Link href="/#contact" className="brand-action mt-10 inline-block rounded-lg px-5 py-3">Porozmawiajmy o Twojej firmie</Link></main>}
