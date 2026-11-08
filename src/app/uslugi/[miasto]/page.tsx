@@ -102,7 +102,7 @@ export default async function CityServicesPage({ params }: PageProps) {
         "@id": url + "#breadcrumbs",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Strona główna", item: base },
-          { "@type": "ListItem", position: 2, name: "Usługi dla firm", item: base + "/rozwoj-biznesu" },
+          { "@type": "ListItem", position: 2, name: "Usługi dla firm", item: base + "/uslugi" },
           { "@type": "ListItem", position: 3, name: city.name, item: url },
         ],
       },
@@ -114,7 +114,7 @@ export default async function CityServicesPage({ params }: PageProps) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
       <section className="mx-auto max-w-6xl px-5 pb-14 pt-28 md:px-8 md:pt-36">
         <nav aria-label="Ścieżka nawigacji" className="mb-10 text-sm text-white/60">
-          <Link href="/" className="hover:text-white">Start</Link> / <span>Usługi</span> / <span>{city.name}</span>
+          <Link href="/" className="hover:text-white">Start</Link> / <Link href="/uslugi" className="hover:text-white">Usługi</Link> / <span>{city.name}</span>
         </nav>
         <p className="mb-5 text-sm font-semibold uppercase tracking-[0.18em] text-white/60">Współpraca zdalna · Cała Polska</p>
         <h1 className="max-w-5xl text-4xl font-semibold tracking-tight md:text-6xl">
