@@ -63,7 +63,9 @@ export default async function Page({ params }: CaseStudyRouteProps) {
   const study = pl.caseStudies.items.find((item) => item.slug === slug)!;
   const workSchema = {
     "@context": "https://schema.org",
-    "@type": "CreativeWork",
+    "@type": "Article",
+    headline: study.title,
+    mainEntityOfPage: `https://bernecki.dev/case-studies/${slug}`,
     "@id": `https://bernecki.dev/case-studies/${slug}#project`,
     name: study.title,
     description: study.summary,
