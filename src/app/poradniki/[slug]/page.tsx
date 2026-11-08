@@ -4,6 +4,7 @@ import {guideScreenshots} from "@/content/guideScreenshots";
 import { Fragment } from "react";
 import { notFound } from "next/navigation";
 import { allGuides, getGuide, guideCategory, getCategory, getRelatedGuides, getGuideCounts } from "@/lib/guide-directory";
+import { aiGuides } from "@/content/aiGuides";
 import { serviceMetadata } from "@/lib/seo";
 import { getEnglishGuide } from "@/lib/guide-i18n";
 import { VatComparison } from "@/components/VatComparison";
@@ -12,7 +13,7 @@ import {blogPostsForGuideCategory} from "@/content/blog";
 type Props = { params: Promise<{ slug: string }> };
 export const dynamicParams = true;
 export const revalidate = 86400;
-export function generateStaticParams() { return allGuides.slice(0, 100).map(({slug}) => ({slug})); }
+export function generateStaticParams() { return [...allGuides.slice(0, 100), ...aiGuides].map(({slug}) => ({slug})); }
 export async function generateMetadata({params}: Props) {
   const {slug} = await params;
   const guide = getGuide(slug);

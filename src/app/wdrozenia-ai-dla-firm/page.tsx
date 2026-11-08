@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Bot, BrainCircuit, ChartNoAxesCombined, Check, FileText, ShieldCheck, Workflow } from "lucide-react";
+import { ArrowRight, Bot, BrainCircuit, ChartNoAxesCombined, FileText, ShieldCheck, Workflow } from "lucide-react";
 import { BookingCalendar } from "@/components/BookingCalendar";
 import { ContactReveal } from "@/components/ContactReveal";
 import { pl } from "@/i18n/pl";

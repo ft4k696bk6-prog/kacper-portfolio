@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Kacper Bernecki" }],
   creator: "Kacper Bernecki",
   openGraph: {
-    title: "Kacper Bernecki — rozwój biznesu, technologia i marketing",
+    title: "Kacper Bernecki — rozwój biznesu, AI i technologia",
     description:
       "Pomysły biznesowe, produkty, dostawcy, strony, CRM i marketing. Praktyczne wsparcie od planu po wdrożenie.",
     url: siteUrl,
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kacper Bernecki — rozwój biznesu, technologia i marketing",
+    title: "Kacper Bernecki — rozwój biznesu, AI i technologia",
     description:
       "Pomysły biznesowe, produkty, dostawcy, strony, CRM i marketing. Praktyczne wsparcie od planu po wdrożenie.",
     images: ["/opengraph-image?brand=studio-20261107"],

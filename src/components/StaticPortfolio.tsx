@@ -11,9 +11,9 @@ const jsonLd = {
       "@type": "WebSite",
       "@id": "https://bernecki.dev/#website",
       url: "https://bernecki.dev/",
-      name: "Kacper Bernecki — rozwój biznesu, technologia i marketing",
+      name: "Kacper Bernecki — rozwój biznesu, AI i technologia",
       description:
-        "Rozwój biznesu, sourcing produktów, strony internetowe, aplikacje CRM i marketing realizowane bezpośrednio z Kacprem Berneckim.",
+        "Rozwój biznesu, sourcing produktów, integracje AI, strony internetowe, aplikacje CRM i marketing realizowane bezpośrednio z Kacprem Berneckim.",
       inLanguage: ["pl-PL", "en-US"],
       publisher: { "@id": "https://bernecki.dev/#person" },
     },
@@ -24,7 +24,7 @@ const jsonLd = {
       url: "https://bernecki.dev/",
       jobTitle: "Business and Web App Developer",
       description:
-        "Polish entrepreneur supporting practical business development, sourcing, websites, CRM systems and marketing.",
+        "Polish entrepreneur supporting practical business development, AI integrations, sourcing, websites, CRM systems and marketing.",
       address: { "@type": "PostalAddress", addressCountry: "PL" },
       sameAs: [
         "https://github.com/ft4k696bk6-prog",
