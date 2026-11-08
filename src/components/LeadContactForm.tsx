@@ -33,10 +33,10 @@ async function getBotProof():Promise<Proof>{
  throw Error("challenge_failed");
 }
 
-export function LeadContactForm({initialService="",english=false}:{initialService?:string;english?:boolean}){
+export function LeadContactForm({initialService="",initialMessage="",english=false}:{initialService?:string;initialMessage?:string;english?:boolean}){
  const [name,setName]=useState(""),[email,setEmail]=useState(""),[company,setCompany]=useState("");
  const [service,setService]=useState(options.some(([v])=>v===initialService)?initialService:"");
- const [message,setMessage]=useState(""),[website,setWebsite]=useState("");
+ const [message,setMessage]=useState(initialMessage),[website,setWebsite]=useState("");
  const [readPolicy,setReadPolicy]=useState(false);
  const [status,setStatus]=useState<Status>("idle"),[feedback,setFeedback]=useState("");
  const mountedAt=useRef(Date.now());
