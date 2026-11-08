@@ -50,7 +50,7 @@ export function Projects(){
  const {t,lang}=useLanguage();const [active,setActive]=useState("");const [filter,setFilter]=useState("Wszystko");
  const categories:Record<string,string>=lang==="pl"?{}:{"Wszystko":"All","Strony":"Websites","CRM i aplikacje":"CRM & apps","Marketing":"Marketing","Autorskie i eksperymenty":"Personal & experimental"};
  const items=[
- ...t.projects.items.map(p=>({title:p.title,description:previewDescriptions[p.caseStudyUrl]?.[lang]??p.description,image:p.caseStudyUrl==="/case-studies/starcars"?"/images/projects/starcars-live-current.jpg":p.caseStudyUrl==="/case-studies/portfolio"?"/portfolio-hero-preview":p.image.src,href:p.caseStudyUrl,category:/CRM|BeatMarket/.test(p.title)?"CRM i aplikacje":/Berni|Unreal|Portfolio/.test(p.title)?"Autorskie i eksperymenty":"Strony",demo:p.demoUrl})),
+ ...t.projects.items.map(p=>({title:p.title,description:previewDescriptions[p.caseStudyUrl]?.[lang]??p.description,image:p.caseStudyUrl==="/case-studies/starcars"?"/images/projects/starcars-live-current.jpg":p.caseStudyUrl==="/case-studies/portfolio"?"/images/projects/portfolio-current-20261108.jpg":p.image.src,href:p.caseStudyUrl,category:/CRM|BeatMarket/.test(p.title)?"CRM i aplikacje":/Berni|Unreal|Portfolio/.test(p.title)?"Autorskie i eksperymenty":"Strony",demo:p.demoUrl})),
  ...realizations.map(p=>{
    const cover=realizationCovers[p.slug];
    const preview=realizationPreviews[p.slug]?.[lang];

@@ -553,7 +553,7 @@ export const enCaseStudies: CaseStudiesContent = {
       repoUrl: "https://github.com/ft4k696bk6-prog/kacper-portfolio",
       images: [
         {
-          src: "/portfolio-hero-preview",
+          src: "/images/projects/portfolio-current-20261108.jpg",
           alt: "Portfolio homepage preview",
         },
       ],
@@ -1105,7 +1105,7 @@ export const plCaseStudies: CaseStudiesContent = {
       repoUrl: "https://github.com/ft4k696bk6-prog/kacper-portfolio",
       images: [
         {
-          src: "/portfolio-hero-preview",
+          src: "/images/projects/portfolio-current-20261108.jpg",
           alt: "Preview strony portfolio",
         },
       ],
