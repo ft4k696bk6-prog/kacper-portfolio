@@ -14,6 +14,7 @@ const offers = [
   ["Marketing i reklamy", "/marketing-i-reklamy"],
   ["AI i automatyzacje", "/wdrozenia-ai-dla-firm"],
   ["Rozwój biznesu", "/rozwoj-biznesu"],
+  ["Partner w rozwoju biznesu", "/partner-w-rozwoju-biznesu"],
 ] as const;
 
 const servicesSchema = {

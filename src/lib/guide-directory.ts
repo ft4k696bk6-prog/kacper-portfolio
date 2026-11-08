@@ -4,12 +4,17 @@ import { offlineGuides } from "../content/pseo/offline-guides";
 import { offlineBatchTwoGuides } from "../content/pseo/offline-batch2-guides";
 import { businessGuides } from "../content/businessGuides";
 import { aiGuides } from "../content/aiGuides";
+import { businessGrowthGuidesOne } from "../content/businessGrowthGuidesOne";
+import { businessGrowthGuidesTwo } from "../content/businessGrowthGuidesTwo";
+import { businessGrowthGuidesThree } from "../content/businessGrowthGuidesThree";
+import { businessGrowthGuidesFour } from "../content/businessGrowthGuidesFour";
 
 /** Jeden katalog: zachowuje wszystkie poradniki tworzone równolegle w guides.ts. */
-export const allGuides = [...existingGuides, ...pseoGuides, ...offlineGuides, ...offlineBatchTwoGuides, ...businessGuides, ...aiGuides];
+export const allGuides = [...existingGuides, ...pseoGuides, ...offlineGuides, ...offlineBatchTwoGuides, ...businessGuides, ...aiGuides, ...businessGrowthGuidesOne, ...businessGrowthGuidesTwo, ...businessGrowthGuidesThree, ...businessGrowthGuidesFour];
 export type Guide = (typeof allGuides)[number];
 
 export const guideCategories = [
+  { slug: "rozwoj-firmy", label: "Rozwój firmy, sprzedaż i marketing", description: "Praktyczne pytania właścicieli firm: klienci, marże, SEO, reklamy, CRM, automatyzacje i procesy." },
   { slug: "ai-w-firmie", label: "AI w firmie", description: "Promptowanie, API, chatboty, automatyzacja i bezpieczeństwo wdrożeń AI." },
   { slug: "meta-ads", label: "Meta Ads i reklamy", description: "Błędy Menedżera reklam, formularze Lead Ads, piksel i pomiar konwersji." },
   { slug: "vercel-hosting", label: "Vercel i hosting", description: "Wdrożenia, statusy projektów, konfiguracja hostingu i domen." },
