@@ -33,6 +33,16 @@ describe("portfolio mobile review", () => {
     expect(css).toContain("@media(hover:none)");
   });
 
+  it("keeps every mobile tile outside the face and reduces CRM coverage", () => {
+    const css = get("../components/HomeStudio.module.css");
+    expect(css).toContain(" .tileStarCars {left:0;top:11%;width:43%");
+    expect(css).toContain(" .tileIsto {left:1%;right:auto;top:43%");
+    expect(css).toContain(" .tileCrm {left:0;bottom:1%;width:53%");
+    expect(css).toContain(".portrait { background:transparent;position:absolute;z-index:5");
+    expect(css).toContain(".tileIsto {z-index:2;right:0;top:29%;width:28%");
+    expect(css).toContain(".tileCrm {z-index:6;left:-1%;bottom:1%;width:47%");
+  });
+
   it("allows the mobile menu to scroll and close with Escape", () => {
     const navigation = get("../components/LanguageSwitcher.tsx");
     expect(navigation).toContain("max-h-[calc(100dvh-5rem)] overflow-y-auto");
