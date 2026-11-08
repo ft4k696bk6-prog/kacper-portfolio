@@ -258,3 +258,32 @@
   translate:-380% 0;animation:sitePreviewGlimmer 11s ease-in-out -6s infinite;
  }
 }
+
+
+/* iOS-friendly visible CRM sheen. The underlying preview remains the genuine screenshot. */
+@media(prefers-reduced-motion:no-preference){
+ .tileCrm .tileVisual:after{
+   position:absolute;
+   z-index:3;
+   top:-8%;
+   bottom:-8%;
+   left:-70%;
+   right:auto;
+   width:70%;
+   height:auto;
+   opacity:1;
+   pointer-events:none;
+   background:linear-gradient(103deg,
+     transparent 4%,rgba(19,27,39,.15) 34%,
+     rgba(255,255,255,.92) 49%,rgba(24,31,42,.14) 65%,
+     transparent 94%);
+   translate:none;
+   transform:translate3d(0,0,0) skewX(-10deg);
+   animation:crmMobileSheen 6.2s linear infinite;
+   will-change:transform;
+ }
+}
+@keyframes crmMobileSheen{
+  0%,13%{transform:translate3d(0,0,0) skewX(-10deg)}
+  59%,100%{transform:translate3d(245%,0,0) skewX(-10deg)}
+}
