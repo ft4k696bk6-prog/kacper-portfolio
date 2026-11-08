@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { guideCategories } from "@/lib/guide-directory";
+import { seoTitle } from "@/lib/seo";
 import { englishCategory, englishCategoryCounts, listEnglishGuides } from "@/lib/guide-i18n";
 type Props={params:Promise<{category:string}>;searchParams:Promise<{page?:string}>};
 export const dynamicParams=true;
@@ -15,7 +16,7 @@ export async function generateMetadata({params,searchParams}:Props):Promise<Meta
  const {total,page}=listEnglishGuides({category,page:parsePage(query.page)});
  if(!total)notFound();
  const url=`https://bernecki.dev/en/guides/topics/${category}${page>1?`?page=${page}`:""}`;
- return {title:{absolute:`${entry.label} — troubleshooting and solutions | Kacper Bernecki`},description:entry.description,
+ return {title:{absolute:seoTitle(`${entry.label} — troubleshooting and solutions`)},description:entry.description,
   alternates:{canonical:url,...(page===1?{languages:{en:url,"pl-PL":`https://bernecki.dev/poradniki/tematy/${category}`}}:{})},
   openGraph:{url,title:entry.label,description:entry.description,type:"website",locale:"en_US"},
   robots:{index:true,follow:true}};
