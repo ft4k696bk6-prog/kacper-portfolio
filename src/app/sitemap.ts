@@ -21,6 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return [
+    { url: siteUrl + "/zewnetrzny-dyrektor", changeFrequency: "monthly", priority: 0.95 },
     { url: siteUrl + "/kontakt", changeFrequency: "monthly", priority: 0.85 },
     { url: siteUrl + "/materialy/brief-strony", changeFrequency: "monthly", priority: 0.8 },
     { url: siteUrl + "/materialy/brief-crm", changeFrequency: "monthly", priority: 0.8 },

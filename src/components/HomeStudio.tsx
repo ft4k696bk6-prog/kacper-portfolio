@@ -6,6 +6,7 @@ import { ArrowUpRight, ArrowRight, Github, Linkedin, BookOpen, BrainCircuit, New
 import { useLanguage } from "@/contexts/LanguageContext";
 import { homepageCopy } from "@/content/homepage-copy";
 import { ClientMarquee } from "./ClientMarquee";
+import { FractionalLeadershipTeaser } from "./FractionalLeadershipTeaser";
 import { Projects } from "./Projects";
 import { ContactReveal } from "./ContactReveal";
 import { LeadContactForm } from "./LeadContactForm";
@@ -53,6 +54,7 @@ export function HomeStudio() {
     </section>
     <ClientMarquee/>
     <Projects/>
+    <FractionalLeadershipTeaser english={lang === "en"}/>
     <section id="services" className={styles.section}>
       <p className={styles.eyebrow}>{lang === "pl" ? "Oferta" : "Services"}</p><h2>{c.services}</h2>
       <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65">{lang === "pl" ? "Wybierz temat, rozwiń szczegóły i sprawdź, w czym mogę pomóc. Jeśli nie wiesz, czego potrzebujesz, napisz — ustalimy to wspólnie." : "Choose a topic, expand details and explore how I can help. Not sure yet? Describe your project."}</p>

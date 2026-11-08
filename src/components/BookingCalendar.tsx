@@ -45,9 +45,10 @@ type BookingCalendarProps = {
   copy: BookingCopy;
   locale: "pl-PL" | "en-US";
   emptyMessage?: string;
+  topic?: string;
 };
 
-export function BookingCalendar({ copy, locale, emptyMessage }: BookingCalendarProps) {
+export function BookingCalendar({ copy, locale, emptyMessage, topic }: BookingCalendarProps) {
   const [days, setDays] = useState<AvailableBookingDay[]>([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
@@ -354,6 +355,7 @@ export function BookingCalendar({ copy, locale, emptyMessage }: BookingCalendarP
             {copy.bookingMessageLabel}
             <textarea
               name="bookingMessage"
+              defaultValue={topic ? `Chcę omówić współpracę: ${topic}.` : ""}
               rows={3}
               className="resize-none rounded-md border border-white/10 bg-black/35 px-3 py-3 text-sm leading-6 text-white outline-none transition-colors focus:border-[var(--brand-accent)]"
             />
