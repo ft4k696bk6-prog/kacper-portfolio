@@ -22,6 +22,7 @@ export function SiteFooter() {
         <Link className="block" href={english?"/en/services/websites":"/tworzenie-stron-internetowych"}>{english?"Website development":"Tworzenie stron internetowych"}</Link>
         <Link className="block" href={english?"/en/services/crm":"/crm-i-aplikacje-webowe"}>{english?"CRM and web applications":"CRM i aplikacje webowe"}</Link>
         <Link className="block" href={english?"/en/services/marketing":"/marketing-i-reklamy"}>{english?"Marketing, advertising and social media":"Marketing, reklamy i social media"}</Link>
+        {!english && <Link className="block" href="/uslugi">Usługi dla firm w całej Polsce</Link>}
         <Link className="block" href="/wdrozenia-ai-dla-firm">{english?"AI and process automation":"AI i automatyzacje dla firm"}</Link>
       </nav>
       <nav aria-label={english?"Before we talk":"Poznaj współpracę"} className="space-y-4 text-white">
