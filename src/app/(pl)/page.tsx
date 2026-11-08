@@ -22,12 +22,21 @@ const structuredData = {
       ]
     },
     {
+      "@type": "Organization",
+      "@id": "https://bernecki.dev/#organization",
+      name: "bernecki.dev",
+      url: "https://bernecki.dev/",
+      description: "Strony internetowe, aplikacje CRM, marketing i automatyzacje dla firm.",
+      founder: { "@id": "https://bernecki.dev/#person" },
+      logo: "https://bernecki.dev/favicon.svg"
+    },
+    {
       "@type": "WebSite",
       "@id": "https://bernecki.dev/#website",
       url: "https://bernecki.dev/",
       name: "Kacper Bernecki – portfolio i usługi dla firm",
       inLanguage: ["pl-PL", "en-US"],
-      publisher: { "@id": "https://bernecki.dev/#person" }
+      publisher: { "@id": "https://bernecki.dev/#organization" }
     },
     {
       "@type": "WebPage",
