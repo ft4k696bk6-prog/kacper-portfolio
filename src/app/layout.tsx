@@ -79,10 +79,10 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.svg?v=silver-20261108-01", type: "image/svg+xml" },
-      { url: "/icon", type: "image/png", sizes: "512x512" },
+      { url: "/icon?v=silver-20261108-01", type: "image/png", sizes: "512x512" },
     ],
     shortcut: [{ url: "/favicon.svg?v=silver-20261108-01", type: "image/svg+xml" }],
-    apple: [{ url: "/apple-icon", type: "image/png", sizes: "180x180" }],
+    apple: [{ url: "/apple-icon?v=silver-20261108-01", type: "image/png", sizes: "180x180" }],
   },
   robots: {
     index: true,
