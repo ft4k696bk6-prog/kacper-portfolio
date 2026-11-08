@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServiceCity, serviceCities } from "@/lib/service-cities";
+import { seoTitle } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ miasto: string }> };
 const base = "https://bernecki.dev";
@@ -56,7 +57,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = `Tworzenie stron internetowych, CRM, aplikacje, reklamy i automatyzacje AI dla firm ${city.from}. Obsługa zdalna w całej Polsce, zakres i wycena ustalane indywidualnie.`;
   const url = `${base}/uslugi/${city.slug}`;
   return {
-    title,
+    title: { absolute: seoTitle(title) },
     description,
     alternates: { canonical: url },
     openGraph: { title, description, url, locale: "pl_PL", type: "website" },
