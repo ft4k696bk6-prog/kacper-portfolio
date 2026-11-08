@@ -247,3 +247,14 @@
 @media(max-width:1023px) and (orientation:portrait) and (prefers-reduced-motion:no-preference){
  .tileCrm{animation:heroDriftCrm 10s ease-in-out -2s infinite}
 }
+
+
+/* B-CRM uses exactly the same quiet light sweep as StarCars and Isto. */
+@media(prefers-reduced-motion:no-preference){
+ .tileCrm .tileVisual{position:relative;isolation:isolate}
+ .tileCrm .tileVisual:after{
+  content:"";position:absolute;inset:0;width:35%;pointer-events:none;
+  background:linear-gradient(105deg,transparent 10%,rgba(255,255,255,.12) 49%,transparent 85%);
+  translate:-380% 0;animation:sitePreviewGlimmer 11s ease-in-out -6s infinite;
+ }
+}
