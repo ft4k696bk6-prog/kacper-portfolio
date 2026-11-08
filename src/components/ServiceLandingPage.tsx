@@ -98,6 +98,7 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           },
         ]
       : [
+          ...(kind === "websites" ? [{ name: "Isto Kebab", slug: "isto-kebab", image: "isto-live-nov08.jpg" }] : []),
           { name: "Motomizer", slug: "motomizer", image: "motomizer-live.jpg" },
           { name: "StarCars", slug: "starcars", image: "starcars-live.jpg" },
         ];
@@ -314,6 +315,55 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           ))}
         </div>
       </section>
+      {kind !== "marketing" && (
+        <section className="mx-auto max-w-6xl px-5 py-16 md:px-8">
+          <h2 className="text-3xl font-semibold tracking-tight">Jak wygląda współpraca i od czego zależy koszt?</h2>
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            <div className="rounded-xl border border-white/15 p-6">
+              <h3 className="text-xl font-semibold">Trzy etapy</h3>
+              <ol className="mt-5 space-y-4 leading-7 text-white/75">
+                <li>1. Rozmowa, cele i krótki brief.</li>
+                <li>2. Uzgodniony zakres, koszt i priorytety.</li>
+                <li>3. Wykonanie, testy i przekazanie rozwiązania.</li>
+              </ol>
+            </div>
+            <div className="rounded-xl border border-white/15 p-6">
+              <h3 className="text-xl font-semibold">Co wpływa na wycenę?</h3>
+              <ul className="mt-5 list-disc space-y-2 pl-5 leading-7 text-white/75">
+                {(kind === "websites" ? [
+                  "Liczba unikalnych widoków, treści i wersji językowych.",
+                  "Integracje z formularzami, płatnościami lub kalendarzem.",
+                  "Przygotowanie zdjęć, tekstów, SEO i późniejsze utrzymanie."
+                ] : [
+                  "Liczba ról, ekranów i etapów procesu.",
+                  "Migracja danych, integracje oraz uprawnienia.",
+                  "Testy bezpieczeństwa, pilotaż i dalszy rozwój."
+                ]).map(factor=><li key={factor}>{factor}</li>)}
+              </ul>
+            </div>
+          </div>
+          <Link href={kind === "websites" ? "/materialy/brief-strony" : "/materialy/brief-crm"} className="mt-7 inline-flex rounded-lg border border-white/25 px-5 py-3 text-sm text-white hover:border-white/60">
+            {kind === "websites" ? "Otwórz checklistę przed wyceną strony" : "Otwórz checklistę przed wdrożeniem CRM"} <ArrowRight className="ml-2 h-4 w-4"/>
+          </Link>
+        </section>
+      )}
+      {kind !== "marketing" && (
+        <section className="mx-auto max-w-6xl px-5 py-14 md:px-8">
+          <h2 className="text-2xl font-semibold">Poradniki przed podjęciem decyzji</h2>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {(kind === "websites" ? [
+              ["Ile kosztuje strona internetowa?", "ile-kosztuje-strona-internetowa"],
+              ["Formularz Lead Ads czy landing page?", "formularz-meta-ads-czy-landing-page"],
+              ["Dlaczego Google nie indeksuje strony?", "google-strona-nie-jest-zaindeksowana"],
+              ["Jak poprawić ucięte zdjęcie na telefonie?", "strona-mobile-uciete-zdjecia-object-fit"],
+            ] : [
+              ["CRM dedykowany czy gotowy?", "crm-na-zamowienie-czy-gotowy"],
+              ["Jak połączyć Facebook Lead Ads z CRM?", "facebook-lead-ads-integracja-z-crm"],
+              ["AI w CRM — co realnie automatyzować?", "ai-w-crm-automatyzacja-leadow"],
+            ]).map(([label,slug])=><Link key={slug} href={`/poradniki/${slug}`} className="rounded-lg border border-white/15 p-4 text-sm text-white/80 hover:border-white/50">{label} <ArrowRight className="ml-1 inline h-4 w-4"/></Link>)}
+          </div>
+        </section>
+      )}
       <section className="mx-auto max-w-4xl px-5 py-16 md:px-8 md:py-24">
         <p className="text-sm uppercase tracking-[0.18em] text-white">
           Najczęstsze pytania
