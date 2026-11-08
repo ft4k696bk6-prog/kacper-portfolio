@@ -22,7 +22,7 @@ describe("portfolio mobile review", () => {
   it("shows three authentic project previews in the requested layered hero", () => {
     const hero = get("../components/HomeStudio.tsx");
     const css = get("../components/HomeStudio.module.css");
-    expect(hero.match(/styles\\.heroTile/g)).toHaveLength(3);
+    expect(hero.split("styles.heroTile").length - 1).toBe(3);
     expect(hero).toContain("/images/projects/starcars-live-current.jpg");
     expect(hero).toContain("/images/projects/isto-live-nov08.jpg");
     expect(hero).toContain("/images/projects/bcrm-admin-dashboard.jpg");
