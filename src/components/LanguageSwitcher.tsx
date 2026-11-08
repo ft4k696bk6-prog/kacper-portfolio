@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { CalendarDays, Cookie, Mail } from "lucide-react";
@@ -17,6 +17,18 @@ const navItems = [
 export function LanguageSwitcher() {
   const { lang, setLang, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!isOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+        menuButton.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [isOpen]);
   const pathname = usePathname();
   const router = useRouter();
   // Every static business route has a real English counterpart, not just translated menu labels.
@@ -166,6 +178,7 @@ export function LanguageSwitcher() {
             {languageButton("en", "ENG")}
           </div>
           <button
+            ref={menuButton}
             onClick={() => setIsOpen((open) => !open)}
             className="brand-outline grid h-11 w-11 place-items-center rounded-md transition-colors"
             aria-expanded={isOpen}
@@ -180,7 +193,7 @@ export function LanguageSwitcher() {
       {isOpen && (
         <motion.div
           id="mobile-portfolio-navigation"
-          className="border-t border-white/10 bg-[var(--brand-black)] px-5 py-5 xl:hidden"
+          className="max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain border-t border-white/10 bg-[var(--brand-black)] px-5 py-5 xl:hidden"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}

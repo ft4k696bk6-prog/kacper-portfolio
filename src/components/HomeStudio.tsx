@@ -24,16 +24,11 @@ export function HomeStudio() {
           <a className={styles.primary} href="#contact">{c.call}<ArrowUpRight size={18}/></a>
           <a className={styles.secondary} href="#projects">{c.projects}<ArrowUpRight size={18}/></a>
         </div>
-        <div className={styles.heroSignals} aria-label={lang === "pl" ? "Obszary współpracy" : "Areas of expertise"}>
-          <span>{lang === "pl" ? "Strategia i start" : "Strategy & launch"}</span>
-          <span>{lang === "pl" ? "Produkty i dostawcy" : "Products & suppliers"}</span>
-          <span>{lang === "pl" ? "Technologia i sprzedaż" : "Technology & sales"}</span>
-        </div>
       </div>
       <div className={styles.heroScene} aria-label={lang === "pl" ? "Wybrane projekty i zdjęcie autora" : "Selected projects and founder portrait"}>
         <div className={styles.portraitLight} aria-hidden="true" />
         <div className={styles.portrait}>
-          <Image src="/images/profile-3-cutout.png" alt={c.portrait} width={1122} height={1402} priority sizes="(min-width:1024px) 490px, 73vw"/>
+          <Image src="/images/profile-3-cutout.png" alt={c.portrait} width={1000} height={1280} priority sizes="(min-width:1024px) 420px, (min-width:768px) 42vw, 74vw"/>
         </div>
         <Link href="/case-studies/starcars" className={`${styles.heroTile} ${styles.tileStarCars}`}>
           <div className={styles.tileVisual}>
@@ -43,15 +38,9 @@ export function HomeStudio() {
         </Link>
         <Link href="/realizacje/isto-kebab-strona" className={`${styles.heroTile} ${styles.tileIsto}`}>
           <div className={styles.tileVisual}>
-            <img src="https://s0.wp.com/mshots/v1/https%3A%2F%2Ftest-test-kebab-berni.vercel.app%2F?vpw=1440&vph=940&w=1200" alt={lang === "pl" ? "Zrzut rzeczywistej strony Isto Kebab" : "Screenshot of the real Isto Kebab website"} width={1200} height={784} loading="lazy" decoding="async" />
+            <Image src="/images/projects/isto-live-nov08.jpg" alt={lang === "pl" ? "Strona Isto Kebab — rzeczywisty widok" : "Isto Kebab — actual website"} width={1440} height={940} sizes="(min-width:1024px) 240px, 44vw" />
           </div>
           <div className={styles.tileCaption}><strong>Isto Kebab</strong><ArrowUpRight size={16}/></div>
-        </Link>
-        <Link href="/case-studies/b-crm" className={`${styles.heroTile} ${styles.tileCrm}`}>
-          <div className={styles.tileVisual}>
-            <Image src="/images/projects/bcrm-admin-dashboard.jpg" alt={lang === "pl" ? "Rzeczywisty panel B-CRM" : "Real B-CRM dashboard"} width={960} height={600} sizes="(min-width:1024px) 400px, 68vw" />
-          </div>
-          <div className={styles.tileCaption}><strong>B-CRM</strong><ArrowUpRight size={16}/></div>
         </Link>
       </div>
     </section>

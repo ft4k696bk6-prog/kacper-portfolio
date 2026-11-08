@@ -1,10 +1,10 @@
 export const homepageCopy = {
   pl: {
-    signature: "Strategia · technologia · rozwój",
+    signature: "Kacper Bernecki / biznes i technologia",
     title: ["Od pomysłu do", "działającego biznesu."],
-    intro: "Pomagam uruchamiać i rozwijać firmy — od modelu działania, produktów i dostawców po strony, CRM, marketing i sprzedaż. Bezpośrednio, z planem i konkretnym wdrożeniem.",
+    intro: "Pomagam rozwijać firmy — od strategii, produktów i dostawców po strony, CRM i marketing. Ustalamy kierunek i wdrażamy go krok po kroku.",
     projects: "Zobacz realizacje",
-    call: "Porozmawiajmy o projekcie",
+    call: "Umów rozmowę",
     portrait: "Portret Kacpra Berneckiego z założonymi rękami",
     services: "Biznes to więcej niż strona internetowa.",
     offer: [
@@ -35,11 +35,11 @@ export const homepageCopy = {
     booking: "Wybierz termin rozmowy", location: "Polska / współpraca zdalna",
   },
   en: {
-    signature: "Strategy · technology · growth",
+    signature: "Kacper Bernecki / business & technology",
     title: ["From idea to", "working business."],
-    intro: "I help launch and grow businesses — from business models, products and suppliers to websites, CRM, marketing and sales. Direct collaboration, practical plans and real implementation.",
+    intro: "I help businesses grow — from strategy, products and suppliers to websites, CRM and marketing. We set the direction and put it into practice, step by step.",
     projects: "View projects",
-    call: "Discuss your project",
+    call: "Book a call",
     portrait: "Portrait of Kacper Bernecki with arms crossed",
     services: "Business is more than a website.",
     offer: [

@@ -19,6 +19,22 @@ describe("portfolio mobile review", () => {
     expect(assistant).not.toContain("h-[min(22rem,calc(100vh-19rem))]");
   });
 
+  it("uses two local website previews without the foreground CRM tile", () => {
+    const hero = get("../components/HomeStudio.tsx");
+    expect(hero.match(/styles\.heroTile/g)).toHaveLength(2);
+    expect(hero).toContain("/images/projects/isto-live-nov08.jpg");
+    expect(hero).not.toContain("mshots");
+    expect(hero).not.toContain("tileCrm");
+    expect(get("../components/HomeStudio.module.css")).toContain("prefers-reduced-motion:no-preference");
+  });
+
+  it("allows the mobile menu to scroll and close with Escape", () => {
+    const navigation = get("../components/LanguageSwitcher.tsx");
+    expect(navigation).toContain("max-h-[calc(100dvh-5rem)] overflow-y-auto");
+    expect(navigation).toContain('event.key === "Escape"');
+    expect(navigation).toContain("menuButton.current?.focus()");
+  });
+
   it("does not send a B-CRM demo prospect to a protected deployment", () => {
     const projects = get("../components/ui/interactive-image-accordion.tsx");
     expect(projects).toContain('p.href==="/case-studies/b-crm"');

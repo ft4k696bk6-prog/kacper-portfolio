@@ -65,7 +65,7 @@ const content={
 const examples=[
   {image:"/images/projects/reenergy-website-live.jpg",name:"Re-Energy System",href:"/case-studies/re-energy-meta-ads",detail:"Strona · marketing · CRM"},
   {image:"/images/projects/starcars-live-current.jpg",name:"StarCars",href:"/case-studies/starcars",detail:"Oferta · import · kalkulacja"},
-  {image:"https://s0.wp.com/mshots/v1/https%3A%2F%2Ftest-test-kebab-berni.vercel.app%2F?vpw=1440&vph=940&w=1200",name:"Isto Kebab",href:"/realizacje/isto-kebab-strona",detail:"Strona · menu · zamówienia"},
+  {image:"/images/projects/isto-live-nov08.jpg",name:"Isto Kebab",href:"/realizacje/isto-kebab-strona",detail:"Strona · menu · zamówienia"},
   {image:"/images/projects/motomizer-live.jpg",name:"Motomizer",href:"/case-studies/motomizer",detail:"Produkt · marka · e-commerce"}
 ];
 const guides=[
