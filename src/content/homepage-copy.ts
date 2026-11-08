@@ -6,7 +6,7 @@ export const homepageCopy = {
     projects: "Zobacz realizacje",
     call: "Umów rozmowę",
     portrait: "Portret Kacpra Berneckiego z założonymi rękami",
-    services: "Co mogę zrobić dla Twojej firmy?"
+    services: "Co mogę zrobić dla Twojej firmy?",
     offer: [
       ["Start i rozwój biznesu", "Pomysł, koszty i plan działania. Praktyczne wnioski z prowadzenia i rozwijania własnych firm.", "/rozwoj-biznesu"],
       ["Produkty, dostawcy i import", "Sourcing, oferty producentów, próbki, kalkulacja dostawy i koordynacja wdrożenia.", "/rozwoj-biznesu"],
@@ -42,7 +42,7 @@ export const homepageCopy = {
     projects: "View projects",
     call: "Book a call",
     portrait: "Portrait of Kacper Bernecki with arms crossed",
-    services: "How can I help your business?"
+    services: "How can I help your business?",
     offer: [
       ["Launch and grow a business", "Planning, costs and lessons from running and growing real businesses.", "/en/business"],
       ["Products, suppliers and imports", "Supplier research, quotes, samples, landed-cost estimates and sourcing coordination.", "/en/business"],
