@@ -10,7 +10,7 @@ const clients = [
   { name:"Re-energy System", detail:"OZE", url:"https://re-energysystem.pl/", logo:"/images/brands/re-energy.png" },
   { name:"StarCars", detail:"USA / Canada", url:"https://star-cars.us", logo:"/images/brands/starcars.svg" },
   { name:"Gentlemen Barber Shop", detail:"Warszawa", url:null, logo:"/images/brands/gentlemen.webp" },
-  { name:"Majka Szado Walter", detail:"Rzeszów", url:"https://rzeszow-adwokat.pl/", logo:"/images/brands/msw.svg" },
+  { name:"Majka Szado Walter", detail:"Rzeszów", url:null, logo:"/images/brands/msw.svg" },
 ];
 
 
