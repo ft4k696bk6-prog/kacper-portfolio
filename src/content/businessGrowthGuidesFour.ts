@@ -128,7 +128,7 @@ const entries: string[][] = [
     "Ustandaryzuj obieg zleceń, wyeliminuj zbędne akceptacje i połącz niektóre narzędzia. Testuj oszczędność na jednym procesie, zanim zmienisz resztę.",
     "Mierz łączną liczbę godzin pracy administracyjnej i liczbę reklamacji spowodowanych błędami.",
     "Nie obcinaj mechanizmów kontroli, które chronią przed istotnymi błędami lub nadużyciami.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "jak-uporzadkowac-procesy-w-firmie",
@@ -138,7 +138,7 @@ const entries: string[][] = [
     "Ustal odpowiedzialność, proste instrukcje i progi decyzji, które zespół może podejmować samodzielnie. Wprowadź krótkie podsumowanie najważniejszych problemów.",
     "Mierz liczbę spraw wymagających interwencji właściciela oraz średni czas ich zakończenia.",
     "Nie deleguj odpowiedzialności bez dostępu do danych, kompetencji i jasnych uprawnień.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "jak-znalezc-waskie-gardlo-w-firmie",
@@ -148,7 +148,7 @@ const entries: string[][] = [
     "Wybierz etap o największej kolejce i usuń konkretną przyczynę: brak właściciela, materiałów, uprawnienia albo integracji. Powtórz pomiar po zmianie.",
     "Mierz liczbę oczekujących zleceń i całkowity czas przejścia procesu.",
     "Nie przyspieszaj jednego etapu, jeśli tylko przeniesie większą kolejkę do następnego.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "ile-kosztuje-crm-dla-firmy",
@@ -208,7 +208,7 @@ const entries: string[][] = [
     "Ustal cel i zakres na pierwsze trzy miesiące, częstotliwość spotkań oraz zasady dodatkowych wdrożeń. Porównaj propozycje przy tych samych obowiązkach.",
     "Oceniaj całkowity koszt współpracy względem wartości uzyskanych zapytań, sprzedaży i oszczędności czasu.",
     "Nie porównuj pakietu samych postów z usługą koordynacji marketingu, sprzedaży i technologii jakby były identyczne.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "konsultant-rozwoju-biznesu-czym-sie-zajmuje",
@@ -218,7 +218,7 @@ const entries: string[][] = [
     "Rozpocznij od audytu i krótkiego planu priorytetów, a potem uzgodnij, kto wdraża zmiany. Oddziel doradztwo od stałego prowadzenia kanałów i systemów.",
     "Mierz postęp wdrożenia oraz wybrane wskaźniki biznesowe przed i po zmianie.",
     "Nie kupuj ogólnych konsultacji bez zakresu, mierników i terminu oceny rezultatów.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "audyt-marketingu-i-sprzedazy",
@@ -228,7 +228,7 @@ const entries: string[][] = [
     "Wskaż trzy największe straty w lejku i przygotuj plan naprawy z właścicielem zadania oraz terminem. Dopiero po weryfikacji efektu rozwijaj budżet.",
     "Mierz jakościowe leady, konwersję ofert i koszt pozyskania klienta po naprawie procesu.",
     "Audyt kończący się listą ogólnych rad bez oceny danych ma niewielką wartość.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "partner-w-rozwoju-biznesu-czy-agencja",
@@ -238,8 +238,8 @@ const entries: string[][] = [
     "Do obsługi pojedynczego kanału wybierz specjalistę. Do koordynacji strony, reklam, handlowców i automatyzacji rozważ współpracę o jasno określonym zakresie.",
     "Mierz jakość zapytań, liczbę rozwiązanych wąskich gardeł i koszt koordynacji.",
     "Nie zakładaj, że jedna osoba osobiście wykona każdą specjalistyczną usługę; ważna jest koordynacja kompetencji.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ]
 ];
 
-export const businessGrowthGuidesFour = entries.map(([slug,title,intro,diagnosis,action,measurement,pitfall,service]) => ({slug,title,description:intro.slice(0,155),intro,service,serviceLabel:service==="/zewnetrzny-dyrektor"?"Partner w rozwoju biznesu":service==="/crm-dla-firm-handlowych"?"CRM i procesy sprzedaży":service==="/wdrozenia-ai-dla-firm"?"AI i automatyzacje":"Automatyzacja leadów i sprzedaży",category:"rozwoj-firmy" as const,sections:[{title:"Najważniejsza diagnostyka",paragraphs:[diagnosis]},{title:"Co zrobić krok po kroku",paragraphs:[action]},{title:"Jak ocenić rezultat",paragraphs:[measurement]},{title:"Pułapka, której warto uniknąć",paragraphs:[pitfall]}]}));
+export const businessGrowthGuidesFour = entries.map(([slug,title,intro,diagnosis,action,measurement,pitfall,service]) => ({slug,title,description:intro.slice(0,155),intro,service,serviceLabel:service==="/partner-w-rozwoju-biznesu"?"Partner w rozwoju biznesu":service==="/crm-dla-firm-handlowych"?"CRM i procesy sprzedaży":service==="/wdrozenia-ai-dla-firm"?"AI i automatyzacje":"Automatyzacja leadów i sprzedaży",category:"rozwoj-firmy" as const,sections:[{title:"Najważniejsza diagnostyka",paragraphs:[diagnosis]},{title:"Co zrobić krok po kroku",paragraphs:[action]},{title:"Jak ocenić rezultat",paragraphs:[measurement]},{title:"Pułapka, której warto uniknąć",paragraphs:[pitfall]}]}));
