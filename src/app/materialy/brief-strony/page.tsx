@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PrintChecklistButton } from "@/components/PrintChecklistButton";
+import { BriefPrintStyles } from "@/components/BriefPrintStyles";
 
 const url = "https://bernecki.dev/materialy/brief-strony";
 export const metadata: Metadata = {
@@ -18,7 +19,8 @@ const sections = [
   { title: "Budżet i termin", items: ["Kiedy strona musi być gotowa i co jest absolutnym minimum?", "Czy budżet obejmuje teksty, zdjęcia, domenę, hosting i utrzymanie?", "Kto zatwierdza projekt i przekazuje materiały?"] },
 ];
 export default function WebsiteBrief() {
-  return <main className="site-page min-h-screen bg-[var(--brand-black)] px-5 pb-24 pt-32 text-white md:px-8 md:pt-40">
+  return <main className="printable-brief site-page min-h-screen bg-[var(--brand-black)] px-5 pb-24 pt-32 text-white md:px-8 md:pt-40">
+    <BriefPrintStyles />
     <div className="mx-auto max-w-4xl">
       <Link href="/tworzenie-stron-internetowych" className="print:hidden text-sm text-white/65 underline">← Tworzenie stron internetowych</Link>
       <p className="mt-9 text-xs uppercase tracking-[.2em] text-white/55">Bezpłatny materiał · bez zapisu na newsletter</p>
