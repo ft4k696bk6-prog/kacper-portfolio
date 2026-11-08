@@ -120,7 +120,7 @@ export default async function CityServicesPage({ params }: PageProps) {
         </p>
         <div className="mt-10 flex flex-wrap gap-4">
           <Link href="/kontakt" className="rounded-full bg-white px-7 py-4 font-semibold text-black hover:bg-white/85">Porozmawiaj o projekcie</Link>
-          <Link href="/realizacje" className="rounded-full border border-white/25 px-7 py-4 font-medium hover:border-white/60">Zobacz realizacje</Link>
+          <Link href="/case-studies" className="rounded-full border border-white/25 px-7 py-4 font-medium hover:border-white/60">Zobacz realizacje</Link>
         </div>
       </section>
 
