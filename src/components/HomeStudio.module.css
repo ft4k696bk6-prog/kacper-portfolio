@@ -193,3 +193,17 @@
 @media(hover:none) {
  .heroTile {animation:none!important}
 }
+
+
+/* Mobile portrait refinement: keep desktop and landscape strictly unchanged. */
+@media (max-width:767px) and (orientation:portrait) {
+  /* Put the headline slightly lower while bringing the portrait closer to the copy. */
+  .hero {padding-top:121px;gap:8px}
+  .heroCopy {padding-top:7px}
+  .hero h1 {margin-top:24px}
+  .heroScene {margin-top:-64px}
+  .portrait {top:auto;bottom:0;height:107%}
+
+  /* Move StarCars behind the upper-left shoulder, not in front of the face. */
+  .tileStarCars {left:17%;top:17%;width:42%;z-index:2}
+}
