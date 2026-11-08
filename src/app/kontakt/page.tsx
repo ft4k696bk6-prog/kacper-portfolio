@@ -26,7 +26,7 @@ export default async function ContactPage({searchParams}:{searchParams:Promise<{
    <h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-tight md:text-6xl">Porozmawiajmy o Twoim projekcie.</h1>
    <p className="mt-6 max-w-3xl text-lg leading-8 text-white/70">Strona, CRM, AI, marketing albo pomysł na biznes? Opisz, czego potrzebujesz. Sprawdzimy zakres i możliwy następny krok — bez presji na duże wdrożenie.</p>
    <div className="mt-12 grid items-start gap-8 lg:grid-cols-[1.15fr_.85fr]">
-    <LeadContactForm initialService={query.usluga||""} initialMessage={selectedPackage?\`Interesuje mnie: \${selectedPackage}. Chciałbym omówić sytuację mojej firmy i możliwy zakres współpracy. \`:""}/>
+    <LeadContactForm initialService={query.usluga||""} initialMessage={selectedPackage ? "Interesuje mnie: "+selectedPackage+". Chciałbym omówić sytuację mojej firmy i możliwy zakres współpracy. " : ""}/>
     <div className="space-y-7">
      <div id="kalendarz" className="scroll-mt-24 rounded-2xl border border-white/15 bg-white/[.025] p-6">
       {selectedPackage && <p className="mb-3 rounded-lg border border-white/20 p-3 text-sm text-white/80">Rozmowa o pakiecie: <strong>{selectedPackage}</strong></p>}
