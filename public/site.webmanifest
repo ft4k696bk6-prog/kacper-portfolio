@@ -1,21 +1,21 @@
 {
   "name": "Kacper Bernecki Portfolio",
-  "short_name": "Kacper",
+  "short_name": "KB",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "/favicon.svg?v=silver-20261108-01",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/icon",
+      "src": "/icon?v=silver-20261108-01",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/apple-icon",
+      "src": "/apple-icon?v=silver-20261108-01",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"

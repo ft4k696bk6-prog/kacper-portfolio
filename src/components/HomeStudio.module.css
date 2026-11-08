@@ -233,3 +233,17 @@
 .tileCrm .tileVisual img{filter:brightness(.68) saturate(.8)}
 .heroTile:focus-visible .tileVisual img{filter:brightness(.9) saturate(.95)}
 @media(max-width:767px){.contact{gap:32px}.contactCopy{margin-bottom:28px}}
+
+
+/* Desktop only: StarCars clears the B-CRM card. Portrait/landscape mobile preserved. */
+@media(min-width:1024px){
+ .tileStarCars{top:13%}
+}
+/* Make the CRM card feel as alive as the other two, without changing its position. */
+@media(prefers-reduced-motion:no-preference){
+ .tileCrm .tileVisual img{animation:sitePreviewZoomCrm 13s ease-in-out infinite}
+}
+@keyframes sitePreviewZoomCrm{0%,100%{transform:scale(1)}50%{transform:scale(1.024)}}
+@media(max-width:1023px) and (orientation:portrait) and (prefers-reduced-motion:no-preference){
+ .tileCrm{animation:heroDriftCrm 10s ease-in-out -2s infinite}
+}

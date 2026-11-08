@@ -31,6 +31,7 @@ export function SiteFooter() {
         <Link className="block" href={english?"/en/guides":"/poradniki"}>{english?"Practical troubleshooting guides":"Poradniki dla przedsiębiorców"}</Link>
         <Link className="block" href={english?"/en/blog":"/blog"}>{english?"Articles and insights":"Blog i artykuły"}</Link>
         <Link className="block" href="/#faq">{english?"Questions about collaboration":"Pytania o współpracę"}</Link>
+        <Link className="block" href="/polityka-prywatnosci">{english?"Privacy policy":"Polityka prywatności"}</Link>
         <Link className="block" href="/kontakt">{english?"Contact and booking":"Kontakt i wycena"}</Link>
       </nav>
     </div>

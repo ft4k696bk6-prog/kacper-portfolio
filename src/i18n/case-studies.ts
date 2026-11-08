@@ -553,7 +553,7 @@ export const enCaseStudies: CaseStudiesContent = {
       repoUrl: "https://github.com/ft4k696bk6-prog/kacper-portfolio",
       images: [
         {
-          src: "https://s0.wp.com/mshots/v1/https%3A%2F%2Fbernecki.dev?vpw=1440&vph=1100&w=1200&requeue=true",
+          src: "/portfolio-hero-preview",
           alt: "Portfolio homepage preview",
         },
       ],
@@ -1101,11 +1101,11 @@ export const plCaseStudies: CaseStudiesContent = {
       summary:
         "Portfolio jest zbudowane wokół B-CRM jako najmocniejszego dowodu technicznego i jasno komunikuje specjalizację w aplikacjach biznesowych.",
       status: "Active development",
-      liveUrl: "https://kacper-portfolio.vercel.app",
+      liveUrl: "https://bernecki.dev",
       repoUrl: "https://github.com/ft4k696bk6-prog/kacper-portfolio",
       images: [
         {
-          src: "/images/projects/portfolio-home.jpg",
+          src: "/portfolio-hero-preview",
           alt: "Preview strony portfolio",
         },
       ],
