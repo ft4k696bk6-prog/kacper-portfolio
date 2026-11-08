@@ -15,7 +15,7 @@ export function HomeStudio() {
   const { lang, t } = useLanguage();
   const c = homepageCopy[lang];
   return <main className={`${styles.studio} portfolio-content`}>
-    <section id="home" className={`${styles.hero} hero-night`} aria-labelledby="hero-title">
+    <section id="home" className={[styles.hero, "hero-night"].join(" ")} aria-labelledby="hero-title">
       <div className={styles.heroCopy}>
         <p className={styles.eyebrow}>{c.signature}</p>
         <h1 id="hero-title">{c.title.map(line => <span key={line}>{line}</span>)}</h1>
@@ -25,22 +25,28 @@ export function HomeStudio() {
           <a className={styles.secondary} href="#projects">{c.projects}<ArrowUpRight size={18}/></a>
         </div>
       </div>
-      <div className={styles.heroScene} aria-label={lang === "pl" ? "Wybrane projekty i zdjęcie autora" : "Selected projects and founder portrait"}>
+      <div className={styles.heroScene}>
         <div className={styles.portraitLight} aria-hidden="true" />
         <div className={styles.portrait}>
-          <Image src="/images/profile-3-cutout.png" alt={c.portrait} width={1000} height={1280} priority sizes="(min-width:1024px) 420px, (min-width:768px) 42vw, 74vw"/>
+          <Image src="/images/profile-3-cutout.png" alt={c.portrait} width={1000} height={1280} priority sizes="(min-width:1024px) 560px, (min-width:768px) 44vw, 75vw"/>
         </div>
-        <Link href="/case-studies/starcars" className={`${styles.heroTile} ${styles.tileStarCars}`}>
+        <Link href="/case-studies/starcars" className={[styles.heroTile, styles.tileStarCars].join(" ")} aria-label={lang === "pl" ? "Zobacz projekt StarCars" : "View StarCars project"}>
           <div className={styles.tileVisual}>
-            <Image src="/images/projects/starcars-live-current.jpg" alt={lang === "pl" ? "Rzeczywista strona StarCars" : "Real StarCars website"} width={640} height={380} sizes="(min-width:1024px) 300px, 44vw" />
+            <Image src="/images/projects/starcars-live-current.jpg" alt={lang === "pl" ? "Zrzut prawdziwej strony StarCars" : "Screenshot of the actual StarCars website"} width={640} height={400} sizes="(min-width:1024px) 330px, (min-width:768px) 23vw, 46vw" loading="eager" />
           </div>
           <div className={styles.tileCaption}><strong>StarCars</strong><ArrowUpRight size={16}/></div>
         </Link>
-        <Link href="/realizacje/isto-kebab-strona" className={`${styles.heroTile} ${styles.tileIsto}`}>
+        <Link href="/realizacje/isto-kebab-strona" className={[styles.heroTile, styles.tileIsto].join(" ")} aria-label={lang === "pl" ? "Zobacz projekt Isto Kebab" : "View Isto Kebab project"}>
           <div className={styles.tileVisual}>
-            <Image src="/images/projects/isto-live-nov08.jpg" alt={lang === "pl" ? "Strona Isto Kebab — rzeczywisty widok" : "Isto Kebab — actual website"} width={1440} height={940} sizes="(min-width:1024px) 240px, 44vw" />
+            <Image src="/images/projects/isto-live-nov08.jpg" alt={lang === "pl" ? "Zrzut prawdziwej strony Isto Kebab" : "Screenshot of the actual Isto Kebab website"} width={640} height={400} sizes="(min-width:1024px) 260px, (min-width:768px) 22vw, 36vw" loading="eager" />
           </div>
           <div className={styles.tileCaption}><strong>Isto Kebab</strong><ArrowUpRight size={16}/></div>
+        </Link>
+        <Link href="/case-studies/b-crm" className={[styles.heroTile, styles.tileCrm].join(" ")} aria-label={lang === "pl" ? "Zobacz projekt B-CRM" : "View B-CRM project"}>
+          <div className={styles.tileVisual}>
+            <Image src="/images/projects/bcrm-admin-dashboard.jpg" alt={lang === "pl" ? "Zrzut rzeczywistego panelu B-CRM" : "Screenshot of the real B-CRM dashboard"} width={640} height={400} sizes="(min-width:1024px) 450px, (min-width:768px) 36vw, 62vw" loading="eager" />
+          </div>
+          <div className={styles.tileCaption}><strong>B-CRM</strong><ArrowUpRight size={16}/></div>
         </Link>
       </div>
     </section>

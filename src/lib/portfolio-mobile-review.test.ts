@@ -19,13 +19,18 @@ describe("portfolio mobile review", () => {
     expect(assistant).not.toContain("h-[min(22rem,calc(100vh-19rem))]");
   });
 
-  it("uses two local website previews without the foreground CRM tile", () => {
+  it("shows three authentic project previews in the requested layered hero", () => {
     const hero = get("../components/HomeStudio.tsx");
-    expect(hero.match(/styles\.heroTile/g)).toHaveLength(2);
+    const css = get("../components/HomeStudio.module.css");
+    expect(hero.split("styles.heroTile").length - 1).toBe(3);
+    expect(hero).toContain("/images/projects/starcars-live-current.jpg");
     expect(hero).toContain("/images/projects/isto-live-nov08.jpg");
+    expect(hero).toContain("/images/projects/bcrm-admin-dashboard.jpg");
     expect(hero).not.toContain("mshots");
-    expect(hero).not.toContain("tileCrm");
-    expect(get("../components/HomeStudio.module.css")).toContain("prefers-reduced-motion:no-preference");
+    expect(css).toContain(".tileCrm");
+    expect(css).toContain("heroDriftStar");
+    expect(css).toContain("prefers-reduced-motion:no-preference");
+    expect(css).toContain("@media(hover:none)");
   });
 
   it("allows the mobile menu to scroll and close with Escape", () => {
