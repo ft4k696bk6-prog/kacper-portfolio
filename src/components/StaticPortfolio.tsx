@@ -68,6 +68,7 @@ const jsonLd = {
         "@type": "OfferCatalog",
         name: "Usługi Kacpra Berneckiego",
         itemListElement: [
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Zewnętrzny dyrektor marketingu, sprzedaży i operacji", url: "https://bernecki.dev/zewnetrzny-dyrektor" } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Rozwój biznesu i koordynacja wdrożeń", url: "https://bernecki.dev/rozwoj-biznesu" } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Wdrożenia AI i automatyzacja procesów", url: "https://bernecki.dev/wdrozenia-ai-dla-firm" } },
           {
