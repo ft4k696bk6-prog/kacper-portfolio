@@ -379,7 +379,7 @@ export const en = {
         repoUrl: "https://github.com/ft4k696bk6-prog/kacper-portfolio",
         caseStudyUrl: "/case-studies/portfolio",
         image: {
-          src: "https://s0.wp.com/mshots/v1/https%3A%2F%2Fbernecki.dev?vpw=1440&vph=1100&w=1200&requeue=true",
+          src: "/portfolio-hero-preview",
           alt: "Portfolio homepage preview",
         },
       },
