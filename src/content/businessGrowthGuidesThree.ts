@@ -78,7 +78,7 @@ const entries: string[][] = [
     "Policz koszt pozyskania klienta i wkład do marży po istotnych kosztach. Dla długiego cyklu sprzedażowego analizuj kohorty i stopniowo uzupełniaj dane.",
     "Mierz CAC, marżę pozyskanego klienta i jakość kontaktów obok klasycznych danych reklamowych.",
     "ROAS z panelu reklam nie jest zyskiem netto; atrybucja platform często przypisuje część sprzedaży inaczej.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "kiedy-wylaczyc-kampanie-reklamowa",
@@ -158,7 +158,7 @@ const entries: string[][] = [
     "Dla ograniczonego zakresu wybierz wykonawcę specjalistycznego. Gdy zadania się przenikają, rozważ jednego partnera koordynującego i jasno określ role.",
     "Mierz terminowość, jakość wykonania, dostęp do danych i koszt pozyskanych klientów.",
     "Nie oceniaj dostawcy wyłącznie na podstawie liczby postów albo obietnic szybkiego wzrostu.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "outsourcing-marketingu-dla-malej-firmy",
@@ -168,7 +168,7 @@ const entries: string[][] = [
     "Ustal zakres miesięczny, mierniki, rytm spotkań oraz prawa do stworzonych materiałów. Zadbaj o współpracę z zespołem obsługującym leady.",
     "Porównuj pełny koszt obsługi z liczbą jakościowych zapytań oraz czasem zaoszczędzonym przez zespół.",
     "Nie oddawaj dostawcy wyłącznej kontroli nad domeną, kontami reklamowymi i danymi klientów.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "kompleksowa-obsluga-internetu-dla-firm",
@@ -178,7 +178,7 @@ const entries: string[][] = [
     "Przygotuj wspólny plan miesięczny, jeden raport jakościowych kontaktów i harmonogram wdrożeń. Rozdziel zadania stałe od jednorazowych inwestycji.",
     "Monitoruj liczbę klientów z każdego kanału, koszt obsługi i czas potrzebny do wprowadzenia zmiany.",
     "Pakiet „wszystko w cenie” bez ograniczeń zakresu zwykle prowadzi do nieporozumień.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "jak-wybrac-agencje-marketingowa",
@@ -272,4 +272,4 @@ const entries: string[][] = [
   ]
 ];
 
-export const businessGrowthGuidesThree = entries.map(([slug,title,intro,diagnosis,action,measurement,pitfall,service]) => ({slug,title,description:intro.slice(0,155),intro,service,serviceLabel:service==="/zewnetrzny-dyrektor"?"Partner w rozwoju biznesu":service==="/automatyzacja-leadow-i-sprzedazy"?"Automatyzacja leadów":"Marketing i reklamy",category:"rozwoj-firmy" as const,sections:[{title:"Co sprawdzić w pierwszej kolejności",paragraphs:[diagnosis]},{title:"Co możesz wdrożyć",paragraphs:[action]},{title:"Jaki wynik obserwować",paragraphs:[measurement]},{title:"Błąd, którego warto uniknąć",paragraphs:[pitfall]}]}));
+export const businessGrowthGuidesThree = entries.map(([slug,title,intro,diagnosis,action,measurement,pitfall,service]) => ({slug,title,description:intro.slice(0,155),intro,service,serviceLabel:service==="/partner-w-rozwoju-biznesu"?"Partner w rozwoju biznesu":service==="/automatyzacja-leadow-i-sprzedazy"?"Automatyzacja leadów":"Marketing i reklamy",category:"rozwoj-firmy" as const,sections:[{title:"Co sprawdzić w pierwszej kolejności",paragraphs:[diagnosis]},{title:"Co możesz wdrożyć",paragraphs:[action]},{title:"Jaki wynik obserwować",paragraphs:[measurement]},{title:"Błąd, którego warto uniknąć",paragraphs:[pitfall]}]}));
