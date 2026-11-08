@@ -6,6 +6,7 @@ import { guideScreenshots } from "@/content/guideScreenshots";
 import { getRelatedGuides } from "@/lib/guide-directory";
 import { getEnglishGuide, getEnglishGuides, englishGuideCategory, englishCategory, englishCategoryCounts } from "@/lib/guide-i18n";
 import { VatComparison } from "@/components/VatComparison";
+import { seoTitle, seoDescription } from "@/lib/seo";
 import {blogPostsForGuideCategory} from "@/content/blog";
 
 type Props={params:Promise<{slug:string}>};
@@ -18,7 +19,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
  if(!guide)notFound();
  const url=`https://bernecki.dev/en/guides/${slug}`;
  return {
-  title:{absolute:`${guide.title} | Kacper Bernecki`},description:guide.description,
+  title:{absolute:seoTitle(guide.title)},description:seoDescription(guide.description,guide.intro),
   alternates:{canonical:url,languages:{"pl-PL":`https://bernecki.dev/poradniki/${slug}`,"en":url}},
   openGraph:{title:guide.title,description:guide.description,url,type:"article",locale:"en_US",alternateLocale:["pl_PL"],siteName:"Kacper Bernecki",images:[{url:"/opengraph-image",width:1200,height:630}]},
   robots:{index:true,follow:true}
