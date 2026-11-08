@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const city = getServiceCity(miasto);
   if (!city) return {};
   const title = `Strony, CRM, marketing i AI dla firm – ${city.name}`;
-  const description = `Tworzenie stron internetowych, CRM, aplikacje, reklamy i automatyzacje AI dla firm z miasta ${city.name}. Obsługa zdalna w całej Polsce, zakres i wycena ustalane indywidualnie.`;
+  const description = `Tworzenie stron internetowych, CRM, aplikacje, reklamy i automatyzacje AI dla firm ${city.from}. Obsługa zdalna w całej Polsce, zakres i wycena ustalane indywidualnie.`;
   const url = `${base}/uslugi/${city.slug}`;
   return {
     title,
@@ -79,13 +79,6 @@ export default async function CityServicesPage({ params }: PageProps) {
         inLanguage: "pl-PL",
         isPartOf: { "@id": base + "/#website" },
         about: services.map((service) => ({ "@type": "Service", name: service.name })),
-      },
-      {
-        "@type": "Person",
-        "@id": base + "/#person",
-        name: "Kacper Bernecki",
-        url: base,
-        knowsAbout: ["tworzenie stron internetowych", "CRM", "aplikacje webowe", "marketing", "automatyzacja AI"],
       },
       {
         "@type": "OfferCatalog",
@@ -121,7 +114,7 @@ export default async function CityServicesPage({ params }: PageProps) {
           Strony internetowe, CRM, marketing i AI dla firm — {city.name}
         </h1>
         <p className="mt-8 max-w-3xl text-lg leading-8 text-white/70">
-          Pomagam przedsiębiorcom z {city.name} rozwijać ofertę i sprzedaż z wykorzystaniem technologii.
+          Pomagam przedsiębiorcom {city.from} rozwijać ofertę i sprzedaż z wykorzystaniem technologii.
           Projektuję strony, wdrażam systemy CRM, aplikacje, marketing i automatyzacje. 
           Współpracę można prowadzić zdalnie — nie deklaruję lokalnego biura w każdym z wymienionych miast.
         </p>
@@ -154,14 +147,14 @@ export default async function CityServicesPage({ params }: PageProps) {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-16 md:px-8">
-        <h2 className="text-3xl font-semibold">Jak wygląda współpraca z firmą z {city.name}?</h2>
+        <h2 className="text-3xl font-semibold">Jak wygląda współpraca z firmą {city.from}?</h2>
         <ol className="mt-8 grid gap-5 md:grid-cols-3">
           <li className="rounded-xl border border-white/10 p-6"><strong>01. Rozmowa</strong><p className="mt-3 leading-7 text-white/65">Ustalamy problem biznesowy, obecne narzędzia i oczekiwany rezultat.</p></li>
           <li className="rounded-xl border border-white/10 p-6"><strong>02. Zakres i wycena</strong><p className="mt-3 leading-7 text-white/65">Dopasowujemy funkcje, terminy i sposób rozliczenia do projektu.</p></li>
           <li className="rounded-xl border border-white/10 p-6"><strong>03. Wdrożenie</strong><p className="mt-3 leading-7 text-white/65">Pracujemy zdalnie, testujemy rozwiązanie i omawiamy dalszy rozwój.</p></li>
         </ol>
         <div className="mt-12 rounded-2xl bg-white p-8 text-black md:p-10">
-          <h2 className="text-2xl font-semibold">Masz projekt w {city.name}?</h2>
+          <h2 className="text-2xl font-semibold">Masz projekt {city.where}?</h2>
           <p className="mt-3 max-w-2xl leading-7 text-black/70">
             Opisz, czego potrzebujesz: strony, CRM, reklamy, AI czy połączenia kilku usług. 
             W odpowiedzi ustalimy zakres i następny krok. Nie podaję sztywnej ceny bez poznania wymagań.

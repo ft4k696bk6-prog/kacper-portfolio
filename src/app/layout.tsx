@@ -1,12 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Suspense } from "react";
 import "./globals.css";
 import "./design-system.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LanguageMetadataSync } from "@/components/LanguageMetadataSync";
 import { AnalyticsConsent } from "@/components/AnalyticsConsent";
-import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { AIMascotAssistant } from "@/components/AIMascotAssistant";
 import { Geist } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -110,17 +108,6 @@ export default function RootLayout({
   return (
     <html lang="pl" className={`scroll-smooth font-sans ${geist.variable}`}>
       <body>
-        <Suspense fallback={null}>
-          <GoogleAnalytics />
-        </Suspense>
-        {/* Web Analytics without additional dependencies; enabled in Vercel project settings */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "window.va = window.va || function(){(window.vaq = window.vaq || []).push(arguments);};",
-          }}
-        />
-        <script defer src="/_vercel/insights/script.js" />
         <LanguageProvider>
           <AnalyticsConsent />
           <LanguageMetadataSync />

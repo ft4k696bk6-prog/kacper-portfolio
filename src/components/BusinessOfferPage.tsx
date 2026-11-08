@@ -12,6 +12,23 @@ const origin="https://bernecki.dev";
 export function BusinessOfferPage({kind}:{kind:BusinessOfferKey}){
   const offer=businessOffers[kind];
   const canonical=origin+"/"+offer.slug;
+  const pricingFactors = kind==="crm" ? [
+    "Liczba użytkowników, ról, zespołów i zakres uprawnień.",
+    "Import dotychczasowych danych, integracje z reklamami, pocztą i formularzami.",
+    "Proces ofertowania, umowy, raporty i etapy realizacji."
+  ] : [
+    "Liczba źródeł leadów i wykorzystywanych narzędzi.",
+    "Zakres integracji CRM, formularzy, reklam i automatycznych powiadomień.",
+    "Konfiguracja pomiaru, audyt procesu oraz dalsza optymalizacja."
+  ];
+  const relatedGuides = kind==="crm" ? [
+    ["CRM: skąd biorą się zduplikowane leady?", "crm-duplikaty-leadow-webhook"],
+    ["Pusta lista po logowaniu — zasady RLS", "supabase-rls-pusta-lista-po-logowaniu"],
+  ] : [
+    ["Co zrobić, gdy tanie leady nie odbierają?", "tani-lead-meta-nie-odbiera-telefonu"],
+    ["Pixel i Conversions API liczą podwójnie", "meta-duplikaty-pixel-conversions-api"],
+    ["Strona i marketing lokalnej firmy", "reklama-lokalnej-firmy-strona-i-social-media"],
+  ];
   const schema={
     "@context":"https://schema.org",
     "@graph":[
@@ -96,6 +113,15 @@ export function BusinessOfferPage({kind}:{kind:BusinessOfferKey}){
             <h3 className="mt-5 text-xl font-semibold">{step.title}</h3>
             <p className="mt-3 leading-7 text-white/70">{step.body}</p>
           </div>)}</div>
+      </section>
+      <section className="border-y border-white/10 py-16">
+        <h2 className="text-3xl font-semibold tracking-tight">Co wpływa na koszt wdrożenia?</h2>
+        <ul className="mt-6 grid gap-3 md:grid-cols-3">{pricingFactors.map(factor=><li key={factor} className="rounded-lg border border-white/15 p-5 leading-7 text-white/75">{factor}</li>)}</ul>
+        <Link href="/materialy/brief-crm" className="mt-7 inline-flex items-center gap-2 rounded-lg border border-white/25 px-5 py-3 text-sm text-white">
+          Checklista do rozmowy o CRM i leadach <ArrowRight className="h-4 w-4"/>
+        </Link>
+        <h3 className="mt-10 text-xl font-semibold">Poradniki związane z usługą</h3>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">{relatedGuides.map(([label,slug])=><Link key={slug} href={`/poradniki/${slug}`} className="rounded-lg border border-white/15 p-4 text-sm leading-6 text-white/75 hover:border-white/40">{label}<ArrowRight className="ml-2 inline h-4 w-4"/></Link>)}</div>
       </section>
       <section className="grid gap-10 py-20 lg:grid-cols-[0.75fr_1.25fr]">
         <h2 className="text-3xl font-semibold tracking-tight">Najczęstsze pytania</h2>

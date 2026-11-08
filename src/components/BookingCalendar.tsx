@@ -180,7 +180,7 @@ export function BookingCalendar({ copy, locale, emptyMessage }: BookingCalendarP
       setTurnstileToken("");
       setState("success");
       setMessage(copy.bookingSuccessLabel);
-      if (typeof window.gtag === "function") {
+      if (typeof window.gtag === "function" && window.localStorage.getItem("site-cookie-consent") === "accepted") {
         window.gtag("event", "generate_lead", {
           lead_type: "confirmed_booking",
           page_path: window.location.pathname,

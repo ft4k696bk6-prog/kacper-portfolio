@@ -22,6 +22,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     { url: siteUrl + "/kontakt", changeFrequency: "monthly", priority: 0.85 },
+    { url: siteUrl + "/materialy/brief-strony", changeFrequency: "monthly", priority: 0.8 },
+    { url: siteUrl + "/materialy/brief-crm", changeFrequency: "monthly", priority: 0.8 },
+    { url: siteUrl + "/case-studies/isto-kebab", changeFrequency: "monthly", priority: 0.9 },
     { url: siteUrl + "/uslugi", changeFrequency: "monthly", priority: 0.75 },
     ...serviceCities.map(city => ({ url: `${siteUrl}/uslugi/${city.slug}`, changeFrequency: "monthly" as const, priority: 0.7 })),
     { url: siteUrl + "/polityka-prywatnosci", changeFrequency: "yearly", priority: 0.2 },

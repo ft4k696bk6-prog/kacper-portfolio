@@ -18,6 +18,7 @@ export function GoogleAnalytics() {
 
   useEffect(() => {
     if (!measurementId) return;
+    (window as unknown as Record<string, boolean>)[`ga-disable-${measurementId}`] = false;
 
     const queryString = searchParams.toString();
     const pagePath = queryString ? `${pathname}?${queryString}` : pathname;
@@ -29,6 +30,7 @@ export function GoogleAnalytics() {
         return;
       }
 
+      if (window.localStorage.getItem("site-cookie-consent") !== "accepted") return;
       window.gtag("event", "page_view", {
         page_title: document.title,
         page_location: window.location.href,
@@ -40,6 +42,7 @@ export function GoogleAnalytics() {
 
     return () => {
       if (retry) clearTimeout(retry);
+      (window as unknown as Record<string, boolean>)[`ga-disable-${measurementId}`] = true;
     };
   }, [measurementId, pathname, searchParams]);
 
