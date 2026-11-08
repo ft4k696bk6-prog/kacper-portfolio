@@ -49,7 +49,7 @@ export default function AIPage(){return <main className="site-page min-h-screen 
     <p className="text-xs uppercase tracking-[.2em] text-white/55">AI · automatyzacja · dane</p>
     <h1 className="mt-5 text-4xl font-semibold leading-tight tracking-tight md:text-6xl">Sztuczna inteligencja, która rozwiązuje konkretny problem w firmie.</h1>
     <p className="mt-7 max-w-2xl text-lg leading-8 text-white/75">Projektuję i integruję rozwiązania AI z procesami firm: obsługą klientów, CRM, dokumentami i analizą danych. Najpierw sprawdzamy, gdzie AI ma sens i ile może kosztować — potem budujemy mały, mierzalny pilotaż.</p>
-    <div className="mt-9 flex flex-wrap gap-3"><a href="#rozmowa" className="brand-action rounded-lg px-6 py-3.5 font-medium text-black">Omów proces w firmie</a><a href="#zastosowania" className="rounded-lg border border-white/20 px-6 py-3.5 hover:border-white/50">Zobacz zastosowania</a></div>
+    <div className="mt-9 flex flex-wrap gap-3"><a href="/kontakt?usluga=AI%20i%20automatyzacja" className="brand-action rounded-lg px-6 py-3.5 font-medium text-black">Omów proces w firmie</a><a href="#zastosowania" className="rounded-lg border border-white/20 px-6 py-3.5 hover:border-white/50">Zobacz zastosowania</a></div>
    </div>
    <div className="rounded-2xl border border-white/15 bg-white/[.035] p-8">
     <BrainCircuit className="h-9 w-9" aria-hidden="true"/><h2 className="mt-6 text-2xl">Najpierw problem. Potem model.</h2>

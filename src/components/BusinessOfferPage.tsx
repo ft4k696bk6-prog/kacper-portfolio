@@ -39,7 +39,7 @@ export function BusinessOfferPage({kind}:{kind:BusinessOfferKey}){
           <h1 className="max-w-4xl text-4xl font-semibold leading-tight tracking-tight md:text-6xl">{offer.heading}</h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-white/75">{offer.intro}</p>
           <div className="mt-9 flex flex-wrap gap-3">
-            <BusinessOfferCta offer={kind} label={offer.cta} placement="hero" href="#konsultacja"/>
+            <BusinessOfferCta offer={kind} label={offer.cta} placement="hero" href={kind==="crm"?"/kontakt?usluga=CRM%20i%20aplikacja":"/kontakt?usluga=Marketing%20i%20reklamy"}/>
             <BusinessOfferCta offer={kind} label="Zobacz wdrożenie" placement="hero" href="#realizacja" secondary/>
           </div>
           <p className="mt-6 max-w-2xl text-sm leading-6 text-white/55">{offer.audience}</p>

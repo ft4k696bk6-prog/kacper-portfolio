@@ -143,9 +143,9 @@ export const en = {
     personaLabel: "AI Assistant",
     greeting: "Ask about projects and collaboration.",
     initialMessage:
-      "Hi! I can explain Kacper’s projects, experience and technologies, and help you find contact details or book a meeting.",
-    placeholder: "Write a question...",
-    placeholderDictation: "Write or dictate something...",
+      "Hi! Tell me what you would like to build or improve — a website, CRM, AI assistant, marketing or a business process. I can outline what Kacper offers and how to book a call.",
+    placeholder: "Describe your project or ask a question...",
+    placeholderDictation: "Describe or dictate your project...",
     inputLabel: "Message for the AI assistant",
     sendLabel: "Send message",
     micLabel: "Start dictation",
