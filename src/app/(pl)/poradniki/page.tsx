@@ -14,10 +14,12 @@ export async function generateMetadata({ searchParams }: Props) {
   );
   const pageNumber = Number(params.strona ?? "1");
   const page = Number.isSafeInteger(pageNumber) && pageNumber > 1 ? pageNumber : 1;
+  const canonical = `https://bernecki.dev/poradniki${!params.q && page > 1 ? `?strona=${page}` : ""}`;
   return {
     ...metadata,
+    openGraph: { ...metadata.openGraph, url: canonical },
     alternates: {
-      canonical: `https://bernecki.dev/poradniki${!params.q && page > 1 ? `?strona=${page}` : ""}`,
+      canonical,
       ...(getEnglishGuides().length>0&&!params.q&&page===1?{languages:{"pl-PL":"https://bernecki.dev/poradniki",en:"https://bernecki.dev/en/guides"}}:{})
     },
     robots: params.q ? { index: false, follow: true } : { index: true, follow: true }
