@@ -46,10 +46,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Kacper Bernecki" }],
   creator: "Kacper Bernecki",
   openGraph: {
-    title: "Kacper Bernecki — rozwój biznesu, AI i technologia",
+    title: "Kacper Bernecki — websites, CRM, marketing and AI",
     description:
-      "Pomysły biznesowe, produkty, dostawcy, strony, CRM i marketing. Praktyczne wsparcie od planu po wdrożenie.",
-    url: siteUrl,
+      "Business development, websites, CRM, marketing and AI. Practical help from initial idea through implementation.",
     siteName: "Kacper Bernecki Portfolio",
     type: "website",
     locale: "en_US",
