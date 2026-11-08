@@ -329,6 +329,12 @@
 .client-loop{overflow:hidden;touch-action:pan-y;cursor:grab;user-select:none;max-width:1440px;margin-inline:auto}
 .client-loop-track,.client-loop-copy{display:flex;width:max-content;flex-shrink:0}
 .client-loop-track{will-change:transform}
+.client-loop[data-dragging="true"]{cursor:grabbing}
+.client-loop-control{display:inline-flex;align-items:center;justify-content:center;width:35px;height:35px;border:1px solid #ffffff2b;border-radius:8px;color:#ededed;background:transparent;touch-action:manipulation;transition:background .15s,border-color .15s}
+.client-loop-control:hover,.client-loop-control:focus-visible{background:#ffffff16;border-color:#ffffff75}
+.client-loop-control:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.client-loop .client-wordmark{touch-action:pan-y}
+
 .image-books{height:480px;gap:10px;margin-inline:0;padding:0;width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
 .image-books .project-book{min-width:52px;flex:1 1 0;height:100%;margin:0}
 .image-books .project-book[data-active="true"]{flex:6 1 0;min-width:320px;height:100%}
@@ -454,3 +460,20 @@ html.lenis,html.lenis body{height:auto}
  .contact-reveal-card:first-child .contact-revealed-value{justify-content:flex-start;text-align:left}
  .contact-reveal-card:last-child .contact-revealed-value{justify-content:flex-end;text-align:right}
 }
+
+/* Real screenshot preview: lightweight movement only, not an iframe or a loaded app. */
+@media(prefers-reduced-motion:no-preference){
+ .image-books .project-book[data-preview-motion="site"][data-active="true"] .project-book-image{
+   animation:bookSiteBreathing 11s ease-in-out infinite;
+   transform-origin:center 28%;
+ }
+}
+@keyframes bookSiteBreathing{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+
+/* Site captures in the detailed Isto/StarCars realizations get the same restrained
+   movement as the smaller covers, without loading an external page or iframe. */
+.site-preview-detail {isolation:isolate}
+@media(prefers-reduced-motion:no-preference) {
+ .site-preview-detail img {animation:detailSiteBreathing 13s ease-in-out infinite;transform-origin:center 26%}
+}
+@keyframes detailSiteBreathing {0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}

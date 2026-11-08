@@ -92,7 +92,10 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
             {study.images.map((image, index) => (
               <div
                 key={image.src}
-                className="surface-card overflow-hidden rounded-xl border border-white/10 bg-[var(--brand-black)] first:lg:col-span-2"
+                className={[
+                  "surface-card overflow-hidden rounded-xl border border-white/10 bg-[var(--brand-black)] first:lg:col-span-2",
+                  slug === "starcars" && index === 0 ? "site-preview-detail" : ""
+                ].join(" ")}
               >
                 <Image
                   src={image.src}

@@ -26,9 +26,7 @@
 .primary:hover {background:#fff;border-color:#fff}
 .secondary {border:1px solid #ffffff40}
 .secondary:hover {background:#151515;border-color:#ffffff70}
-/* Mobile art direction: 3 cards form a staggered column LEFT of the portrait.
-   A right-side card would cross the face/shoulder at 375px. Keep head and chest clear.
-   On desktop upper cards sit BEHIND the person; only the smaller CRM overlaps the lower-left edge. */
+/* Desktop/landscape layout unchanged. Portrait mobile places the Isto tile to the right, StarCars to the left, both behind the portrait; B-CRM stays at the lower left. */
 .heroScene {position:relative;min-width:0;width:100%;height:650px;isolation:isolate;overflow:visible}
 .portraitLight {position:absolute;inset:0 -3% 0 17%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 61% 42%,rgba(255,255,255,.085),rgba(255,255,255,.025) 42%,transparent 72%)}
 .portrait { background:transparent;position:absolute;z-index:5;right:3%;bottom:0;width:73%;height:100%;overflow:hidden;pointer-events:none;mask-image:linear-gradient(to bottom,#000 0%,#000 87%,transparent 100%)}
@@ -36,7 +34,7 @@
 .heroTile {position:absolute;display:block;overflow:hidden;border:1px solid #ffffff36;border-radius:13px;background:#111;box-shadow:0 15px 48px #000b;transform-origin:center center;transition:border-color .2s,box-shadow .2s}
 .heroTile:hover {border-color:#ffffff85;box-shadow:0 21px 54px #000d}
 .heroTile:focus-visible {outline:2px solid #fff;outline-offset:5px}
-.tileVisual {aspect-ratio:1.6;background:#141414;overflow:hidden}
+.tileVisual {position:relative;aspect-ratio:1.6;background:#141414;overflow:hidden}
 .tileVisual img {display:block;width:100%;height:100%;object-fit:cover;object-position:top left}
 .tileCaption {display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;min-height:42px;color:#f4f4f4}
 .tileCaption strong {font-size:13px;font-weight:550}
@@ -189,10 +187,8 @@
  .tileIsto {width:37%;top:42%}
  .tileCrm {width:53%;bottom:1%}
 }
-/* Touch devices do not animate linked tiles under the user's finger. */
-@media(hover:none) {
- .heroTile {animation:none!important}
-}
+/* On touchscreens pause only during an actual press; idle motion remains visible. */
+@media(hover:none) {.heroTile:active {animation-play-state:paused}}
 
 
 /* Mobile portrait refinement: keep desktop and landscape strictly unchanged. */
@@ -204,6 +200,28 @@
   .heroScene {margin-top:-64px}
   .portrait {top:auto;bottom:0;height:107%}
 
-  /* Move StarCars behind the upper-left shoulder, not in front of the face. */
-  .tileStarCars {left:17%;top:17%;width:42%;z-index:2}
+  /* Requested portrait-only composition: the upper cards stay behind the person. */
+  .tileStarCars {left:-2%;top:15%;width:45%;z-index:2}
+  .tileIsto {left:auto;right:-2%;top:9%;width:35%;z-index:2}
+}
+
+/* Low-cost motion of genuine website screenshots, not embedded iframes. */
+@media(prefers-reduced-motion:no-preference) {
+ .tileStarCars .tileVisual img {animation:sitePreviewZoom 12s ease-in-out infinite}
+ .tileIsto .tileVisual img {animation:sitePreviewZoom 10s ease-in-out -3s infinite}
+ .tileStarCars .tileVisual:after,.tileIsto .tileVisual:after {
+  content:"";position:absolute;inset:0;width:35%;pointer-events:none;
+  background:linear-gradient(105deg,transparent 10%,rgba(255,255,255,.12) 49%,transparent 85%);
+  translate:-380% 0;animation:sitePreviewGlimmer 11s ease-in-out infinite;
+ }
+ .tileIsto .tileVisual:after {animation-delay:-4s}
+ .heroTile:hover .tileVisual img,.heroTile:focus-visible .tileVisual img {animation-play-state:paused}
+}
+@keyframes sitePreviewZoom {0%,100%{transform:scale(1)}50%{transform:scale(1.036)}}
+@keyframes sitePreviewGlimmer {0%,25%,100%{translate:-380% 0}45%,49%{translate:380% 0}}
+@media(max-width:1023px) and (orientation:portrait) and (prefers-reduced-motion:no-preference) {
+ .tileStarCars {animation:heroDriftStar 11s ease-in-out infinite}
+ .tileIsto {animation:heroDriftIsto 13s ease-in-out -4s infinite}
+ .tileCrm {animation:heroDriftCrm 12s ease-in-out -6s infinite}
+ .heroTile:focus-visible {animation-play-state:paused}
 }
