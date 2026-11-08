@@ -15,7 +15,7 @@ const features=[
  "Proces składania zamówienia połączony z osobną logiką operacyjną",
  "Informacje potrzebne do podjęcia decyzji i kontaktu z lokalem",
 ];
-const schema={"@context":"https://schema.org","@type":"CreativeWork","@id":url+"#project",name:"Isto Kebab — strona i zamówienia",url,author:{"@id":"https://bernecki.dev/#person"},image:"https://bernecki.dev/images/projects/isto-live-nov08.jpg",description:"Wdrożenie strony restauracji, menu i procesu zamawiania.",inLanguage:"pl-PL"};
+const schema={"@context":"https://schema.org","@type":"Article","@id":url+"#project",mainEntityOfPage:url,headline:"Isto Kebab — strona i zamówienia",name:"Isto Kebab — strona i zamówienia",url,author:{"@id":"https://bernecki.dev/#person"},image:"https://bernecki.dev/images/projects/isto-live-nov08.jpg",description:"Wdrożenie strony restauracji, menu i procesu zamawiania.",inLanguage:"pl-PL"};
 export default function IstoCaseStudy(){
  return <main className="site-page min-h-screen bg-[var(--brand-black)] px-5 pb-24 pt-32 text-white md:px-8 md:pt-40">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,"\\u003c")}}/>
