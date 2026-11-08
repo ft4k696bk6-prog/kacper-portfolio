@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { listEnglishGuides, englishCategoryCounts,englishGuideCategory,englishCategory } from "@/lib/guide-i18n";
+import { seoTitle } from "@/lib/seo";
 
 type Props={searchParams:Promise<{q?:string;page?:string}>};
 const root="https://bernecki.dev/en/guides";
@@ -8,9 +9,10 @@ const parsePage=(v?:string)=>{const n=Number(v??1);return Number.isSafeInteger(n
 export async function generateMetadata({searchParams}:Props):Promise<Metadata>{
  const params=await searchParams;const {page}=listEnglishGuides({query:params.q,page:parsePage(params.page)});
  const url=root+(page>1&& !params.q?`?page=${page}`:"");
- return {title:"Troubleshooting guides: Next.js, Supabase, SEO and CRM | Kacper Bernecki",
+ return {title:{absolute:seoTitle("Troubleshooting guides: Next.js, Supabase, SEO and CRM")},
  description:"English technical guides with exact symptoms, diagnostic steps, solutions, verification and source documentation.",
- alternates:{canonical:url,languages:{en:url,"pl-PL":"https://bernecki.dev/poradniki"}},robots:params.q?{index:false,follow:true}:{index:true,follow:true}};
+ openGraph:{url,type:"website",locale:"en_US",title:"Practical technical guides"},
+ alternates:{canonical:url,...(page===1&&!params.q?{languages:{en:url,"pl-PL":"https://bernecki.dev/poradniki"}}:{})},robots:params.q?{index:false,follow:true}:{index:true,follow:true}};
 }
 export default async function EnglishGuideCatalog({searchParams}:Props){
  const params=await searchParams;const query=(params.q??"").trim().slice(0,100);
