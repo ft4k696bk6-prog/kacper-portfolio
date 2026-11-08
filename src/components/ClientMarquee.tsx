@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { wrapMarqueePosition } from "@/lib/marquee";
 const clients = [
@@ -68,7 +68,7 @@ export function ClientMarquee() {
   <div className="flex items-center gap-2">
     <button type="button" className="client-loop-control" aria-label={pl?"Przesuń firmy w lewo":"Move companies left"} onClick={()=>manualMove.current(-240)}><ChevronLeft size={17}/></button>
     <button type="button" className="client-loop-control" aria-label={pl?"Przesuń firmy w prawo":"Move companies right"} onClick={()=>manualMove.current(240)}><ChevronRight size={17}/></button>
-    <button type="button" onClick={()=>setPaused(value=>!value)} aria-pressed={paused} className="ml-1 text-xs text-white/70 hover:text-white">{paused?(pl?"Wznów pasek":"Resume"):(pl?"Zatrzymaj pasek":"Pause")}</button>
+    <button type="button" onClick={()=>setPaused(value=>!value)} aria-pressed={paused} aria-label={paused?(pl?"Wznów pasek":"Resume ticker"):(pl?"Zatrzymaj pasek":"Pause ticker")} title={paused?(pl?"Wznów pasek":"Resume ticker"):(pl?"Zatrzymaj pasek":"Pause ticker")} className="client-loop-control ml-1">{paused?<Play size={16}/>:<Pause size={16}/>}</button>
   </div>
  </div>
  <div ref={ref} className="client-loop" aria-label={pl?"Logotypy firm — przeciągnij w lewo lub prawo":"Company logos — swipe left or right"}><div ref={track} className="client-loop-track">{[0,1,2].map(copy=><div key={copy} className="client-loop-copy" aria-hidden={copy!==1?true:undefined}>{clients.map(client=>{
