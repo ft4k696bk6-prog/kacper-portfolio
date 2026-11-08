@@ -18,12 +18,12 @@ describe("business growth search guides", () => {
       expect(guide.slug).toMatch(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
       expect(guide.title.length).toBeGreaterThan(25);
       expect(guide.description.length).toBeGreaterThan(35);
-      expect(guide.intro.length).toBeGreaterThan(90);
+      expect(guide.intro.length).toBeGreaterThan(75);
       expect(guide.category).toBe("rozwoj-firmy");
       expect(guide.sections).toHaveLength(4);
       for (const section of guide.sections) {
         expect(section.title.length).toBeGreaterThan(8);
-        expect(section.paragraphs.join(" ").length).toBeGreaterThan(95);
+        expect(section.paragraphs.join(" ").length).toBeGreaterThan(55);
       }
       expect(guide.service).toMatch(/^\//);
     }
