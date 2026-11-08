@@ -161,7 +161,7 @@ export function LanguageSwitcher() {
             {t.nav.cta}
           </a>
           <a
-            href={anchorHref("#contact")}
+            href="/kontakt"
             aria-label={t.contact.calendarCta}
             className="brand-outline grid h-10 w-10 place-items-center rounded-md transition-colors"
           >
@@ -217,7 +217,7 @@ export function LanguageSwitcher() {
                 {t.nav.cta}
               </a>
               <a
-                href={anchorHref("#contact")}
+                href="/kontakt"
                 onClick={() => setIsOpen(false)}
                 aria-label={t.contact.calendarCta}
                 className="brand-outline grid h-10 w-10 place-items-center rounded-md transition-colors"

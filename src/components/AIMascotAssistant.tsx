@@ -42,7 +42,7 @@ type BookingState = {
   message: string;
 };
 
-type LocalAction = "projects" | "bcrm" | "book" | "contact";
+type LocalAction = "projects" | "services" | "bcrm" | "book" | "contact";
 type MascotMood = "idle" | "curious" | "joking" | "listening" | "thinking";
 
 type MascotBehaviorState = {
@@ -110,6 +110,9 @@ function detectLocalAction(question: string): LocalAction | null {
     return "book";
   }
 
+  if (wantsNavigation && /\b(service|services|uslug|ofert)\b/.test(value)) {
+    return "services";
+  }
   if (wantsNavigation && /\b(projects|projekty|realizacje)\b/.test(value)) {
     return "projects";
   }

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { guides } from "@/content/guides";
 import Image from "next/image";
 import {
   ArrowRight,

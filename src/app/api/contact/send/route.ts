@@ -54,7 +54,7 @@ export async function POST(req:NextRequest){
    headers:{"Authorization":`Bearer ${apiKey}`,"Content-Type":"application/json"},
    body:JSON.stringify({
     from,to:[to],reply_to:d.email,
-    subject:"Nowe zapytanie z bernecki.dev — "+d.service,
+    subject:"Nowe zapytanie z bernecki.dev — "+d.service.replace(/[\r\n]/g," "),
     html:"<h2>Nowe zapytanie z portfolio</h2>"+
       "<p><b>Imię:</b> "+esc(d.name)+"</p>"+
       "<p><b>E-mail:</b> "+esc(d.email)+"</p>"+
