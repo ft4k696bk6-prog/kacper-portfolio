@@ -11,7 +11,7 @@ const entries: string[][] = [
     "Wprowadź jeden rejestr leadów, obowiązkowy następny krok po kontakcie i cykliczny przegląd utraconych szans. Dopiero po naprawie najgorszego etapu testuj nowy kanał pozyskiwania klientów.",
     "Co tydzień licz konwersję zapytanie→rozmowa→oferta→sprzedaż oraz koszt pozyskania klienta, nie wyłącznie kliknięcia.",
     "Nie oceniaj handlowców na podstawie samych przychodzących leadów, jeśli jakość ruchu między kampaniami jest różna.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "jak-zdobyc-wiecej-klientow",
@@ -31,7 +31,7 @@ const entries: string[][] = [
     "Zmień niejasny komunikat na ofertę dla określonego odbiorcy. Usuń tarcie z formularza, popraw zdjęcia i realizacje, a w reklamach oddziel intencję zakupu od ogólnego zainteresowania.",
     "Mierz zapytania kwalifikowane i odsetek osób, które przechodzą od odwiedzin do rozmowy.",
     "Bez danych nie nazywaj problemu SEO: przyczyną może być cena, opinie, obsługa lub produkt.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "firma-ma-obroty-ale-nie-ma-zysku",
@@ -41,7 +41,7 @@ const entries: string[][] = [
     "Wskaż oferty o najniższym wkładzie do pokrycia kosztów, usprawnij ich realizację i popraw politykę rabatową. Jeśli problemem są reklamy, zmień pomiar z kosztu leada na koszt pozyskanego klienta.",
     "Porównuj marżę brutto, koszt pozyskania oraz wynik po kosztach operacyjnych na poziomie całej firmy.",
     "Nie utożsamiaj marży brutto z zyskiem netto ani wpływu na konto z wynikiem księgowym.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "jak-zwiekszyc-marze-w-firmie",
@@ -51,7 +51,7 @@ const entries: string[][] = [
     "Ustal minimalne progi opłacalności, doprecyzuj zakres pakietów i oddziel płatne prace dodatkowe. Zautomatyzuj powtarzalne czynności tam, gdzie oszczędność jest mierzalna.",
     "Mierz marżę na zleceniu przed i po zmianie oraz liczbę reklamacji i zwrotów.",
     "Podnoszenie marży przez obcinanie jakości może obniżyć utrzymanie klientów i ostatecznie pogorszyć wynik.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "gdzie-firma-traci-pieniadze",
@@ -61,7 +61,7 @@ const entries: string[][] = [
     "Zacznij od dwóch strat o największym wpływie i najłatwiejszym sposobie pomiaru. Przypisz właściciela zmiany i termin ponownej kontroli zamiast równocześnie zmieniać cały system.",
     "Dla każdej poprawki wpisz koszt wdrożenia, wynik bazowy i efekt po 30 dniach.",
     "Nie używaj arbitralnych procentów oszczędności bez dokumentów i porównywalnych okresów.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "jak-zwiekszyc-rentownosc-firmy",
@@ -71,7 +71,7 @@ const entries: string[][] = [
     "Przesuń zasoby do rentownych usług, popraw wyceny i usuń niepotrzebne etapy realizacji. Przy dużych odchyleniach zaplanuj osobne analizy rachunkowe z osobą odpowiedzialną za finanse.",
     "Śledź marżę na ofercie i rzeczywisty wkład danego kanału do wyniku operacyjnego.",
     "Wysoka liczba leadów nie oznacza wysokiej rentowności, podobnie jak niska cena kliknięcia.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "jak-obnizyc-koszty-pozyskania-klienta",
@@ -131,7 +131,7 @@ const entries: string[][] = [
     "Utwórz podstawowe pakiety i osobne pozycje za dodatki. Dla wycen niestandardowych zaplanuj etap zbierania danych, zanim obiecasz cenę.",
     "Monitoruj różnicę między planowanym a rzeczywistym kosztem zlecenia i odsetek ofert zaakceptowanych.",
     "Sam wysoki procent marży nie gwarantuje rentowności, jeśli liczba zleceń nie pokrywa kosztów stałych.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "jak-zrobic-audyt-sprzedazy",
@@ -141,7 +141,7 @@ const entries: string[][] = [
     "Rozrysuj proces od pierwszego zapytania do płatności, wskaż wąskie gardła i przetestuj dwie konkretne poprawki: np. szybszy kontakt oraz follow-up po wycenie.",
     "Zapisz metrykę początkową dla każdego etapu i sprawdź zmianę po pełnym cyklu sprzedażowym.",
     "Audyt bez właściciela wdrożenia, dat i sposobu pomiaru staje się dokumentem bez wpływu na wynik.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "dlaczego-sprzedaz-spada",
@@ -151,7 +151,7 @@ const entries: string[][] = [
     "Wybierz jeden główny czynnik spadku. Jeśli zniknął ruch organiczny, zbadaj SEO; jeśli oferty przegrywają, przeanalizuj cenę, zakres i konkurencję; jeśli maleje wartość koszyka, sprawdź miks usług.",
     "Mierz wszystkie trzy składniki osobno i wyznacz datę ponownej oceny.",
     "Nie zmieniaj jednocześnie cen, reklam i strony, bo nie ustalisz, która korekta wpłynęła na wynik.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "jak-sprzedawac-wiecej-stalym-klientom",
@@ -161,7 +161,7 @@ const entries: string[][] = [
     "Zaproponuj logiczny kolejny krok, np. opiekę techniczną po uruchomieniu strony lub szkolenie po wdrożeniu CRM. Uwzględnij jasny zakres i możliwość odmowy.",
     "Mierz wartość powracających klientów, powtarzalność zamówień i satysfakcję po realizacji.",
     "Nie sprzedawaj dodatków, które nie tworzą wartości; zwiększają przychód krótkoterminowo, ale pogarszają retencję.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "jak-zbudowac-lejek-sprzedazowy",
@@ -181,7 +181,7 @@ const entries: string[][] = [
     "Dla każdego celu zapisz inicjatywę, właściciela, budżet, miernik i datę kontroli. Zablokuj nowe projekty, jeśli nie wspierają bieżących priorytetów.",
     "Raz w tygodniu sprawdzaj wynik i przeszkody, a po 30 dniach koryguj założenia na podstawie danych.",
     "Plan zakładający jednoczesny wzrost wszystkich usług i kanałów zwykle przeciąża zespół.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "jak-poprawic-obsluge-klienta-w-firmie",
@@ -211,7 +211,7 @@ const entries: string[][] = [
     "Wybierz pięć do ośmiu KPI, ustal właściciela danych i częstotliwość kontroli. Zbuduj prosty dashboard z wartościami obecnymi i trendem zamiast raportu pełnego liczb bez kontekstu.",
     "Co tydzień zapisuj podjętą decyzję i sprawdzaj, czy wynikała z konkretnej metryki.",
     "Nie nagradzaj ilości działań bez sprawdzania ich jakości; liczba telefonów nie jest sama w sobie sprzedażą.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "jak-obliczyc-konwersje-leadow",
@@ -231,7 +231,7 @@ const entries: string[][] = [
     "Przygotuj dwa lub trzy czytelne zakresy usługi i przedstaw korzyści opcji wyższej. Dodawaj elementy tylko wtedy, gdy odpowiadają na zgłoszoną potrzebę.",
     "Mierz średnią wartość transakcji, marżę oraz odsetek reklamacji i ponownych zakupów.",
     "Podnoszenie średniej wartości koszyka przez niepotrzebne dodatki może obniżać zaufanie i liczbę zamówień.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ],
   [
     "jak-zrobic-plan-marketingowy-dla-firmy",
@@ -251,7 +251,7 @@ const entries: string[][] = [
     "Napraw pierwszy udokumentowany punkt utraty potencjalnego klienta. Przy małym budżecie wstrzymaj eksperymenty o niejasnym celu i skup środki na kontrolowanym teście.",
     "Oceniaj liczbę sensownych zapytań oraz sprzedaż przy porównywalnym nakładzie, nie samo ROAS zgłaszane przez platformę.",
     "Nie przypisuj każdej zmiany wyniku jednej kampanii, jeśli równocześnie zmieniły się ceny, sezon i proces sprzedaży.",
-    "/zewnetrzny-dyrektor"
+    "/partner-w-rozwoju-biznesu"
   ]
 ];
 
