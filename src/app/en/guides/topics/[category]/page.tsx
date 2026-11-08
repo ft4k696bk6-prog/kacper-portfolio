@@ -15,8 +15,10 @@ export async function generateMetadata({params,searchParams}:Props):Promise<Meta
  const {total,page}=listEnglishGuides({category,page:parsePage(query.page)});
  if(!total)notFound();
  const url=`https://bernecki.dev/en/guides/topics/${category}${page>1?`?page=${page}`:""}`;
- return {title:`${entry.label} — troubleshooting and solutions | Kacper Bernecki`,description:entry.description,
-  alternates:{canonical:url,languages:{en:url,"pl-PL":`https://bernecki.dev/poradniki/tematy/${category}`}},robots:{index:true,follow:true}};
+ return {title:{absolute:`${entry.label} — troubleshooting and solutions | Kacper Bernecki`},description:entry.description,
+  alternates:{canonical:url,...(page===1?{languages:{en:url,"pl-PL":`https://bernecki.dev/poradniki/tematy/${category}`}}:{})},
+  openGraph:{url,title:entry.label,description:entry.description,type:"website",locale:"en_US"},
+  robots:{index:true,follow:true}};
 }
 export default async function EnglishCategoryPage({params,searchParams}:Props){
  const [{category},query]=await Promise.all([params,searchParams]);
