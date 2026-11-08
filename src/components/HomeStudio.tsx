@@ -57,9 +57,9 @@ export function HomeStudio() {
       <p className={styles.eyebrow}>{lang === "pl" ? "Oferta" : "Services"}</p><h2>{c.services}</h2>
       <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65">{lang === "pl" ? "Wybierz temat, rozwiń szczegóły i sprawdź, w czym mogę pomóc. Jeśli nie wiesz, czego potrzebujesz, napisz — ustalimy to wspólnie." : "Choose a topic, expand details and explore how I can help. Not sure yet? Describe your project."}</p>
       <OfferCards offers={c.offer} english={lang === "en"}/>
-      <div className="mt-8 flex flex-wrap gap-3">
-        <Link href="/kontakt" className="brand-action inline-flex min-h-12 items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold text-black">{lang === "pl" ? "Zapytaj o współpracę" : "Discuss your project"} <ArrowUpRight size={17}/></Link>
-        <Link href="/#projects" className="inline-flex min-h-12 items-center gap-2 rounded-lg border border-white/20 px-6 py-3 text-sm text-white hover:border-white/50">{lang === "pl" ? "Zobacz realizacje" : "View projects"} <ArrowRight size={16}/></Link>
+      <div className="mt-8 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-3">
+        <Link href="/kontakt" className="brand-action inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-3 py-3 text-center text-[11px] font-semibold leading-5 text-black sm:px-6 sm:text-sm">{lang === "pl" ? "Zapytaj o współpracę" : "Discuss your project"} <ArrowUpRight size={17}/></Link>
+        <Link href="/#projects" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-white/20 px-3 py-3 text-center text-[11px] leading-5 text-white hover:border-white/50 sm:px-6 sm:text-sm">{lang === "pl" ? "Zobacz realizacje" : "View projects"} <ArrowRight size={16}/></Link>
       </div>
     </section>
     <section id="guides" className={styles.section}>

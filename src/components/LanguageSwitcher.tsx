@@ -8,8 +8,8 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const navItems = [
-  { href: "#projects", pl: "Realizacje", en: "Projects" },
   { href: "#services", pl: "Oferta", en: "Services" },
+  { href: "#projects", pl: "Realizacje", en: "Projects" },
   { href: "#guides", pl: "Poradniki", en: "Guides" },
 ] as const;
 
@@ -145,7 +145,6 @@ export function LanguageSwitcher() {
               {lang==="pl"?item.pl:item.en}
             </a>
           ))}
-          <Link href={lang==="en"?"/en/business":"/rozwoj-biznesu"} className="ui-nav rounded-md px-4 py-2 text-sm">{lang==="pl"?"Rozwój biznesu":"Business"}</Link>
         </nav>
 
         <div className="hidden items-center gap-3 xl:flex">{cookies}
@@ -206,7 +205,6 @@ export function LanguageSwitcher() {
                 {lang==="pl"?item.pl:item.en}
               </a>
             ))}
-            <Link href={lang==="en"?"/en/business":"/rozwoj-biznesu"} className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang==="pl"?"Rozwój biznesu":"Business development"}</Link>
             <div className="mt-3 flex items-center justify-between gap-3">
               <a
                 href="/kontakt"

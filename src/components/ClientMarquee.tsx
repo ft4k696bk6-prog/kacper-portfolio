@@ -33,7 +33,7 @@ export function ClientMarquee(){
   const tick=(time:number)=>{
    frame=0;if(document.hidden||!visible)return;
    const dt=last?Math.min(time-last,50):0;last=time;
-   if(!mouse&&!touch&&time-interactedAt>2600&&!viewport.contains(document.activeElement)){position+=dt*.035;draw()}
+   if(!mouse&&!touch&&time-interactedAt>700){position+=dt*.035;draw()}
    schedule();
   };
   const mark=()=>{interactedAt=performance.now();viewport.dataset.dragging="true"};
@@ -98,7 +98,6 @@ export function ClientMarquee(){
  return <section id="collaborations" className="border-y border-white/10 bg-[var(--brand-black)] py-7">
   <div className="mx-auto mb-4 flex max-w-7xl items-center justify-between gap-3 px-5 md:px-8">
    <h2 className="text-xs uppercase tracking-[.18em] text-white/70">{pl?"Wybrane współprace":"Selected collaborations"}</h2>
-   <span className="text-[11px] text-white/50">{pl?"Przeciągnij logotypy ↔":"Drag logos ↔"}</span>
   </div>
   <div ref={viewportRef} className="client-loop" aria-label={pl?"Logotypy firm — przeciągnij w lewo lub prawo":"Company logos — swipe left or right"}>
    <div ref={trackRef} className="client-loop-track">{[0,1,2].map(copy=>
