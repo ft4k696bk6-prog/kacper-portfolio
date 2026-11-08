@@ -502,3 +502,20 @@ html.lenis,html.lenis body{height:auto}
 
 /* Project book touch gestures preserve native scrolling; no redundant arrow controls. */
 .project-accordion{touch-action:pan-x pan-y}
+
+
+/* Fix native touch project scrolling: no swipe-to-select and no scroll jumps.
+   Cards keep constant mobile widths while descriptions toggle on click. */
+.image-books{overflow-anchor:none}
+.image-books .project-book{overflow-anchor:none}
+@media(max-width:767px){
+ .image-books .project-book,
+ .image-books .project-book[data-active="true"]{
+   flex:0 0 min(82vw,340px);
+   min-width:0;
+   transition:border-color .2s ease;
+ }
+ .image-books .project-book-preview{overflow:hidden}
+ .image-books .project-book[data-active="false"] .project-book-image{opacity:.75}
+ .image-books .project-book[data-active="true"] .project-book-image{opacity:1}
+}
