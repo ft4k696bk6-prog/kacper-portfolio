@@ -206,6 +206,23 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           </div>
         </section>
       )}
+      {kind !== "websites" && (
+        <section className="mx-auto max-w-6xl px-5 py-12 md:px-8">
+          <p className="mb-5 text-xs uppercase tracking-[0.2em] text-white/60">Rozwiązania dla firm</p>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Link href="/crm-dla-firm-handlowych" className="group rounded-xl border border-white/15 bg-white/[0.035] p-6 transition hover:border-white/40">
+              <h2 className="text-xl font-semibold">CRM dla zespołu handlowego</h2>
+              <p className="mt-3 leading-7 text-white/70">Leady, role, zadania i etapy sprzedaży w jednym procesie.</p>
+              <span className="mt-5 inline-flex items-center gap-2 text-sm underline underline-offset-4">Zobacz ofertę <ArrowRight className="h-4 w-4" aria-hidden="true"/></span>
+            </Link>
+            <Link href="/automatyzacja-leadow-i-sprzedazy" className="group rounded-xl border border-white/15 bg-white/[0.035] p-6 transition hover:border-white/40">
+              <h2 className="text-xl font-semibold">Automatyzacja leadów i sprzedaży</h2>
+              <p className="mt-3 leading-7 text-white/70">Połącz reklamę, formularz, CRM i kontakt handlowca.</p>
+              <span className="mt-5 inline-flex items-center gap-2 text-sm underline underline-offset-4">Zobacz ofertę <ArrowRight className="h-4 w-4" aria-hidden="true"/></span>
+            </Link>
+          </div>
+        </section>
+      )}
       <section className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-[0.8fr_1.2fr] md:px-8 md:py-24">
         <div>
           <p className="text-sm uppercase tracking-[0.18em] text-white">

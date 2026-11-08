@@ -180,6 +180,13 @@ export function BookingCalendar({ copy, locale, emptyMessage }: BookingCalendarP
       setTurnstileToken("");
       setState("success");
       setMessage(copy.bookingSuccessLabel);
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "generate_lead", {
+          lead_type: "confirmed_booking",
+          page_path: window.location.pathname,
+          page_location: window.location.href,
+        });
+      }
     } catch (error) {
       setState("error");
       setMessage(error instanceof Error ? error.message : copy.bookingErrorLabel);
