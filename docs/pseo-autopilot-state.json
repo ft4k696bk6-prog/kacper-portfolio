@@ -13,277 +13,281 @@
     "Supabase: limit 1000 rekordów w odpowiedzi",
     "Next.js: Hydration failed przez datę i strefę czasową",
     "Next.js: błędne importy client component i server component",
-    "CRM: po zdjęciu blokady handlowiec nadal nie widzi leada"
+    "CRM: po zdjęciu blokady handlowiec nadal nie widzi leada",
+    "Supabase: duplikaty rekordów po ponowieniu webhooka",
+    "Supabase: brak rekordów po zmianie roli użytkownika",
+    "Next.js: notFound działa w dev, ale 404 po buildzie",
+    "Next.js: server action nie działa po wdrożeniu",
+    "CRM: filtr przypisania utrzymuje nieaktualną listę",
+    "CRM: pliki klienta widoczne dla nieuprawnionej osoby",
+    "SEO: podstrony usług mają takie same title i description",
+    "SEO: spadek kliknięć bez spadku liczby wyświetleń",
+    "Google: podstrony nie mają linków wewnętrznych"
   ],
   "rejectedTopics": [],
   "seenIssueUrls": [],
-  "lastRun": "2026-11-07T16:55:45.036Z",
-  "runCount": 2,
+  "lastRun": "2026-11-08T09:34:15.202Z",
+  "runCount": 3,
   "lastSummary": {
     "attempts": 60,
-    "approved": 8,
-    "rejected": 52,
-    "cost": 0.2794
+    "approved": 9,
+    "rejected": 51,
+    "cost": 0.271
   },
   "failureHistory": {
     "Meta Ads: reklama zatwierdzona, ale nie ma wyświetleń": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:32:13.663Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:12:30.584Z",
       "reason": "editorial length"
     },
     "Meta Ads: odrzucenie płatności mimo środków na karcie": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:32:37.511Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:12:52.523Z",
       "reason": "editorial length"
     },
     "Facebook: osoba nie widzi strony w tożsamości reklamy": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:32:56.324Z",
-      "reason": "source"
+      "count": 3,
+      "lastAt": "2026-11-08T09:13:15.414Z",
+      "reason": "editorial length"
     },
     "Meta Business Suite: brak dostępu do leadów po zmianie administratora": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:33:15.535Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:13:36.868Z",
       "reason": "editorial length"
     },
     "Lead Ads: formularz nie pozwala pobrać CSV": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:33:40.107Z",
-      "reason": "independent QA"
+      "count": 3,
+      "lastAt": "2026-11-08T09:14:00.409Z",
+      "reason": "link broken"
     },
     "Lead Ads: webhook odbiera tylko część zgłoszeń": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:33:58.518Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:14:18.893Z",
       "reason": "editorial length"
     },
     "Meta: testowe leady działają, prawdziwe nie docierają": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:34:26.651Z",
-      "reason": "independent QA"
+      "count": 3,
+      "lastAt": "2026-11-08T09:14:39.860Z",
+      "reason": "editorial length"
     },
     "Meta: zmiana właściciela strony blokuje reklamowanie": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:35:18.464Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:15:01.654Z",
       "reason": "editorial length"
     },
     "Meta Ads: kampania zablokowana przez limit wydatków": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:35:41.306Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:15:27.575Z",
       "reason": "source"
     },
     "Meta: reklama ma wysoki CTR i zero kontaktów": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:36:19.136Z",
-      "reason": "independent QA"
+      "count": 3,
+      "lastAt": "2026-11-08T09:15:49.517Z",
+      "reason": "editorial length"
     },
     "Vercel: podgląd działa, ale produkcja wyświetla stary commit": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:36:42.600Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:16:12.485Z",
       "reason": "editorial length"
     },
     "Vercel: Deployment Protection blokuje dostęp klientowi": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:37:07.317Z",
-      "reason": "editorial length"
+      "count": 3,
+      "lastAt": "2026-11-08T09:16:39.799Z",
+      "reason": "independent QA"
     },
     "Vercel: wyświetla się 404 na własnej domenie": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:37:25.644Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:17:02.985Z",
       "reason": "editorial length"
     },
     "Vercel: domena przypisana do innego projektu": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:37:47.732Z",
-      "reason": "link broken"
+      "count": 3,
+      "lastAt": "2026-11-08T09:17:23.720Z",
+      "reason": "editorial length"
     },
     "Vercel: Function Invocation Timeout w formularzu": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:38:22.107Z",
-      "reason": "independent QA"
+      "count": 3,
+      "lastAt": "2026-11-08T09:17:43.613Z",
+      "reason": "editorial length"
     },
     "Vercel: Edge Function zwraca 500 tylko na produkcji": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:38:44.473Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:18:03.410Z",
       "reason": "editorial length"
     },
     "Vercel: webhook deploymentu nie uruchamia się po push": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:39:03.951Z",
-      "reason": "link broken"
+      "count": 3,
+      "lastAt": "2026-11-08T09:18:20.921Z",
+      "reason": "editorial length"
     },
     "Vercel: build zatrzymuje brakujący import zależności": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:39:22.152Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:18:40.666Z",
       "reason": "editorial length"
     },
     "Vercel: przekroczono limit zasobów i projekt jest wstrzymany": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:40:06.926Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:19:20.515Z",
       "reason": "editorial length"
     },
     "Supabase: insert narusza WITH CHECK": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:40:55.487Z",
-      "reason": "editorial length"
-    },
-    "Supabase: duplikaty rekordów po ponowieniu webhooka": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:41:15.202Z",
-      "reason": "editorial length"
-    },
-    "Supabase: brak rekordów po zmianie roli użytkownika": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:41:37.805Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:19:46.798Z",
       "reason": "editorial length"
     },
     "Supabase: query count różni się od liczby widocznych wierszy": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:43:30.396Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:21:20.797Z",
       "reason": "editorial length"
     },
     "Supabase: realtime nie aktualizuje listy leadów": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:44:19.018Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:21:40.878Z",
       "reason": "editorial length"
     },
     "Supabase: migracja bazy rozjeżdża schemat produkcyjny": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:44:44.513Z",
-      "reason": "editorial length"
+      "count": 3,
+      "lastAt": "2026-11-08T09:22:07.253Z",
+      "reason": "independent QA"
     },
     "Next.js: useSearchParams wymaga Suspense": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:45:58.322Z",
-      "reason": "link broken"
+      "count": 3,
+      "lastAt": "2026-11-08T09:22:57.205Z",
+      "reason": "editorial length"
     },
     "Next.js: metadata canonical wskazuje na stronę główną": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:46:19.639Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:23:15.540Z",
       "reason": "editorial length"
     },
     "Next.js: obraz w Image ucina twarz na mobile": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:46:42.045Z",
-      "reason": "editorial length"
-    },
-    "Next.js: notFound działa w dev, ale 404 po buildzie": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:47:07.609Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:23:36.043Z",
       "reason": "editorial length"
     },
     "React: useEffect wywołuje zapytanie dwa razy": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:47:26.402Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:24:19.341Z",
       "reason": "source"
     },
     "React: lista z nieprawidłowym key miesza rekordy": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:47:45.139Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:24:36.604Z",
       "reason": "editorial length"
     },
     "TypeScript: Property does not exist on type never": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:48:05.652Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:24:53.633Z",
       "reason": "editorial length"
     },
-    "Next.js: server action nie działa po wdrożeniu": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:48:28.406Z",
-      "reason": "link broken"
-    },
     "React: formularz traci dane po przejściu między krokami": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:48:49.427Z",
-      "reason": "source"
+      "count": 3,
+      "lastAt": "2026-11-08T09:25:43.225Z",
+      "reason": "editorial length"
     },
     "CRM: licznik przypisanych leadów różni się od listy": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:49:49.657Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:26:11.080Z",
       "reason": "editorial length"
     },
     "CRM: powiadomienia PWA nie działają na iPhonie": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:51:15.468Z",
-      "reason": "editorial length"
+      "count": 3,
+      "lastAt": "2026-11-08T09:26:52.442Z",
+      "reason": "source"
     },
     "CRM: callbacki znikają po zmianie strefy czasowej": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:51:39.553Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:27:07.675Z",
       "reason": "editorial length"
     },
     "CRM: dashboard liczy anulowane umowy do wyniku": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:52:02.208Z",
-      "reason": "editorial length"
-    },
-    "CRM: filtr przypisania utrzymuje nieaktualną listę": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:52:27.179Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:27:32.596Z",
       "reason": "editorial length"
     },
     "CRM: import CSV powoduje duplikaty telefonów": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:52:48.179Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:28:20.910Z",
       "reason": "editorial length"
     },
     "CRM: archiwalne leady nie powinny trafiać do kolejki": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:53:07.756Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:28:40.118Z",
       "reason": "editorial length"
     },
     "CRM: status leadu nie synchronizuje się między zakładkami": {
-      "count": 2,
-      "lastAt": "2026-11-07T16:53:54.643Z",
+      "count": 3,
+      "lastAt": "2026-11-08T09:29:30.268Z",
       "reason": "editorial length"
     },
     "Vercel: certyfikat SSL nie jest wydawany dla domeny": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:39:44.094Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-08T09:19:02.187Z",
+      "reason": "source"
     },
     "Supabase: Storage policy odrzuca upload zdjęcia": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:42:37.837Z",
-      "reason": "link broken"
+      "count": 2,
+      "lastAt": "2026-11-08T09:20:59.396Z",
+      "reason": "editorial length"
     },
     "Next.js: generateStaticParams nie zawiera nowych slugów": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:45:34.770Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-08T09:22:37.230Z",
+      "reason": "independent QA"
     },
     "CRM: dwie osoby edytują lead i nadpisują komentarze": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:50:46.970Z",
-      "reason": "editorial length"
-    },
-    "CRM: pliki klienta widoczne dla nieuprawnionej osoby": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:53:32.742Z",
+      "count": 2,
+      "lastAt": "2026-11-08T09:26:31.192Z",
       "reason": "editorial length"
     },
     "Google Search Console: wykryto, obecnie nie zindeksowano": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:54:22.434Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-08T09:29:49.977Z",
+      "reason": "link broken"
     },
     "Google Search Console: zindeksowano, choć zablokowano robots.txt": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:54:41.779Z",
+      "count": 2,
+      "lastAt": "2026-11-08T09:30:10.548Z",
       "reason": "editorial length"
     },
     "Google Search Console: canonical inny niż wybrany przez Google": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:55:02.999Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-08T09:30:35.380Z",
+      "reason": "link broken"
     },
     "Sitemap XML: URL jest poprawny, ale nie ma go w wynikach": {
-      "count": 1,
-      "lastAt": "2026-11-07T16:55:20.607Z",
+      "count": 2,
+      "lastAt": "2026-11-08T09:30:53.806Z",
       "reason": "editorial length"
     },
     "IndexNow: zgłoszenie przyjęte, ale strona nie jest indeksowana": {
+      "count": 2,
+      "lastAt": "2026-11-08T09:31:12.929Z",
+      "reason": "editorial length"
+    },
+    "SEO: Google pokazuje inny opis niż meta description": {
       "count": 1,
-      "lastAt": "2026-11-07T16:55:45.036Z",
+      "lastAt": "2026-11-08T09:31:53.485Z",
+      "reason": "editorial length"
+    },
+    "SEO: tag noindex pozostał po wersji testowej": {
+      "count": 1,
+      "lastAt": "2026-11-08T09:32:44.615Z",
+      "reason": "link broken"
+    },
+    "SEO: Googlebot otrzymuje 403, użytkownik 200": {
+      "count": 1,
+      "lastAt": "2026-11-08T09:33:09.553Z",
+      "reason": "editorial length"
+    },
+    "Open Graph: stara miniatura po zmianie logo": {
+      "count": 1,
+      "lastAt": "2026-11-08T09:33:26.979Z",
+      "reason": "editorial length"
+    },
+    "iCloud+: własna domena skonfigurowana, ale poczta nie dochodzi": {
+      "count": 1,
+      "lastAt": "2026-11-08T09:34:15.202Z",
       "reason": "editorial length"
     }
   },
