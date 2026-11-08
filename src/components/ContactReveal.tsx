@@ -1,6 +1,7 @@
 "use client";
 
 import { DustReveal } from "@/components/DustReveal";
+import { trackContactInteraction } from "@/lib/lead-analytics";
 import { useState } from "react";
 import type { ReactNode } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
@@ -62,6 +63,7 @@ export function ContactReveal({ copy, plain = false }: ContactRevealProps) {
       }
 
       setRevealed((current) => ({ ...current, [target]: payload.value }));
+      trackContactInteraction("reveal", target);
       setState("idle");
       setActiveTarget(null);
       setHumanCheckTarget(null);
@@ -85,6 +87,7 @@ export function ContactReveal({ copy, plain = false }: ContactRevealProps) {
       <div className="contact-reveal-grid">
         <RevealButton
           plain={plain}
+          target="phone"
           icon={<Phone aria-hidden="true" />}
           label={copy.phoneLabel}
           buttonLabel={copy.phoneButton}
@@ -95,6 +98,7 @@ export function ContactReveal({ copy, plain = false }: ContactRevealProps) {
         />
         <RevealButton
           plain={plain}
+          target="email"
           icon={<Mail aria-hidden="true" />}
           label={copy.emailLabel}
           buttonLabel={copy.emailButton}
@@ -130,6 +134,7 @@ export function ContactReveal({ copy, plain = false }: ContactRevealProps) {
 
 function RevealButton({
   plain,
+  target,
   icon,
   label,
   buttonLabel,
@@ -139,6 +144,7 @@ function RevealButton({
   onClick,
 }: {
   plain: boolean;
+  target: "phone" | "email";
   icon: ReactNode;
   label: string;
   buttonLabel: string;
@@ -156,6 +162,7 @@ function RevealButton({
       {value && href ? (
         <a
           href={href}
+          onClick={() => trackContactInteraction("click", target)}
           className="contact-revealed-value"
         >
           {!plain && <DustReveal text={value}/>}<span>{value}</span>

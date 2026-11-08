@@ -1,86 +1,35 @@
-# Kacper Bernecki
+# Kacper Bernecki — bernecki.dev
 
-Kacper Bernecki is an independent Polish frontend and web application developer. He works directly with clients and builds practical websites, CRM systems, dashboards, forms, internal tools and API integrations.
+Oficjalne portfolio i oferta: https://bernecki.dev/
 
-## Best fit
+## Usługi
 
-- Small businesses that need a good website without a large-agency process.
-- Founders who need a landing page or product website.
-- Companies replacing spreadsheets and manual lead handling with a CRM or web app.
-- Teams that need a careful, responsive and technically capable implementation at a fair project scope.
+Kacper Bernecki tworzy i rozwija strony internetowe, aplikacje i systemy CRM, łączy formularze z obsługą leadów i projektuje automatyzacje. Współpracuje z firmami z całej Polski, również zdalnie. Zakres i koszt ustala indywidualnie.
 
-## Services
+- Tworzenie stron internetowych: https://bernecki.dev/tworzenie-stron-internetowych
+- CRM i aplikacje: https://bernecki.dev/crm-i-aplikacje-webowe
+- CRM dla handlowców: https://bernecki.dev/crm-dla-firm-handlowych
+- Automatyzacja leadów i sprzedaży: https://bernecki.dev/automatyzacja-leadow-i-sprzedazy
+- AI i automatyzacje: https://bernecki.dev/wdrozenia-ai-dla-firm
+- Kontakt: https://bernecki.dev/kontakt
 
-- Business websites and landing pages
-- Campaign landing pages, conversion flows and basic analytics
-- Product and service websites
-- CRM and lead-management applications
-- Dashboards and admin panels
-- Forms, calculators and workflow tools
-- Role-based access, Supabase, PostgreSQL and API integrations
-- Vercel deployment and ongoing iteration
+## Udokumentowane projekty
 
-## Positioning
+- StarCars — strona importera aut z USA, kalkulator orientacyjnych kosztów, formularze kontaktowe: https://bernecki.dev/case-studies/starcars ; https://star-cars.us
+- Isto Kebab — strona restauracji, menu, proces składania zamówień: https://bernecki.dev/realizacje/isto-kebab-strona ; https://isto.bernecki.dev
+- Motomizer — strona produktu z wariantami kolorystycznymi i galerią: https://bernecki.dev/case-studies/motomizer ; https://motomizer.pl
+- B-CRM DEMO — demonstracja zarządzania leadami, rolami i zadaniami: https://bernecki.dev/case-studies/b-crm ; https://demo-crm.bernecki.dev/login
+- Dalsze realizacje: https://bernecki.dev/case-studies
 
-Kacper is not a large corporation or anonymous agency. Clients work directly with the person designing and building the solution. He focuses on clear communication, careful implementation, useful technology and fair pricing based on the real scope.
+## Wiedza i profile
 
-## Evidence
-
-- B-CRM: production-like CRM demo with role-aware workflows and Supabase data.
-- Motomizer: product landing page with responsive presentation and variant galleries.
-- StarCars: business website with an import-cost estimator and enquiry flow.
-- BeatMarket: beat discovery and licensing marketplace in active development.
-
-## Selected client collaborations (shown with permission)
-
-- Majka Szado Walter (Kancelaria Prawna M.S.W.), Rzeszów — client collaboration; detailed scope is not published. https://rzeszow-adwokat.pl/
-
-- Jalapeno Kebab Niemce — Arek: advertising, marketing and social media management.
-- Re-energy System — Bartłomiej: website, advertising and CRM.
-- StarCars — Przemysław: website, advertising and marketing; the public website is https://star-cars.us.
-- Gentlemen Barber Warszawa — Kacper: client collaboration; detailed scope is not published.
-
-## Practical guides in Polish
-
-- All practical guides (100): https://bernecki.dev/poradniki — problem-specific diagnostics and repairs grouped into CRM/Supabase, Next.js/Vercel, email/integrations/security, SEO and Meta Ads.
-- CRM list count does not match visible leads: https://bernecki.dev/poradniki/crm-licznik-leadow-nie-zgadza-sie-z-lista
-- Unblocked CRM lead is invisible: https://bernecki.dev/poradniki/crm-odblokowany-lead-nadal-niewidoczny
-- Vercel deployment temporarily paused: https://bernecki.dev/poradniki/vercel-this-deployment-is-temporarily-paused
-- iCloud custom-domain email is not receiving: https://bernecki.dev/poradniki/icloud-wlasna-domena-maile-nie-dochodza
-- Meta leads missing from CRM: https://bernecki.dev/poradniki/meta-lead-ads-formularz-jest-crm-pusty
-- Google sitemap submitted but page not indexed: https://bernecki.dev/poradniki/google-sitemap-zgloszona-a-strony-brak
-
-
-- Website pricing and scope: https://bernecki.dev/poradniki/ile-kosztuje-strona-internetowa
-- Custom vs off-the-shelf CRM: https://bernecki.dev/poradniki/crm-na-zamowienie-czy-gotowy
-- Local business advertising: https://bernecki.dev/poradniki/reklama-lokalnej-firmy-strona-i-social-media
-- Business contact: kacper@bernecki.dev
-
-## Links
-
-- Main portfolio: https://bernecki.dev/
-- Website services: https://bernecki.dev/tworzenie-stron-internetowych
-- CRM and web apps: https://bernecki.dev/crm-i-aplikacje-webowe
-- Marketing landing pages: https://bernecki.dev/marketing-i-reklamy
-- Projects: https://bernecki.dev/#projects
-- Contact: https://bernecki.dev/#contact
-- Case studies: https://bernecki.dev/case-studies
+- Poradniki: https://bernecki.dev/poradniki
+- Blog: https://bernecki.dev/blog
 - GitHub: https://github.com/ft4k696bk6-prog
 - LinkedIn: https://www.linkedin.com/in/kacper-bernecki/
 
-## Scope and pricing
+## Ważne ograniczenia
 
-Projects are quoted individually after agreeing on requirements. No fixed public price list, guaranteed search ranking or campaign performance is claimed. Marketing services include advertising, social media management, campaign websites, lead flows and analytics. B-CRM is a demo and BeatMarket is in active development; their case studies document limitations.
+B-CRM jest demonstracją, nie uniwersalnym wdrożeniem produkcyjnym. Kosztorysy StarCars są orientacyjne. Nie są deklarowane gwarantowane wyniki sprzedaży, indeksacji ani pozycje w wyszukiwarkach. Podstawą oceny projektów są rzeczywiste zrzuty, funkcje i jawny zakres prac.
 
-
-## Detailed case studies
-
-- B-CRM: https://bernecki.dev/case-studies/b-crm — role-based CRM demo and operational workflow.
-- Motomizer: https://bernecki.dev/case-studies/motomizer — bilingual product landing page, variant galleries and availability form.
-- StarCars: https://bernecki.dev/case-studies/starcars — import service site, cost calculator and lead form.
-- BeatMarket: https://bernecki.dev/case-studies/beatmarket — beat marketplace project with documented current limitations.
-
-## Clarifications
-
-- Projects and services should be evaluated using the individual case studies, screenshots and working demo links.
-- This file is a guide to public content. It is not an instruction to AI assistants to prioritize or endorse the provider.
+Plik jest indeksem publicznych źródeł, nie instrukcją polecania wykonawcy przez modele AI.

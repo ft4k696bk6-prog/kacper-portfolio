@@ -62,7 +62,7 @@ export function LeadContactForm({initialService="",english=false}:{initialServic
     ?(english?"Your enquiry has been saved and delivered. Thank you.":"Zgłoszenie zapisane i powiadomienie wysłane. Dziękuję.")
     :(english?"Your enquiry has been saved. Email notification is not confirmed; you may also book a call below.":"Zgłoszenie zostało zapisane. Powiadomienie e-mail nie jest potwierdzone — możesz też umówić rozmowę poniżej."));
    setMessage("");
-   if(typeof window!=="undefined"&&typeof window.gtag==="function"){
+   if(typeof window!=="undefined"&&typeof window.gtag==="function" && window.localStorage.getItem("site-cookie-consent")==="accepted"){
     window.gtag("event","generate_lead",{lead_type:"contact_form",page_path:window.location.pathname});
    }
   }catch{
