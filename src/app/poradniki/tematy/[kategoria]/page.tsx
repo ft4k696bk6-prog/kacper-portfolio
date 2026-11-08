@@ -35,6 +35,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
       canonical: `https://bernecki.dev/poradniki/tematy/${kategoria}${page > 1 ? `?strona=${page}` : ""}`,
       ...(page===1&&englishCategoryCounts().some(c=>c.slug===kategoria&&c.count>0)?{languages:{"pl-PL":`https://bernecki.dev/poradniki/tematy/${kategoria}`,en:`https://bernecki.dev/en/guides/topics/${kategoria}`}}:{})
     },
+    openGraph:{...metadata.openGraph,url:`https://bernecki.dev/poradniki/tematy/${kategoria}${page>1?`?strona=${page}`:""}`},
     robots: { index: true, follow: true }
   };
 }
