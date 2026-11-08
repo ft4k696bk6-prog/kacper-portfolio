@@ -18,11 +18,11 @@ const siteUrl = "https://bernecki.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Rozwój biznesu, strony, CRM i marketing | Kacper Bernecki",
+    default: "Rozwój biznesu, AI, strony, CRM i marketing | Kacper Bernecki",
     template: "%s | Kacper Bernecki",
   },
   description:
-    "Rozwój biznesu, produkty, dostawcy, strony, CRM i marketing. Od pomysłu do działającego przedsięwzięcia z Kacprem Berneckim.",
+    "Rozwój biznesu, wdrożenia AI, produkty, dostawcy, strony, CRM i marketing. Od pomysłu do działającego przedsięwzięcia z Kacprem Berneckim.",
   keywords: [
     "Kacper Bernecki",
     "rozwój biznesu",
@@ -36,6 +36,9 @@ export const metadata: Metadata = {
     "Next.js Developer",
     "Supabase",
     "CRM",
+    "wdrożenia AI dla firm",
+    "AI i automatyzacje",
+    "asystenci AI dla biznesu",
     "dashboardy",
     "aplikacje biznesowe",
     "formularze",

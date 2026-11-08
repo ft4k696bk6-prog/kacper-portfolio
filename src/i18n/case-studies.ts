@@ -549,11 +549,11 @@ export const enCaseStudies: CaseStudiesContent = {
       summary:
         "The portfolio is structured around B-CRM as the strongest technical proof and keeps positioning specific to business web apps.",
       status: "Active development",
-      liveUrl: "https://kacper-portfolio.vercel.app",
+      liveUrl: "https://bernecki.dev",
       repoUrl: "https://github.com/ft4k696bk6-prog/kacper-portfolio",
       images: [
         {
-          src: "/images/projects/portfolio-home.jpg",
+          src: "https://s0.wp.com/mshots/v1/https%3A%2F%2Fbernecki.dev?vpw=1440&vph=1100&w=1200&requeue=true",
           alt: "Portfolio homepage preview",
         },
       ],

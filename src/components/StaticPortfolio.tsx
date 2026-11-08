@@ -37,6 +37,8 @@ const jsonLd = {
         "Website development",
         "CRM systems",
         "Business web applications",
+        "AI API integrations",
+        "Business process automation",
         "React",
         "TypeScript",
         "Next.js",
@@ -60,12 +62,14 @@ const jsonLd = {
         "CRM development",
         "Business web application development",
         "Landing page development",
+        "AI integration and process automation",
       ],
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: "Usługi Kacpra Berneckiego",
         itemListElement: [
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Rozwój biznesu i koordynacja wdrożeń", url: "https://bernecki.dev/rozwoj-biznesu" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Wdrożenia AI i automatyzacja procesów", url: "https://bernecki.dev/wdrozenia-ai-dla-firm" } },
           {
             "@type": "Offer",
             itemOffered: {

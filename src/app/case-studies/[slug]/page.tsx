@@ -71,7 +71,7 @@ export default async function Page({ params }: CaseStudyRouteProps) {
     inLanguage: "pl-PL",
     author: { "@id": "https://bernecki.dev/#person" },
     ...(study.liveUrl ? { exampleOfWork: { "@type": "WebSite", url: study.liveUrl } } : {}),
-    ...(study.images?.length ? { image: study.images.map(img => `https://bernecki.dev${img.src}`) } : {}),
+    ...(study.images?.length ? { image: study.images.map(img => img.src.startsWith("https://") ? img.src : `https://bernecki.dev${img.src}`) } : {}),
     keywords: study.stack.join(", "),
   };
   return <>
