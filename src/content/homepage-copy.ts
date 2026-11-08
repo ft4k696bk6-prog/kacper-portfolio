@@ -6,16 +6,16 @@ export const homepageCopy = {
     projects: "Zobacz realizacje",
     call: "Umów rozmowę",
     portrait: "Portret Kacpra Berneckiego z założonymi rękami",
-    services: "Biznes to więcej niż strona internetowa.",
+    services: "Co mogę zrobić dla Twojej firmy?"
     offer: [
-      ["Start i rozwój biznesu", "Pomysł, model biznesowy, porównanie kosztów i plan działania. Również edukacyjne materiały o podatkach — bez indywidualnego doradztwa.", "/rozwoj-biznesu"],
+      ["Start i rozwój biznesu", "Pomysł, koszty i plan działania. Praktyczne wnioski z prowadzenia i rozwijania własnych firm.", "/rozwoj-biznesu"],
       ["Produkty, dostawcy i import", "Sourcing, oferty producentów, próbki, kalkulacja dostawy i koordynacja wdrożenia.", "/rozwoj-biznesu"],
       ["Strony, sklepy i systemy", "Strony firmowe, e-commerce, CRM, aplikacje i automatyzacje, które wspierają sprzedaż.", "/crm-i-aplikacje-webowe"],
       ["AI i automatyzacje dla firm", "Asystenci AI, integracje API, chatboty i analiza danych. Najpierw audyt i pilotaż, potem wdrożenie.", "/wdrozenia-ai-dla-firm"],
       ["Marketing i sprzedaż", "Oferta, kampanie, pozyskiwanie klientów, analiza wyników i doskonalenie procesu.", "/marketing-i-reklamy"],
     ],
     about: "Praktyka zamiast gotowych schematów.",
-    bio: "Łączę rozwój biznesu, technologię, automatyzacje AI i marketing. Rozwijałem projekty z branży OZE, importu samochodów, sprzedaży produktów i aplikacji dla firm. Pomagam przekładać pomysły na konkretne procesy i narzędzia. Nie jestem doradcą podatkowym ani kancelarią — sprawy wymagające uprawnień powinny trafić do odpowiedniego specjalisty.",
+    bio: "Łączę rozwój biznesu, technologię, automatyzacje AI i marketing. Rozwijałem projekty z branży OZE, importu samochodów, sprzedaży produktów i aplikacji dla firm. Pomagam przekładać pomysły na konkretne procesy i narzędzia. Dzielę się również tym, czego nauczyły mnie rzeczywiste wdrożenia i błędy w prowadzeniu firm.",
     steps: [
       ["Sprawdzamy, czy pomysł ma sens", "Klient, potrzeba, koszty, ryzyka i realne możliwości."],
       ["Budujemy najważniejsze elementy", "Dostawcy, produkt, oferta, technologia, marketing i proces."],
@@ -42,16 +42,16 @@ export const homepageCopy = {
     projects: "View projects",
     call: "Book a call",
     portrait: "Portrait of Kacper Bernecki with arms crossed",
-    services: "Business is more than a website.",
+    services: "How can I help your business?"
     offer: [
-      ["Launch and grow a business", "Business strategy, costs and practical launch plans, with educational tax explanations rather than regulated tax advice.", "/en/business"],
+      ["Launch and grow a business", "Planning, costs and lessons from running and growing real businesses.", "/en/business"],
       ["Products, suppliers and imports", "Supplier research, quotes, samples, landed-cost estimates and sourcing coordination.", "/en/business"],
       ["Websites, shops and systems", "Business websites, e-commerce, CRM, applications and automation built to support sales.", "/en/services/crm"],
       ["AI and process automation", "AI assistants, API integrations and business data analysis, starting with a controlled pilot.", "/wdrozenia-ai-dla-firm"],
       ["Marketing and sales", "Offers, campaigns, customer acquisition, results analysis and workflow improvements.", "/en/services/marketing"],
     ],
     about: "Hands-on experience, not a generic formula.",
-    bio: "I connect business development, technology, AI automation and marketing. My projects span renewable energy, car imports, physical products and business applications. I help turn ideas into practical workflows and tools. I am not a licensed tax adviser or law firm; regulated matters need an appropriately qualified specialist.",
+    bio: "I connect business development, technology, AI automation and marketing. My projects span renewable energy, car imports, physical products and business applications. I help turn ideas into practical workflows and tools and share practical lessons from running businesses, including mistakes.",
     steps: [
       ["Check the commercial case", "Customers, demand, costs, risks and realistic opportunities."],
       ["Build what matters first", "Suppliers, product, offer, technology, marketing and workflow."],

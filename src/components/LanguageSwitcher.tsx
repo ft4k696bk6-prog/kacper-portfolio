@@ -8,10 +8,9 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const navItems = [
-  { href: "#services", key: "home" },
-  { href: "#about", key: "about" },
-  { href: "#projects", key: "projects" },
-  { href: "#contact", key: "contact" },
+  { href: "#projects", pl: "Realizacje", en: "Projects" },
+  { href: "#services", pl: "Oferta", en: "Services" },
+  { href: "#guides", pl: "Poradniki", en: "Guides" },
 ] as const;
 
 export function LanguageSwitcher() {
@@ -143,12 +142,10 @@ export function LanguageSwitcher() {
               href={anchorHref(item.href)}
               className="ui-nav rounded-md px-4 py-2 text-sm"
             >
-              {t.nav[item.key]}
+              {lang==="pl"?item.pl:item.en}
             </a>
           ))}
-          <Link href={lang === "en" ? "/en/business" : "/rozwoj-biznesu"} className="ui-nav rounded-md px-4 py-2 text-sm">{lang === "pl" ? "Rozwój biznesu" : "Business"}</Link>
-          <Link href={lang === "en" ? "/en/guides" : "/poradniki"} className="ui-nav rounded-md px-4 py-2 text-sm">{lang === "pl" ? "Poradniki" : "Guides"}</Link>
-          <Link href={lang === "en" ? "/en/blog" : "/blog"} className="ui-nav rounded-md px-4 py-2 text-sm">Blog</Link>
+          <Link href={lang==="en"?"/en/business":"/rozwoj-biznesu"} className="ui-nav rounded-md px-4 py-2 text-sm">{lang==="pl"?"Rozwój biznesu":"Business"}</Link>
         </nav>
 
         <div className="hidden items-center gap-3 xl:flex">{cookies}
@@ -157,7 +154,7 @@ export function LanguageSwitcher() {
             {languageButton("en", "ENG")}
           </div>
           <a
-            href={anchorHref("#contact")}
+            href="/kontakt"
             className="brand-action glass-action inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm transition-all hover:-translate-y-0.5"
           >
             <Mail className="h-4 w-4" />
@@ -206,15 +203,13 @@ export function LanguageSwitcher() {
                 className="glass-action rounded-md px-3 py-3 text-base text-white hover:bg-[var(--brand-black)]"
                 onClick={() => setIsOpen(false)}
               >
-                {t.nav[item.key]}
+                {lang==="pl"?item.pl:item.en}
               </a>
             ))}
-            <Link href={lang === "en" ? "/en/business" : "/rozwoj-biznesu"} className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang === "pl" ? "Rozwój biznesu" : "Business development"}</Link>
-            <Link href={lang === "en" ? "/en/guides" : "/poradniki"} className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang === "pl" ? "Poradniki" : "Guides"}</Link>
-            <Link href={lang === "en" ? "/en/blog" : "/blog"} className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>Blog</Link>
+            <Link href={lang==="en"?"/en/business":"/rozwoj-biznesu"} className="glass-action rounded-md px-3 py-3 text-base text-white" onClick={() => setIsOpen(false)}>{lang==="pl"?"Rozwój biznesu":"Business development"}</Link>
             <div className="mt-3 flex items-center justify-between gap-3">
               <a
-                href={anchorHref("#contact")}
+                href="/kontakt"
                 onClick={() => setIsOpen(false)}
                 className="brand-action glass-action inline-flex items-center gap-2 rounded-md  px-4 py-2 text-sm text-black"
               >
