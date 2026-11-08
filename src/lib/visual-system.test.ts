@@ -15,9 +15,9 @@ describe("shared visual system", () => {
   it("applies the same page system to every page family", () => {
     for (const file of [
       "components/CaseStudyPage.tsx", "components/ServiceLandingPage.tsx", "components/ChoosePortfolio.tsx",
-      "app/case-studies/page.tsx", "app/case-studies/re-energy-meta-ads/page.tsx",
-      "app/poradniki/page.tsx", "app/poradniki/[slug]/page.tsx", "app/realizacje/[slug]/page.tsx",
-      "app/reklamy-meta-ads-dla-firm/page.tsx", "app/not-found.tsx",
+      "app/(pl)/case-studies/page.tsx", "app/(pl)/case-studies/re-energy-meta-ads/page.tsx",
+      "app/(pl)/poradniki/page.tsx", "app/(pl)/poradniki/[slug]/page.tsx", "app/(pl)/realizacje/[slug]/page.tsx",
+      "app/(pl)/reklamy-meta-ads-dla-firm/page.tsx", "app/not-found.tsx",
     ]) {
       expect(readFileSync(new URL(`../${file}`, import.meta.url), "utf8")).toContain('className="site-page ');
     }
