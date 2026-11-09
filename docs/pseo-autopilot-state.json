@@ -22,17 +22,18 @@
     "CRM: pliki klienta widoczne dla nieuprawnionej osoby",
     "SEO: podstrony usług mają takie same title i description",
     "SEO: spadek kliknięć bez spadku liczby wyświetleń",
-    "Google: podstrony nie mają linków wewnętrznych"
+    "Google: podstrony nie mają linków wewnętrznych",
+    "WordPress: biała strona po aktualizacji wtyczki"
   ],
   "rejectedTopics": [],
   "seenIssueUrls": [],
-  "lastRun": "2026-11-08T09:34:15.202Z",
-  "runCount": 3,
+  "lastRun": "2026-11-09T10:25:58.407Z",
+  "runCount": 4,
   "lastSummary": {
     "attempts": 60,
-    "approved": 9,
-    "rejected": 51,
-    "cost": 0.271
+    "approved": 1,
+    "rejected": 59,
+    "cost": 0.186
   },
   "failureHistory": {
     "Meta Ads: reklama zatwierdzona, ale nie ma wyświetleń": {
@@ -221,74 +222,299 @@
       "reason": "editorial length"
     },
     "Vercel: certyfikat SSL nie jest wydawany dla domeny": {
-      "count": 2,
-      "lastAt": "2026-11-08T09:19:02.187Z",
-      "reason": "source"
+      "count": 3,
+      "lastAt": "2026-11-09T09:57:11.482Z",
+      "reason": "link broken"
     },
     "Supabase: Storage policy odrzuca upload zdjęcia": {
-      "count": 2,
-      "lastAt": "2026-11-08T09:20:59.396Z",
+      "count": 3,
+      "lastAt": "2026-11-09T09:57:31.057Z",
       "reason": "editorial length"
     },
     "Next.js: generateStaticParams nie zawiera nowych slugów": {
-      "count": 2,
-      "lastAt": "2026-11-08T09:22:37.230Z",
-      "reason": "independent QA"
+      "count": 3,
+      "lastAt": "2026-11-09T09:57:51.031Z",
+      "reason": "editorial length"
     },
     "CRM: dwie osoby edytują lead i nadpisują komentarze": {
-      "count": 2,
-      "lastAt": "2026-11-08T09:26:31.192Z",
+      "count": 3,
+      "lastAt": "2026-11-09T09:58:11.384Z",
       "reason": "editorial length"
     },
     "Google Search Console: wykryto, obecnie nie zindeksowano": {
-      "count": 2,
-      "lastAt": "2026-11-08T09:29:49.977Z",
-      "reason": "link broken"
-    },
-    "Google Search Console: zindeksowano, choć zablokowano robots.txt": {
-      "count": 2,
-      "lastAt": "2026-11-08T09:30:10.548Z",
+      "count": 3,
+      "lastAt": "2026-11-09T09:58:33.209Z",
       "reason": "editorial length"
     },
+    "Google Search Console: zindeksowano, choć zablokowano robots.txt": {
+      "count": 3,
+      "lastAt": "2026-11-09T09:58:52.379Z",
+      "reason": "link broken"
+    },
     "Google Search Console: canonical inny niż wybrany przez Google": {
-      "count": 2,
-      "lastAt": "2026-11-08T09:30:35.380Z",
+      "count": 3,
+      "lastAt": "2026-11-09T09:59:17.636Z",
       "reason": "link broken"
     },
     "Sitemap XML: URL jest poprawny, ale nie ma go w wynikach": {
-      "count": 2,
-      "lastAt": "2026-11-08T09:30:53.806Z",
-      "reason": "editorial length"
-    },
-    "IndexNow: zgłoszenie przyjęte, ale strona nie jest indeksowana": {
-      "count": 2,
-      "lastAt": "2026-11-08T09:31:12.929Z",
-      "reason": "editorial length"
-    },
-    "SEO: Google pokazuje inny opis niż meta description": {
-      "count": 1,
-      "lastAt": "2026-11-08T09:31:53.485Z",
-      "reason": "editorial length"
-    },
-    "SEO: tag noindex pozostał po wersji testowej": {
-      "count": 1,
-      "lastAt": "2026-11-08T09:32:44.615Z",
+      "count": 3,
+      "lastAt": "2026-11-09T09:59:37.236Z",
       "reason": "link broken"
     },
+    "IndexNow: zgłoszenie przyjęte, ale strona nie jest indeksowana": {
+      "count": 3,
+      "lastAt": "2026-11-09T09:59:55.061Z",
+      "reason": "source"
+    },
+    "SEO: Google pokazuje inny opis niż meta description": {
+      "count": 2,
+      "lastAt": "2026-11-09T10:00:16.723Z",
+      "reason": "link broken"
+    },
+    "SEO: tag noindex pozostał po wersji testowej": {
+      "count": 2,
+      "lastAt": "2026-11-09T10:00:40.672Z",
+      "reason": "editorial length"
+    },
     "SEO: Googlebot otrzymuje 403, użytkownik 200": {
-      "count": 1,
-      "lastAt": "2026-11-08T09:33:09.553Z",
+      "count": 2,
+      "lastAt": "2026-11-09T10:01:00.490Z",
       "reason": "editorial length"
     },
     "Open Graph: stara miniatura po zmianie logo": {
-      "count": 1,
-      "lastAt": "2026-11-08T09:33:26.979Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-09T10:01:23.431Z",
+      "reason": "source"
     },
     "iCloud+: własna domena skonfigurowana, ale poczta nie dochodzi": {
-      "count": 1,
-      "lastAt": "2026-11-08T09:34:15.202Z",
+      "count": 2,
+      "lastAt": "2026-11-09T10:01:42.898Z",
       "reason": "editorial length"
+    },
+    "iCloud: Ukryj mój adres e-mail nie przekazuje wiadomości": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:02:13.049Z",
+      "reason": "independent QA"
+    },
+    "iCloud Mail: dodany adres bez osobnego hasła do skrzynki": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:02:31.680Z",
+      "reason": "editorial length"
+    },
+    "DNS: podwójny SPF powoduje błąd uwierzytelnienia": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:02:54.119Z",
+      "reason": "editorial length"
+    },
+    "DNS: nieprawidłowe MX kierują pocztę do starego hostingu": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:03:14.089Z",
+      "reason": "source"
+    },
+    "DMARC: wiadomości z domeny lądują w spamie": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:03:35.445Z",
+      "reason": "editorial length"
+    },
+    "DKIM: podpis nie przechodzi weryfikacji mimo ustawienia rekordu": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:04:03.269Z",
+      "reason": "editorial length"
+    },
+    "Cloudflare: proxy DNS psuje weryfikację subdomeny": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:04:25.464Z",
+      "reason": "editorial length"
+    },
+    "DNS: subdomena CRM kieruje do złego projektu": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:04:49.529Z",
+      "reason": "editorial length"
+    },
+    "SSL: przeglądarka wyświetla ERR_CERT_COMMON_NAME_INVALID": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:05:15.076Z",
+      "reason": "editorial length"
+    },
+    "Poczta: formularz wysyła 200, ale wiadomość nie dociera": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:05:39.639Z",
+      "reason": "source"
+    },
+    "DNS: propagacja zmian trwa dłużej niż planowano": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:06:00.845Z",
+      "reason": "editorial length"
+    },
+    "Formularz kontaktowy: wysyła się bez błędu, lecz nie ma maila": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:06:25.444Z",
+      "reason": "source"
+    },
+    "Formularz: Turnstile token wygasa przed wysłaniem": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:06:43.561Z",
+      "reason": "editorial length"
+    },
+    "API: 401 Unauthorized po odświeżeniu strony": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:07:07.592Z",
+      "reason": "source"
+    },
+    "API: CORS blocked by policy na domenie produkcyjnej": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:07:36.567Z",
+      "reason": "editorial length"
+    },
+    "Webhook: serwer zwraca 200, ale zapis nie występuje": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:07:44.713Z",
+      "reason": "editorial length"
+    },
+    "Webhook: ten sam event przychodzi wielokrotnie": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:08:06.634Z",
+      "reason": "editorial length"
+    },
+    "Formularz: spam mimo honeypota i rate limitu": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:08:26.720Z",
+      "reason": "editorial length"
+    },
+    "API: rate limit 429 po krótkim czasie": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:08:45.699Z",
+      "reason": "editorial length"
+    },
+    "API: 413 Payload Too Large przy przesyłaniu zdjęć": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:09:07.047Z",
+      "reason": "source"
+    },
+    "Formularz: walidacja nie pokazuje błędnego pola": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:09:25.345Z",
+      "reason": "link broken"
+    },
+    "API: błędne odświeżanie access tokena integracji": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:09:49.147Z",
+      "reason": "source"
+    },
+    "API: różnica content-type psuje parsowanie JSON": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:10:06.884Z",
+      "reason": "source"
+    },
+    "WordPress: 404 na wpisach po zmianie permalinków": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:10:56.330Z",
+      "reason": "editorial length"
+    },
+    "WordPress: mieszana zawartość HTTP i HTTPS": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:11:21.576Z",
+      "reason": "editorial length"
+    },
+    "WordPress: formularz nie wysyła wiadomości przez SMTP": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:11:39.193Z",
+      "reason": "editorial length"
+    },
+    "WordPress: cache nie pokazuje zmian w edytorze": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:12:01.571Z",
+      "reason": "editorial length"
+    },
+    "WordPress: menu mobilne przysłania ekran": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:12:20.473Z",
+      "reason": "editorial length"
+    },
+    "WordPress: konflikt dwóch wtyczek SEO": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:13:29.696Z",
+      "reason": "provider error"
+    },
+    "WordPress: zniknęły obrazki po migracji domeny": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:14:16.525Z",
+      "reason": "provider error"
+    },
+    "WooCommerce: checkout nie kończy zamówienia": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:15:03.522Z",
+      "reason": "provider error"
+    },
+    "WordPress: przekroczenie limitu pamięci PHP": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:15:50.557Z",
+      "reason": "provider error"
+    },
+    "WordPress: nie da się wgrać pliku .webp": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:16:37.205Z",
+      "reason": "provider error"
+    },
+    "WordPress: spam w komentarzach po wyłączeniu moderacji": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:17:23.949Z",
+      "reason": "provider error"
+    },
+    "Mobile: tekst nachodzi na zdjęcie osoby": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:18:10.631Z",
+      "reason": "provider error"
+    },
+    "Mobile: poziomy scroll przez element z position absolute": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:18:57.449Z",
+      "reason": "provider error"
+    },
+    "Mobile: przycisk telefon jest za duży w nawigacji": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:19:44.201Z",
+      "reason": "provider error"
+    },
+    "CSS: object-fit przycina zdjęcie produktu": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:20:30.950Z",
+      "reason": "provider error"
+    },
+    "CSS: fixed header zasłania początek artykułu": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:21:17.736Z",
+      "reason": "provider error"
+    },
+    "UX: slider projektów nie daje się przesuwać palcem": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:22:04.444Z",
+      "reason": "provider error"
+    },
+    "WWW: logo z białym tłem na ciemnej stronie": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:22:51.229Z",
+      "reason": "provider error"
+    },
+    "WWW: za duża pusta przestrzeń nad hero": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:23:38.137Z",
+      "reason": "provider error"
+    },
+    "WWW: znikające ikony po aktualizacji biblioteki": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:24:24.770Z",
+      "reason": "provider error"
+    },
+    "WWW: brak alt przy ważnych zdjęciach": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:25:11.708Z",
+      "reason": "provider error"
+    },
+    "WWW: błędy CLS przez obraz bez wymiarów": {
+      "count": 1,
+      "lastAt": "2026-11-09T10:25:58.407Z",
+      "reason": "provider error"
     }
   },
   "migratedInitialRejections": 50
