@@ -22,6 +22,8 @@ export function SiteFooter() {
         <Link className="block" href={english?"/en/business":"/rozwoj-biznesu"}>{english?"Business development and sourcing":"Rozwój biznesu i sourcing"}</Link>
         <Link className="block" href={english?"/en/services/websites":"/tworzenie-stron-internetowych"}>{english?"Website development":"Tworzenie stron internetowych"}</Link>
         <Link className="block" href={english?"/en/services/crm":"/crm-i-aplikacje-webowe"}>{english?"CRM and web applications":"CRM i aplikacje webowe"}</Link>
+        {!english && <Link className="block" href="/crm-dla-firm-handlowych">CRM dla firm handlowych</Link>}
+        {!english && <Link className="block" href="/automatyzacja-leadow-i-sprzedazy">Automatyzacja leadów i sprzedaży</Link>}
         <Link className="block" href={english?"/en/services/marketing":"/marketing-i-reklamy"}>{english?"Marketing, advertising and social media":"Marketing, reklamy i social media"}</Link>
         {!english && <Link className="block" href="/uslugi">Usługi dla firm w całej Polsce</Link>}
         <Link className="block" href="/wdrozenia-ai-dla-firm">{english?"AI and process automation":"AI i automatyzacje dla firm"}</Link>
@@ -29,6 +31,7 @@ export function SiteFooter() {
       <nav aria-label={english?"Before we talk":"Poznaj współpracę"} className="space-y-4 text-white">
         <p className="text-xs uppercase tracking-widest text-white/70">{english?"Before we talk":"Przed rozmową"}</p>
         <Link className="block" href={english?"/en/case-studies":"/case-studies"}>{english?"Case studies and live projects":"Realizacje i działające projekty"}</Link>
+        {!english && <Link className="block" href="/realizacje">Pozostałe realizacje</Link>}
         <Link className="block" href="/#collaborations">{english?"Client collaborations":"Współprace z firmami"}</Link>
         <Link className="block" href={english?"/en/guides":"/poradniki"}>{english?"Practical troubleshooting guides":"Poradniki dla przedsiębiorców"}</Link>
         <Link className="block" href={english?"/en/blog":"/blog"}>{english?"Articles and insights":"Blog i artykuły"}</Link>
