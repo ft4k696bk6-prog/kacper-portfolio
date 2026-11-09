@@ -10,7 +10,8 @@ export const homepageCopy = {
     offer: [
       ["Start i rozwój biznesu", "Pomysł, koszty i plan działania. Praktyczne wnioski z prowadzenia i rozwijania własnych firm.", "/rozwoj-biznesu"],
       ["Produkty, dostawcy i import", "Sourcing, oferty producentów, próbki, kalkulacja dostawy i koordynacja wdrożenia.", "/rozwoj-biznesu"],
-      ["Strony, sklepy i systemy", "Strony firmowe, e-commerce, CRM, aplikacje i automatyzacje, które wspierają sprzedaż.", "/crm-i-aplikacje-webowe"],
+      ["Strony internetowe i sklepy", "Responsywne strony firmowe, landing page i sklepy z przejrzystą ofertą, formularzem i pomiarem zapytań.", "/tworzenie-stron-internetowych"],
+      ["CRM i aplikacje dla firm", "Leady, zadania, uprawnienia i raporty w dedykowanym systemie dopasowanym do procesu sprzedaży.", "/crm-i-aplikacje-webowe"],
       ["AI i automatyzacje dla firm", "Asystenci AI, integracje API, chatboty i analiza danych. Najpierw audyt i pilotaż, potem wdrożenie.", "/wdrozenia-ai-dla-firm"],
       ["Marketing i sprzedaż", "Oferta, kampanie, pozyskiwanie klientów, analiza wyników i doskonalenie procesu.", "/marketing-i-reklamy"],
     ],
@@ -46,7 +47,8 @@ export const homepageCopy = {
     offer: [
       ["Launch and grow a business", "Planning, costs and lessons from running and growing real businesses.", "/en/business"],
       ["Products, suppliers and imports", "Supplier research, quotes, samples, landed-cost estimates and sourcing coordination.", "/en/business"],
-      ["Websites, shops and systems", "Business websites, e-commerce, CRM, applications and automation built to support sales.", "/en/services/crm"],
+      ["Websites and online shops", "Responsive business sites, landing pages and shops with clear offers, contact forms and measurable enquiries.", "/en/services/websites"],
+      ["CRM and business applications", "Lead management, roles, reporting and internal workflows in software tailored to your sales process.", "/en/services/crm"],
       ["AI and process automation", "AI assistants, API integrations and business data analysis, starting with a controlled pilot.", "/wdrozenia-ai-dla-firm"],
       ["Marketing and sales", "Offers, campaigns, customer acquisition, results analysis and workflow improvements.", "/en/services/marketing"],
     ],
