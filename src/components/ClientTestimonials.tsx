@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -11,7 +12,6 @@ type Testimonial = {
   quotePl: string;
   quoteEn: string;
   href: string;
-  related?: boolean;
 };
 
 const testimonials: Testimonial[] = [
@@ -22,7 +22,6 @@ const testimonials: Testimonial[] = [
     quotePl: "Przy imporcie aut klient ma sporo pytań, zanim w ogóle zadzwoni. Strona porządkuje ofertę i pozwala sprawdzić orientacyjne koszty sprowadzenia samochodu. Mamy też przestrzeń, żeby rozwijać kolejne funkcje.",
     quoteEn: "People have plenty of questions before contacting a vehicle importer. The website explains our offer and lets them estimate import costs. It also gives us room to keep developing new features.",
     href: "/case-studies/starcars",
-    related: true,
   },
   {
     company: "Re-Energy System",
@@ -31,7 +30,6 @@ const testimonials: Testimonial[] = [
     quotePl: "Nie chodziło nam o samą wizytówkę w internecie. Strona, reklamy i formularze mają wspierać pozyskiwanie zapytań od klientów. Doceniamy to, że rozwiązania są dopasowane do naszej branży i możemy je rozwijać wraz z firmą.",
     quoteEn: "We needed more than an online business card. Our website, advertising and forms are designed around customer enquiries. We value solutions tailored to our industry that can evolve with the business.",
     href: "/case-studies/re-energy-meta-ads",
-    related: true,
   },
   {
     company: "Re-Energy System",
@@ -40,7 +38,6 @@ const testimonials: Testimonial[] = [
     quotePl: "Zależało nam, żeby handlowcy mieli porządek w kontaktach, a biuro widziało, co dzieje się po podpisaniu umowy. B-CRM łączy leady, zadania i realizację w jednym miejscu. Powstawał pod nasz sposób pracy, a nie według gotowego szablonu.",
     quoteEn: "We needed salespeople to stay on top of leads and our office to see what happens after a contract is signed. B-CRM brings contacts, tasks and delivery into one place. It was built around how our team works, not a generic template.",
     href: "/case-studies/b-crm",
-    related: true,
   },
   {
     company: "Motomizer",
@@ -49,7 +46,6 @@ const testimonials: Testimonial[] = [
     quotePl: "To nietypowy produkt i zależało nam, żeby od pierwszego spojrzenia było wiadomo, co go wyróżnia. Strona pokazuje warianty i najważniejsze funkcje w spójny sposób. Taki kierunek dobrze pasuje do rozwijania marki.",
     quoteEn: "Our product is unusual, so we wanted people to understand what makes it different at a glance. The site presents its variants and key features consistently, in a way that suits the brand we are building.",
     href: "/case-studies/motomizer",
-    related: true,
   },
   {
     company: "Isto Kebab",
@@ -69,6 +65,13 @@ const testimonials: Testimonial[] = [
   },
 ];
 
+const clientLogos: Record<string, string> = {
+  StarCars: "/images/brands/starcars.svg",
+  "Re-Energy System": "/images/brands/re-energy.png",
+  "Isto Kebab": "/images/brands/isto-kebab.svg",
+  "Gentlemen Barber Shop": "/images/brands/gentlemen.webp",
+};
+
 export function ClientTestimonials() {
   const { lang } = useLanguage();
   const pl = lang === "pl";
@@ -85,8 +88,8 @@ export function ClientTestimonials() {
           </h2>
           <p className="max-w-lg text-sm leading-7 text-white/60">
             {pl
-              ? "Opinie przygotowane za zgodą firm, w oparciu o zrealizowane projekty. Część wymienionych marek to również przedsięwzięcia, które współtworzę."
-              : "Feedback prepared with permission from the businesses, based on our actual projects. Some of the brands featured are ventures I also help build."}
+              ? "Opinie przygotowane za zgodą firm, w oparciu o zrealizowane projekty."
+              : "Feedback prepared with permission from the businesses, based on our actual projects."}
           </p>
         </div>
         <div className="mt-9 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
@@ -98,17 +101,28 @@ export function ClientTestimonials() {
                   <p>„{pl ? item.quotePl : item.quoteEn}”</p>
                 </blockquote>
               </div>
-              <div className="mt-7 border-t border-white/10 pt-5">
-                <p className="text-base font-semibold text-white">{item.company}</p>
-                {item.related && (
-                  <p className="mt-1 text-xs leading-5 text-white/45">
-                    {pl ? "Marka współtworzona" : "A venture I also help build"}
-                  </p>
-                )}
-                <Link href={item.href} className="mt-3 inline-flex min-h-9 items-center gap-1.5 text-sm text-white/75 underline-offset-4 transition hover:text-white hover:underline">
-                  {pl ? "Zobacz realizację" : "Explore the project"}
-                  <ArrowUpRight aria-hidden="true" size={15} />
-                </Link>
+              <div className="mt-7 flex items-center justify-between gap-4 border-t border-white/10 pt-5">
+                <div className="min-w-0">
+                  <p className="text-base font-semibold text-white">{item.company}</p>
+                  <Link href={item.href} className="mt-2 inline-flex min-h-9 items-center gap-1.5 text-sm text-white/75 underline-offset-4 transition hover:text-white hover:underline">
+                    {pl ? "Zobacz realizację" : "Explore the project"}
+                    <ArrowUpRight aria-hidden="true" size={15} />
+                  </Link>
+                </div>
+                <div className="flex h-14 w-[104px] shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[.035] px-3 py-2 sm:w-[116px]" aria-hidden="true">
+                  {clientLogos[item.company] ? (
+                    <Image
+                      src={clientLogos[item.company]}
+                      alt=""
+                      width={116}
+                      height={48}
+                      sizes="116px"
+                      className="h-full w-full object-contain"
+                    />
+                  ) : (
+                    <span className="text-[10px] font-bold tracking-[.12em] text-white/85">MOTOMIZER</span>
+                  )}
+                </div>
               </div>
             </article>
           ))}
