@@ -17,8 +17,8 @@ describe("portfolio mobile review", () => {
     const assistant = get("../components/AIMascotAssistant.tsx");
     // The booking flow needs more than 22rem; the actual compact panel is
     // bounded by the dynamic viewport and lets its message history scroll.
-    expect(assistant).toContain('h-[min(36rem,calc(100dvh-8.5rem))]');
-    expect(assistant).toContain('h-[min(36rem,calc(100dvh-7rem))]');
+    expect(assistant).toContain('h-[min(36rem,calc(100dvh-9.5rem))]');
+    expect(assistant).toContain('h-[min(36rem,calc(100dvh-10rem))]');
     expect(assistant).toContain('className="min-h-0 max-h-80 flex-1');
     expect(assistant).not.toContain("calc(100vh-19rem)");
   });

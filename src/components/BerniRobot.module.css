@@ -1,0 +1,86 @@
+.stage {
+  --berni-look-x: 0px;
+  --berni-look-y: 0px;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  overflow: visible;
+  isolation: isolate;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+.robot { width: 100%; height: 100%; overflow: visible; display: block; }
+.shadow { transform-origin: 84px 145px; animation: shadowPulse 4.5s ease-in-out infinite; }
+.body { transform-origin: 83px 123px; animation: breathe 4.5s ease-in-out infinite; }
+.head { transform-origin: 82px 112px; animation: headIdle 5.4s ease-in-out infinite; }
+.tail { transform-origin: 118px 113px; animation: tailWag 3.7s ease-in-out infinite; }
+.earLeft, .earRight { transform-box: fill-box; transform-origin: center top; animation: earTwitch 9s ease-in-out infinite; }
+.earRight { animation-delay: -4.4s; }
+.eyes { transform: translate(var(--berni-look-x), var(--berni-look-y)); transition: transform 115ms ease-out; }
+.eyeLights { transform-box: fill-box; transform-origin: center; animation: blink 7.2s infinite; }
+.cloud { fill: #9aa5b4; stroke: #e1e8f0; stroke-width: 1.5; }
+.forecast { opacity: .95; }
+.sun { stroke: #f3f6fb; stroke-width: 3; stroke-linecap: round; fill: #bfc7d2; animation: sunPulse 4s ease-in-out infinite; transform-origin: 81px 18px; }
+.rain { stroke: #9ec8e6; stroke-width: 3.2; stroke-linecap: round; animation: rainDrop .85s linear infinite; }
+.snow, .sleet { fill: #f7faff; font-size: 14px; animation: snowFall 2.8s ease-in-out infinite; }
+.sleet path { stroke: #93bdd9; stroke-width: 2.6; stroke-linecap: round; }
+.thunder { fill: #eff6ff; animation: lightning 3.5s steps(2,end) infinite; }
+.hail { fill: #cddced; animation: hailFall 1.35s ease-in infinite; }
+.fog { stroke: #bac7d6; stroke-width: 4; stroke-linecap: round; opacity: .8; animation: fogFlow 5s ease-in-out infinite; }
+.wind { stroke: #e2ecf6; stroke-width: 3; stroke-linecap: round; animation: fogFlow 2.3s ease-in-out infinite; }
+.cold { animation: iceTwinkle 3s ease-in-out infinite; }
+.hot { animation: hotSweat 2.2s ease-in-out infinite; }
+.sleep { fill: #eef4ff; font-size: 16px; font-weight: 800; animation: sleepFloat 3.5s ease-in-out infinite; }
+.thought { fill: #e2eaf4; animation: thoughtPulse 1.6s ease-in-out infinite; }
+.sparkles { animation: sparkle .65s ease-in-out infinite alternate; }
+.stage[data-mood="curious"] .head, .stage[data-mood="listening"] .head { animation: curiousTilt 2.6s ease-in-out infinite; }
+.stage[data-mood="typing"] .head { animation: typingLook .7s ease-in-out infinite; }
+.stage[data-mood="thinking"] .head, .stage[data-mood="working"] .head { animation: thinkingLook 2.8s ease-in-out infinite; }
+.stage[data-mood="sleeping"] .head { animation: asleep 5s ease-in-out infinite; }
+.stage[data-mood="sleeping"] .tail { animation-play-state: paused; }
+.stage[data-mood="sleeping"] .eyeLights { animation: none; }
+.stage[data-mood="happy"] .tail, .stage[data-mood="excited"] .tail { animation: tailWag .32s ease-in-out infinite alternate; }
+.stage[data-mood="excited"] .body { animation: happyBounce .54s ease-in-out infinite; }
+.stage[data-mood="surprised"] .head { animation: startled .55s ease-out both; }
+.stage[data-mood="worried"] .head { animation: worried 2s ease-in-out infinite; }
+.stage[data-thermal="cold"] .body, .stage[data-thermal="cold"] .head { animation: shiver .19s ease-in-out infinite alternate; }
+.stage[data-thermal="hot"] .head { animation: hotPant 1.8s ease-in-out infinite; }
+.stage[data-mood="sleeping"] .cold,
+.stage[data-mood="sleeping"] .hot { opacity: .3; }
+@keyframes breathe { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.035); } }
+@keyframes headIdle { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-1.3px) rotate(-1deg); } }
+@keyframes tailWag { 0%,100% { transform: rotate(-11deg); } 50% { transform: rotate(16deg); } }
+@keyframes earTwitch { 0%,92%,100% { transform: rotate(0); } 95% { transform: rotate(8deg); } }
+@keyframes blink { 0%,27%,29%,72%,74%,100% { transform: scaleY(1); } 28%,73% { transform: scaleY(.06); } }
+@keyframes curiousTilt { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(5deg); } }
+@keyframes typingLook { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(2px) rotate(2deg); } }
+@keyframes thinkingLook { 0%,100% { transform: rotate(4deg); } 50% { transform: rotate(-2deg) translateY(-1px); } }
+@keyframes asleep { 0%,100% { transform: translateY(2px) rotate(3deg); } 50% { transform: translateY(4px) rotate(4deg); } }
+@keyframes happyBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes startled { 0% { transform: translateY(6px) scale(.9); } 45% { transform: translateY(-9px) scale(1.04); } 100% { transform: translateY(0) scale(1); } }
+@keyframes worried { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+@keyframes shiver { from { transform: translateX(-1.3px); } to { transform: translateX(1.3px); } }
+@keyframes hotPant { 0%,100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+@keyframes shadowPulse { 0%,100% { transform: scaleX(1); opacity: .15; } 50% { transform: scaleX(.94); opacity: .09; } }
+@keyframes sunPulse { 0%,100% { opacity: .85; transform: scale(.95); } 50% { opacity: 1; transform: scale(1.06); } }
+@keyframes rainDrop { 0% { transform: translateY(-3px); opacity: 0; } 25% { opacity: 1; } 100% { transform: translateY(7px); opacity: 0; } }
+@keyframes snowFall { 0%,100% { transform: translateY(-2px) rotate(-4deg); } 50% { transform: translateY(5px) rotate(6deg); } }
+@keyframes lightning { 0%,84%,92%,100% { opacity: .25; } 85%,88% { opacity: 1; } }
+@keyframes hailFall { 0% { transform: translateY(-3px); opacity: 0; } 25% { opacity: 1; } 100% { transform: translateY(8px); opacity: 0; } }
+@keyframes fogFlow { 0%,100% { transform: translateX(-4px); opacity: .6; } 50% { transform: translateX(4px); opacity: 1; } }
+@keyframes iceTwinkle { 0%,100% { opacity: .6; } 50% { opacity: 1; } }
+@keyframes hotSweat { 0% { transform: translateY(-4px); opacity: .2; } 60% { opacity: 1; } 100% { transform: translateY(6px); opacity: .2; } }
+@keyframes sleepFloat { 0% { transform: translate(0,4px); opacity: 0; } 40% { opacity: 1; } 100% { transform: translate(5px,-10px); opacity: 0; } }
+@keyframes thoughtPulse { 0%,100% { opacity: .35; } 50% { opacity: .95; } }
+@keyframes sparkle { from { opacity: .3; transform: scale(.85); } to { opacity: 1; transform: scale(1.05); } }
+@media (prefers-reduced-motion: reduce) {
+  .stage *, .stage *::before, .stage *::after {
+    animation: none !important; transition: none !important;
+  }
+}
+
+/* Look down at the chat field while typing, not at the pointer. */
+.stage[data-mood="typing"] .eyes { transform: translate(0px, 3px); }
+.stage[data-mood="listening"] .earLeft { animation: earTwitch 1.2s ease-in-out infinite; }
+.stage[data-mood="listening"] .earRight { animation: earTwitch 1.35s ease-in-out infinite reverse; }
