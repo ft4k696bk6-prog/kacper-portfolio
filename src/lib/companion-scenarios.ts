@@ -1,3 +1,5 @@
+import { expandedCompanionRules } from "./companion-expanded";
+
 export type CompanionLocale = "pl" | "en";
 export type CompanionDevice = "iphone" | "ipad" | "android" | "tablet" | "mac" | "windows" | "linux" | "unknown";
 export type CompanionBrowser = "safari" | "chrome" | "firefox" | "edge" | "other";
@@ -38,6 +40,7 @@ export type CompanionNudge = {
   id: string;
   category: CompanionCategory;
   topic: CompanionTopic;
+  family: string;
   text: string;
   intent: "chat" | "audit";
 };
@@ -50,6 +53,8 @@ type Rule = {
   en: string;
   weight: number;
   intent: CompanionNudge["intent"];
+  topic?: CompanionTopic;
+  family?: string;
 };
 const rules: Rule[] = [];
 
@@ -551,9 +556,13 @@ addSet("combo-city-viewport", "combination", c => Boolean(c.city) && c.width >= 
   ["{city} na radarze, a Twoje okno ma {width} px szerokości. Całkiem sporo informacji z jednej wizyty, prawda?","{city} on my radar and your window is {width}px wide. Quite a lot from one visit, right?"],
 ], 4);
 
+// The expansion module is data-only and imports the context type exclusively.
+rules.push(...expandedCompanionRules);
+
 export const COMPANION_SCENARIO_COUNT = rules.length;
 
 function ruleTopic(rule: Rule): CompanionTopic {
+  if (rule.topic) return rule.topic;
   if (rule.category !== "combination") return rule.category;
   if (/(?:-rain|-snow|-sleet|-storm|-cold|-heat|-fog|-weather|-freeze|-sun(?:-|$)|-wind(?:-|$))/.test(rule.id)) return "weather";
   if (/(?:-iphone|-android|-ipad|-tablet|-phone|-linux|-mac(?:-|$)|-windows)/.test(rule.id)) return "device";
@@ -569,6 +578,7 @@ export function getEligibleCompanionMessages(context: CompanionContext): Compani
     id: rule.id,
     category: rule.category,
     topic: ruleTopic(rule),
+    family: rule.family ?? rule.id.replace(/-\d+$/, ""),
     text: fillTemplate(context.lang === "en" ? rule.en : rule.pl, context),
     intent: rule.intent,
   }));
@@ -661,43 +671,67 @@ function canRender(rule: Rule, c: CompanionContext): boolean {
   return true;
 }
 
+/** No personal information is stored in the message selection history. */
+export type CompanionSelectionMemory = {
+  recentTopics?: CompanionTopic[];
+  recentFamilies?: string[];
+  recentTexts?: string[];
+};
+
+function canonicalCompanionText(text: string): string {
+  return text.trim().toLocaleLowerCase().replace(/\\s+/g, " ");
+}
+
 /**
- * Returns a deterministic, authored sentence, never a generated AI completion.
- * The recent-ID and previous-category guards reduce repeats and sales pressure.
+ * Weighted shuffle-bag rather than independent random draws.
+ * 1. Avoid recently seen IDs and identical rendered sentences.
+ * 2. Avoid repeating a category/topic and story family if alternatives exist.
+ * 3. Use random selection among genuinely eligible, unseen candidates.
+ * 4. Only recycle a message when all applicable alternatives are exhausted.
+ *
+ * Pure function: call sites may persist only the list of message IDs/families.
  */
 export function pickCompanionNudge(
   context: CompanionContext,
   recentIds: string[] = [],
   previousTopic?: CompanionTopic,
   random: () => number = Math.random,
+  memory: CompanionSelectionMemory = {},
 ): CompanionNudge | null {
-  let candidates = rules.filter(rule => canRender(rule, context) && !recentIds.includes(rule.id));
-  if (!candidates.length) candidates = rules.filter(rule => canRender(rule, context));
-  if (!candidates.length) return null;
+  const entries = getEligibleCompanionMessages(context);
+  if (!entries.length) return null;
+  const byId = new Set(recentIds);
+  const recentText = new Set((memory.recentTexts ?? []).map(canonicalCompanionText));
+  const eligibleUnseen = entries.filter(e => !byId.has(e.id) && !recentText.has(canonicalCompanionText(e.text)));
+  let eligible = eligibleUnseen.length ? eligibleUnseen : entries.filter(e => !recentText.has(canonicalCompanionText(e.text)));
+  if (!eligible.length) eligible = entries;
 
-  const weighted = candidates.map(rule => {
-    const categoryWeight: Record<CompanionCategory, number> = {
-      combination: 5, weather: 3, device: 3, viewport: 2.4, page: 3,
-      return: 2, location: 1.6, time: 1.2, browser: 1, playful: 1,
-    };
-    const repetitionPenalty = ruleTopic(rule) === previousTopic ? 0.04 : 1;
-    return { rule, weight: rule.weight * categoryWeight[rule.category] * repetitionPenalty };
-  });
-  const total = weighted.reduce((sum, item) => sum + item.weight, 0);
-  let threshold = Math.max(0, Math.min(0.999999, random())) * total;
-  let selected = weighted[weighted.length - 1].rule;
-  for (const item of weighted) {
-    threshold -= item.weight;
-    if (threshold < 0) { selected = item.rule; break; }
-  }
-  return {
-    id: selected.id,
-    category: selected.category,
-    topic: ruleTopic(selected),
-    text: fillTemplate(context.lang === "en" ? selected.en : selected.pl, context),
-    intent: selected.intent,
+  // Prevent a recurring topic/family, but don't eliminate the last choice.
+  const topics = (memory.recentTopics ?? (previousTopic ? [previousTopic] : [])).slice(-3);
+  const recentTopics = new Set(topics);
+  const topicFresh = eligible.filter(e => !recentTopics.has(e.topic));
+  if (topicFresh.length >= 3) eligible = topicFresh;
+  const families = new Set((memory.recentFamilies ?? []).slice(-4));
+  const familyFresh = eligible.filter(e => !families.has(e.family));
+  if (familyFresh.length >= 3) eligible = familyFresh;
 
+  const weights: Record<CompanionCategory, number> = {
+    combination: 1.45, weather: 1.6, device: 1.4, viewport: 1.3, page: 1.5,
+    return: 1.2, location: 1.3, time: 1.15, browser: 1.2, playful: 1.25,
   };
+  const ruleIndex = new Map(rules.map(rule => [rule.id, rule] as const));
+  const allWeight = eligible.reduce((n, item) => {
+    const source = ruleIndex.get(item.id);
+    return n + (source?.weight ?? 1) * weights[item.category];
+  }, 0);
+  let threshold = Math.max(0, Math.min(0.999999999, random())) * allWeight;
+  let chosen = eligible[eligible.length - 1];
+  for (const item of eligible) {
+    const source = ruleIndex.get(item.id);
+    threshold -= (source?.weight ?? 1) * weights[item.category];
+    if (threshold < 0) { chosen = item; break; }
+  }
+  return chosen;
 }
 
 export function getCompanionContext(
