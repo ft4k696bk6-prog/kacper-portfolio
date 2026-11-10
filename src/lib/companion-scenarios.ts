@@ -93,72 +93,72 @@ const isWork = (c: CompanionContext) => /realizacje|projects|case-stud|portfolio
 const isGuide = (c: CompanionContext) => /poradniki|blog|guides/.test(c.pathname);
 
 addSet("wx-freeze", "weather", c => hasWeather(c) && temperature(c) < 0, [
-  ["Brrr… prognoza dla Twojej okolicy pokazuje {temp}°C. Aż mi się piksele trzęsą.", "Brrr… the forecast for your area says {temp}°C. Even my pixels are shivering."],
-  ["{city}: {temp}°C. Jeśli mój wentylator zamarznie, wiesz dlaczego.", "{city}: {temp}°C. If my fan freezes, you'll know why."],
-  ["Tak zimno, że nawet mój kod chciałby założyć kurtkę.", "It's so cold even my code wants to wear a coat."],
-  ["Poniżej zera? To nie jest temperatura dla cyfrowego zwierzaka.", "Below freezing? Not ideal weather for a little digital creature."],
+  ["{place} dziś {temp}°C. Brrr… aż mi się piksele trzęsą.","{place} it's {temp}°C today. Brrr… even my pixels are shivering."],
+  ["{place} {temp}°C. Jeśli mi zamarznie wentylator, będzie wiadomo dlaczego.","{place} it's {temp}°C. If my fan freezes, you'll know why."],
+  ["{place} taki mróz, że nawet mój kod chciałby założyć kurtkę.","{place} it's so cold that even my code wants a coat."],
+  ["{place} temperatura spadła poniżej zera. To nie są warunki dla cyfrowego zwierzaka.","{place} the temperature is below zero. Not ideal for a little digital creature."],
 ], 3);
 addSet("wx-extreme-freeze", "weather", c => hasWeather(c) && temperature(c) <= -10, [
-  ["{temp}°C?! Czy ktoś przestawił pogodę w tryb ekstremalny?", "{temp}°C?! Did someone switch the weather to extreme mode?"],
-  ["Na dworze {temp}°C. Ja zostaję po tej stronie ekranu.", "It's {temp}°C outside in your area. I'm staying on this side of the screen."],
+  ["{place} aż {temp}°C?! Ktoś przestawił pogodę w tryb ekstremalny?","{place} it's {temp}°C?! Did someone switch the weather to extreme mode?"],
+  ["{place} {temp}°C. Ja zostaję po tej stronie ekranu, dzięki.","{place} it's {temp}°C. I'm staying on this side of the screen, thanks."],
 ], 4);
 addSet("wx-chilly", "weather", c => hasWeather(c) && temperature(c) >= 0 && temperature(c) <= 8, [
-  ["Brr… u Was dziś chłodno. Na szczęście do rozmowy ze mną nie potrzebujesz rękawiczek.", "Brr… it's chilly in your area. Luckily, you don't need gloves to chat with me."],
-  ["Prognoza: {temp}°C. Lepiej mieć pod ręką coś ciepłego.", "Forecast: {temp}°C. Might be worth having something warm nearby."],
-  ["Chłodno dzisiaj. Mnie na szczęście wystarczy trochę energii z serwera.", "Chilly today. Luckily, a bit of server power keeps me going."],
+  ["Brrr… {place} dziś tylko {temp}°C. Chyba pora na coś ciepłego.","Brrr… {place} it's only {temp}°C today. Time for something warm."],
+  ["{place} zrobiło się chłodno. Gdybym miał ręce, schowałbym je do kieszeni.","{place} it's turned chilly. If I had hands, they'd be in my pockets."],
+  ["{place} {temp}°C. Dobrze, że do działania wystarcza mi trochę prądu.","{place} it's {temp}°C. Good thing all I need is a little electricity."],
 ], 2);
 addSet("wx-mild", "weather", c => hasWeather(c) && temperature(c) >= 9 && temperature(c) <= 22, [
-  ["{temp}°C — całkiem przyjemnie. Nawet mi się nie chce chować do chmury.", "{temp}°C — rather pleasant. Even I don't feel like hiding in the cloud."],
-  ["Pogoda całkiem znośna. Dobry moment na nowy pomysł.", "Not bad weather at all. A good time for a fresh idea."],
+  ["{place} dziś {temp}°C. W sam raz, żeby złapać nowy pomysł.","{place} it's {temp}°C today. Nice weather for a new idea."],
+  ["{place} zapowiada się przyjemny dzień. Nawet ja wyszedłbym z ekranu na spacer.","{place} the day looks pleasant. Even I'd leave this screen for a walk."],
 ], 1);
 addSet("wx-warm", "weather", c => hasWeather(c) && temperature(c) >= 23 && temperature(c) < 30, [
-  ["O, robi się ciepło: {temp}°C. Mój cyfrowy termostat już to zauważył.", "Getting warm: {temp}°C. My digital thermostat has noticed."],
-  ["Ciepło u Was. Gdybym miał okulary przeciwsłoneczne, właśnie bym je założył.", "It's warm in your area. If I had sunglasses, I'd be wearing them."],
+  ["{place} już {temp}°C. Mój cyfrowy termostat też to zauważył.","{place} it's already {temp}°C. My digital thermostat noticed too."],
+  ["{place} całkiem ciepło. Gdybym miał okulary przeciwsłoneczne, już bym je założył.","{place} it's pretty warm. If I had sunglasses, I'd be wearing them."],
 ], 2);
 addSet("wx-heat", "weather", c => hasWeather(c) && temperature(c) >= 30, [
-  ["Ale żar! {temp}°C według prognozy. Oby komputer miał lepsze chłodzenie ode mnie.", "What a scorcher! The forecast says {temp}°C. Hope your computer has better cooling than I do."],
-  ["{temp}°C? Dziś nawet piksele wolą siedzieć w cieniu.", "{temp}°C? Even pixels would rather sit in the shade today."],
-  ["Gorąco, co? Dobrze, że mogę udawać, że mam klimatyzację.", "Hot, isn't it? Good thing I can pretend I have air conditioning."],
-  ["Temperatura rośnie. Spokojnie, to nie przez tę stronę.", "The temperature is rising. Don't worry, it's not because of this website."],
+  ["{place} aż {temp}°C. Oby Twój sprzęt miał porządne chłodzenie.","{place} it's {temp}°C. Hope your device has decent cooling."],
+  ["{place} {temp}°C?! Dziś nawet piksele wolą siedzieć w cieniu.","{place} it's {temp}°C?! Even pixels would rather stay in the shade."],
+  ["{place} taki upał, że mógłbym usmażyć na procesorze naleśnika. Gdybym miał procesor.","{place} it's so hot I could fry a pancake on my processor. If I had one."],
+  ["{place} według prognozy naprawdę gorąco. Dobrze, że mogę udawać, że mam klimatyzację.","{place} it's seriously hot in the forecast. Good thing I can pretend to have air conditioning."],
 ], 4);
 addSet("wx-rain", "weather", rain, [
-  ["Kap, kap… prognoza zapowiada deszcz. Ja chyba zostanę pod swoim cyfrowym dachem.", "Drip, drip… rain is in the forecast. I'll stay under my digital roof."],
-  ["Deszcz w prognozie. Dobrze, że strony internetowe nie potrzebują parasola.", "Rain in the forecast. Good thing websites don't need umbrellas."],
-  ["Pogoda dorzuca dziś własne efekty specjalne. I to bez JavaScriptu.", "The weather has its own special effects today. No JavaScript required."],
-  ["Jeśli planujesz spacer, zerknij na prognozę. Wygląda na mokry dzień.", "Planning a walk? Check the forecast. Looks like a wet day."],
+  ["Kap, kap… {place} prognoza zapowiada deszcz. Ja zostaję pod cyfrowym dachem.","Drip, drip… {place} rain is in the forecast. I'll stay under my digital roof."],
+  ["{place} dziś deszczowo. Na szczęście strony internetowe nie potrzebują parasola.","{place} rainy weather today. Luckily, websites don't need umbrellas."],
+  ["{place} nadciąga deszcz. Natura dorzuca własne efekty specjalne, bez JavaScriptu.","{place} rain's on the way. Nature has its own special effects, no JavaScript required."],
+  ["{place} w prognozie deszcz. Jeśli wybierasz się na spacer, zerknij najpierw za okno.","{place} rain is in the forecast. If you're going for a walk, have a look outside first."],
 ], 3);
 addSet("wx-snow", "weather", snow, [
-  ["Pada śnieg w prognozie! Gdybym miał ręce, już lepiłbym bałwana.", "Snow is in the forecast! If I had hands, I'd be making a snowman."],
-  ["Biało się robi. Nawet mój ekran zazdrości tej zimowej estetyki.", "Things are turning white. Even my screen is jealous of that winter look."],
-  ["Śnieg! Ciekawe, czy moje piksele też potrafią robić aniołki.", "Snow! I wonder if pixels can make snow angels."],
+  ["{place} prognoza zapowiada śnieg! Gdybym miał ręce, lepiłbym bałwana.","{place} snow is in the forecast! If I had hands, I'd build a snowman."],
+  ["{place} zrobi się biało. Mój ciemny interfejs będzie miał konkurencję.","{place} things may turn white. My dark interface has some competition."],
+  ["{place} śnieg w prognozie. Ciekawe, czy piksele potrafią robić aniołki na śniegu.","{place} snow is in the forecast. Wonder if pixels can make snow angels."],
 ], 3);
 addSet("wx-sleet", "weather", sleet, [
-  ["Deszcz ze śniegiem? Nawet pogoda nie może się zdecydować.", "Sleet? Even the weather can't make up its mind."],
-  ["Prognoza mówi: trochę śniegu, trochę deszczu. Czyli klasyczny pogodowy kompromis.", "Forecast says a bit of snow, a bit of rain. A classic weather compromise."],
+  ["{place} deszcz ze śniegiem. Nawet pogoda nie potrafi dziś podjąć decyzji.","{place} sleet in the forecast. Even the weather can't make a decision today."],
+  ["{place} trochę śniegu, trochę deszczu. Klasyczny pogodowy kompromis.","{place} a bit of snow, a bit of rain. A classic weather compromise."],
 ], 3);
 addSet("wx-storm", "weather", storm, [
-  ["Grzmoty w prognozie. Oby tylko prądu nie zabrakło — mam jeszcze sporo do powiedzenia.", "Thunder in the forecast. Hope the power stays on — I've got more to say."],
-  ["Burza? Ja się nie boję. Tylko tak profilaktycznie schowam trochę niżej.", "A thunderstorm? I'm not scared. I'll just move a little lower, just in case."],
-  ["Niebo szykuje własny pokaz efektów. Ja dziś nie konkuruję.", "The sky is putting on its own light show. I'm not competing today."],
+  ["{place} prognoza zapowiada burzę. Oby prąd został z nami — mam jeszcze sporo do powiedzenia.","{place} thunderstorms are in the forecast. Hope the power stays on — I've got more to say."],
+  ["{place} zapowiadają grzmoty. Nie boję się, tylko na wszelki wypadek schowam trochę niżej.","{place} thunder is expected. I'm not scared, just moving a little lower to be safe."],
+  ["{place} niebo szykuje własny pokaz efektów. Dziś nie zamierzam konkurować.","{place} the sky is preparing a light show. I won't compete today."],
 ], 5);
 addSet("wx-windy", "weather", windy, [
-  ["Ale wieje! Według prognozy wiatr osiąga około {wind} m/s. Trzymaj telefon mocno.", "That's windy! The forecast says about {wind} m/s. Hold on to your phone."],
-  ["Wietrznie u Was. Ja na szczęście jestem dobrze przypięty do strony.", "Windy in your area. Luckily, I'm securely attached to the page."],
-  ["Gdyby mnie dało się zdmuchnąć z ekranu, dziś byłby ten dzień.", "If I could be blown off the screen, today would be the day."],
+  ["{place} mocno wieje: około {wind} m/s według prognozy. Trzymaj się tam!","{place} the forecast calls for winds near {wind} m/s. Hold on tight!"],
+  ["{place} wietrznie. Ja na szczęście jestem mocno przypięty do tej strony.","{place} windy today. Luckily, I'm firmly attached to this website."],
+  ["{place} taki wiatr, że dobrze, iż nie da się mnie zdmuchnąć z ekranu.","{place} so windy that I'm glad I can't be blown off your screen."],
 ], 3);
 addSet("wx-sunny", "weather", sunny, [
-  ["Słońce w prognozie, a Ty w internecie? Nie oceniam. Sam tu mieszkam.", "Sunshine in the forecast, and you're browsing? No judgment. I live here."],
-  ["Wygląda na pogodny dzień. Może po mojej krótkiej wizycie wyjdziesz na spacer?", "Looks like a bright day. Maybe go for a walk after our little chat?"],
-  ["Słońce robi dziś świetną robotę. Nawet bez CSS.", "The sun is doing a great job today. Without any CSS."],
+  ["{place} według prognozy słonecznie, a Ty w internecie? Nie oceniam. Sam tu mieszkam.","{place} sunshine in the forecast and you're online? No judgment. I live here."],
+  ["{place} zapowiada się ładnie. Nie będę Cię długo zatrzymywać od spaceru.","{place} a lovely day ahead. I won't keep you from your walk for long."],
+  ["{place} słońce robi dziś świetną robotę. Nawet bez CSS.","{place} the sun's putting on a great show today. No CSS required."],
 ], 1);
 addSet("wx-clouds", "weather", cloudy, [
-  ["Trochę chmur. Dobrze, że ja działam również w chmurze.", "A few clouds around. Luckily, I run in the cloud too."],
-  ["Słońce gra dziś z chmurami w chowanego. Ja gram w asystenta.", "The sun's playing hide-and-seek with the clouds. I'm playing assistant."],
-  ["Pochmurno? Spokojnie, wewnątrz tej strony zawsze coś się dzieje.", "Cloudy? There's still plenty happening inside this website."],
+  ["{place} pochmurno. Dobrze, że ja też potrafię działać w chmurze.","{place} cloudy today. Good thing I can work in the cloud too."],
+  ["{place} słońce gra z chmurami w chowanego. Ja gram w asystenta.","{place} the sun is playing hide-and-seek with the clouds. I'm playing assistant."],
+  ["{place} sporo chmur w prognozie. W moim małym okienku przynajmniej coś widać.","{place} lots of clouds in the forecast. At least things are clear in my little window."],
 ], 1);
 addSet("wx-fog", "weather", fog, [
-  ["Mgła w prognozie. Oby Twoje plany były dziś bardziej przejrzyste.", "Fog in the forecast. Hope your plans are a little clearer today."],
-  ["Widoczność w pogodzie słaba, ale tutaj wszystko staram się pokazać wyraźnie.", "Poor visibility in the forecast. I'll try to keep everything clear here."],
+  ["{place} mgliście. Oby Twoje plany na dziś były bardziej przejrzyste.","{place} it's foggy. Hope your plans for today are clearer."],
+  ["{place} prognoza zapowiada mgłę. Ja przynajmniej widzę wszystkie piksele.","{place} fog is in the forecast. At least I can see every pixel."],
 ], 2);
 
 addSet("device-iphone", "device", c => c.device === "iphone", [
