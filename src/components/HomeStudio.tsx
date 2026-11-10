@@ -64,7 +64,7 @@ export function HomeStudio() {
       <div className={styles.introTerminal}>
         <div className={styles.introTerminalTop}>
           <span className={styles.introDots}><i /><i /><i /></span>
-          <span>BERNECKI.DEV <em>/</em> INTERFACE BUILD</span>
+          <span>BERNECKI.DEV <em>/</em> AI / BUILD ENGINE</span>
           <span className={styles.introTerminalState}>LIVE</span>
         </div>
         <div className={styles.introCode}>

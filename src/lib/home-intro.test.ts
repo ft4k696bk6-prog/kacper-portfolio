@@ -21,6 +21,8 @@ describe("home page build intro", () => {
 
   it("plays only once per session, with the opt-out for reduced motion", () => {
     expect(layout).toContain("bernecki-home-intro-v2");
+    expect(layout).toContain('get("intro")==="1"');
+    expect(layout).toContain("DOMContentLoaded");
     expect(layout).toContain('root.dataset.homeIntro="play"');
     expect(layout).toContain('root.dataset.homeIntro="skip"');
     expect(layout).toContain("prefers-reduced-motion: reduce");
@@ -34,7 +36,7 @@ describe("home page build intro", () => {
     expect(homepage).toContain('/images/projects/isto-live-nov08.jpg');
     expect(homepage).toContain('/images/projects/bcrm-admin-dashboard.jpg');
     expect(homepage).toContain("<ClientTestimonials/>");
-    expect(homepage).toContain("INTERFACE BUILD");
+    expect(homepage).toContain("AI / BUILD ENGINE");
     expect(styles).toContain("studioBuildSignals");
   });
 });
