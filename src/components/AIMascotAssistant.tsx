@@ -1016,6 +1016,7 @@ export function AIMascotAssistant() {
                 open={open}
                 lastReply={messages[messages.length - 1]?.role === "assistant" ? messages[messages.length - 1].content : ""}
                 nudgeText={nudge?.text ?? ""}
+                weatherContext={serverContext?.weather ?? null}
                 onOpen={() => openChat()}
               />
             </div>
