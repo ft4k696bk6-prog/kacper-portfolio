@@ -2,7 +2,8 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Search, LayoutGrid, Globe, Megaphone, Workflow, Bot, Code2 } from "lucide-react";
-import { toolboxCategories, toolboxItems } from "@/lib/toolbox";
+import { toolboxCategories } from "@/lib/toolbox";
+import { visibleToolboxItems } from "@/lib/toolbox-visibility";
 
 const icons: Record<string,typeof LayoutGrid>={
  "Wszystkie":LayoutGrid,"WWW i SEO":Globe,"Reklamy i marketing":Megaphone,
@@ -11,7 +12,7 @@ const icons: Record<string,typeof LayoutGrid>={
 export function FreeToolsDirectory(){
  const [q,setQ]=useState("");
  const [cat,setCat]=useState("Wszystkie");
- const listed=useMemo(()=>toolboxItems.filter(t=>
+ const listed=useMemo(()=>visibleToolboxItems.filter(t=>
   (cat==="Wszystkie"||t.category===cat)&&
   (t.title+" "+t.description+" "+t.category).toLocaleLowerCase("pl").includes(q.toLocaleLowerCase("pl").trim())
  ),[q,cat]);
@@ -22,7 +23,7 @@ export function FreeToolsDirectory(){
     <span className="sr-only">Wyszukaj darmowe narzędzie</span>
     <input type="search" value={q} onChange={e=>setQ(e.target.value)} placeholder="Szukaj: audyt SEO, Meta Ads, ROAS..." className="w-full rounded-xl border border-white/20 bg-[#121212] py-4 pl-12 pr-4 text-sm text-white outline-none placeholder:text-white/45 focus:border-white/60"/>
    </label>
-   <span className="text-sm text-white/50">{listed.length} z {toolboxItems.length} narzędzi</span>
+   <span className="text-sm text-white/50">{listed.length} z {visibleToolboxItems.length} dodatkowych narzędzi</span>
   </div>
   <Link href="/narzedzia/audyt-strony" className="group mt-7 flex flex-col gap-5 rounded-2xl border border-white/30 bg-gradient-to-br from-[#252525] to-[#101010] p-6 transition-colors hover:border-white/60 md:flex-row md:items-center md:justify-between md:p-8">
    <div className="max-w-2xl"><p className="text-[10px] uppercase tracking-[.2em] text-white/55">Główne narzędzie / wszystko w jednym</p>

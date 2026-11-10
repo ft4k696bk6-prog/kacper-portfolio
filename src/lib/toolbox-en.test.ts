@@ -2,6 +2,7 @@ import {describe,it,expect} from "vitest";
 import { toolboxItems } from "./toolbox";
 import { englishToolboxItems,englishToolForSlug,englishToolPath,localizedToolPath,localizedToolboxPath,englishToolboxCategories } from "./toolbox-en";
 import { buildPortfolioOpenRouterPrompt,isPortfolioTopic } from "./portfolio-openrouter";
+import { standaloneWebsiteCheckerSlugs,visibleToolboxItems,visibleEnglishToolboxItems,catalogToolboxCount,isShownInToolboxCatalog } from "./toolbox-visibility";
 describe("bilingual toolbox SEO and assistant integration",()=>{
  it("provides one distinct English page for each of the 45 tools",()=>{
   expect(englishToolboxItems).toHaveLength(45);
@@ -39,5 +40,28 @@ describe("bilingual toolbox SEO and assistant integration",()=>{
   }
   expect(isPortfolioTopic("Can you calculate ROAS?")).toBe(true);
   expect(isPortfolioTopic("Darmowe narzędzia SEO")).toBe(true);
+ });
+});
+
+describe("focused public toolbox",()=>{
+ it("keeps the 12 overlapping checkers out of both catalogs",()=>{
+  expect(standaloneWebsiteCheckerSlugs).toHaveLength(12);
+  expect(catalogToolboxCount).toBe(33);
+  expect(visibleToolboxItems).toHaveLength(32);
+  expect(visibleEnglishToolboxItems).toHaveLength(32);
+  expect(visibleToolboxItems.some(x=>x.slug==="audyt-strony")).toBe(false);
+  expect(visibleEnglishToolboxItems.some(x=>x.slug==="audyt-strony")).toBe(false);
+  for(const slug of standaloneWebsiteCheckerSlugs){
+   expect(isShownInToolboxCatalog(slug)).toBe(false);
+   expect(visibleToolboxItems.some(t=>t.slug===slug)).toBe(false);
+   expect(visibleEnglishToolboxItems.some(t=>t.slug===slug)).toBe(false);
+   expect(toolboxItems.some(t=>t.slug===slug)).toBe(true);
+   expect(englishToolboxItems.some(t=>t.slug===slug)).toBe(true);
+  }
+ });
+ it("keeps standalone generators, validators and advertising tools discoverable",()=>{
+  for(const slug of ["diagnostyka-meta-ads","kalkulator-roas","walidator-schema-org","walidator-sitemap-xml","generator-schema-localbusiness","czy-ai-widzi-strone"]){
+   expect(isShownInToolboxCatalog(slug)).toBe(true);
+  }
  });
 });

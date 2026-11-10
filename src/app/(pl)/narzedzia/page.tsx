@@ -2,22 +2,23 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FreeToolsDirectory } from "@/components/FreeToolsDirectory";
 import { toolboxItems } from "@/lib/toolbox";
+import { visibleToolboxItems } from "@/lib/toolbox-visibility";
 export const metadata: Metadata={
  title:"Darmowe narzędzia SEO, WWW, Meta Ads i CRM | bernecki.dev",
  description:"Darmowe testery stron WWW, SEO i botów AI, kalkulatory Meta Ads, ROAS, CPL, CRM oraz narzędzia techniczne. Bez rejestracji.",
  alternates:{canonical:"https://bernecki.dev/narzedzia",languages:{"pl-PL":"https://bernecki.dev/narzedzia",en:"https://bernecki.dev/en/tools"}},
- openGraph:{title:"Darmowe narzędzia dla firm i programistów | bernecki.dev",description:"Sprawdź stronę internetową, SEO, reklamy i koszty sprzedaży. 45 darmowych narzędzi online.",url:"https://bernecki.dev/narzedzia",type:"website"}
+ openGraph:{title:"Darmowe narzędzia dla firm i programistów | bernecki.dev",description:"Sprawdź stronę internetową, SEO, reklamy i koszty sprzedaży. Darmowe narzędzia online bez rejestracji.",url:"https://bernecki.dev/narzedzia",type:"website"}
 };
 export default function FreeToolsPage(){
  const jsonLd={"@context":"https://schema.org","@type":"CollectionPage",name:"Darmowe narzędzia online – bernecki.dev",url:"https://bernecki.dev/narzedzia",inLanguage:"pl-PL",
- mainEntity:{"@type":"ItemList",itemListElement:toolboxItems.map((t,i)=>({"@type":"ListItem",position:i+1,name:t.title,url:"https://bernecki.dev/narzedzia/"+t.slug}))}};
+ mainEntity:{"@type":"ItemList",itemListElement:[toolboxItems[0],...visibleToolboxItems].map((t,i)=>({"@type":"ListItem",position:i+1,name:t.title,url:"https://bernecki.dev/narzedzia/"+t.slug}))}};
  return <main className="site-page mx-auto max-w-7xl px-5 pb-24 pt-36 md:px-8">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(jsonLd).replace(/</g,"\\u003c")}}/>
   <nav className="text-xs text-white/50" aria-label="Ścieżka strony"><Link href="/" className="underline underline-offset-4">Strona główna</Link><span className="mx-2">/</span>Narzędzia</nav>
   <header className="mt-12 max-w-4xl">
-   <p className="page-eyebrow">TOOLBOX / 45 NARZĘDZI / BEZ REJESTRACJI</p>
+   <p className="page-eyebrow">TOOLBOX / AUDYT WWW + KALKULATORY / BEZ REJESTRACJI</p>
    <h1 className="mt-6">Darmowe narzędzia do stron, reklam i sprzedaży.</h1>
-   <p className="page-intro mt-6 max-w-3xl text-base md:text-lg">Nie musisz zakładać konta ani podawać maila. Sprawdź swoją witrynę, diagnozuj najczęstsze problemy z reklamami, analizuj kampanie i przeliczaj opłacalność działań. Każde narzędzie ma osobny adres i jasny zakres analizy.</p>
+   <p className="page-intro mt-6 max-w-3xl text-base md:text-lg">Nie musisz zakładać konta ani podawać maila. Sprawdź swoją witrynę, diagnozuj najczęstsze problemy z reklamami, analizuj kampanie i przeliczaj opłacalność działań. Wybierz główny audyt strony lub oddzielne narzędzie do konkretnego zadania. Szczegółowe testery techniczne pozostają dostępne pod swoimi adresami.</p>
   </header>
   <FreeToolsDirectory/>
   <section className="mt-16 grid gap-6 rounded-2xl border border-white/15 bg-[#111111] p-6 md:grid-cols-[1fr_auto] md:items-center md:p-9">

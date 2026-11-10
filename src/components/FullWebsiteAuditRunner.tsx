@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, AlertTriangle, ClipboardCopy, Download, ExternalLink, Globe2, LoaderCircle } from "lucide-react";
+import { ArrowRight, AlertTriangle, ClipboardCopy, Download, Globe2, LoaderCircle } from "lucide-react";
 
 type Severity="critical"|"warning"|"info";
 type Issue={id:string;severity:Severity;category:string;title:string;detail:string;fix:string;page?:string};
@@ -35,15 +35,6 @@ const issueTone:Record<Severity,string>={
 };
 const issueText:Record<Severity,string>={critical:"Krytyczne",warning:"Do poprawy",info:"Do weryfikacji"};
 const categoryOrder=["SEO","Indeksowanie","Dostępność","Wydajność","Bezpieczeństwo","Analityka","Domena"];
-const toolLinks:Record<string,{label:string;href:string}>={
- SEO:{label:"Osobny audyt SEO",href:"/narzedzia/audyt-seo"},
- Indeksowanie:{label:"Tester robots.txt",href:"/narzedzia/walidator-robots-txt"},
- Dostępność:{label:"Tester ALT obrazów",href:"/narzedzia/tester-obrazow-alt"},
- Wydajność:{label:"Tester TTFB",href:"/narzedzia/test-czasu-odpowiedzi-serwera"},
- Bezpieczeństwo:{label:"Tester TLS",href:"/narzedzia/sprawdzanie-certyfikatu-ssl"},
- Analityka:{label:"Tester Meta Pixel",href:"/narzedzia/tester-meta-pixel"},
- Domena:{label:"Tester SPF i DMARC",href:"/narzedzia/test-spf-dmarc"}
-};
 function downloadFile(content:string,name:string,type:string) {
  const url=URL.createObjectURL(new Blob([content],{type}));
  const link=document.createElement("a");link.href=url;link.download=name;link.click();URL.revokeObjectURL(url);
@@ -160,7 +151,7 @@ export function FullWebsiteAuditRunner(){
      <div className="flex flex-wrap gap-2">{[["all","Wszystkie"],["critical","Krytyczne"],["warning","Do poprawy"],["info","Do sprawdzenia"]].map(([value,name])=><button key={value} type="button" onClick={()=>setFilter(value as typeof filter)} className={"rounded-md border px-3 py-2 text-xs "+(filter===value?"border-white/60 bg-white/10 text-white":"border-white/10 text-white/55 hover:border-white/40")}>{name}</button>)}</div>
     </div>
     {ordered.length===0?<p className="rounded-xl border border-white/15 p-5 text-sm text-white/70">Nie wykryto uwag w tej kategorii na przeskanowanej próbce. Nie oznacza to pełnej zgodności witryny.</p>:ordered.map(cat=><div key={cat} className="overflow-hidden rounded-xl border border-white/15 bg-[#111111]">
-     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 p-4 md:px-5"><h4 className="font-medium">{cat} <span className="ml-2 text-sm font-normal text-white/45">{findings.filter(i=>i.category===cat).length}</span></h4><Link href={toolLinks[cat]?.href||"/narzedzia"} className="inline-flex items-center gap-1.5 text-xs text-white/60 hover:text-white">{toolLinks[cat]?.label||"Inne narzędzia"}<ExternalLink size={13}/></Link></div>
+     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 p-4 md:px-5"><h4 className="font-medium">{cat} <span className="ml-2 text-sm font-normal text-white/45">{findings.filter(i=>i.category===cat).length}</span></h4></div>
      <div className="space-y-3 p-4 md:p-5">{findings.filter(i=>i.category===cat).map(item=><details key={item.id} className={"group rounded-lg border p-4 "+issueTone[item.severity]}>
       <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-medium"><span>{item.title}</span><span className="shrink-0 text-[10px] opacity-75">{issueText[item.severity]} +</span></summary>
       {item.page&&<p className="mt-3 break-all text-xs opacity-70">{item.page}</p>}

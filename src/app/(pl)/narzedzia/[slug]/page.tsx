@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, ShieldCheck, MoveRight } from "lucide-react";
 import { toolboxItems, findTool } from "@/lib/toolbox";
 import { englishToolPath } from "@/lib/toolbox-en";
+import { visibleToolboxItems } from "@/lib/toolbox-visibility";
 import { FreeToolRunner } from "@/components/FreeToolRunner";
 import { FullWebsiteAuditRunner } from "@/components/FullWebsiteAuditRunner";
 
@@ -18,7 +19,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
 }
 export default async function ToolPage({params}:Props){
  const {slug}=await params;const tool=findTool(slug);if(!tool)notFound();
- const related=toolboxItems.filter(t=>t.category===tool.category&&t.slug!==slug).slice(0,3);
+ const related=visibleToolboxItems.filter(t=>t.category===tool.category&&t.slug!==slug).slice(0,3);
  const service=tool.category==="Reklamy i marketing"?"/marketing-i-reklamy":tool.category==="CRM i sprzedaż"?"/crm-i-aplikacje-webowe":"/tworzenie-stron-internetowych";
  const jsonLd={"@context":"https://schema.org","@graph":[
   {"@type":"WebApplication",name:tool.title,url:"https://bernecki.dev/narzedzia/"+slug,description:tool.description,
@@ -58,10 +59,10 @@ export default async function ToolPage({params}:Props){
    <div><p className="page-eyebrow">Zamień diagnozę w konkretne działania</p><h2 className="mt-3 text-2xl font-medium">Wolisz zlecić poprawki?</h2><p className="mt-3 max-w-2xl text-sm leading-7 text-white/60">Mogę pomóc z wdrożeniem strony, reklam lub CRM. Samo korzystanie z narzędzi pozostaje darmowe.</p></div>
    <Link className="brand-action mt-5 inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-lg px-6 text-sm md:mt-0" href="/kontakt">Zapytaj o współpracę <ArrowUpRight size={17}/></Link>
   </section>
-  <section className="mt-16">
+  {related.length>0&&<section className="mt-16">
    <div className="flex flex-wrap items-center justify-between gap-4"><h2 className="text-2xl font-medium">Podobne narzędzia</h2><Link href="/narzedzia" className="inline-flex items-center gap-2 text-sm text-white/75 underline underline-offset-4">Wszystkie narzędzia <MoveRight size={16}/></Link></div>
    <div className="mt-6 grid gap-3 md:grid-cols-3">{related.map(t=><Link href={"/narzedzia/"+t.slug} key={t.slug} className="group rounded-xl border border-white/15 bg-[#111111] p-5 transition hover:border-white/50"><h3 className="font-medium">{t.title}</h3><p className="mt-3 text-sm leading-6 text-white/60">{t.description}</p><span className="mt-5 inline-flex items-center gap-2 text-xs text-white/75">Uruchom <ArrowUpRight size={14}/></span></Link>)}</div>
-  </section>
+  </section>}
   <Link href="/narzedzia" className="mt-10 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white"><ArrowLeft size={16}/>Powrót do katalogu</Link>
   <div className="sr-only"><Link href={service}>Zobacz powiązaną usługę</Link></div>
  </main>;
