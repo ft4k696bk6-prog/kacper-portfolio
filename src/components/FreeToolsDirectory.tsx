@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Search, LayoutGrid, Globe, Megaphone, Workflow, Bot, Code2 } from "lucide-react";
 import { toolboxCategories } from "@/lib/toolbox";
-import { visibleToolboxItems, catalogToolboxCount } from "@/lib/toolbox-visibility";
+import { visibleToolboxItems } from "@/lib/toolbox-visibility";
 
 const icons: Record<string,typeof LayoutGrid>={
  "Wszystkie":LayoutGrid,"WWW i SEO":Globe,"Reklamy i marketing":Megaphone,
