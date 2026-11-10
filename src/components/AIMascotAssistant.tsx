@@ -1052,6 +1052,7 @@ export function AIMascotAssistant() {
                 listening={listening}
                 open={open}
                 lastReply={messages[messages.length - 1]?.role === "assistant" ? messages[messages.length - 1].content : ""}
+                nudgeText={nudge?.text ?? ""}
                 onOpen={() => openChat()}
               />
             </div>
