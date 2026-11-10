@@ -204,18 +204,18 @@ function issueList(pages:ScannedPage[], extras:{
   for(const page of pages){
     const h=page.html;
     const tag=page.url;
-    if(page.status>=400)append("critical","Dostępność","http-"+tag,"Błąd odpowiedzi HTTP",\`Serwer zwrócił status \${page.status}.\`,"Sprawdź, czy podstrona istnieje i nie blokuje żądania.",tag);
+    if(page.status>=400)append("critical","Dostępność","http-"+tag,"Błąd odpowiedzi HTTP",`Serwer zwrócił status ${page.status}.`,"Sprawdź, czy podstrona istnieje i nie blokuje żądania.",tag);
     if(!h.title)append("critical","SEO","title-"+tag,"Brakuje znacznika title","W kodzie HTML nie znaleziono tytułu podstrony.","Dodaj unikalny, opisowy <title>.",tag);
-    else if(h.title.length>70)append("warning","SEO","titlelength-"+tag,"Długi tytuł strony",\`Title ma \${h.title.length} znaków.\`,"Rozważ krótszy tytuł zachowujący główny temat podstrony.",tag);
+    else if(h.title.length>70)append("warning","SEO","titlelength-"+tag,"Długi tytuł strony",`Title ma ${h.title.length} znaków.`,"Rozważ krótszy tytuł zachowujący główny temat podstrony.",tag);
     if(!h.description)append("warning","SEO","desc-"+tag,"Brakuje meta description","Nie wykryto opisu strony.","Dodaj unikalny opis zgodny z treścią podstrony.",tag);
     if(!h.headings.some(x=>x.level===1))append("warning","SEO","h1-"+tag,"Brakuje H1","W pobranym HTML nie znaleziono nagłówka H1.","Uzupełnij czytelny nagłówek główny.",tag);
-    if(h.headings.filter(x=>x.level===1).length>1)append("info","SEO","h1multi-"+tag,"Wiele nagłówków H1",\`Wykryto \${h.headings.filter(x=>x.level===1).length} nagłówki H1.\`,"Sprawdź, czy hierarchia nagłówków jest logiczna.",tag);
+    if(h.headings.filter(x=>x.level===1).length>1)append("info","SEO","h1multi-"+tag,"Wiele nagłówków H1",`Wykryto ${h.headings.filter(x=>x.level===1).length} nagłówki H1.`,"Sprawdź, czy hierarchia nagłówków jest logiczna.",tag);
     if(!h.canonical)append("warning","Indeksowanie","canonical-"+tag,"Brak canonical","Nie wykryto linku canonical.","Wskaż kanoniczny adres, jeśli jest to uzasadnione strukturą witryny.",tag);
-    if(/\bnoindex\b/i.test(h.robots))append("critical","Indeksowanie","noindex-"+tag,"Dyrektywa noindex",\`Meta robots zawiera: \${h.robots}.\`,"Jeśli podstrona ma być indeksowana, zweryfikuj dyrektywę i ustawienia CMS.",tag);
+    if(/\bnoindex\b/i.test(h.robots))append("critical","Indeksowanie","noindex-"+tag,"Dyrektywa noindex",`Meta robots zawiera: ${h.robots}.`,"Jeśli podstrona ma być indeksowana, zweryfikuj dyrektywę i ustawienia CMS.",tag);
     if(!h.lang)append("warning","Dostępność","lang-"+tag,"Brak języka dokumentu","Tag HTML nie zawiera atrybutu lang.","Dodaj właściwy język, np. lang=\\"pl\\".",tag);
     if(!h.hasViewport)append("warning","Dostępność","viewport-"+tag,"Brak viewport","Brak meta viewport w HTML.","Dodaj poprawny viewport na urządzenia mobilne.",tag);
-    if(h.imagesMissingAlt>0)append("warning","Dostępność","alt-"+tag,"Obrazy bez atrybutu alt",\`Wykryto \${h.imagesMissingAlt} obrazów bez alt na \${h.imageCount} elementów img.\`,"Dodaj opisy do obrazów informacyjnych lub pusty alt do dekoracyjnych.",tag);
-    if(page.ttfb>800)append("warning","Wydajność","ttfb-"+tag,"Wysoki TTFB pojedynczego żądania",\`Czas pierwszej odpowiedzi wyniósł \${page.ttfb} ms.\`,"Sprawdź cache, backend i czas odpowiedzi serwera; potwierdź wynik powtarzanym testem.",tag);
+    if(h.imagesMissingAlt>0)append("warning","Dostępność","alt-"+tag,"Obrazy bez atrybutu alt",`Wykryto ${h.imagesMissingAlt} obrazów bez alt na ${h.imageCount} elementów img.`,"Dodaj opisy do obrazów informacyjnych lub pusty alt do dekoracyjnych.",tag);
+    if(page.ttfb>800)append("warning","Wydajność","ttfb-"+tag,"Wysoki TTFB pojedynczego żądania",`Czas pierwszej odpowiedzi wyniósł ${page.ttfb} ms.`,"Sprawdź cache, backend i czas odpowiedzi serwera; potwierdź wynik powtarzanym testem.",tag);
   }
   const first=pages[0]?.html;
   if(first&&!first.og.image)append("warning","SEO","og-image","Brak og:image na stronie startowej","Nie wykryto grafiki Open Graph.","Dodaj obraz do udostępniania linku.");
@@ -224,7 +224,7 @@ function issueList(pages:ScannedPage[], extras:{
   if(!extras.sitemap)append("warning","Indeksowanie","sitemap","Nie znaleziono poprawnej mapy sitemap.xml","Nie wykryto mapy pod adresem /sitemap.xml.","Sprawdź czy mapa istnieje i zgłoś ją w Search Console.");
   if(extras.tls){
     if(!extras.tls.authorized)append("critical","Bezpieczeństwo","tls","Nieprawidłowa weryfikacja certyfikatu TLS",extras.tls.authorizationError||"Certyfikat nie został zweryfikowany.","Sprawdź konfigurację certyfikatu i łańcuch zaufania.");
-    else if(typeof extras.tls.daysRemaining==="number"&&extras.tls.daysRemaining<21)append("warning","Bezpieczeństwo","tls-expiring","Certyfikat wkrótce wygaśnie",\`Pozostało \${extras.tls.daysRemaining} dni.\`,"Skonfiguruj automatyczne odnawianie certyfikatu.");
+    else if(typeof extras.tls.daysRemaining==="number"&&extras.tls.daysRemaining<21)append("warning","Bezpieczeństwo","tls-expiring","Certyfikat wkrótce wygaśnie",`Pozostało ${extras.tls.daysRemaining} dni.`,"Skonfiguruj automatyczne odnawianie certyfikatu.");
   }
   if(extras.dns){
     if(!extras.dns.spf.length)append("warning","Domena","spf","Nie wykryto SPF","Brak publicznego rekordu SPF dla domeny.","Sprawdź ustawienia poczty i opublikuj prawidłowy SPF.");
@@ -234,7 +234,7 @@ function issueList(pages:ScannedPage[], extras:{
   for(const p of pages){
     if(p.html.title){
       const other=names.get(p.html.title.toLowerCase().trim());
-      if(other&&other!==p.url)append("warning","SEO","duplicate-title-"+p.url,"Powtarzający się title",\`Ten sam title występuje też na \${other}.\`,"Zadbaj o unikalny tytuł każdej podstrony.",p.url);
+      if(other&&other!==p.url)append("warning","SEO","duplicate-title-"+p.url,"Powtarzający się title",`Ten sam title występuje też na ${other}.`,"Zadbaj o unikalny tytuł każdej podstrony.",p.url);
       else names.set(p.html.title.toLowerCase().trim(),p.url);
     }
   }
@@ -242,7 +242,7 @@ function issueList(pages:ScannedPage[], extras:{
 }
 async function completeAudit(url:URL){
   const initial=await fetchPublic(url);
-  if(initial.status>=400)throw new Error(\`Podany adres zwrócił HTTP \${initial.status}. Nie można rozpocząć pełnego audytu.\`);
+  if(initial.status>=400)throw new Error(`Podany adres zwrócił HTTP ${initial.status}. Nie można rozpocząć pełnego audytu.`);
   if(!/<html\b/i.test(initial.body))throw new Error("Adres nie zwrócił dokumentu HTML.");
   const final=new URL(initial.url);
   const root=final.origin;
