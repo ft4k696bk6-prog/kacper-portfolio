@@ -96,7 +96,7 @@ function csvRows(csv:string) {
  row.push(cell);if(row.some(v=>v.trim()))rows.push(row);
  return rows.slice(0,10001);
 }
-function localRun(mode:string, v:Record<string,string>, fileText:string):Result {
+export function localRun(mode:string, v:Record<string,string>, fileText:string):Result {
  const n=(key:string,zero=false)=>requireNumber(v,key,zero);
  const metrics=(...items:[string,string][]):Metric[]=>items.map(([label,value])=>({label,value}));
  switch(mode){
@@ -191,7 +191,7 @@ function localRun(mode:string, v:Record<string,string>, fileText:string):Result 
  default:throw new Error("Nieznany rodzaj narzędzia.");
  }
 }
-function fromSite(mode:string,d:SiteReport):Result{
+export function fromSite(mode:string,d:SiteReport):Result{
  if(mode==="tls"){
   const c=d.tls;if(!c)throw new Error("Nie znaleziono danych certyfikatu.");
   return {title:"Certyfikat TLS domeny "+d.host,metrics:[{label:"Weryfikacja",value:c.authorized?"Poprawna":"Błąd: "+c.authorizationError},{label:"Ważny do",value:c.validTo||"—"},{label:"Pozostałe dni",value:c.daysRemaining===null?"—":String(c.daysRemaining)},{label:"Protokół",value:c.protocol||"—"},{label:"Wystawca",value:c.issuer||"—"},{label:"Domena (CN)",value:c.subject||"—"}],warning:"To punktowa kontrola połączenia na porcie 443, nie pełen audyt bezpieczeństwa TLS."};
@@ -234,6 +234,10 @@ function fromSite(mode:string,d:SiteReport):Result{
  if(mode==="seo")base.messages.push("Dane strukturalne JSON-LD: "+h.jsonLdCount+" bloków. Liczba linków: "+h.linkCount+".");
  return base;
 }
+export async function calculateSha256(input:string):Promise<string>{
+ const hash=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(input));
+ return Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,"0")).join("");
+}
 export function FreeToolRunner({mode,slug}:{mode:string;slug:string}){
  const [values,setValues]=useState<Record<string,string>>({});
  const [result,setResult]=useState<Result|null>(null);
@@ -252,8 +256,7 @@ export function FreeToolRunner({mode,slug}:{mode:string;slug:string}){
     setResult(fromSite(mode,d));
    }else if(mode==="sha256"){
     if(!values.body)throw new Error("Wpisz tekst do obliczenia skrótu SHA-256.");
-    const hash=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(values.body));
-    const digest=Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,"0")).join("");
+    const digest=await calculateSha256(values.body);
     setResult({title:"Skrót SHA-256",text:digest,warning:"Skrót jest obliczany lokalnie; do przechowywania haseł stosuj funkcje specjalnie do tego przeznaczone, np. Argon2id."});
    }else setResult(localRun(mode,values,csv));
   }catch(e){setError(e instanceof Error?e.message:"Nie udało się wykonać analizy.");}
