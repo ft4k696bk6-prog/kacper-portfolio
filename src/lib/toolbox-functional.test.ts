@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { toolboxItems } from "./toolbox";
-import { fromSite, localRun, calculateSha256 } from "../components/FreeToolRunner";
+import { fromSite, localRun, calculateSha256 } from "./toolbox-engine";
 
 const raw = {
  status:200,url:"https://sagan.dev/",bytes:24000,ttfb:152,
