@@ -7,7 +7,6 @@ import { LanguageMetadataSync } from "@/components/LanguageMetadataSync";
 import { AnalyticsConsent } from "@/components/AnalyticsConsent";
 import { AIMascotAssistant } from "@/components/AIMascotAssistant";
 import { Geist } from "next/font/google";
-import Script from "next/script";
 import { SiteFooter } from "@/components/SiteFooter";
 import { brand } from "@/lib/brand";
 
@@ -108,10 +107,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pl" suppressHydrationWarning className={`scroll-smooth font-sans ${geist.variable}`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: '(function(){try{if(location.pathname!=="/")return;var key="bernecki-home-intro-v1";if(sessionStorage.getItem(key)){document.documentElement.dataset.homeIntro="skip";}else{sessionStorage.setItem(key,"1");}}catch(e){}})();',
+          }}
+        />
+      </head>
       <body>
-        <Script id="bernecki-home-intro-session" strategy="beforeInteractive">
-          {`(function(){try{if(window.location.pathname!=="/")return;var key="bernecki-home-intro-v1";if(window.sessionStorage.getItem(key)){document.documentElement.dataset.homeIntro="skip";}else{window.sessionStorage.setItem(key,"1");}}catch(e){}})();`}
-        </Script>
         <LanguageProvider>
           <AnalyticsConsent />
           <LanguageMetadataSync />

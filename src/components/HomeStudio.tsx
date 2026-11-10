@@ -23,7 +23,7 @@ export function HomeStudio() {
   useEffect(() => {
     const timer = window.setTimeout(() => {
       document.documentElement.dataset.homeIntro = "skip";
-    }, 1250);
+    }, 1800);
     return () => {
       window.clearTimeout(timer);
       document.documentElement.dataset.homeIntro = "skip";
