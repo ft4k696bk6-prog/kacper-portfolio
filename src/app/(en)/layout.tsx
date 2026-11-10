@@ -17,7 +17,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: "Websites, CRM Software & Marketing | Kacper Bernecki",
-    template: "%s | Kacper Bernecki",
+    // Page titles are already composed by the route; appending the brand here duplicates it.
+    template: "%s",
   },
   description:
     "Custom websites, CRM software and business applications. Marketing, Meta Ads and automation solutions for companies across Poland.",

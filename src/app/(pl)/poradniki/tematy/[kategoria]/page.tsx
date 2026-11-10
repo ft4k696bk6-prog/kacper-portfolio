@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCategory, getGuideCounts, guideCategories, listGuides } from "@/lib/guide-directory";
-import { serviceMetadata } from "@/lib/seo";
+import { serviceMetadata, seoDescription } from "@/lib/seo";
 import { englishCategoryCounts } from "@/lib/guide-i18n";
 
 export const dynamicParams = true;
@@ -26,7 +26,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
   if (!total) notFound();
   const metadata = serviceMetadata(
     `${category.label} — poradniki i rozwiązywanie błędów`,
-    category.description,
+    seoDescription(category.description, `Poznaj typowe objawy, przyczyny problemów, kolejne kroki diagnostyczne i sposoby weryfikacji rozwiązania w obszarze ${category.label.toLowerCase()}.`),
     `poradniki/tematy/${kategoria}`
   );
   return {
