@@ -45,11 +45,13 @@ async function safeAddress(host:string){
   if(!found.length||found.some(v=>!publicIP(v.address)))throw new Error("Domena nie wskazuje na dozwolony publiczny adres IP.");
   return found[0].address;
 }
-async function fetchPublic(url:URL,redirects=0):Promise<{status:number;url:string;body:string;bytes:number;ttfb:number; contentType:string}>{
+type RedirectInfo={from:string;to:string;status:number};
+type HttpHeaders=Record<string,string>;
+async function fetchPublic(url:URL,redirects=0,chain:RedirectInfo[]=[]):Promise<{status:number;url:string;body:string;bytes:number;ttfb:number; contentType:string; redirects:RedirectInfo[];headers:HttpHeaders}>{
   if(redirects>3)throw new Error("Zbyt wiele przekierowań.");
   const ip=await safeAddress(url.hostname);
   const started=Date.now();
-  const response=await new Promise<{status:number; location:string;body:string;bytes:number;ttfb:number; contentType:string}>((resolve,reject)=>{
+  const response=await new Promise<{status:number;location:string;body:string;bytes:number;ttfb:number;contentType:string;headers:HttpHeaders}>((resolve,reject)=>{
     const req=(url.protocol==="https:"?httpsRequest:httpRequest)(url,{
       method:"GET",lookup:(_h,_o,cb)=>cb(null,ip,4),headers:{"User-Agent":"bernecki.dev-toolbox/1.0","Accept":"text/html,text/plain,application/xml,text/xml;q=0.8,*/*;q=0.2"},
       timeout:8000
@@ -58,7 +60,12 @@ async function fetchPublic(url:URL,redirects=0):Promise<{status:number;url:strin
       const type=String(res.headers["content-type"]||"");
       const location=String(res.headers.location||"");
       const ttfb=Date.now()-started;
-      if(status>=300&&status<400&&location){res.resume();return resolve({status,location,body:"",bytes:0,ttfb,contentType:type});}
+      const headers:HttpHeaders={};
+      for(const name of ["content-security-policy","strict-transport-security","x-content-type-options","referrer-policy","permissions-policy","x-frame-options","cache-control","server","content-type"]){
+        const value=res.headers[name];
+        if(value)headers[name]=Array.isArray(value)?value.join(", "):value;
+      }
+      if(status>=300&&status<400&&location){res.resume();return resolve({status,location,body:"",bytes:0,ttfb,contentType:type,headers});}
       if(!/text\/html|text\/plain|xml|application\/xhtml\+xml/i.test(type)&&type) {
         res.resume();return reject(new Error("Podany adres nie zwraca dokumentu HTML ani tekstu."));
       }
@@ -68,7 +75,7 @@ async function fetchPublic(url:URL,redirects=0):Promise<{status:number;url:strin
         if(total>MAX_HTML){ended=true;req.destroy(new Error("Dokument jest zbyt duży do szybkiego testu (limit 900 kB)."));return;}
         chunks.push(chunk);
       });
-      res.on("end",()=>{if(!ended)resolve({status,location,body:Buffer.concat(chunks).toString("utf8"),bytes:total,ttfb,contentType:type});});
+      res.on("end",()=>{if(!ended)resolve({status,location,body:Buffer.concat(chunks).toString("utf8"),bytes:total,ttfb,contentType:type,headers});});
       res.on("error",reject);
     });
     req.on("timeout",()=>req.destroy(new Error("Serwer nie odpowiedział w ciągu 8 sekund.")));
@@ -77,9 +84,9 @@ async function fetchPublic(url:URL,redirects=0):Promise<{status:number;url:strin
   });
   if(response.location){
     const redirect=parseTarget(new URL(response.location,url).toString());
-    return fetchPublic(redirect,redirects+1);
+    return fetchPublic(redirect,redirects+1,[...chain,{from:url.toString(),to:redirect.toString(),status:response.status}]);
   }
-  return {status:response.status,url:url.toString(),body:response.body,bytes:response.bytes,ttfb:response.ttfb,contentType:response.contentType};
+  return {status:response.status,url:url.toString(),body:response.body,bytes:response.bytes,ttfb:response.ttfb,contentType:response.contentType,headers:response.headers,redirects:chain};
 }
 function clean(s:string){return s.replace(/<[^>]*>/g," ").replace(/&amp;/gi,"&").replace(/&quot;/gi,'"').replace(/&#39;|&apos;/gi,"'").replace(/&lt;/gi,"<").replace(/&gt;/gi,">").replace(/\s+/g," ").trim().slice(0,280);}
 function attribute(tag:string,name:string){
@@ -100,7 +107,12 @@ function inspectHtml(html:string){
     lang,headings,og:{title:meta("og:title"),description:meta("og:description"),image:meta("og:image"),type:meta("og:type")},
     twitter:meta("twitter:card"),jsonLdCount:(html.match(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>/gi)||[]).length,
     imageCount:images.length,imagesMissingAlt:images.filter(v=>!/(?:\s|<)alt\s*=/i.test(v)).length,
-    linkCount:(html.match(/<a\b[^>]*href\s*=/gi)||[]).length, hasViewport:tags.some(v=>attribute(v,"name").toLowerCase()==="viewport")
+    linkCount:(html.match(/<a\b[^>]*href\s*=/gi)||[]).length, hasViewport:tags.some(v=>attribute(v,"name").toLowerCase()==="viewport"),
+    tracking:{
+      metaPixel:/fbevents\.js|fbq\s*\(/i.test(html),
+      gtm:/googletagmanager\.com\/gtm\.js|GTM-[A-Z0-9]{5,}/i.test(html),
+      ga4:/googletagmanager\.com\/gtag\/js|G-[A-Z0-9]{7,}/i.test(html)
+    }
   };
 }
 async function checkTls(hostname:string){
@@ -128,7 +140,7 @@ export async function POST(req:NextRequest){
   if(limited(req))return NextResponse.json({error:"Limit 12 analiz na minutę. Spróbuj ponownie później."},{status:429});
   try{
     const body=await req.json() as {url?:unknown;mode?:unknown};
-    if(typeof body.url!=="string"||!["site","seo","meta","headings","og","ai","tls","dns"].includes(String(body.mode)))throw new Error("Nieprawidłowe dane.");
+    if(typeof body.url!=="string"||!["site","seo","meta","headings","og","ai","tls","dns","ttfb","redirects","headers","pixel","gtm","images"].includes(String(body.mode)))throw new Error("Nieprawidłowe dane.");
     const url=parseTarget(body.url);
     if(body.mode==="tls")return NextResponse.json({host:url.hostname,tls:await checkTls(url.hostname)});
     if(body.mode==="dns")return NextResponse.json({host:url.hostname,dns:await checkDns(url.hostname)});
