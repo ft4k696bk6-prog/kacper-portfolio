@@ -23,7 +23,7 @@ const modeLabels:Record<string,Record<string,string>>={
  schema:{body:"Paste JSON-LD markup"},schemaGenerate:{url:"Website URL",name:"Business name"},
  serp:{url:"Website URL",title:"Page title",description:"Meta description"},
  llms:{name:"Website or business name",description:"Short business description",url:"Website URL",links:"Important page URLs (one per line)"},
- adsCsv:{body:"Upload Meta Ads CSV export"},adText:{body:"Primary ad text"},base64:{body:"Text or Base64 value"},
+ adsCsv:{body:"Upload Meta Ads CSV export"},base64:{body:"Text or Base64 value"},
  sha256:{body:"Text to hash using SHA-256"},jwt:{body:"JWT token (decoded locally)"},
  json:{body:"JSON input"},profit:{margin:"Gross margin (%)"},
  lostLeads:{leads:"Unanswered leads per month",margin:"Average margin per sale (PLN)"},
@@ -31,7 +31,7 @@ const modeLabels:Record<string,Record<string,string>>={
  automation:{cost:"Cost per work hour (PLN)",rate:"Time that can be automated (%)",monthly:"Monthly tools cost (PLN)"},
  ltv:{margin:"Gross margin (%)"},traffic:{rate:"Expected lead conversion (%)"},
  conversion:{leads:"Enquiries / leads",clients:"New customers"},
- adText:{headline:"Ad headline"},
+ adText:{body:"Primary ad text",headline:"Ad headline"},
  siteCost:{type:"Website type",forms:"Forms and integrations"}
 };
 const options:Record<string,string>={
