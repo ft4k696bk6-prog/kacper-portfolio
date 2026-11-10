@@ -597,7 +597,7 @@ export function AIMascotAssistant() {
                   <motion.aside
                     role="dialog"
                     aria-label={t.aiMascot.chatTitle}
-                    className={`absolute z-30 flex max-h-[min(36rem,calc(100vh-1rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/95 shadow-[0_28px_90px_rgba(0,0,0,0.58)] backdrop-blur-2xl ${companionPanelPositionClass} ${companionPanelSizeClass}`}
+                    className={`absolute z-30 flex max-h-[min(36rem,calc(100dvh-7rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/95 shadow-[0_28px_90px_rgba(0,0,0,0.58)] backdrop-blur-2xl ${companionPanelPositionClass} ${companionPanelSizeClass}`}
                     initial={{ opacity: 0, y: 12, scale: 0.96 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 12, scale: 0.96 }}
@@ -630,7 +630,7 @@ export function AIMascotAssistant() {
                     <div
                       ref={scrollAreaRef}
                       aria-live="polite"
-                      className="max-h-80 flex-1 space-y-2 overflow-y-auto px-4 py-3"
+                      className="min-h-0 max-h-80 flex-1 space-y-2 overflow-y-auto px-4 py-3"
                     >
                       {messages.slice(booking.step === "idle" ? -5 : -3).map((message) => (
                         <div
