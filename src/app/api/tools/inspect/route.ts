@@ -53,7 +53,14 @@ async function fetchPublic(url:URL,redirects=0,chain:RedirectInfo[]=[]):Promise<
   const started=Date.now();
   const response=await new Promise<{status:number;location:string;body:string;bytes:number;ttfb:number;contentType:string;headers:HttpHeaders}>((resolve,reject)=>{
     const req=(url.protocol==="https:"?httpsRequest:httpRequest)(url,{
-      method:"GET",lookup:(_h,_o,cb)=>cb(null,ip,4),headers:{"User-Agent":"bernecki.dev-toolbox/1.0","Accept":"text/html,text/plain,application/xml,text/xml;q=0.8,*/*;q=0.2"},
+      method:"GET",
+      // Node 22/24 calls custom lookup with all:true when autoSelectFamily is enabled.
+      // Returning a plain IP in that mode causes ERR_INVALID_IP_ADDRESS: undefined.
+      lookup:(_h,options,cb)=>{
+        if(options.all) return cb(null,[{address:ip,family:4}]);
+        return cb(null,ip,4);
+      },
+      headers:{"User-Agent":"bernecki.dev-toolbox/1.0","Accept":"text/html,text/plain,application/xml,text/xml;q=0.8,*/*;q=0.2"},
       timeout:8000
     },res=>{
       const status=res.statusCode||0;

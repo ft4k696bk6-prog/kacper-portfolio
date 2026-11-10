@@ -14,7 +14,9 @@
     "pseo:backlog": "node scripts/pseo-backlog.mjs",
     "pseo:check": "vitest run src/lib/guide-directory.test.ts",
     "pseo:qa": "node scripts/pseo-autopilot-quality.mjs",
-    "pseo:autopilot": "node scripts/pseo-autopilot.mjs"
+    "pseo:autopilot": "node scripts/pseo-autopilot.mjs",
+    "test:toolbox": "vitest run src/lib/toolbox-functional.test.ts",
+    "prebuild": "npm run test:toolbox"
   },
   "dependencies": {
     "@marsidev/react-turnstile": "^1.5.0",
