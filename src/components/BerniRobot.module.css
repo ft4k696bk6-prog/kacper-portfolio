@@ -79,3 +79,8 @@
     animation: none !important; transition: none !important;
   }
 }
+
+/* Look down at the chat field while typing, not at the pointer. */
+.stage[data-mood="typing"] .eyes { transform: translate(0px, 3px); }
+.stage[data-mood="listening"] .earLeft { animation: earTwitch 1.2s ease-in-out infinite; }
+.stage[data-mood="listening"] .earRight { animation: earTwitch 1.35s ease-in-out infinite reverse; }
