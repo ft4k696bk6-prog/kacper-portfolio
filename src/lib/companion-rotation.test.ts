@@ -21,7 +21,7 @@ function context(override: Partial<CompanionContext> = {}): CompanionContext {
 describe("Berni >1000 authored combinations", () => {
   it("ships more than 1000 literal bilingual pre-authored message templates", () => {
     expect(expandedCompanionRules.length).toBeGreaterThanOrEqual(1000);
-    expect(COMPANION_SCENARIO_COUNT).toBeGreaterThanOrEqual(1200);
+    expect(COMPANION_SCENARIO_COUNT).toBeGreaterThanOrEqual(1397);
     expect(new Set(expandedCompanionRules.map(r => r.id)).size).toBe(expandedCompanionRules.length);
     expect(new Set(expandedCompanionRules.map(r => r.pl)).size).toBe(expandedCompanionRules.length);
     expect(new Set(expandedCompanionRules.map(r => r.en)).size).toBe(expandedCompanionRules.length);
