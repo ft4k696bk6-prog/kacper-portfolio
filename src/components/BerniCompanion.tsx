@@ -54,7 +54,10 @@ export function BerniCompanion({
   }, []);
 
   useEffect(() => {
-    if (!lastReply) return;
+    if (!lastReply) {
+      const clear = window.setTimeout(() => setReaction(null), 0);
+      return () => window.clearTimeout(clear);
+    }
     const start = window.setTimeout(() => setReaction(detectBerniReaction(lastReply)), 0);
     const end = window.setTimeout(() => setReaction(null), 6200);
     return () => { window.clearTimeout(start); window.clearTimeout(end); };
@@ -66,6 +69,7 @@ export function BerniCompanion({
     let frame = 0;
     const onMove = (event: PointerEvent) => {
       lastActivityRef.current = Date.now();
+      if (sleeping) setSleeping(false);
       if (!finePointer || frame) return;
       frame = window.requestAnimationFrame(() => {
         frame = 0;
@@ -93,6 +97,7 @@ export function BerniCompanion({
     const onScroll = () => {
       // Tracking activity is cheap: no state updates on each scroll frame.
       lastActivityRef.current = Date.now();
+      if (sleeping) setSleeping(false);
     };
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerdown", onActivity, { passive: true });
@@ -110,7 +115,7 @@ export function BerniCompanion({
       window.clearInterval(timer);
       if (frame) window.cancelAnimationFrame(frame);
     };
-  }, [open]);
+  }, [open, sleeping]);
 
   function requestLocalWeather() {
     if (geoPendingRef.current) return;
@@ -153,6 +158,7 @@ export function BerniCompanion({
     <div ref={hostRef} className="relative h-[6.2rem] w-[6.2rem] sm:h-28 sm:w-28"
       data-testid="berni-companion" data-mood={robotMood} data-weather={weather?.condition ?? "unknown"}>
       <button type="button"
+        onMouseEnter={() => { setSleeping(false); setReaction("curious"); }}
         onClick={() => { setSleeping(false); setReaction("happy"); onOpen(); }}
         aria-label={lang === "pl" ? "Porozmawiaj z Bernim, asystentem AI" : "Talk to Berni, the AI assistant"}
         title={lang === "pl" ? "Berni — asystent AI" : "Berni — AI assistant"}
@@ -170,7 +176,7 @@ export function BerniCompanion({
       </button>
       {weather ? <span className="pointer-events-none absolute -top-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/15 bg-[#12161b]/95 px-2 py-0.5 text-[9px] text-white/80"
         title="Forecast: MET Norway">
-        {getBerniWeatherLabel(weather.condition, lang)} · {Math.round(weather.temperature)}°C
+        {getBerniWeatherLabel(weather.condition, lang)} · {Math.round(weather.temperature)}°C · MET Norway
       </span> : null}
       {weatherError ? <span role="status" className="absolute bottom-[100%] right-0 w-48 rounded-lg bg-[#1b2027] p-2 text-[11px] text-white shadow-xl">{weatherError}</span> : null}
     </div>
