@@ -39,7 +39,7 @@ export default async function ToolPage({params}:Props){
   {tool.slug==="audyt-strony"?<FullWebsiteAuditRunner/>:<FreeToolRunner mode={tool.mode} slug={tool.slug}/>}
   {tool.slug!=="audyt-strony"&&["WWW i SEO","AI i wyszukiwarki"].includes(tool.category)&&<Link href="/narzedzia/audyt-strony" className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/20 bg-[#141414] p-5 transition-colors hover:border-white/50">
    <div><span className="text-xs font-medium text-white/50">Jedna analiza zamiast kilku</span><h2 className="mt-2 text-base font-medium">Sprawdź też SEO, obrazy, SSL, DNS i inne elementy w jednym audycie.</h2></div><span className="inline-flex items-center gap-2 text-sm">Darmowy audyt całej próbki <ArrowUpRight size={16}/></span>
-  </Link>
+  </Link>}
   <section className="mt-14 grid gap-6 border-t border-white/15 pt-12 md:grid-cols-2">
    <article className="rounded-xl border border-white/15 bg-[#111111] p-6">
     <p className="page-eyebrow">Jak korzystać</p>
