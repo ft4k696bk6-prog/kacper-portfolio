@@ -140,7 +140,7 @@ export function HomeStudio() {
         <Link href="/narzedzia" className="inline-flex items-center gap-2 text-sm font-medium underline underline-offset-4">{lang==="pl"?"Wszystkie narzędzia":"Browse tools"} <ArrowRight size={16}/></Link>
       </div>
       <div className="mt-8 grid gap-3 md:grid-cols-3">
-        {[["Audyt strony WWW","Sprawdź publiczny HTML, SEO i błędy techniczne.","audyt-strony"],["Problemy Meta Ads","Rozwiąż typowe błędy kampanii i zestawów.","diagnostyka-meta-ads"],["Kalkulator ROAS","Sprawdź przychód z każdej złotówki reklamy.","kalkulator-roas"]].map(([name,desc,slug])=><Link key={slug} href={"/narzedzia/"+slug} className="group rounded-xl border border-white/15 bg-[#111111] p-6 transition-colors hover:border-white/50">
+        {[["Darmowy audyt strony WWW","Sprawdź publiczny HTML, SEO i błędy techniczne.","audyt-strony"],["Darmowa diagnostyka Meta Ads","Rozwiąż typowe błędy kampanii i zestawów.","diagnostyka-meta-ads"],["Darmowy kalkulator ROAS","Sprawdź przychód z każdej złotówki reklamy.","kalkulator-roas"]].map(([name,desc,slug])=><Link key={slug} href={"/narzedzia/"+slug} className="group rounded-xl border border-white/15 bg-[#111111] p-6 transition-colors hover:border-white/50">
          <span className="text-[10px] uppercase tracking-[.16em] text-white/50">TOOLBOX / FREE</span><h3 className="mt-5 text-xl">{name}</h3><p className="mt-3 text-sm leading-7 text-white/65">{desc}</p><span className="mt-5 inline-flex items-center gap-2 text-sm text-white/80">Sprawdź <ArrowRight size={16}/></span>
         </Link>)}
       </div>

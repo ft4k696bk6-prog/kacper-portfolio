@@ -41,7 +41,7 @@ export function FreeToolsDirectory(){
      <h2 className="mt-5 text-xl font-medium leading-snug tracking-tight text-white">{tool.title}</h2>
      <p className="mt-3 text-sm leading-6 text-white/60">{tool.description}</p>
     </div>
-    <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white/80 group-hover:text-white">Otwórz narzędzie <ArrowUpRight size={16}/></span>
+    <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white/80 group-hover:text-white">Uruchom za darmo <ArrowUpRight size={16}/></span>
    </Link>)}
   </div>}
  </div>;

@@ -10,8 +10,9 @@ export function generateStaticParams(){return toolboxItems.map(t=>({slug:t.slug}
 export async function generateMetadata({params}:Props):Promise<Metadata>{
  const {slug}=await params;const t=findTool(slug);if(!t)return {};
  const url="https://bernecki.dev/narzedzia/"+slug;
- return {title:t.title+" | bernecki.dev",description:t.description+" Bez rejestracji. Sprawdź online.",alternates:{canonical:url},
-  openGraph:{title:t.title+" | Darmowe narzędzia",description:t.description,url,type:"website"}};
+ const seoDescription = t.title+". "+t.description+" Bez opłat i rejestracji.";
+ return {title:t.title+" | bernecki.dev",description:seoDescription,alternates:{canonical:url},
+  openGraph:{title:t.title+" | bernecki.dev",description:seoDescription,url,type:"website"}};
 }
 export default async function ToolPage({params}:Props){
  const {slug}=await params;const tool=findTool(slug);if(!tool)notFound();

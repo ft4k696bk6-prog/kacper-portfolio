@@ -1,5 +1,5 @@
 export type ToolboxItem = { slug:string; title:string; description:string; category:string; mode:string; hint:string; question:string; answer:string };
-export const toolboxItems: ToolboxItem[] = [
+export const toolboxItems: ToolboxItem[] =  [
   {
     "slug": "audyt-strony",
     "title": "Darmowy audyt strony internetowej",
@@ -22,7 +22,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "analizator-meta-tagow",
-    "title": "Analizator meta tagów strony",
+    "title": "Darmowy analizator meta tagów strony",
     "description": "Sprawdź title, description, canonical i robots bez instalowania rozszerzeń.",
     "category": "WWW i SEO",
     "mode": "meta",
@@ -32,7 +32,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "tester-naglowkow-h1-h6",
-    "title": "Tester nagłówków H1–H6",
+    "title": "Darmowy tester nagłówków H1–H6",
     "description": "Zobacz hierarchię nagłówków H1, H2 i H3 na swojej stronie internetowej.",
     "category": "WWW i SEO",
     "mode": "headings",
@@ -42,7 +42,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "tester-open-graph",
-    "title": "Tester Open Graph",
+    "title": "Darmowy tester Open Graph",
     "description": "Sprawdź, jakie tytuły, opisy i grafiki strona podaje do podglądu linków.",
     "category": "WWW i SEO",
     "mode": "og",
@@ -52,7 +52,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "czy-ai-widzi-strone",
-    "title": "Czy boty AI widzą stronę?",
+    "title": "Darmowy test dostępności strony dla botów AI",
     "description": "Sprawdź podstawowe sygnały dostępu dla crawlerów AI: robots.txt, noindex i treści HTML.",
     "category": "AI i wyszukiwarki",
     "mode": "ai",
@@ -62,7 +62,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "sprawdzanie-certyfikatu-ssl",
-    "title": "Sprawdzenie certyfikatu SSL i TLS",
+    "title": "Darmowe sprawdzanie certyfikatu SSL i TLS",
     "description": "Odczytaj wystawcę, termin ważności i domenę publicznego certyfikatu HTTPS.",
     "category": "WWW i SEO",
     "mode": "tls",
@@ -72,7 +72,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "test-spf-dmarc",
-    "title": "Tester SPF i DMARC domeny",
+    "title": "Darmowy tester SPF i DMARC domeny",
     "description": "Sprawdź publiczne rekordy SPF i DMARC oraz podstawowe błędy konfiguracji poczty.",
     "category": "WWW i SEO",
     "mode": "dns",
@@ -82,7 +82,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "walidator-robots-txt",
-    "title": "Tester pliku robots.txt",
+    "title": "Darmowy tester pliku robots.txt",
     "description": "Wklej robots.txt i sprawdź dyrektywy User-agent, Allow, Disallow oraz Sitemap.",
     "category": "WWW i SEO",
     "mode": "robots",
@@ -92,7 +92,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "walidator-sitemap-xml",
-    "title": "Walidator sitemap.xml",
+    "title": "Darmowy walidator sitemap.xml",
     "description": "Sprawdź poprawność XML i policz adresy URL w mapie strony.",
     "category": "WWW i SEO",
     "mode": "sitemap",
@@ -102,7 +102,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "walidator-schema-org",
-    "title": "Walidator danych Schema.org",
+    "title": "Darmowy walidator danych Schema.org",
     "description": "Sprawdź składnię JSON-LD i podstawową strukturę danych uporządkowanych.",
     "category": "WWW i SEO",
     "mode": "schema",
@@ -112,7 +112,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "generator-schema-localbusiness",
-    "title": "Generator LocalBusiness Schema",
+    "title": "Darmowy generator Schema.org LocalBusiness",
     "description": "Wygeneruj kod JSON-LD z nazwą, stroną i adresem swojej firmy.",
     "category": "WWW i SEO",
     "mode": "schemaGenerate",
@@ -122,7 +122,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "podglad-wyniku-google",
-    "title": "Podgląd strony w Google",
+    "title": "Darmowy podgląd wyniku Google",
     "description": "Zobacz symulację tytułu, opisu i adresu w wynikach wyszukiwania.",
     "category": "WWW i SEO",
     "mode": "serp",
@@ -132,7 +132,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "generator-llms-txt",
-    "title": "Generator pliku llms.txt",
+    "title": "Darmowy generator pliku llms.txt",
     "description": "Stwórz prosty plik llms.txt opisujący firmę i jej najważniejsze zasoby.",
     "category": "AI i wyszukiwarki",
     "mode": "llms",
@@ -142,7 +142,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "diagnostyka-meta-ads",
-    "title": "Diagnostyka problemów Meta Ads",
+    "title": "Darmowa diagnostyka Meta Ads",
     "description": "Znajdź przyczynę komunikatów: zestaw reklam nieaktywny, reklama odrzucona lub brak wydatków.",
     "category": "Reklamy i marketing",
     "mode": "adsIssues",
@@ -152,7 +152,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "analiza-wynikow-meta-ads-csv",
-    "title": "Analizator raportu Meta Ads CSV",
+    "title": "Darmowa analiza wyników Meta Ads z CSV",
     "description": "Wgraj eksport CSV z Menedżera reklam i policz wydatki, kliknięcia, CTR, CPC, leady i CPL.",
     "category": "Reklamy i marketing",
     "mode": "adsCsv",
@@ -172,7 +172,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "kalkulator-cpl",
-    "title": "Kalkulator CPL i kosztu leada",
+    "title": "Darmowy kalkulator CPL i kosztu leada",
     "description": "Oblicz koszt pozyskania kontaktu z reklamy i oszacuj liczbę leadów.",
     "category": "Reklamy i marketing",
     "mode": "cpl",
@@ -182,7 +182,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "kalkulator-budzetu-reklam",
-    "title": "Kalkulator budżetu reklamowego",
+    "title": "Darmowy kalkulator budżetu reklamowego",
     "description": "Wylicz orientacyjny budżet potrzebny do osiągnięcia celu leadowego.",
     "category": "Reklamy i marketing",
     "mode": "budget",
@@ -192,7 +192,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "kalkulator-oplacalnosci-reklam",
-    "title": "Kalkulator opłacalności reklam",
+    "title": "Darmowy kalkulator opłacalności reklam",
     "description": "Oceń wynik kampanii z uwzględnieniem przychodu, marży i kosztu reklam.",
     "category": "Reklamy i marketing",
     "mode": "profit",
@@ -212,7 +212,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "licznik-znakow-reklamy",
-    "title": "Licznik znaków reklamy",
+    "title": "Darmowy licznik znaków reklamy",
     "description": "Sprawdź długość nagłówka i tekstu reklamy przed publikacją.",
     "category": "Reklamy i marketing",
     "mode": "adText",
@@ -222,7 +222,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "kalkulator-konwersji-strony",
-    "title": "Kalkulator konwersji strony WWW",
+    "title": "Darmowy kalkulator konwersji strony WWW",
     "description": "Policz współczynnik konwersji odwiedzin na zapytania i sprzedaż.",
     "category": "Reklamy i marketing",
     "mode": "conversion",
@@ -232,7 +232,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "kalkulator-cac",
-    "title": "Kalkulator kosztu pozyskania klienta CAC",
+    "title": "Darmowy kalkulator kosztu pozyskania klienta (CAC)",
     "description": "Oblicz koszt pozyskania jednego klienta na podstawie wydatków i sprzedaży.",
     "category": "Reklamy i marketing",
     "mode": "cac",
@@ -242,7 +242,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "kalkulator-strat-z-leadow",
-    "title": "Kalkulator utraconych leadów",
+    "title": "Darmowy kalkulator utraconych leadów",
     "description": "Oszacuj wartość kontaktów, na które firma nie odpowiedziała.",
     "category": "CRM i sprzedaż",
     "mode": "lostLeads",
@@ -252,7 +252,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "kalkulator-roi-crm",
-    "title": "Kalkulator zwrotu z CRM",
+    "title": "Darmowy kalkulator zwrotu z CRM",
     "description": "Sprawdź hipotetyczny okres zwrotu z wdrożenia CRM przy założonym wzroście sprzedaży.",
     "category": "CRM i sprzedaż",
     "mode": "crm",
@@ -262,7 +262,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "kalkulator-oszczednosci-automatyzacji",
-    "title": "Kalkulator oszczędności z automatyzacji",
+    "title": "Darmowy kalkulator oszczędności z automatyzacji",
     "description": "Sprawdź, ile czasu i kosztów może oszczędzić automatyzacja powtarzalnych zadań.",
     "category": "CRM i sprzedaż",
     "mode": "automation",
@@ -272,7 +272,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "kalkulator-kosztu-strony",
-    "title": "Kalkulator ceny strony internetowej",
+    "title": "Darmowy kalkulator ceny strony internetowej",
     "description": "Oszacuj orientacyjny budżet na stronę lub landing page na podstawie zakresu prac.",
     "category": "CRM i sprzedaż",
     "mode": "siteCost",
@@ -292,7 +292,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "konwerter-unix-time",
-    "title": "Konwerter czasu Unix",
+    "title": "Darmowy konwerter czasu Unix",
     "description": "Zamieniaj znaczniki czasu Unix na datę w Polsce i UTC.",
     "category": "Dla programistów",
     "mode": "unix",
@@ -302,7 +302,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "formatter-json",
-    "title": "Walidator i formatter JSON",
+    "title": "Darmowy walidator i formatter JSON",
     "description": "Waliduj, formatuj i kopiuj czytelny kod JSON bez przesyłania danych na serwer.",
     "category": "Dla programistów",
     "mode": "json",
@@ -312,7 +312,7 @@ export const toolboxItems: ToolboxItem[] = [
   },
   {
     "slug": "generator-uuid",
-    "title": "Generator UUID v4",
+    "title": "Darmowy generator UUID v4",
     "description": "Generuj losowe identyfikatory UUID w przeglądarce.",
     "category": "Dla programistów",
     "mode": "uuid",
@@ -320,136 +320,136 @@ export const toolboxItems: ToolboxItem[] = [
     "question": "Czy UUID jest hasłem?",
     "answer": "Nie. UUID służy do identyfikacji obiektów, nie jako tajny token bezpieczeństwa."
   },
-{
-  "slug": "test-czasu-odpowiedzi-serwera",
-  "title": "Tester czasu odpowiedzi serwera TTFB",
-  "description": "Zmierz czas otrzymania pierwszego bajtu odpowiedzi dla publicznej strony internetowej.",
-  "category": "WWW i SEO",
-  "mode": "ttfb",
-  "hint": "Zobacz czas pierwszej odpowiedzi i rozmiar pobranego HTML. To pomiar pojedynczego żądania, nie pełny test szybkości.",
-  "question": "Czy TTFB jest równoznaczne z Core Web Vitals?",
-  "answer": "Nie. TTFB mierzy tylko część komunikacji z serwerem, a Core Web Vitals dotyczą doświadczeń użytkownika z ładowania i interakcji."
-},
-{
-  "slug": "tester-przekierowan-301-302",
-  "title": "Tester przekierowań HTTP 301/302",
-  "description": "Sprawdź łańcuch przekierowań i ostateczny adres URL swojej strony.",
-  "category": "WWW i SEO",
-  "mode": "redirects",
-  "hint": "Prześledź do trzech przekierowań HTTP od podanego adresu do końcowego URL.",
-  "question": "Czy każde przekierowanie 301 jest błędem?",
-  "answer": "Nie. Przekierowanie 301 może być prawidłowe. Problematyczne bywają pętle lub długie łańcuchy."
-},
-{
-  "slug": "tester-naglowkow-bezpieczenstwa",
-  "title": "Tester nagłówków HTTP bezpieczeństwa",
-  "description": "Sprawdź, czy serwer zwraca CSP, HSTS, X-Content-Type-Options i inne nagłówki.",
-  "category": "WWW i SEO",
-  "mode": "headers",
-  "hint": "Odczytaj podstawowe nagłówki bezpieczeństwa z odpowiedzi publicznej strony.",
-  "question": "Czy obecność CSP oznacza całkowite bezpieczeństwo?",
-  "answer": "Nie. Prawidłowa polityka CSP zależy od wartości i aplikacji; samo istnienie nagłówka nie gwarantuje ochrony."
-},
-{
-  "slug": "tester-meta-pixel",
-  "title": "Tester Meta Pixel na stronie",
-  "description": "Wykryj typowe fragmenty instalacji Meta Pixel w publicznym HTML strony.",
-  "category": "Reklamy i marketing",
-  "mode": "pixel",
-  "hint": "Sprawdź obecność kodu fbevents.js lub fbq w kodzie odpowiedzi serwera.",
-  "question": "Czy wykryty kod oznacza poprawną konwersję?",
-  "answer": "Nie. Pixel może się uruchamiać błędnie, być blokowany przez zgody lub nie wysyłać właściwych zdarzeń."
-},
-{
-  "slug": "tester-google-tag-manager",
-  "title": "Tester instalacji Google Tag Manager",
-  "description": "Sprawdź ślady kontenera GTM i tagu Google Analytics w kodzie strony.",
-  "category": "Reklamy i marketing",
-  "mode": "gtm",
-  "hint": "Wykryj skrypt Google Tag Manager lub identyfikator pomiarowy w pobranym HTML.",
-  "question": "Czy brak GTM oznacza brak analityki?",
-  "answer": "Nie. Analityka może być zaimplementowana inaczej lub doładowana po uruchomieniu JavaScript."
-},
-{
-  "slug": "tester-obrazow-alt",
-  "title": "Tester atrybutów ALT obrazów",
-  "description": "Sprawdź liczbę obrazów i brakujących atrybutów alt w publicznym HTML.",
-  "category": "WWW i SEO",
-  "mode": "images",
-  "hint": "Zlicz elementy img oraz te, które nie zawierają atrybutu alt.",
-  "question": "Czy każdy obraz musi mieć opisowy ALT?",
-  "answer": "Nie. Obrazy dekoracyjne mogą mieć alt pusty; brak atrybutu alt jest jednak sygnałem do sprawdzenia."
-},
-{
-  "slug": "kalkulator-cpc",
-  "title": "Darmowy kalkulator CPC",
-  "description": "Oblicz średni koszt kliknięcia reklamy na podstawie budżetu i liczby kliknięć.",
-  "category": "Reklamy i marketing",
-  "mode": "cpc",
-  "hint": "Podaj łączny koszt i liczbę kliknięć linku.",
-  "question": "Czy CPC uwzględnia jakość leadów?",
-  "answer": "Nie. CPC mierzy koszt kliknięcia, nie późniejszą skuteczność pozyskiwania klientów."
-},
-{
-  "slug": "kalkulator-cpm",
-  "title": "Darmowy kalkulator CPM",
-  "description": "Oblicz koszt tysiąca wyświetleń reklam i porównaj kampanie.",
-  "category": "Reklamy i marketing",
-  "mode": "cpm",
-  "hint": "Podaj wydatki reklamowe i liczbę wyświetleń.",
-  "question": "Czy tani CPM oznacza skuteczną kampanię?",
-  "answer": "Nie. Istotne są również częstotliwość, jakość odbiorców i konwersje."
-},
-{
-  "slug": "kalkulator-leadow-z-ruchu",
-  "title": "Kalkulator liczby leadów z ruchu",
-  "description": "Oszacuj liczbę zapytań przy zadanym ruchu i współczynniku konwersji strony.",
-  "category": "Reklamy i marketing",
-  "mode": "traffic",
-  "hint": "Wprowadź liczbę odwiedzin i zakładany procent konwersji.",
-  "question": "Czy to prognoza pozyskiwania leadów?",
-  "answer": "Nie. To scenariusz wynikający z podanych założeń, a nie prognoza ruchu lub skuteczności."
-},
-{
-  "slug": "kalkulator-ltv-klienta",
-  "title": "Kalkulator LTV klienta",
-  "description": "Oblicz modelową wartość marży z klienta z uwzględnieniem ponownych zakupów.",
-  "category": "CRM i sprzedaż",
-  "mode": "ltv",
-  "hint": "Wprowadź średnią wartość zamówienia, liczbę zakupów rocznie, okres współpracy i marżę.",
-  "question": "Czy model LTV uwzględnia retencję i dyskonto?",
-  "answer": "Nie. To uproszczony scenariusz bez prawdopodobieństw rezygnacji i wartości pieniądza w czasie."
-},
-{
-  "slug": "konwerter-base64",
-  "title": "Darmowy konwerter Base64",
-  "description": "Koduj i dekoduj UTF-8 jako Base64 bez wysyłania tekstu na serwer.",
-  "category": "Dla programistów",
-  "mode": "base64",
-  "hint": "Wklej tekst i wybierz kodowanie lub dekodowanie Base64 w przeglądarce.",
-  "question": "Czy Base64 szyfruje dane?",
-  "answer": "Nie. To kodowanie reprezentacji bajtów, nie zabezpieczenie ani szyfrowanie."
-},
-{
-  "slug": "generator-sha256",
-  "title": "Generator hasha SHA-256",
-  "description": "Oblicz skrót SHA-256 dowolnego tekstu lokalnie w przeglądarce.",
-  "category": "Dla programistów",
-  "mode": "sha256",
-  "hint": "Wpisz tekst, aby otrzymać jego skrót SHA-256 w postaci szesnastkowej.",
-  "question": "Czy SHA-256 nadaje się do przechowywania haseł?",
-  "answer": "Nie używaj zwykłego SHA-256 bezpośrednio do haseł. Preferuj Argon2id, bcrypt lub scrypt z odpowiednimi parametrami."
-},
-{
-  "slug": "tester-kontrastu-kolorow",
-  "title": "Tester kontrastu kolorów WCAG",
-  "description": "Sprawdź kontrast dwóch kolorów i podstawowe progi WCAG AA dla tekstu.",
-  "category": "Dla programistów",
-  "mode": "contrast",
-  "hint": "Podaj dwa kolory w formacie HEX, aby obliczyć współczynnik kontrastu.",
-  "question": "Czy samo AA zapewnia zgodność WCAG?",
-  "answer": "Nie. Kontrast dotyczy tylko jednego kryterium dostępności; potrzebne są także inne kontrole."
-}
+  {
+    "slug": "test-czasu-odpowiedzi-serwera",
+    "title": "Darmowy tester czasu odpowiedzi serwera TTFB",
+    "description": "Zmierz czas otrzymania pierwszego bajtu odpowiedzi dla publicznej strony internetowej.",
+    "category": "WWW i SEO",
+    "mode": "ttfb",
+    "hint": "Zobacz czas pierwszej odpowiedzi i rozmiar pobranego HTML. To pomiar pojedynczego żądania, nie pełny test szybkości.",
+    "question": "Czy TTFB jest równoznaczne z Core Web Vitals?",
+    "answer": "Nie. TTFB mierzy tylko część komunikacji z serwerem, a Core Web Vitals dotyczą doświadczeń użytkownika z ładowania i interakcji."
+  },
+  {
+    "slug": "tester-przekierowan-301-302",
+    "title": "Darmowy tester przekierowań HTTP 301/302",
+    "description": "Sprawdź łańcuch przekierowań i ostateczny adres URL swojej strony.",
+    "category": "WWW i SEO",
+    "mode": "redirects",
+    "hint": "Prześledź do trzech przekierowań HTTP od podanego adresu do końcowego URL.",
+    "question": "Czy każde przekierowanie 301 jest błędem?",
+    "answer": "Nie. Przekierowanie 301 może być prawidłowe. Problematyczne bywają pętle lub długie łańcuchy."
+  },
+  {
+    "slug": "tester-naglowkow-bezpieczenstwa",
+    "title": "Darmowy tester nagłówków bezpieczeństwa HTTP",
+    "description": "Sprawdź, czy serwer zwraca CSP, HSTS, X-Content-Type-Options i inne nagłówki.",
+    "category": "WWW i SEO",
+    "mode": "headers",
+    "hint": "Odczytaj podstawowe nagłówki bezpieczeństwa z odpowiedzi publicznej strony.",
+    "question": "Czy obecność CSP oznacza całkowite bezpieczeństwo?",
+    "answer": "Nie. Prawidłowa polityka CSP zależy od wartości i aplikacji; samo istnienie nagłówka nie gwarantuje ochrony."
+  },
+  {
+    "slug": "tester-meta-pixel",
+    "title": "Darmowy tester Meta Pixel",
+    "description": "Wykryj typowe fragmenty instalacji Meta Pixel w publicznym HTML strony.",
+    "category": "Reklamy i marketing",
+    "mode": "pixel",
+    "hint": "Sprawdź obecność kodu fbevents.js lub fbq w kodzie odpowiedzi serwera.",
+    "question": "Czy wykryty kod oznacza poprawną konwersję?",
+    "answer": "Nie. Pixel może się uruchamiać błędnie, być blokowany przez zgody lub nie wysyłać właściwych zdarzeń."
+  },
+  {
+    "slug": "tester-google-tag-manager",
+    "title": "Darmowy tester Google Tag Manager",
+    "description": "Sprawdź ślady kontenera GTM i tagu Google Analytics w kodzie strony.",
+    "category": "Reklamy i marketing",
+    "mode": "gtm",
+    "hint": "Wykryj skrypt Google Tag Manager lub identyfikator pomiarowy w pobranym HTML.",
+    "question": "Czy brak GTM oznacza brak analityki?",
+    "answer": "Nie. Analityka może być zaimplementowana inaczej lub doładowana po uruchomieniu JavaScript."
+  },
+  {
+    "slug": "tester-obrazow-alt",
+    "title": "Darmowy tester atrybutów ALT obrazów",
+    "description": "Sprawdź liczbę obrazów i brakujących atrybutów alt w publicznym HTML.",
+    "category": "WWW i SEO",
+    "mode": "images",
+    "hint": "Zlicz elementy img oraz te, które nie zawierają atrybutu alt.",
+    "question": "Czy każdy obraz musi mieć opisowy ALT?",
+    "answer": "Nie. Obrazy dekoracyjne mogą mieć alt pusty; brak atrybutu alt jest jednak sygnałem do sprawdzenia."
+  },
+  {
+    "slug": "kalkulator-cpc",
+    "title": "Darmowy kalkulator CPC",
+    "description": "Oblicz średni koszt kliknięcia reklamy na podstawie budżetu i liczby kliknięć.",
+    "category": "Reklamy i marketing",
+    "mode": "cpc",
+    "hint": "Podaj łączny koszt i liczbę kliknięć linku.",
+    "question": "Czy CPC uwzględnia jakość leadów?",
+    "answer": "Nie. CPC mierzy koszt kliknięcia, nie późniejszą skuteczność pozyskiwania klientów."
+  },
+  {
+    "slug": "kalkulator-cpm",
+    "title": "Darmowy kalkulator CPM",
+    "description": "Oblicz koszt tysiąca wyświetleń reklam i porównaj kampanie.",
+    "category": "Reklamy i marketing",
+    "mode": "cpm",
+    "hint": "Podaj wydatki reklamowe i liczbę wyświetleń.",
+    "question": "Czy tani CPM oznacza skuteczną kampanię?",
+    "answer": "Nie. Istotne są również częstotliwość, jakość odbiorców i konwersje."
+  },
+  {
+    "slug": "kalkulator-leadow-z-ruchu",
+    "title": "Darmowy kalkulator leadów z ruchu",
+    "description": "Oszacuj liczbę zapytań przy zadanym ruchu i współczynniku konwersji strony.",
+    "category": "Reklamy i marketing",
+    "mode": "traffic",
+    "hint": "Wprowadź liczbę odwiedzin i zakładany procent konwersji.",
+    "question": "Czy to prognoza pozyskiwania leadów?",
+    "answer": "Nie. To scenariusz wynikający z podanych założeń, a nie prognoza ruchu lub skuteczności."
+  },
+  {
+    "slug": "kalkulator-ltv-klienta",
+    "title": "Darmowy kalkulator LTV klienta",
+    "description": "Oblicz modelową wartość marży z klienta z uwzględnieniem ponownych zakupów.",
+    "category": "CRM i sprzedaż",
+    "mode": "ltv",
+    "hint": "Wprowadź średnią wartość zamówienia, liczbę zakupów rocznie, okres współpracy i marżę.",
+    "question": "Czy model LTV uwzględnia retencję i dyskonto?",
+    "answer": "Nie. To uproszczony scenariusz bez prawdopodobieństw rezygnacji i wartości pieniądza w czasie."
+  },
+  {
+    "slug": "konwerter-base64",
+    "title": "Darmowy konwerter Base64",
+    "description": "Koduj i dekoduj UTF-8 jako Base64 bez wysyłania tekstu na serwer.",
+    "category": "Dla programistów",
+    "mode": "base64",
+    "hint": "Wklej tekst i wybierz kodowanie lub dekodowanie Base64 w przeglądarce.",
+    "question": "Czy Base64 szyfruje dane?",
+    "answer": "Nie. To kodowanie reprezentacji bajtów, nie zabezpieczenie ani szyfrowanie."
+  },
+  {
+    "slug": "generator-sha256",
+    "title": "Darmowy generator SHA-256",
+    "description": "Oblicz skrót SHA-256 dowolnego tekstu lokalnie w przeglądarce.",
+    "category": "Dla programistów",
+    "mode": "sha256",
+    "hint": "Wpisz tekst, aby otrzymać jego skrót SHA-256 w postaci szesnastkowej.",
+    "question": "Czy SHA-256 nadaje się do przechowywania haseł?",
+    "answer": "Nie używaj zwykłego SHA-256 bezpośrednio do haseł. Preferuj Argon2id, bcrypt lub scrypt z odpowiednimi parametrami."
+  },
+  {
+    "slug": "tester-kontrastu-kolorow",
+    "title": "Darmowy tester kontrastu kolorów WCAG",
+    "description": "Sprawdź kontrast dwóch kolorów i podstawowe progi WCAG AA dla tekstu.",
+    "category": "Dla programistów",
+    "mode": "contrast",
+    "hint": "Podaj dwa kolory w formacie HEX, aby obliczyć współczynnik kontrastu.",
+    "question": "Czy samo AA zapewnia zgodność WCAG?",
+    "answer": "Nie. Kontrast dotyczy tylko jednego kryterium dostępności; potrzebne są także inne kontrole."
+  }
 ];
 export const toolboxCategories = ["Wszystkie", "WWW i SEO", "Reklamy i marketing", "CRM i sprzedaż", "AI i wyszukiwarki", "Dla programistów"];
 export function findTool(slug:string){return toolboxItems.find(item=>item.slug===slug);}

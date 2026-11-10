@@ -10,7 +10,7 @@ const navItems = [
   { href: "#services", pl: "Oferta", en: "Services" },
   { href: "#projects", pl: "Realizacje", en: "Projects" },
   { href: "#guides", pl: "Poradniki", en: "Guides" },
-  { href: "/narzedzia", pl: "Narzędzia", en: "Tools" },
+  { href: "/narzedzia", pl: "Darmowe narzędzia", en: "Free tools" },
 ] as const;
 
 export function LanguageSwitcher() {
