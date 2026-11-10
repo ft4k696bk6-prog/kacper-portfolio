@@ -162,42 +162,60 @@ addSet("wx-fog", "weather", fog, [
 ], 2);
 
 addSet("device-iphone", "device", c => c.device === "iphone", [
-  ["Widzę, że przeglądasz stronę na iPhonie. Wiesz, ile firm traci klientów przez źle działającą wersję mobilną? Możemy sprawdzić Twoją.", "I see you're browsing on an iPhone. Know how many businesses lose customers to a broken mobile website? We can check yours."],
-  ["iPhone w dłoni, a cała strona na małym ekranie. Tak właśnie powinien działać dobry projekt.", "An iPhone in hand and a whole website on a small screen. That's what good design should do."],
-  ["Ciekawostka: dobry widok mobilny to nie tylko pomniejszona wersja desktopu.", "Fun fact: good mobile design isn't just a shrunken desktop site."],
+  ["Widzę, że przeglądasz stronę na iPhonie. Wiesz, ile firm traci klientów przez źle działającą wersję mobilną? Możemy sprawdzić Twoją.","I can see you're browsing on an iPhone. Know how many businesses lose customers to a broken mobile website? We can check yours."],
+  ["iPhone wykryty. Cała ta strona mieści się na Twoim ekranie — i właśnie tak powinna działać responsywność.","iPhone detected. This whole site fits on your screen — that's what responsiveness should feel like."],
+  ["Na iPhonie każdy źle ustawiony przycisk od razu rzuca się w oczy. Sprawdź, czy tutaj wszystko działa wygodnie.","On an iPhone, a badly placed button stands out immediately. See how comfortable this site feels."],
 ], 4, "audit");
 addSet("device-android", "device", c => c.device === "android", [
-  ["Android na pokładzie! Twoja firmowa strona też dobrze działa na różnych telefonach? Możemy to sprawdzić.", "Android on board! Does your business website work well across phones too? We can check."],
-  ["Android wykryty. A wiesz, że ta sama strona może wyglądać inaczej na każdym telefonie?", "Android detected. Did you know the same site can look different on every phone?"],
-  ["Telefon to dziś często pierwsze miejsce kontaktu klienta z firmą. Warto o tym pamiętać.", "A phone is often a customer's first contact with a business. Worth remembering."],
+  ["Widzę, że przeglądasz stronę na telefonie z Androidem. Wiesz, ile firm traci klientów przez kiepską wersję mobilną?","I can see you're browsing on an Android phone. Know how many businesses lose customers because of poor mobile design?"],
+  ["Android wykryty. Na takim telefonie dobra strona powinna działać równie sprawnie jak na iPhonie.","Android detected. A good website should work just as well on your phone as it does on an iPhone."],
+  ["Przeglądasz na Androidzie. Wygodne przyciski i czytelne teksty to nie luksus, tylko podstawa.","You're browsing on Android. Easy-to-tap buttons and readable text aren't luxuries — they're essentials."],
 ], 4, "audit");
-addSet("device-ipad", "device", c => c.device === "ipad" || c.device === "tablet", [
-  ["O, tablet! Ani telefon, ani komputer. Właśnie dlatego dobre strony muszą dopasowywać się do ekranu.", "A tablet! Neither phone nor laptop. That's why good websites must adapt."],
-  ["Większy ekran dotykowy to niezły test dla każdej strony. Sprawdzaj śmiało.", "A larger touchscreen is a good test for any website. Feel free to explore."],
+addSet("device-ipad", "device", c => c.device === "ipad", [
+  ["Widzę iPada. Sprawdź, jak układ tej strony dopasował się do Twojego ekranu.","I can see you're using an iPad. Notice how this page layout adapts to your screen."],
+  ["iPad wykryty! Na takim ekranie od razu widać, czy projekt naprawdę jest responsywny.","iPad detected! This kind of screen quickly reveals whether a design is truly responsive."],
 ], 2);
+addSet("device-tablet", "device", c => c.device === "tablet", [
+  ["Tablet wykryty. Sprawdź, jak układ strony wykorzystuje ten rozmiar ekranu.", "Tablet detected. See how the page layout makes use of this screen size."],
+  ["Przeglądasz na tablecie. Tu małe, źle rozmieszczone przyciski naprawdę potrafią przeszkadzać.", "You're browsing on a tablet. Tiny, awkwardly placed buttons can really get in the way."],
+], 2);
+
 addSet("device-mac", "device", c => c.device === "mac", [
-  ["Mac? Dobry sprzęt do kreatywnej pracy. Chcesz zajrzeć za kulisy tej strony?", "A Mac? Great for creative work. Want a peek behind the scenes?"],
-  ["Mac na pokładzie. Obiecuję nie prosić Cię o instalację siedmiu aplikacji.", "Mac on board. I promise I won't ask you to install seven apps."],
+  ["Mac wykryty. Chcesz zobaczyć, jak wygląda ta strona od strony kodu?","Mac detected. Want to see what's happening behind the scenes?"],
+  ["Przeglądasz na Macu. Obiecuję nie kazać Ci instalować siedmiu aplikacji, żeby zobaczyć moje projekty.","You're browsing on a Mac. I promise you won't need seven apps just to see my projects."],
 ], 2);
 addSet("device-windows", "device", c => c.device === "windows", [
-  ["Windows wykryty. Obiecuję nie poprosić o ponowne uruchomienie komputera.", "Windows detected. I promise not to ask you to restart your computer."],
-  ["Duży ekran i Windows? Rozgość się, jest co oglądać.", "Windows and a larger screen? Make yourself comfortable — there's plenty to explore."],
+  ["Windows wykryty. Spokojnie, nie poproszę Cię o ponowne uruchomienie komputera.","Windows detected. Don't worry, I won't ask you to restart your computer."],
+  ["Przeglądasz na Windowsie, a okno ma teraz {width} px szerokości. Układ dopasowuję właśnie do tej wartości.","You're browsing on Windows, and your browser window is currently {width}px wide. That's the space this layout adapts to."],
 ], 2);
 addSet("device-linux", "device", c => c.device === "linux", [
-  ["O, Linux! Jest szansa, że rozumiesz moje problemy z zależnościami.", "Oh, Linux! You might actually understand my dependency problems."],
-  ["Linux? W takim razie nie będę tłumaczył, co to terminal.", "Linux? I guess I won't have to explain what a terminal is."],
+  ["Linux wykryty. Czyli istnieje szansa, że rozumiesz moje problemy z zależnościami.","Linux detected. So there's a chance you understand my dependency problems."],
+  ["O, Linux! Jeśli coś tutaj nie działa, pewnie już wiesz, gdzie zajrzeć w konsoli.","Oh, Linux! If something breaks here, you probably already know where to look in the console."],
 ], 4);
 addSet("device-phone", "device", phone, [
-  ["Całą tę stronę masz teraz w kieszeni. Fajne, ile da się zmieścić na małym ekranie, prawda?", "This whole website fits in your pocket. Amazing what fits on a small screen, right?"],
-  ["Przeglądasz na telefonie. Sprawdź, czy wszystko wygodnie się klika.", "You're browsing on a phone. See how easy everything is to tap."],
-  ["Mały ekran nie powinien oznaczać gorszej strony. Chcesz sprawdzić własną?", "A small screen shouldn't mean a worse website. Want to check yours?"],
+  ["Całe bernecki.dev oglądasz teraz {onDevice}. Fajnie, ile da się zmieścić w małym oknie, prawda?","You're viewing all of bernecki.dev {onDevice}. Amazing how much can fit in a small window, right?"],
+  ["Przeglądasz {onDevice}. Zobacz, jak dopasowałem układ do tego sposobu korzystania ze strony.","You're browsing {onDevice}. Notice how the layout adapts to the way you're using it."],
+  ["Widzę Cię {onDevice}. Gdy projektuję przyciski, właśnie takie urządzenia mam na myśli.","I see you're browsing {onDevice}. Devices like yours are exactly what I think about when designing buttons."],
 ], 2);
 addSet("viewport-wide", "viewport", c => c.width >= 1500, [
-  ["Ale masz tu przestrzeni! Na takim ekranie mógłbym postawić drugi serwer.", "Look at all that space! I could fit a second server on that screen."],
-  ["Szeroki ekran, szerokie możliwości. Sprawdź, jak ułożyłem tu projekty.", "Wide screen, wide possibilities. Have a look at the project layout."],
+  ["Twoje okno przeglądarki ma {width} px szerokości. Sporo miejsca na dobre pomysły.","Your browser window is {width}px wide. Plenty of room for good ideas."],
+  ["{width} px szerokości okna? Przy takiej przestrzeni nawet moje piksele mogą się rozprostować.","A {width}px browser window? Even my pixels have room to stretch."],
 ], 2);
+addSet("viewport-compact", "viewport", c => c.width > 0 && c.width < 400, [
+  ["Okno Twojej przeglądarki ma tylko {width} px szerokości. I właśnie dlatego pilnuję każdego piksela.", "Your browser window is just {width}px wide. That's why I pay attention to every pixel."],
+  ["{width} px szerokości okna — niewiele, ale wystarczy, żeby zmieścić całą historię tej strony.", "A {width}px-wide window — not much, but enough to fit this website's story."],
+], 2);
+addSet("viewport-medium", "viewport", c => c.width >= 400 && c.width < 900, [
+  ["Twoje okno przeglądarki ma teraz {width} px. Spróbuj je zmienić, a zobaczysz, jak reaguje układ.", "Your browser window is {width}px wide. Resize it to see how the layout responds."],
+  ["{width} px dostępnej szerokości. Układ strony właśnie do tego się dopasowuje.", "{width}px of browser width. The page layout is adapting to that space."],
+], 2);
+addSet("viewport-large", "viewport", c => c.width >= 900 && c.width < 1500, [
+  ["Twoje okno ma {width} px szerokości. W sam raz, żeby rozłożyć projekty bez ścisku.", "Your browser window is {width}px wide. Plenty of room to spread out the projects."],
+  ["{width} px szerokości okna. Żadnego zgadywania modelu sprzętu — po prostu dopasowanie układu.", "Your browser window is {width}px wide. No device guessing — just a responsive layout."],
+], 2);
+
 addSet("device-touch", "device", c => c.touch, [
-  ["Możesz mnie dotknąć. Tylko delikatnie, jestem z pikseli.", "You can tap me. Gently though — I'm made of pixels."],
+  ["Twoje urządzenie obsługuje dotyk. Możesz mnie stuknąć — jestem odporny na odciski palców.","Your device supports touch. Go ahead and tap me — fingerprints won't hurt."],
 ], 1);
 
 addSet("time-morning", "time", c => c.hour >= 5 && c.hour < 9, [
@@ -257,24 +275,24 @@ addSet("browser-edge", "browser", c => c.browser === "edge", [
   ["Edge? Microsoft byłby dumny. Ja po prostu cieszę się z odwiedzin.", "Edge? Microsoft would be proud. I'm just happy you're here."],
 ], 2);
 addSet("browser-dark", "browser", c => c.dark, [
-  ["Wolisz ciemny motyw? Mamy podobny gust.", "Prefer dark mode? We have similar taste."],
-  ["Ciemny motyw aktywny. Oczy odpoczywają, piksele pracują.", "Dark mode is on. Eyes can relax while pixels do the work."],
+  ["Twój system preferuje ciemny motyw. Mamy podobny gust.","Your system prefers dark mode. We have similar taste."],
+  ["Ciemny motyw ustawiony w systemie, ciemna strona na ekranie. Współpracujemy.","Dark mode in your system, dark site on your screen. A good match."],
 ], 1);
 addSet("browser-light", "browser", c => !c.dark, [
-  ["Jasny motyw? Jasne. Ja też czasami wychodzę z ciemności.", "Light mode? Fair enough. I step out of the dark sometimes too."],
+  ["Twój system preferuje jasny motyw, a ja mieszkam na czarnej stronie. Kontrast charakterów.","Your system prefers light mode, but I live on a dark website. Opposites attract."],
 ], 1);
 addSet("browser-reduced", "browser", c => c.reducedMotion, [
-  ["Wolisz mniej ruchu na ekranie? Uszanuję to. Żadnych akrobacji.", "Prefer less motion? I respect that. No acrobatics."],
+  ["Twój system prosi o ograniczenie animacji. Jasna sprawa — żadnych niepotrzebnych akrobacji.","Your system asks for reduced motion. Understood — no unnecessary acrobatics."],
 ], 2);
 
 addSet("location-city", "location", c => Boolean(c.city), [
-  ["Psst… mój mały detektor wskazuje okolice miasta {city}. Trafiłem chociaż w pobliże?", "Psst… my little detector points somewhere near {city}. Close enough?"],
-  ["{city} melduje się na radarze. Pozdrawiam z mojego kawałka internetu.", "{city} is on my radar. Greetings from my little corner of the internet."],
-  ["Wygląda na to, że zaglądasz z okolic {city}. Tak naprawdę nie znam Twojego dokładnego adresu.", "Looks like you're somewhere around {city}. I don't know your exact address, though."],
+  ["{city} — pozdrawiam! Miło, że zajrzałeś na bernecki.dev.","{city} — hello! Nice to have you on bernecki.dev."],
+  ["{city} melduje się na radarze. Zobacz, co potrafi mały kawałek internetu.","{city} is on my radar. See what a little corner of the internet can do."],
+  ["O, {city}! Widzę nazwę miasta, ale spokojnie — nie znam Twojego adresu.","Oh, {city}! I can see the city's name, but don't worry — I don't know your address."],
 ], 2);
 addSet("location-outside", "location", c => Boolean(c.city) && Boolean(c.country) && c.country !== "PL", [
-  ["O, odwiedziny spoza Polski! Internet naprawdę nie zna granic.", "Oh, a visit from outside Poland! The internet really knows no borders."],
-  ["Dzielą nas kilometry, ale ta strona i tak dociera do Ciebie w jednej chwili.", "We might be miles apart, but this page still reaches you in an instant."],
+  ["{city} — nawet stamtąd dotarłeś do mojego portfolio. Internet nie zna granic.","{city} — you've found my portfolio from all the way over there. The internet knows no borders."],
+  ["Hej, {city}! Kilometry nas dzielą, ale ta strona dociera do Ciebie bez problemu.","Hey, {city}! We might be miles apart, but this site still reaches you."],
 ], 2);
 addSet("page-tools", "page", isAudit, [
   ["O, będzie testowanie. Lubię testy. Szczególnie kiedy przechodzę je za pierwszym razem.", "Oh, we're testing things! I like tests. Especially when I pass on the first try."],
@@ -502,14 +520,23 @@ function fillTemplate(value: string, c: CompanionContext): string {
   const onDevice = c.device === "iphone"
     ? (c.lang === "pl" ? "na iPhonie" : "on an iPhone")
     : (c.lang === "pl" ? "na telefonie z Androidem" : "on an Android phone");
+  const onTablet = c.device === "ipad"
+    ? (c.lang === "pl" ? "na iPadzie" : "on an iPad")
+    : (c.lang === "pl" ? "na tablecie" : "on a tablet");
   const values: Record<string, string> = {
-    city, place: city ? formatCompanionPlace(city, c.lang) : "",
+    city,
+    place: city ? formatCompanionPlace(city, c.lang) : "",
     temp: c.weather ? String(c.weather.temperature) : "",
     wind: c.weather?.windSpeed != null ? String(c.weather.windSpeed) : "",
     width: String(c.width),
     onDevice: phone(c) ? onDevice : "",
+    onTablet: c.device === "ipad" || c.device === "tablet" ? onTablet : "",
   };
-  return value.replace(/\\{(city|place|temp|wind|width|onDevice)\\}/g, (_match, token: string) => values[token] ?? "");
+  let result = value;
+  for (const [key, replacement] of Object.entries(values)) {
+    result = result.split("{" + key + "}").join(replacement);
+  }
+  return result;
 }
 
 function canRender(rule: Rule, c: CompanionContext): boolean {
@@ -520,6 +547,7 @@ function canRender(rule: Rule, c: CompanionContext): boolean {
   if (body.includes("{temp}") && !c.weather) return false;
   if (body.includes("{wind}") && c.weather?.windSpeed == null) return false;
   if (body.includes("{onDevice}") && !phone(c)) return false;
+  if (body.includes("{onTablet}") && c.device !== "ipad" && c.device !== "tablet") return false;
   return true;
 }
 
