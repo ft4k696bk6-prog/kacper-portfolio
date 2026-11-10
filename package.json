@@ -15,7 +15,7 @@
     "pseo:check": "vitest run src/lib/guide-directory.test.ts",
     "pseo:qa": "node scripts/pseo-autopilot-quality.mjs",
     "pseo:autopilot": "node scripts/pseo-autopilot.mjs",
-    "test:toolbox": "vitest run src/lib/toolbox-functional.test.ts",
+    "test:toolbox": "vitest run --config toolbox.vitest.config.ts src/lib/toolbox-functional.test.ts",
     "prebuild": "npm run test:toolbox"
   },
   "dependencies": {
