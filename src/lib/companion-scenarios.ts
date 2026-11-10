@@ -33,9 +33,11 @@ export type CompanionContext = {
   width: number;
   returning: boolean;
 };
+export type CompanionTopic = "weather" | "device" | "viewport" | "time" | "location" | "browser" | "page" | "return" | "playful";
 export type CompanionNudge = {
   id: string;
   category: CompanionCategory;
+  topic: CompanionTopic;
   text: string;
   intent: "chat" | "audit";
 };
@@ -551,6 +553,27 @@ addSet("combo-city-viewport", "combination", c => Boolean(c.city) && c.width >= 
 
 export const COMPANION_SCENARIO_COUNT = rules.length;
 
+function ruleTopic(rule: Rule): CompanionTopic {
+  if (rule.category !== "combination") return rule.category;
+  if (/(?:-rain|-snow|-sleet|-storm|-cold|-heat|-fog|-weather|-freeze|-sun(?:-|$)|-wind(?:-|$))/.test(rule.id)) return "weather";
+  if (/(?:-iphone|-android|-ipad|-tablet|-phone|-linux|-mac(?:-|$)|-windows)/.test(rule.id)) return "device";
+  if (/(?:-audit|-crm|-ads|-marketing|-guides|-work)/.test(rule.id)) return "page";
+  if (rule.id.includes("-city") || rule.id.includes("-location")) return "location";
+  if (rule.id.includes("-return")) return "return";
+  return "time";
+}
+
+/** Enumerates authored messages for QA; weather/location messages require a real city. */
+export function getEligibleCompanionMessages(context: CompanionContext): CompanionNudge[] {
+  return rules.filter(rule => canRender(rule, context)).map(rule => ({
+    id: rule.id,
+    category: rule.category,
+    topic: ruleTopic(rule),
+    text: fillTemplate(context.lang === "en" ? rule.en : rule.pl, context),
+    intent: rule.intent,
+  }));
+}
+
 const LOCATIVE_PL: Record<string, string> = {
   "rzeszów": "Rzeszowie", "warszawa": "Warszawie", "kraków": "Krakowie",
   "lublin": "Lublinie", "poznań": "Poznaniu", "wrocław": "Wrocławiu",
@@ -645,7 +668,7 @@ function canRender(rule: Rule, c: CompanionContext): boolean {
 export function pickCompanionNudge(
   context: CompanionContext,
   recentIds: string[] = [],
-  previousCategory?: CompanionCategory,
+  previousTopic?: CompanionTopic,
   random: () => number = Math.random,
 ): CompanionNudge | null {
   let candidates = rules.filter(rule => canRender(rule, context) && !recentIds.includes(rule.id));
@@ -657,7 +680,7 @@ export function pickCompanionNudge(
       combination: 5, weather: 3, device: 3, viewport: 2.4, page: 3,
       return: 2, location: 1.6, time: 1.2, browser: 1, playful: 1,
     };
-    const repetitionPenalty = rule.category === previousCategory ? 0.1 : 1;
+    const repetitionPenalty = ruleTopic(rule) === previousTopic ? 0.04 : 1;
     return { rule, weight: rule.weight * categoryWeight[rule.category] * repetitionPenalty };
   });
   const total = weighted.reduce((sum, item) => sum + item.weight, 0);
@@ -670,6 +693,7 @@ export function pickCompanionNudge(
   return {
     id: selected.id,
     category: selected.category,
+    topic: ruleTopic(selected),
     text: fillTemplate(context.lang === "en" ? selected.en : selected.pl, context),
     intent: selected.intent,
 
