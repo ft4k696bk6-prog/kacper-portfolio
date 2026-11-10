@@ -112,7 +112,6 @@ export function BerniRobot({ mood, weather, lang, compact = false }: Props) {
           <path d="M48 97q-4 5-6 2" stroke="#d0d8e3" strokeWidth="2" strokeLinecap="round"/>
         </g>
         {weather ? <WeatherFX condition={weather.condition} /> : null}
-        {thermal === "cold" ? <g className={styles.cold}><path d="M38 88l-3 11M132 85l4 12M47 45l-2 8" stroke="#bde6ff" strokeWidth="3" strokeLinecap="round"/></g> : null}
         {thermal === "hot" ? <g className={styles.hot}><path d="M130 65q-10 13-2 13 9 0 2-13ZM36 85q-9 12-2 12 9 0 2-12Z" fill="#c0dff6"/></g> : null}
         {mood === "sleeping" ? <g className={styles.sleep}><text x="121" y="49">z</text><text x="134" y="35">Z</text></g> : null}
         {mood === "thinking" || mood === "working" ? <g className={styles.thought}><circle cx="127" cy="52" r="2.5"/><circle cx="137" cy="45" r="3.2"/><circle cx="146" cy="32" r="4"/></g> : null}
