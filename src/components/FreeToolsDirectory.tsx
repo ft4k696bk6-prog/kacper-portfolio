@@ -31,6 +31,18 @@ export function FreeToolsDirectory(){
     <p className="mt-3 text-sm leading-7 text-white/65">Wpisz jeden adres. Sprawdź SEO, indeksowanie, obrazy, SSL, DNS, Google Tag i Meta Pixel na próbce do 7 podstron. Otrzymaj jedną listę zaleceń.</p></div>
    <span className="brand-action inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-medium">Sprawdź stronę za darmo <ArrowUpRight size={17}/></span>
   </Link>
+  <div className="mt-4 grid gap-3 md:grid-cols-2">
+   <Link href="/narzedzia/codzienne" className="group rounded-2xl border border-white/20 bg-[#131313] p-6 transition-colors hover:border-white/60">
+    <p className="page-eyebrow">NOWE / CODZIENNE</p><h2 className="mt-3 text-xl font-medium">8 narzędzi i zabaw w jednym miejscu</h2>
+    <p className="mt-3 text-sm leading-6 text-white/60">Zdjęcia, tekst, hasła, procenty, stopki e-mail, losowanie i gry. Bez logowania.</p>
+    <span className="mt-5 inline-flex items-center gap-2 text-sm">Otwórz centrum narzędzi <ArrowUpRight size={16}/></span>
+   </Link>
+   <Link href="/narzedzia/codzienne#kids" className="group rounded-2xl border border-white/20 bg-[#131313] p-6 transition-colors hover:border-white/60">
+    <p className="page-eyebrow">GRY / DLA DZIECI</p><h2 className="mt-3 text-xl font-medium">Klawiaturowa galaktyka</h2>
+    <p className="mt-3 text-sm leading-6 text-white/60">Autorska zabawa w litery, cyfry i kosmos. Obsługa klawiatury, dotyku i pełnego ekranu.</p>
+    <span className="mt-5 inline-flex items-center gap-2 text-sm">Uruchom grę <ArrowUpRight size={16}/></span>
+   </Link>
+  </div>
   <div className="mt-6 flex flex-wrap gap-2" aria-label="Kategorie narzędzi">
    {toolboxCategories.map(category=>{
     const Icon=icons[category];
