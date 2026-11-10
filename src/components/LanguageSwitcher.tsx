@@ -116,7 +116,7 @@ export function LanguageSwitcher() {
   return (
     <motion.header
       data-dark={dark} className="site-nav fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[var(--brand-black)]/85 backdrop-blur-xl"
-      initial={{ opacity: 0, y: -18 }}
+      initial={pathname === "/" ? false : { opacity: 0, y: -18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
     >

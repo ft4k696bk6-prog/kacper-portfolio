@@ -110,7 +110,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: '(function(){if(location.pathname!=="/")return;var root=document.documentElement;if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){root.dataset.homeIntro="skip";return;}var replay=new URLSearchParams(location.search).get("intro")==="1";try{var key="bernecki-home-intro-v2";if(sessionStorage.getItem(key)&&!replay){root.dataset.homeIntro="skip";return;}sessionStorage.setItem(key,"1");root.dataset.homeIntro="play";}catch(e){root.dataset.homeIntro="play";}var target=function(){var el=document.querySelector("[data-bernecki-nav-logo]");if(!el)return;var r=el.getBoundingClientRect();root.style.setProperty("--intro-flight-x",(r.left+r.width/2-innerWidth/2)+"px");root.style.setProperty("--intro-flight-y",(r.top+r.height/2-innerHeight/2)+"px");root.style.setProperty("--intro-flight-scale",String(r.width/76));};if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",target,{once:true});}else{target();}})();',
+            __html: '(function(){if(location.pathname!=="/")return;var root=document.documentElement;if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){root.dataset.homeIntro="skip";return;}var replay=new URLSearchParams(location.search).get("intro")==="1";try{var key="bernecki-home-intro-v3";if(sessionStorage.getItem(key)&&!replay){root.dataset.homeIntro="skip";return;}sessionStorage.setItem(key,"1");root.dataset.homeIntro="armed";}catch(e){root.dataset.homeIntro="armed";}window.setTimeout(function(){if(root.dataset.homeIntro==="armed"){root.dataset.homeIntro="skip";}},2800);})();',
           }}
         />
       </head>
