@@ -26,7 +26,7 @@ export function FreeToolRunner({mode,slug}:{mode:string;slug:string}){
     if(!values.body)throw new Error("Wpisz tekst do obliczenia skrótu SHA-256.");
     const digest=await calculateSha256(values.body);
     setResult({title:"Skrót SHA-256",text:digest,warning:"Skrót jest obliczany lokalnie; do przechowywania haseł stosuj funkcje specjalnie do tego przeznaczone, np. Argon2id."});
-   }else setResult(localRun(mode,values,csv));
+   }else setResult(localRun(mode,mode==="siteCost"?{type:"landing",forms:"simple",...values}:values,csv));
   }catch(e){setError(e instanceof Error?e.message:"Nie udało się wykonać analizy.");}
   finally{setLoading(false);}
  };

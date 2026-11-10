@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { toolboxItems } from "../lib/toolbox";
+import { englishToolboxItems, englishToolPath } from "../lib/toolbox-en";
 import { allGuides, getGuideCounts } from "../lib/guide-directory";
 import { getEnglishGuide, getEnglishGuides, englishCategoryCounts } from "../lib/guide-i18n";
 import { realizations } from "../content/realizations";
@@ -22,8 +23,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return [
-    {url:siteUrl+"/narzedzia",changeFrequency:"monthly",priority:0.9},
-    ...toolboxItems.map(tool=>({url:siteUrl+"/narzedzia/"+tool.slug,changeFrequency:"monthly" as const,priority:0.75})),
+    {url:siteUrl+"/narzedzia",changeFrequency:"monthly",priority:0.9,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia",en:siteUrl+"/en/tools"}}},
+    {url:siteUrl+"/en/tools",changeFrequency:"monthly",priority:0.9,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia",en:siteUrl+"/en/tools"}}},
+    ...toolboxItems.map(tool=>({url:siteUrl+"/narzedzia/"+tool.slug,changeFrequency:"monthly" as const,priority:0.75,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/"+tool.slug,en:siteUrl+englishToolPath(tool.slug)}}})),
+    ...englishToolboxItems.map(tool=>({url:siteUrl+"/en/tools/"+tool.englishSlug,changeFrequency:"monthly" as const,priority:0.75,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/"+tool.slug,en:siteUrl+"/en/tools/"+tool.englishSlug}}})),
     { url: siteUrl + "/partner-w-rozwoju-biznesu", changeFrequency: "monthly", priority: 0.95 },
     { url: siteUrl + "/kontakt", changeFrequency: "monthly", priority: 0.85 },
     { url: siteUrl + "/materialy/brief-strony", changeFrequency: "monthly", priority: 0.8 },

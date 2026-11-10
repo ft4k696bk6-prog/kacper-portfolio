@@ -144,7 +144,7 @@ export const pl: Translations = {
     personaLabel: "Asystent AI",
     greeting: "Zapytaj o projekty i współpracę.",
     initialMessage:
-      "Cześć! Napisz, co chcesz zbudować lub usprawnić — stronę, CRM, AI, marketing czy inny proces. Powiem, czy to mieści się w zakresie usług i jak umówić rozmowę.",
+      "Cześć! Mogę za darmo przeanalizować Twoją stronę, znaleźć odpowiednie narzędzie albo pomóc z pytaniami o strony, CRM i reklamy. Od czego zaczynamy?",
     placeholder: "Opisz projekt albo zadaj pytanie...",
     placeholderDictation: "Opisz projekt albo podyktuj...",
     inputLabel: "Wiadomość do asystenta AI",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, AlertTriangle, ClipboardCopy, Download, ExternalLink, Globe2, LoaderCircle } from "lucide-react";
 
@@ -79,6 +79,10 @@ function plainReport(report:Report) {
 }
 export function FullWebsiteAuditRunner(){
  const [url,setUrl]=useState("");
+ useEffect(()=>{
+  const fromQuery=new URLSearchParams(window.location.search).get("url");
+  if(fromQuery&&fromQuery.length<=2048&&/^https?:\/\//i.test(fromQuery))setUrl(fromQuery);
+ },[]);
  const [busy,setBusy]=useState(false);
  const [error,setError]=useState("");
  const [report,setReport]=useState<Report|null>(null);

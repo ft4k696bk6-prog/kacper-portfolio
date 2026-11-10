@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { CalendarDays, Cookie, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { englishToolboxItems, englishToolPath, localizedToolboxPath } from "@/lib/toolbox-en";
 
 const navItems = [
   { href: "#services", pl: "Oferta", en: "Services" },
@@ -43,6 +44,16 @@ export function LanguageSwitcher() {
   };
   // Guides have separate, indexable EN URLs; a localStorage toggle alone would leave Polish text visible.
   const guideLanguagePath = (target: "pl" | "en") => {
+    if(pathname==="/narzedzia"||pathname==="/en/tools")return localizedToolboxPath(target);
+    if(pathname.startsWith("/narzedzia/")){
+      const slug=pathname.slice("/narzedzia/".length);
+      return target==="en"?englishToolPath(slug):pathname;
+    }
+    if(pathname.startsWith("/en/tools/")){
+      const englishSlug=pathname.slice("/en/tools/".length);
+      const tool=englishToolboxItems.find(t=>t.englishSlug===englishSlug);
+      return target==="pl"&&tool?"/narzedzia/"+tool.slug:pathname;
+    }
     if (pathname.startsWith("/blog/")) return target==="en"?`/en/blog/${pathname.slice("/blog/".length)}`:pathname;
     if (pathname.startsWith("/en/blog/")) return target==="pl"?`/blog/${pathname.slice("/en/blog/".length)}`:pathname;
     if (pathname.startsWith("/realizacje/")) {
@@ -98,7 +109,7 @@ export function LanguageSwitcher() {
     return () => window.removeEventListener("scroll", update);
   }, [pathname]);
   const cookies = <button type="button" aria-label={t.consent.settings} onClick={() => window.dispatchEvent(new Event("portfolio-open-cookie-settings"))} className="brand-outline grid h-10 w-10 place-items-center rounded-md"><Cookie size={17}/></button>;
-  const anchorHref = (hash: string) => hash.startsWith("/") ? hash : (pathname === "/" ? hash : `/${hash}`);
+  const anchorHref = (hash: string) => hash==="/narzedzia" ? localizedToolboxPath(lang) : hash.startsWith("/") ? hash : (pathname === "/" ? hash : `/${hash}`);
 
   const languageButton = (value: "pl" | "en", label: string) => (
     <button

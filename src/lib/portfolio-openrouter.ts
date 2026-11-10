@@ -28,6 +28,7 @@ const topicTerms = [
   "api", "hurtown", "magazyn", "zamow", "order", "sklep", "shop", "ecommerce",
   "e-commerce", "pomoc", "potrzebuje", "potrzebuj", "wspier", "wycen",
   "zbudow", "wdroz", "deployment", "analityk", "analiz", "raport", "dane",
+  "tool", "narzedzi", "checker", "audit", "audyt", "roas", "cpl", "cpc", "pixel", "utm", "seo", "ssl", "dmarc", "jwt",
 ];
 
 function normalized(value: string) {
@@ -61,8 +62,8 @@ export function outsideScopeAnswer(language: Language) {
 
 export function offlinePortfolioAnswer(language: Language) {
   return language === "pl"
-    ? "Mogę opowiedzieć o Kacprze, B-CRM, Motomizer, StarCars, BeatMarket i współpracy. Pełne opisy znajdziesz w sekcji projektów. Rozmowy AI są obecnie niedostępne."
-    : "I can point you to Kacper's B-CRM, Motomizer, StarCars and BeatMarket projects and contact details on this page. AI responses are currently unavailable.";
+    ? "Narzędzia i darmowy audyt strony działają niezależnie od czatu AI: https://bernecki.dev/narzedzia. O projektach i współpracy przeczytasz na stronie głównej. Odpowiedzi modelu AI są obecnie niedostępne."
+    : "You can use the free website audit and other tools without AI chat: https://bernecki.dev/en/tools. Explore projects and contact details on the homepage. AI model replies are currently unavailable.";
 }
 
 export function buildPortfolioOpenRouterPrompt(language: Language) {
@@ -94,8 +95,15 @@ STRICT SCOPE:
 - For off-topic questions, respond with one short sentence directing the visitor to ask about Kacper's work.
 - Keep replies SHORT, usually 1-3 sentences, never more than 100 words.
 - Contact: direct visitors to https://bernecki.dev/kontakt (form, email and booking).
+- The website provides 45 public, free self-service tools. For questions about SEO, website errors, ads, marketing metrics or web diagnostics, recommend the matching real tool before proposing a consultation. Never claim you personally ran a scan, accessed an ad account or checked user data without a tool result.
+- Main website audit: https://bernecki.dev/narzedzia/audyt-strony ; English: https://bernecki.dev/en/tools/free-website-audit . The chat's first suggestion "Analyze my website" actually runs the site's public scanner after the visitor supplies a URL. Limitations: up to 7 pages, no Google rankings or Core Web Vitals.
+- Meta Ads issues: https://bernecki.dev/narzedzia/diagnostyka-meta-ads ; English: https://bernecki.dev/en/tools/meta-ads-troubleshooter .
+- ROAS: https://bernecki.dev/narzedzia/kalkulator-roas ; English: https://bernecki.dev/en/tools/roas-calculator .
+- Meta Pixel: https://bernecki.dev/narzedzia/tester-meta-pixel ; English: https://bernecki.dev/en/tools/meta-pixel-checker .
+- Ads CSV analyzer: https://bernecki.dev/narzedzia/analiza-wynikow-meta-ads-csv ; English: https://bernecki.dev/en/tools/meta-ads-csv-analyzer .
+- Complete tools catalog: https://bernecki.dev/narzedzia ; English: https://bernecki.dev/en/tools . For other needs (CPL, CPC, CPM, CRM, DNS, TLS, JSON, WCAG), send visitors to this verified catalog. Use URLs matching the visitor's language; do not invent tools or results.
 - This chatbot is an AI assistant, not Kacper personally.
-- External links should only come from the verified list in the facts below.
+- External links must be drawn only from verified URLs included in this prompt, including the free toolbox URLs listed above and the public portfolio URLs below.
 
 PUBLIC PORTFOLIO FACTS:
 - Kacper Bernecki designs and develops web experiences and practical business applications.
@@ -108,5 +116,5 @@ PUBLIC PORTFOLIO FACTS:
 - Named public projects and their declared status (these may include prototypes/demos, NOT proof of completed commercial deliveries):
 ${caseStudies}
 
-No browsing tools, execution tools, personal history or other knowledge sources are available to you.`;
+You have no direct browsing or execution tools as the language model. Actual URL audits are handled separately by the website application, never fabricated by you.`;
 }

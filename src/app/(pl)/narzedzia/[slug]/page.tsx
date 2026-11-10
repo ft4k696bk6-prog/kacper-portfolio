@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, ShieldCheck, MoveRight } from "lucide-react";
 import { toolboxItems, findTool } from "@/lib/toolbox";
+import { englishToolPath } from "@/lib/toolbox-en";
 import { FreeToolRunner } from "@/components/FreeToolRunner";
 import { FullWebsiteAuditRunner } from "@/components/FullWebsiteAuditRunner";
 
@@ -12,7 +13,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
  const {slug}=await params;const t=findTool(slug);if(!t)return {};
  const url="https://bernecki.dev/narzedzia/"+slug;
  const seoDescription = t.title+". "+t.description+" Bez opłat i rejestracji.";
- return {title:t.title+" | bernecki.dev",description:seoDescription,alternates:{canonical:url},
+ return {title:t.title+" | bernecki.dev",description:seoDescription,alternates:{canonical:url,languages:{"pl-PL":url,en:"https://bernecki.dev"+englishToolPath(slug)}},
   openGraph:{title:t.title+" | bernecki.dev",description:seoDescription,url,type:"website"}};
 }
 export default async function ToolPage({params}:Props){

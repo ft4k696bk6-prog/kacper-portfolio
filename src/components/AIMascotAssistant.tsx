@@ -9,6 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { DEFAULT_BOOKING_TIME_ZONE, formatSlotDate } from "@/lib/booking";
 import type { AvailableBookingDay } from "@/lib/calcom";
 import { COOKIE_CONSENT_EVENT, COOKIE_CONSENT_KEY, type CookieConsentState } from "@/lib/preferences";
+import { localizedToolPath } from "@/lib/toolbox-en";
 
 type ChatMessage = {
   id: string;
@@ -42,7 +43,7 @@ type BookingState = {
   message: string;
 };
 
-type LocalAction = "projects" | "services" | "bcrm" | "book" | "contact";
+type LocalAction = "projects" | "services" | "bcrm" | "book" | "contact" | "audit";
 type MascotMood = "idle" | "curious" | "joking" | "listening" | "thinking";
 
 type MascotBehaviorState = {
@@ -103,6 +104,7 @@ function normalizeCommand(value: string) {
 
 function detectLocalAction(question: string): LocalAction | null {
   const value = normalizeCommand(question);
+  if (/(audyt|audit|przeanalizuj|analizuj|analy[sz]e|sprawdz|check|scan)/.test(value) && /(stron|site|web|seo|witryn)/.test(value)) return "audit";
   const wantsNavigation =
     /\b(show|open|go|take|jump|przejdz|pokaz|otworz|sprawdz|wyswietl|zobacz)\b/.test(value);
 
@@ -132,6 +134,52 @@ function getAssistantRuntimeCopy(lang: "en" | "pl") {
   return { retryLabel: lang === "pl" ? "Ponów odpowiedź" : "Retry answer" };
 }
 
+
+function extractWebsiteUrl(message:string):string|null {
+ const match=message.match(/(?:https?:\/\/)?(?:[a-z0-9-]+\.)+[a-z]{2,}(?::(?:80|443))?(?:\/[^\s<>"']*)?/i);
+ if(!match)return null;
+ const raw=match[0].replace(/[.,;!?)]*$/,"");
+ try{const url=new URL(/^https?:\/\//i.test(raw)?raw:"https://"+raw);
+  if(!["https:","http:"].includes(url.protocol)||url.username||url.password)return null;
+  return url.href;
+ }catch{return null;}
+}
+
+function toolSuggestionForQuestion(text:string):string|null{
+ const normalized=normalizeCommand(text);
+ const entries:[RegExp,string][]=[
+  [/\b(roas|return on ad spend)\b/,"kalkulator-roas"],
+  [/\b(cpl|cost per lead|koszt lead)/,"kalkulator-cpl"],
+  [/\b(cpc|cost per click)\b/,"kalkulator-cpc"],
+  [/\b(cpm|cost per mille)\b/,"kalkulator-cpm"],
+  [/\b(utm|campaign tracking link|parametr.*utm)/,"generator-utm"],
+  [/meta ads.*(error|problem|odrzucon|nieaktywn|rejected|inactive|not spending)|\b(zestaw reklam|reklam.*odrzucon)/,"diagnostyka-meta-ads"],
+  [/(meta pixel|facebook pixel|piksel meta|pixel tracking)/,"tester-meta-pixel"],
+  [/(google tag manager|\bgtm\b)/,"tester-google-tag-manager"],
+  [/(spf|dmarc|dns poczt|email authentication)/,"test-spf-dmarc"],
+  [/(ssl|tls|certyfikat)/,"sprawdzanie-certyfikatu-ssl"],
+  [/(\bjwt\b|token decoder)/,"dekoder-jwt"],
+  [/(formatter json|walidator json|validate json|json formatter)/,"formatter-json"],
+  [/(sitemap|mapa strony)/,"walidator-sitemap-xml"],
+  [/(robots\.txt|robots txt)/,"walidator-robots-txt"],
+  [/(schema\.org|json-ld|structured data|dane strukturalne)/,"walidator-schema-org"],
+  [/(kolor.*kontrast|color contrast|wcag contrast)/,"tester-kontrastu-kolorow"],
+  [/(ile kosztuje strona|website price|website cost|koszt strony)/,"kalkulator-kosztu-strony"],
+  [/(automatyzacj.*oszczed|automation savings)/,"kalkulator-oszczednosci-automatyzacji"],
+  [/(roi crm|zwrot.*crm)/,"kalkulator-roi-crm"],
+  [/(pozyskani.*klient|customer acquisition cost|\bcac\b)/,"kalkulator-cac"],
+  [/(backlink|seo|audyt stron|website audit)/,"audyt-strony"]
+ ];
+ return entries.find(([pattern])=>pattern.test(normalized))?.[1]||null;
+}
+
+function renderLinkedMessage(content:string){
+ return content.split(/(https:\/\/bernecki\.dev\/[a-z0-9/_-]+(?:\?[^\s]+)?)/gi).map((part,index)=>
+  /^https:\/\/bernecki\.dev\/[a-z0-9/_-]+/i.test(part)
+  ? <a key={index} href={part} className="break-all underline underline-offset-4 hover:text-white/80">{part}</a>
+  : <span key={index}>{part}</span>);
+}
+
 const defaultBookingState: BookingState = {
   step: "idle",
   days: [],
@@ -157,6 +205,7 @@ export function AIMascotAssistant() {
   ]);
   const [input, setInput] = useState("");
   const [website, setWebsite] = useState("");
+  const [awaitingAuditUrl, setAwaitingAuditUrl] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [lastFailedQuestion, setLastFailedQuestion] = useState("");
@@ -287,11 +336,53 @@ export function AIMascotAssistant() {
     setLastFailedQuestion("");
     setBehavior({ mood: localAction ? "curious" : "thinking" });
 
-    if (localAction && !options.retry) {
-      window.setTimeout(() => handleQuickAction(localAction), 0);
+    const websiteUrl=extractWebsiteUrl(question);
+    if((awaitingAuditUrl||localAction==="audit")&&!options.retry){
+      if(!websiteUrl){
+        setAwaitingAuditUrl(true);
+        setMessages(current=>[...current,createMessage("assistant",lang==="pl"
+          ?"Podaj publiczny adres strony (np. https://example.com), a przeprowadzę automatyczny audyt SEO, SSL, DNS i podstron. Bez rejestracji."
+          :"Paste a public website URL (e.g. https://example.com). I'll run an SEO, SSL, DNS and multi-page audit without registration.")]);
+        setBehavior({mood:"curious"});
+        return;
+      }
+      setAwaitingAuditUrl(false);
+      setLoading(true);
+      try{
+        const response=await fetch("/api/tools/inspect",{
+          method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({mode:"full",url:websiteUrl}),
+          signal:AbortSignal.timeout(55000)
+        });
+        const data=await response.json() as {summary?:{critical:number;warning:number;info:number;scanned:number};error?:string};
+        if(!response.ok||!data.summary)throw new Error("Audit request failed");
+        const reportLink="https://bernecki.dev"+localizedToolPath("audyt-strony",lang)+"?url="+encodeURIComponent(websiteUrl);
+        const summary=lang==="pl"
+          ?"Przeanalizowałem "+data.summary.scanned+" publicznych podstron. Wykryłem "+data.summary.critical+" problemów krytycznych, "+data.summary.warning+" do poprawy i "+data.summary.info+" do weryfikacji. To próbka, nie pełna analiza witryny."
+          :"I scanned "+data.summary.scanned+" public pages and found "+data.summary.critical+" critical issues, "+data.summary.warning+" issues to fix and "+data.summary.info+" items to review. This is a sample, not a full-site crawl.";
+        setMessages(current=>[...current,createMessage("assistant",summary+"\n"+(lang==="pl"?"Zobacz pełny raport: ":"View the full report: ")+reportLink)]);
+        setBehavior({mood:"joking"});
+      }catch{
+        setMessages(current=>[...current,createMessage("assistant",lang==="pl"
+          ?"Skanowanie nie powiodło się. Spróbuj bezpośrednio: https://bernecki.dev/narzedzia/audyt-strony"
+          :"The scan failed. Try it directly: https://bernecki.dev/en/tools/free-website-audit")]);
+      }finally{setLoading(false);}
       return;
     }
-
+    if(localAction&&!options.retry){
+      window.setTimeout(()=>handleQuickAction(localAction),0);
+      return;
+    }
+    // Deterministic tool navigation needs no AI request or hallucinated analysis.
+    const suggestedTool=toolSuggestionForQuestion(question);
+    if(suggestedTool&&!options.retry){
+      const link="https://bernecki.dev"+localizedToolPath(suggestedTool,lang);
+      const answer=lang==="pl"
+       ?"Mam do tego darmowe narzędzie. Uruchom je tutaj: "+link
+       :"There is a free tool for that. Open it here: "+link;
+      setMessages(current=>[...current,createMessage("assistant",answer)]);
+      setBehavior({mood:"curious"});
+      return;
+    }
     setLoading(true);
 
     try {
@@ -394,10 +485,19 @@ export function AIMascotAssistant() {
     void sendMessage();
   }
 
-  function handleQuickAction(action: "projects" | "services" | "bcrm" | "book" | "contact" | "code") {
+  function handleQuickAction(action: "projects" | "services" | "bcrm" | "book" | "contact" | "code" | "audit") {
     setError("");
     setBehavior((current) => ({ ...current, mood: "joking" }));
 
+    if(action==="audit"){
+      setOpen(true);
+      setAwaitingAuditUrl(true);
+      setMessages(current=>[...current,createMessage("assistant",lang==="pl"
+        ?"Wklej adres strony, którą mam przeanalizować (np. https://example.com). Sprawdzę próbkę podstron, SEO, SSL, DNS i analitykę — za darmo."
+        :"Paste the website URL to audit (e.g. https://example.com). I'll check a sample of pages, SEO, SSL, DNS and analytics for free.")]);
+      window.setTimeout(()=>inputRef.current?.focus(),80);
+      return;
+    }
     if (action === "projects") {
       setMessages((current) => [...current, createMessage("assistant", t.aiMascot.actionReplies.projects)]);
       scrollToStaticSection("#projects");
@@ -555,6 +655,7 @@ export function AIMascotAssistant() {
 
   const quickActions = useMemo(
     () => [
+      { key: "audit" as const, label: lang==="pl"?"Przeanalizuj moją stronę":"Analyze my website" },
       { key: "projects" as const, label: t.aiMascot.quickActions.projects },
       { key: "services" as const, label: lang==="pl"?"Dostępne usługi":"Services" },
       { key: "book" as const, label: t.aiMascot.quickActions.book },
@@ -641,7 +742,7 @@ export function AIMascotAssistant() {
                               : "rounded-bl-md border border-white/[0.08] bg-[var(--brand-black)] text-white"
                           }`}
                         >
-                          {message.content}
+                          {renderLinkedMessage(message.content)}
                         </div>
                       ))}
 

@@ -106,7 +106,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`scroll-smooth font-sans ${geist.variable}`}>
       <body>
-        <LanguageProvider>
+        <LanguageProvider initialLang="en">
           <AnalyticsConsent />
           <LanguageMetadataSync />
           <LanguageSwitcher />
