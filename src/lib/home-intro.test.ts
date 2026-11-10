@@ -21,21 +21,23 @@ describe("home page build intro", () => {
   });
 
   it("runs once, permits replay and cannot trap a slow/hydration-disabled visitor", () => {
-    expect(layout).toContain("bernecki-home-intro-v3");
+    expect(layout).toContain("bernecki-home-intro-v4");
     expect(layout).toContain('get("intro")==="1"');
     expect(layout).toContain('root.dataset.homeIntro="armed"');
     expect(layout).toContain('root.dataset.homeIntro="skip"');
     expect(layout).toContain("prefers-reduced-motion: reduce");
     expect(layout).toContain("window.setTimeout(function()");
-    expect(styles).toContain("@media(prefers-reduced-motion:reduce){.introOverlay,.introBlueprint,.introTerminal{display:none!important}}");
+    expect(styles).toContain("@media(prefers-reduced-motion:reduce){.introOverlay,.introTerminal{display:none!important}}");
   });
 
-  it("unveils the existing hero in a top-left to bottom-right build", () => {
-    expect(styles).toContain("studioBuildFromLogo");
-    expect(styles).toContain("studioTraceH");
-    expect(styles).toContain("clip-path:polygon(var(--intro-origin-x,40px) 0");
-    expect(styles).toContain("studioTraceV");
-    expect(homepage).toContain("introBlueprint");
+  it("types the build sequentially and unveils the hero from top down without lines", () => {
+    expect(styles).toContain("studioTopDownUnveil");
+    expect(styles).toContain("studioHeadlineType");
+    expect(styles).toContain("clip-path:inset(100% 0 0 0)");
+    expect(styles).not.toContain("studioTraceH");
+    expect(styles).not.toContain("studioTraceV");
+    expect(homepage).not.toContain("introBlueprint");
+    expect(homepage).toContain("introCodeRowFive");
     expect(homepage).toContain("AI / BUILD ENGINE");
     expect(homepage).toContain('/images/profile-3-cutout.png');
     expect(homepage).toContain('/images/projects/starcars-live-current.jpg');

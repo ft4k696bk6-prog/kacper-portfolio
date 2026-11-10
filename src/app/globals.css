@@ -543,7 +543,7 @@ html.lenis,html.lenis body{height:auto}
  }
  html[data-home-intro="running"] .site-nav > div > :not(:first-child),
  html[data-home-intro="running"] .site-nav > div > a:first-child > span:not([data-bernecki-nav-logo]){
-  animation:berneckiNavUIArrive .35s ease-out 1.35s both;
+  animation:berneckiNavUIArrive .45s ease-out 1.84s both;
  }
 }
 @keyframes berneckiNavUIArrive{from{opacity:0}to{opacity:1}}
