@@ -177,7 +177,7 @@ export function EnglishToolRunner({mode,slug}:{mode:string;slug:string}){
    }else if(mode==="sha256"){
     if(!values.body)throw Error("Enter text to hash.");
     raw={title:"SHA-256",text:await calculateSha256(values.body)};
-   }else raw=localRun(mode,values,csv);
+   }else raw=localRun(mode,mode==="siteCost"?{type:"landing",forms:"simple",...values}:values,csv);
    setResult(normalizeResult(mode,raw,values,tool?.title||"Free tool"));
   }catch(e){
    if(e instanceof Error&&/limit/i.test(e.message))setError("Rate limit reached. Please try again shortly.");
