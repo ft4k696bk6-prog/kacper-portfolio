@@ -17,11 +17,11 @@ type MetForecast = {
 };
 
 export async function GET(request: NextRequest) {
-  const latitude = Number(request.nextUrl.searchParams.get("lat"));
-  const longitude = Number(request.nextUrl.searchParams.get("lon"));
+  const rawLatitude = request.nextUrl.searchParams.get("lat") ?? request.headers.get("x-vercel-ip-latitude");
+  const rawLongitude = request.nextUrl.searchParams.get("lon") ?? request.headers.get("x-vercel-ip-longitude");
+  const latitude = rawLatitude === null ? Number.NaN : Number(rawLatitude);
+  const longitude = rawLongitude === null ? Number.NaN : Number(rawLongitude);
   if (
-    !request.nextUrl.searchParams.has("lat") ||
-    !request.nextUrl.searchParams.has("lon") ||
     !Number.isFinite(latitude) || !Number.isFinite(longitude) ||
     latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180
   ) {
