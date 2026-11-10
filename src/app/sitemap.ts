@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { toolboxItems } from "../lib/toolbox";
 import { allGuides, getGuideCounts } from "../lib/guide-directory";
 import { getEnglishGuide, getEnglishGuides, englishCategoryCounts } from "../lib/guide-i18n";
 import { realizations } from "../content/realizations";
@@ -21,6 +22,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return [
+    {url:siteUrl+"/narzedzia",changeFrequency:"monthly",priority:0.9},
+    ...toolboxItems.map(tool=>({url:siteUrl+"/narzedzia/"+tool.slug,changeFrequency:"monthly" as const,priority:0.75})),
     { url: siteUrl + "/partner-w-rozwoju-biznesu", changeFrequency: "monthly", priority: 0.95 },
     { url: siteUrl + "/kontakt", changeFrequency: "monthly", priority: 0.85 },
     { url: siteUrl + "/materialy/brief-strony", changeFrequency: "monthly", priority: 0.8 },
