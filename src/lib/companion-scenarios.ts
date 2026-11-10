@@ -1,7 +1,7 @@
 export type CompanionLocale = "pl" | "en";
-export type CompanionDevice = "iphone" | "ipad" | "android" | "tablet" | "mac" | "windows" | "linux" | "mobile" | "desktop";
+export type CompanionDevice = "iphone" | "ipad" | "android" | "tablet" | "mac" | "windows" | "linux" | "unknown";
 export type CompanionBrowser = "safari" | "chrome" | "firefox" | "edge" | "other";
-export type CompanionCategory = "weather" | "device" | "time" | "location" | "browser" | "page" | "return" | "combination" | "playful";
+export type CompanionCategory = "weather" | "device" | "viewport" | "time" | "location" | "browser" | "page" | "return" | "combination" | "playful";
 
 export type CompanionWeather = {
   temperature: number;
@@ -26,6 +26,7 @@ export type CompanionContext = {
   hour: number;
   day: number;
   month: number;
+  date: number;
   dark: boolean;
   touch: boolean;
   reducedMotion: boolean;
@@ -37,7 +38,6 @@ export type CompanionNudge = {
   category: CompanionCategory;
   text: string;
   intent: "chat" | "audit";
-  weatherCredit: boolean;
 };
 
 type Rule = {
@@ -71,7 +71,7 @@ function addSet(
 }
 
 const any = () => true;
-const hasWeather = (c: CompanionContext) => c.weather !== null;
+const hasWeather = (c: CompanionContext) => c.weather !== null && Boolean(c.city);
 const temperature = (c: CompanionContext) => c.weather?.temperature ?? 99;
 const symbol = (c: CompanionContext) => c.weather?.symbol?.toLowerCase() ?? "";
 const storm = (c: CompanionContext) => /thunder/.test(symbol(c));
@@ -82,7 +82,7 @@ const cloudy = (c: CompanionContext) => /(cloudy|partlycloudy)/.test(symbol(c));
 const sunny = (c: CompanionContext) => /(clearsky|fair)/.test(symbol(c));
 const fog = (c: CompanionContext) => /fog/.test(symbol(c));
 const windy = (c: CompanionContext) => (c.weather?.windSpeed ?? 0) >= 10;
-const phone = (c: CompanionContext) => ["iphone", "android", "mobile"].includes(c.device);
+const phone = (c: CompanionContext) => c.device === "iphone" || c.device === "android";
 const night = (c: CompanionContext) => c.hour >= 23 || c.hour < 5;
 const evening = (c: CompanionContext) => c.hour >= 18 && c.hour < 23;
 const isAudit = (c: CompanionContext) => /narzedzia|tools|audyt|audit/.test(c.pathname);
@@ -192,7 +192,7 @@ addSet("device-phone", "device", phone, [
   ["Przeglądasz na telefonie. Sprawdź, czy wszystko wygodnie się klika.", "You're browsing on a phone. See how easy everything is to tap."],
   ["Mały ekran nie powinien oznaczać gorszej strony. Chcesz sprawdzić własną?", "A small screen shouldn't mean a worse website. Want to check yours?"],
 ], 2);
-addSet("device-wide", "device", c => c.width >= 1500, [
+addSet("viewport-wide", "viewport", c => c.width >= 1500, [
   ["Ale masz tu przestrzeni! Na takim ekranie mógłbym postawić drugi serwer.", "Look at all that space! I could fit a second server on that screen."],
   ["Szeroki ekran, szerokie możliwości. Sprawdź, jak ułożyłem tu projekty.", "Wide screen, wide possibilities. Have a look at the project layout."],
 ], 2);
@@ -240,7 +240,7 @@ addSet("time-spring", "time", c => c.month >= 2 && c.month <= 4, [
 addSet("time-autumn", "time", c => c.month >= 8 && c.month <= 10, [
   ["Jesień. Liście spadają, ale oby nie spadała liczba klientów.", "Autumn. Leaves are falling — hopefully your customer numbers aren't."],
 ], 1);
-addSet("time-halloween", "time", c => c.month === 9 && c.day >= 0 && new Date().getDate() === 31, [
+addSet("time-halloween", "time", c => c.month === 9 && c.date === 31, [
   ["Buuu! Najstraszniejsze rzeczy, jakie widziałem, to niektóre stare fragmenty kodu.", "Boo! The scariest things I've seen are pieces of legacy code."],
 ], 2);
 
@@ -272,14 +272,10 @@ addSet("location-city", "location", c => Boolean(c.city), [
   ["{city} melduje się na radarze. Pozdrawiam z mojego kawałka internetu.", "{city} is on my radar. Greetings from my little corner of the internet."],
   ["Wygląda na to, że zaglądasz z okolic {city}. Tak naprawdę nie znam Twojego dokładnego adresu.", "Looks like you're somewhere around {city}. I don't know your exact address, though."],
 ], 2);
-addSet("location-outside", "location", c => Boolean(c.country) && c.country !== "PL", [
+addSet("location-outside", "location", c => Boolean(c.city) && Boolean(c.country) && c.country !== "PL", [
   ["O, odwiedziny spoza Polski! Internet naprawdę nie zna granic.", "Oh, a visit from outside Poland! The internet really knows no borders."],
   ["Dzielą nas kilometry, ale ta strona i tak dociera do Ciebie w jednej chwili.", "We might be miles apart, but this page still reaches you in an instant."],
 ], 2);
-addSet("location-none", "location", c => !c.city, [
-  ["Nie wiem, skąd mnie odwiedzasz. I wiesz co? Nie muszę. Miło Cię tu widzieć.", "I don't know where you're browsing from. And that's fine. Good to see you."],
-], 1);
-
 addSet("page-tools", "page", isAudit, [
   ["O, będzie testowanie. Lubię testy. Szczególnie kiedy przechodzę je za pierwszym razem.", "Oh, we're testing things! I like tests. Especially when I pass on the first try."],
   ["Sprawdzamy stronę? Świetnie. Najpierw fakty, potem poprawki.", "Auditing a website? Great. Facts first, fixes second."],
@@ -317,10 +313,6 @@ addSet("return-visit", "return", c => c.returning, [
   ["Witaj ponownie. Jak widzisz, nadal pilnuję tego miejsca.", "Welcome back. As you can see, I'm still looking after this place."],
   ["Znowu się widzimy. Chyba zaczynamy się lubić.", "We meet again. I think we're starting to get along."],
 ], 3);
-addSet("return-first", "return", c => !c.returning, [
-  ["Hej! Chyba jeszcze się nie znamy. Jestem małym mieszkańcem tej strony.", "Hey! I don't think we've met. I'm the little creature living on this site."],
-  ["Pierwsza wizyta? Rozgość się. Postaram się nie przeszkadzać.", "First visit? Make yourself at home. I'll try not to get in the way."],
-], 1);
 addSet("playful-general", "playful", any, [
   ["Psst… jestem tutaj, gdybyś chciał o coś zapytać.", "Psst… I'm here if you feel like asking something."],
   ["Nie jestem wyskakującą reklamą. Obiecuję. Po prostu czasem lubię zagadać.", "I'm not a pop-up ad. Promise. I just like saying hello sometimes."],
@@ -454,25 +446,80 @@ addSet("combo-city-wind", "combination", c => Boolean(c.city) && windy(c), [
 
 export const COMPANION_SCENARIO_COUNT = rules.length;
 
+const LOCATIVE_PL: Record<string, string> = {
+  "rzeszów": "Rzeszowie", "warszawa": "Warszawie", "kraków": "Krakowie",
+  "lublin": "Lublinie", "poznań": "Poznaniu", "wrocław": "Wrocławiu",
+  "gdańsk": "Gdańsku", "gdynia": "Gdyni", "sopot": "Sopocie",
+  "łódź": "Łodzi", "katowice": "Katowicach", "białystok": "Białymstoku",
+  "bydgoszcz": "Bydgoszczy", "toruń": "Toruniu", "szczecin": "Szczecinie",
+  "olsztyn": "Olsztynie", "kielce": "Kielcach", "opole": "Opolu",
+  "zielona góra": "Zielonej Górze", "gorzów wielkopolski": "Gorzowie Wielkopolskim",
+  "częstochowa": "Częstochowie", "radom": "Radomiu", "płock": "Płocku",
+  "przemyśl": "Przemyślu", "mielec": "Mielcu", "stalowa wola": "Stalowej Woli",
+  "tarnobrzeg": "Tarnobrzegu", "krosno": "Krośnie",
+  "jasło": "Jaśle", "dębica": "Dębicy", "sanok": "Sanoku",
+  "jarosław": "Jarosławiu", "łańcut": "Łańcucie", "leżajsk": "Leżajsku",
+  "ustrzyki dolne": "Ustrzykach Dolnych", "bieszczady": "Bieszczadach",
+  "zakopane": "Zakopanem", "nowy sącz": "Nowym Sączu",
+  "nowy targ": "Nowym Targu", "tarnów": "Tarnowie",
+  "bielsko-biała": "Bielsku-Białej", "gliwice": "Gliwicach",
+  "zabrze": "Zabrzu", "tychy": "Tychach", "rybnik": "Rybniku",
+  "sosnowiec": "Sosnowcu", "chorzów": "Chorzowie",
+  "dąbrowa górnicza": "Dąbrowie Górniczej",
+  "elbląg": "Elblągu", "grudziądz": "Grudziądzu",
+  "inowrocław": "Inowrocławiu", "włocławek": "Włocławku",
+  "piła": "Pile", "kalisz": "Kaliszu", "konin": "Koninie",
+  "leszno": "Lesznie", "gniezno": "Gnieźnie",
+  "piotrków trybunalski": "Piotrkowie Trybunalskim",
+  "bełchatów": "Bełchatowie", "sieradz": "Sieradzu",
+  "zamość": "Zamościu", "chełm": "Chełmie", "puławy": "Puławach",
+  "biala podlaska": "Białej Podlaskiej", "biała podlaska": "Białej Podlaskiej",
+  "świdnik": "Świdniku", "łuków": "Łukowie",
+  "ostrołęka": "Ostrołęce", "siedlce": "Siedlcach",
+  "suwałki": "Suwałkach", "łomża": "Łomży",
+  "koszalin": "Koszalinie", "kołobrzeg": "Kołobrzegu",
+  "słupsk": "Słupsku", "ustka": "Ustce",
+  "jelenia góra": "Jeleniej Górze", "wałbrzych": "Wałbrzychu",
+  "legnica": "Legnicy", "lubin": "Lubinie",
+  "świdnica": "Świdnicy", "nysa": "Nysie", "brzeg": "Brzegu",
+  "głogów": "Głogowie", "świnoujście": "Świnoujściu",
+  "pruszków": "Pruszkowie", "piaseczno": "Piasecznie",
+  "złotów": "Złotowie", "mińsk mazowiecki": "Mińsku Mazowieckim",
+  "marki": "Markach", "wołomin": "Wołominie",
+  "krakow": "Krakowie", "poznan": "Poznaniu", "warsaw": "Warszawie",
+  "london": "Londynie", "berlin": "Berlinie", "paris": "Paryżu",
+  "vienna": "Wiedniu", "prague": "Pradze", "budapest": "Budapeszcie",
+};
+
+export function formatCompanionPlace(city: string, lang: CompanionLocale): string {
+  if (lang === "en") return "In " + city;
+  const inCase = LOCATIVE_PL[city.trim().toLocaleLowerCase("pl")];
+  return inCase ? "W " + inCase : city + " —";
+}
+
 function fillTemplate(value: string, c: CompanionContext): string {
-  const map: Record<string, string> = {
-    city: c.city ?? "",
+  const city = c.city ?? "";
+  const onDevice = c.device === "iphone"
+    ? (c.lang === "pl" ? "na iPhonie" : "on an iPhone")
+    : (c.lang === "pl" ? "na telefonie z Androidem" : "on an Android phone");
+  const values: Record<string, string> = {
+    city, place: city ? formatCompanionPlace(city, c.lang) : "",
     temp: c.weather ? String(c.weather.temperature) : "",
-    wind: c.weather?.windSpeed !== null && c.weather?.windSpeed !== undefined
-      ? String(c.weather.windSpeed)
-      : "",
+    wind: c.weather?.windSpeed != null ? String(c.weather.windSpeed) : "",
+    width: String(c.width),
+    onDevice: phone(c) ? onDevice : "",
   };
-  return value.split("{city}").join(map.city)
-    .split("{temp}").join(map.temp)
-    .split("{wind}").join(map.wind);
+  return value.replace(/\\{(city|place|temp|wind|width|onDevice)\\}/g, (_match, token: string) => values[token] ?? "");
 }
 
 function canRender(rule: Rule, c: CompanionContext): boolean {
   if (!rule.eligible(c)) return false;
   const body = c.lang === "en" ? rule.en : rule.pl;
-  if (body.includes("{city}") && !c.city) return false;
+  if ((rule.category === "weather" || rule.category === "location") && !c.city) return false;
+  if ((body.includes("{city}") || body.includes("{place}")) && !c.city) return false;
   if (body.includes("{temp}") && !c.weather) return false;
   if (body.includes("{wind}") && c.weather?.windSpeed == null) return false;
+  if (body.includes("{onDevice}") && !phone(c)) return false;
   return true;
 }
 
@@ -492,7 +539,7 @@ export function pickCompanionNudge(
 
   const weighted = candidates.map(rule => {
     const categoryWeight: Record<CompanionCategory, number> = {
-      combination: 5, weather: 3, device: 3, page: 3,
+      combination: 5, weather: 3, device: 3, viewport: 2.4, page: 3,
       return: 2, location: 1.6, time: 1.2, browser: 1, playful: 1,
     };
     const repetitionPenalty = rule.category === previousCategory ? 0.1 : 1;
@@ -510,12 +557,7 @@ export function pickCompanionNudge(
     category: selected.category,
     text: fillTemplate(context.lang === "en" ? selected.en : selected.pl, context),
     intent: selected.intent,
-    weatherCredit: (selected.category === "weather" || selected.category === "combination") && Boolean(context.weather) && (
-      selected.id.startsWith("wx-") ||
-      selected.id.includes("-rain") || selected.id.includes("-snow") || selected.id.includes("-sleet") ||
-      selected.id.includes("-wind") || selected.id.includes("-cold") || selected.id.includes("-heat") ||
-      selected.id.includes("-storm") || selected.id.includes("-fog") || selected.id.includes("-sun")
-    ),
+
   };
 }
 
@@ -530,15 +572,15 @@ export function getCompanionContext(
   const iphone = /iPhone/i.test(ua);
   const ipad = /iPad/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
   const android = /Android/i.test(ua);
-  let device: CompanionDevice = "desktop";
+  let device: CompanionDevice = "unknown";
   if (iphone) device = "iphone";
   else if (ipad) device = "ipad";
   else if (android && /Mobile/i.test(ua)) device = "android";
   else if (android) device = "tablet";
   else if (/Macintosh|Mac OS X/i.test(ua)) device = "mac";
-  else if (/Windows/i.test(ua)) device = "windows";
-  else if (/Linux/i.test(ua)) device = "linux";
-  else if (window.innerWidth < 768) device = "mobile";
+  else if (/Windows NT/i.test(ua)) device = "windows";
+  else if (/Linux|X11/i.test(ua)) device = "linux";
+
 
   let browser: CompanionBrowser = "other";
   if (ua.includes("Edg/") || ua.includes("EdgiOS/")) browser = "edge";
@@ -558,6 +600,7 @@ export function getCompanionContext(
     hour: now.getHours(),
     day: now.getDay(),
     month: now.getMonth(),
+    date: now.getDate(),
     dark: window.matchMedia("(prefers-color-scheme: dark)").matches,
     reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     touch,
