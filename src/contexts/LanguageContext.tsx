@@ -19,10 +19,11 @@ const LanguageContext = createContext<LanguageContextValue>({
   setLang: () => {},
 });
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("pl");
+export function LanguageProvider({ children, initialLang = "pl" }: { children: React.ReactNode; initialLang?: Lang }) {
+  const [lang, setLangState] = useState<Lang>(initialLang);
 
   useEffect(() => {
+    if(initialLang==="en")return; // Explicit /en/ pages must not flash Polish from stored preferences.
     const cookieConsent = localStorage.getItem(COOKIE_CONSENT_KEY);
     if (cookieConsent !== "accepted") {
       return;
@@ -32,7 +33,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     if (stored === "pl" || stored === "en") {
       setLangState(stored);
     }
-  }, []);
+  }, [initialLang]);
 
   const setLang = (next: Lang) => {
     setLangState(next);
