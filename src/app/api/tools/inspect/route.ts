@@ -261,9 +261,29 @@ async function completeAudit(url:URL){
   const generalRules=robots.match(/(?:^|\n)\s*User-agent:\s*\*[\s\S]*?(?=\n\s*User-agent:|$)/i)?.[0]||"";
   const disallowAll=/^\s*Disallow:\s*\/\s*(?:#.*)?$/im.test(generalRules);
   const links=gatherInternalLinks(initial.body,initial.url,hostname);
-  const candidates=[new URL("/",root).href,...sitemapLocations(sitemap,hostname),...links]
-    .filter((value,index,array)=>array.indexOf(value)===index&&value!==initial.url)
-    .slice(0,MAX_CRAWLED_PAGES-1);
+  // Prefer a broad sample from different site sections, not the first 6 sitemap entries.
+  const pool=[new URL("/",root).href,...links,...sitemapLocations(sitemap,hostname)]
+    .filter((value,index,array)=>array.indexOf(value)===index&&value!==initial.url);
+  const robotsRules=generalRules.split(/\\r?\\n/).map(v=>v.split("#")[0].trim());
+  const allowedByRobots=(candidate:string)=>{
+    const path=new URL(candidate).pathname;
+    const rules=robotsRules.map(v=>v.match(/^(allow|disallow):\\s*(.*)$/i)).filter(Boolean)
+      .map(m=>({isAllow:m![1].toLowerCase()==="allow",path:m![2]}))
+      .filter(m=>m.path&&path.startsWith(m.path));
+    rules.sort((a,b)=>b.path.length-a.path.length||Number(b.isAllow)-Number(a.isAllow));
+    return !rules.length||rules[0].isAllow;
+  };
+  const candidates:string[]=[];const sections=new Set<string>();
+  for(const candidate of pool){
+    if(!allowedByRobots(candidate))continue;
+    const group=new URL(candidate).pathname.split("/").filter(Boolean)[0]||"/";
+    if(!sections.has(group)){sections.add(group);candidates.push(candidate);}
+    if(candidates.length>=MAX_CRAWLED_PAGES-1)break;
+  }
+  if(candidates.length<MAX_CRAWLED_PAGES-1)for(const candidate of pool){
+    if(candidates.length>=MAX_CRAWLED_PAGES-1)break;
+    if(!candidates.includes(candidate)&&allowedByRobots(candidate))candidates.push(candidate);
+  }
   const pageData:ScannedPage[]=[{
     url:initial.url,status:initial.status,ttfb:initial.ttfb,sizeKb:Math.round(initial.bytes/1024*10)/10,
     html:inspectHtml(initial.body)

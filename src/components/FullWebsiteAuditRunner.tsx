@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, AlertTriangle, CheckCircle2, ClipboardCopy, Download, ExternalLink, FileSearch, Globe2, LoaderCircle, ShieldCheck } from "lucide-react";
+import { ArrowRight, AlertTriangle, ClipboardCopy, Download, ExternalLink, Globe2, LoaderCircle } from "lucide-react";
 
 type Severity="critical"|"warning"|"info";
 type Issue={id:string;severity:Severity;category:string;title:string;detail:string;fix:string;page?:string};
