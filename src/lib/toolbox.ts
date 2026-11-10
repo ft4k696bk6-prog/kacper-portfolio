@@ -1,0 +1,325 @@
+export type ToolboxItem = { slug:string; title:string; description:string; category:string; mode:string; hint:string; question:string; answer:string };
+export const toolboxItems: ToolboxItem[] = [
+  {
+    "slug": "audyt-strony",
+    "title": "Darmowy audyt strony internetowej",
+    "description": "Sprawdź podstawowe błędy strony WWW: dostępność, meta tagi, nagłówki, linki i elementy SEO.",
+    "category": "WWW i SEO",
+    "mode": "site",
+    "hint": "Wpisz adres strony. Skan sprawdzi publiczny kod HTML i pokaże możliwe poprawki.",
+    "question": "Czy audyt ocenia całą witrynę?",
+    "answer": "Nie. Sprawdzana jest podana podstrona i podstawowe elementy jej publicznego HTML. Nie zastępuje audytu technicznego całego serwisu."
+  },
+  {
+    "slug": "audyt-seo",
+    "title": "Darmowy audyt SEO strony",
+    "description": "Sprawdź tytuł, opis, nagłówki, kanoniczny adres, indeksowanie i dane strukturalne swojej podstrony.",
+    "category": "WWW i SEO",
+    "mode": "seo",
+    "hint": "Szybko zidentyfikuj problemy on-page, które warto zweryfikować przed rozbudową SEO.",
+    "question": "Czy wynik pokazuje pozycję w Google?",
+    "answer": "Nie. Analizuje wybrane elementy strony, nie jej rzeczywiste pozycje ani status indeksowania w Google Search Console."
+  },
+  {
+    "slug": "analizator-meta-tagow",
+    "title": "Analizator meta tagów strony",
+    "description": "Sprawdź title, description, canonical i robots bez instalowania rozszerzeń.",
+    "category": "WWW i SEO",
+    "mode": "meta",
+    "hint": "Podaj URL, aby odczytać kluczowe znaczniki strony i ich długości.",
+    "question": "Czy Google zawsze pokazuje meta description?",
+    "answer": "Nie. Google może ułożyć własny opis na podstawie treści strony i zapytania."
+  },
+  {
+    "slug": "tester-naglowkow-h1-h6",
+    "title": "Tester nagłówków H1–H6",
+    "description": "Zobacz hierarchię nagłówków H1, H2 i H3 na swojej stronie internetowej.",
+    "category": "WWW i SEO",
+    "mode": "headings",
+    "hint": "Sprawdź strukturę nagłówków odczytaną z HTML i oceniaj ją w kontekście treści.",
+    "question": "Czy jeden H1 to bezwzględny wymóg?",
+    "answer": "Nie. To czytelna konwencja, a nie gwarancja wyższej pozycji w wyszukiwarce."
+  },
+  {
+    "slug": "tester-open-graph",
+    "title": "Tester Open Graph",
+    "description": "Sprawdź, jakie tytuły, opisy i grafiki strona podaje do podglądu linków.",
+    "category": "WWW i SEO",
+    "mode": "og",
+    "hint": "Wykryj znaczniki og:title, og:description, og:image oraz Twitter Cards.",
+    "question": "Czy podgląd jest identyczny we wszystkich serwisach?",
+    "answer": "Nie. Facebook, LinkedIn i inne platformy mogą stosować własny cache i zasady kadrowania."
+  },
+  {
+    "slug": "czy-ai-widzi-strone",
+    "title": "Czy boty AI widzą stronę?",
+    "description": "Sprawdź podstawowe sygnały dostępu dla crawlerów AI: robots.txt, noindex i treści HTML.",
+    "category": "AI i wyszukiwarki",
+    "mode": "ai",
+    "hint": "Sprawdź, czy publiczny kod strony i wskazówki dla botów nie blokują wybranych robotów.",
+    "question": "Czy dostępność strony gwarantuje polecanie przez AI?",
+    "answer": "Nie. Tester sprawdza techniczne sygnały dostępności, nie rekomendacje, cytowania ani widoczność w modelach AI."
+  },
+  {
+    "slug": "sprawdzanie-certyfikatu-ssl",
+    "title": "Sprawdzenie certyfikatu SSL i TLS",
+    "description": "Odczytaj wystawcę, termin ważności i domenę publicznego certyfikatu HTTPS.",
+    "category": "WWW i SEO",
+    "mode": "tls",
+    "hint": "Sprawdź certyfikat serwera HTTPS bez instalowania narzędzi.",
+    "question": "Czy poprawny certyfikat oznacza pełne bezpieczeństwo?",
+    "answer": "Nie. Potwierdza wybrane aspekty szyfrowanego połączenia, nie bezpieczeństwo całej aplikacji."
+  },
+  {
+    "slug": "test-spf-dmarc",
+    "title": "Tester SPF i DMARC domeny",
+    "description": "Sprawdź publiczne rekordy SPF i DMARC oraz podstawowe błędy konfiguracji poczty.",
+    "category": "WWW i SEO",
+    "mode": "dns",
+    "hint": "Podaj domenę, aby zobaczyć rekordy TXT dotyczące uwierzytelniania poczty.",
+    "question": "Czy to sprawdza również DKIM?",
+    "answer": "Nie. Sprawdzenie DKIM wymaga znajomości selektora używanego przez dostawcę poczty."
+  },
+  {
+    "slug": "walidator-robots-txt",
+    "title": "Tester pliku robots.txt",
+    "description": "Wklej robots.txt i sprawdź dyrektywy User-agent, Allow, Disallow oraz Sitemap.",
+    "category": "WWW i SEO",
+    "mode": "robots",
+    "hint": "Wklej zawartość pliku robots.txt i skontroluj podstawową składnię oraz reguły.",
+    "question": "Czy Disallow blokuje indeksowanie?",
+    "answer": "Nie zawsze. Dyrektywa ogranicza crawling, a URL może nadal być indeksowany innymi metodami."
+  },
+  {
+    "slug": "walidator-sitemap-xml",
+    "title": "Walidator sitemap.xml",
+    "description": "Sprawdź poprawność XML i policz adresy URL w mapie strony.",
+    "category": "WWW i SEO",
+    "mode": "sitemap",
+    "hint": "Wklej sitemap.xml i otrzymaj raport o strukturze, liczbie adresów i błędach.",
+    "question": "Czy poprawna mapa oznacza indeksację?",
+    "answer": "Nie. Mapa strony pomaga odkrywać adresy, ale ich indeksacja zależy od wielu innych czynników."
+  },
+  {
+    "slug": "walidator-schema-org",
+    "title": "Walidator danych Schema.org",
+    "description": "Sprawdź składnię JSON-LD i podstawową strukturę danych uporządkowanych.",
+    "category": "WWW i SEO",
+    "mode": "schema",
+    "hint": "Wklej dane JSON-LD i wykryj błędy składni oraz brak kluczowych pól.",
+    "question": "Czy tester potwierdza rich results Google?",
+    "answer": "Nie. Do sprawdzenia obsługiwanych wyników rozszerzonych użyj również oficjalnego testu Google."
+  },
+  {
+    "slug": "generator-schema-localbusiness",
+    "title": "Generator LocalBusiness Schema",
+    "description": "Wygeneruj kod JSON-LD z nazwą, stroną i adresem swojej firmy.",
+    "category": "WWW i SEO",
+    "mode": "schemaGenerate",
+    "hint": "Wypełnij dane firmy i skopiuj gotowy znacznik JSON-LD.",
+    "question": "Czy mogę wpisywać nieprawdziwe dane?",
+    "answer": "Nie. Dane strukturalne powinny odpowiadać realnej treści i faktycznym informacjom o działalności."
+  },
+  {
+    "slug": "podglad-wyniku-google",
+    "title": "Podgląd strony w Google",
+    "description": "Zobacz symulację tytułu, opisu i adresu w wynikach wyszukiwania.",
+    "category": "WWW i SEO",
+    "mode": "serp",
+    "hint": "Wpisz title, description i URL. Zobacz przybliżony wygląd wyniku wyszukiwania.",
+    "question": "Czy Google wyświetli dokładnie taki snippet?",
+    "answer": "Nie. To podgląd orientacyjny; Google może modyfikować tytuł i opis."
+  },
+  {
+    "slug": "generator-llms-txt",
+    "title": "Generator pliku llms.txt",
+    "description": "Stwórz prosty plik llms.txt opisujący firmę i jej najważniejsze zasoby.",
+    "category": "AI i wyszukiwarki",
+    "mode": "llms",
+    "hint": "Wpisz nazwę, opis i linki. Pobierz gotowy tekst do udostępnienia pod /llms.txt.",
+    "question": "Czy llms.txt wpływa na ranking w AI?",
+    "answer": "Nie ma gwarancji. To propozycja formatu, a nie oficjalny czynnik rankingu."
+  },
+  {
+    "slug": "diagnostyka-meta-ads",
+    "title": "Diagnostyka problemów Meta Ads",
+    "description": "Znajdź przyczynę komunikatów: zestaw reklam nieaktywny, reklama odrzucona lub brak wydatków.",
+    "category": "Reklamy i marketing",
+    "mode": "adsIssues",
+    "hint": "Wybierz problem z Menedżera reklam. Otrzymasz konkretne kroki diagnostyczne.",
+    "question": "Czy narzędzie ma dostęp do konta reklamowego?",
+    "answer": "Nie. Diagnostyka jest oparta na wybranym objawie i nie wymaga logowania na Facebooka."
+  },
+  {
+    "slug": "analiza-wynikow-meta-ads-csv",
+    "title": "Analizator raportu Meta Ads CSV",
+    "description": "Wgraj eksport CSV z Menedżera reklam i policz wydatki, kliknięcia, CTR, CPC, leady i CPL.",
+    "category": "Reklamy i marketing",
+    "mode": "adsCsv",
+    "hint": "Wczytaj plik CSV lokalnie w przeglądarce. Raport nie musi trafiać na serwer.",
+    "question": "Czy moje dane reklamowe są wysyłane?",
+    "answer": "Nie. CSV jest przeliczany lokalnie w przeglądarce. Sprawdź poprawność rozpoznanych kolumn."
+  },
+  {
+    "slug": "kalkulator-roas",
+    "title": "Darmowy kalkulator ROAS",
+    "description": "Policz zwrot z wydatków reklamowych na podstawie przychodu i budżetu.",
+    "category": "Reklamy i marketing",
+    "mode": "roas",
+    "hint": "Wprowadź kwotę wydaną na reklamę i przychód przypisany kampanii.",
+    "question": "Czy ROAS oznacza zysk?",
+    "answer": "Nie. ROAS nie odejmuje kosztu produktów, obsługi ani podatków."
+  },
+  {
+    "slug": "kalkulator-cpl",
+    "title": "Kalkulator CPL i kosztu leada",
+    "description": "Oblicz koszt pozyskania kontaktu z reklamy i oszacuj liczbę leadów.",
+    "category": "Reklamy i marketing",
+    "mode": "cpl",
+    "hint": "Podaj wydatki reklamowe i liczbę pozyskanych leadów.",
+    "question": "Czy najniższy CPL jest zawsze najlepszy?",
+    "answer": "Nie. Liczy się też jakość leadów i koszt pozyskania klienta."
+  },
+  {
+    "slug": "kalkulator-budzetu-reklam",
+    "title": "Kalkulator budżetu reklamowego",
+    "description": "Wylicz orientacyjny budżet potrzebny do osiągnięcia celu leadowego.",
+    "category": "Reklamy i marketing",
+    "mode": "budget",
+    "hint": "Podaj docelową liczbę leadów i zakładany CPL.",
+    "question": "Czy kalkulator przewiduje realne wyniki kampanii?",
+    "answer": "Nie. Oblicza budżet na podstawie przyjętych założeń, a nie prognozuje aukcji reklamowej."
+  },
+  {
+    "slug": "kalkulator-oplacalnosci-reklam",
+    "title": "Kalkulator opłacalności reklam",
+    "description": "Oceń wynik kampanii z uwzględnieniem przychodu, marży i kosztu reklam.",
+    "category": "Reklamy i marketing",
+    "mode": "profit",
+    "hint": "Wprowadź przychód, marżę brutto i wydatki na reklamę.",
+    "question": "Czy wynik jest księgowym zyskiem netto?",
+    "answer": "Nie. Nie uwzględnia wszystkich kosztów stałych, podatków i kosztów pracy."
+  },
+  {
+    "slug": "generator-utm",
+    "title": "Darmowy generator linków UTM",
+    "description": "Zbuduj link kampanii z utm_source, utm_medium, utm_campaign i innymi parametrami.",
+    "category": "Reklamy i marketing",
+    "mode": "utm",
+    "hint": "Wypełnij pola i skopiuj poprawnie zakodowany adres URL.",
+    "question": "Czy UTM wpływają na pozycjonowanie?",
+    "answer": "Same parametry UTM nie poprawiają pozycji, służą do oznaczania źródeł ruchu."
+  },
+  {
+    "slug": "licznik-znakow-reklamy",
+    "title": "Licznik znaków reklamy",
+    "description": "Sprawdź długość nagłówka i tekstu reklamy przed publikacją.",
+    "category": "Reklamy i marketing",
+    "mode": "adText",
+    "hint": "Wklej tekst reklamy i kontroluj liczbę znaków w polach.",
+    "question": "Czy limity są takie same na wszystkich placementach?",
+    "answer": "Nie. Widoczna długość tekstu zależy od platformy, formatu i urządzenia."
+  },
+  {
+    "slug": "kalkulator-konwersji-strony",
+    "title": "Kalkulator konwersji strony WWW",
+    "description": "Policz współczynnik konwersji odwiedzin na zapytania i sprzedaż.",
+    "category": "Reklamy i marketing",
+    "mode": "conversion",
+    "hint": "Podaj liczbę odwiedzin, leadów i klientów.",
+    "question": "Czy konwersja równa się sprzedaży?",
+    "answer": "Nie. Możesz mierzyć osobno konwersję na leada i konwersję leada w klienta."
+  },
+  {
+    "slug": "kalkulator-cac",
+    "title": "Kalkulator kosztu pozyskania klienta CAC",
+    "description": "Oblicz koszt pozyskania jednego klienta na podstawie wydatków i sprzedaży.",
+    "category": "Reklamy i marketing",
+    "mode": "cac",
+    "hint": "Wprowadź koszty marketingu i sprzedaży oraz liczbę nowych klientów.",
+    "question": "Czy CAC uwzględnia koszt obsługi?",
+    "answer": "Tylko wtedy, gdy dodasz go do kosztów. Wynik zależy od przyjętego zakresu kosztów."
+  },
+  {
+    "slug": "kalkulator-strat-z-leadow",
+    "title": "Kalkulator utraconych leadów",
+    "description": "Oszacuj wartość kontaktów, na które firma nie odpowiedziała.",
+    "category": "CRM i sprzedaż",
+    "mode": "lostLeads",
+    "hint": "Wprowadź liczbę nieobsłużonych leadów, konwersję i średnią marżę na sprzedaży.",
+    "question": "Czy to rzeczywista strata firmy?",
+    "answer": "Nie. To model potencjalnie utraconej marży oparty na Twoich założeniach."
+  },
+  {
+    "slug": "kalkulator-roi-crm",
+    "title": "Kalkulator zwrotu z CRM",
+    "description": "Sprawdź hipotetyczny okres zwrotu z wdrożenia CRM przy założonym wzroście sprzedaży.",
+    "category": "CRM i sprzedaż",
+    "mode": "crm",
+    "hint": "Podaj koszty CRM, obecne leady i możliwą poprawę konwersji.",
+    "question": "Czy CRM gwarantuje wzrost sprzedaży?",
+    "answer": "Nie. Kalkulator pokazuje scenariusz, a wynik zależy od procesu i jakości wdrożenia."
+  },
+  {
+    "slug": "kalkulator-oszczednosci-automatyzacji",
+    "title": "Kalkulator oszczędności z automatyzacji",
+    "description": "Sprawdź, ile czasu i kosztów może oszczędzić automatyzacja powtarzalnych zadań.",
+    "category": "CRM i sprzedaż",
+    "mode": "automation",
+    "hint": "Wpisz liczbę godzin, koszt godziny i poziom automatyzacji.",
+    "question": "Czy automatyzacja usuwa cały koszt pracy?",
+    "answer": "Nie. Obliczenie pokazuje orientacyjną wartość odzyskanego czasu, nie zawsze oszczędność gotówkową."
+  },
+  {
+    "slug": "kalkulator-kosztu-strony",
+    "title": "Kalkulator ceny strony internetowej",
+    "description": "Oszacuj orientacyjny budżet na stronę lub landing page na podstawie zakresu prac.",
+    "category": "CRM i sprzedaż",
+    "mode": "siteCost",
+    "hint": "Zaznacz typ strony, liczbę podstron i dodatkowe funkcje.",
+    "question": "Czy wynik jest wiążącą wyceną?",
+    "answer": "Nie. To orientacyjny przedział budżetu; oferta wymaga analizy treści i funkcjonalności."
+  },
+  {
+    "slug": "dekoder-jwt",
+    "title": "Darmowy dekoder JWT",
+    "description": "Odczytaj nagłówek i payload tokenu JWT bez wysyłania go na serwer.",
+    "category": "Dla programistów",
+    "mode": "jwt",
+    "hint": "Wklej token. Dekodowanie odbywa się wyłącznie w przeglądarce.",
+    "question": "Czy dekoder sprawdza podpis JWT?",
+    "answer": "Nie. Dekodowanie danych nie oznacza weryfikacji podpisu ani autentyczności tokenu."
+  },
+  {
+    "slug": "konwerter-unix-time",
+    "title": "Konwerter czasu Unix",
+    "description": "Zamieniaj znaczniki czasu Unix na datę w Polsce i UTC.",
+    "category": "Dla programistów",
+    "mode": "unix",
+    "hint": "Wprowadź timestamp w sekundach lub milisekundach.",
+    "question": "Dlaczego wynik różni się o godzinę lub dwie?",
+    "answer": "Czas polski uwzględnia przesunięcie strefowe i zmianę czasu letniego."
+  },
+  {
+    "slug": "formatter-json",
+    "title": "Walidator i formatter JSON",
+    "description": "Waliduj, formatuj i kopiuj czytelny kod JSON bez przesyłania danych na serwer.",
+    "category": "Dla programistów",
+    "mode": "json",
+    "hint": "Wklej JSON, aby wykryć błąd składni i otrzymać poprawne formatowanie.",
+    "question": "Czy formatter modyfikuje wartości danych?",
+    "answer": "Nie zmienia znaczenia poprawnego JSON; może jedynie zmienić wcięcia i zapis whitespace."
+  },
+  {
+    "slug": "generator-uuid",
+    "title": "Generator UUID v4",
+    "description": "Generuj losowe identyfikatory UUID w przeglądarce.",
+    "category": "Dla programistów",
+    "mode": "uuid",
+    "hint": "Wygeneruj UUID v4 za pomocą bezpiecznego generatora losowości przeglądarki.",
+    "question": "Czy UUID jest hasłem?",
+    "answer": "Nie. UUID służy do identyfikacji obiektów, nie jako tajny token bezpieczeństwa."
+  }
+];
+export const toolboxCategories = ["Wszystkie", "WWW i SEO", "Reklamy i marketing", "CRM i sprzedaż", "AI i wyszukiwarki", "Dla programistów"];
+export function findTool(slug:string){return toolboxItems.find(item=>item.slug===slug);}
