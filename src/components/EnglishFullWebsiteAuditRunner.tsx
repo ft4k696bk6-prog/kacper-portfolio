@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
-import { ArrowRight, ClipboardCopy, Download, LoaderCircle, ExternalLink, Globe2 } from "lucide-react";
-import { englishToolPath } from "@/lib/toolbox-en";
+import { ArrowRight, ClipboardCopy, Download, LoaderCircle, Globe2 } from "lucide-react";
 
 type Issue={id:string;severity:"critical"|"warning"|"info";category:string;title:string;detail:string;fix:string;page?:string};
 type Page={url:string;status:number;ttfb:number;sizeKb:number;html:{title:string;headings:{level:number;text:string}[];imagesMissingAlt:number}};
@@ -135,6 +134,5 @@ export function EnglishFullWebsiteAuditRunner() {
    <div className="rounded-xl border border-white/15 p-5"><h3 className="text-sm font-medium">Important limitations</h3>{limitations.map(v=><p key={v} className="mt-2 text-xs leading-6 text-white/55">{v}</p>)}</div>
    <div className="flex flex-wrap items-center justify-between gap-5 rounded-xl border border-white/25 bg-[#121212] p-6"><div><h3 className="text-xl font-medium">Want these issues fixed?</h3><p className="mt-2 text-sm text-white/65">I can review the findings and suggest practical next steps.</p></div><Link href="/kontakt" className="brand-action inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 text-sm">Discuss the fixes <ArrowRight size={16}/></Link></div>
   </section>}
-  <div className="text-sm text-white/65"><Link href={englishToolPath("audyt-seo")} className="inline-flex items-center gap-2 underline underline-offset-4">Run the separate SEO checker <ExternalLink size={14}/></Link></div>
  </div>;
 }

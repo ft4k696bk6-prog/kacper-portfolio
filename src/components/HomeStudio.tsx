@@ -139,7 +139,7 @@ export function HomeStudio() {
       <p className={styles.eyebrow}>{lang==="pl"?"Darmowe narzędzia":"Free toolbox"}</p>
       <div className="flex flex-wrap items-end justify-between gap-5">
         <div><h2>{lang==="pl"?"Sprawdź stronę i reklamy. Za darmo.":"Test your website and ads. For free."}</h2>
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65">{lang==="pl"?"Wpisz jeden adres i sprawdź SEO, obrazy, SSL, DNS i analitykę w jednym audycie. Dodatkowo 44 szczegółowe narzędzia do reklam, CRM i programowania — bez konta.":"Run a combined website audit with one URL, or explore 44 other standalone tools for SEO, Meta Ads, CRM and developer tasks. No sign-up required."}</p></div>
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65">{lang==="pl"?"Wpisz jeden adres i sprawdź SEO, obrazy, SSL, DNS i analitykę w jednym audycie. Dodatkowo kalkulatory i praktyczne narzędzia do reklam, CRM i programowania — bez konta.":"Run a combined website audit with one URL, or explore focused tools for Meta Ads, CRM and developer tasks. No sign-up required."}</p></div>
         <Link href={localizedToolboxPath(lang)} className="inline-flex items-center gap-2 text-sm font-medium underline underline-offset-4">{lang==="pl"?"Wszystkie narzędzia":"Browse tools"} <ArrowRight size={16}/></Link>
       </div>
       <div className="mt-8 grid gap-3 md:grid-cols-3">

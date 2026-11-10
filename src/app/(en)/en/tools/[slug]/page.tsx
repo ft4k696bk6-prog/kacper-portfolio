@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, ShieldCheck, MoveRight } from "lucide-react";
 import { englishToolboxItems, englishToolForSlug, englishToolPath } from "@/lib/toolbox-en";
+import { visibleEnglishToolboxItems } from "@/lib/toolbox-visibility";
 import { EnglishToolRunner } from "@/components/EnglishToolRunner";
 import { EnglishFullWebsiteAuditRunner } from "@/components/EnglishFullWebsiteAuditRunner";
 
@@ -21,7 +22,7 @@ export async function generateMetadata({params}:Params):Promise<Metadata>{
 }
 export default async function EnglishToolPage({params}:Params){
  const {slug}=await params,tool=englishToolForSlug(slug);if(!tool)notFound();
- const related=englishToolboxItems.filter(t=>t.category===tool.category&&t.slug!==tool.slug).slice(0,3);
+ const related=visibleEnglishToolboxItems.filter(t=>t.category===tool.category&&t.slug!==tool.slug).slice(0,3);
  const isFull=tool.slug==="audyt-strony";
  const service=tool.category==="Advertising & marketing"?"/en/services/marketing":tool.category==="CRM & sales"?"/en/services/crm":"/en/services/websites";
  const faqQuestion=isFull?"Does this audit check every page on my website?":"Can I use this tool without an account?";
@@ -60,9 +61,9 @@ export default async function EnglishToolPage({params}:Params){
    <div><p className="page-eyebrow">Turn results into action</p><h2 className="mt-3 text-2xl font-medium">Need help fixing it?</h2><p className="mt-3 max-w-2xl text-sm leading-7 text-white/60">I can help implement a website, marketing or CRM improvement. The tools are free whether or not we work together.</p></div>
    <Link href="/kontakt" className="brand-action mt-5 inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-lg px-6 text-sm md:mt-0">Talk about your project <ArrowUpRight size={17}/></Link>
   </section>
-  <section className="mt-16"><div className="flex flex-wrap items-center justify-between gap-4"><h2 className="text-2xl font-medium">Related free tools</h2><Link href="/en/tools" className="inline-flex items-center gap-2 text-sm text-white/75 underline underline-offset-4">Browse all tools <MoveRight size={16}/></Link></div>
+  {related.length>0&&<section className="mt-16"><div className="flex flex-wrap items-center justify-between gap-4"><h2 className="text-2xl font-medium">Related free tools</h2><Link href="/en/tools" className="inline-flex items-center gap-2 text-sm text-white/75 underline underline-offset-4">Browse all tools <MoveRight size={16}/></Link></div>
    <div className="mt-6 grid gap-3 md:grid-cols-3">{related.map(t=><Link key={t.slug} href={englishToolPath(t.slug)} className="rounded-xl border border-white/15 bg-[#111111] p-5 transition hover:border-white/50"><h3 className="font-medium">{t.title}</h3><p className="mt-3 text-sm leading-6 text-white/60">{t.description}</p><span className="mt-5 inline-flex items-center gap-2 text-xs text-white/75">Open <ArrowUpRight size={14}/></span></Link>)}</div>
-  </section>
+  </section>}
   <Link href="/en/tools" className="mt-10 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white"><ArrowLeft size={16}/>Back to free tools</Link>
   <div className="sr-only"><Link href={service}>Related services</Link></div>
  </main>;

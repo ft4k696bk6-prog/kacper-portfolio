@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowUpRight, Search, Globe, Megaphone, Bot, Code2, Workflow, LayoutGrid } from "lucide-react";
-import { englishToolboxItems, englishToolPath } from "@/lib/toolbox-en";
+import { englishToolPath } from "@/lib/toolbox-en";
+import { visibleEnglishToolboxItems } from "@/lib/toolbox-visibility";
 
 const filters=["All","Website & SEO","Advertising & marketing","CRM & sales","AI & search","Developer tools"];
 const icons:Record<string,typeof Globe>={"All":LayoutGrid,"Website & SEO":Globe,"Advertising & marketing":Megaphone,"CRM & sales":Workflow,"AI & search":Bot,"Developer tools":Code2};
 export function EnglishToolsDirectory() {
  const [query,setQuery]=useState("");
  const [category,setCategory]=useState("All");
- const found=useMemo(()=>englishToolboxItems.filter(t=>(category==="All"||t.category===category)&&
+ const found=useMemo(()=>visibleEnglishToolboxItems.filter(t=>(category==="All"||t.category===category)&&
   (t.title+" "+t.description+" "+t.category).toLowerCase().includes(query.toLowerCase().trim())),[query,category]);
  return <div className="mt-10">
   <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -19,7 +20,7 @@ export function EnglishToolsDirectory() {
     <span className="sr-only">Search free tools</span>
     <input type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search: SEO audit, Meta Ads, ROAS..." className="w-full rounded-xl border border-white/20 bg-[#121212] py-4 pl-12 pr-4 text-sm text-white outline-none placeholder:text-white/45 focus:border-white/60"/>
    </label>
-   <span className="text-sm text-white/50">Showing {found.length} of {englishToolboxItems.length} tools</span>
+   <span className="text-sm text-white/50">Showing {found.length} of {visibleEnglishToolboxItems.length} additional tools</span>
   </div>
   <Link href={englishToolPath("audyt-strony")} className="group mt-7 flex flex-col gap-5 rounded-2xl border border-white/30 bg-gradient-to-br from-[#252525] to-[#101010] p-6 transition-colors hover:border-white/60 md:flex-row md:items-center md:justify-between md:p-8">
    <div className="max-w-2xl">
