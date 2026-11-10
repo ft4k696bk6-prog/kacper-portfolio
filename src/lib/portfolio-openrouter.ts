@@ -62,8 +62,8 @@ export function outsideScopeAnswer(language: Language) {
 
 export function offlinePortfolioAnswer(language: Language) {
   return language === "pl"
-    ? "Mogę opowiedzieć o Kacprze, B-CRM, Motomizer, StarCars, BeatMarket i współpracy. Pełne opisy znajdziesz w sekcji projektów. Rozmowy AI są obecnie niedostępne."
-    : "I can point you to Kacper's B-CRM, Motomizer, StarCars and BeatMarket projects and contact details on this page. AI responses are currently unavailable.";
+    ? "Narzędzia i darmowy audyt strony działają niezależnie od czatu AI: https://bernecki.dev/narzedzia. O projektach i współpracy przeczytasz na stronie głównej. Odpowiedzi modelu AI są obecnie niedostępne."
+    : "You can use the free website audit and other tools without AI chat: https://bernecki.dev/en/tools. Explore projects and contact details on the homepage. AI model replies are currently unavailable.";
 }
 
 export function buildPortfolioOpenRouterPrompt(language: Language) {
@@ -103,7 +103,7 @@ STRICT SCOPE:
 - Ads CSV analyzer: https://bernecki.dev/narzedzia/analiza-wynikow-meta-ads-csv ; English: https://bernecki.dev/en/tools/meta-ads-csv-analyzer .
 - Complete tools catalog: https://bernecki.dev/narzedzia ; English: https://bernecki.dev/en/tools . For other needs (CPL, CPC, CPM, CRM, DNS, TLS, JSON, WCAG), send visitors to this verified catalog. Use URLs matching the visitor's language; do not invent tools or results.
 - This chatbot is an AI assistant, not Kacper personally.
-- External links should only come from the verified list in the facts below.
+- External links must be drawn only from verified URLs included in this prompt, including the free toolbox URLs listed above and the public portfolio URLs below.
 
 PUBLIC PORTFOLIO FACTS:
 - Kacper Bernecki designs and develops web experiences and practical business applications.
