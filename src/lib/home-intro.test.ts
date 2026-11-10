@@ -9,34 +9,37 @@ const layout = read("../app/(pl)/layout.tsx");
 const globals = read("../app/globals.css");
 
 describe("home page build intro", () => {
-  it("flies to the actual navbar mark instead of hard-coded viewport coordinates", () => {
+  it("moves the actual navbar mark and never creates a second KB sprite", () => {
     expect(nav).toContain("data-bernecki-nav-logo");
+    expect(nav).toContain('initial={pathname === "/" ? false');
     expect(homepage).toContain('querySelector<HTMLElement>("[data-bernecki-nav-logo]")');
-    expect(homepage).toContain("bounds.left + bounds.width / 2 - window.innerWidth / 2");
-    expect(homepage).toContain("bounds.top + bounds.height / 2 - window.innerHeight / 2");
-    expect(homepage).toContain('root.style.setProperty("--intro-flight-scale"');
-    expect(styles).toContain("var(--intro-flight-x");
-    expect(globals).toContain("berneckiHeaderLogoArrive");
+    expect(homepage).toContain("logo.animate([");
+    expect(homepage).toContain("flight.cancel()");
+    expect(homepage).not.toContain("introFlightMark");
+    expect(homepage).not.toContain("introFlightAnchor");
+    expect(globals).toContain("data-bernecki-nav-logo");
   });
 
-  it("plays only once per session, with the opt-out for reduced motion", () => {
-    expect(layout).toContain("bernecki-home-intro-v2");
+  it("runs once, permits replay and cannot trap a slow/hydration-disabled visitor", () => {
+    expect(layout).toContain("bernecki-home-intro-v3");
     expect(layout).toContain('get("intro")==="1"');
-    expect(layout).toContain("DOMContentLoaded");
-    expect(layout).toContain('root.dataset.homeIntro="play"');
+    expect(layout).toContain('root.dataset.homeIntro="armed"');
     expect(layout).toContain('root.dataset.homeIntro="skip"');
     expect(layout).toContain("prefers-reduced-motion: reduce");
-    expect(styles).toContain("@media(prefers-reduced-motion:reduce){.introOverlay{display:none!important}}");
-    expect(styles).toContain("studioIntroEnd");
+    expect(layout).toContain("window.setTimeout(function()");
+    expect(styles).toContain("@media(prefers-reduced-motion:reduce){.introOverlay,.introBlueprint,.introTerminal{display:none!important}}");
   });
 
-  it("reuses the live portrait and three real project screenshots", () => {
+  it("unveils the existing hero in a top-left to bottom-right build", () => {
+    expect(styles).toContain("studioBuildFromLogo");
+    expect(styles).toContain("studioTraceH");
+    expect(styles).toContain("clip-path:polygon(var(--intro-origin-x,40px) 0");
+    expect(styles).toContain("studioTraceV");
+    expect(homepage).toContain("introBlueprint");
+    expect(homepage).toContain("AI / BUILD ENGINE");
     expect(homepage).toContain('/images/profile-3-cutout.png');
     expect(homepage).toContain('/images/projects/starcars-live-current.jpg');
     expect(homepage).toContain('/images/projects/isto-live-nov08.jpg');
     expect(homepage).toContain('/images/projects/bcrm-admin-dashboard.jpg');
-    expect(homepage).toContain("<ClientTestimonials/>");
-    expect(homepage).toContain("AI / BUILD ENGINE");
-    expect(styles).toContain("studioBuildSignals");
   });
 });
