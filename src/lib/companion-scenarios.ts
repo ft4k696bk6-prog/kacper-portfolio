@@ -323,125 +323,125 @@ addSet("playful-general", "playful", any, [
 
 // Hand-written combinations are not assembled randomly: each sentence has a natural rhythm.
 addSet("combo-iphone-night", "combination", c => c.device === "iphone" && night(c), [
-  ["Środek nocy, a Ty przeglądasz strony na iPhonie? Albo masz świetny pomysł, albo nie możesz zasnąć.", "Browsing websites on your iPhone in the middle of the night? Either a great idea or you can't sleep."],
-  ["iPhone, późna godzina i portfolio? Brzmi jak początek ciekawego projektu.", "iPhone, late hour, and a portfolio? Sounds like the start of an interesting project."],
+  ["Środek nocy, a Ty przeglądasz stronę na iPhonie? Albo masz świetny pomysł, albo nie możesz zasnąć.","It's the middle of the night and you're browsing on an iPhone? Either a great idea or you can't sleep."],
+  ["iPhone i taka godzina? Najlepsze pomysły podobno nie patrzą na zegarek.","An iPhone at this hour? The best ideas apparently don't watch the clock."],
 ], 5);
 addSet("combo-iphone-rain", "combination", c => c.device === "iphone" && rain(c), [
-  ["Deszcz w prognozie i iPhone w dłoni. Może to dobry moment, żeby sprawdzić swoją stronę?", "Rain in the forecast and an iPhone in hand. Maybe a good moment to check your website?"],
-  ["Na dworze zapowiada się mokro. Przynajmniej na iPhonie ta strona pozostanie sucha.", "Looks wet outside. At least this site will stay dry on your iPhone."],
+  ["{place} według prognozy będzie padać, a Ty przeglądasz na iPhonie. Idealna pora na cyfrowe porządki.","{place} rain is forecast, and you're on an iPhone. Perfect timing for a little digital housekeeping."],
+  ["iPhone w dłoni, a {place} zapowiadają deszcz. Ja bym dziś został przy dobrym Wi-Fi.","An iPhone in hand, and {place} rain is on the way. I'd stay somewhere with good Wi-Fi."],
 ], 4);
 addSet("combo-iphone-cold", "combination", c => c.device === "iphone" && hasWeather(c) && temperature(c) <= 4, [
-  ["Brrr… {temp}°C w prognozie, a Ty z iPhonem? Mam nadzieję, że ręce masz w cieple.", "Brrr… {temp}°C in the forecast and you're on an iPhone? Hope your hands are warm."],
-  ["Zimno w Twojej okolicy. Przynajmniej do przewijania strony nie potrzebujesz zdejmować rękawiczek… chyba.", "Chilly around you. At least scrolling shouldn't require taking your gloves off… probably."],
+  ["Brrr… {place} {temp}°C, a Ty przeglądasz na iPhonie. Mam nadzieję, że palce nie marzną.","Brrr… {place} it's {temp}°C, and you're browsing on an iPhone. Hope your fingers aren't freezing."],
+  ["{place} naprawdę zimno. iPhone w dłoni, a rękawiczki chyba też by się przydały.","{place} it's seriously cold. You've got an iPhone in hand; gloves might help too."],
 ], 4);
 addSet("combo-iphone-heat", "combination", c => c.device === "iphone" && hasWeather(c) && temperature(c) >= 30, [
-  ["{temp}°C i iPhone w dłoni? Daj mu trochę cienia, a mnie trochę uwagi.", "{temp}°C and an iPhone in your hand? Give it some shade and me a little attention."],
+  ["{place} {temp}°C, a Ty na iPhonie? Daj mu trochę cienia — elektronika też nie lubi upałów.","{place} it's {temp}°C and you're on an iPhone? Give it some shade — electronics don't love the heat."],
 ], 4);
 addSet("combo-android-night", "combination", c => c.device === "android" && night(c), [
-  ["Android, późna noc i technologia. Widzę, że to nie przypadkowa wizyta.", "Android, late night, and tech. Doesn't sound like a random visit."],
-  ["Jeszcze nie śpisz i przeglądasz na Androidzie? Ja na szczęście nie potrzebuję snu.", "Still awake and browsing on Android? Luckily, I don't need sleep."],
+  ["Android, późna noc i przeglądanie portfolio. Zapowiada się ciekawy projekt?","Android, late night, and portfolio browsing. Working on a new idea?"],
+  ["Tak późno, a Ty na Androidzie? Ja nie potrzebuję snu, ale Ty chyba tak.","This late and you're browsing on Android? I don't need sleep, but you might."],
 ], 4);
 addSet("combo-android-wind", "combination", c => c.device === "android" && windy(c), [
-  ["Wietrznie w Twojej okolicy. Trzymaj Androida mocno, nie chciałbym Cię zgubić.", "Windy in your area. Hold on to that Android — I'd hate to lose you."],
+  ["{place} mocno wieje, a Ty przeglądasz stronę na Androidzie. Oby telefon trzymał się pewnie.","{place} it's windy and you're browsing on Android. Hope you're holding on to your phone."],
 ], 4);
 addSet("combo-mac-night", "combination", c => c.device === "mac" && night(c), [
-  ["Mac, późna noc i przeglądanie portfolio? Brzmi jak początek jakiegoś ciekawego projektu.", "A Mac, a late night, and portfolio browsing? Sounds like the start of a creative project."],
-  ["Praca na Macu o tej porze? Oby to był dobry pomysł, a nie deadline na jutro.", "Working on a Mac this late? Hope it's a great idea, not a deadline tomorrow."],
+  ["Mac, późna noc i przeglądanie realizacji. Brzmi jak początek ciekawego projektu.","A Mac, late night, and project browsing. Sounds like the start of something interesting."],
+  ["Przeglądasz na Macu o tej porze? Oby to był dobry pomysł, a nie deadline na jutro.","Browsing on a Mac this late? Hope it's a great idea, not tomorrow's deadline."],
 ], 5);
 addSet("combo-windows-monday", "combination", c => c.device === "windows" && c.day === 1, [
-  ["Poniedziałek i Windows. Mam nadzieję, że przynajmniej jedno dzisiaj nie sprawia Ci problemów.", "Monday and Windows. Hopefully at least one of them is behaving today."],
-  ["Windows w poniedziałek? Dobra, to ja na wszelki wypadek nie pytam o aktualizacje.", "Windows on a Monday? Okay, I won't ask about updates."],
+  ["Poniedziałek i Windows. Mam nadzieję, że przynajmniej jedno dzisiaj działa bez niespodzianek.","Monday and Windows. Hopefully at least one behaves today."],
+  ["Windows w poniedziałek? Na wszelki wypadek nie pytam o aktualizacje.","Windows on a Monday? I won't ask about updates, just in case."],
 ], 4);
 addSet("combo-windows-night", "combination", c => c.device === "windows" && night(c), [
-  ["Windows, noc i portfolio. Ktoś tu chyba planuje coś większego.", "Windows, late night, and a portfolio. Someone might be planning something big."],
+  ["Windows, późna noc i portfolio. Ktoś tu chyba zbiera inspiracje.","Windows, late night, and a portfolio. Someone's collecting inspiration."],
 ], 4);
 addSet("combo-linux-night", "combination", c => c.device === "linux" && night(c), [
-  ["Linux i noc? Nie musisz mi tłumaczyć. Pewnie jeszcze jeden terminal jest otwarty.", "Linux and late night? No explanation needed. There's probably another terminal open."],
-  ["Późno, a Linux nadal działa. Czyli pewnie jeszcze nie skończyłeś konfigurować.", "It's late and Linux is still running. So the configuration probably isn't finished."],
+  ["Linux i późna noc? Mam podejrzenie, że gdzieś masz otwarty terminal.","Linux and a late night? I have a suspicion there's a terminal open somewhere."],
+  ["Przeglądasz na Linuksie o tej porze? Mam nadzieję, że nie walczysz z kolejną zależnością.","Browsing on Linux at this hour? Hope you're not fighting another dependency."],
 ], 5);
 addSet("combo-tablet-weather", "combination", c => (c.device === "ipad" || c.device === "tablet") && rain(c), [
-  ["Deszcz w prognozie, tablet w dłoni. Brzmi jak plan na spokojne popołudnie.", "Rain in the forecast and a tablet in hand. Sounds like a relaxed afternoon."],
+  ["{place} prognoza zapowiada deszcz, a Ty przeglądasz {onTablet}. Spokojny plan na wieczór?","{place} rain's in the forecast, and you're browsing {onTablet}. A quiet evening in?"],
 ], 3);
 addSet("combo-phone-heat", "combination", c => phone(c) && hasWeather(c) && temperature(c) >= 30, [
-  ["Upał i ekran telefonu. Pamiętaj o cieniu — sprzęt też nie lubi się przegrzewać.", "Heat and a phone screen. Find some shade — devices don't like overheating either."],
+  ["{place} {temp}°C, a Ty przeglądasz {onDevice}. Trzymaj sprzęt w cieniu — upał nie pomaga baterii.","{place} it's {temp}°C and you're browsing {onDevice}. Keep it in the shade — heat isn't great for batteries."],
 ], 3);
 addSet("combo-phone-audit", "combination", c => phone(c) && isAudit(c), [
-  ["Testujesz stronę z telefonu? Świetnie. Właśnie na telefonach wiele problemów wychodzi na jaw.", "Auditing on your phone? Great. That's where a lot of website problems become obvious."],
-  ["Diagnostyka na małym ekranie. Idealny sposób, żeby sprawdzić, czy narzędzie jest naprawdę wygodne.", "Auditing on a small screen. A good way to see whether a tool is actually usable."],
+  ["Przeglądasz audyt {onDevice}. Właśnie na takich urządzeniach często wychodzą błędy mobilnego interfejsu.","You're checking the audit {onDevice}. That's often where mobile UI problems show up."],
+  ["Narzędzia SEO {onDevice}? Dobry test, czy wszystko działa wygodnie również bez myszy.","SEO tools {onDevice}? A good test of whether everything works without a mouse."],
 ], 5);
 addSet("combo-phone-ads", "combination", c => phone(c) && isAds(c), [
-  ["Meta Ads na telefonie? Uważaj na jeden klik — czasem kosztuje więcej niż myślisz.", "Meta Ads on mobile? Careful with that one tap — it can cost more than you think."],
-  ["Sprawdzasz reklamy na telefonie. Warto pamiętać, że Twoi klienci też je tam oglądają.", "Checking ads on a phone? Remember, your customers are seeing them there too."],
+  ["Meta Ads {onDevice}? Jeden nieuważny klik w Menedżerze reklam potrafi sporo kosztować.","Meta Ads {onDevice}? One careless tap in Ads Manager can be expensive."],
+  ["Przeglądasz poradniki reklamowe {onDevice}. Właśnie tak wielu klientów widzi reklamy firm.","You're browsing ad guides {onDevice}. That's how many customers see business ads too."],
 ], 4);
 addSet("combo-phone-crm", "combination", c => phone(c) && isCrm(c), [
-  ["CRM na telefonie powinien ułatwiać pracę handlowcowi, a nie zmuszać go do celowania palcem w małe przyciski.", "A mobile CRM should help salespeople, not make them aim at tiny buttons."],
-  ["Jeśli handlowiec nie może wygodnie sprawdzić leada na telefonie, to CRM wymaga poprawy.", "If a salesperson can't comfortably check a lead on a phone, the CRM needs work."],
+  ["Czytasz o CRM {onDevice}. Handlowiec też powinien móc wygodnie obsłużyć leada na takim sprzęcie.","You're reading about CRMs {onDevice}. A salesperson should be able to manage a lead on that device too."],
+  ["CRM {onDevice} powinien ułatwiać pracę, a nie zmuszać do celowania w mikroskopijne przyciski.","A CRM {onDevice} should make work easier, not force people to aim at tiny buttons."],
 ], 4);
 addSet("combo-night-audit", "combination", c => night(c) && isAudit(c), [
-  ["Nocna diagnostyka strony? Podoba mi się ta determinacja. Sprawdźmy konkrety.", "A late-night website audit? I admire the determination. Let's check the facts."],
+  ["Audyt strony o tej porze? Szanuję determinację. Zobaczmy, co da się sprawdzić.","A website audit at this hour? Respect the determination. Let's see what we can check."],
 ], 4);
 addSet("combo-night-crm", "combination", c => night(c) && isCrm(c), [
-  ["Jest późno, a Ty czytasz o CRM? Chyba ktoś chce w końcu uporządkować firmę.", "It's late and you're reading about CRMs? Someone's ready to get their business organized."],
+  ["Późna noc, a Ty oglądasz rozwiązania CRM? Chyba szykuje się porządkowanie procesów.","Late night and you're exploring CRM solutions? Sounds like some workflow improvements are coming."],
 ], 4);
 addSet("combo-weekend-work", "combination", c => (c.day === 0 || c.day === 6) && isWork(c), [
-  ["Weekendowy przegląd realizacji? To naprawdę porządny research.", "Browsing case studies on the weekend? That's serious research."],
-  ["Weekend, a Ty analizujesz projekty. Mam nadzieję, że znajdziesz coś inspirującego.", "Checking projects over the weekend? Hope something sparks an idea."],
+  ["Weekendowy przegląd realizacji? To się nazywa porządny research.","Browsing projects on the weekend? That's thorough research."],
+  ["Weekend, a Ty oglądasz projekty. Mam nadzieję, że znajdziesz coś inspirującego.","It's the weekend and you're looking at projects. Hope you find some inspiration."],
 ], 4);
 addSet("combo-friday-ads", "combination", c => c.day === 5 && isAds(c), [
-  ["Piątek i Meta Ads. Oby żadna kampania nie postanowiła dziś zrobić niespodzianki.", "Friday and Meta Ads. Hopefully no campaign decides to surprise you today."],
+  ["Piątek i tematy reklamowe. Oby żadna kampania nie zrobiła dziś niespodzianki.","Friday and advertising topics. Hope no campaign has any surprises today."],
 ], 4);
 addSet("combo-monday-crm", "combination", c => c.day === 1 && isCrm(c), [
-  ["Poniedziałek. Idealny dzień, żeby ustawić CRM tak, aby reszta tygodnia była prostsza.", "Monday. A perfect day to make your CRM simplify the rest of the week."],
+  ["Poniedziałek i CRM. Dobry moment, żeby reszta tygodnia była prostsza.","Monday and CRM. Good timing to make the rest of the week easier."],
 ], 4);
 addSet("combo-return-night", "combination", c => c.returning && night(c), [
-  ["Dobry wieczór, znowu się widzimy. Chyba zaczynamy się lubić.", "Good evening, we meet again. I think we're starting to get along."],
-  ["Znowu Ty i znowu tak późno? Zaczynam dostrzegać pewien schemat.", "You again, and this late? I'm starting to notice a pattern."],
+  ["Późna pora, a Ty znów tutaj? Chyba zaczynamy się lubić.","Late at night and you're back? I think we're starting to get along."],
+  ["Witaj ponownie! Nawet o tej godzinie pamiętam, że już się widzieliśmy.","Welcome back! Even at this hour I remember we've met before."],
 ], 5);
 addSet("combo-return-audit", "combination", c => c.returning && isAudit(c), [
-  ["Wracasz do narzędzi? Bardzo dobrze. Warto sprawdzać efekty po zmianach.", "Back to the tools? Good. It's worth checking results after making changes."],
+  ["Wracasz do narzędzi? Dobrze, warto sprawdzać efekty po zmianach.","Back to the tools? Good — it's worth checking results after making changes."],
 ], 5);
 addSet("combo-rain-evening", "combination", c => rain(c) && evening(c), [
-  ["Deszczowy wieczór według prognozy. W sam raz na chwilę przy komputerze.", "A rainy evening in the forecast. A good time to spend a moment at the computer."],
-  ["Wieczór, deszcz i spokojne przeglądanie. Ja bym tylko dorzucił herbatę.", "Evening, rain, and a quiet browse. I'd add a cup of tea."],
+  ["{place} prognozują deszczowy wieczór. W sam raz na chwilę przy komputerze.","{place} a rainy evening is forecast. A good moment to spend a little time at the computer."],
+  ["Wieczór, a {place} deszcz w prognozie. Ja bym jeszcze dorzucił herbatę.","Evening, and {place} rain in the forecast. I'd add a cup of tea."],
 ], 4);
 addSet("combo-snow-night", "combination", c => snow(c) && night(c), [
-  ["Śnieg i późna noc. Brzmi jak ładny widok za oknem… przynajmniej według prognozy.", "Snow and a late night. Sounds lovely outside… at least according to the forecast."],
+  ["{place} w nocnej prognozie śnieg. Brzmi jak ładny widok za oknem.","{place} snow is in the overnight forecast. Sounds like a lovely view outside."],
 ], 4);
 addSet("combo-storm-night", "combination", c => storm(c) && night(c), [
-  ["Burza w nocnej prognozie? Jeśli zgasną światła, nie bierz tego do siebie.", "Thunderstorms in the overnight forecast? If the lights go out, don't take it personally."],
+  ["{place} prognoza zapowiada nocną burzę. Jeśli zgasną światła, nie bierz tego do siebie.","{place} thunderstorms are forecast overnight. If the lights go out, don't take it personally."],
 ], 5);
 addSet("combo-wind-cold", "combination", c => windy(c) && hasWeather(c) && temperature(c) <= 5, [
-  ["Zimno i wietrznie. Taka pogoda potrafi przekonać nawet mnie, żeby nie wychodzić z ekranu.", "Cold and windy. Weather like that could convince even me to stay inside the screen."],
+  ["{place} zimno i wietrznie. Nawet ja wolałbym dziś nie wychodzić z ekranu.","{place} cold and windy. Even I'd rather stay inside the screen."],
 ], 4);
 addSet("combo-sun-weekend", "combination", c => sunny(c) && (c.day === 0 || c.day === 6), [
-  ["Weekend i słońce w prognozie. Nie będę Cię zatrzymywać długo. Obiecuję.", "Weekend and sunshine in the forecast. I won't keep you long. Promise."],
+  ["{place} słońce w weekendowej prognozie. Nie będę Cię długo zatrzymywać.","{place} sunshine in the weekend forecast. I won't keep you long."],
 ], 4);
 addSet("combo-fog-morning", "combination", c => fog(c) && c.hour >= 5 && c.hour <= 10, [
-  ["Mglisty poranek. Ja na szczęście mam całkiem dobrą widoczność na tę stronę.", "Foggy morning. Luckily, I've got a clear view of this page."],
+  ["{place} mglisty poranek. Dobrze, że tutaj wszystko staram się pokazać wyraźnie.","{place} a foggy morning. Good thing I try to keep everything clear here."],
 ], 4);
 addSet("combo-heat-crm", "combination", c => hasWeather(c) && temperature(c) >= 30 && isCrm(c), [
-  ["Na dworze gorąco, a Ty myślisz o CRM. Przynajmniej procesy w firmie mogą działać na chłodno.", "It's hot outside and you're looking at CRMs. At least your processes can stay cool."],
+  ["{place} upał, a Ty czytasz o CRM. Przynajmniej procesy firmowe mogą działać na chłodno.","{place} it's hot and you're reading about CRMs. At least business processes can stay cool."],
 ], 4);
 addSet("combo-cold-marketing", "combination", c => hasWeather(c) && temperature(c) < 0 && isAds(c), [
-  ["Mróz w prognozie, a Ty analizujesz reklamy. Lepiej, żeby tylko pogoda miała temperaturę poniżej zera.", "Freezing forecast and you're checking ads. Let's hope it's only the temperature that's below zero."],
+  ["{place} mróz w prognozie, a Ty analizujesz reklamy. Oby tylko temperatura była poniżej zera.","{place} freezing temperatures in the forecast, and you're checking ads. Hope it's only the temperature that's below zero."],
 ], 4);
 addSet("combo-dark-night", "combination", c => c.dark && night(c), [
-  ["Ciemny motyw i późna pora. Widać, że umiesz zadbać o klimat.", "Dark mode and a late hour. You certainly know how to set the mood."],
+  ["Późna noc, a Twój system preferuje ciemny motyw. Zgraliśmy się idealnie.","Late at night, and your system prefers dark mode. A perfect match."],
 ], 2);
 addSet("combo-linux-guides", "combination", c => c.device === "linux" && isGuide(c), [
-  ["Linux i poradniki techniczne? Widzę, że czytasz dokumentację także poza pracą.", "Linux and technical guides? Looks like you read documentation outside work too."],
+  ["Linux i poradniki techniczne. Widzę, że lubisz mieć rzeczy pod kontrolą.","Linux and technical guides. Looks like you like to be in control."],
 ], 4);
 addSet("combo-city-rain", "combination", c => Boolean(c.city) && rain(c), [
-  ["{city}: według prognozy dzisiaj mokro. Ja na szczęście mieszkam w chmurze, która nie przecieka.", "{city}: rain is in the forecast. Luckily, my cloud doesn't leak."],
+  ["{place} prognozują deszcz. Ja na szczęście mieszkam w chmurze, która nie przecieka.","{place} rain's in the forecast. Luckily, my cloud doesn't leak."],
 ], 4);
 addSet("combo-city-snow", "combination", c => Boolean(c.city) && snow(c), [
-  ["{city}: prognoza zapowiada śnieg. Gdybym miał nos, przykleiłbym do niego płatek.", "{city}: snow is in the forecast. If I had a nose, I'd catch a snowflake on it."],
+  ["{place} prognoza zapowiada śnieg. Gdybym miał nos, złapałbym na niego płatek.","{place} snow's in the forecast. If I had a nose, I'd catch a snowflake on it."],
 ], 4);
 addSet("combo-city-heat", "combination", c => Boolean(c.city) && hasWeather(c) && temperature(c) >= 30, [
-  ["{city}: aż {temp}°C według prognozy? Na szczęście ja mam tylko wirtualne czoło do ocierania.", "{city}: {temp}°C in the forecast? Luckily, my forehead is purely virtual."],
+  ["{place} aż {temp}°C według prognozy?! Na szczęście mój pot jest tylko wirtualny.","{place} it's {temp}°C in the forecast?! Luckily, my sweat is purely virtual."],
 ], 4);
 addSet("combo-city-wind", "combination", c => Boolean(c.city) && windy(c), [
-  ["{city} i taki wiatr? Trzymaj się mocno — ja już trzymam się przycisku czatu.", "{city} and winds like that? Hold tight — I'm holding on to the chat button."],
+  ["{place} mocny wiatr. Dobrze, że jestem przypięty do przycisku czatu.","{place} strong winds. Good thing I'm attached to the chat button."],
 ], 4);
 
 export const COMPANION_SCENARIO_COUNT = rules.length;
