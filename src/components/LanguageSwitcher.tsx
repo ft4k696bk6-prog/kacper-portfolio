@@ -10,6 +10,7 @@ const navItems = [
   { href: "#services", pl: "Oferta", en: "Services" },
   { href: "#projects", pl: "Realizacje", en: "Projects" },
   { href: "#guides", pl: "Poradniki", en: "Guides" },
+  { href: "/narzedzia", pl: "Narzędzia", en: "Tools" },
 ] as const;
 
 export function LanguageSwitcher() {
@@ -84,7 +85,7 @@ export function LanguageSwitcher() {
   };
   useEffect(() => {
     if (pathname.startsWith("/en/") && lang !== "en") setLang("en");
-    if ((pathname.startsWith("/poradniki") || pathname.startsWith("/blog") || pathname.startsWith("/realizacje/") ||
+    if ((pathname.startsWith("/narzedzia") || pathname.startsWith("/poradniki") || pathname.startsWith("/blog") || pathname.startsWith("/realizacje/") ||
       ["/case-studies","/case-studies/re-energy-meta-ads","/reklamy-meta-ads-dla-firm",
        "/tworzenie-stron-internetowych","/crm-i-aplikacje-webowe","/marketing-i-reklamy","/rozwoj-biznesu"].includes(pathname)) &&
        lang !== "pl") setLang("pl");
@@ -97,7 +98,7 @@ export function LanguageSwitcher() {
     return () => window.removeEventListener("scroll", update);
   }, [pathname]);
   const cookies = <button type="button" aria-label={t.consent.settings} onClick={() => window.dispatchEvent(new Event("portfolio-open-cookie-settings"))} className="brand-outline grid h-10 w-10 place-items-center rounded-md"><Cookie size={17}/></button>;
-  const anchorHref = (hash: string) => (pathname === "/" ? hash : `/${hash}`);
+  const anchorHref = (hash: string) => hash.startsWith("/") ? hash : (pathname === "/" ? hash : `/${hash}`);
 
   const languageButton = (value: "pl" | "en", label: string) => (
     <button
