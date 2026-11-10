@@ -14,7 +14,7 @@ import {
   getCompanionContext,
   pickCompanionNudge,
   type CompanionNudge,
-  type CompanionCategory,
+  type CompanionTopic,
   type CompanionServerContext,
 } from "@/lib/companion-scenarios";
 
@@ -95,8 +95,9 @@ const HIDE_DURATION_MS = 48 * 60 * 60 * 1000;
 const HIDDEN_UNTIL_KEY = "ai-mascot-hidden-until";
 const NUDGE_OPT_OUT_KEY = "kb-companion-nudges-off";
 const NUDGE_HISTORY_KEY = "kb-companion-recent-v1";
-const NUDGE_LAST_CATEGORY_KEY = "kb-companion-last-category";
+const NUDGE_LAST_TOPIC_KEY = "kb-companion-last-topic-v2";
 const NUDGE_RETURNING_KEY = "kb-companion-returning";
+const NUDGE_RETURNING_SESSION_KEY = "kb-companion-returning-this-session";
 const NUDGE_SESSION_COUNT_KEY = "kb-companion-session-count";
 
 function createMessage(role: ChatMessage["role"], content: string): ChatMessage {
@@ -253,6 +254,13 @@ export function AIMascotAssistant() {
     const hiddenUntil = Number(localStorage.getItem(HIDDEN_UNTIL_KEY) || 0);
     setHidden(Number.isFinite(hiddenUntil) && hiddenUntil > Date.now());
     setNudgesDisabled(localStorage.getItem(NUDGE_OPT_OUT_KEY) === "1");
+    // The second message in the same session is not a "return visit".
+    if (sessionStorage.getItem(NUDGE_RETURNING_SESSION_KEY) === null) {
+      sessionStorage.setItem(
+        NUDGE_RETURNING_SESSION_KEY,
+        localStorage.getItem(NUDGE_RETURNING_KEY) === "1" ? "1" : "0",
+      );
+    }
     setNudgeSettingsLoaded(true);
     syncCookieBannerVisibility();
     setDictationSupported(Boolean(window.SpeechRecognition || window.webkitSpeechRecognition));
@@ -335,9 +343,9 @@ export function AIMascotAssistant() {
         } catch { return [] as string[]; }
       })() : [];
       const previous = consentAccepted
-        ? localStorage.getItem(NUDGE_LAST_CATEGORY_KEY) as CompanionCategory | null
+        ? localStorage.getItem(NUDGE_LAST_TOPIC_KEY) as CompanionTopic | null
         : null;
-      const returning = consentAccepted && localStorage.getItem(NUDGE_RETURNING_KEY) === "1";
+      const returning = consentAccepted && sessionStorage.getItem(NUDGE_RETURNING_SESSION_KEY) === "1";
       const language = pathname.startsWith("/en") ? "en" : lang;
       const context = getCompanionContext(language, pathname, consentAccepted ? serverContext : null, returning);
       const selected = pickCompanionNudge(context, history, previous ?? undefined);
@@ -347,7 +355,7 @@ export function AIMascotAssistant() {
       sessionStorage.setItem(NUDGE_SESSION_COUNT_KEY, String(alreadyShown + 1));
       if (consentAccepted) {
         localStorage.setItem(NUDGE_HISTORY_KEY, JSON.stringify([...history, selected.id].slice(-45)));
-        localStorage.setItem(NUDGE_LAST_CATEGORY_KEY, selected.category);
+        localStorage.setItem(NUDGE_LAST_TOPIC_KEY, selected.topic);
         localStorage.setItem(NUDGE_RETURNING_KEY, "1");
       }
     }
