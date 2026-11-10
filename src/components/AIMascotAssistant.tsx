@@ -361,12 +361,6 @@ export function AIMascotAssistant() {
     return () => window.clearTimeout(timer);
   }, [nudge]);
 
-  function dismissNudge() {
-    setNudge(null);
-    // Closing a message is not an invitation to display another one immediately.
-    sessionStorage.setItem(NUDGE_SESSION_COUNT_KEY, "2");
-  }
-
   function disableNudges() {
     localStorage.setItem(NUDGE_OPT_OUT_KEY, "1");
     setNudgesDisabled(true);
@@ -376,18 +370,6 @@ export function AIMascotAssistant() {
   function enableNudges() {
     localStorage.removeItem(NUDGE_OPT_OUT_KEY);
     setNudgesDisabled(false);
-  }
-
-  function handleNudgeAction() {
-    if (!nudge) return;
-    const intent = nudge.intent;
-    setNudge(null);
-    sessionStorage.setItem(NUDGE_SESSION_COUNT_KEY, "2");
-    if (intent === "audit") {
-      router.push(lang === "en" || pathname.startsWith("/en") ? "/en/tools" : "/narzedzia/audyt-strony");
-    } else {
-      openChat();
-    }
   }
 
   useEffect(() => {
@@ -989,48 +971,22 @@ export function AIMascotAssistant() {
                   <motion.div
                     role="status"
                     aria-live="polite"
-                    className="absolute bottom-[calc(100%+0.85rem)] right-0 z-40 w-[min(20.5rem,calc(100vw-1.25rem))] overflow-hidden rounded-2xl border border-white/15 bg-[#121317]/95 text-white shadow-[0_18px_60px_rgba(0,0,0,0.48)] backdrop-blur-xl"
+                    data-testid="ai-mascot-nudge"
+                    className="absolute bottom-[calc(100%+0.7rem)] right-0 z-40 w-[min(19rem,calc(100vw-1.25rem))] overflow-hidden rounded-2xl border border-white/15 bg-[#121317]/95 text-white shadow-[0_18px_48px_rgba(0,0,0,0.38)] backdrop-blur-xl"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 8 }}
                     transition={{ duration: 0.18 }}
                   >
-                    <div className="flex items-start gap-2 p-3">
-                      <button
-                        type="button"
-                        onClick={handleNudgeAction}
-                        className="min-w-0 flex-1 text-left"
-                        aria-label={lang === "pl" ? "Otwórz wiadomość asystenta" : "Open assistant message"}
-                      >
-                        <span className="mb-1 block text-[11px] font-semibold tracking-wide text-white/65">
-                          {lang === "pl" ? "Asystent AI · podpowiedź" : "AI Assistant · a thought"}
-                        </span>
-                        <span className="block text-[13px] leading-5 text-white/95">{nudge.text}</span>
-                        <span className="mt-2 block text-[11px] font-medium text-white/65">
-                          {nudge.intent === "audit"
-                            ? (lang === "pl" ? "Sprawdź stronę →" : "Check your website →")
-                            : (lang === "pl" ? "Odpowiedz →" : "Reply →")}
-                        </span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={dismissNudge}
-                        aria-label={lang === "pl" ? "Zamknij wiadomość" : "Dismiss message"}
-                        className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-white/55 transition hover:bg-white/10 hover:text-white"
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                    </div>
-                    <div className="flex items-center justify-between gap-2 border-t border-white/10 px-3 py-2">
-                      {nudge.weatherCredit ? (
-                        <a href="https://www.met.no/en" target="_blank" rel="noopener noreferrer" className="text-[10px] text-white/55 underline-offset-2 hover:underline">
-                          {lang === "pl" ? "Prognoza: MET Norway" : "Forecast: MET Norway"}
-                        </a>
-                      ) : <span />}
+                    <p className="px-3.5 pb-2 pt-3.5 text-[13px] leading-[1.55] text-white/95">
+                      {nudge.text}
+                    </p>
+                    <div className="flex justify-end px-3.5 pb-2.5">
                       <button
                         type="button"
                         onClick={disableNudges}
-                        className="text-right text-[10px] text-white/55 underline-offset-2 hover:text-white hover:underline"
+                        data-testid="ai-mascot-nudge-opt-out"
+                        className="text-[11px] text-white/65 underline-offset-2 transition hover:text-white hover:underline focus-visible:underline"
                       >
                         {lang === "pl" ? "Nie pokazuj więcej" : "Don't show again"}
                       </button>
