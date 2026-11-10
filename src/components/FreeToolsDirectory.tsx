@@ -24,6 +24,12 @@ export function FreeToolsDirectory(){
    </label>
    <span className="text-sm text-white/50">{listed.length} z {toolboxItems.length} narzędzi</span>
   </div>
+  <Link href="/narzedzia/audyt-strony" className="group mt-7 flex flex-col gap-5 rounded-2xl border border-white/30 bg-gradient-to-br from-[#252525] to-[#101010] p-6 transition-colors hover:border-white/60 md:flex-row md:items-center md:justify-between md:p-8">
+   <div className="max-w-2xl"><p className="text-[10px] uppercase tracking-[.2em] text-white/55">Główne narzędzie / wszystko w jednym</p>
+    <h2 className="mt-3 text-2xl font-medium leading-tight tracking-tight md:text-3xl">Darmowy kompleksowy audyt strony WWW</h2>
+    <p className="mt-3 text-sm leading-7 text-white/65">Wpisz jeden adres. Sprawdź SEO, indeksowanie, obrazy, SSL, DNS, Google Tag i Meta Pixel na próbce do 7 podstron. Otrzymaj jedną listę zaleceń.</p></div>
+   <span className="brand-action inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-medium">Sprawdź stronę za darmo <ArrowUpRight size={17}/></span>
+  </Link>
   <div className="mt-6 flex flex-wrap gap-2" aria-label="Kategorie narzędzi">
    {toolboxCategories.map(category=>{
     const Icon=icons[category];
