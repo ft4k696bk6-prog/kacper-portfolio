@@ -136,11 +136,11 @@ export function HomeStudio() {
       <p className={styles.eyebrow}>{lang==="pl"?"Darmowe narzędzia":"Free toolbox"}</p>
       <div className="flex flex-wrap items-end justify-between gap-5">
         <div><h2>{lang==="pl"?"Sprawdź stronę i reklamy. Za darmo.":"Test your website and ads. For free."}</h2>
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65">{lang==="pl"?"45 praktycznych narzędzi: audyt SEO, diagnostyka Meta Ads, kalkulatory ROAS i CRM oraz testy techniczne. Bez konta i bez podawania maila.":"45 practical tools: SEO checks, Meta Ads diagnostics, marketing and CRM calculators. No sign-up required."}</p></div>
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65">{lang==="pl"?"Wpisz jeden adres i sprawdź SEO, obrazy, SSL, DNS i analitykę w jednym audycie. Dodatkowo 44 szczegółowe narzędzia do reklam, CRM i programowania — bez konta.":"45 practical tools: SEO checks, Meta Ads diagnostics, marketing and CRM calculators. No sign-up required."}</p></div>
         <Link href="/narzedzia" className="inline-flex items-center gap-2 text-sm font-medium underline underline-offset-4">{lang==="pl"?"Wszystkie narzędzia":"Browse tools"} <ArrowRight size={16}/></Link>
       </div>
       <div className="mt-8 grid gap-3 md:grid-cols-3">
-        {[["Darmowy audyt strony WWW","Sprawdź publiczny HTML, SEO i błędy techniczne.","audyt-strony"],["Darmowa diagnostyka Meta Ads","Rozwiąż typowe błędy kampanii i zestawów.","diagnostyka-meta-ads"],["Darmowy kalkulator ROAS","Sprawdź przychód z każdej złotówki reklamy.","kalkulator-roas"]].map(([name,desc,slug])=><Link key={slug} href={"/narzedzia/"+slug} className="group rounded-xl border border-white/15 bg-[#111111] p-6 transition-colors hover:border-white/50">
+        {[["Kompleksowy darmowy audyt WWW","SEO, SSL, DNS, analityka i podstrony w jednym raporcie.","audyt-strony"],["Darmowa diagnostyka Meta Ads","Rozwiąż typowe błędy kampanii i zestawów.","diagnostyka-meta-ads"],["Darmowy kalkulator ROAS","Sprawdź przychód z każdej złotówki reklamy.","kalkulator-roas"]].map(([name,desc,slug])=><Link key={slug} href={"/narzedzia/"+slug} className="group rounded-xl border border-white/15 bg-[#111111] p-6 transition-colors hover:border-white/50">
          <span className="text-[10px] uppercase tracking-[.16em] text-white/50">TOOLBOX / FREE</span><h3 className="mt-5 text-xl">{name}</h3><p className="mt-3 text-sm leading-7 text-white/65">{desc}</p><span className="mt-5 inline-flex items-center gap-2 text-sm text-white/80">Sprawdź <ArrowRight size={16}/></span>
         </Link>)}
       </div>

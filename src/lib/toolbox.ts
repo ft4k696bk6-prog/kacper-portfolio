@@ -2,13 +2,13 @@ export type ToolboxItem = { slug:string; title:string; description:string; categ
 export const toolboxItems: ToolboxItem[] =  [
   {
     "slug": "audyt-strony",
-    "title": "Darmowy audyt strony internetowej",
-    "description": "Sprawdź podstawowe błędy strony WWW: dostępność, meta tagi, nagłówki, linki i elementy SEO.",
+    "title": "Darmowy kompleksowy audyt strony internetowej",
+    "description": "Wpisz jeden adres i sprawdź do 7 publicznych podstron: SEO, indeksowanie, meta tagi, obrazy, TLS, DNS, analitykę i nagłówki bezpieczeństwa. Jeden zbiorczy raport.",
     "category": "WWW i SEO",
     "mode": "site",
-    "hint": "Wpisz adres strony. Skan sprawdzi publiczny kod HTML i pokaże możliwe poprawki.",
-    "question": "Czy audyt ocenia całą witrynę?",
-    "answer": "Nie. Sprawdzana jest podana podstrona i podstawowe elementy jej publicznego HTML. Nie zastępuje audytu technicznego całego serwisu."
+    "hint": "Zbiorczy raport analizuje do 7 podstron tej samej domeny oraz publiczne ustawienia robots.txt, sitemap.xml, SSL i poczty. Podpowiada konkretne poprawki, bez przełączania się pomiędzy osobnymi testerami.",
+    "question": "Czy jeden audyt zastąpi sprawdzanie wszystkich podstron?",
+    "answer": "W jednym uruchomieniu wykonujemy wiele kontroli na maksymalnie 7 podstronach. To praktyczna analiza próbki, nie pełny crawl całej witryny ani pomiar Core Web Vitals. Szczegółowe testery pozostają dostępne osobno."
   },
   {
     "slug": "audyt-seo",
