@@ -6,9 +6,19 @@ import { connect as tlsConnect } from "node:tls";
 import { isIP } from "node:net";
 
 export const runtime = "nodejs";
-export const maxDuration = 20;
+export const maxDuration = 45;
 const MAX_HTML = 900_000;
 const visits = new Map<string,{hits:number; expires:number}>();
+const deepVisits = new Map<string,{hits:number; expires:number}>();
+function fullAuditAllowed(req:NextRequest) {
+  const ip=req.headers.get("x-real-ip")||req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()||"anonymous";
+  const now=Date.now();
+  if(deepVisits.size>1200)for(const [key,value] of deepVisits)if(value.expires<now)deepVisits.delete(key);
+  const current=deepVisits.get(ip);
+  if(!current||current.expires<now){deepVisits.set(ip,{hits:1,expires:now+300_000});return true;}
+  current.hits++;
+  return current.hits<=3;
+}
 
 function limited(req:NextRequest) {
   const ip = req.headers.get("x-real-ip") || req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "anonymous";
@@ -143,12 +153,183 @@ async function checkDns(domain:string){
     ...(!dmarc.some(v=>v.toUpperCase().startsWith("V=DMARC1"))?["Brak rekordu DMARC."]:[])
   ]};
 }
+
+type AuditSeverity="critical"|"warning"|"info";
+type AuditCategory="SEO"|"Wydajność"|"Dostępność"|"Bezpieczeństwo"|"Analityka"|"Indeksowanie"|"Domena";
+type AuditIssue={id:string;severity:AuditSeverity;category:AuditCategory;title:string;detail:string;fix:string;page?:string};
+type ScannedPage={url:string;status:number;ttfb:number;sizeKb:number;html:ReturnType<typeof inspectHtml>};
+const MAX_CRAWLED_PAGES=7;
+
+function gatherInternalLinks(html:string,pageUrl:string,hostname:string):string[]{
+  const candidates:string[]=[];
+  for(const match of html.matchAll(/<a\b[^>]*>/gi)){
+    const href=attribute(match[0],"href");
+    if(!href||href.startsWith("#")||/^(mailto|tel|javascript|data):/i.test(href))continue;
+    try{
+      const target=new URL(href,pageUrl);
+      if(!["https:","http:"].includes(target.protocol)||target.hostname!==hostname||target.port||target.username||target.password)continue;
+      target.hash="";target.search="";
+      if(/\.(?:pdf|xml|json|jpg|jpeg|png|webp|gif|svg|webm|mp4|zip|css|js|txt|ico|woff2?)$/i.test(target.pathname))continue;
+      candidates.push(target.href);
+      if(candidates.length>=90)break;
+    }catch{}
+  }
+  return [...new Set(candidates)];
+}
+function sitemapLocations(xml:string,hostname:string):string[]{
+  const all:string[]=[];
+  if(!/<(?:urlset|sitemapindex)(?:\s|>)/i.test(xml))return all;
+  for(const match of xml.matchAll(/<loc\b[^>]*>([\s\S]*?)<\/loc>/gi)){
+    if(all.length>=250)break;
+    const decoded=match[1].replace(/&amp;/gi,"&").replace(/&#38;/g,"&").trim();
+    try{
+      const target=new URL(decoded);
+      if(target.hostname!==hostname||!["https:","http:"].includes(target.protocol)||target.port||target.username||target.password)continue;
+      target.hash="";target.search="";
+      if(/\.(?:xml|gz|pdf|jpg|png|zip|js|css)$/i.test(target.pathname))continue;
+      all.push(target.href);
+    }catch{}
+  }
+  return [...new Set(all)];
+}
+function issueList(pages:ScannedPage[], extras:{
+  tls?:{authorized:boolean;daysRemaining:number|null;authorizationError?:string};
+  dns?:{spf:string[];dmarc:string[]};
+  robots:boolean;sitemap:boolean;
+}):AuditIssue[]{
+  const out:AuditIssue[]=[];
+  const append=(severity:AuditSeverity,category:AuditCategory,id:string,title:string,detail:string,fix:string,page?:string)=>{
+    out.push({severity,category,id,title,detail,fix,page});
+  };
+  for(const page of pages){
+    const h=page.html;
+    const tag=page.url;
+    if(page.status>=400)append("critical","Dostępność","http-"+tag,"Błąd odpowiedzi HTTP",\`Serwer zwrócił status \${page.status}.\`,"Sprawdź, czy podstrona istnieje i nie blokuje żądania.",tag);
+    if(!h.title)append("critical","SEO","title-"+tag,"Brakuje znacznika title","W kodzie HTML nie znaleziono tytułu podstrony.","Dodaj unikalny, opisowy <title>.",tag);
+    else if(h.title.length>70)append("warning","SEO","titlelength-"+tag,"Długi tytuł strony",\`Title ma \${h.title.length} znaków.\`,"Rozważ krótszy tytuł zachowujący główny temat podstrony.",tag);
+    if(!h.description)append("warning","SEO","desc-"+tag,"Brakuje meta description","Nie wykryto opisu strony.","Dodaj unikalny opis zgodny z treścią podstrony.",tag);
+    if(!h.headings.some(x=>x.level===1))append("warning","SEO","h1-"+tag,"Brakuje H1","W pobranym HTML nie znaleziono nagłówka H1.","Uzupełnij czytelny nagłówek główny.",tag);
+    if(h.headings.filter(x=>x.level===1).length>1)append("info","SEO","h1multi-"+tag,"Wiele nagłówków H1",\`Wykryto \${h.headings.filter(x=>x.level===1).length} nagłówki H1.\`,"Sprawdź, czy hierarchia nagłówków jest logiczna.",tag);
+    if(!h.canonical)append("warning","Indeksowanie","canonical-"+tag,"Brak canonical","Nie wykryto linku canonical.","Wskaż kanoniczny adres, jeśli jest to uzasadnione strukturą witryny.",tag);
+    if(/\bnoindex\b/i.test(h.robots))append("critical","Indeksowanie","noindex-"+tag,"Dyrektywa noindex",\`Meta robots zawiera: \${h.robots}.\`,"Jeśli podstrona ma być indeksowana, zweryfikuj dyrektywę i ustawienia CMS.",tag);
+    if(!h.lang)append("warning","Dostępność","lang-"+tag,"Brak języka dokumentu","Tag HTML nie zawiera atrybutu lang.","Dodaj właściwy język, np. lang=\\"pl\\".",tag);
+    if(!h.hasViewport)append("warning","Dostępność","viewport-"+tag,"Brak viewport","Brak meta viewport w HTML.","Dodaj poprawny viewport na urządzenia mobilne.",tag);
+    if(h.imagesMissingAlt>0)append("warning","Dostępność","alt-"+tag,"Obrazy bez atrybutu alt",\`Wykryto \${h.imagesMissingAlt} obrazów bez alt na \${h.imageCount} elementów img.\`,"Dodaj opisy do obrazów informacyjnych lub pusty alt do dekoracyjnych.",tag);
+    if(page.ttfb>800)append("warning","Wydajność","ttfb-"+tag,"Wysoki TTFB pojedynczego żądania",\`Czas pierwszej odpowiedzi wyniósł \${page.ttfb} ms.\`,"Sprawdź cache, backend i czas odpowiedzi serwera; potwierdź wynik powtarzanym testem.",tag);
+  }
+  const first=pages[0]?.html;
+  if(first&&!first.og.image)append("warning","SEO","og-image","Brak og:image na stronie startowej","Nie wykryto grafiki Open Graph.","Dodaj obraz do udostępniania linku.");
+  if(first&&!first.tracking.gtm&&!first.tracking.ga4)append("info","Analityka","tags","Nie wykryto GTM ani GA4 w HTML","Tagi doładowywane przez JavaScript lub zgody mogą nie być widoczne.","Sprawdź instalację analityki w trybie testowym przeglądarki.");
+  if(!extras.robots)append("info","Indeksowanie","robots","Nie potwierdzono robots.txt","Nie udało się pobrać publicznego robots.txt ze statusem 2xx.","Sprawdź ścieżkę /robots.txt i reguły dla crawlerów.");
+  if(!extras.sitemap)append("warning","Indeksowanie","sitemap","Nie znaleziono poprawnej mapy sitemap.xml","Nie wykryto mapy pod adresem /sitemap.xml.","Sprawdź czy mapa istnieje i zgłoś ją w Search Console.");
+  if(extras.tls){
+    if(!extras.tls.authorized)append("critical","Bezpieczeństwo","tls","Nieprawidłowa weryfikacja certyfikatu TLS",extras.tls.authorizationError||"Certyfikat nie został zweryfikowany.","Sprawdź konfigurację certyfikatu i łańcuch zaufania.");
+    else if(typeof extras.tls.daysRemaining==="number"&&extras.tls.daysRemaining<21)append("warning","Bezpieczeństwo","tls-expiring","Certyfikat wkrótce wygaśnie",\`Pozostało \${extras.tls.daysRemaining} dni.\`,"Skonfiguruj automatyczne odnawianie certyfikatu.");
+  }
+  if(extras.dns){
+    if(!extras.dns.spf.length)append("warning","Domena","spf","Nie wykryto SPF","Brak publicznego rekordu SPF dla domeny.","Sprawdź ustawienia poczty i opublikuj prawidłowy SPF.");
+    if(!extras.dns.dmarc.length)append("warning","Domena","dmarc","Nie wykryto DMARC","Brak publicznego rekordu DMARC.","Skonfiguruj DMARC zgodnie z dostawcą poczty.");
+  }
+  const names=new Map<string,string>();
+  for(const p of pages){
+    if(p.html.title){
+      const other=names.get(p.html.title.toLowerCase().trim());
+      if(other&&other!==p.url)append("warning","SEO","duplicate-title-"+p.url,"Powtarzający się title",\`Ten sam title występuje też na \${other}.\`,"Zadbaj o unikalny tytuł każdej podstrony.",p.url);
+      else names.set(p.html.title.toLowerCase().trim(),p.url);
+    }
+  }
+  return out.slice(0,110);
+}
+async function completeAudit(url:URL){
+  const initial=await fetchPublic(url);
+  if(initial.status>=400)throw new Error(\`Podany adres zwrócił HTTP \${initial.status}. Nie można rozpocząć pełnego audytu.\`);
+  if(!/<html\b/i.test(initial.body))throw new Error("Adres nie zwrócił dokumentu HTML.");
+  const final=new URL(initial.url);
+  const root=final.origin;
+  const hostname=final.hostname;
+  const [robotsR,sitemapR,tlsR,dnsR]=await Promise.allSettled([
+    fetchPublic(new URL("/robots.txt",root)),
+    fetchPublic(new URL("/sitemap.xml",root)),
+    checkTls(hostname),
+    checkDns(hostname)
+  ]);
+  const robots=robotsR.status==="fulfilled"&&robotsR.value.status>=200&&robotsR.value.status<300&&
+    /(?:user-agent|disallow|allow):/i.test(robotsR.value.body)?robotsR.value.body.slice(0,50000):"";
+  const sitemap=sitemapR.status==="fulfilled"&&sitemapR.value.status>=200&&sitemapR.value.status<300&&
+    /<(?:urlset|sitemapindex)(?:\s|>)/i.test(sitemapR.value.body)?sitemapR.value.body:"";
+  // We do not bypass an explicit site-wide User-agent:* Disallow:/.
+  const generalRules=robots.match(/(?:^|\n)\s*User-agent:\s*\*[\s\S]*?(?=\n\s*User-agent:|$)/i)?.[0]||"";
+  const disallowAll=/^\s*Disallow:\s*\/\s*(?:#.*)?$/im.test(generalRules);
+  const links=gatherInternalLinks(initial.body,initial.url,hostname);
+  const candidates=[new URL("/",root).href,...sitemapLocations(sitemap,hostname),...links]
+    .filter((value,index,array)=>array.indexOf(value)===index&&value!==initial.url)
+    .slice(0,MAX_CRAWLED_PAGES-1);
+  const pageData:ScannedPage[]=[{
+    url:initial.url,status:initial.status,ttfb:initial.ttfb,sizeKb:Math.round(initial.bytes/1024*10)/10,
+    html:inspectHtml(initial.body)
+  }];
+  const failed:{url:string;reason:string}[]=[];
+  if(!disallowAll){
+    // Small batches avoid placing excessive concurrent load on analyzed websites.
+    for(let i=0;i<candidates.length;i+=3){
+      const done=await Promise.allSettled(candidates.slice(i,i+3).map(u=>fetchPublic(new URL(u))));
+      done.forEach((out,j)=>{
+        const target=candidates[i+j];
+        if(out.status==="fulfilled"){
+          const response=out.value;
+          if(new URL(response.url).hostname!==hostname){failed.push({url:target,reason:"Przekierowano poza badaną domenę."});return;}
+          if(!/<html\b/i.test(response.body)){failed.push({url:target,reason:"Nie zwrócono HTML."});return;}
+          pageData.push({url:response.url,status:response.status,ttfb:response.ttfb,
+            sizeKb:Math.round(response.bytes/1024*10)/10,html:inspectHtml(response.body)});
+        }else{failed.push({url:target,reason:out.reason instanceof Error?out.reason.message:"Błąd pobierania"});}
+      });
+    }
+  }
+  const tls=tlsR.status==="fulfilled"?tlsR.value as {authorized:boolean;daysRemaining:number|null;authorizationError?:string;validTo:string;issuer:string;protocol:string}:null;
+  const dns=dnsR.status==="fulfilled"?dnsR.value:null;
+  const issues=issueList(pageData,{tls:tls||undefined,dns:dns||undefined,robots:Boolean(robots),sitemap:Boolean(sitemap)});
+  const main=pageData[0].html;
+  return {
+    requestedUrl:url.toString(),url:initial.url,host:hostname,analyzedAt:new Date().toISOString(),
+    pages:pageData,failedPages:failed,requestedPageLimit:MAX_CRAWLED_PAGES,
+    issues,summary:{
+      critical:issues.filter(v=>v.severity==="critical").length,
+      warning:issues.filter(v=>v.severity==="warning").length,
+      info:issues.filter(v=>v.severity==="info").length,
+      scanned:pageData.length,foundPages:candidates.length+1,
+      totalImages:pageData.reduce((a,p)=>a+p.html.imageCount,0),
+      imagesMissingAlt:pageData.reduce((a,p)=>a+p.html.imagesMissingAlt,0),
+      meanTTFB:Math.round(pageData.reduce((a,p)=>a+p.ttfb,0)/pageData.length)
+    },
+    technical:{
+      robots:{present:Boolean(robots),url:root+"/robots.txt",sample:robots.slice(0,1800),crawlingRestricted:disallowAll},
+      sitemap:{present:Boolean(sitemap),url:root+"/sitemap.xml",discoveredUrls:sitemapLocations(sitemap,hostname).length,
+        isIndex:/<sitemapindex(?:\s|>)/i.test(sitemap)},
+      securityHeaders:initial.headers,
+      redirects:initial.redirects,
+      tls, dns,
+      tags:{metaPixel:main.tracking.metaPixel,gtm:main.tracking.gtm,ga4:main.tracking.ga4}
+    },
+    limitations:[
+      "Automatycznie sprawdzono maksymalnie 7 publicznych podstron tej samej domeny; nie jest to kompletny crawl witryny.",
+      "Audyt opiera się na HTML zwracanym przez serwer, nie wykonuje JavaScriptu w przeglądarce.",
+      "TTFB to pojedynczy pomiar serwerowy, nie wynik Google PageSpeed ani Core Web Vitals.",
+      "Nie sprawdzono pozycji SEO, indeksacji w Google, polityki cookies, faktycznej poprawności Pixel/CAPI ani wszystkich kryteriów WCAG."
+    ]
+  };
+}
+
 export async function POST(req:NextRequest){
   if(limited(req))return NextResponse.json({error:"Limit 12 analiz na minutę. Spróbuj ponownie później."},{status:429});
   try{
     const body=await req.json() as {url?:unknown;mode?:unknown};
-    if(typeof body.url!=="string"||!["site","seo","meta","headings","og","ai","tls","dns","ttfb","redirects","headers","pixel","gtm","images"].includes(String(body.mode)))throw new Error("Nieprawidłowe dane.");
+    if(typeof body.url!=="string"||!["site","seo","meta","headings","og","ai","tls","dns","ttfb","redirects","headers","pixel","gtm","images","full"].includes(String(body.mode)))throw new Error("Nieprawidłowe dane.");
     const url=parseTarget(body.url);
+    if(body.mode==="full"){
+      if(!fullAuditAllowed(req))return NextResponse.json({error:"Limit pełnych audytów: 3 na 5 minut. Spróbuj ponownie później."},{status:429});
+      const result=await completeAudit(url);
+      return NextResponse.json(result,{headers:{"cache-control":"no-store"}});
+    }
     if(body.mode==="tls")return NextResponse.json({host:url.hostname,tls:await checkTls(url.hostname)});
     if(body.mode==="dns")return NextResponse.json({host:url.hostname,dns:await checkDns(url.hostname)});
     const page=await fetchPublic(url);
