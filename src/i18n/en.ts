@@ -143,7 +143,7 @@ export const en = {
     personaLabel: "AI Assistant",
     greeting: "Ask about projects and collaboration.",
     initialMessage:
-      "Hi! Tell me what you would like to build or improve — a website, CRM, AI assistant, marketing or a business process. I can outline what Kacper offers and how to book a call.",
+      "Hi! I can run a free website audit, help you find the right tool, or explain Kacper’s websites, CRM and marketing services. What can I help with?",
     placeholder: "Describe your project or ask a question...",
     placeholderDictation: "Describe or dictate your project...",
     inputLabel: "Message for the AI assistant",

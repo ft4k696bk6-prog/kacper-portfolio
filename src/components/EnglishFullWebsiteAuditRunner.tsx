@@ -1,5 +1,5 @@
 "use client";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { ArrowRight, ClipboardCopy, Download, LoaderCircle, ExternalLink, Globe2 } from "lucide-react";
 import { englishToolPath } from "@/lib/toolbox-en";
@@ -50,6 +50,10 @@ const limitations=[
 function download(data:string,name:string,type:string){const u=URL.createObjectURL(new Blob([data],{type}));const link=document.createElement("a");link.href=u;link.download=name;link.click();URL.revokeObjectURL(u);}
 export function EnglishFullWebsiteAuditRunner() {
  const [url,setUrl]=useState("");
+ useEffect(()=>{
+  const fromQuery=new URLSearchParams(window.location.search).get("url");
+  if(fromQuery&&fromQuery.length<=2048&&/^https?:\/\//i.test(fromQuery))setUrl(fromQuery);
+ },[]);
  const [busy,setBusy]=useState(false);
  const [error,setError]=useState("");
  const [audit,setAudit]=useState<Audit|null>(null);
