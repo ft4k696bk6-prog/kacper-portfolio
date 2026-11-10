@@ -3,13 +3,15 @@
 import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { usePathname, useRouter } from "next/navigation";
-import { CalendarDays, Eye, Loader2, MessageCircle, Mic, MicOff, RotateCcw, Send, X } from "lucide-react";
+import { CalendarDays, Eye, Loader2, Mic, MicOff, RotateCcw, Send, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { DEFAULT_BOOKING_TIME_ZONE, formatSlotDate } from "@/lib/booking";
 import type { AvailableBookingDay } from "@/lib/calcom";
 import { COOKIE_CONSENT_EVENT, COOKIE_CONSENT_KEY, type CookieConsentState } from "@/lib/preferences";
 import { localizedToolPath } from "@/lib/toolbox-en";
+import { BerniCompanion } from "@/components/BerniCompanion";
+import { BerniRobot } from "@/components/BerniRobot";
 import {
   getCompanionContext,
   pickCompanionNudge,
@@ -246,8 +248,8 @@ export function AIMascotAssistant() {
     ? "bottom-[calc(100%+0.7rem)] right-0 w-[min(21.5rem,calc(100vw-1.25rem))]"
     : "bottom-[calc(100%+0.9rem)] right-0 w-[24rem]";
   const companionPanelSizeClass = isCompactViewport
-    ? "h-[min(36rem,calc(100dvh-8.5rem))]"
-    : "h-[min(36rem,calc(100dvh-7rem))]";
+    ? "h-[min(36rem,calc(100dvh-9.5rem))]"
+    : "h-[min(36rem,calc(100dvh-10rem))]";
   useEffect(() => {
     setMounted(true);
     const hiddenUntil = Number(localStorage.getItem(HIDDEN_UNTIL_KEY) || 0);
@@ -797,7 +799,7 @@ export function AIMascotAssistant() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 16 }}
           >
-            <MessageCircle className="h-4 w-4" />
+            <span className="inline-block h-7 w-7"><BerniRobot mood="sleeping" lang={lang} compact /></span>
             {t.aiMascot.restoreLabel}
           </motion.button>
         ) : null}
@@ -826,7 +828,10 @@ export function AIMascotAssistant() {
                   >
                     <div className="flex items-start justify-between gap-3 border-b border-white/[0.07] px-4 py-3">
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-medium text-white">{t.aiMascot.chatTitle}</p>
+                        <div className="flex items-center gap-2">
+                          <span className="inline-block h-8 w-8 shrink-0"><BerniRobot mood={loading ? "thinking" : input.trim() ? "typing" : "happy"} lang={lang} compact /></span>
+                          <p className="truncate text-sm font-medium text-white">Berni · {lang === "pl" ? "Asystent AI" : "AI assistant"}</p>
+                        </div>
                       </div>
                       <div className="flex shrink-0 items-center gap-1">
                         <button
@@ -1039,21 +1044,16 @@ export function AIMascotAssistant() {
                 ) : null}
               </AnimatePresence>
 
-              <motion.button
-                type="button"
-                onClick={() => openChat()}
-                aria-label={t.aiMascot.openLabel}
-                data-testid="ai-mascot-open"
-                data-mood={behavior.mood}
-                className="brand-outline group relative grid h-12 w-12 place-items-center rounded-full outline-none transition focus-visible:ring-2 focus-visible:ring-[var(--brand-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-black md:h-14 md:w-14"
-              >
-                <span className="brand-action absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full border border-[#111111]  px-1 text-[9px] font-semibold tracking-wide text-black">
-                  AI
-                </span>
-                <span className="relative z-10 grid h-8 w-8 place-items-center md:h-9 md:w-9">
-                  <MessageCircle className="h-4 w-4 md:h-5 md:w-5" />
-                </span>
-              </motion.button>
+              <BerniCompanion
+                lang={lang}
+                mood={behavior.mood}
+                input={input}
+                loading={loading}
+                listening={listening}
+                open={open}
+                lastReply={messages[messages.length - 1]?.role === "assistant" ? messages[messages.length - 1].content : ""}
+                onOpen={() => openChat()}
+              />
             </div>
           </motion.div>
         ) : null}
