@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, ArrowRight, Github, Linkedin, BookOpen, BrainCircuit, Newspaper } from "lucide-react";
-import { englishToolPath, localizedToolboxPath, localizedToolPath } from "@/lib/toolbox-en";
+import { localizedToolboxPath, localizedToolPath } from "@/lib/toolbox-en";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { homepageCopy } from "@/content/homepage-copy";
 import { ClientMarquee } from "./ClientMarquee";
