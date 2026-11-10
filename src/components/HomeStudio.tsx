@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, ArrowRight, Github, Linkedin, BookOpen, BrainCircuit, Newspaper } from "lucide-react";
@@ -17,7 +19,24 @@ import styles from "./HomeStudio.module.css";
 export function HomeStudio() {
   const { lang, t } = useLanguage();
   const c = homepageCopy[lang];
+  // Restore the normal hero motion after the one-time, non-blocking opening sequence.
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      document.documentElement.dataset.homeIntro = "skip";
+    }, 1250);
+    return () => {
+      window.clearTimeout(timer);
+      document.documentElement.dataset.homeIntro = "skip";
+    };
+  }, []);
   return <main className={`${styles.studio} portfolio-content`}>
+    <div className={styles.introOverlay} aria-hidden="true">
+      <div className={styles.introIdentity}>
+        <Image src="/favicon-silver.svg" alt="" width={68} height={68} unoptimized />
+        <span>BERNECKI.DEV</span>
+        <i />
+      </div>
+    </div>
     <section id="home" className={[styles.hero, "hero-night"].join(" ")} aria-labelledby="hero-title">
       <div className={styles.heroCopy}>
         <p className={styles.eyebrow}>{c.signature}</p>

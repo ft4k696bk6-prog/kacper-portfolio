@@ -239,3 +239,76 @@
 @media(min-width:1024px){
  .tileStarCars{top:13%}
 }
+
+
+/* Home-only opening: a silver KB mark and a short curtain reveal.
+   CSS runs without waiting for hydration; no loading screen or scroll lock.
+   The session gate suppresses repeats, while reduced-motion always skips it. */
+.introOverlay{display:none;position:fixed;inset:0;z-index:200;pointer-events:none;background:#080808;align-items:center;justify-content:center;overflow:hidden}
+.introIdentity{display:flex;flex-direction:column;align-items:center;gap:20px;transform:translateY(-1vh)}
+.introIdentity img{width:68px;height:68px;display:block}
+.introIdentity span{font-size:11px;letter-spacing:.3em;font-weight:550;color:#e5e5e5;padding-left:.3em}
+.introIdentity i{display:block;width:76px;height:1px;background:linear-gradient(90deg,transparent,#e2e2e2,transparent);transform-origin:center}
+@media(prefers-reduced-motion:no-preference){
+ :global(html:not([data-home-intro="skip"])) .introOverlay{
+  display:flex;animation:studioIntroCurtain .86s cubic-bezier(.76,0,.22,1) both
+ }
+ :global(html:not([data-home-intro="skip"])) .introIdentity{
+  animation:studioIntroIdentity .65s ease-in-out both
+ }
+ :global(html:not([data-home-intro="skip"])) .introIdentity i{
+  animation:studioIntroLine .6s cubic-bezier(.2,.7,.2,1) both
+ }
+ :global(html:not([data-home-intro="skip"])) .heroCopy .eyebrow{
+  animation:studioEntrance .58s cubic-bezier(.2,.8,.2,1) .49s both
+ }
+ :global(html:not([data-home-intro="skip"])) .heroCopy h1{
+  animation:studioEntrance .66s cubic-bezier(.2,.8,.2,1) .55s both
+ }
+ :global(html:not([data-home-intro="skip"])) .heroCopy .intro{
+  animation:studioEntrance .62s cubic-bezier(.2,.8,.2,1) .62s both
+ }
+ :global(html:not([data-home-intro="skip"])) .heroCopy .actions{
+  animation:studioEntrance .62s cubic-bezier(.2,.8,.2,1) .68s both
+ }
+ :global(html:not([data-home-intro="skip"])) .portrait{
+  animation:studioPortraitEntrance .76s cubic-bezier(.2,.8,.2,1) .41s both
+ }
+ :global(html:not([data-home-intro="skip"])) .tileStarCars{
+  animation:studioTileEntrance .65s cubic-bezier(.2,.8,.2,1) .59s both,heroDriftStar 11s ease-in-out infinite
+ }
+ :global(html:not([data-home-intro="skip"])) .tileIsto{
+  animation:studioTileEntrance .65s cubic-bezier(.2,.8,.2,1) .69s both,heroDriftIsto 13s ease-in-out -4s infinite
+ }
+ :global(html:not([data-home-intro="skip"])) .tileCrm{
+  animation:studioTileEntrance .67s cubic-bezier(.2,.8,.2,1) .78s both
+ }
+}
+@keyframes studioIntroCurtain{
+ 0%,23%{clip-path:inset(0 0 0 0);visibility:visible}
+ 99%{clip-path:inset(0 0 100% 0);visibility:visible}
+ 100%{clip-path:inset(0 0 100% 0);visibility:hidden}
+}
+@keyframes studioIntroIdentity{
+ 0%{opacity:0;transform:translateY(14px) scale(.96)}
+ 35%,73%{opacity:1;transform:translateY(-1vh) scale(1)}
+ 100%{opacity:0;transform:translateY(-15px) scale(1.02)}
+}
+@keyframes studioIntroLine{
+ from{opacity:0;transform:scaleX(.15)}
+ 45%{opacity:1;transform:scaleX(1)}
+ to{opacity:0;transform:scaleX(1.35)}
+}
+@keyframes studioEntrance{
+ from{opacity:0;transform:translateY(19px);filter:blur(4px)}
+ to{opacity:1;transform:translateY(0);filter:blur(0)}
+}
+@keyframes studioPortraitEntrance{
+ from{opacity:0;transform:translateY(27px);filter:blur(3px)}
+ to{opacity:1;transform:translateY(0);filter:blur(0)}
+}
+@keyframes studioTileEntrance{
+ from{opacity:0;scale:.94;filter:blur(5px)}
+ to{opacity:1;scale:1;filter:blur(0)}
+}
+@media(prefers-reduced-motion:reduce){.introOverlay{display:none!important}}
