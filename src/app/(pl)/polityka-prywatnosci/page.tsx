@@ -27,6 +27,8 @@ const sections=[
  ]},
  {title:"5. Kalendarz i asystent AI",paragraphs:[
   "Podczas rezerwacji spotkania dane niezbędne do umówienia terminu są przekazywane do usługi kalendarzowej obsługującej rezerwacje. Dane wpisane w rozmowie z asystentem AI mogą zostać przekazane dostawcy modelu językowego w celu wygenerowania odpowiedzi. Nie wpisuj do czatu haseł, kluczy API, danych finansowych ani danych wrażliwych.",
+  "Automatyczne krótkie wiadomości asystenta są wybierane z gotowych tekstów, bez wysyłania tych komunikatów do modelu AI. Po zaakceptowaniu opcjonalnych cookies strona może używać przybliżonego miasta i współrzędnych oszacowanych z adresu IP przez Vercel do dobrania lokalnych komunikatów pogodowych. Zaokrąglone współrzędne są wysyłane z serwera strony do MET Norway; przeglądarka użytkownika nie łączy się bezpośrednio z tym dostawcą.",
+  "Można wyłączyć automatyczne wiadomości przyciskiem «Nie pokazuj więcej». W przeglądarce przechowywane są wówczas preferencje oraz, przy odpowiedniej zgodzie, historia wyświetlonych komunikatów pozwalająca unikać powtórek.",
   "Na stronie używane są też techniczne mechanizmy niezbędne do działania formularza, kalendarza i preferencji użytkownika."
  ]},
  {title:"6. Cookies i analityka",paragraphs:[
