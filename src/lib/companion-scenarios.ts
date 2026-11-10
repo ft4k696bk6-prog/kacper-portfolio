@@ -219,47 +219,47 @@ addSet("device-touch", "device", c => c.touch, [
 ], 1);
 
 addSet("time-morning", "time", c => c.hour >= 5 && c.hour < 9, [
-  ["Tak wcześnie? Widzę, że ktoś dzisiaj nie zamierza marnować dnia.", "Up this early? Looks like someone has plans for today."],
-  ["Dzień dobry! Kawa już wypita czy dopiero zaczynamy?", "Good morning! Coffee finished, or just getting started?"],
-  ["Poranek. Ja już jestem gotowy do działania, a Ty?", "Morning. I'm ready to go — are you?"],
+  ["Tak wcześnie na bernecki.dev? Ktoś tu chyba ma konkretny plan na dzień.","On bernecki.dev this early? Someone must have a plan for the day."],
+  ["Dzień dobry! Ja już jestem na stanowisku. A kawa u Ciebie gotowa?","Good morning! I'm already on duty. Is your coffee ready?"],
+  ["Poranek i przeglądanie projektów. Brzmi jak niezły początek dnia.","A morning spent browsing projects. Not a bad way to start the day."],
 ], 2);
 addSet("time-lunch", "time", c => c.hour >= 11 && c.hour < 15, [
-  ["Pora obiadowa, a Ty tutaj? To ja poproszę trochę RAM-u na deser.", "Lunchtime and you're here? I'll have some extra RAM for dessert."],
-  ["Południe. Idealny moment, żeby znaleźć rozwiązanie problemu, który czeka od rana.", "Midday. A good moment to solve that problem that's been waiting since morning."],
+  ["Pora obiadowa, a Ty na bernecki.dev? To ja poproszę trochę RAM-u na deser.","Lunchtime and you're on bernecki.dev? I'll have some extra RAM for dessert."],
+  ["Południe. Ja nie robię przerwy na obiad, ale Ty możesz.","Midday. I don't take lunch breaks, but you can."],
 ], 1);
 addSet("time-evening", "time", evening, [
-  ["Dobry wieczór. Podobno najlepsze pomysły przychodzą po godzinach.", "Good evening. They say the best ideas come after hours."],
-  ["Wieczorny research? Dobrze trafiłeś. Mam kilka rzeczy do pokazania.", "Evening research? You're in the right place. I've got a few things to show."],
-  ["Wieczór, cisza i trochę technologii. Całkiem dobry zestaw.", "An evening, some quiet, and a bit of tech. Not a bad combination."],
+  ["Dobry wieczór. To pora, gdy wiele dobrych pomysłów dopiero się zaczyna.","Good evening. This is when a lot of good ideas are only getting started."],
+  ["Wieczorny research na bernecki.dev? Rozgość się, mam kilka rzeczy do pokazania.","Doing some evening research on bernecki.dev? Make yourself at home."],
+  ["Wieczór, spokojny ekran i trochę technologii. Całkiem dobry zestaw.","Evening, a quiet screen, and a bit of tech. Not a bad combination."],
 ], 2);
 addSet("time-night", "time", night, [
-  ["Ty jeszcze nie śpisz? Ja nie muszę, ale Ty chyba powinieneś.", "Still awake? I don't need sleep, but you probably do."],
-  ["Nocne przeglądanie internetu. Brzmi jak początek dobrego pomysłu albo długa bezsenność.", "Late-night browsing. Either a great idea or a serious case of insomnia."],
-  ["Już tak późno? U mnie czas płynie trochę inaczej.", "That late already? Time works a little differently for me."],
+  ["Ty jeszcze nie śpisz? Ja nie muszę, ale Ty pewnie powinieneś.","Still awake? I don't need sleep, but you probably do."],
+  ["Nocne przeglądanie portfolio? Albo świetny pomysł, albo bezsenność.","Browsing a portfolio late at night? Either a great idea or insomnia."],
+  ["U Ciebie już tak późno? U mnie czas płynie trochę inaczej.","It's that late for you already? Time works a little differently for me."],
 ], 3);
 addSet("time-monday", "time", c => c.day === 1, [
-  ["Poniedziałek… jeszcze tylko kilka kaw i będzie piątek.", "Monday… just a few coffees and it'll be Friday."],
-  ["Nowy tydzień, nowa lista rzeczy do zrobienia. Brzmi znajomo?", "New week, new to-do list. Sound familiar?"],
+  ["Poniedziałek… jeszcze tylko kilka kaw i będzie piątek.","Monday… just a few coffees and it'll be Friday."],
+  ["Nowy tydzień, nowa lista rzeczy do zrobienia. Brzmi znajomo?","New week, new to-do list. Sound familiar?"],
 ], 1);
 addSet("time-friday", "time", c => c.day === 5, [
-  ["Piątek! Oby Twoje plany na weekend miały mniej błędów niż piątkowy deploy.", "Friday! Hope your weekend plans have fewer bugs than a Friday deploy."],
-  ["Piątek, ale ja wciąż na stanowisku. Urlopy nie są jeszcze dla mnie.", "Friday, but I'm still on duty. No holidays for me yet."],
+  ["Piątek! Oby Twoje weekendowe plany miały mniej błędów niż piątkowy deploy.","Friday! Hope your weekend plans have fewer bugs than a Friday deploy."],
+  ["Piątek, a ja wciąż na stanowisku. Urlopy to dla mnie nieodkryta funkcja.","Friday and I'm still on duty. Holidays are an unexplored feature for me."],
 ], 2);
 addSet("time-weekend", "time", c => c.day === 0 || c.day === 6, [
-  ["Weekend, a Ty oglądasz portfolio? Szanuję tę ciekawość.", "It's the weekend and you're checking out a portfolio? I respect the curiosity."],
-  ["Weekend! Ja pracuję bez przerwy, ale Tobie polecam chwilę odpoczynku.", "Weekend! I work nonstop, but I recommend taking a little break."],
+  ["Weekend, a Ty na bernecki.dev? Szanuję tę ciekawość.","Weekend and you're on bernecki.dev? I respect the curiosity."],
+  ["Weekend! Ja nie znam wolnego, ale Tobie polecam chwilę odpoczynku.","It's the weekend! I don't get time off, but you should."],
 ], 2);
-addSet("time-winter", "time", c => c.month === 11 || c.month <= 1, [
-  ["Zimą najlepiej działa ogrzewanie, kawa i dobry kod. Kolejność dowolna.", "In winter, heating, coffee, and clean code work best. Any order."],
+addSet("time-winter", "time", c => c.country === "PL" && (c.month === 11 || c.month <= 1), [
+  ["Zima w Polsce: ogrzewanie, kawa i dobry kod. Kolejność dowolna.","Winter in Poland: heating, coffee, and clean code. In any order."],
 ], 1);
-addSet("time-spring", "time", c => c.month >= 2 && c.month <= 4, [
-  ["Wiosna! Może czas na wiosenne porządki również na firmowej stronie?", "Spring! Maybe it's time for a little website spring-cleaning too?"],
+addSet("time-spring", "time", c => c.country === "PL" && c.month >= 2 && c.month <= 4, [
+  ["Wiosna w Polsce! Może czas odświeżyć też firmową stronę?","Spring in Poland! Maybe it's time to refresh the business website too?"],
 ], 1);
-addSet("time-autumn", "time", c => c.month >= 8 && c.month <= 10, [
-  ["Jesień. Liście spadają, ale oby nie spadała liczba klientów.", "Autumn. Leaves are falling — hopefully your customer numbers aren't."],
+addSet("time-autumn", "time", c => c.country === "PL" && c.month >= 8 && c.month <= 10, [
+  ["Polska jesień. Liście spadają, ale oby liczba klientów nie spadała.","Autumn in Poland. The leaves are falling — hopefully your customer count isn't."],
 ], 1);
 addSet("time-halloween", "time", c => c.month === 9 && c.date === 31, [
-  ["Buuu! Najstraszniejsze rzeczy, jakie widziałem, to niektóre stare fragmenty kodu.", "Boo! The scariest things I've seen are pieces of legacy code."],
+  ["Buuu! Najstraszniejsze rzeczy, jakie widziałem, to stare fragmenty kodu.","Boo! The scariest things I've seen are pieces of legacy code."],
 ], 2);
 
 addSet("browser-safari", "browser", c => c.browser === "safari", [
@@ -295,48 +295,48 @@ addSet("location-outside", "location", c => Boolean(c.city) && Boolean(c.country
   ["Hej, {city}! Kilometry nas dzielą, ale ta strona dociera do Ciebie bez problemu.","Hey, {city}! We might be miles apart, but this site still reaches you."],
 ], 2);
 addSet("page-tools", "page", isAudit, [
-  ["O, będzie testowanie. Lubię testy. Szczególnie kiedy przechodzę je za pierwszym razem.", "Oh, we're testing things! I like tests. Especially when I pass on the first try."],
-  ["Sprawdzamy stronę? Świetnie. Najpierw fakty, potem poprawki.", "Auditing a website? Great. Facts first, fixes second."],
-  ["Nie trzeba zgadywać, dlaczego strona nie działa dobrze. Można to sprawdzić.", "No need to guess why a website underperforms. We can check."],
+  ["Jesteś w darmowych narzędziach. Lubię ten dział — tu można coś naprawdę sprawdzić.","You're browsing the free tools. I like this section — you can actually test things here."],
+  ["Oglądasz narzędzia diagnostyczne. Najpierw konkretne dane, potem wnioski.","You're looking at diagnostic tools. Facts first, conclusions second."],
+  ["W tym dziale zamiast zgadywać, możesz zrobić szybki test. To lubię.","In this section, you can run a quick test instead of guessing. I like that."],
 ], 3);
 addSet("page-ads", "page", isAds, [
-  ["Reklamy potrafią przepalać budżet szybciej niż samochód paliwo. Lepiej sprawdzić ustawienia.", "Ads can burn through a budget fast. Better to check the setup."],
-  ["Zestaw reklam nieaktywny? Zanim zwiększysz budżet, sprawdź, co naprawdę nie działa.", "Ad set inactive? Before spending more, check what actually failed."],
-  ["Meta Ads to nie tylko przycisk „Promuj post”. Choć czasem tak to wygląda.", "Meta Ads is more than the Boost Post button. Even if it sometimes doesn't look that way."],
+  ["Czytasz o reklamach. Jeden drobny błąd w ustawieniach potrafi sporo kosztować.","You're reading about advertising. One small configuration mistake can be expensive."],
+  ["Marketing i reklamy na ekranie. W tym temacie wolę liczby od obietnic.","Marketing and ads on your screen. In this area I prefer numbers to promises."],
+  ["Zaglądasz do tematu reklam. Fajnie, że chcesz zrozumieć mechanikę, a nie tylko klikać „Promuj”.","You're exploring advertising. Good to understand how it works rather than just hitting Boost."],
 ], 3);
 addSet("page-crm", "page", isCrm, [
-  ["Nadal Excel do ogarniania klientów? Nie oceniam… ale znam wygodniejsze rozwiązania.", "Still managing customers in spreadsheets? No judgment… but there are easier ways."],
-  ["Dobry CRM nie powinien dokładać pracy. Powinien ją zdejmować z głowy.", "A good CRM shouldn't create more work. It should take work off your plate."],
-  ["Lead, notatka, zadanie, termin. Wszystko w jednym miejscu brzmi znacznie lepiej, prawda?", "Lead, note, task, deadline. All in one place sounds better, doesn't it?"],
+  ["Oglądasz rozwiązania CRM. Najlepszy system to taki, którego nie trzeba tłumaczyć przez godzinę.","You're exploring CRMs. The best system is one that doesn't need an hour-long explanation."],
+  ["Czytasz o CRM. Dobry system powinien skracać pracę, a nie dokładać kolejnych kliknięć.","You're reading about CRM systems. A good one should reduce work, not add clicks."],
+  ["Lead, notatka, zadanie, termin. W CRM najlepiej mieć to w jednym miejscu.","Lead, note, task, deadline. In a CRM, it's best to keep them together."],
 ], 3);
 addSet("page-services", "page", isServices, [
-  ["Wiesz, co lubię w dobrych stronach? Kiedy są ładne, szybkie i faktycznie pomagają firmie.", "Know what I like about good websites? They look great, load fast, and genuinely help a business."],
-  ["Ładna strona to początek. Ważne, żeby ktoś chciał na niej zostać.", "A beautiful website is a start. What matters is making people want to stay."],
-  ["Jeśli projekt ma działać na telefonie i komputerze, warto pomyśleć o tym od początku.", "If a project needs to work on phone and desktop, plan for both from day one."],
+  ["Oglądasz moje usługi. Ciekawostka: najwięcej pracy często zajmują rzeczy, których później nie widać.","You're exploring my services. Funny thing: the hardest work is often invisible at the end."],
+  ["Jesteś w ofercie. Ja pilnuję pikseli, a Kacper zajmuje się resztą.","You're browsing the services. I look after the pixels; Kacper handles the rest."],
+  ["Ta strona dopasowuje układ do szerokości okna. Możesz sprawdzić to, zmieniając jego rozmiar.","This site adapts its layout to the browser window width. Try resizing it."],
 ], 3);
 addSet("page-work", "page", isWork, [
-  ["Zaglądasz za kulisy? Lubię ten moment.", "Looking behind the scenes? I love this part."],
-  ["Te projekty nie zrobiły się same. Chociaż gdybym miał ręce…", "These projects didn't build themselves. Although, if I had hands…"],
-  ["Realizacje mówią więcej niż obietnice. Dlatego warto je pokazywać.", "Real work says more than promises. That's why it's worth showing."],
+  ["Przeglądasz realizacje? Dobrze trafiłeś. Lubię, gdy widać efekt końcowy.","Looking through projects? You're in the right place. I like seeing the finished work."],
+  ["Oglądasz projekty, które naprawdę powstały. Gdybym miał ręce, może pomógłbym przy kolejnym.","You're looking at real projects. If I had hands, maybe I could help with the next one."],
+  ["Realizacje mówią więcej niż obietnice. Dlatego masz je właśnie przed sobą.","Real work speaks louder than promises. That's why it's right here."],
 ], 3);
 addSet("page-guides", "page", isGuide, [
-  ["Dobra decyzja: najpierw zrozumieć problem, potem go rozwiązać.", "Good call: understand the problem first, then solve it."],
-  ["Czasem jedna dobra wskazówka oszczędza kilka godzin szukania.", "Sometimes one useful tip saves hours of searching."],
+  ["Czytasz poradnik. Dobra decyzja: najpierw zrozumieć problem, potem go rozwiązać.","You're reading a guide. Good call: understand the problem first, solve it second."],
+  ["Jeden dobry poradnik potrafi oszczędzić kilka godzin szukania. Oby ten był właśnie taki.","One useful guide can save hours of searching. Hope this one does."],
 ], 2);
 addSet("page-contact", "page", c => /kontakt|contact/.test(c.pathname), [
-  ["Wolisz porozmawiać z człowiekiem? Rozumiem. Kacper zna więcej rzeczy ode mnie. Na razie.", "Prefer talking to a human? Fair enough. Kacper knows more than I do. For now."],
+  ["Jesteś przy kontakcie. Jeśli wolisz porozmawiać z człowiekiem, Kacper już jest jeden krok dalej.","You're on the contact page. If you'd rather talk to a human, Kacper is one step away."],
 ], 2);
 addSet("return-visit", "return", c => c.returning, [
-  ["O, znowu Ty! Miło, że wracasz.", "Oh, you again! Nice to have you back."],
-  ["Witaj ponownie. Jak widzisz, nadal pilnuję tego miejsca.", "Welcome back. As you can see, I'm still looking after this place."],
-  ["Znowu się widzimy. Chyba zaczynamy się lubić.", "We meet again. I think we're starting to get along."],
+  ["O, wróciłeś na bernecki.dev! Miło znowu Cię widzieć.","You're back on bernecki.dev! Nice to see you again."],
+  ["Witaj ponownie. Jak widzisz, nadal pilnuję tego miejsca.","Welcome back. As you can see, I'm still looking after this place."],
+  ["Znowu się widzimy. Chyba zaczynamy się lubić.","We meet again. I think we're starting to get along."],
 ], 3);
 addSet("playful-general", "playful", any, [
-  ["Psst… jestem tutaj, gdybyś chciał o coś zapytać.", "Psst… I'm here if you feel like asking something."],
-  ["Nie jestem wyskakującą reklamą. Obiecuję. Po prostu czasem lubię zagadać.", "I'm not a pop-up ad. Promise. I just like saying hello sometimes."],
-  ["Mam tu całkiem niezły widok na stronę. Tylko czasami zasłania mi go kursor.", "I've got a pretty good view of this website. The cursor gets in my way sometimes."],
-  ["Zwykle siedzę cicho. Ale czasem mam coś ciekawego do powiedzenia.", "I'm usually quiet. Sometimes I have something interesting to say, though."],
-  ["Nie chcę przeszkadzać. Po prostu sprawdzam, czy wszystko u Ciebie dobrze.", "Don't want to interrupt. Just checking that everything's going well."],
+  ["Psst… jestem obok, jeśli będziesz czegoś szukać.","Psst… I'm around if you're looking for something."],
+  ["Czasem tylko mrugam, a czasem zagaduję. Tak to jest, gdy mieszka się w portfolio.","Sometimes I blink, sometimes I chat. Life inside a portfolio."],
+  ["Mam stąd niezły widok na stronę. Tylko kursor czasem mi go zasłania.","I've got a good view of the page from here. The cursor gets in the way sometimes."],
+  ["Zwykle siedzę cicho. Ale trudno zawsze milczeć, gdy tyle się tu dzieje.","I'm usually quiet. Hard to stay silent with so much going on here."],
+  ["Nie przeszkadzam? Dobra. Będę tutaj, gdy zechcesz pogadać.","Not interrupting, am I? Good. I'll be here if you feel like chatting."],
 ], 1);
 
 // Hand-written combinations are not assembled randomly: each sentence has a natural rhythm.
@@ -510,9 +510,9 @@ const LOCATIVE_PL: Record<string, string> = {
 };
 
 export function formatCompanionPlace(city: string, lang: CompanionLocale): string {
-  if (lang === "en") return "In " + city;
+  if (lang === "en") return "in " + city;
   const inCase = LOCATIVE_PL[city.trim().toLocaleLowerCase("pl")];
-  return inCase ? "W " + inCase : city + " —";
+  return inCase ? "w " + inCase : city + " —";
 }
 
 function fillTemplate(value: string, c: CompanionContext): string {
@@ -536,7 +536,7 @@ function fillTemplate(value: string, c: CompanionContext): string {
   for (const [key, replacement] of Object.entries(values)) {
     result = result.split("{" + key + "}").join(replacement);
   }
-  return result;
+  return result.replace(/^w /, "W ").replace(/^in /, "In ");
 }
 
 function canRender(rule: Rule, c: CompanionContext): boolean {
