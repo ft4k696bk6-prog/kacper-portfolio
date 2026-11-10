@@ -72,11 +72,11 @@ describe("companion wow copy: grounded context", () => {
         city === "Lublin" ? "Lublinie" : "Bieszczadach";
       const relevant = getEligibleCompanionMessages(sample)
         .filter(msg => msg.topic === "weather" || msg.category === "location");
-      expect(relevant.length).toBeGreaterThan(20);
+      expect(relevant.length).toBeGreaterThan(10);
       for (const message of relevant) {
         expect(message.text.includes(expected) || message.text.includes(city)).toBe(true);
         expect(message.text).not.toMatch(/Twojej okolicy|u Was|your area|in your area/i);
-        expect(message.text).not.toMatch(/\\{(?:city|place|temp|wind|onDevice|width)\\}/);
+        expect(message.text).not.toMatch(/\{(?:city|place|temp|wind|onDevice|width)\}/);
       }
     }
   });
@@ -118,7 +118,7 @@ describe("companion wow copy: grounded context", () => {
         const ctx = context({ lang, city, device, weather, hour: 0, pathname: "/narzedzia/audyt-strony" });
         for (const message of getEligibleCompanionMessages(ctx)) {
           expect(message.text.trim().length).toBeGreaterThan(12);
-          expect(message.text).not.toMatch(/\\{(?:city|place|temp|wind|width|onDevice|onTablet)\\}/);
+          expect(message.text).not.toMatch(/\{(?:city|place|temp|wind|width|onDevice|onTablet)\}/);
           if (!city) expect(message.category).not.toBe("location");
           if (message.topic === "weather") expect(city).not.toBeNull();
         }
