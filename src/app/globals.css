@@ -515,3 +515,13 @@ html.lenis,html.lenis body{height:auto}
    min-width:0;
  }
 }
+
+
+/* Hold the actual header mark during the one-time entrance so the flying KB
+   lands on exactly one visible logo. Every other header control remains usable. */
+@media(prefers-reduced-motion:no-preference){
+ html[data-home-intro="play"] .site-nav [data-bernecki-nav-logo]{
+  animation:berneckiHeaderLogoArrive .18s ease-out 1.55s both
+ }
+}
+@keyframes berneckiHeaderLogoArrive{from{opacity:0}to{opacity:1}}

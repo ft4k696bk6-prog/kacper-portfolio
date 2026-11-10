@@ -19,22 +19,61 @@ import styles from "./HomeStudio.module.css";
 export function HomeStudio() {
   const { lang, t } = useLanguage();
   const c = homepageCopy[lang];
-  // Restore the normal hero motion after the one-time, non-blocking opening sequence.
+  // Measure the actual navbar logo so the opening mark lands on the same pixels,
+  // including narrow phones, browser zoom and unusual desktop widths.
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      document.documentElement.dataset.homeIntro = "skip";
-    }, 1800);
+    const root = document.documentElement;
+    if (root.dataset.homeIntro !== "play") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      root.dataset.homeIntro = "skip";
+      return;
+    }
+    const updateDestination = () => {
+      const logo = document.querySelector<HTMLElement>("[data-bernecki-nav-logo]");
+      if (!logo) return;
+      const bounds = logo.getBoundingClientRect();
+      root.style.setProperty("--intro-flight-x", `${bounds.left + bounds.width / 2 - window.innerWidth / 2}px`);
+      root.style.setProperty("--intro-flight-y", `${bounds.top + bounds.height / 2 - window.innerHeight / 2}px`);
+      root.style.setProperty("--intro-flight-scale", String(bounds.width / 76));
+    };
+    const first = window.setTimeout(updateDestination, 80);
+    const settled = window.setTimeout(updateDestination, 500);
+    const done = window.setTimeout(() => { root.dataset.homeIntro = "skip"; }, 2300);
+    window.addEventListener("resize", updateDestination, { passive: true });
     return () => {
-      window.clearTimeout(timer);
-      document.documentElement.dataset.homeIntro = "skip";
+      window.clearTimeout(first);
+      window.clearTimeout(settled);
+      window.clearTimeout(done);
+      window.removeEventListener("resize", updateDestination);
+      root.dataset.homeIntro = "skip";
     };
   }, []);
   return <main className={`${styles.studio} portfolio-content`}>
     <div className={styles.introOverlay} aria-hidden="true">
-      <div className={styles.introIdentity}>
-        <Image src="/favicon-silver.svg" alt="" width={68} height={68} unoptimized />
-        <span>BERNECKI.DEV</span>
-        <i />
+      <div className={styles.introBackdrop} />
+      <div className={styles.introGrid} />
+      <div className={styles.introHalo} />
+      <div className={styles.introSignals}>
+        <span><i /> 01 / LAYOUT</span>
+        <span><i /> 02 / CONTENT</span>
+        <span><i /> 03 / PREVIEW</span>
+      </div>
+      <div className={styles.introFlightAnchor}>
+        <span className={styles.introFlightMark}>KB</span>
+      </div>
+      <div className={styles.introTerminal}>
+        <div className={styles.introTerminalTop}>
+          <span className={styles.introDots}><i /><i /><i /></span>
+          <span>BERNECKI.DEV <em>/</em> INTERFACE BUILD</span>
+          <span className={styles.introTerminalState}>LIVE</span>
+        </div>
+        <div className={styles.introCode}>
+          <div className={styles.introCodeRowOne}><b>01</b><code><span>›</span> compose(<strong>&lt;Hero /&gt;</strong>)</code></div>
+          <div className={styles.introCodeRowTwo}><b>02</b><code><span>›</span> mount(<strong>portrait, copy</strong>)</code></div>
+          <div className={styles.introCodeRowThree}><b>03</b><code><span>›</span> render(<strong>3 projects</strong>)</code></div>
+        </div>
+        <div className={styles.introProgress}><i /></div>
+        <div className={styles.introBuildSuccess}>✓ BUILD COMPLETE <span>100%</span></div>
       </div>
     </div>
     <section id="home" className={[styles.hero, "hero-night"].join(" ")} aria-labelledby="hero-title">

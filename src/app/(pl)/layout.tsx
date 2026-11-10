@@ -110,7 +110,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: '(function(){try{if(location.pathname!=="/")return;var key="bernecki-home-intro-v1";if(sessionStorage.getItem(key)){document.documentElement.dataset.homeIntro="skip";}else{sessionStorage.setItem(key,"1");}}catch(e){}})();',
+            __html: '(function(){if(location.pathname!=="/")return;var root=document.documentElement;if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){root.dataset.homeIntro="skip";return;}try{var key="bernecki-home-intro-v2";if(sessionStorage.getItem(key)){root.dataset.homeIntro="skip";}else{sessionStorage.setItem(key,"1");root.dataset.homeIntro="play";}}catch(e){root.dataset.homeIntro="play";}})();',
           }}
         />
       </head>

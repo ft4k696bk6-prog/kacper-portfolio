@@ -126,7 +126,7 @@ export function LanguageSwitcher() {
           className="group flex items-center gap-3"
           onClick={() => setIsOpen(false)}
         >
-          <span className="brand-mark grid h-10 w-10 place-items-center rounded-md border text-sm">
+          <span data-bernecki-nav-logo className="brand-mark grid h-10 w-10 place-items-center rounded-md border text-sm">
             KB
           </span>
           <span className="hidden text-sm uppercase tracking-[0.28em] text-white transition-colors group-hover:text-white sm:inline">
