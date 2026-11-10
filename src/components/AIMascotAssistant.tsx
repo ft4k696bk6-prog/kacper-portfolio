@@ -10,6 +10,13 @@ import { DEFAULT_BOOKING_TIME_ZONE, formatSlotDate } from "@/lib/booking";
 import type { AvailableBookingDay } from "@/lib/calcom";
 import { COOKIE_CONSENT_EVENT, COOKIE_CONSENT_KEY, type CookieConsentState } from "@/lib/preferences";
 import { localizedToolPath } from "@/lib/toolbox-en";
+import {
+  getCompanionContext,
+  pickCompanionNudge,
+  type CompanionNudge,
+  type CompanionCategory,
+  type CompanionServerContext,
+} from "@/lib/companion-scenarios";
 
 type ChatMessage = {
   id: string;
@@ -86,6 +93,11 @@ declare global {
 
 const HIDE_DURATION_MS = 48 * 60 * 60 * 1000;
 const HIDDEN_UNTIL_KEY = "ai-mascot-hidden-until";
+const NUDGE_OPT_OUT_KEY = "kb-companion-nudges-off";
+const NUDGE_HISTORY_KEY = "kb-companion-recent-v1";
+const NUDGE_LAST_CATEGORY_KEY = "kb-companion-last-category";
+const NUDGE_RETURNING_KEY = "kb-companion-returning";
+const NUDGE_SESSION_COUNT_KEY = "kb-companion-session-count";
 
 function createMessage(role: ChatMessage["role"], content: string): ChatMessage {
   return {
@@ -198,6 +210,10 @@ export function AIMascotAssistant() {
   const [mounted, setMounted] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
+  const [nudge, setNudge] = useState<CompanionNudge | null>(null);
+  const [nudgesDisabled, setNudgesDisabled] = useState(false);
+  const [nudgeSettingsLoaded, setNudgeSettingsLoaded] = useState(false);
+  const [serverContext, setServerContext] = useState<CompanionServerContext | null>(null);
   const [cookieBannerVisible, setCookieBannerVisible] = useState(false);
   const [isCompactViewport, setIsCompactViewport] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -236,6 +252,8 @@ export function AIMascotAssistant() {
     setMounted(true);
     const hiddenUntil = Number(localStorage.getItem(HIDDEN_UNTIL_KEY) || 0);
     setHidden(Number.isFinite(hiddenUntil) && hiddenUntil > Date.now());
+    setNudgesDisabled(localStorage.getItem(NUDGE_OPT_OUT_KEY) === "1");
+    setNudgeSettingsLoaded(true);
     syncCookieBannerVisibility();
     setDictationSupported(Boolean(window.SpeechRecognition || window.webkitSpeechRecognition));
 
@@ -273,6 +291,105 @@ export function AIMascotAssistant() {
     };
   }, []);
 
+  // Public, zero-token messages. IP-based weather is optional and never needed
+  // for the chat itself. Only request location context after consent is accepted.
+  useEffect(() => {
+    if (!mounted || cookieBannerVisible || nudgesDisabled) return;
+    if (localStorage.getItem(COOKIE_CONSENT_KEY) !== "accepted") return;
+    const controller = new AbortController();
+    fetch("/api/companion-context", { signal: controller.signal, cache: "no-store" })
+      .then(response => response.ok ? response.json() : null)
+      .then((data: CompanionServerContext | null) => {
+        if (!controller.signal.aborted && data) setServerContext(data);
+      })
+      .catch(() => {});
+    return () => controller.abort();
+  }, [mounted, cookieBannerVisible, nudgesDisabled]);
+
+  useEffect(() => {
+    if (!mounted || !nudgeSettingsLoaded || cookieBannerVisible || hidden || open || nudge || nudgesDisabled) return;
+    const alreadyShown = Number(sessionStorage.getItem(NUDGE_SESSION_COUNT_KEY) || 0);
+    if (alreadyShown >= 2) return;
+
+    // First greeting after intro; a second message requires 2+ minutes more.
+    let timer: number;
+    function maybeShow() {
+      const introState = document.documentElement.dataset.homeIntro;
+      const target = document.activeElement;
+      const isTyping = target instanceof HTMLElement
+        && (["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) || target.isContentEditable);
+      if (
+        document.visibilityState !== "visible" ||
+        introState === "armed" || introState === "running" ||
+        isTyping
+      ) {
+        timer = window.setTimeout(maybeShow, 1800);
+        return;
+      }
+
+      const consentAccepted = localStorage.getItem(COOKIE_CONSENT_KEY) === "accepted";
+      const history = consentAccepted ? (() => {
+        try {
+          const saved = JSON.parse(localStorage.getItem(NUDGE_HISTORY_KEY) || "[]");
+          return Array.isArray(saved) ? saved.filter((item): item is string => typeof item === "string").slice(-45) : [];
+        } catch { return [] as string[]; }
+      })() : [];
+      const previous = consentAccepted
+        ? localStorage.getItem(NUDGE_LAST_CATEGORY_KEY) as CompanionCategory | null
+        : null;
+      const returning = consentAccepted && localStorage.getItem(NUDGE_RETURNING_KEY) === "1";
+      const language = pathname.startsWith("/en") ? "en" : lang;
+      const context = getCompanionContext(language, pathname, consentAccepted ? serverContext : null, returning);
+      const selected = pickCompanionNudge(context, history, previous ?? undefined);
+      if (!selected) return;
+
+      setNudge(selected);
+      sessionStorage.setItem(NUDGE_SESSION_COUNT_KEY, String(alreadyShown + 1));
+      if (consentAccepted) {
+        localStorage.setItem(NUDGE_HISTORY_KEY, JSON.stringify([...history, selected.id].slice(-45)));
+        localStorage.setItem(NUDGE_LAST_CATEGORY_KEY, selected.category);
+        localStorage.setItem(NUDGE_RETURNING_KEY, "1");
+      }
+    }
+    timer = window.setTimeout(maybeShow, alreadyShown === 0 ? 10500 : 120000);
+    return () => window.clearTimeout(timer);
+  }, [mounted, nudgeSettingsLoaded, cookieBannerVisible, hidden, open, nudge, nudgesDisabled, pathname, lang, serverContext]);
+
+  useEffect(() => {
+    if (!nudge) return;
+    const timer = window.setTimeout(() => setNudge(null), 12500);
+    return () => window.clearTimeout(timer);
+  }, [nudge]);
+
+  function dismissNudge() {
+    setNudge(null);
+    // Closing a message is not an invitation to display another one immediately.
+    sessionStorage.setItem(NUDGE_SESSION_COUNT_KEY, "2");
+  }
+
+  function disableNudges() {
+    localStorage.setItem(NUDGE_OPT_OUT_KEY, "1");
+    setNudgesDisabled(true);
+    setNudge(null);
+  }
+
+  function enableNudges() {
+    localStorage.removeItem(NUDGE_OPT_OUT_KEY);
+    setNudgesDisabled(false);
+  }
+
+  function handleNudgeAction() {
+    if (!nudge) return;
+    const intent = nudge.intent;
+    setNudge(null);
+    sessionStorage.setItem(NUDGE_SESSION_COUNT_KEY, "2");
+    if (intent === "audit") {
+      router.push(lang === "en" || pathname.startsWith("/en") ? "/en/tools" : "/narzedzia/audyt-strony");
+    } else {
+      openChat();
+    }
+  }
+
   useEffect(() => {
     setMessages((current) =>
       current.length === 1 && current[0].role === "assistant"
@@ -289,6 +406,7 @@ export function AIMascotAssistant() {
   }, [messages, booking.step, loading]);
 
   function openChat(prefill?: string) {
+    setNudge(null);
     setHidden(false);
     setOpen(true);
     setBehavior({ mood: "curious" });
@@ -299,12 +417,14 @@ export function AIMascotAssistant() {
   }
 
   function hideMascot() {
+    setNudge(null);
     localStorage.setItem(HIDDEN_UNTIL_KEY, String(Date.now() + HIDE_DURATION_MS));
     setOpen(false);
     setHidden(true);
   }
 
   function restoreMascot() {
+    setNudge(null);
     localStorage.removeItem(HIDDEN_UNTIL_KEY);
     setHidden(false);
     setOpen(true);
@@ -780,6 +900,15 @@ export function AIMascotAssistant() {
                     </div>
 
                     <div className="border-t border-white/[0.07] bg-black/18 px-3.5 py-3">
+                      <button
+                        type="button"
+                        onClick={nudgesDisabled ? enableNudges : disableNudges}
+                        className="mb-2 text-left text-[11px] text-white/55 underline-offset-2 transition hover:text-white hover:underline"
+                      >
+                        {nudgesDisabled
+                          ? (lang === "pl" ? "Włącz automatyczne podpowiedzi" : "Enable occasional tips")
+                          : (lang === "pl" ? "Wyłącz automatyczne podpowiedzi" : "Turn off occasional tips")}
+                      </button>
                       <div className="mb-3 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                         {quickActions.map((action) => (
                           <button
@@ -852,6 +981,61 @@ export function AIMascotAssistant() {
                       </form>
                     </div>
                   </motion.aside>
+                ) : null}
+              </AnimatePresence>
+
+              <AnimatePresence>
+                {!open && nudge && !nudgesDisabled ? (
+                  <motion.div
+                    role="status"
+                    aria-live="polite"
+                    className="absolute bottom-[calc(100%+0.85rem)] right-0 z-40 w-[min(20.5rem,calc(100vw-1.25rem))] overflow-hidden rounded-2xl border border-white/15 bg-[#121317]/95 text-white shadow-[0_18px_60px_rgba(0,0,0,0.48)] backdrop-blur-xl"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.18 }}
+                  >
+                    <div className="flex items-start gap-2 p-3">
+                      <button
+                        type="button"
+                        onClick={handleNudgeAction}
+                        className="min-w-0 flex-1 text-left"
+                        aria-label={lang === "pl" ? "Otwórz wiadomość asystenta" : "Open assistant message"}
+                      >
+                        <span className="mb-1 block text-[11px] font-semibold tracking-wide text-white/65">
+                          {lang === "pl" ? "Asystent AI · podpowiedź" : "AI Assistant · a thought"}
+                        </span>
+                        <span className="block text-[13px] leading-5 text-white/95">{nudge.text}</span>
+                        <span className="mt-2 block text-[11px] font-medium text-white/65">
+                          {nudge.intent === "audit"
+                            ? (lang === "pl" ? "Sprawdź stronę →" : "Check your website →")
+                            : (lang === "pl" ? "Odpowiedz →" : "Reply →")}
+                        </span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={dismissNudge}
+                        aria-label={lang === "pl" ? "Zamknij wiadomość" : "Dismiss message"}
+                        className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-white/55 transition hover:bg-white/10 hover:text-white"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-between gap-2 border-t border-white/10 px-3 py-2">
+                      {nudge.weatherCredit ? (
+                        <a href="https://www.met.no/en" target="_blank" rel="noopener noreferrer" className="text-[10px] text-white/55 underline-offset-2 hover:underline">
+                          {lang === "pl" ? "Prognoza: MET Norway" : "Forecast: MET Norway"}
+                        </a>
+                      ) : <span />}
+                      <button
+                        type="button"
+                        onClick={disableNudges}
+                        className="text-right text-[10px] text-white/55 underline-offset-2 hover:text-white hover:underline"
+                      >
+                        {lang === "pl" ? "Nie pokazuj więcej" : "Don't show again"}
+                      </button>
+                    </div>
+                  </motion.div>
                 ) : null}
               </AnimatePresence>
 
