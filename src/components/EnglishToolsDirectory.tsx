@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowUpRight, Search, Globe, Megaphone, Bot, Code2, Workflow, LayoutGrid } from "lucide-react";
-import { englishToolboxItems, englishToolboxCategories, englishToolPath } from "@/lib/toolbox-en";
+import { englishToolboxItems, englishToolPath } from "@/lib/toolbox-en";
 
 const filters=["All","Website & SEO","Advertising & marketing","CRM & sales","AI & search","Developer tools"];
 const icons:Record<string,typeof Globe>={"All":LayoutGrid,"Website & SEO":Globe,"Advertising & marketing":Megaphone,"CRM & sales":Workflow,"AI & search":Bot,"Developer tools":Code2};
