@@ -28,7 +28,7 @@ export function classifyBerniWeather(symbolCode: string, windSpeed = 0): BerniWe
 }
 
 export function detectBerniReaction(message: string): BerniMood {
-  const value = message.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const value = message.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l");
   if (/(awaria|blad|error|problem|nie dziala|nie udalo|failed|sorry|przykro|unavailable|odrzucon|odmow)/.test(value)) return "worried";
   if (/(udalo sie|gotowe|sukces|success|confirmed|potwierdzon|rezerwacj.*(udana|potwierdz)|zrobion|done|excellent)/.test(value)) return "excited";
   if (/(haha|hehe|xd|zart|joke|funny|smiesz|lol)/.test(value)) return "happy";
