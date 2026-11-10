@@ -212,7 +212,7 @@ function issueList(pages:ScannedPage[], extras:{
     if(h.headings.filter(x=>x.level===1).length>1)append("info","SEO","h1multi-"+tag,"Wiele nagłówków H1",`Wykryto ${h.headings.filter(x=>x.level===1).length} nagłówki H1.`,"Sprawdź, czy hierarchia nagłówków jest logiczna.",tag);
     if(!h.canonical)append("warning","Indeksowanie","canonical-"+tag,"Brak canonical","Nie wykryto linku canonical.","Wskaż kanoniczny adres, jeśli jest to uzasadnione strukturą witryny.",tag);
     if(/\bnoindex\b/i.test(h.robots))append("critical","Indeksowanie","noindex-"+tag,"Dyrektywa noindex",`Meta robots zawiera: ${h.robots}.`,"Jeśli podstrona ma być indeksowana, zweryfikuj dyrektywę i ustawienia CMS.",tag);
-    if(!h.lang)append("warning","Dostępność","lang-"+tag,"Brak języka dokumentu","Tag HTML nie zawiera atrybutu lang.","Dodaj właściwy język, np. lang=\\"pl\\".",tag);
+    if(!h.lang)append("warning","Dostępność","lang-"+tag,"Brak języka dokumentu","Tag HTML nie zawiera atrybutu lang.","Dodaj właściwy język, np. lang=\"pl\".",tag);
     if(!h.hasViewport)append("warning","Dostępność","viewport-"+tag,"Brak viewport","Brak meta viewport w HTML.","Dodaj poprawny viewport na urządzenia mobilne.",tag);
     if(h.imagesMissingAlt>0)append("warning","Dostępność","alt-"+tag,"Obrazy bez atrybutu alt",`Wykryto ${h.imagesMissingAlt} obrazów bez alt na ${h.imageCount} elementów img.`,"Dodaj opisy do obrazów informacyjnych lub pusty alt do dekoracyjnych.",tag);
     if(page.ttfb>800)append("warning","Wydajność","ttfb-"+tag,"Wysoki TTFB pojedynczego żądania",`Czas pierwszej odpowiedzi wyniósł ${page.ttfb} ms.`,"Sprawdź cache, backend i czas odpowiedzi serwera; potwierdź wynik powtarzanym testem.",tag);
