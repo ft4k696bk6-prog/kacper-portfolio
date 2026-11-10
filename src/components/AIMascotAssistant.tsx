@@ -335,7 +335,7 @@ export function AIMascotAssistant() {
     setNudge(null);
     sessionStorage.setItem(NUDGE_SESSION_COUNT_KEY, "2");
     if (intent === "audit") {
-      router.push(lang === "en" || pathname.startsWith("/en") ? "/en/tools" : "/narzedzia");
+      router.push(lang === "en" || pathname.startsWith("/en") ? "/en/tools" : "/narzedzia/audyt-strony");
     } else {
       openChat();
     }
