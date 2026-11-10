@@ -297,7 +297,8 @@
 }
 @keyframes studioBuildFromLogo{
  0%,39%{clip-path:polygon(0 0,100% 0,100% 100%,0 100%,0 0,0 0);visibility:visible}
- 50%{clip-path:polygon(16% 0,100% 0,100% 100%,0 100%,0 16%,16% 16%);visibility:visible}
+ 43%{clip-path:polygon(var(--intro-origin-x,40px) 0,100% 0,100% 100%,0 100%,0 var(--intro-origin-y,40px),var(--intro-origin-x,40px) var(--intro-origin-y,40px));visibility:visible}
+ 50%{clip-path:polygon(max(var(--intro-origin-x,40px),16%) 0,100% 0,100% 100%,0 100%,0 max(var(--intro-origin-y,40px),16%),max(var(--intro-origin-x,40px),16%) max(var(--intro-origin-y,40px),16%));visibility:visible}
  72%{clip-path:polygon(68% 0,100% 0,100% 100%,0 100%,0 68%,68% 68%);visibility:visible}
  96%{clip-path:polygon(100% 0,100% 0,100% 100%,0 100%,0 100%,100% 100%);visibility:visible}
  100%{clip-path:polygon(100% 0,100% 0,100% 100%,0 100%,0 100%,100% 100%);visibility:hidden}

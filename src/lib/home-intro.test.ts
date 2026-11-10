@@ -33,6 +33,7 @@ describe("home page build intro", () => {
   it("unveils the existing hero in a top-left to bottom-right build", () => {
     expect(styles).toContain("studioBuildFromLogo");
     expect(styles).toContain("studioTraceH");
+    expect(styles).toContain("clip-path:polygon(var(--intro-origin-x,40px) 0");
     expect(styles).toContain("studioTraceV");
     expect(homepage).toContain("introBlueprint");
     expect(homepage).toContain("AI / BUILD ENGINE");
