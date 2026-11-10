@@ -12,6 +12,7 @@ type Testimonial = {
   quotePl: string;
   quoteEn: string;
   href: string;
+  logo?: string;
 };
 
 const testimonials: Testimonial[] = [
@@ -38,6 +39,7 @@ const testimonials: Testimonial[] = [
     quotePl: "Zależało nam, żeby handlowcy mieli porządek w kontaktach, a biuro widziało, co dzieje się po podpisaniu umowy. B-CRM łączy leady, zadania i realizację w jednym miejscu. Powstawał pod nasz sposób pracy, a nie według gotowego szablonu.",
     quoteEn: "We needed salespeople to stay on top of leads and our office to see what happens after a contract is signed. B-CRM brings contacts, tasks and delivery into one place. It was built around how our team works, not a generic template.",
     href: "/case-studies/b-crm",
+    logo: "/images/brands/b-crm.svg",
   },
   {
     company: "Motomizer",
@@ -66,7 +68,7 @@ const testimonials: Testimonial[] = [
 ];
 
 const clientLogos: Record<string, string> = {
-  StarCars: "/images/brands/starcars.svg",
+  StarCars: "/images/brands/starcars-testimonials.svg",
   "Re-Energy System": "/images/brands/re-energy.png",
   "Isto Kebab": "/images/brands/isto-kebab.svg",
   "Gentlemen Barber Shop": "/images/brands/gentlemen.webp",
@@ -110,9 +112,9 @@ export function ClientTestimonials() {
                   </Link>
                 </div>
                 <div className="flex h-14 w-[104px] shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[.035] px-3 py-2 sm:w-[116px]" aria-hidden="true">
-                  {clientLogos[item.company] ? (
+                  {(item.logo ?? clientLogos[item.company]) ? (
                     <Image
-                      src={clientLogos[item.company]}
+                      src={item.logo ?? clientLogos[item.company]}
                       alt=""
                       width={116}
                       height={48}
