@@ -319,7 +319,137 @@ export const toolboxItems: ToolboxItem[] = [
     "hint": "Wygeneruj UUID v4 za pomocą bezpiecznego generatora losowości przeglądarki.",
     "question": "Czy UUID jest hasłem?",
     "answer": "Nie. UUID służy do identyfikacji obiektów, nie jako tajny token bezpieczeństwa."
-  }
+  },
+{
+  "slug": "test-czasu-odpowiedzi-serwera",
+  "title": "Tester czasu odpowiedzi serwera TTFB",
+  "description": "Zmierz czas otrzymania pierwszego bajtu odpowiedzi dla publicznej strony internetowej.",
+  "category": "WWW i SEO",
+  "mode": "ttfb",
+  "hint": "Zobacz czas pierwszej odpowiedzi i rozmiar pobranego HTML. To pomiar pojedynczego żądania, nie pełny test szybkości.",
+  "question": "Czy TTFB jest równoznaczne z Core Web Vitals?",
+  "answer": "Nie. TTFB mierzy tylko część komunikacji z serwerem, a Core Web Vitals dotyczą doświadczeń użytkownika z ładowania i interakcji."
+},
+{
+  "slug": "tester-przekierowan-301-302",
+  "title": "Tester przekierowań HTTP 301/302",
+  "description": "Sprawdź łańcuch przekierowań i ostateczny adres URL swojej strony.",
+  "category": "WWW i SEO",
+  "mode": "redirects",
+  "hint": "Prześledź do trzech przekierowań HTTP od podanego adresu do końcowego URL.",
+  "question": "Czy każde przekierowanie 301 jest błędem?",
+  "answer": "Nie. Przekierowanie 301 może być prawidłowe. Problematyczne bywają pętle lub długie łańcuchy."
+},
+{
+  "slug": "tester-naglowkow-bezpieczenstwa",
+  "title": "Tester nagłówków HTTP bezpieczeństwa",
+  "description": "Sprawdź, czy serwer zwraca CSP, HSTS, X-Content-Type-Options i inne nagłówki.",
+  "category": "WWW i SEO",
+  "mode": "headers",
+  "hint": "Odczytaj podstawowe nagłówki bezpieczeństwa z odpowiedzi publicznej strony.",
+  "question": "Czy obecność CSP oznacza całkowite bezpieczeństwo?",
+  "answer": "Nie. Prawidłowa polityka CSP zależy od wartości i aplikacji; samo istnienie nagłówka nie gwarantuje ochrony."
+},
+{
+  "slug": "tester-meta-pixel",
+  "title": "Tester Meta Pixel na stronie",
+  "description": "Wykryj typowe fragmenty instalacji Meta Pixel w publicznym HTML strony.",
+  "category": "Reklamy i marketing",
+  "mode": "pixel",
+  "hint": "Sprawdź obecność kodu fbevents.js lub fbq w kodzie odpowiedzi serwera.",
+  "question": "Czy wykryty kod oznacza poprawną konwersję?",
+  "answer": "Nie. Pixel może się uruchamiać błędnie, być blokowany przez zgody lub nie wysyłać właściwych zdarzeń."
+},
+{
+  "slug": "tester-google-tag-manager",
+  "title": "Tester instalacji Google Tag Manager",
+  "description": "Sprawdź ślady kontenera GTM i tagu Google Analytics w kodzie strony.",
+  "category": "Reklamy i marketing",
+  "mode": "gtm",
+  "hint": "Wykryj skrypt Google Tag Manager lub identyfikator pomiarowy w pobranym HTML.",
+  "question": "Czy brak GTM oznacza brak analityki?",
+  "answer": "Nie. Analityka może być zaimplementowana inaczej lub doładowana po uruchomieniu JavaScript."
+},
+{
+  "slug": "tester-obrazow-alt",
+  "title": "Tester atrybutów ALT obrazów",
+  "description": "Sprawdź liczbę obrazów i brakujących atrybutów alt w publicznym HTML.",
+  "category": "WWW i SEO",
+  "mode": "images",
+  "hint": "Zlicz elementy img oraz te, które nie zawierają atrybutu alt.",
+  "question": "Czy każdy obraz musi mieć opisowy ALT?",
+  "answer": "Nie. Obrazy dekoracyjne mogą mieć alt pusty; brak atrybutu alt jest jednak sygnałem do sprawdzenia."
+},
+{
+  "slug": "kalkulator-cpc",
+  "title": "Darmowy kalkulator CPC",
+  "description": "Oblicz średni koszt kliknięcia reklamy na podstawie budżetu i liczby kliknięć.",
+  "category": "Reklamy i marketing",
+  "mode": "cpc",
+  "hint": "Podaj łączny koszt i liczbę kliknięć linku.",
+  "question": "Czy CPC uwzględnia jakość leadów?",
+  "answer": "Nie. CPC mierzy koszt kliknięcia, nie późniejszą skuteczność pozyskiwania klientów."
+},
+{
+  "slug": "kalkulator-cpm",
+  "title": "Darmowy kalkulator CPM",
+  "description": "Oblicz koszt tysiąca wyświetleń reklam i porównaj kampanie.",
+  "category": "Reklamy i marketing",
+  "mode": "cpm",
+  "hint": "Podaj wydatki reklamowe i liczbę wyświetleń.",
+  "question": "Czy tani CPM oznacza skuteczną kampanię?",
+  "answer": "Nie. Istotne są również częstotliwość, jakość odbiorców i konwersje."
+},
+{
+  "slug": "kalkulator-leadow-z-ruchu",
+  "title": "Kalkulator liczby leadów z ruchu",
+  "description": "Oszacuj liczbę zapytań przy zadanym ruchu i współczynniku konwersji strony.",
+  "category": "Reklamy i marketing",
+  "mode": "traffic",
+  "hint": "Wprowadź liczbę odwiedzin i zakładany procent konwersji.",
+  "question": "Czy to prognoza pozyskiwania leadów?",
+  "answer": "Nie. To scenariusz wynikający z podanych założeń, a nie prognoza ruchu lub skuteczności."
+},
+{
+  "slug": "kalkulator-ltv-klienta",
+  "title": "Kalkulator LTV klienta",
+  "description": "Oblicz modelową wartość marży z klienta z uwzględnieniem ponownych zakupów.",
+  "category": "CRM i sprzedaż",
+  "mode": "ltv",
+  "hint": "Wprowadź średnią wartość zamówienia, liczbę zakupów rocznie, okres współpracy i marżę.",
+  "question": "Czy model LTV uwzględnia retencję i dyskonto?",
+  "answer": "Nie. To uproszczony scenariusz bez prawdopodobieństw rezygnacji i wartości pieniądza w czasie."
+},
+{
+  "slug": "konwerter-base64",
+  "title": "Darmowy konwerter Base64",
+  "description": "Koduj i dekoduj UTF-8 jako Base64 bez wysyłania tekstu na serwer.",
+  "category": "Dla programistów",
+  "mode": "base64",
+  "hint": "Wklej tekst i wybierz kodowanie lub dekodowanie Base64 w przeglądarce.",
+  "question": "Czy Base64 szyfruje dane?",
+  "answer": "Nie. To kodowanie reprezentacji bajtów, nie zabezpieczenie ani szyfrowanie."
+},
+{
+  "slug": "generator-sha256",
+  "title": "Generator hasha SHA-256",
+  "description": "Oblicz skrót SHA-256 dowolnego tekstu lokalnie w przeglądarce.",
+  "category": "Dla programistów",
+  "mode": "sha256",
+  "hint": "Wpisz tekst, aby otrzymać jego skrót SHA-256 w postaci szesnastkowej.",
+  "question": "Czy SHA-256 nadaje się do przechowywania haseł?",
+  "answer": "Nie używaj zwykłego SHA-256 bezpośrednio do haseł. Preferuj Argon2id, bcrypt lub scrypt z odpowiednimi parametrami."
+},
+{
+  "slug": "tester-kontrastu-kolorow",
+  "title": "Tester kontrastu kolorów WCAG",
+  "description": "Sprawdź kontrast dwóch kolorów i podstawowe progi WCAG AA dla tekstu.",
+  "category": "Dla programistów",
+  "mode": "contrast",
+  "hint": "Podaj dwa kolory w formacie HEX, aby obliczyć współczynnik kontrastu.",
+  "question": "Czy samo AA zapewnia zgodność WCAG?",
+  "answer": "Nie. Kontrast dotyczy tylko jednego kryterium dostępności; potrzebne są także inne kontrole."
+}
 ];
 export const toolboxCategories = ["Wszystkie", "WWW i SEO", "Reklamy i marketing", "CRM i sprzedaż", "AI i wyszukiwarki", "Dla programistów"];
 export function findTool(slug:string){return toolboxItems.find(item=>item.slug===slug);}
