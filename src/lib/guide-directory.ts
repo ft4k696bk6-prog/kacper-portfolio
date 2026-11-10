@@ -8,9 +8,10 @@ import { businessGrowthGuidesOne } from "../content/businessGrowthGuidesOne";
 import { businessGrowthGuidesTwo } from "../content/businessGrowthGuidesTwo";
 import { businessGrowthGuidesThree } from "../content/businessGrowthGuidesThree";
 import { businessGrowthGuidesFour } from "../content/businessGrowthGuidesFour";
+import { metaAdsTroubleshootingGuides } from "../content/metaAdsTroubleshootingGuides";
 
 /** Jeden katalog: zachowuje wszystkie poradniki tworzone równolegle w guides.ts. */
-export const allGuides = [...existingGuides, ...pseoGuides, ...offlineGuides, ...offlineBatchTwoGuides, ...businessGuides, ...aiGuides, ...businessGrowthGuidesOne, ...businessGrowthGuidesTwo, ...businessGrowthGuidesThree, ...businessGrowthGuidesFour];
+export const allGuides = [...existingGuides, ...pseoGuides, ...offlineGuides, ...offlineBatchTwoGuides, ...businessGuides, ...aiGuides, ...businessGrowthGuidesOne, ...businessGrowthGuidesTwo, ...businessGrowthGuidesThree, ...businessGrowthGuidesFour, ...metaAdsTroubleshootingGuides];
 export type Guide = (typeof allGuides)[number];
 
 export const guideCategories = [
