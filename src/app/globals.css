@@ -547,3 +547,20 @@ html.lenis,html.lenis body{height:auto}
  }
 }
 @keyframes berneckiNavUIArrive{from{opacity:0}to{opacity:1}}
+
+/* The cookie prompt joins the page only after the home build intro finishes. */
+.cookie-consent-banner {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity .3s ease, transform .3s ease, visibility .3s;
+}
+html:is([data-home-intro="armed"],[data-home-intro="running"]) .cookie-consent-banner {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cookie-consent-banner { transition: none; }
+}

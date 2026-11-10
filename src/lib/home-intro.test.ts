@@ -7,6 +7,7 @@ const nav = read("../components/LanguageSwitcher.tsx");
 const styles = read("../components/HomeStudio.module.css");
 const layout = read("../app/(pl)/layout.tsx");
 const globals = read("../app/globals.css");
+const consent = read("../components/AnalyticsConsent.tsx");
 
 describe("home page build intro", () => {
   it("moves the actual navbar mark and never creates a second KB sprite", () => {
@@ -43,5 +44,14 @@ describe("home page build intro", () => {
     expect(homepage).toContain('/images/projects/starcars-live-current.jpg');
     expect(homepage).toContain('/images/projects/isto-live-nov08.jpg');
     expect(homepage).toContain('/images/projects/bcrm-admin-dashboard.jpg');
+  });
+
+  it("reveals a compact, translucent cookie card only once the intro completes", () => {
+    expect(consent).toContain("cookie-consent-banner");
+    expect(consent).toContain("max-w-[23rem]");
+    expect(consent).toContain("bg-[#101114]/80");
+    expect(globals).toContain('html:is([data-home-intro="armed"],[data-home-intro="running"]) .cookie-consent-banner');
+    expect(globals).toContain("visibility: hidden;");
+    expect(globals).toContain("pointer-events: none;");
   });
 });

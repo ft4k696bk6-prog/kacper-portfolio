@@ -64,21 +64,21 @@ export function AnalyticsConsent() {
       ) : null}
 
       {loaded && consent === null ? (
-        <div className="fixed bottom-4 left-4 right-4 z-[70] mx-auto max-w-2xl rounded-md border border-white/35 bg-[var(--brand-black)]/95 p-4 text-sm text-white shadow-[0_22px_70px_rgba(0,0,0,0.42)] backdrop-blur-xl md:left-5 md:right-auto md:mx-0 md:max-w-md">
-          <p className="text-base font-medium text-white">{t.consent.title}</p>
-          <p className="mt-2 text-xs leading-5 text-white/70 md:text-sm md:leading-6">{t.consent.description}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
+        <div className="cookie-consent-banner fixed inset-x-3 bottom-3 z-[70] mx-auto max-w-[23rem] rounded-xl border border-white/15 bg-[#101114]/80 p-3 text-white shadow-[0_12px_40px_rgba(0,0,0,0.24)] backdrop-blur-md sm:inset-x-auto sm:bottom-5 sm:left-5 sm:mx-0 sm:w-[23rem] sm:p-4">
+          <p className="text-[13px] font-semibold leading-5 text-white">{t.consent.title}</p>
+          <p className="mt-1 text-[11px] leading-[1.55] text-white/75 sm:text-xs">{t.consent.description}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => choose("accepted")}
-              className="brand-action glass-action rounded-md px-4 py-2 text-sm transition hover:-translate-y-0.5"
+              className="brand-action glass-action inline-flex min-h-9 items-center justify-center rounded-lg px-3 py-1.5 text-xs font-semibold transition hover:-translate-y-px"
             >
               {t.consent.accept}
             </button>
             <button
               type="button"
               onClick={() => choose("rejected")}
-              className="glass-action rounded-md border border-white/15 px-4 py-2 text-sm text-white transition hover:border-[var(--brand-accent)] hover:text-white"
+              className="inline-flex min-h-9 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/85 transition hover:border-white/40 hover:bg-white/10 hover:text-white"
             >
               {t.consent.reject}
             </button>
