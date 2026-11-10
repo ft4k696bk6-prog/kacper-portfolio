@@ -101,6 +101,57 @@ const NUDGE_LAST_TOPIC_KEY = "kb-companion-last-topic-v2";
 const NUDGE_RETURNING_KEY = "kb-companion-returning";
 const NUDGE_RETURNING_SESSION_KEY = "kb-companion-returning-this-session";
 const NUDGE_SESSION_COUNT_KEY = "kb-companion-session-count";
+const NUDGE_MEMORY_KEY = "kb-companion-memory-v3";
+
+// Contains only already displayed message IDs/phrases and coarse categories.
+// It stores no names, addresses, IPs, device fingerprint or unique user ID.
+type NudgeMemory = {
+  ids: string[];
+  topics: CompanionTopic[];
+  families: string[];
+  texts: string[];
+};
+function readNudgeMemory(): NudgeMemory {
+  const empty: NudgeMemory = { ids: [], topics: [], families: [], texts: [] };
+  try {
+    const value = JSON.parse(localStorage.getItem(NUDGE_MEMORY_KEY) || sessionStorage.getItem(NUDGE_MEMORY_KEY) || "null") as Partial<NudgeMemory> | null;
+    if (!value || !Array.isArray(value.ids)) {
+      // Reuse old opt-in memory so the update does not restart the same texts.
+      const legacy = JSON.parse(localStorage.getItem(NUDGE_HISTORY_KEY) || "[]") as unknown;
+      return { ...empty, ids: Array.isArray(legacy) ? legacy.filter((x): x is string => typeof x === "string").slice(-1200) : [] };
+    }
+    const strings = (input: unknown, cap: number) =>
+      Array.isArray(input) ? input.filter((x): x is string => typeof x === "string").slice(-cap) : [];
+    return {
+      ids: strings(value.ids, 1200),
+      topics: strings(value.topics, 6) as CompanionTopic[],
+      families: strings(value.families, 8),
+      texts: strings(value.texts, 150),
+    };
+  } catch {
+    return empty;
+  }
+}
+function writeNudgeMemory(memory: NudgeMemory, selected: CompanionNudge) {
+  try {
+    localStorage.setItem(NUDGE_MEMORY_KEY, JSON.stringify({
+      ids: [...memory.ids, selected.id].slice(-1200),
+      topics: [...memory.topics, selected.topic].slice(-6),
+      families: [...memory.families, selected.family].slice(-8),
+      texts: [...memory.texts, selected.text].slice(-150),
+    } satisfies NudgeMemory));
+  } catch {
+    // Storage may be disabled; session history still prevents duplicate messages.
+    try { sessionStorage.setItem(NUDGE_MEMORY_KEY, JSON.stringify({
+      ids: [...memory.ids, selected.id].slice(-120),
+      topics: [...memory.topics, selected.topic].slice(-6),
+      families: [...memory.families, selected.family].slice(-8),
+      texts: [...memory.texts, selected.text].slice(-30),
+    } satisfies NudgeMemory)); } catch {}
+  }
+}
+
+
 
 function createMessage(role: ChatMessage["role"], content: string): ChatMessage {
   return {
@@ -337,26 +388,24 @@ export function AIMascotAssistant() {
       }
 
       const consentAccepted = localStorage.getItem(COOKIE_CONSENT_KEY) === "accepted";
-      const history = consentAccepted ? (() => {
-        try {
-          const saved = JSON.parse(localStorage.getItem(NUDGE_HISTORY_KEY) || "[]");
-          return Array.isArray(saved) ? saved.filter((item): item is string => typeof item === "string").slice(-45) : [];
-        } catch { return [] as string[]; }
-      })() : [];
-      const previous = consentAccepted
-        ? localStorage.getItem(NUDGE_LAST_TOPIC_KEY) as CompanionTopic | null
-        : null;
+      // Shuffle-bag history is strictly functional: it cannot identify visitors
+      // and never leaves the browser. Weather/IP data remains consent-gated.
+      const history = readNudgeMemory();
+      const previous = history.topics.at(-1);
       const returning = consentAccepted && sessionStorage.getItem(NUDGE_RETURNING_SESSION_KEY) === "1";
       const language = pathname.startsWith("/en") ? "en" : lang;
       const context = getCompanionContext(language, pathname, consentAccepted ? serverContext : null, returning);
-      const selected = pickCompanionNudge(context, history, previous ?? undefined);
+      const selected = pickCompanionNudge(context, history.ids, previous, Math.random, {
+        recentTopics: history.topics,
+        recentFamilies: history.families,
+        recentTexts: history.texts,
+      });
       if (!selected) return;
 
       setNudge(selected);
       sessionStorage.setItem(NUDGE_SESSION_COUNT_KEY, String(alreadyShown + 1));
+      writeNudgeMemory(history, selected);
       if (consentAccepted) {
-        localStorage.setItem(NUDGE_HISTORY_KEY, JSON.stringify([...history, selected.id].slice(-45)));
-        localStorage.setItem(NUDGE_LAST_TOPIC_KEY, selected.topic);
         localStorage.setItem(NUDGE_RETURNING_KEY, "1");
       }
     }
