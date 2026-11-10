@@ -462,6 +462,93 @@ addSet("combo-city-wind", "combination", c => Boolean(c.city) && windy(c), [
   ["{place} mocny wiatr. Dobrze, że jestem przypięty do przycisku czatu.","{place} strong winds. Good thing I'm attached to the chat button."],
 ], 4);
 
+addSet("combo-iphone-viewport", "combination", c => c.device === "iphone" && c.width >= 250, [
+  ["iPhone i okno o szerokości {width} px. Właśnie pod takie konkretne wymiary układa się ta strona.","An iPhone and a {width}px-wide browser window. That's the exact width this layout is adapting to."],
+  ["Wykryłem iPhone'a. Twoja przeglądarka daje mi teraz {width} px szerokości — i ani piksela więcej.","I detected an iPhone. Your browser gives me {width}px of width right now — not a pixel more."],
+], 4);
+
+addSet("combo-android-viewport", "combination", c => c.device === "android" && c.width >= 250, [
+  ["Android i okno szerokie na {width} px. Wystarczy, żeby zobaczyć, czy interfejs naprawdę jest mobilny.","Android and a {width}px-wide window. Enough to see whether the interface is genuinely mobile-friendly."],
+  ["Przeglądasz na Androidzie, a moje miejsce na ekranie ma {width} px. Lepiej dobrze gospodarować pikselami.","You're browsing on Android and I've got {width}px to work with. Better use those pixels well."],
+], 4);
+
+addSet("combo-ipad-viewport", "combination", c => c.device === "ipad" && c.width >= 350, [
+  ["iPad i {width} px szerokości okna. Właśnie dlatego wersja tabletowa potrzebuje własnego układu.","An iPad and a {width}px-wide window. That's why tablet layouts deserve proper attention."],
+  ["Wykryłem iPada. Okno ma {width} px — wystarczająco, żeby złapać błędy, których nie widać na telefonie.","I detected an iPad. The window is {width}px wide — enough to spot issues you might miss on a phone."],
+], 4);
+
+addSet("combo-tablet-viewport", "combination", c => c.device === "tablet" && c.width >= 350, [
+  ["Tablet i okno o szerokości {width} px. Właśnie do takiego widoku też dopasowuję tę stronę.","A tablet and a {width}px-wide window. This is exactly the kind of layout I design for too."],
+  ["Przeglądasz na tablecie. Mam tu {width} px szerokości, więc nie będę udawał, że to wielki monitor.","You're on a tablet. I've got {width}px of width, so I won't pretend it's a huge monitor."],
+], 4);
+
+addSet("combo-mac-wide", "combination", c => c.device === "mac" && c.width >= 1200, [
+  ["Mac i okno szerokie na {width} px. Tyle przestrzeni aż prosi się o dobry projekt.","A Mac and a {width}px-wide window. That's a lot of space for good design."],
+  ["Przeglądasz na Macu. Przy {width} px szerokości okna moje projekty mogą wreszcie odetchnąć.","You're browsing on a Mac. At {width}px wide, my projects finally have room to breathe."],
+], 4);
+
+addSet("combo-windows-narrow", "combination", c => c.device === "windows" && c.width < 780 && c.width > 250, [
+  ["Windows, ale okno ma tylko {width} px szerokości. I proszę — strona nadal powinna się mieścić.","Windows, but your window is only {width}px wide. And the site should still fit."],
+  ["Na Windowsie też można mieć wąskie okno. U Ciebie ma teraz {width} px — już się dopasowuję.","Windows can have a narrow browser window too. Yours is {width}px wide — adapting now."],
+], 4);
+
+addSet("combo-linux-wide", "combination", c => c.device === "linux" && c.width >= 1200, [
+  ["Linux i {width} px szerokości okna. Dużo miejsca na terminal i jeszcze trochę na mnie.","Linux and a {width}px-wide window. Room for a terminal and still some for me."],
+  ["Przeglądasz na Linuksie, w oknie szerokim na {width} px. Brzmi jak porządne stanowisko do pracy.","You're browsing on Linux in a {width}px-wide window. Sounds like a solid workspace."],
+], 4);
+
+addSet("combo-iphone-city-night", "combination", c => Boolean(c.city) && c.device === "iphone" && night(c), [
+  ["{place} jest już późno, a Ty wciąż przeglądasz na iPhonie. Coś mi mówi, że masz jakiś pomysł.","{place} it's already late, and you're still browsing on an iPhone. I suspect you've got an idea."],
+  ["Noc na zegarku, {city} na radarze, a u Ciebie iPhone. Taki zestaw nie zdarza się przypadkiem.","Late at night, {city} on my radar, and you're using an iPhone. Quite a combination."],
+], 4);
+
+addSet("combo-android-city-night", "combination", c => Boolean(c.city) && c.device === "android" && night(c), [
+  ["{place} późna noc, a Ty na Androidzie. Ja nie śpię, ale nie wiem, jak Ty dajesz radę.","{place} it's late at night and you're on Android. I never sleep, but I don't know how you manage."],
+  ["Android, {city} i środek nocy. Oby to była inspiracja, a nie deadline.","Android, {city}, and the middle of the night. Hope it's inspiration, not a deadline."],
+], 4);
+
+addSet("combo-mac-city-evening", "combination", c => Boolean(c.city) && c.device === "mac" && evening(c), [
+  ["Wieczór, {city} i Mac na pokładzie. Brzmi jak całkiem dobry czas na nowy projekt.","Evening, {city}, and a Mac. Sounds like a good time to start a new project."],
+  ["{place} już wieczór, a Ty przeglądasz na Macu. Mam nadzieję, że znajdziesz tu dobrą inspirację.","{place} it's evening and you're browsing on a Mac. Hope you find some inspiration here."],
+], 4);
+
+addSet("combo-ipad-city", "combination", c => Boolean(c.city) && c.device === "ipad", [
+  ["{city} melduje się na mapie, iPad w rękach. Fajnie, że mogę być z Tobą również na tablecie.","{city} on the map, iPad in hand. Nice that I can join you on a tablet too."],
+], 4);
+
+addSet("combo-tablet-city", "combination", c => Boolean(c.city) && c.device === "tablet", [
+  ["{city} na moim radarze, a Ty przeglądasz na tablecie. Wszystko tu powinno się wygodnie klikać.","{city} on my radar, and you're browsing on a tablet. Everything should be easy to tap."],
+], 4);
+
+addSet("combo-windows-city", "combination", c => Boolean(c.city) && c.device === "windows", [
+  ["{city} na radarze, Windows w przeglądarce. Zgadza się? Ja tylko składam to, co naprawdę widzę.","{city} on my radar, Windows in the browser. Sound right? I'm only using what I can actually detect."],
+], 4);
+
+addSet("combo-linux-city", "combination", c => Boolean(c.city) && c.device === "linux", [
+  ["Linux i {city} — ciekawy zestaw. Jeśli szukasz technicznych szczegółów, jesteś w dobrym miejscu.","Linux and {city} — interesting combination. If you're looking for technical details, you're in the right place."],
+], 4);
+
+addSet("combo-safari-iphone", "combination", c => c.device === "iphone" && c.browser === "safari", [
+  ["iPhone i Safari. Sprawdzam, czy wszystkie zaokrąglenia i animacje dobrze się tu zachowują.","An iPhone and Safari. I'm keeping an eye on how the rounded corners and animations behave."],
+  ["Safari na iPhonie — właśnie tu dobra wersja mobilna powinna wyglądać naturalnie.","Safari on an iPhone — this is where a good mobile site should feel effortless."],
+], 4);
+
+addSet("combo-chrome-android", "combination", c => c.device === "android" && c.browser === "chrome", [
+  ["Chrome na Androidzie. Dobrze, że nie musisz instalować żadnej aplikacji, żeby ze mną pogadać.","Chrome on Android. Glad you don't need to install an app to chat with me."],
+], 4);
+
+addSet("combo-firefox-linux", "combination", c => c.device === "linux" && c.browser === "firefox", [
+  ["Firefox i Linux. Czuję, że ktoś tu lubi mieć kontrolę nad przeglądarką.","Firefox and Linux. Something tells me you like control over your browser."],
+], 4);
+
+addSet("combo-browser-width", "combination", c => c.browser === "chrome" && c.width >= 350, [
+  ["Chrome i okno szerokie na {width} px. Dzięki, teraz wiem dokładnie, ile miejsca mam na ekranie.","Chrome and a {width}px-wide window. Now I know exactly how much space I can use."],
+], 4);
+
+addSet("combo-city-viewport", "combination", c => Boolean(c.city) && c.width >= 250 && c.width < 550, [
+  ["{city} na radarze, a Twoje okno ma {width} px szerokości. Całkiem sporo informacji z jednej wizyty, prawda?","{city} on my radar and your window is {width}px wide. Quite a lot from one visit, right?"],
+], 4);
+
 export const COMPANION_SCENARIO_COUNT = rules.length;
 
 const LOCATIVE_PL: Record<string, string> = {
