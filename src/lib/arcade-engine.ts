@@ -33,7 +33,8 @@ export type MineCell={mine:boolean;near:number;open:boolean;flag:boolean};
 export function makeMines(total=64,count=10,skip=-1,random:()=>number=Math.random):MineCell[]{
  if(total<2||count<1||count>=total||skip>=total)throw Error("Invalid minefield");
  const cells=Array.from({length:total},()=>({mine:false,near:0,open:false,flag:false}));
- let spots=0;while(spots<count){const i=Math.floor(random()*total);if(i!==skip&&!cells[i].mine){cells[i].mine=true;spots++;}}
+ const candidates=Array.from({length:total},(_,i)=>i).filter(i=>i!==skip);
+ for(let i=0;i<count;i++){const j=i+Math.min(candidates.length-i-1,Math.floor(random()*(candidates.length-i)));[candidates[i],candidates[j]]=[candidates[j],candidates[i]];cells[candidates[i]].mine=true;}
  const side=Math.sqrt(total);if(!Number.isInteger(side))throw Error("Square board only");
  for(let i=0;i<total;i++)if(!cells[i].mine){
   const x=i%side,y=Math.floor(i/side);
