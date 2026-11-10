@@ -8,9 +8,10 @@ type Metric={label:string;value:string};
 type Result={title:string;metrics?:Metric[];messages?:string[];text?:string;warning?:string};
 type SiteReport={
   status:number;url:string;bytes:number;ttfb:number;robots?:string;robotsAvailable?:boolean;
+  redirects?:{from:string;to:string;status:number}[];headers?:Record<string,string>;
   html?:{title:string;description:string;robots:string;canonical:string;lang:string;
     headings:{level:number;text:string}[];og:{title:string;description:string;image:string;type:string};twitter:string;
-    jsonLdCount:number;imageCount:number;imagesMissingAlt:number;linkCount:number;hasViewport:boolean;};
+    jsonLdCount:number;imageCount:number;imagesMissingAlt:number;linkCount:number;hasViewport:boolean;tracking?:{metaPixel:boolean;gtm:boolean;ga4:boolean};};
   host?:string;tls?:{authorized:boolean;authorizationError:string;subject:string;issuer:string;validFrom:string;validTo:string;protocol:string;daysRemaining:number|null};
   dns?:{spf:string[];dmarc:string[];txtCount:number;notes:string[]};
 };
@@ -19,7 +20,7 @@ const number=(key:string,label:string,placeholder="np. 100"):InputField=>({key,l
 const text=(key:string,label:string,placeholder=""):InputField=>({key,label,placeholder});
 const area=(key:string,label:string,placeholder=""):InputField=>({key,label,placeholder,type:"textarea"});
 const inputs:Record<string,InputField[]>={
-  site:siteInput,seo:siteInput,meta:siteInput,headings:siteInput,og:siteInput,ai:siteInput,tls:siteInput,dns:siteInput,
+  site:siteInput,seo:siteInput,meta:siteInput,headings:siteInput,og:siteInput,ai:siteInput,tls:siteInput,dns:siteInput,ttfb:siteInput,redirects:siteInput,headers:siteInput,pixel:siteInput,gtm:siteInput,images:siteInput,
   robots:[area("body","Wklej zawartość robots.txt","User-agent: *\nDisallow: /admin/\nSitemap: https://twojafirma.pl/sitemap.xml")],
   sitemap:[area("body","Wklej XML mapy strony",'<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://twojafirma.pl/</loc></url></urlset>')],
   schema:[area("body","Wklej dane JSON-LD",'{"@context":"https://schema.org","@type":"Organization","name":"Firma"}')],
@@ -32,6 +33,13 @@ const inputs:Record<string,InputField[]>={
     {value:"pixel",label:"Brak zdarzeń lub konwersji Pixel / CAPI"},{value:"learning",label:"Reklamy utknęły w fazie uczenia się"},
     {value:"payment",label:"Problem z płatnością lub limitem konta"}]}],
   adsCsv:[],
+  cpc:[number("spend","Wydatki reklamowe (zł)","1000"),number("clicks","Liczba kliknięć linku","250")],
+  cpm:[number("spend","Wydatki reklamowe (zł)","1000"),number("impressions","Liczba wyświetleń","40000")],
+  traffic:[number("views","Liczba odwiedzin","1000"),number("rate","Zakładana konwersja na leada (%)","3")],
+  ltv:[number("avg","Średnia wartość zakupu (zł)","500"),number("orders","Zakupy rocznie","3"),number("years","Lata współpracy","2"),number("margin","Marża brutto (%)","35")],
+  base64:[area("body","Tekst wejściowy","Wklej tekst lub Base64..."),{key:"operation",label:"Operacja",type:"select",options:[{value:"encode",label:"Tekst UTF-8 → Base64"},{value:"decode",label:"Base64 → tekst UTF-8"}]}],
+  sha256:[area("body","Tekst do obliczenia SHA-256","Wpisz tekst, który chcesz zahashować")],
+  contrast:[text("fg","Kolor tekstu (HEX)","#f2f2f2"),text("bg","Kolor tła (HEX)","#080808")],
   roas:[number("spend","Wydatki reklamowe (zł)","1000"),number("revenue","Przychód z reklam (zł)","5000")],
   cpl:[number("spend","Wydatki reklamowe (zł)","1000"),number("leads","Liczba pozyskanych leadów","20")],
   budget:[number("leads","Docelowa liczba leadów","50"),number("cpl","Zakładany CPL (zł)","40")],
@@ -153,6 +161,17 @@ function localRun(mode:string, v:Record<string,string>, fileText:string):Result 
   if([sp,ld,cl,im].every(a=>a===null))throw new Error("Nie rozpoznano kolumn raportu. Wyeksportuj CSV z kolumnami: wydana kwota, wyniki, kliknięcia linku, wyświetlenia.");
   return {title:"Podsumowanie eksportu CSV",metrics:metrics(["Wiersze kampanii",String(rows.length-1)],...(sp!==null?[["Wydatki",pln(sp)] as [string,string]]:[]),...(ld!==null?[["Wyniki",fmt(ld,0)] as [string,string]]:[]),...(sp!==null&&ld!==null&&ld>0?[["CPL / koszt wyniku",pln(sp/ld)] as [string,string]]:[]),...(cl!==null?[["Kliknięcia linku",fmt(cl,0)] as [string,string]]:[]),...(im!==null&&cl!==null&&im>0?[["CTR linku",fmt(cl/im*100)+"%"] as [string,string]]:[])),messages:["Rozpoznane kolumny: "+[spend>=0?"wydatki":"",leads>=0?"wyniki":"",clicks>=0?"kliknięcia":"",impressions>=0?"wyświetlenia":""].filter(Boolean).join(", ")],warning:"Wyniki mogą oznaczać różne typy zdarzeń. Sprawdź zakres dat, walutę, atrybucję i czy eksport nie zawiera wierszy sumy."};
  }
+ case "cpc":{const sp=n("spend"),clicks=n("clicks");return {title:"Średni koszt kliknięcia CPC",metrics:metrics(["CPC",pln(sp/clicks)],["Wydatki",pln(sp)],["Kliknięcia",fmt(clicks,0)]),warning:"CPC dotyczy tylko wskazanego rodzaju kliknięcia i nie mierzy jakości ruchu."};}
+ case "cpm":{const sp=n("spend"),im=n("impressions");return {title:"Koszt tysiąca wyświetleń CPM",metrics:metrics(["CPM",pln(sp/im*1000)],["Wydatki",pln(sp)],["Wyświetlenia",fmt(im,0)]),warning:"CPM sam w sobie nie przesądza o skuteczności reklamy."};}
+ case "traffic":{const views=n("views"),rate=n("rate",true);if(rate>100)throw new Error("Konwersja musi być w zakresie 0–100%.");return {title:"Scenariusz pozyskania leadów",metrics:metrics(["Zakładane leady",fmt(views*rate/100,1)],["Konwersja",fmt(rate)+"%"],["Odwiedziny",fmt(views,0)]),warning:"To wynik modelu matematycznego, nie prognoza skuteczności strony."};}
+ case "ltv":{const avg=n("avg"),orders=n("orders"),years=n("years"),margin=n("margin",true);if(margin>100)throw new Error("Marża musi wynosić 0–100%.");const rev=avg*orders*years;return {title:"Uproszczony model LTV",metrics:metrics(["Przychód w okresie",pln(rev)],["Marża z klienta (LTV)",pln(rev*margin/100)],["Roczne przychody",pln(avg*orders)]),warning:"Model zakłada stałą liczbę zakupów bez churn, rabatów i dyskonta."};}
+ case "base64":{const input=v.body||"";if(!input)throw new Error("Wpisz tekst.");if(v.operation==="decode"){
+   const raw=atob(input.trim().replace(/\s+/g,""));const bytes=Uint8Array.from(raw,ch=>ch.charCodeAt(0));
+   return {title:"Zdekodowany tekst UTF-8",text:new TextDecoder("utf-8",{fatal:true}).decode(bytes)};
+  }const bytes=new TextEncoder().encode(input);const binary=Array.from(bytes,b=>String.fromCharCode(b)).join("");return {title:"Zakodowany Base64",text:btoa(binary),warning:"Base64 nie szyfruje i nie chroni danych."};}
+ case "contrast":{const parse=(value:string)=>{const s=value.trim();if(!/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(s))throw new Error("Podaj kolor HEX w formacie #fff lub #ffffff.");const hex=s.length===4?s.slice(1).split("").map(x=>x+x).join(""):s.slice(1);const channels=[0,2,4].map(i=>parseInt(hex.slice(i,i+2),16)/255).map(x=>x<=0.04045?x/12.92:((x+0.055)/1.055)**2.4);return channels[0]*0.2126+channels[1]*0.7152+channels[2]*0.0722;};
+   const l1=parse(v.fg||""),l2=parse(v.bg||"");const ratio=(Math.max(l1,l2)+.05)/(Math.min(l1,l2)+.05);
+   return {title:"Kontrast WCAG",metrics:metrics(["Współczynnik",fmt(ratio,2)+":1"],["WCAG AA tekst zwykły",ratio>=4.5?"Spełnia":"Nie spełnia"],["WCAG AA tekst duży",ratio>=3?"Spełnia":"Nie spełnia"],["WCAG AAA zwykły",ratio>=7?"Spełnia":"Nie spełnia"]),warning:"Dotyczy kontrastu 2 kolorów, nie kompleksowej zgodności witryny z WCAG."};}
  case "roas":{const spend=n("spend"),revenue=n("revenue",true);return {title:"Wynik kampanii",metrics:metrics(["ROAS",fmt(revenue/spend)+"×"],["Przychód / 1 zł reklamy",pln(revenue/spend)],["Przychód minus reklamy",pln(revenue-spend)]),warning:"Przychód minus reklamę nie jest zyskiem netto. Uwzględnij koszt produktu, realizacji i pozostałe wydatki."};}
  case "cpl":{const spend=n("spend"),leads=n("leads");return {title:"Koszt pozyskania leada",metrics:metrics(["CPL",pln(spend/leads)],["Wydatki",pln(spend)],["Leady",fmt(leads,0)]),warning:"Sam CPL nie mówi nic o jakości zapytań ani o sprzedaży."};}
  case "budget":{const leads=n("leads"),cpl=n("cpl");return {title:"Orientacyjny budżet na kampanię",metrics:metrics(["Potrzebny budżet",pln(leads*cpl)],["Liczba leadów",fmt(leads,0)],["Założony CPL",pln(cpl)]),warning:"Wynik to obliczenie scenariuszowe, nie prognoza skuteczności kampanii."};}
@@ -183,6 +202,11 @@ function fromSite(mode:string,d:SiteReport):Result{
  }
  const h=d.html;if(!h)throw new Error("Serwer nie zwrócił danych HTML.");
  const base:Result={title:"Analiza strony "+new URL(d.url).hostname,metrics:[{label:"HTTP",value:String(d.status)},{label:"TTFB tego żądania",value:d.ttfb+" ms"},{label:"Pobrany HTML",value:fmt(d.bytes/1024,1)+" kB"}],messages:[],warning:"Analiza obejmuje pobrany publiczny HTML jednej podstrony. Nie jest pomiarem Core Web Vitals ani potwierdzeniem indeksacji."};
+ if(mode==="ttfb"){base.metrics=[{label:"TTFB z serwera testowego",value:d.ttfb+" ms"},{label:"Kod HTTP",value:String(d.status)},{label:"HTML",value:fmt(d.bytes/1024,1)+" kB"}];base.warning="Jedno żądanie z infrastruktury serwera. Wynik zmienia się zależnie od cache, obciążenia i położenia. To nie pełny pomiar szybkości strony.";return base;}
+ if(mode==="redirects"){base.metrics=[{label:"Liczba przekierowań",value:String(d.redirects?.length||0)},{label:"Końcowy status HTTP",value:String(d.status)},{label:"Docelowy URL",value:d.url}];base.messages=(d.redirects||[]).map(x=>x.status+" "+x.from+" → "+x.to);if(!base.messages.length)base.messages=["Nie wykryto przekierowań HTTP w badanym żądaniu."];return base;}
+ if(mode==="headers"){const wanted=["content-security-policy","strict-transport-security","x-content-type-options","referrer-policy","permissions-policy","x-frame-options"];base.metrics=wanted.map(k=>({label:k,value:d.headers?.[k]?"Obecny":"Brak"}));base.messages=wanted.filter(k=>d.headers?.[k]).map(k=>k+": "+String(d.headers?.[k]).slice(0,200));base.warning="Odczyt nagłówków nie jest audytem bezpieczeństwa. Same nazwy nagłówków nie wystarczą do oceny ich polityk.";return base;}
+ if(mode==="pixel"||mode==="gtm"){const found=mode==="pixel"?h.tracking?.metaPixel:h.tracking?.gtm;const measurement=mode==="pixel"?"Meta Pixel":"Google Tag Manager";base.metrics=[{label:measurement,value:found?"Znaleziono ślad kodu":"Nie wykryto w HTML"},{label:"Kod HTTP",value:String(d.status)},...(mode==="gtm"?[{label:"Google Analytics / gtag",value:h.tracking?.ga4?"Wykryto ślad":"Brak śladu"}]:[])];base.warning="Tester przeszukuje kod HTML pobrany z serwera; skrypty dołączone przez JavaScript po załadowaniu lub przez menedżer zgód mogą nie być widoczne. Wykryty ślad nie potwierdza wysyłania zdarzeń.";return base;}
+ if(mode==="images"){base.metrics=[{label:"Obrazy img w HTML",value:String(h.imageCount)},{label:"Brak atrybutu alt",value:String(h.imagesMissingAlt)},{label:"Z atrybutem alt",value:String(h.imageCount-h.imagesMissingAlt)}];base.warning="Pusty atrybut alt może być prawidłowy dla obrazów dekoracyjnych. Nie analizowano obrazów dynamicznie ładowanych przez JavaScript.";return base;}
  if(mode==="meta"){base.metrics=[{label:"Title",value:h.title||"brak"},{label:"Description",value:h.description||"brak"},{label:"Canonical",value:h.canonical||"brak"},{label:"Robots",value:h.robots||"brak"},{label:"Język",value:h.lang||"brak"}];base.messages=["Title: "+h.title.length+" znaków; meta description: "+h.description.length+" znaków."];return base;}
  if(mode==="headings"){base.metrics=[{label:"H1",value:String(h.headings.filter(x=>x.level===1).length)},{label:"H2",value:String(h.headings.filter(x=>x.level===2).length)},{label:"Pozostałe",value:String(h.headings.filter(x=>x.level>2).length)}];base.messages=h.headings.map(x=>"H"+x.level+": "+(x.text||"(pusty)"));return base;}
  if(mode==="og"){base.metrics=[{label:"og:title",value:h.og.title||"brak"},{label:"og:description",value:h.og.description||"brak"},{label:"og:image",value:h.og.image||"brak"},{label:"twitter:card",value:h.twitter||"brak"}];base.messages=[...(h.og.image?[]:["Brak og:image — udostępniony link może nie mieć odpowiedniej miniatury."])];return base;}
@@ -221,11 +245,16 @@ export function FreeToolRunner({mode,slug}:{mode:string;slug:string}){
  const run=async(e:React.FormEvent<HTMLFormElement>)=>{
   e.preventDefault();setLoading(true);setError("");setResult(null);
   try{
-   if(["site","seo","meta","headings","og","ai","tls","dns"].includes(mode)){
+   if(["site","seo","meta","headings","og","ai","tls","dns","ttfb","redirects","headers","pixel","gtm","images"].includes(mode)){
     const response=await fetch("/api/tools/inspect",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:values.url||"",mode}),signal:AbortSignal.timeout(20000)});
     const d=await response.json() as SiteReport&{error?:string};
     if(!response.ok)throw new Error(d.error||"Nie udało się sprawdzić strony.");
     setResult(fromSite(mode,d));
+   }else if(mode==="sha256"){
+    if(!values.body)throw new Error("Wpisz tekst do obliczenia skrótu SHA-256.");
+    const hash=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(values.body));
+    const digest=Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,"0")).join("");
+    setResult({title:"Skrót SHA-256",text:digest,warning:"Skrót jest obliczany lokalnie; do przechowywania haseł stosuj funkcje specjalnie do tego przeznaczone, np. Argon2id."});
    }else setResult(localRun(mode,values,csv));
   }catch(e){setError(e instanceof Error?e.message:"Nie udało się wykonać analizy.");}
   finally{setLoading(false);}
@@ -260,7 +289,7 @@ export function FreeToolRunner({mode,slug}:{mode:string;slug:string}){
      {loading?"Trwa sprawdzanie...":mode==="uuid"?"Wygeneruj identyfikatory":"Sprawdź / oblicz za darmo"}
    </button>
    {error&&<p className="mt-4 rounded-xl border border-rose-400/30 bg-rose-400/5 p-3 text-sm leading-6 text-rose-200" role="alert">{error}</p>}
-   <p className="mt-4 text-xs leading-6 text-white/45">{["jwt","json","adsCsv","uuid"].includes(mode)?"Dane przetwarzane lokalnie — nie są wysyłane do serwera.":"Bez obowiązkowego konta. Analizy zewnętrznych domen wymagają krótkiego zapytania do serwera."}</p>
+   <p className="mt-4 text-xs leading-6 text-white/45">{["jwt","json","adsCsv","uuid","base64","sha256"].includes(mode)?"Dane przetwarzane lokalnie — nie są wysyłane do serwera.":"Bez obowiązkowego konta. Analizy zewnętrznych domen wymagają krótkiego zapytania do serwera."}</p>
   </form>
   <section aria-live="polite" aria-atomic="true" className="min-w-0 rounded-2xl border border-white/15 bg-[#111111] p-5 md:p-7">
    <div className="mb-7 flex flex-wrap items-center justify-between gap-3"><h2 className="text-xl font-medium tracking-tight md:text-2xl">Wynik</h2>{result&&<div className="flex gap-2"><button type="button" onClick={()=>navigator.clipboard.writeText(output)} className="inline-flex items-center gap-2 rounded-lg border border-white/20 px-3 py-2 text-xs hover:border-white/65"><ClipboardCopy size={14}/>Kopiuj</button><button type="button" onClick={download} className="inline-flex items-center gap-2 rounded-lg border border-white/20 px-3 py-2 text-xs hover:border-white/65"><Download size={14}/>TXT</button></div>}</div>
