@@ -15,8 +15,12 @@ describe("portfolio mobile review", () => {
 
   it("keeps the assistant usable on short-height mobile screens", () => {
     const assistant = get("../components/AIMascotAssistant.tsx");
-    expect(assistant).toContain("h-[min(22rem,calc(100dvh-8rem))]");
-    expect(assistant).not.toContain("h-[min(22rem,calc(100vh-19rem))]");
+    // The booking flow needs more than 22rem; the actual compact panel is
+    // bounded by the dynamic viewport and lets its message history scroll.
+    expect(assistant).toContain('h-[min(36rem,calc(100dvh-8.5rem))]');
+    expect(assistant).toContain('h-[min(36rem,calc(100dvh-7rem))]');
+    expect(assistant).toContain('className="min-h-0 max-h-80 flex-1');
+    expect(assistant).not.toContain("calc(100vh-19rem)");
   });
 
   it("shows three authentic project previews in the requested layered hero", () => {
