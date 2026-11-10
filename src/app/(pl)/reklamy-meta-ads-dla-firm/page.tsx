@@ -26,6 +26,23 @@ export default function MetaAdsServicePage() {
       <section className="mt-20"><h2 className="text-3xl">Jak wygląda współpraca?</h2><div className="mt-8 grid gap-4 md:grid-cols-2">{stages.map(s=><article key={s.h} className="surface-card rounded-xl border border-white/15 p-6"><h3 className="text-xl">{s.h}</h3><p className="mt-4 leading-7 text-white/70">{s.d}</p></article>)}</div></section>
       <section className="mt-20 grid gap-10 border-t border-white/15 pt-14 md:grid-cols-2"><div><h2 className="text-3xl">Co warto mierzyć poza kosztem leada?</h2><p className="mt-5 leading-8 text-white/75">Tani kontakt, który nigdy nie odpowiada na telefon, nie jest dobrym wynikiem. Współpraca ma sens, kiedy firma widzi postęp kontaktów w procesie sprzedaży.</p></div><ul className="space-y-4 text-white/80"><li>— Koszt pozyskania zgłoszenia (CPL)</li><li>— Odsetek kontaktów poprawnych i kontaktowalnych</li><li>— Liczba rozmów i przygotowanych ofert</li><li>— Koszt pozyskania klienta (CAC), o ile dane sprzedażowe pozwalają go policzyć</li><li>— Czas od wysłania formularza do pierwszego kontaktu</li></ul></section>
       <section className="surface-card mt-20 rounded-2xl border border-white/20 bg-white/[0.04] p-7 md:p-10"><p className="text-xs uppercase tracking-[0.2em] text-white/60">Przykład z branży OZE</p><h2 className="mt-4 text-3xl">Re-Energy System: około 2 lata kampanii jako jedynego źródła leadów.</h2><p className="mt-5 max-w-3xl leading-8 text-white/75">Re-Energy System: 90 837 zł budżetu reklamowego, 6 mln zł obrotu firmy i 2 331 pozyskanych kontaktów w 17 kampaniach leadowych, ze średnim kosztem 29,79 zł. Kampanie połączyłem z formularzami i procesem obsługi zgłoszeń przez handlowców.</p><Link href="/case-studies/re-energy-meta-ads" className="mt-6 inline-block underline underline-offset-4">Zobacz pełne case study →</Link></section>
+      <section className="mt-20 border-t border-white/15 pt-14">
+        <h2 className="text-3xl">Najczęstsze błędy w Meta Ads</h2>
+        <p className="mt-4 max-w-3xl leading-8 text-white/70">Nie możesz uruchomić kampanii? Zacznij od konkretnego komunikatu w Menedżerze reklam. Przygotowałem praktyczne diagnozy problemów z kampaniami, zestawami, formularzami i dostarczaniem reklam.</p>
+        <div className="mt-7 grid gap-3 md:grid-cols-2">
+          {[
+            ["Zestaw reklam nieaktywny", "meta-zestaw-reklam-nieaktywny-jak-wlaczyc"],
+            ["Brak aktywnych kampanii", "meta-brak-aktywnych-kampanii-co-oznacza"],
+            ["Kampania aktywna, zestaw wyłączony", "meta-kampania-aktywna-zestaw-wylaczony"],
+            ["Reklamy same się wyłączają", "meta-reklamy-same-sie-wylaczaja"],
+            ["Nie można opublikować kampanii", "meta-brak-przycisku-opublikuj"],
+            ["Uczenie się ograniczone", "meta-uczenie-sie-ograniczone-co-zmienic"],
+            ["Nie można pobrać leadów", "meta-nie-moge-pobrac-leadow"],
+            ["Nieopublikowane zmiany w Meta Ads", "meta-nieopublikowane-zmiany-reklamy"]
+          ].map(([label, slug]) => <Link key={slug} href={`/poradniki/${slug}`} className="surface-card rounded-xl border border-white/15 px-5 py-4 leading-6 text-white transition-colors hover:border-white/50">{label} →</Link>)}
+        </div>
+        <Link href="/poradniki/tematy/meta-ads" className="mt-7 inline-block underline underline-offset-4">Zobacz wszystkie poradniki Meta Ads →</Link>
+      </section>
       <section className="mt-20"><h2 className="text-3xl">Najczęstsze pytania</h2><div className="mt-6 space-y-4">{[["Czy potrzebuję strony internetowej?","Niekoniecznie. Kampanie mogą korzystać z formularza Meta, ale strona może lepiej wyjaśnić ofertę i wesprzeć pomiar."],["Czy gwarantujesz konkretną liczbę leadów?","Nie. Wolumen i cena zależą od branży, lokalizacji, oferty i budżetu. Ustalamy cele i kontrolujemy wyniki."],["Czy zajmujesz się też CRM?","Tak. Mogę połączyć pozyskiwanie zgłoszeń z ich organizacją i obsługą w systemie CRM."]].map(([q,a])=><div key={q} className="surface-card rounded-lg border border-white/15 p-6"><h3 className="text-lg">{q}</h3><p className="mt-3 leading-7 text-white/70">{a}</p></div>)}</div></section>
       <div className="mt-14"><Link href="/#contact" className="inline-block rounded-lg brand-action px-6 py-4 text-black">Porozmawiajmy o Twojej kampanii →</Link></div>
     </div>
