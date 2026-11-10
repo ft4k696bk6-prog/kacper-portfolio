@@ -43,7 +43,14 @@ export function isPortfolioTopic(question: string) {
     return true;
   }
 
-  return topicTerms.some((term) => value.includes(term));
+  // Short technical terms must appear as separate words. Otherwise e.g.
+  // "napisz" and "capital" accidentally match "api" and incur a paid request.
+  return topicTerms.some((term) => {
+    if (term === "ai" || term === "api" || term === "dev" || term === "crm" || term === "oze" || term === "web") {
+      return new RegExp("(^|[^a-z0-9])" + term + "($|[^a-z0-9])").test(value);
+    }
+    return value.includes(term);
+  });
 }
 
 export function outsideScopeAnswer(language: Language) {
