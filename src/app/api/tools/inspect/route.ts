@@ -264,10 +264,10 @@ async function completeAudit(url:URL){
   // Prefer a broad sample from different site sections, not the first 6 sitemap entries.
   const pool=[new URL("/",root).href,...links,...sitemapLocations(sitemap,hostname)]
     .filter((value,index,array)=>array.indexOf(value)===index&&value!==initial.url);
-  const robotsRules=generalRules.split(/\\r?\\n/).map(v=>v.split("#")[0].trim());
+  const robotsRules=generalRules.split(/\r?\n/).map(v=>v.split("#")[0].trim());
   const allowedByRobots=(candidate:string)=>{
     const path=new URL(candidate).pathname;
-    const rules=robotsRules.map(v=>v.match(/^(allow|disallow):\\s*(.*)$/i)).filter(Boolean)
+    const rules=robotsRules.map(v=>v.match(/^(allow|disallow):\s*(.*)$/i)).filter(Boolean)
       .map(m=>({isAllow:m![1].toLowerCase()==="allow",path:m![2]}))
       .filter(m=>m.path&&path.startsWith(m.path));
     rules.sort((a,b)=>b.path.length-a.path.length||Number(b.isAllow)-Number(a.isAllow));
