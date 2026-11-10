@@ -17,7 +17,7 @@ function safeCity(value: string | null): string | null {
     const city = Array.from(decodeURIComponent(value)).filter((character) => character >= " " && character !== "<" && character !== ">").join("").trim();
     // Browser copy must never present a placeholder, IP address or garbage as a town.
     if (city.length < 2 || city.length > 72) return null;
-    if (!/^[\\p{L}\\p{M} .'-]+$/u.test(city)) return null;
+    if (!/^[\p{L}\p{M} .'-]+$/u.test(city)) return null;
     if (/^(unknown|none|null|undefined|localhost|not available|n\\/?a)$/i.test(city)) return null;
     return city;
   } catch {
