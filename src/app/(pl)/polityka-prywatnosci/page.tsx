@@ -46,7 +46,7 @@ export default function PrivacyPage(){
    <nav className="text-sm text-white/65"><Link href="/" className="hover:text-white">Portfolio</Link> / Polityka prywatności</nav>
    <p className="mt-10 text-xs uppercase tracking-[.18em] text-white/55">Ochrona danych</p>
    <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">Polityka prywatności</h1>
-   <p className="mt-6 text-sm leading-7 text-white/70">Ostatnia aktualizacja: 8 listopada 2026 r.</p>
+   <p className="mt-6 text-sm leading-7 text-white/70">Ostatnia aktualizacja: 11 listopada 2026 r.</p>
    <p className="mt-4 text-base leading-8 text-white/75">Poniżej opisano przetwarzanie danych przy kontakcie, rezerwacji spotkania i korzystaniu z serwisu bernecki.dev.</p>
    <div className="mt-10 space-y-10">{sections.map(s=><section key={s.title} className="border-t border-white/15 pt-7">
     <h2 className="text-xl font-semibold">{s.title}</h2>
