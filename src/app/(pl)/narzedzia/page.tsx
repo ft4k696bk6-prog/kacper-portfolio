@@ -5,7 +5,7 @@ import { toolboxItems } from "@/lib/toolbox";
 export const metadata: Metadata={
  title:"Darmowe narzędzia SEO, WWW, Meta Ads i CRM | bernecki.dev",
  description:"Darmowe testery stron WWW, SEO i botów AI, kalkulatory Meta Ads, ROAS, CPL, CRM oraz narzędzia techniczne. Bez rejestracji.",
- alternates:{canonical:"https://bernecki.dev/narzedzia"},
+ alternates:{canonical:"https://bernecki.dev/narzedzia",languages:{"pl-PL":"https://bernecki.dev/narzedzia",en:"https://bernecki.dev/en/tools"}},
  openGraph:{title:"Darmowe narzędzia dla firm i programistów | bernecki.dev",description:"Sprawdź stronę internetową, SEO, reklamy i koszty sprzedaży. 45 darmowych narzędzi online.",url:"https://bernecki.dev/narzedzia",type:"website"}
 };
 export default function FreeToolsPage(){

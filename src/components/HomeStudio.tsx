@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, ArrowRight, Github, Linkedin, BookOpen, BrainCircuit, Newspaper } from "lucide-react";
+import { englishToolPath, localizedToolboxPath, localizedToolPath } from "@/lib/toolbox-en";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { homepageCopy } from "@/content/homepage-copy";
 import { ClientMarquee } from "./ClientMarquee";
@@ -92,6 +93,7 @@ export function HomeStudio() {
         <div className={styles.actions}>
           <a className={styles.primary} href="#contact">{c.call}<ArrowUpRight size={18}/></a>
           <a className={styles.secondary} href="#projects">{c.projects}<ArrowUpRight size={18}/></a>
+          <Link className={styles.secondary} href={localizedToolboxPath(lang)}>{lang==="pl"?"Darmowe narzędzia":"Free tools"}<ArrowUpRight size={18}/></Link>
         </div>
       </div>
       <div className={styles.heroScene}>
@@ -130,18 +132,21 @@ export function HomeStudio() {
       <div className="mt-8 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-3">
         <Link href="/kontakt" className="brand-action inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-3 py-3 text-center text-[11px] font-semibold leading-5 text-black sm:px-6 sm:text-sm">{lang === "pl" ? "Zapytaj o współpracę" : "Discuss your project"} <ArrowUpRight size={17}/></Link>
         <Link href="/#projects" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-white/20 px-3 py-3 text-center text-[11px] leading-5 text-white hover:border-white/50 sm:px-6 sm:text-sm">{lang === "pl" ? "Zobacz realizacje" : "View projects"} <ArrowRight size={16}/></Link>
+         <Link href={localizedToolboxPath(lang)} className="col-span-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-white/20 px-3 py-3 text-center text-[11px] leading-5 text-white hover:border-white/50 sm:col-span-1 sm:px-6 sm:text-sm">{lang==="pl"?"Darmowe narzędzia":"Free tools"} <ArrowRight size={16}/></Link>
       </div>
     </section>
     <section id="tools" className={styles.section}>
       <p className={styles.eyebrow}>{lang==="pl"?"Darmowe narzędzia":"Free toolbox"}</p>
       <div className="flex flex-wrap items-end justify-between gap-5">
         <div><h2>{lang==="pl"?"Sprawdź stronę i reklamy. Za darmo.":"Test your website and ads. For free."}</h2>
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65">{lang==="pl"?"Wpisz jeden adres i sprawdź SEO, obrazy, SSL, DNS i analitykę w jednym audycie. Dodatkowo 44 szczegółowe narzędzia do reklam, CRM i programowania — bez konta.":"45 practical tools: SEO checks, Meta Ads diagnostics, marketing and CRM calculators. No sign-up required."}</p></div>
-        <Link href="/narzedzia" className="inline-flex items-center gap-2 text-sm font-medium underline underline-offset-4">{lang==="pl"?"Wszystkie narzędzia":"Browse tools"} <ArrowRight size={16}/></Link>
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65">{lang==="pl"?"Wpisz jeden adres i sprawdź SEO, obrazy, SSL, DNS i analitykę w jednym audycie. Dodatkowo 44 szczegółowe narzędzia do reklam, CRM i programowania — bez konta.":"Run a combined website audit with one URL, or explore 44 other standalone tools for SEO, Meta Ads, CRM and developer tasks. No sign-up required."}</p></div>
+        <Link href={localizedToolboxPath(lang)} className="inline-flex items-center gap-2 text-sm font-medium underline underline-offset-4">{lang==="pl"?"Wszystkie narzędzia":"Browse tools"} <ArrowRight size={16}/></Link>
       </div>
       <div className="mt-8 grid gap-3 md:grid-cols-3">
-        {[["Kompleksowy darmowy audyt WWW","SEO, SSL, DNS, analityka i podstrony w jednym raporcie.","audyt-strony"],["Darmowa diagnostyka Meta Ads","Rozwiąż typowe błędy kampanii i zestawów.","diagnostyka-meta-ads"],["Darmowy kalkulator ROAS","Sprawdź przychód z każdej złotówki reklamy.","kalkulator-roas"]].map(([name,desc,slug])=><Link key={slug} href={"/narzedzia/"+slug} className="group rounded-xl border border-white/15 bg-[#111111] p-6 transition-colors hover:border-white/50">
-         <span className="text-[10px] uppercase tracking-[.16em] text-white/50">TOOLBOX / FREE</span><h3 className="mt-5 text-xl">{name}</h3><p className="mt-3 text-sm leading-7 text-white/65">{desc}</p><span className="mt-5 inline-flex items-center gap-2 text-sm text-white/80">Sprawdź <ArrowRight size={16}/></span>
+        {(lang==="pl"?
+          [["Darmowy kompleksowy audyt WWW","SEO, SSL, DNS i analityka w jednym raporcie.","audyt-strony"],["Darmowa diagnostyka Meta Ads","Znajdź przyczyny problemów z reklamami.","diagnostyka-meta-ads"],["Darmowy kalkulator ROAS","Policz przychód na każdą złotówkę reklamy.","kalkulator-roas"]]
+          :[["Free comprehensive website audit","SEO, SSL, DNS and analytics in one report.","audyt-strony"],["Free Meta Ads troubleshooter","Find out why your ads are not delivering.","diagnostyka-meta-ads"],["Free ROAS calculator","Calculate return on ad spend.","kalkulator-roas"]]).map(([name,desc,slug])=><Link key={slug} href={localizedToolPath(slug,lang)} className="group rounded-xl border border-white/15 bg-[#111111] p-6 transition-colors hover:border-white/50">
+         <span className="text-[10px] uppercase tracking-[.16em] text-white/50">TOOLBOX / FREE</span><h3 className="mt-5 text-xl">{name}</h3><p className="mt-3 text-sm leading-7 text-white/65">{desc}</p><span className="mt-5 inline-flex items-center gap-2 text-sm text-white/80">{lang==="pl"?"Sprawdź":"Open tool"} <ArrowRight size={16}/></span>
         </Link>)}
       </div>
     </section>
