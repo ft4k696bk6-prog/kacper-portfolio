@@ -116,7 +116,7 @@ function readableValue(value:string) {
  const dictionary:Record<string,string>={
   "brak":"Not found","Brak":"Not found","Nie wykryto":"Not detected","Znaleziono ślad kodu":"Code marker found",
   "Nie wykryto w HTML":"Not detected in HTML","Wykryto ślad":"Marker found","Brak śladu":"No marker found",
-  "Poprawna":"Valid","Niepoprawna":"Invalid","Obecny":"Present","Brak":"Missing",
+  "Poprawna":"Valid","Niepoprawna":"Invalid","Obecny":"Present",
   "Spełnia":"Pass","Nie spełnia":"Fail","odczytano":"Found","nie odczytano":"Not found",
   "brak tytułu":"Missing title","wykryto tytuł":"Title detected"
  };
