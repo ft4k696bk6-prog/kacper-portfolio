@@ -20,12 +20,17 @@ describe("restricted portfolio OpenRouter configuration", () => {
     expect(isPortfolioTopic("Jakie projekty stworzył Kacper?")).toBe(true);
     expect(isPortfolioTopic("Tell me about B-CRM and Motomizer")).toBe(true);
     expect(isPortfolioTopic("How can I contact Kacper?")).toBe(true);
+    expect(isPortfolioTopic("Czy zrobisz integrację API do sklepu?")).toBe(true);
+    expect(isPortfolioTopic("Can we discuss an AI assistant?")).toBe(true);
   });
 
   it("refuses unrelated tasks before any paid model request", () => {
     expect(isPortfolioTopic("Napisz mi przepis na sernik")).toBe(false);
     expect(isPortfolioTopic("What is the capital of Canada?")).toBe(false);
     expect(isPortfolioTopic("Wymyśl opowiadanie o smokach")).toBe(false);
+    // "api" must not match inside unrelated words like "napisz" or "capital".
+    expect(isPortfolioTopic("Napisz mi przepis na sernik")).toBe(false);
+    expect(isPortfolioTopic("What is the capital of Canada?")).toBe(false);
     expect(outsideScopeAnswer("pl")).toContain("Kacpra Berneckiego");
   });
 
