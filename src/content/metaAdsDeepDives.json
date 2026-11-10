@@ -1,0 +1,82 @@
+{
+  "meta-zestaw-reklam-nieaktywny-jak-wlaczyc": {
+    "heading": "Trzy poziomy emisji — gdzie dokładnie szukać blokady?",
+    "points": [
+      "Na poziomie kampanii sprawdź, czy jej przełącznik jest aktywny i czy zakończył się harmonogram. Aktywna kampania z wyłączonym zestawem nadal nie emituje reklam z tego zestawu.",
+      "Na poziomie zestawu reklam sprawdź datę rozpoczęcia i zakończenia, budżet lub ograniczenia oraz status w kolumnie dostarczania. Samo przesunięcie suwaka bez publikacji zmian może nie wystarczyć.",
+      "Na poziomie konkretnej reklamy sprawdź, czy istnieje opublikowana kreacja, czy nie jest odrzucona i czy nie wymaga ponownej weryfikacji. Nie twórz nowej kampanii tylko dlatego, że reklama utknęła w szkicu.",
+      "Porównaj wyświetlenia w tym samym przedziale czasu przed zmianą i po jej zastosowaniu. Brak wyświetleń mimo aktywnych przełączników wymaga dalszej diagnostyki, a nie automatycznego zwiększania budżetu."
+    ],
+    "outcome": "Jeżeli wszystkie trzy poziomy są włączone, ale emisja nie rusza, zapisz dokładny komunikat dostarczania i sprawdź płatności, jakość konta oraz ewentualne ograniczenia."
+  },
+  "meta-brak-aktywnych-kampanii-co-oznacza": {
+    "heading": "Jak odróżnić pusty filtr od rzeczywistego braku kampanii?",
+    "points": [
+      "Zacznij od weryfikacji identyfikatora konta reklamowego i wybranego portfolio firmowego. Podobnie nazwane konta prowadzą do pomyłek, szczególnie gdy obsługujesz kilka marek.",
+      "Wyłącz filtry „Aktywne” i inne zapisane widoki, a zakres dat ustaw na okres, kiedy reklamy na pewno działały. Filtr dat może ukrywać wyniki nawet wtedy, gdy obiekty nadal istnieją.",
+      "Sprawdź osobno kampanie, zestawy reklam i reklamy. Przejrzyj zakończone kampanie oraz wersje robocze; nie wszystkie pojawiają się w tych samych widokach.",
+      "Jeśli kampanie były widoczne wcześniej, porównaj swoje uprawnienia z uprawnieniami administratora i sprawdź historię aktywności."
+    ],
+    "outcome": "Dopiero po wykluczeniu filtrów, złego konta i utraty dostępu warto rozważać odtwarzanie brakujących elementów."
+  },
+  "meta-kampania-aktywna-zestaw-wylaczony": {
+    "heading": "Dlaczego aktywna kampania może wydawać 0 zł?",
+    "points": [
+      "Ustal, czy budżet jest ustawiony na poziomie kampanii, czy zestawu. Wspólny budżet nie musi być rozdzielany równo, ale wyłączony zestaw w ogóle nie konkuruje o emisję.",
+      "Sprawdź harmonogram zestawu: rozpoczęcie w przyszłości albo przeszła data zakończenia mogą wstrzymać emisję mimo aktywnej kampanii.",
+      "Otwórz poziom reklam i upewnij się, że co najmniej jedna kreacja jest opublikowana, zgodna z zasadami i gotowa do dostarczania.",
+      "Jeśli w panelu pojawia się odrzucenie reklamy lub blokada konta, rozwiąż wskazany powód zamiast kopiować zestaw."
+    ],
+    "outcome": "W raporcie oceniaj status dostarczania i liczbę wyświetleń konkretnego zestawu, nie sam zielony lub niebieski przełącznik kampanii."
+  },
+  "meta-reklamy-same-sie-wylaczaja": {
+    "heading": "Jak znaleźć sprawcę automatycznego wyłączenia?",
+    "points": [
+      "Otwórz historię aktywności reklamy lub zestawu i odczytaj dokładną godzinę oraz rodzaj zmiany. To najważniejszy punkt wyjścia, bo pozwala odróżnić działanie użytkownika od automatyzacji.",
+      "Sprawdź automatyczne reguły, np. wyłączanie po określonym wydatku lub koszcie wyniku. Porównaj ich czas wykonania z chwilą wyłączenia kampanii.",
+      "Zweryfikuj datę końcową emisji, limity wydatków i ewentualne zmiany w metodzie płatności. Niektóre ograniczenia wstrzymują reklamę bez ręcznej edycji jej treści.",
+      "Jeżeli historię zmienił nieznany użytkownik, sprawdź uprawnienia, sesje i bezpieczeństwo konta firmowego. Nie udostępniaj loginu osobom obiecującym szybkie „odblokowanie”."
+    ],
+    "outcome": "Gdy poznasz przyczynę, napraw tylko konkretny mechanizm. Usunięcie wszystkich reguł bywa ryzykowne, bo część chroni budżet."
+  },
+  "meta-status-nie-dostarcza-co-robic": {
+    "heading": "Diagnostyka statusu „Nie dostarcza” bez przypadkowych edycji",
+    "points": [
+      "Zapisz dokładne brzmienie komunikatu po rozwinięciu statusu dostarczania. Jedno ogólne określenie może odnosić się do wielu problemów: wyłączonego zestawu, rozliczeń, harmonogramu lub oceny reklamy.",
+      "Porównaj status konta, kampanii, zestawu i reklamy. Gdy problem występuje tylko przy jednej kreacji, zacznij od niej, nie od całej kampanii.",
+      "Sprawdź, czy reklama była opublikowana oraz czy Meta zakończyła jej weryfikację. Ustalenie „włączona, ale w trakcie przeglądu” prowadzi do innego działania niż „odrzucona”.",
+      "Nie zmieniaj jednocześnie grupy odbiorców, budżetu i kreacji. Po każdej poprawce odczekaj na jej publikację i ponownie sprawdź stan dostarczania."
+    ],
+    "outcome": "Jeśli problem nie ustępuje, zanotuj identyfikator zestawu, czas wystąpienia i treść błędu — to przyspiesza zgłoszenie do oficjalnego wsparcia."
+  },
+  "meta-uczenie-sie-ograniczone-co-zmienic": {
+    "heading": "Kiedy warto reagować na ograniczone uczenie?",
+    "points": [
+      "Najpierw policz wartościowe zdarzenia optymalizacji z ostatnich dni. Zestaw może generować kliknięcia, ale nie dostarczać liczby sygnałów potrzebnych do stabilnego uczenia.",
+      "Sprawdź, czy kilka niemal identycznych zestawów nie konkuruje o tę samą grupę. Rozdrobnienie budżetu utrudnia ocenę oraz może ograniczać ilość danych dla każdego zestawu.",
+      "Rozważ konsolidację podobnych zestawów albo zmianę celu optymalizacji wyłącznie wtedy, gdy nadal odpowiada on rzeczywistemu etapowi lejka sprzedaży.",
+      "Porównuj koszt jakościowego leada, kontaktowalność i zamknięte sprzedaże. Zielony status nie jest celem samym w sobie, a większy budżet nie gwarantuje lepszej jakości."
+    ],
+    "outcome": "Jeśli wyniki biznesowe są stabilne i opłacalne, nie trzeba na siłę usuwać etykiety „Uczenie się ograniczone”."
+  },
+  "meta-brak-przycisku-opublikuj": {
+    "heading": "Brak przycisku publikacji: typowe scenariusze",
+    "points": [
+      "Upewnij się, że edytujesz właściwe konto i że masz uprawnienia do tworzenia oraz publikowania reklam, a nie wyłącznie do podglądu statystyk.",
+      "Sprawdź, czy istnieje jakakolwiek niezapisana zmiana. W wielu widokach opcja publikacji pojawia się dopiero po modyfikacji i zatwierdzeniu formularza.",
+      "Przejrzyj błędy walidacji na poziomie reklamy: brak tożsamości strony, niedokończonego materiału, niedostępny link lub problem z formatem pliku.",
+      "Jeśli panel działa niestabilnie, zrób zrzut komunikatu i sprawdź działanie w aktualnej wersji przeglądarki, bez utraty wersji roboczej."
+    ],
+    "outcome": "Nie zakładaj nowego konta reklamowego ani nie zmieniaj celów kampanii, zanim nie ustalisz, czy to problem uprawnień, formularza czy interfejsu."
+  },
+  "meta-nie-moge-pobrac-leadow": {
+    "heading": "Dlaczego kontakt w Meta nie pojawia się w CRM?",
+    "points": [
+      "Oddziel dwa przypadki: lead istnieje w formularzach Meta, ale nie można go pobrać, albo lead da się pobrać, lecz integracja nie wysyła go do CRM. To zupełnie inne problemy.",
+      "Sprawdź dostęp do strony Facebook, formularza i uprawnienia do leadów. Uprawnienie do prowadzenia reklam nie zawsze oznacza dostęp do danych z formularzy.",
+      "Zweryfikuj, czy właściwy formularz jest przypisany do działającej kampanii, a integracja korzysta z aktualnego połączenia i wymaganych uprawnień. Po ponownym połączeniu wykonaj test na nieprodukcyjnym formularzu.",
+      "Porównaj liczbę leadów w panelu Meta z liczbą utworzonych rekordów w CRM, uwzględniając duplikaty i filtry. Sprawdź też, czy dane osobowe są przetwarzane zgodnie z zasadami firmy."
+    ],
+    "outcome": "Nie pobieraj i nie przesyłaj danych osobowych przez niezaufane aplikacje tylko po to, by obejść problem uprawnień."
+  }
+}
