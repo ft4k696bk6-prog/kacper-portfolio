@@ -16,12 +16,13 @@ type Props = {
   listening: boolean;
   open: boolean;
   lastReply: string;
+  nudgeText: string;
   onOpen: () => void;
 };
 
 /** Companion visuals are intentionally independent of the chat backend. */
 export function BerniCompanion({
-  lang, mood, input, loading, listening, open, lastReply, onOpen,
+  lang, mood, input, loading, listening, open, lastReply, nudgeText, onOpen,
 }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const lastActivityRef = useRef(0);
@@ -62,6 +63,16 @@ export function BerniCompanion({
     const end = window.setTimeout(() => setReaction(null), 6200);
     return () => { window.clearTimeout(start); window.clearTimeout(end); };
   }, [lastReply]);
+
+  useEffect(() => {
+    if (!nudgeText) return;
+    const start = window.setTimeout(() => {
+      const eventMood = detectBerniReaction(nudgeText);
+      setReaction(eventMood === "idle" ? "curious" : eventMood);
+    }, 0);
+    const end = window.setTimeout(() => setReaction(null), 12500);
+    return () => { window.clearTimeout(start); window.clearTimeout(end); };
+  }, [nudgeText]);
 
   useEffect(() => {
     if (!lastActivityRef.current) lastActivityRef.current = Date.now();
