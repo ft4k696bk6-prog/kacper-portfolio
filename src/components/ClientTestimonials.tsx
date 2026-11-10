@@ -39,7 +39,7 @@ const testimonials: Testimonial[] = [
     quotePl: "Zależało nam, żeby handlowcy mieli porządek w kontaktach, a biuro widziało, co dzieje się po podpisaniu umowy. B-CRM łączy leady, zadania i realizację w jednym miejscu. Powstawał pod nasz sposób pracy, a nie według gotowego szablonu.",
     quoteEn: "We needed salespeople to stay on top of leads and our office to see what happens after a contract is signed. B-CRM brings contacts, tasks and delivery into one place. It was built around how our team works, not a generic template.",
     href: "/case-studies/b-crm",
-    logo: "/images/brands/b-crm.svg",
+    logo: "/images/brands/b-crm-logo.webp",
   },
   {
     company: "Motomizer",
