@@ -14,7 +14,7 @@ type ForecastPoint = {
 function safeCity(value: string | null): string | null {
   if (!value) return null;
   try {
-    const city = decodeURIComponent(value).replace(/[<>\\u0000-\\u001f]/g, "").trim();
+    const city = Array.from(decodeURIComponent(value)).filter((character) => character >= " " && character !== "<" && character !== ">").join("").trim();
     return city.length > 0 && city.length <= 72 ? city : null;
   } catch {
     return null;
@@ -22,7 +22,7 @@ function safeCity(value: string | null): string | null {
 }
 
 function readCoordinate(value: string | null, min: number, max: number): number | null {
-  if (value === null || !/^-?\\d+(\\.\\d+)?$/.test(value)) return null;
+  if (value === null || value.trim() === "") return null;
   const number = Number(value);
   return Number.isFinite(number) && number >= min && number <= max
     ? Math.round(number * 10) / 10
