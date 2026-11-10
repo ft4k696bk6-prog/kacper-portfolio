@@ -15,7 +15,11 @@ function safeCity(value: string | null): string | null {
   if (!value) return null;
   try {
     const city = Array.from(decodeURIComponent(value)).filter((character) => character >= " " && character !== "<" && character !== ">").join("").trim();
-    return city.length > 0 && city.length <= 72 ? city : null;
+    // Browser copy must never present a placeholder, IP address or garbage as a town.
+    if (city.length < 2 || city.length > 72) return null;
+    if (!/^[\p{L}\p{M} .'-]+$/u.test(city)) return null;
+    if (["unknown", "none", "null", "undefined", "localhost", "not available", "n/a"].includes(city.toLowerCase())) return null;
+    return city;
   } catch {
     return null;
   }
@@ -38,7 +42,7 @@ export async function GET(request: NextRequest) {
   const responseHeaders = { "Cache-Control": "private, no-store" };
 
   // Do not ask for precise browser location. A coarse Vercel IP position is optional.
-  if (lat === null || lon === null) {
+  if (!city || lat === null || lon === null) {
     return NextResponse.json({ location, weather: null }, { headers: responseHeaders });
   }
 

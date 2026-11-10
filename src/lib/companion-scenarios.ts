@@ -1,7 +1,7 @@
 export type CompanionLocale = "pl" | "en";
-export type CompanionDevice = "iphone" | "ipad" | "android" | "tablet" | "mac" | "windows" | "linux" | "mobile" | "desktop";
+export type CompanionDevice = "iphone" | "ipad" | "android" | "tablet" | "mac" | "windows" | "linux" | "unknown";
 export type CompanionBrowser = "safari" | "chrome" | "firefox" | "edge" | "other";
-export type CompanionCategory = "weather" | "device" | "time" | "location" | "browser" | "page" | "return" | "combination" | "playful";
+export type CompanionCategory = "weather" | "device" | "viewport" | "time" | "location" | "browser" | "page" | "return" | "combination" | "playful";
 
 export type CompanionWeather = {
   temperature: number;
@@ -26,18 +26,20 @@ export type CompanionContext = {
   hour: number;
   day: number;
   month: number;
+  date: number;
   dark: boolean;
   touch: boolean;
   reducedMotion: boolean;
   width: number;
   returning: boolean;
 };
+export type CompanionTopic = "weather" | "device" | "viewport" | "time" | "location" | "browser" | "page" | "return" | "playful";
 export type CompanionNudge = {
   id: string;
   category: CompanionCategory;
+  topic: CompanionTopic;
   text: string;
   intent: "chat" | "audit";
-  weatherCredit: boolean;
 };
 
 type Rule = {
@@ -71,7 +73,7 @@ function addSet(
 }
 
 const any = () => true;
-const hasWeather = (c: CompanionContext) => c.weather !== null;
+const hasWeather = (c: CompanionContext) => c.weather !== null && Boolean(c.city);
 const temperature = (c: CompanionContext) => c.weather?.temperature ?? 99;
 const symbol = (c: CompanionContext) => c.weather?.symbol?.toLowerCase() ?? "";
 const storm = (c: CompanionContext) => /thunder/.test(symbol(c));
@@ -82,7 +84,7 @@ const cloudy = (c: CompanionContext) => /(cloudy|partlycloudy)/.test(symbol(c));
 const sunny = (c: CompanionContext) => /(clearsky|fair)/.test(symbol(c));
 const fog = (c: CompanionContext) => /fog/.test(symbol(c));
 const windy = (c: CompanionContext) => (c.weather?.windSpeed ?? 0) >= 10;
-const phone = (c: CompanionContext) => ["iphone", "android", "mobile"].includes(c.device);
+const phone = (c: CompanionContext) => c.device === "iphone" || c.device === "android";
 const night = (c: CompanionContext) => c.hour >= 23 || c.hour < 5;
 const evening = (c: CompanionContext) => c.hour >= 18 && c.hour < 23;
 const isAudit = (c: CompanionContext) => /narzedzia|tools|audyt|audit/.test(c.pathname);
@@ -93,155 +95,173 @@ const isWork = (c: CompanionContext) => /realizacje|projects|case-stud|portfolio
 const isGuide = (c: CompanionContext) => /poradniki|blog|guides/.test(c.pathname);
 
 addSet("wx-freeze", "weather", c => hasWeather(c) && temperature(c) < 0, [
-  ["Brrr… prognoza dla Twojej okolicy pokazuje {temp}°C. Aż mi się piksele trzęsą.", "Brrr… the forecast for your area says {temp}°C. Even my pixels are shivering."],
-  ["{city}: {temp}°C. Jeśli mój wentylator zamarznie, wiesz dlaczego.", "{city}: {temp}°C. If my fan freezes, you'll know why."],
-  ["Tak zimno, że nawet mój kod chciałby założyć kurtkę.", "It's so cold even my code wants to wear a coat."],
-  ["Poniżej zera? To nie jest temperatura dla cyfrowego zwierzaka.", "Below freezing? Not ideal weather for a little digital creature."],
+  ["{place} dziś {temp}°C. Brrr… aż mi się piksele trzęsą.","{place} it's {temp}°C today. Brrr… even my pixels are shivering."],
+  ["{place} {temp}°C. Jeśli mi zamarznie wentylator, będzie wiadomo dlaczego.","{place} it's {temp}°C. If my fan freezes, you'll know why."],
+  ["{place} taki mróz, że nawet mój kod chciałby założyć kurtkę.","{place} it's so cold that even my code wants a coat."],
+  ["{place} temperatura spadła poniżej zera. To nie są warunki dla cyfrowego zwierzaka.","{place} the temperature is below zero. Not ideal for a little digital creature."],
 ], 3);
 addSet("wx-extreme-freeze", "weather", c => hasWeather(c) && temperature(c) <= -10, [
-  ["{temp}°C?! Czy ktoś przestawił pogodę w tryb ekstremalny?", "{temp}°C?! Did someone switch the weather to extreme mode?"],
-  ["Na dworze {temp}°C. Ja zostaję po tej stronie ekranu.", "It's {temp}°C outside in your area. I'm staying on this side of the screen."],
+  ["{place} aż {temp}°C?! Ktoś przestawił pogodę w tryb ekstremalny?","{place} it's {temp}°C?! Did someone switch the weather to extreme mode?"],
+  ["{place} {temp}°C. Ja zostaję po tej stronie ekranu, dzięki.","{place} it's {temp}°C. I'm staying on this side of the screen, thanks."],
 ], 4);
 addSet("wx-chilly", "weather", c => hasWeather(c) && temperature(c) >= 0 && temperature(c) <= 8, [
-  ["Brr… u Was dziś chłodno. Na szczęście do rozmowy ze mną nie potrzebujesz rękawiczek.", "Brr… it's chilly in your area. Luckily, you don't need gloves to chat with me."],
-  ["Prognoza: {temp}°C. Lepiej mieć pod ręką coś ciepłego.", "Forecast: {temp}°C. Might be worth having something warm nearby."],
-  ["Chłodno dzisiaj. Mnie na szczęście wystarczy trochę energii z serwera.", "Chilly today. Luckily, a bit of server power keeps me going."],
+  ["Brrr… {place} dziś tylko {temp}°C. Chyba pora na coś ciepłego.","Brrr… {place} it's only {temp}°C today. Time for something warm."],
+  ["{place} zrobiło się chłodno. Gdybym miał ręce, schowałbym je do kieszeni.","{place} it's turned chilly. If I had hands, they'd be in my pockets."],
+  ["{place} {temp}°C. Dobrze, że do działania wystarcza mi trochę prądu.","{place} it's {temp}°C. Good thing all I need is a little electricity."],
 ], 2);
 addSet("wx-mild", "weather", c => hasWeather(c) && temperature(c) >= 9 && temperature(c) <= 22, [
-  ["{temp}°C — całkiem przyjemnie. Nawet mi się nie chce chować do chmury.", "{temp}°C — rather pleasant. Even I don't feel like hiding in the cloud."],
-  ["Pogoda całkiem znośna. Dobry moment na nowy pomysł.", "Not bad weather at all. A good time for a fresh idea."],
+  ["{place} dziś {temp}°C. W sam raz, żeby złapać nowy pomysł.","{place} it's {temp}°C today. Nice weather for a new idea."],
+  ["{place} zapowiada się przyjemny dzień. Nawet ja wyszedłbym z ekranu na spacer.","{place} the day looks pleasant. Even I'd leave this screen for a walk."],
 ], 1);
 addSet("wx-warm", "weather", c => hasWeather(c) && temperature(c) >= 23 && temperature(c) < 30, [
-  ["O, robi się ciepło: {temp}°C. Mój cyfrowy termostat już to zauważył.", "Getting warm: {temp}°C. My digital thermostat has noticed."],
-  ["Ciepło u Was. Gdybym miał okulary przeciwsłoneczne, właśnie bym je założył.", "It's warm in your area. If I had sunglasses, I'd be wearing them."],
+  ["{place} już {temp}°C. Mój cyfrowy termostat też to zauważył.","{place} it's already {temp}°C. My digital thermostat noticed too."],
+  ["{place} całkiem ciepło. Gdybym miał okulary przeciwsłoneczne, już bym je założył.","{place} it's pretty warm. If I had sunglasses, I'd be wearing them."],
 ], 2);
 addSet("wx-heat", "weather", c => hasWeather(c) && temperature(c) >= 30, [
-  ["Ale żar! {temp}°C według prognozy. Oby komputer miał lepsze chłodzenie ode mnie.", "What a scorcher! The forecast says {temp}°C. Hope your computer has better cooling than I do."],
-  ["{temp}°C? Dziś nawet piksele wolą siedzieć w cieniu.", "{temp}°C? Even pixels would rather sit in the shade today."],
-  ["Gorąco, co? Dobrze, że mogę udawać, że mam klimatyzację.", "Hot, isn't it? Good thing I can pretend I have air conditioning."],
-  ["Temperatura rośnie. Spokojnie, to nie przez tę stronę.", "The temperature is rising. Don't worry, it's not because of this website."],
+  ["{place} aż {temp}°C. Oby Twój sprzęt miał porządne chłodzenie.","{place} it's {temp}°C. Hope your device has decent cooling."],
+  ["{place} {temp}°C?! Dziś nawet piksele wolą siedzieć w cieniu.","{place} it's {temp}°C?! Even pixels would rather stay in the shade."],
+  ["{place} taki upał, że mógłbym usmażyć na procesorze naleśnika. Gdybym miał procesor.","{place} it's so hot I could fry a pancake on my processor. If I had one."],
+  ["{place} według prognozy naprawdę gorąco. Dobrze, że mogę udawać, że mam klimatyzację.","{place} it's seriously hot in the forecast. Good thing I can pretend to have air conditioning."],
 ], 4);
 addSet("wx-rain", "weather", rain, [
-  ["Kap, kap… prognoza zapowiada deszcz. Ja chyba zostanę pod swoim cyfrowym dachem.", "Drip, drip… rain is in the forecast. I'll stay under my digital roof."],
-  ["Deszcz w prognozie. Dobrze, że strony internetowe nie potrzebują parasola.", "Rain in the forecast. Good thing websites don't need umbrellas."],
-  ["Pogoda dorzuca dziś własne efekty specjalne. I to bez JavaScriptu.", "The weather has its own special effects today. No JavaScript required."],
-  ["Jeśli planujesz spacer, zerknij na prognozę. Wygląda na mokry dzień.", "Planning a walk? Check the forecast. Looks like a wet day."],
+  ["Kap, kap… {place} prognoza zapowiada deszcz. Ja zostaję pod cyfrowym dachem.","Drip, drip… {place} rain is in the forecast. I'll stay under my digital roof."],
+  ["{place} dziś deszczowo. Na szczęście strony internetowe nie potrzebują parasola.","{place} rainy weather today. Luckily, websites don't need umbrellas."],
+  ["{place} nadciąga deszcz. Natura dorzuca własne efekty specjalne, bez JavaScriptu.","{place} rain's on the way. Nature has its own special effects, no JavaScript required."],
+  ["{place} w prognozie deszcz. Jeśli wybierasz się na spacer, zerknij najpierw za okno.","{place} rain is in the forecast. If you're going for a walk, have a look outside first."],
 ], 3);
 addSet("wx-snow", "weather", snow, [
-  ["Pada śnieg w prognozie! Gdybym miał ręce, już lepiłbym bałwana.", "Snow is in the forecast! If I had hands, I'd be making a snowman."],
-  ["Biało się robi. Nawet mój ekran zazdrości tej zimowej estetyki.", "Things are turning white. Even my screen is jealous of that winter look."],
-  ["Śnieg! Ciekawe, czy moje piksele też potrafią robić aniołki.", "Snow! I wonder if pixels can make snow angels."],
+  ["{place} prognoza zapowiada śnieg! Gdybym miał ręce, lepiłbym bałwana.","{place} snow is in the forecast! If I had hands, I'd build a snowman."],
+  ["{place} zrobi się biało. Mój ciemny interfejs będzie miał konkurencję.","{place} things may turn white. My dark interface has some competition."],
+  ["{place} śnieg w prognozie. Ciekawe, czy piksele potrafią robić aniołki na śniegu.","{place} snow is in the forecast. Wonder if pixels can make snow angels."],
 ], 3);
 addSet("wx-sleet", "weather", sleet, [
-  ["Deszcz ze śniegiem? Nawet pogoda nie może się zdecydować.", "Sleet? Even the weather can't make up its mind."],
-  ["Prognoza mówi: trochę śniegu, trochę deszczu. Czyli klasyczny pogodowy kompromis.", "Forecast says a bit of snow, a bit of rain. A classic weather compromise."],
+  ["{place} deszcz ze śniegiem. Nawet pogoda nie potrafi dziś podjąć decyzji.","{place} sleet in the forecast. Even the weather can't make a decision today."],
+  ["{place} trochę śniegu, trochę deszczu. Klasyczny pogodowy kompromis.","{place} a bit of snow, a bit of rain. A classic weather compromise."],
 ], 3);
 addSet("wx-storm", "weather", storm, [
-  ["Grzmoty w prognozie. Oby tylko prądu nie zabrakło — mam jeszcze sporo do powiedzenia.", "Thunder in the forecast. Hope the power stays on — I've got more to say."],
-  ["Burza? Ja się nie boję. Tylko tak profilaktycznie schowam trochę niżej.", "A thunderstorm? I'm not scared. I'll just move a little lower, just in case."],
-  ["Niebo szykuje własny pokaz efektów. Ja dziś nie konkuruję.", "The sky is putting on its own light show. I'm not competing today."],
+  ["{place} prognoza zapowiada burzę. Oby prąd został z nami — mam jeszcze sporo do powiedzenia.","{place} thunderstorms are in the forecast. Hope the power stays on — I've got more to say."],
+  ["{place} zapowiadają grzmoty. Nie boję się, tylko na wszelki wypadek schowam trochę niżej.","{place} thunder is expected. I'm not scared, just moving a little lower to be safe."],
+  ["{place} niebo szykuje własny pokaz efektów. Dziś nie zamierzam konkurować.","{place} the sky is preparing a light show. I won't compete today."],
 ], 5);
 addSet("wx-windy", "weather", windy, [
-  ["Ale wieje! Według prognozy wiatr osiąga około {wind} m/s. Trzymaj telefon mocno.", "That's windy! The forecast says about {wind} m/s. Hold on to your phone."],
-  ["Wietrznie u Was. Ja na szczęście jestem dobrze przypięty do strony.", "Windy in your area. Luckily, I'm securely attached to the page."],
-  ["Gdyby mnie dało się zdmuchnąć z ekranu, dziś byłby ten dzień.", "If I could be blown off the screen, today would be the day."],
+  ["{place} mocno wieje: około {wind} m/s według prognozy. Trzymaj się tam!","{place} the forecast calls for winds near {wind} m/s. Hold on tight!"],
+  ["{place} wietrznie. Ja na szczęście jestem mocno przypięty do tej strony.","{place} windy today. Luckily, I'm firmly attached to this website."],
+  ["{place} taki wiatr, że dobrze, iż nie da się mnie zdmuchnąć z ekranu.","{place} so windy that I'm glad I can't be blown off your screen."],
 ], 3);
 addSet("wx-sunny", "weather", sunny, [
-  ["Słońce w prognozie, a Ty w internecie? Nie oceniam. Sam tu mieszkam.", "Sunshine in the forecast, and you're browsing? No judgment. I live here."],
-  ["Wygląda na pogodny dzień. Może po mojej krótkiej wizycie wyjdziesz na spacer?", "Looks like a bright day. Maybe go for a walk after our little chat?"],
-  ["Słońce robi dziś świetną robotę. Nawet bez CSS.", "The sun is doing a great job today. Without any CSS."],
+  ["{place} według prognozy słonecznie, a Ty w internecie? Nie oceniam. Sam tu mieszkam.","{place} sunshine in the forecast and you're online? No judgment. I live here."],
+  ["{place} zapowiada się ładnie. Nie będę Cię długo zatrzymywać od spaceru.","{place} a lovely day ahead. I won't keep you from your walk for long."],
+  ["{place} słońce robi dziś świetną robotę. Nawet bez CSS.","{place} the sun's putting on a great show today. No CSS required."],
 ], 1);
 addSet("wx-clouds", "weather", cloudy, [
-  ["Trochę chmur. Dobrze, że ja działam również w chmurze.", "A few clouds around. Luckily, I run in the cloud too."],
-  ["Słońce gra dziś z chmurami w chowanego. Ja gram w asystenta.", "The sun's playing hide-and-seek with the clouds. I'm playing assistant."],
-  ["Pochmurno? Spokojnie, wewnątrz tej strony zawsze coś się dzieje.", "Cloudy? There's still plenty happening inside this website."],
+  ["{place} pochmurno. Dobrze, że ja też potrafię działać w chmurze.","{place} cloudy today. Good thing I can work in the cloud too."],
+  ["{place} słońce gra z chmurami w chowanego. Ja gram w asystenta.","{place} the sun is playing hide-and-seek with the clouds. I'm playing assistant."],
+  ["{place} sporo chmur w prognozie. W moim małym okienku przynajmniej coś widać.","{place} lots of clouds in the forecast. At least things are clear in my little window."],
 ], 1);
 addSet("wx-fog", "weather", fog, [
-  ["Mgła w prognozie. Oby Twoje plany były dziś bardziej przejrzyste.", "Fog in the forecast. Hope your plans are a little clearer today."],
-  ["Widoczność w pogodzie słaba, ale tutaj wszystko staram się pokazać wyraźnie.", "Poor visibility in the forecast. I'll try to keep everything clear here."],
+  ["{place} mgliście. Oby Twoje plany na dziś były bardziej przejrzyste.","{place} it's foggy. Hope your plans for today are clearer."],
+  ["{place} prognoza zapowiada mgłę. Ja przynajmniej widzę wszystkie piksele.","{place} fog is in the forecast. At least I can see every pixel."],
 ], 2);
 
 addSet("device-iphone", "device", c => c.device === "iphone", [
-  ["Widzę, że przeglądasz stronę na iPhonie. Wiesz, ile firm traci klientów przez źle działającą wersję mobilną? Możemy sprawdzić Twoją.", "I see you're browsing on an iPhone. Know how many businesses lose customers to a broken mobile website? We can check yours."],
-  ["iPhone w dłoni, a cała strona na małym ekranie. Tak właśnie powinien działać dobry projekt.", "An iPhone in hand and a whole website on a small screen. That's what good design should do."],
-  ["Ciekawostka: dobry widok mobilny to nie tylko pomniejszona wersja desktopu.", "Fun fact: good mobile design isn't just a shrunken desktop site."],
+  ["Widzę, że przeglądasz stronę na iPhonie. Wiesz, ile firm traci klientów przez źle działającą wersję mobilną? Możemy sprawdzić Twoją.","I can see you're browsing on an iPhone. Know how many businesses lose customers to a broken mobile website? We can check yours."],
+  ["iPhone wykryty. Cała ta strona mieści się na Twoim ekranie — i właśnie tak powinna działać responsywność.","iPhone detected. This whole site fits on your screen — that's what responsiveness should feel like."],
+  ["Na iPhonie każdy źle ustawiony przycisk od razu rzuca się w oczy. Sprawdź, czy tutaj wszystko działa wygodnie.","On an iPhone, a badly placed button stands out immediately. See how comfortable this site feels."],
 ], 4, "audit");
 addSet("device-android", "device", c => c.device === "android", [
-  ["Android na pokładzie! Twoja firmowa strona też dobrze działa na różnych telefonach? Możemy to sprawdzić.", "Android on board! Does your business website work well across phones too? We can check."],
-  ["Android wykryty. A wiesz, że ta sama strona może wyglądać inaczej na każdym telefonie?", "Android detected. Did you know the same site can look different on every phone?"],
-  ["Telefon to dziś często pierwsze miejsce kontaktu klienta z firmą. Warto o tym pamiętać.", "A phone is often a customer's first contact with a business. Worth remembering."],
+  ["Widzę, że przeglądasz stronę na telefonie z Androidem. Wiesz, ile firm traci klientów przez kiepską wersję mobilną?","I can see you're browsing on an Android phone. Know how many businesses lose customers because of poor mobile design?"],
+  ["Android wykryty. Na takim telefonie dobra strona powinna działać równie sprawnie jak na iPhonie.","Android detected. A good website should work just as well on your phone as it does on an iPhone."],
+  ["Przeglądasz na Androidzie. Wygodne przyciski i czytelne teksty to nie luksus, tylko podstawa.","You're browsing on Android. Easy-to-tap buttons and readable text aren't luxuries — they're essentials."],
 ], 4, "audit");
-addSet("device-ipad", "device", c => c.device === "ipad" || c.device === "tablet", [
-  ["O, tablet! Ani telefon, ani komputer. Właśnie dlatego dobre strony muszą dopasowywać się do ekranu.", "A tablet! Neither phone nor laptop. That's why good websites must adapt."],
-  ["Większy ekran dotykowy to niezły test dla każdej strony. Sprawdzaj śmiało.", "A larger touchscreen is a good test for any website. Feel free to explore."],
+addSet("device-ipad", "device", c => c.device === "ipad", [
+  ["Widzę iPada. Sprawdź, jak układ tej strony dopasował się do Twojego ekranu.","I can see you're using an iPad. Notice how this page layout adapts to your screen."],
+  ["iPad wykryty! Na takim ekranie od razu widać, czy projekt naprawdę jest responsywny.","iPad detected! This kind of screen quickly reveals whether a design is truly responsive."],
 ], 2);
+addSet("device-tablet", "device", c => c.device === "tablet", [
+  ["Tablet wykryty. Sprawdź, jak układ strony wykorzystuje ten rozmiar ekranu.", "Tablet detected. See how the page layout makes use of this screen size."],
+  ["Przeglądasz na tablecie. Tu małe, źle rozmieszczone przyciski naprawdę potrafią przeszkadzać.", "You're browsing on a tablet. Tiny, awkwardly placed buttons can really get in the way."],
+], 2);
+
 addSet("device-mac", "device", c => c.device === "mac", [
-  ["Mac? Dobry sprzęt do kreatywnej pracy. Chcesz zajrzeć za kulisy tej strony?", "A Mac? Great for creative work. Want a peek behind the scenes?"],
-  ["Mac na pokładzie. Obiecuję nie prosić Cię o instalację siedmiu aplikacji.", "Mac on board. I promise I won't ask you to install seven apps."],
+  ["Mac wykryty. Chcesz zobaczyć, jak wygląda ta strona od strony kodu?","Mac detected. Want to see what's happening behind the scenes?"],
+  ["Przeglądasz na Macu. Obiecuję nie kazać Ci instalować siedmiu aplikacji, żeby zobaczyć moje projekty.","You're browsing on a Mac. I promise you won't need seven apps just to see my projects."],
 ], 2);
 addSet("device-windows", "device", c => c.device === "windows", [
-  ["Windows wykryty. Obiecuję nie poprosić o ponowne uruchomienie komputera.", "Windows detected. I promise not to ask you to restart your computer."],
-  ["Duży ekran i Windows? Rozgość się, jest co oglądać.", "Windows and a larger screen? Make yourself comfortable — there's plenty to explore."],
+  ["Windows wykryty. Spokojnie, nie poproszę Cię o ponowne uruchomienie komputera.","Windows detected. Don't worry, I won't ask you to restart your computer."],
+  ["Przeglądasz na Windowsie, a okno ma teraz {width} px szerokości. Układ dopasowuję właśnie do tej wartości.","You're browsing on Windows, and your browser window is currently {width}px wide. That's the space this layout adapts to."],
 ], 2);
 addSet("device-linux", "device", c => c.device === "linux", [
-  ["O, Linux! Jest szansa, że rozumiesz moje problemy z zależnościami.", "Oh, Linux! You might actually understand my dependency problems."],
-  ["Linux? W takim razie nie będę tłumaczył, co to terminal.", "Linux? I guess I won't have to explain what a terminal is."],
+  ["Linux wykryty. Czyli istnieje szansa, że rozumiesz moje problemy z zależnościami.","Linux detected. So there's a chance you understand my dependency problems."],
+  ["O, Linux! Jeśli coś tutaj nie działa, pewnie już wiesz, gdzie zajrzeć w konsoli.","Oh, Linux! If something breaks here, you probably already know where to look in the console."],
 ], 4);
 addSet("device-phone", "device", phone, [
-  ["Całą tę stronę masz teraz w kieszeni. Fajne, ile da się zmieścić na małym ekranie, prawda?", "This whole website fits in your pocket. Amazing what fits on a small screen, right?"],
-  ["Przeglądasz na telefonie. Sprawdź, czy wszystko wygodnie się klika.", "You're browsing on a phone. See how easy everything is to tap."],
-  ["Mały ekran nie powinien oznaczać gorszej strony. Chcesz sprawdzić własną?", "A small screen shouldn't mean a worse website. Want to check yours?"],
+  ["Całe bernecki.dev oglądasz teraz {onDevice}. Fajnie, ile da się zmieścić w małym oknie, prawda?","You're viewing all of bernecki.dev {onDevice}. Amazing how much can fit in a small window, right?"],
+  ["Przeglądasz {onDevice}. Zobacz, jak dopasowałem układ do tego sposobu korzystania ze strony.","You're browsing {onDevice}. Notice how the layout adapts to the way you're using it."],
+  ["Widzę Cię {onDevice}. Gdy projektuję przyciski, właśnie takie urządzenia mam na myśli.","I see you're browsing {onDevice}. Devices like yours are exactly what I think about when designing buttons."],
 ], 2);
-addSet("device-wide", "device", c => c.width >= 1500, [
-  ["Ale masz tu przestrzeni! Na takim ekranie mógłbym postawić drugi serwer.", "Look at all that space! I could fit a second server on that screen."],
-  ["Szeroki ekran, szerokie możliwości. Sprawdź, jak ułożyłem tu projekty.", "Wide screen, wide possibilities. Have a look at the project layout."],
+addSet("viewport-wide", "viewport", c => c.width >= 1500, [
+  ["Twoje okno przeglądarki ma {width} px szerokości. Sporo miejsca na dobre pomysły.","Your browser window is {width}px wide. Plenty of room for good ideas."],
+  ["{width} px szerokości okna? Przy takiej przestrzeni nawet moje piksele mogą się rozprostować.","A {width}px browser window? Even my pixels have room to stretch."],
 ], 2);
+addSet("viewport-compact", "viewport", c => c.width > 0 && c.width < 400, [
+  ["Okno Twojej przeglądarki ma tylko {width} px szerokości. I właśnie dlatego pilnuję każdego piksela.", "Your browser window is just {width}px wide. That's why I pay attention to every pixel."],
+  ["{width} px szerokości okna — niewiele, ale wystarczy, żeby zmieścić całą historię tej strony.", "A {width}px-wide window — not much, but enough to fit this website's story."],
+], 2);
+addSet("viewport-medium", "viewport", c => c.width >= 400 && c.width < 900, [
+  ["Twoje okno przeglądarki ma teraz {width} px. Spróbuj je zmienić, a zobaczysz, jak reaguje układ.", "Your browser window is {width}px wide. Resize it to see how the layout responds."],
+  ["{width} px dostępnej szerokości. Układ strony właśnie do tego się dopasowuje.", "{width}px of browser width. The page layout is adapting to that space."],
+], 2);
+addSet("viewport-large", "viewport", c => c.width >= 900 && c.width < 1500, [
+  ["Twoje okno ma {width} px szerokości. W sam raz, żeby rozłożyć projekty bez ścisku.", "Your browser window is {width}px wide. Plenty of room to spread out the projects."],
+  ["{width} px szerokości okna. Żadnego zgadywania modelu sprzętu — po prostu dopasowanie układu.", "Your browser window is {width}px wide. No device guessing — just a responsive layout."],
+], 2);
+
 addSet("device-touch", "device", c => c.touch, [
-  ["Możesz mnie dotknąć. Tylko delikatnie, jestem z pikseli.", "You can tap me. Gently though — I'm made of pixels."],
+  ["Twoje urządzenie obsługuje dotyk. Możesz mnie stuknąć — jestem odporny na odciski palców.","Your device supports touch. Go ahead and tap me — fingerprints won't hurt."],
 ], 1);
 
 addSet("time-morning", "time", c => c.hour >= 5 && c.hour < 9, [
-  ["Tak wcześnie? Widzę, że ktoś dzisiaj nie zamierza marnować dnia.", "Up this early? Looks like someone has plans for today."],
-  ["Dzień dobry! Kawa już wypita czy dopiero zaczynamy?", "Good morning! Coffee finished, or just getting started?"],
-  ["Poranek. Ja już jestem gotowy do działania, a Ty?", "Morning. I'm ready to go — are you?"],
+  ["Tak wcześnie na bernecki.dev? Ktoś tu chyba ma konkretny plan na dzień.","On bernecki.dev this early? Someone must have a plan for the day."],
+  ["Dzień dobry! Ja już jestem na stanowisku. A kawa u Ciebie gotowa?","Good morning! I'm already on duty. Is your coffee ready?"],
+  ["Poranek i przeglądanie projektów. Brzmi jak niezły początek dnia.","A morning spent browsing projects. Not a bad way to start the day."],
 ], 2);
 addSet("time-lunch", "time", c => c.hour >= 11 && c.hour < 15, [
-  ["Pora obiadowa, a Ty tutaj? To ja poproszę trochę RAM-u na deser.", "Lunchtime and you're here? I'll have some extra RAM for dessert."],
-  ["Południe. Idealny moment, żeby znaleźć rozwiązanie problemu, który czeka od rana.", "Midday. A good moment to solve that problem that's been waiting since morning."],
+  ["Pora obiadowa, a Ty na bernecki.dev? To ja poproszę trochę RAM-u na deser.","Lunchtime and you're on bernecki.dev? I'll have some extra RAM for dessert."],
+  ["Południe. Ja nie robię przerwy na obiad, ale Ty możesz.","Midday. I don't take lunch breaks, but you can."],
 ], 1);
 addSet("time-evening", "time", evening, [
-  ["Dobry wieczór. Podobno najlepsze pomysły przychodzą po godzinach.", "Good evening. They say the best ideas come after hours."],
-  ["Wieczorny research? Dobrze trafiłeś. Mam kilka rzeczy do pokazania.", "Evening research? You're in the right place. I've got a few things to show."],
-  ["Wieczór, cisza i trochę technologii. Całkiem dobry zestaw.", "An evening, some quiet, and a bit of tech. Not a bad combination."],
+  ["Dobry wieczór. To pora, gdy wiele dobrych pomysłów dopiero się zaczyna.","Good evening. This is when a lot of good ideas are only getting started."],
+  ["Wieczorny research na bernecki.dev? Rozgość się, mam kilka rzeczy do pokazania.","Doing some evening research on bernecki.dev? Make yourself at home."],
+  ["Wieczór, spokojny ekran i trochę technologii. Całkiem dobry zestaw.","Evening, a quiet screen, and a bit of tech. Not a bad combination."],
 ], 2);
 addSet("time-night", "time", night, [
-  ["Ty jeszcze nie śpisz? Ja nie muszę, ale Ty chyba powinieneś.", "Still awake? I don't need sleep, but you probably do."],
-  ["Nocne przeglądanie internetu. Brzmi jak początek dobrego pomysłu albo długa bezsenność.", "Late-night browsing. Either a great idea or a serious case of insomnia."],
-  ["Już tak późno? U mnie czas płynie trochę inaczej.", "That late already? Time works a little differently for me."],
+  ["Ty jeszcze nie śpisz? Ja nie muszę, ale Ty pewnie powinieneś.","Still awake? I don't need sleep, but you probably do."],
+  ["Nocne przeglądanie portfolio? Albo świetny pomysł, albo bezsenność.","Browsing a portfolio late at night? Either a great idea or insomnia."],
+  ["U Ciebie już tak późno? U mnie czas płynie trochę inaczej.","It's that late for you already? Time works a little differently for me."],
 ], 3);
 addSet("time-monday", "time", c => c.day === 1, [
-  ["Poniedziałek… jeszcze tylko kilka kaw i będzie piątek.", "Monday… just a few coffees and it'll be Friday."],
-  ["Nowy tydzień, nowa lista rzeczy do zrobienia. Brzmi znajomo?", "New week, new to-do list. Sound familiar?"],
+  ["Poniedziałek… jeszcze tylko kilka kaw i będzie piątek.","Monday… just a few coffees and it'll be Friday."],
+  ["Nowy tydzień, nowa lista rzeczy do zrobienia. Brzmi znajomo?","New week, new to-do list. Sound familiar?"],
 ], 1);
 addSet("time-friday", "time", c => c.day === 5, [
-  ["Piątek! Oby Twoje plany na weekend miały mniej błędów niż piątkowy deploy.", "Friday! Hope your weekend plans have fewer bugs than a Friday deploy."],
-  ["Piątek, ale ja wciąż na stanowisku. Urlopy nie są jeszcze dla mnie.", "Friday, but I'm still on duty. No holidays for me yet."],
+  ["Piątek! Oby Twoje weekendowe plany miały mniej błędów niż piątkowy deploy.","Friday! Hope your weekend plans have fewer bugs than a Friday deploy."],
+  ["Piątek, a ja wciąż na stanowisku. Urlopy to dla mnie nieodkryta funkcja.","Friday and I'm still on duty. Holidays are an unexplored feature for me."],
 ], 2);
 addSet("time-weekend", "time", c => c.day === 0 || c.day === 6, [
-  ["Weekend, a Ty oglądasz portfolio? Szanuję tę ciekawość.", "It's the weekend and you're checking out a portfolio? I respect the curiosity."],
-  ["Weekend! Ja pracuję bez przerwy, ale Tobie polecam chwilę odpoczynku.", "Weekend! I work nonstop, but I recommend taking a little break."],
+  ["Weekend, a Ty na bernecki.dev? Szanuję tę ciekawość.","Weekend and you're on bernecki.dev? I respect the curiosity."],
+  ["Weekend! Ja nie znam wolnego, ale Tobie polecam chwilę odpoczynku.","It's the weekend! I don't get time off, but you should."],
 ], 2);
-addSet("time-winter", "time", c => c.month === 11 || c.month <= 1, [
-  ["Zimą najlepiej działa ogrzewanie, kawa i dobry kod. Kolejność dowolna.", "In winter, heating, coffee, and clean code work best. Any order."],
+addSet("time-winter", "time", c => c.country === "PL" && (c.month === 11 || c.month <= 1), [
+  ["Zima w Polsce: ogrzewanie, kawa i dobry kod. Kolejność dowolna.","Winter in Poland: heating, coffee, and clean code. In any order."],
 ], 1);
-addSet("time-spring", "time", c => c.month >= 2 && c.month <= 4, [
-  ["Wiosna! Może czas na wiosenne porządki również na firmowej stronie?", "Spring! Maybe it's time for a little website spring-cleaning too?"],
+addSet("time-spring", "time", c => c.country === "PL" && c.month >= 2 && c.month <= 4, [
+  ["Wiosna w Polsce! Może czas odświeżyć też firmową stronę?","Spring in Poland! Maybe it's time to refresh the business website too?"],
 ], 1);
-addSet("time-autumn", "time", c => c.month >= 8 && c.month <= 10, [
-  ["Jesień. Liście spadają, ale oby nie spadała liczba klientów.", "Autumn. Leaves are falling — hopefully your customer numbers aren't."],
+addSet("time-autumn", "time", c => c.country === "PL" && c.month >= 8 && c.month <= 10, [
+  ["Polska jesień. Liście spadają, ale oby liczba klientów nie spadała.","Autumn in Poland. The leaves are falling — hopefully your customer count isn't."],
 ], 1);
-addSet("time-halloween", "time", c => c.month === 9 && c.day >= 0 && new Date().getDate() === 31, [
-  ["Buuu! Najstraszniejsze rzeczy, jakie widziałem, to niektóre stare fragmenty kodu.", "Boo! The scariest things I've seen are pieces of legacy code."],
+addSet("time-halloween", "time", c => c.month === 9 && c.date === 31, [
+  ["Buuu! Najstraszniejsze rzeczy, jakie widziałem, to stare fragmenty kodu.","Boo! The scariest things I've seen are pieces of legacy code."],
 ], 2);
 
 addSet("browser-safari", "browser", c => c.browser === "safari", [
@@ -257,222 +277,387 @@ addSet("browser-edge", "browser", c => c.browser === "edge", [
   ["Edge? Microsoft byłby dumny. Ja po prostu cieszę się z odwiedzin.", "Edge? Microsoft would be proud. I'm just happy you're here."],
 ], 2);
 addSet("browser-dark", "browser", c => c.dark, [
-  ["Wolisz ciemny motyw? Mamy podobny gust.", "Prefer dark mode? We have similar taste."],
-  ["Ciemny motyw aktywny. Oczy odpoczywają, piksele pracują.", "Dark mode is on. Eyes can relax while pixels do the work."],
+  ["Twój system preferuje ciemny motyw. Mamy podobny gust.","Your system prefers dark mode. We have similar taste."],
+  ["Ciemny motyw ustawiony w systemie, ciemna strona na ekranie. Współpracujemy.","Dark mode in your system, dark site on your screen. A good match."],
 ], 1);
 addSet("browser-light", "browser", c => !c.dark, [
-  ["Jasny motyw? Jasne. Ja też czasami wychodzę z ciemności.", "Light mode? Fair enough. I step out of the dark sometimes too."],
+  ["Twój system preferuje jasny motyw, a ja mieszkam na czarnej stronie. Kontrast charakterów.","Your system prefers light mode, but I live on a dark website. Opposites attract."],
 ], 1);
 addSet("browser-reduced", "browser", c => c.reducedMotion, [
-  ["Wolisz mniej ruchu na ekranie? Uszanuję to. Żadnych akrobacji.", "Prefer less motion? I respect that. No acrobatics."],
+  ["Twój system prosi o ograniczenie animacji. Jasna sprawa — żadnych niepotrzebnych akrobacji.","Your system asks for reduced motion. Understood — no unnecessary acrobatics."],
 ], 2);
 
 addSet("location-city", "location", c => Boolean(c.city), [
-  ["Psst… mój mały detektor wskazuje okolice miasta {city}. Trafiłem chociaż w pobliże?", "Psst… my little detector points somewhere near {city}. Close enough?"],
-  ["{city} melduje się na radarze. Pozdrawiam z mojego kawałka internetu.", "{city} is on my radar. Greetings from my little corner of the internet."],
-  ["Wygląda na to, że zaglądasz z okolic {city}. Tak naprawdę nie znam Twojego dokładnego adresu.", "Looks like you're somewhere around {city}. I don't know your exact address, though."],
+  ["{city} — pozdrawiam! Miło, że zajrzałeś na bernecki.dev.","{city} — hello! Nice to have you on bernecki.dev."],
+  ["{city} melduje się na radarze. Zobacz, co potrafi mały kawałek internetu.","{city} is on my radar. See what a little corner of the internet can do."],
+  ["O, {city}! Widzę nazwę miasta, ale spokojnie — nie znam Twojego adresu.","Oh, {city}! I can see the city's name, but don't worry — I don't know your address."],
 ], 2);
-addSet("location-outside", "location", c => Boolean(c.country) && c.country !== "PL", [
-  ["O, odwiedziny spoza Polski! Internet naprawdę nie zna granic.", "Oh, a visit from outside Poland! The internet really knows no borders."],
-  ["Dzielą nas kilometry, ale ta strona i tak dociera do Ciebie w jednej chwili.", "We might be miles apart, but this page still reaches you in an instant."],
+addSet("location-outside", "location", c => Boolean(c.city) && Boolean(c.country) && c.country !== "PL", [
+  ["{city} — nawet stamtąd dotarłeś do mojego portfolio. Internet nie zna granic.","{city} — you've found my portfolio from all the way over there. The internet knows no borders."],
+  ["Hej, {city}! Kilometry nas dzielą, ale ta strona dociera do Ciebie bez problemu.","Hey, {city}! We might be miles apart, but this site still reaches you."],
 ], 2);
-addSet("location-none", "location", c => !c.city, [
-  ["Nie wiem, skąd mnie odwiedzasz. I wiesz co? Nie muszę. Miło Cię tu widzieć.", "I don't know where you're browsing from. And that's fine. Good to see you."],
-], 1);
-
 addSet("page-tools", "page", isAudit, [
-  ["O, będzie testowanie. Lubię testy. Szczególnie kiedy przechodzę je za pierwszym razem.", "Oh, we're testing things! I like tests. Especially when I pass on the first try."],
-  ["Sprawdzamy stronę? Świetnie. Najpierw fakty, potem poprawki.", "Auditing a website? Great. Facts first, fixes second."],
-  ["Nie trzeba zgadywać, dlaczego strona nie działa dobrze. Można to sprawdzić.", "No need to guess why a website underperforms. We can check."],
+  ["Jesteś w darmowych narzędziach. Lubię ten dział — tu można coś naprawdę sprawdzić.","You're browsing the free tools. I like this section — you can actually test things here."],
+  ["Oglądasz narzędzia diagnostyczne. Najpierw konkretne dane, potem wnioski.","You're looking at diagnostic tools. Facts first, conclusions second."],
+  ["W tym dziale zamiast zgadywać, możesz zrobić szybki test. To lubię.","In this section, you can run a quick test instead of guessing. I like that."],
 ], 3);
 addSet("page-ads", "page", isAds, [
-  ["Reklamy potrafią przepalać budżet szybciej niż samochód paliwo. Lepiej sprawdzić ustawienia.", "Ads can burn through a budget fast. Better to check the setup."],
-  ["Zestaw reklam nieaktywny? Zanim zwiększysz budżet, sprawdź, co naprawdę nie działa.", "Ad set inactive? Before spending more, check what actually failed."],
-  ["Meta Ads to nie tylko przycisk „Promuj post”. Choć czasem tak to wygląda.", "Meta Ads is more than the Boost Post button. Even if it sometimes doesn't look that way."],
+  ["Czytasz o reklamach. Jeden drobny błąd w ustawieniach potrafi sporo kosztować.","You're reading about advertising. One small configuration mistake can be expensive."],
+  ["Marketing i reklamy na ekranie. W tym temacie wolę liczby od obietnic.","Marketing and ads on your screen. In this area I prefer numbers to promises."],
+  ["Zaglądasz do tematu reklam. Fajnie, że chcesz zrozumieć mechanikę, a nie tylko klikać „Promuj”.","You're exploring advertising. Good to understand how it works rather than just hitting Boost."],
 ], 3);
 addSet("page-crm", "page", isCrm, [
-  ["Nadal Excel do ogarniania klientów? Nie oceniam… ale znam wygodniejsze rozwiązania.", "Still managing customers in spreadsheets? No judgment… but there are easier ways."],
-  ["Dobry CRM nie powinien dokładać pracy. Powinien ją zdejmować z głowy.", "A good CRM shouldn't create more work. It should take work off your plate."],
-  ["Lead, notatka, zadanie, termin. Wszystko w jednym miejscu brzmi znacznie lepiej, prawda?", "Lead, note, task, deadline. All in one place sounds better, doesn't it?"],
+  ["Oglądasz rozwiązania CRM. Najlepszy system to taki, którego nie trzeba tłumaczyć przez godzinę.","You're exploring CRMs. The best system is one that doesn't need an hour-long explanation."],
+  ["Czytasz o CRM. Dobry system powinien skracać pracę, a nie dokładać kolejnych kliknięć.","You're reading about CRM systems. A good one should reduce work, not add clicks."],
+  ["Lead, notatka, zadanie, termin. W CRM najlepiej mieć to w jednym miejscu.","Lead, note, task, deadline. In a CRM, it's best to keep them together."],
 ], 3);
 addSet("page-services", "page", isServices, [
-  ["Wiesz, co lubię w dobrych stronach? Kiedy są ładne, szybkie i faktycznie pomagają firmie.", "Know what I like about good websites? They look great, load fast, and genuinely help a business."],
-  ["Ładna strona to początek. Ważne, żeby ktoś chciał na niej zostać.", "A beautiful website is a start. What matters is making people want to stay."],
-  ["Jeśli projekt ma działać na telefonie i komputerze, warto pomyśleć o tym od początku.", "If a project needs to work on phone and desktop, plan for both from day one."],
+  ["Oglądasz moje usługi. Ciekawostka: najwięcej pracy często zajmują rzeczy, których później nie widać.","You're exploring my services. Funny thing: the hardest work is often invisible at the end."],
+  ["Jesteś w ofercie. Ja pilnuję pikseli, a Kacper zajmuje się resztą.","You're browsing the services. I look after the pixels; Kacper handles the rest."],
+  ["Ta strona dopasowuje układ do szerokości okna. Możesz sprawdzić to, zmieniając jego rozmiar.","This site adapts its layout to the browser window width. Try resizing it."],
 ], 3);
 addSet("page-work", "page", isWork, [
-  ["Zaglądasz za kulisy? Lubię ten moment.", "Looking behind the scenes? I love this part."],
-  ["Te projekty nie zrobiły się same. Chociaż gdybym miał ręce…", "These projects didn't build themselves. Although, if I had hands…"],
-  ["Realizacje mówią więcej niż obietnice. Dlatego warto je pokazywać.", "Real work says more than promises. That's why it's worth showing."],
+  ["Przeglądasz realizacje? Dobrze trafiłeś. Lubię, gdy widać efekt końcowy.","Looking through projects? You're in the right place. I like seeing the finished work."],
+  ["Oglądasz projekty, które naprawdę powstały. Gdybym miał ręce, może pomógłbym przy kolejnym.","You're looking at real projects. If I had hands, maybe I could help with the next one."],
+  ["Realizacje mówią więcej niż obietnice. Dlatego masz je właśnie przed sobą.","Real work speaks louder than promises. That's why it's right here."],
 ], 3);
 addSet("page-guides", "page", isGuide, [
-  ["Dobra decyzja: najpierw zrozumieć problem, potem go rozwiązać.", "Good call: understand the problem first, then solve it."],
-  ["Czasem jedna dobra wskazówka oszczędza kilka godzin szukania.", "Sometimes one useful tip saves hours of searching."],
+  ["Czytasz poradnik. Dobra decyzja: najpierw zrozumieć problem, potem go rozwiązać.","You're reading a guide. Good call: understand the problem first, solve it second."],
+  ["Jeden dobry poradnik potrafi oszczędzić kilka godzin szukania. Oby ten był właśnie taki.","One useful guide can save hours of searching. Hope this one does."],
 ], 2);
 addSet("page-contact", "page", c => /kontakt|contact/.test(c.pathname), [
-  ["Wolisz porozmawiać z człowiekiem? Rozumiem. Kacper zna więcej rzeczy ode mnie. Na razie.", "Prefer talking to a human? Fair enough. Kacper knows more than I do. For now."],
+  ["Jesteś przy kontakcie. Jeśli wolisz porozmawiać z człowiekiem, Kacper już jest jeden krok dalej.","You're on the contact page. If you'd rather talk to a human, Kacper is one step away."],
 ], 2);
 addSet("return-visit", "return", c => c.returning, [
-  ["O, znowu Ty! Miło, że wracasz.", "Oh, you again! Nice to have you back."],
-  ["Witaj ponownie. Jak widzisz, nadal pilnuję tego miejsca.", "Welcome back. As you can see, I'm still looking after this place."],
-  ["Znowu się widzimy. Chyba zaczynamy się lubić.", "We meet again. I think we're starting to get along."],
+  ["O, wróciłeś na bernecki.dev! Miło znowu Cię widzieć.","You're back on bernecki.dev! Nice to see you again."],
+  ["Witaj ponownie. Jak widzisz, nadal pilnuję tego miejsca.","Welcome back. As you can see, I'm still looking after this place."],
+  ["Znowu się widzimy. Chyba zaczynamy się lubić.","We meet again. I think we're starting to get along."],
 ], 3);
-addSet("return-first", "return", c => !c.returning, [
-  ["Hej! Chyba jeszcze się nie znamy. Jestem małym mieszkańcem tej strony.", "Hey! I don't think we've met. I'm the little creature living on this site."],
-  ["Pierwsza wizyta? Rozgość się. Postaram się nie przeszkadzać.", "First visit? Make yourself at home. I'll try not to get in the way."],
-], 1);
 addSet("playful-general", "playful", any, [
-  ["Psst… jestem tutaj, gdybyś chciał o coś zapytać.", "Psst… I'm here if you feel like asking something."],
-  ["Nie jestem wyskakującą reklamą. Obiecuję. Po prostu czasem lubię zagadać.", "I'm not a pop-up ad. Promise. I just like saying hello sometimes."],
-  ["Mam tu całkiem niezły widok na stronę. Tylko czasami zasłania mi go kursor.", "I've got a pretty good view of this website. The cursor gets in my way sometimes."],
-  ["Zwykle siedzę cicho. Ale czasem mam coś ciekawego do powiedzenia.", "I'm usually quiet. Sometimes I have something interesting to say, though."],
-  ["Nie chcę przeszkadzać. Po prostu sprawdzam, czy wszystko u Ciebie dobrze.", "Don't want to interrupt. Just checking that everything's going well."],
+  ["Psst… jestem obok, jeśli będziesz czegoś szukać.","Psst… I'm around if you're looking for something."],
+  ["Czasem tylko mrugam, a czasem zagaduję. Tak to jest, gdy mieszka się w portfolio.","Sometimes I blink, sometimes I chat. Life inside a portfolio."],
+  ["Mam stąd niezły widok na stronę. Tylko kursor czasem mi go zasłania.","I've got a good view of the page from here. The cursor gets in the way sometimes."],
+  ["Zwykle siedzę cicho. Ale trudno zawsze milczeć, gdy tyle się tu dzieje.","I'm usually quiet. Hard to stay silent with so much going on here."],
+  ["Nie przeszkadzam? Dobra. Będę tutaj, gdy zechcesz pogadać.","Not interrupting, am I? Good. I'll be here if you feel like chatting."],
 ], 1);
 
 // Hand-written combinations are not assembled randomly: each sentence has a natural rhythm.
 addSet("combo-iphone-night", "combination", c => c.device === "iphone" && night(c), [
-  ["Środek nocy, a Ty przeglądasz strony na iPhonie? Albo masz świetny pomysł, albo nie możesz zasnąć.", "Browsing websites on your iPhone in the middle of the night? Either a great idea or you can't sleep."],
-  ["iPhone, późna godzina i portfolio? Brzmi jak początek ciekawego projektu.", "iPhone, late hour, and a portfolio? Sounds like the start of an interesting project."],
+  ["Środek nocy, a Ty przeglądasz stronę na iPhonie? Albo masz świetny pomysł, albo nie możesz zasnąć.","It's the middle of the night and you're browsing on an iPhone? Either a great idea or you can't sleep."],
+  ["iPhone i taka godzina? Najlepsze pomysły podobno nie patrzą na zegarek.","An iPhone at this hour? The best ideas apparently don't watch the clock."],
 ], 5);
 addSet("combo-iphone-rain", "combination", c => c.device === "iphone" && rain(c), [
-  ["Deszcz w prognozie i iPhone w dłoni. Może to dobry moment, żeby sprawdzić swoją stronę?", "Rain in the forecast and an iPhone in hand. Maybe a good moment to check your website?"],
-  ["Na dworze zapowiada się mokro. Przynajmniej na iPhonie ta strona pozostanie sucha.", "Looks wet outside. At least this site will stay dry on your iPhone."],
+  ["{place} według prognozy będzie padać, a Ty przeglądasz na iPhonie. Idealna pora na cyfrowe porządki.","{place} rain is forecast, and you're on an iPhone. Perfect timing for a little digital housekeeping."],
+  ["iPhone w dłoni, a {place} zapowiadają deszcz. Ja bym dziś został przy dobrym Wi-Fi.","An iPhone in hand, and {place} rain is on the way. I'd stay somewhere with good Wi-Fi."],
 ], 4);
 addSet("combo-iphone-cold", "combination", c => c.device === "iphone" && hasWeather(c) && temperature(c) <= 4, [
-  ["Brrr… {temp}°C w prognozie, a Ty z iPhonem? Mam nadzieję, że ręce masz w cieple.", "Brrr… {temp}°C in the forecast and you're on an iPhone? Hope your hands are warm."],
-  ["Zimno w Twojej okolicy. Przynajmniej do przewijania strony nie potrzebujesz zdejmować rękawiczek… chyba.", "Chilly around you. At least scrolling shouldn't require taking your gloves off… probably."],
+  ["Brrr… {place} {temp}°C, a Ty przeglądasz na iPhonie. Mam nadzieję, że palce nie marzną.","Brrr… {place} it's {temp}°C, and you're browsing on an iPhone. Hope your fingers aren't freezing."],
+  ["{place} naprawdę zimno. iPhone w dłoni, a rękawiczki chyba też by się przydały.","{place} it's seriously cold. You've got an iPhone in hand; gloves might help too."],
 ], 4);
 addSet("combo-iphone-heat", "combination", c => c.device === "iphone" && hasWeather(c) && temperature(c) >= 30, [
-  ["{temp}°C i iPhone w dłoni? Daj mu trochę cienia, a mnie trochę uwagi.", "{temp}°C and an iPhone in your hand? Give it some shade and me a little attention."],
+  ["{place} {temp}°C, a Ty na iPhonie? Daj mu trochę cienia — elektronika też nie lubi upałów.","{place} it's {temp}°C and you're on an iPhone? Give it some shade — electronics don't love the heat."],
 ], 4);
 addSet("combo-android-night", "combination", c => c.device === "android" && night(c), [
-  ["Android, późna noc i technologia. Widzę, że to nie przypadkowa wizyta.", "Android, late night, and tech. Doesn't sound like a random visit."],
-  ["Jeszcze nie śpisz i przeglądasz na Androidzie? Ja na szczęście nie potrzebuję snu.", "Still awake and browsing on Android? Luckily, I don't need sleep."],
+  ["Android, późna noc i przeglądanie portfolio. Zapowiada się ciekawy projekt?","Android, late night, and portfolio browsing. Working on a new idea?"],
+  ["Tak późno, a Ty na Androidzie? Ja nie potrzebuję snu, ale Ty chyba tak.","This late and you're browsing on Android? I don't need sleep, but you might."],
 ], 4);
 addSet("combo-android-wind", "combination", c => c.device === "android" && windy(c), [
-  ["Wietrznie w Twojej okolicy. Trzymaj Androida mocno, nie chciałbym Cię zgubić.", "Windy in your area. Hold on to that Android — I'd hate to lose you."],
+  ["{place} mocno wieje, a Ty przeglądasz stronę na Androidzie. Oby telefon trzymał się pewnie.","{place} it's windy and you're browsing on Android. Hope you're holding on to your phone."],
 ], 4);
 addSet("combo-mac-night", "combination", c => c.device === "mac" && night(c), [
-  ["Mac, późna noc i przeglądanie portfolio? Brzmi jak początek jakiegoś ciekawego projektu.", "A Mac, a late night, and portfolio browsing? Sounds like the start of a creative project."],
-  ["Praca na Macu o tej porze? Oby to był dobry pomysł, a nie deadline na jutro.", "Working on a Mac this late? Hope it's a great idea, not a deadline tomorrow."],
+  ["Mac, późna noc i przeglądanie realizacji. Brzmi jak początek ciekawego projektu.","A Mac, late night, and project browsing. Sounds like the start of something interesting."],
+  ["Przeglądasz na Macu o tej porze? Oby to był dobry pomysł, a nie deadline na jutro.","Browsing on a Mac this late? Hope it's a great idea, not tomorrow's deadline."],
 ], 5);
 addSet("combo-windows-monday", "combination", c => c.device === "windows" && c.day === 1, [
-  ["Poniedziałek i Windows. Mam nadzieję, że przynajmniej jedno dzisiaj nie sprawia Ci problemów.", "Monday and Windows. Hopefully at least one of them is behaving today."],
-  ["Windows w poniedziałek? Dobra, to ja na wszelki wypadek nie pytam o aktualizacje.", "Windows on a Monday? Okay, I won't ask about updates."],
+  ["Poniedziałek i Windows. Mam nadzieję, że przynajmniej jedno dzisiaj działa bez niespodzianek.","Monday and Windows. Hopefully at least one behaves today."],
+  ["Windows w poniedziałek? Na wszelki wypadek nie pytam o aktualizacje.","Windows on a Monday? I won't ask about updates, just in case."],
 ], 4);
 addSet("combo-windows-night", "combination", c => c.device === "windows" && night(c), [
-  ["Windows, noc i portfolio. Ktoś tu chyba planuje coś większego.", "Windows, late night, and a portfolio. Someone might be planning something big."],
+  ["Windows, późna noc i portfolio. Ktoś tu chyba zbiera inspiracje.","Windows, late night, and a portfolio. Someone's collecting inspiration."],
 ], 4);
 addSet("combo-linux-night", "combination", c => c.device === "linux" && night(c), [
-  ["Linux i noc? Nie musisz mi tłumaczyć. Pewnie jeszcze jeden terminal jest otwarty.", "Linux and late night? No explanation needed. There's probably another terminal open."],
-  ["Późno, a Linux nadal działa. Czyli pewnie jeszcze nie skończyłeś konfigurować.", "It's late and Linux is still running. So the configuration probably isn't finished."],
+  ["Linux i późna noc? Mam podejrzenie, że gdzieś masz otwarty terminal.","Linux and a late night? I have a suspicion there's a terminal open somewhere."],
+  ["Przeglądasz na Linuksie o tej porze? Mam nadzieję, że nie walczysz z kolejną zależnością.","Browsing on Linux at this hour? Hope you're not fighting another dependency."],
 ], 5);
 addSet("combo-tablet-weather", "combination", c => (c.device === "ipad" || c.device === "tablet") && rain(c), [
-  ["Deszcz w prognozie, tablet w dłoni. Brzmi jak plan na spokojne popołudnie.", "Rain in the forecast and a tablet in hand. Sounds like a relaxed afternoon."],
+  ["{place} prognoza zapowiada deszcz, a Ty przeglądasz {onTablet}. Spokojny plan na wieczór?","{place} rain's in the forecast, and you're browsing {onTablet}. A quiet evening in?"],
 ], 3);
 addSet("combo-phone-heat", "combination", c => phone(c) && hasWeather(c) && temperature(c) >= 30, [
-  ["Upał i ekran telefonu. Pamiętaj o cieniu — sprzęt też nie lubi się przegrzewać.", "Heat and a phone screen. Find some shade — devices don't like overheating either."],
+  ["{place} {temp}°C, a Ty przeglądasz {onDevice}. Trzymaj sprzęt w cieniu — upał nie pomaga baterii.","{place} it's {temp}°C and you're browsing {onDevice}. Keep it in the shade — heat isn't great for batteries."],
 ], 3);
 addSet("combo-phone-audit", "combination", c => phone(c) && isAudit(c), [
-  ["Testujesz stronę z telefonu? Świetnie. Właśnie na telefonach wiele problemów wychodzi na jaw.", "Auditing on your phone? Great. That's where a lot of website problems become obvious."],
-  ["Diagnostyka na małym ekranie. Idealny sposób, żeby sprawdzić, czy narzędzie jest naprawdę wygodne.", "Auditing on a small screen. A good way to see whether a tool is actually usable."],
+  ["Przeglądasz audyt {onDevice}. Właśnie na takich urządzeniach często wychodzą błędy mobilnego interfejsu.","You're checking the audit {onDevice}. That's often where mobile UI problems show up."],
+  ["Narzędzia SEO {onDevice}? Dobry test, czy wszystko działa wygodnie również bez myszy.","SEO tools {onDevice}? A good test of whether everything works without a mouse."],
 ], 5);
 addSet("combo-phone-ads", "combination", c => phone(c) && isAds(c), [
-  ["Meta Ads na telefonie? Uważaj na jeden klik — czasem kosztuje więcej niż myślisz.", "Meta Ads on mobile? Careful with that one tap — it can cost more than you think."],
-  ["Sprawdzasz reklamy na telefonie. Warto pamiętać, że Twoi klienci też je tam oglądają.", "Checking ads on a phone? Remember, your customers are seeing them there too."],
+  ["Meta Ads {onDevice}? Jeden nieuważny klik w Menedżerze reklam potrafi sporo kosztować.","Meta Ads {onDevice}? One careless tap in Ads Manager can be expensive."],
+  ["Przeglądasz poradniki reklamowe {onDevice}. Właśnie tak wielu klientów widzi reklamy firm.","You're browsing ad guides {onDevice}. That's how many customers see business ads too."],
 ], 4);
 addSet("combo-phone-crm", "combination", c => phone(c) && isCrm(c), [
-  ["CRM na telefonie powinien ułatwiać pracę handlowcowi, a nie zmuszać go do celowania palcem w małe przyciski.", "A mobile CRM should help salespeople, not make them aim at tiny buttons."],
-  ["Jeśli handlowiec nie może wygodnie sprawdzić leada na telefonie, to CRM wymaga poprawy.", "If a salesperson can't comfortably check a lead on a phone, the CRM needs work."],
+  ["Czytasz o CRM {onDevice}. Handlowiec też powinien móc wygodnie obsłużyć leada na takim sprzęcie.","You're reading about CRMs {onDevice}. A salesperson should be able to manage a lead on that device too."],
+  ["CRM {onDevice} powinien ułatwiać pracę, a nie zmuszać do celowania w mikroskopijne przyciski.","A CRM {onDevice} should make work easier, not force people to aim at tiny buttons."],
 ], 4);
 addSet("combo-night-audit", "combination", c => night(c) && isAudit(c), [
-  ["Nocna diagnostyka strony? Podoba mi się ta determinacja. Sprawdźmy konkrety.", "A late-night website audit? I admire the determination. Let's check the facts."],
+  ["Audyt strony o tej porze? Szanuję determinację. Zobaczmy, co da się sprawdzić.","A website audit at this hour? Respect the determination. Let's see what we can check."],
 ], 4);
 addSet("combo-night-crm", "combination", c => night(c) && isCrm(c), [
-  ["Jest późno, a Ty czytasz o CRM? Chyba ktoś chce w końcu uporządkować firmę.", "It's late and you're reading about CRMs? Someone's ready to get their business organized."],
+  ["Późna noc, a Ty oglądasz rozwiązania CRM? Chyba szykuje się porządkowanie procesów.","Late night and you're exploring CRM solutions? Sounds like some workflow improvements are coming."],
 ], 4);
 addSet("combo-weekend-work", "combination", c => (c.day === 0 || c.day === 6) && isWork(c), [
-  ["Weekendowy przegląd realizacji? To naprawdę porządny research.", "Browsing case studies on the weekend? That's serious research."],
-  ["Weekend, a Ty analizujesz projekty. Mam nadzieję, że znajdziesz coś inspirującego.", "Checking projects over the weekend? Hope something sparks an idea."],
+  ["Weekendowy przegląd realizacji? To się nazywa porządny research.","Browsing projects on the weekend? That's thorough research."],
+  ["Weekend, a Ty oglądasz projekty. Mam nadzieję, że znajdziesz coś inspirującego.","It's the weekend and you're looking at projects. Hope you find some inspiration."],
 ], 4);
 addSet("combo-friday-ads", "combination", c => c.day === 5 && isAds(c), [
-  ["Piątek i Meta Ads. Oby żadna kampania nie postanowiła dziś zrobić niespodzianki.", "Friday and Meta Ads. Hopefully no campaign decides to surprise you today."],
+  ["Piątek i tematy reklamowe. Oby żadna kampania nie zrobiła dziś niespodzianki.","Friday and advertising topics. Hope no campaign has any surprises today."],
 ], 4);
 addSet("combo-monday-crm", "combination", c => c.day === 1 && isCrm(c), [
-  ["Poniedziałek. Idealny dzień, żeby ustawić CRM tak, aby reszta tygodnia była prostsza.", "Monday. A perfect day to make your CRM simplify the rest of the week."],
+  ["Poniedziałek i CRM. Dobry moment, żeby reszta tygodnia była prostsza.","Monday and CRM. Good timing to make the rest of the week easier."],
 ], 4);
 addSet("combo-return-night", "combination", c => c.returning && night(c), [
-  ["Dobry wieczór, znowu się widzimy. Chyba zaczynamy się lubić.", "Good evening, we meet again. I think we're starting to get along."],
-  ["Znowu Ty i znowu tak późno? Zaczynam dostrzegać pewien schemat.", "You again, and this late? I'm starting to notice a pattern."],
+  ["Późna pora, a Ty znów tutaj? Chyba zaczynamy się lubić.","Late at night and you're back? I think we're starting to get along."],
+  ["Witaj ponownie! Nawet o tej godzinie pamiętam, że już się widzieliśmy.","Welcome back! Even at this hour I remember we've met before."],
 ], 5);
 addSet("combo-return-audit", "combination", c => c.returning && isAudit(c), [
-  ["Wracasz do narzędzi? Bardzo dobrze. Warto sprawdzać efekty po zmianach.", "Back to the tools? Good. It's worth checking results after making changes."],
+  ["Wracasz do narzędzi? Dobrze, warto sprawdzać efekty po zmianach.","Back to the tools? Good — it's worth checking results after making changes."],
 ], 5);
 addSet("combo-rain-evening", "combination", c => rain(c) && evening(c), [
-  ["Deszczowy wieczór według prognozy. W sam raz na chwilę przy komputerze.", "A rainy evening in the forecast. A good time to spend a moment at the computer."],
-  ["Wieczór, deszcz i spokojne przeglądanie. Ja bym tylko dorzucił herbatę.", "Evening, rain, and a quiet browse. I'd add a cup of tea."],
+  ["{place} prognozują deszczowy wieczór. W sam raz na chwilę przy komputerze.","{place} a rainy evening is forecast. A good moment to spend a little time at the computer."],
+  ["Wieczór, a {place} deszcz w prognozie. Ja bym jeszcze dorzucił herbatę.","Evening, and {place} rain in the forecast. I'd add a cup of tea."],
 ], 4);
 addSet("combo-snow-night", "combination", c => snow(c) && night(c), [
-  ["Śnieg i późna noc. Brzmi jak ładny widok za oknem… przynajmniej według prognozy.", "Snow and a late night. Sounds lovely outside… at least according to the forecast."],
+  ["{place} w nocnej prognozie śnieg. Brzmi jak ładny widok za oknem.","{place} snow is in the overnight forecast. Sounds like a lovely view outside."],
 ], 4);
 addSet("combo-storm-night", "combination", c => storm(c) && night(c), [
-  ["Burza w nocnej prognozie? Jeśli zgasną światła, nie bierz tego do siebie.", "Thunderstorms in the overnight forecast? If the lights go out, don't take it personally."],
+  ["{place} prognoza zapowiada nocną burzę. Jeśli zgasną światła, nie bierz tego do siebie.","{place} thunderstorms are forecast overnight. If the lights go out, don't take it personally."],
 ], 5);
 addSet("combo-wind-cold", "combination", c => windy(c) && hasWeather(c) && temperature(c) <= 5, [
-  ["Zimno i wietrznie. Taka pogoda potrafi przekonać nawet mnie, żeby nie wychodzić z ekranu.", "Cold and windy. Weather like that could convince even me to stay inside the screen."],
+  ["{place} zimno i wietrznie. Nawet ja wolałbym dziś nie wychodzić z ekranu.","{place} cold and windy. Even I'd rather stay inside the screen."],
 ], 4);
 addSet("combo-sun-weekend", "combination", c => sunny(c) && (c.day === 0 || c.day === 6), [
-  ["Weekend i słońce w prognozie. Nie będę Cię zatrzymywać długo. Obiecuję.", "Weekend and sunshine in the forecast. I won't keep you long. Promise."],
+  ["{place} słońce w weekendowej prognozie. Nie będę Cię długo zatrzymywać.","{place} sunshine in the weekend forecast. I won't keep you long."],
 ], 4);
 addSet("combo-fog-morning", "combination", c => fog(c) && c.hour >= 5 && c.hour <= 10, [
-  ["Mglisty poranek. Ja na szczęście mam całkiem dobrą widoczność na tę stronę.", "Foggy morning. Luckily, I've got a clear view of this page."],
+  ["{place} mglisty poranek. Dobrze, że tutaj wszystko staram się pokazać wyraźnie.","{place} a foggy morning. Good thing I try to keep everything clear here."],
 ], 4);
 addSet("combo-heat-crm", "combination", c => hasWeather(c) && temperature(c) >= 30 && isCrm(c), [
-  ["Na dworze gorąco, a Ty myślisz o CRM. Przynajmniej procesy w firmie mogą działać na chłodno.", "It's hot outside and you're looking at CRMs. At least your processes can stay cool."],
+  ["{place} upał, a Ty czytasz o CRM. Przynajmniej procesy firmowe mogą działać na chłodno.","{place} it's hot and you're reading about CRMs. At least business processes can stay cool."],
 ], 4);
 addSet("combo-cold-marketing", "combination", c => hasWeather(c) && temperature(c) < 0 && isAds(c), [
-  ["Mróz w prognozie, a Ty analizujesz reklamy. Lepiej, żeby tylko pogoda miała temperaturę poniżej zera.", "Freezing forecast and you're checking ads. Let's hope it's only the temperature that's below zero."],
+  ["{place} mróz w prognozie, a Ty analizujesz reklamy. Oby tylko temperatura była poniżej zera.","{place} freezing temperatures in the forecast, and you're checking ads. Hope it's only the temperature that's below zero."],
 ], 4);
 addSet("combo-dark-night", "combination", c => c.dark && night(c), [
-  ["Ciemny motyw i późna pora. Widać, że umiesz zadbać o klimat.", "Dark mode and a late hour. You certainly know how to set the mood."],
+  ["Późna noc, a Twój system preferuje ciemny motyw. Zgraliśmy się idealnie.","Late at night, and your system prefers dark mode. A perfect match."],
 ], 2);
 addSet("combo-linux-guides", "combination", c => c.device === "linux" && isGuide(c), [
-  ["Linux i poradniki techniczne? Widzę, że czytasz dokumentację także poza pracą.", "Linux and technical guides? Looks like you read documentation outside work too."],
+  ["Linux i poradniki techniczne. Widzę, że lubisz mieć rzeczy pod kontrolą.","Linux and technical guides. Looks like you like to be in control."],
 ], 4);
 addSet("combo-city-rain", "combination", c => Boolean(c.city) && rain(c), [
-  ["{city}: według prognozy dzisiaj mokro. Ja na szczęście mieszkam w chmurze, która nie przecieka.", "{city}: rain is in the forecast. Luckily, my cloud doesn't leak."],
+  ["{place} prognozują deszcz. Ja na szczęście mieszkam w chmurze, która nie przecieka.","{place} rain's in the forecast. Luckily, my cloud doesn't leak."],
 ], 4);
 addSet("combo-city-snow", "combination", c => Boolean(c.city) && snow(c), [
-  ["{city}: prognoza zapowiada śnieg. Gdybym miał nos, przykleiłbym do niego płatek.", "{city}: snow is in the forecast. If I had a nose, I'd catch a snowflake on it."],
+  ["{place} prognoza zapowiada śnieg. Gdybym miał nos, złapałbym na niego płatek.","{place} snow's in the forecast. If I had a nose, I'd catch a snowflake on it."],
 ], 4);
 addSet("combo-city-heat", "combination", c => Boolean(c.city) && hasWeather(c) && temperature(c) >= 30, [
-  ["{city}: aż {temp}°C według prognozy? Na szczęście ja mam tylko wirtualne czoło do ocierania.", "{city}: {temp}°C in the forecast? Luckily, my forehead is purely virtual."],
+  ["{place} aż {temp}°C według prognozy?! Na szczęście mój pot jest tylko wirtualny.","{place} it's {temp}°C in the forecast?! Luckily, my sweat is purely virtual."],
 ], 4);
 addSet("combo-city-wind", "combination", c => Boolean(c.city) && windy(c), [
-  ["{city} i taki wiatr? Trzymaj się mocno — ja już trzymam się przycisku czatu.", "{city} and winds like that? Hold tight — I'm holding on to the chat button."],
+  ["{place} mocny wiatr. Dobrze, że jestem przypięty do przycisku czatu.","{place} strong winds. Good thing I'm attached to the chat button."],
+], 4);
+
+addSet("combo-iphone-viewport", "combination", c => c.device === "iphone" && c.width >= 250, [
+  ["iPhone i okno o szerokości {width} px. Właśnie pod takie konkretne wymiary układa się ta strona.","An iPhone and a {width}px-wide browser window. That's the exact width this layout is adapting to."],
+  ["Wykryłem iPhone'a. Twoja przeglądarka daje mi teraz {width} px szerokości — i ani piksela więcej.","I detected an iPhone. Your browser gives me {width}px of width right now — not a pixel more."],
+], 4);
+
+addSet("combo-android-viewport", "combination", c => c.device === "android" && c.width >= 250, [
+  ["Android i okno szerokie na {width} px. Wystarczy, żeby zobaczyć, czy interfejs naprawdę jest mobilny.","Android and a {width}px-wide window. Enough to see whether the interface is genuinely mobile-friendly."],
+  ["Przeglądasz na Androidzie, a moje miejsce na ekranie ma {width} px. Lepiej dobrze gospodarować pikselami.","You're browsing on Android and I've got {width}px to work with. Better use those pixels well."],
+], 4);
+
+addSet("combo-ipad-viewport", "combination", c => c.device === "ipad" && c.width >= 350, [
+  ["iPad i {width} px szerokości okna. Właśnie dlatego wersja tabletowa potrzebuje własnego układu.","An iPad and a {width}px-wide window. That's why tablet layouts deserve proper attention."],
+  ["Wykryłem iPada. Okno ma {width} px — wystarczająco, żeby złapać błędy, których nie widać na telefonie.","I detected an iPad. The window is {width}px wide — enough to spot issues you might miss on a phone."],
+], 4);
+
+addSet("combo-tablet-viewport", "combination", c => c.device === "tablet" && c.width >= 350, [
+  ["Tablet i okno o szerokości {width} px. Właśnie do takiego widoku też dopasowuję tę stronę.","A tablet and a {width}px-wide window. This is exactly the kind of layout I design for too."],
+  ["Przeglądasz na tablecie. Mam tu {width} px szerokości, więc nie będę udawał, że to wielki monitor.","You're on a tablet. I've got {width}px of width, so I won't pretend it's a huge monitor."],
+], 4);
+
+addSet("combo-mac-wide", "combination", c => c.device === "mac" && c.width >= 1200, [
+  ["Mac i okno szerokie na {width} px. Tyle przestrzeni aż prosi się o dobry projekt.","A Mac and a {width}px-wide window. That's a lot of space for good design."],
+  ["Przeglądasz na Macu. Przy {width} px szerokości okna moje projekty mogą wreszcie odetchnąć.","You're browsing on a Mac. At {width}px wide, my projects finally have room to breathe."],
+], 4);
+
+addSet("combo-windows-narrow", "combination", c => c.device === "windows" && c.width < 780 && c.width > 250, [
+  ["Windows, ale okno ma tylko {width} px szerokości. I proszę — strona nadal powinna się mieścić.","Windows, but your window is only {width}px wide. And the site should still fit."],
+  ["Na Windowsie też można mieć wąskie okno. U Ciebie ma teraz {width} px — już się dopasowuję.","Windows can have a narrow browser window too. Yours is {width}px wide — adapting now."],
+], 4);
+
+addSet("combo-linux-wide", "combination", c => c.device === "linux" && c.width >= 1200, [
+  ["Linux i {width} px szerokości okna. Dużo miejsca na terminal i jeszcze trochę na mnie.","Linux and a {width}px-wide window. Room for a terminal and still some for me."],
+  ["Przeglądasz na Linuksie, w oknie szerokim na {width} px. Brzmi jak porządne stanowisko do pracy.","You're browsing on Linux in a {width}px-wide window. Sounds like a solid workspace."],
+], 4);
+
+addSet("combo-iphone-city-night", "combination", c => Boolean(c.city) && c.device === "iphone" && night(c), [
+  ["{place} jest już późno, a Ty wciąż przeglądasz na iPhonie. Coś mi mówi, że masz jakiś pomysł.","{place} it's already late, and you're still browsing on an iPhone. I suspect you've got an idea."],
+  ["Noc na zegarku, {city} na radarze, a u Ciebie iPhone. Taki zestaw nie zdarza się przypadkiem.","Late at night, {city} on my radar, and you're using an iPhone. Quite a combination."],
+], 4);
+
+addSet("combo-android-city-night", "combination", c => Boolean(c.city) && c.device === "android" && night(c), [
+  ["{place} późna noc, a Ty na Androidzie. Ja nie śpię, ale nie wiem, jak Ty dajesz radę.","{place} it's late at night and you're on Android. I never sleep, but I don't know how you manage."],
+  ["Android, {city} i środek nocy. Oby to była inspiracja, a nie deadline.","Android, {city}, and the middle of the night. Hope it's inspiration, not a deadline."],
+], 4);
+
+addSet("combo-mac-city-evening", "combination", c => Boolean(c.city) && c.device === "mac" && evening(c), [
+  ["Wieczór, {city} i Mac na pokładzie. Brzmi jak całkiem dobry czas na nowy projekt.","Evening, {city}, and a Mac. Sounds like a good time to start a new project."],
+  ["{place} już wieczór, a Ty przeglądasz na Macu. Mam nadzieję, że znajdziesz tu dobrą inspirację.","{place} it's evening and you're browsing on a Mac. Hope you find some inspiration here."],
+], 4);
+
+addSet("combo-ipad-city", "combination", c => Boolean(c.city) && c.device === "ipad", [
+  ["{city} melduje się na mapie, iPad w rękach. Fajnie, że mogę być z Tobą również na tablecie.","{city} on the map, iPad in hand. Nice that I can join you on a tablet too."],
+], 4);
+
+addSet("combo-tablet-city", "combination", c => Boolean(c.city) && c.device === "tablet", [
+  ["{city} na moim radarze, a Ty przeglądasz na tablecie. Wszystko tu powinno się wygodnie klikać.","{city} on my radar, and you're browsing on a tablet. Everything should be easy to tap."],
+], 4);
+
+addSet("combo-windows-city", "combination", c => Boolean(c.city) && c.device === "windows", [
+  ["{city} na radarze, Windows w przeglądarce. Zgadza się? Ja tylko składam to, co naprawdę widzę.","{city} on my radar, Windows in the browser. Sound right? I'm only using what I can actually detect."],
+], 4);
+
+addSet("combo-linux-city", "combination", c => Boolean(c.city) && c.device === "linux", [
+  ["Linux i {city} — ciekawy zestaw. Jeśli szukasz technicznych szczegółów, jesteś w dobrym miejscu.","Linux and {city} — interesting combination. If you're looking for technical details, you're in the right place."],
+], 4);
+
+addSet("combo-safari-iphone", "combination", c => c.device === "iphone" && c.browser === "safari", [
+  ["iPhone i Safari. Sprawdzam, czy wszystkie zaokrąglenia i animacje dobrze się tu zachowują.","An iPhone and Safari. I'm keeping an eye on how the rounded corners and animations behave."],
+  ["Safari na iPhonie — właśnie tu dobra wersja mobilna powinna wyglądać naturalnie.","Safari on an iPhone — this is where a good mobile site should feel effortless."],
+], 4);
+
+addSet("combo-chrome-android", "combination", c => c.device === "android" && c.browser === "chrome", [
+  ["Chrome na Androidzie. Dobrze, że nie musisz instalować żadnej aplikacji, żeby ze mną pogadać.","Chrome on Android. Glad you don't need to install an app to chat with me."],
+], 4);
+
+addSet("combo-firefox-linux", "combination", c => c.device === "linux" && c.browser === "firefox", [
+  ["Firefox i Linux. Czuję, że ktoś tu lubi mieć kontrolę nad przeglądarką.","Firefox and Linux. Something tells me you like control over your browser."],
+], 4);
+
+addSet("combo-browser-width", "combination", c => c.browser === "chrome" && c.width >= 350, [
+  ["Chrome i okno szerokie na {width} px. Dzięki, teraz wiem dokładnie, ile miejsca mam na ekranie.","Chrome and a {width}px-wide window. Now I know exactly how much space I can use."],
+], 4);
+
+addSet("combo-city-viewport", "combination", c => Boolean(c.city) && c.width >= 250 && c.width < 550, [
+  ["{city} na radarze, a Twoje okno ma {width} px szerokości. Całkiem sporo informacji z jednej wizyty, prawda?","{city} on my radar and your window is {width}px wide. Quite a lot from one visit, right?"],
 ], 4);
 
 export const COMPANION_SCENARIO_COUNT = rules.length;
 
+function ruleTopic(rule: Rule): CompanionTopic {
+  if (rule.category !== "combination") return rule.category;
+  if (/(?:-rain|-snow|-sleet|-storm|-cold|-heat|-fog|-weather|-freeze|-sun(?:-|$)|-wind(?:-|$))/.test(rule.id)) return "weather";
+  if (/(?:-iphone|-android|-ipad|-tablet|-phone|-linux|-mac(?:-|$)|-windows)/.test(rule.id)) return "device";
+  if (/(?:-audit|-crm|-ads|-marketing|-guides|-work)/.test(rule.id)) return "page";
+  if (rule.id.includes("-city") || rule.id.includes("-location")) return "location";
+  if (rule.id.includes("-return")) return "return";
+  return "time";
+}
+
+/** Enumerates authored messages for QA; weather/location messages require a real city. */
+export function getEligibleCompanionMessages(context: CompanionContext): CompanionNudge[] {
+  return rules.filter(rule => canRender(rule, context)).map(rule => ({
+    id: rule.id,
+    category: rule.category,
+    topic: ruleTopic(rule),
+    text: fillTemplate(context.lang === "en" ? rule.en : rule.pl, context),
+    intent: rule.intent,
+  }));
+}
+
+const LOCATIVE_PL: Record<string, string> = {
+  "rzeszów": "Rzeszowie", "warszawa": "Warszawie", "kraków": "Krakowie",
+  "lublin": "Lublinie", "poznań": "Poznaniu", "wrocław": "Wrocławiu",
+  "gdańsk": "Gdańsku", "gdynia": "Gdyni", "sopot": "Sopocie",
+  "łódź": "Łodzi", "katowice": "Katowicach", "białystok": "Białymstoku",
+  "bydgoszcz": "Bydgoszczy", "toruń": "Toruniu", "szczecin": "Szczecinie",
+  "olsztyn": "Olsztynie", "kielce": "Kielcach", "opole": "Opolu",
+  "zielona góra": "Zielonej Górze", "gorzów wielkopolski": "Gorzowie Wielkopolskim",
+  "częstochowa": "Częstochowie", "radom": "Radomiu", "płock": "Płocku",
+  "przemyśl": "Przemyślu", "mielec": "Mielcu", "stalowa wola": "Stalowej Woli",
+  "tarnobrzeg": "Tarnobrzegu", "krosno": "Krośnie",
+  "jasło": "Jaśle", "dębica": "Dębicy", "sanok": "Sanoku",
+  "jarosław": "Jarosławiu", "łańcut": "Łańcucie", "leżajsk": "Leżajsku",
+  "ustrzyki dolne": "Ustrzykach Dolnych", "bieszczady": "Bieszczadach",
+  "zakopane": "Zakopanem", "nowy sącz": "Nowym Sączu",
+  "nowy targ": "Nowym Targu", "tarnów": "Tarnowie",
+  "bielsko-biała": "Bielsku-Białej", "gliwice": "Gliwicach",
+  "zabrze": "Zabrzu", "tychy": "Tychach", "rybnik": "Rybniku",
+  "sosnowiec": "Sosnowcu", "chorzów": "Chorzowie",
+  "dąbrowa górnicza": "Dąbrowie Górniczej",
+  "elbląg": "Elblągu", "grudziądz": "Grudziądzu",
+  "inowrocław": "Inowrocławiu", "włocławek": "Włocławku",
+  "piła": "Pile", "kalisz": "Kaliszu", "konin": "Koninie",
+  "leszno": "Lesznie", "gniezno": "Gnieźnie",
+  "piotrków trybunalski": "Piotrkowie Trybunalskim",
+  "bełchatów": "Bełchatowie", "sieradz": "Sieradzu",
+  "zamość": "Zamościu", "chełm": "Chełmie", "puławy": "Puławach",
+  "biala podlaska": "Białej Podlaskiej", "biała podlaska": "Białej Podlaskiej",
+  "świdnik": "Świdniku", "łuków": "Łukowie",
+  "ostrołęka": "Ostrołęce", "siedlce": "Siedlcach",
+  "suwałki": "Suwałkach", "łomża": "Łomży",
+  "koszalin": "Koszalinie", "kołobrzeg": "Kołobrzegu",
+  "słupsk": "Słupsku", "ustka": "Ustce",
+  "jelenia góra": "Jeleniej Górze", "wałbrzych": "Wałbrzychu",
+  "legnica": "Legnicy", "lubin": "Lubinie",
+  "świdnica": "Świdnicy", "nysa": "Nysie", "brzeg": "Brzegu",
+  "głogów": "Głogowie", "świnoujście": "Świnoujściu",
+  "pruszków": "Pruszkowie", "piaseczno": "Piasecznie",
+  "złotów": "Złotowie", "mińsk mazowiecki": "Mińsku Mazowieckim",
+  "marki": "Markach", "wołomin": "Wołominie",
+  "krakow": "Krakowie", "poznan": "Poznaniu", "warsaw": "Warszawie",
+  "london": "Londynie", "berlin": "Berlinie", "paris": "Paryżu",
+  "vienna": "Wiedniu", "prague": "Pradze", "budapest": "Budapeszcie",
+};
+
+export function formatCompanionPlace(city: string, lang: CompanionLocale): string {
+  if (lang === "en") return "in " + city;
+  const inCase = LOCATIVE_PL[city.trim().toLocaleLowerCase("pl")];
+  return inCase ? "w " + inCase : city + " —";
+}
+
 function fillTemplate(value: string, c: CompanionContext): string {
-  const map: Record<string, string> = {
-    city: c.city ?? "",
+  const city = c.city ?? "";
+  const onDevice = c.device === "iphone"
+    ? (c.lang === "pl" ? "na iPhonie" : "on an iPhone")
+    : (c.lang === "pl" ? "na telefonie z Androidem" : "on an Android phone");
+  const onTablet = c.device === "ipad"
+    ? (c.lang === "pl" ? "na iPadzie" : "on an iPad")
+    : (c.lang === "pl" ? "na tablecie" : "on a tablet");
+  const values: Record<string, string> = {
+    city,
+    place: city ? formatCompanionPlace(city, c.lang) : "",
     temp: c.weather ? String(c.weather.temperature) : "",
-    wind: c.weather?.windSpeed !== null && c.weather?.windSpeed !== undefined
-      ? String(c.weather.windSpeed)
-      : "",
+    wind: c.weather?.windSpeed != null ? String(c.weather.windSpeed) : "",
+    width: String(c.width),
+    onDevice: phone(c) ? onDevice : "",
+    onTablet: c.device === "ipad" || c.device === "tablet" ? onTablet : "",
   };
-  return value.split("{city}").join(map.city)
-    .split("{temp}").join(map.temp)
-    .split("{wind}").join(map.wind);
+  let result = value;
+  for (const [key, replacement] of Object.entries(values)) {
+    result = result.split("{" + key + "}").join(replacement);
+  }
+  return result.replace(/^w /, "W ").replace(/^in /, "In ");
 }
 
 function canRender(rule: Rule, c: CompanionContext): boolean {
   if (!rule.eligible(c)) return false;
   const body = c.lang === "en" ? rule.en : rule.pl;
-  if (body.includes("{city}") && !c.city) return false;
+  if ((rule.category === "weather" || rule.category === "location") && !c.city) return false;
+  if ((body.includes("{city}") || body.includes("{place}")) && !c.city) return false;
   if (body.includes("{temp}") && !c.weather) return false;
   if (body.includes("{wind}") && c.weather?.windSpeed == null) return false;
+  if (body.includes("{onDevice}") && !phone(c)) return false;
+  if (body.includes("{onTablet}") && c.device !== "ipad" && c.device !== "tablet") return false;
   return true;
 }
 
@@ -483,7 +668,7 @@ function canRender(rule: Rule, c: CompanionContext): boolean {
 export function pickCompanionNudge(
   context: CompanionContext,
   recentIds: string[] = [],
-  previousCategory?: CompanionCategory,
+  previousTopic?: CompanionTopic,
   random: () => number = Math.random,
 ): CompanionNudge | null {
   let candidates = rules.filter(rule => canRender(rule, context) && !recentIds.includes(rule.id));
@@ -492,10 +677,10 @@ export function pickCompanionNudge(
 
   const weighted = candidates.map(rule => {
     const categoryWeight: Record<CompanionCategory, number> = {
-      combination: 5, weather: 3, device: 3, page: 3,
+      combination: 5, weather: 3, device: 3, viewport: 2.4, page: 3,
       return: 2, location: 1.6, time: 1.2, browser: 1, playful: 1,
     };
-    const repetitionPenalty = rule.category === previousCategory ? 0.1 : 1;
+    const repetitionPenalty = ruleTopic(rule) === previousTopic ? 0.04 : 1;
     return { rule, weight: rule.weight * categoryWeight[rule.category] * repetitionPenalty };
   });
   const total = weighted.reduce((sum, item) => sum + item.weight, 0);
@@ -508,14 +693,10 @@ export function pickCompanionNudge(
   return {
     id: selected.id,
     category: selected.category,
+    topic: ruleTopic(selected),
     text: fillTemplate(context.lang === "en" ? selected.en : selected.pl, context),
     intent: selected.intent,
-    weatherCredit: (selected.category === "weather" || selected.category === "combination") && Boolean(context.weather) && (
-      selected.id.startsWith("wx-") ||
-      selected.id.includes("-rain") || selected.id.includes("-snow") || selected.id.includes("-sleet") ||
-      selected.id.includes("-wind") || selected.id.includes("-cold") || selected.id.includes("-heat") ||
-      selected.id.includes("-storm") || selected.id.includes("-fog") || selected.id.includes("-sun")
-    ),
+
   };
 }
 
@@ -530,15 +711,15 @@ export function getCompanionContext(
   const iphone = /iPhone/i.test(ua);
   const ipad = /iPad/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
   const android = /Android/i.test(ua);
-  let device: CompanionDevice = "desktop";
+  let device: CompanionDevice = "unknown";
   if (iphone) device = "iphone";
   else if (ipad) device = "ipad";
   else if (android && /Mobile/i.test(ua)) device = "android";
   else if (android) device = "tablet";
   else if (/Macintosh|Mac OS X/i.test(ua)) device = "mac";
-  else if (/Windows/i.test(ua)) device = "windows";
-  else if (/Linux/i.test(ua)) device = "linux";
-  else if (window.innerWidth < 768) device = "mobile";
+  else if (/Windows NT/i.test(ua)) device = "windows";
+  else if (/Linux|X11/i.test(ua)) device = "linux";
+
 
   let browser: CompanionBrowser = "other";
   if (ua.includes("Edg/") || ua.includes("EdgiOS/")) browser = "edge";
@@ -558,6 +739,7 @@ export function getCompanionContext(
     hour: now.getHours(),
     day: now.getDay(),
     month: now.getMonth(),
+    date: now.getDate(),
     dark: window.matchMedia("(prefers-color-scheme: dark)").matches,
     reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     touch,
