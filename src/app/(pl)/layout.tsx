@@ -106,7 +106,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pl" className={`scroll-smooth font-sans ${geist.variable}`}>
+    <html lang="pl" suppressHydrationWarning className={`scroll-smooth font-sans ${geist.variable}`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: '(function(){try{if(location.pathname!=="/")return;var key="bernecki-home-intro-v1";if(sessionStorage.getItem(key)){document.documentElement.dataset.homeIntro="skip";}else{sessionStorage.setItem(key,"1");}}catch(e){}})();',
+          }}
+        />
+      </head>
       <body>
         <LanguageProvider>
           <AnalyticsConsent />
