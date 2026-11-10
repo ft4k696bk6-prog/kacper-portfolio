@@ -462,7 +462,9 @@ function fillTemplate(value: string, c: CompanionContext): string {
       ? String(c.weather.windSpeed)
       : "",
   };
-  return value.replace(/\\{(city|temp|wind)\\}/g, (_match, key: string) => map[key] || "");
+  return value.split("{city}").join(map.city)
+    .split("{temp}").join(map.temp)
+    .split("{wind}").join(map.wind);
 }
 
 function canRender(rule: Rule, c: CompanionContext): boolean {
@@ -539,10 +541,10 @@ export function getCompanionContext(
   else if (window.innerWidth < 768) device = "mobile";
 
   let browser: CompanionBrowser = "other";
-  if (/Edg\\/|EdgiOS\\//i.test(ua)) browser = "edge";
-  else if (/Firefox\\/|FxiOS\\//i.test(ua)) browser = "firefox";
-  else if (/Chrome\\/|CriOS\\//i.test(ua)) browser = "chrome";
-  else if (/Safari\\//i.test(ua)) browser = "safari";
+  if (ua.includes("Edg/") || ua.includes("EdgiOS/")) browser = "edge";
+  else if (ua.includes("Firefox/") || ua.includes("FxiOS/")) browser = "firefox";
+  else if (ua.includes("Chrome/") || ua.includes("CriOS/")) browser = "chrome";
+  else if (ua.includes("Safari/")) browser = "safari";
 
   const now = new Date();
   return {
