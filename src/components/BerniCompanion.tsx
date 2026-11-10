@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { CloudSun, Loader2 } from "lucide-react";
 import { BerniRobot } from "@/components/BerniRobot";
+import { COOKIE_CONSENT_KEY } from "@/lib/preferences";
 import {
   detectBerniReaction, getBerniWeatherLabel,
   type BerniMood, type BerniWeather,
@@ -41,6 +42,8 @@ export function BerniCompanion({
       mood === "joking" ? "happy" : mood === "idle" ? "idle" : mood);
 
   useEffect(() => {
+    // Do not use IP-derived weather when the visitor rejected optional context personalization.
+    if (localStorage.getItem(COOKIE_CONSENT_KEY) !== "accepted") return;
     const controller = new AbortController();
     // Approximate region weather, if Vercel IP geo headers are present.
     fetch("/api/berni-weather", { signal: controller.signal })
@@ -186,8 +189,8 @@ export function BerniCompanion({
         {weatherLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CloudSun className="h-3.5 w-3.5" />}
       </button>
       {weather ? <span className="pointer-events-none absolute -top-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/15 bg-[#12161b]/95 px-2 py-0.5 text-[9px] text-white/80"
-        title="Forecast: MET Norway">
-        {getBerniWeatherLabel(weather.condition, lang)} · {Math.round(weather.temperature)}°C · MET Norway
+        title={lang === "pl" ? "Warunki pogodowe" : "Weather conditions"}>
+        {getBerniWeatherLabel(weather.condition, lang)} · {Math.round(weather.temperature)}°C
       </span> : null}
       {weatherError ? <span role="status" className="absolute bottom-[100%] right-0 w-48 rounded-lg bg-[#1b2027] p-2 text-[11px] text-white shadow-xl">{weatherError}</span> : null}
     </div>
