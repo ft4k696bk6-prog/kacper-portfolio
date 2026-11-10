@@ -242,26 +242,20 @@
 
 
 
-/* The page is unveiled from the TRUE navbar logo towards right and down.
-   The covering curtain is an L shape; its missing top-left rectangle grows.
-   No fake KB sprite, no page reload, no DOM mutation of the actual hero. */
+/* Top-down reveal after the actual KB logo lands in the navigation.
+   The editor types real-looking steps; no blueprint crosshair or axis lines. */
 .introOverlay{display:none;position:fixed;inset:0;z-index:90;pointer-events:none;isolation:isolate;overflow:hidden;background:#060607}
 .introBackdrop{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 47%,#1a1a1d 0%,#0d0d0e 36%,#050505 75%)}
 .introGrid{position:absolute;inset:0;background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse at 50% 50%,#000 0%,transparent 78%);opacity:.55}
 .introHalo{position:absolute;left:var(--intro-origin-x,40px);top:var(--intro-origin-y,40px);width:116px;height:116px;border:1px solid #ffffff36;border-radius:50%;box-shadow:0 0 70px #ffffff1b,inset 0 0 25px #ffffff10;transform:translate(-50%,-50%) scale(.2);opacity:0}
-.introBlueprint{display:none;position:fixed;inset:0;z-index:95;pointer-events:none}
-.introTraceHorizontal,.introTraceVertical,.introTraceOrigin{position:absolute;display:block;background:#e8e8eb;box-shadow:0 0 14px #ffffff8f,0 0 30px #ffffff37;opacity:0}
-.introTraceHorizontal{left:var(--intro-origin-x,40px);top:var(--intro-origin-y,40px);width:max(0px,calc(100vw - var(--intro-origin-x,40px)));height:1px;transform-origin:left center}
-.introTraceVertical{left:var(--intro-origin-x,40px);top:var(--intro-origin-y,40px);width:1px;height:max(0px,calc(100vh - var(--intro-origin-y,40px)));transform-origin:center top}
-.introTraceOrigin{left:calc(var(--intro-origin-x,40px) - 4px);top:calc(var(--intro-origin-y,40px) - 4px);width:9px;height:9px;border:1px solid #fff;background:#080808;border-radius:50%}
 .introTerminal{display:none;position:fixed;z-index:98;pointer-events:none;top:calc(var(--intro-origin-y,40px) + 67px);left:max(20px,calc(var(--intro-origin-x,40px) - 20px));width:min(420px,calc(100vw - 48px));border:1px solid #ffffff29;border-radius:12px;background:#0b0b0de8;box-shadow:0 18px 65px #0009,0 0 35px #ffffff06;overflow:hidden;opacity:0}
 .introTerminalTop{display:flex;align-items:center;gap:12px;min-height:34px;padding:0 13px;border-bottom:1px solid #ffffff1c;color:#b8b8bd;font:600 9px/1.2 ui-monospace,monospace;letter-spacing:.1em}
 .introTerminalTop em{font-style:normal;color:#6f6f73}
 .introDots{display:flex;gap:4px}
 .introDots i{width:5px;height:5px;border-radius:50%;background:#666;display:block}
 .introDots i:nth-child(1){background:#c4c4c7}
-.introTerminalState{margin-left:auto;color:#e8e8ea;letter-spacing:.14em}
-.introCode{padding:10px 15px 5px;display:grid;gap:6px;color:#e4e4e8;font:500 11px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace}
+.introTerminalState{margin-left:auto;color:#e8e8ea;letter-spacing:.12em;font-size:8px}
+.introCode{padding:12px 15px 10px;display:grid;gap:7px;color:#e4e4e8;font:500 11px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace}
 .introCode > div{display:flex;align-items:center;gap:16px;white-space:nowrap;clip-path:inset(0 100% 0 0)}
 .introCode b{font-size:9px;color:#64646b;font-weight:400}
 .introCode code{font:inherit}
@@ -273,49 +267,45 @@
 .introBuildSuccess span{color:#86868d}
 @media(prefers-reduced-motion:no-preference){
  :global(html[data-home-intro="armed"]) .introOverlay{display:block}
- :global(html[data-home-intro="running"]) .introOverlay{display:block;animation:studioBuildFromLogo 2.25s linear both}
- :global(html[data-home-intro="running"]) .introGrid{animation:studioGridFade 2.25s ease both}
- :global(html[data-home-intro="running"]) .introHalo{animation:studioCornerHalo .55s ease-out .95s both}
- :global(html[data-home-intro="running"]) .introBlueprint{display:block;animation:studioBlueprintEnd 2.3s linear both}
- :global(html[data-home-intro="running"]) .introTraceHorizontal{animation:studioTraceH .88s cubic-bezier(.18,.75,.2,1) 1.0s both}
- :global(html[data-home-intro="running"]) .introTraceVertical{animation:studioTraceV 1.05s cubic-bezier(.18,.75,.2,1) 1.08s both}
- :global(html[data-home-intro="running"]) .introTraceOrigin{animation:studioOriginPulse .46s ease-out 1s both}
- :global(html[data-home-intro="running"]) .introTerminal{display:block;animation:studioCodePanel 1.2s ease-out 1s both}
- :global(html[data-home-intro="running"]) .introCodeRowOne{animation:studioCodeWrite .2s steps(24,end) 1.12s both}
- :global(html[data-home-intro="running"]) .introCodeRowTwo{animation:studioCodeWrite .2s steps(28,end) 1.30s both}
- :global(html[data-home-intro="running"]) .introCodeRowThree{animation:studioCodeWrite .2s steps(24,end) 1.48s both}
- :global(html[data-home-intro="running"]) .introProgress i{animation:studioBuildProgress .84s ease-out 1.05s both}
- :global(html[data-home-intro="running"]) .introBuildSuccess{animation:studioBuildUI .18s ease 1.84s both}
- :global(html[data-home-intro="running"]) .heroCopy .eyebrow{animation:studioEntrance .65s cubic-bezier(.17,.8,.2,1) 1.13s both}
- :global(html[data-home-intro="running"]) .heroCopy h1{animation:studioEntrance .72s cubic-bezier(.17,.8,.2,1) 1.20s both}
- :global(html[data-home-intro="running"]) .heroCopy .intro{animation:studioEntrance .72s cubic-bezier(.17,.8,.2,1) 1.31s both}
- :global(html[data-home-intro="running"]) .heroCopy .actions{animation:studioEntrance .68s cubic-bezier(.17,.8,.2,1) 1.40s both}
- :global(html[data-home-intro="running"]) .portrait{animation:studioPortraitEntrance .88s cubic-bezier(.17,.8,.2,1) 1.21s both}
- :global(html[data-home-intro="running"]) .tileStarCars{animation:studioTileEntrance .78s cubic-bezier(.17,.8,.2,1) 1.34s both}
- :global(html[data-home-intro="running"]) .tileIsto{animation:studioTileEntrance .78s cubic-bezier(.17,.8,.2,1) 1.46s both}
- :global(html[data-home-intro="running"]) .tileCrm{animation:studioTileEntrance .78s cubic-bezier(.17,.8,.2,1) 1.58s both}
+ :global(html[data-home-intro="running"]) .introOverlay{display:block;animation:studioTopDownUnveil 3.55s cubic-bezier(.45,0,.18,1) both}
+ :global(html[data-home-intro="running"]) .introGrid{animation:studioGridFade 3.55s ease both}
+ :global(html[data-home-intro="running"]) .introHalo{animation:studioCornerHalo .55s ease-out 1.04s both}
+ :global(html[data-home-intro="running"]) .introTerminal{display:block;animation:studioCodePanel 3.54s linear both}
+ :global(html[data-home-intro="running"]) .introCodeRowOne{animation:studioCodeWrite .35s steps(20,end) 1.18s both}
+ :global(html[data-home-intro="running"]) .introCodeRowTwo{animation:studioCodeWrite .37s steps(24,end) 1.53s both}
+ :global(html[data-home-intro="running"]) .introCodeRowThree{animation:studioCodeWrite .37s steps(24,end) 1.90s both}
+ :global(html[data-home-intro="running"]) .introCodeRowFour{animation:studioCodeWrite .37s steps(25,end) 2.27s both}
+ :global(html[data-home-intro="running"]) .introCodeRowFive{animation:studioCodeWrite .37s steps(25,end) 2.64s both}
+ :global(html[data-home-intro="running"]) .introProgress i{animation:studioBuildProgress 1.85s ease-out 1.14s both}
+ :global(html[data-home-intro="running"]) .introBuildSuccess{animation:studioBuildUI .18s ease 3.04s both}
+ :global(html[data-home-intro="running"]) .heroCopy .eyebrow{animation:studioEntrance .61s cubic-bezier(.17,.8,.2,1) 1.69s both}
+ :global(html[data-home-intro="running"]) .heroCopy h1{animation:studioEntrance .72s cubic-bezier(.17,.8,.2,1) 1.88s both}
+ :global(html[data-home-intro="running"]) .heroCopy h1 span:first-child{animation:studioHeadlineType .54s steps(18,end) 1.95s both}
+ :global(html[data-home-intro="running"]) .heroCopy h1 span:last-child{animation:studioHeadlineType .65s steps(22,end) 2.17s both}
+ :global(html[data-home-intro="running"]) .heroCopy .intro{animation:studioEntrance .70s cubic-bezier(.17,.8,.2,1) 2.32s both}
+ :global(html[data-home-intro="running"]) .heroCopy .actions{animation:studioEntrance .68s cubic-bezier(.17,.8,.2,1) 2.53s both}
+ :global(html[data-home-intro="running"]) .portrait{animation:studioPortraitEntrance .88s cubic-bezier(.17,.8,.2,1) 2.08s both}
+ :global(html[data-home-intro="running"]) .tileStarCars{animation:studioTileEntrance .73s cubic-bezier(.17,.8,.2,1) 2.33s both}
+ :global(html[data-home-intro="running"]) .tileIsto{animation:studioTileEntrance .73s cubic-bezier(.17,.8,.2,1) 2.56s both}
+ :global(html[data-home-intro="running"]) .tileCrm{animation:studioTileEntrance .73s cubic-bezier(.17,.8,.2,1) 2.79s both}
 }
-@keyframes studioBuildFromLogo{
- 0%,39%{clip-path:polygon(0 0,100% 0,100% 100%,0 100%,0 0,0 0);visibility:visible}
- 43%{clip-path:polygon(var(--intro-origin-x,40px) 0,100% 0,100% 100%,0 100%,0 var(--intro-origin-y,40px),var(--intro-origin-x,40px) var(--intro-origin-y,40px));visibility:visible}
- 50%{clip-path:polygon(max(var(--intro-origin-x,40px),16%) 0,100% 0,100% 100%,0 100%,0 max(var(--intro-origin-y,40px),16%),max(var(--intro-origin-x,40px),16%) max(var(--intro-origin-y,40px),16%));visibility:visible}
- 72%{clip-path:polygon(68% 0,100% 0,100% 100%,0 100%,0 68%,68% 68%);visibility:visible}
- 96%{clip-path:polygon(100% 0,100% 0,100% 100%,0 100%,0 100%,100% 100%);visibility:visible}
- 100%{clip-path:polygon(100% 0,100% 0,100% 100%,0 100%,0 100%,100% 100%);visibility:hidden}
+@keyframes studioTopDownUnveil{
+ 0%,31%{clip-path:inset(0 0 0 0);visibility:visible}
+ 46%{clip-path:inset(22% 0 0 0);visibility:visible}
+ 70%{clip-path:inset(68% 0 0 0);visibility:visible}
+ 97%{clip-path:inset(100% 0 0 0);visibility:visible}
+ 100%{clip-path:inset(100% 0 0 0);visibility:hidden}
 }
-@keyframes studioGridFade{0%,48%{opacity:.55}95%,100%{opacity:0}}
+@keyframes studioGridFade{0%,44%{opacity:.42}96%,100%{opacity:0}}
 @keyframes studioCornerHalo{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}35%{opacity:.95}100%{opacity:0;transform:translate(-50%,-50%) scale(2.2)}}
-@keyframes studioBlueprintEnd{0%,91%{opacity:1}100%{opacity:0}}
-@keyframes studioTraceH{0%{opacity:0;transform:scaleX(0)}15%{opacity:.85}77%{opacity:.6}100%{opacity:0;transform:scaleX(1)}}
-@keyframes studioTraceV{0%{opacity:0;transform:scaleY(0)}15%{opacity:.85}77%{opacity:.6}100%{opacity:0;transform:scaleY(1)}}
-@keyframes studioOriginPulse{0%{opacity:0;scale:.4}35%{opacity:1;scale:1.65}100%{opacity:0;scale:2.5}}
-@keyframes studioCodePanel{0%{opacity:0;scale:.94;translate:0 -8px}16%,75%{opacity:1;scale:1;translate:0 0}100%{opacity:0;scale:1;translate:0 5px}}
+@keyframes studioCodePanel{0%,28%{opacity:0;transform:translateY(-8px) scale(.98)}36%,74%{opacity:1;transform:translateY(0) scale(1)}93%,100%{opacity:0;transform:translateY(-8px) scale(1)}}
 @keyframes studioCodeWrite{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 @keyframes studioBuildProgress{from{width:0}to{width:100%}}
 @keyframes studioBuildUI{from{opacity:0}to{opacity:1}}
-@keyframes studioEntrance{from{opacity:0;transform:translateY(28px);filter:blur(6px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
-@keyframes studioPortraitEntrance{from{opacity:0;transform:translateY(42px) scale(.975);filter:blur(6px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
-@keyframes studioTileEntrance{from{opacity:0;scale:.82;filter:blur(8px)}to{opacity:1;scale:1;filter:blur(0)}}
+@keyframes studioHeadlineType{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes studioEntrance{from{opacity:0;transform:translateY(23px);filter:blur(4px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes studioPortraitEntrance{from{opacity:0;transform:translateY(40px) scale(.97);filter:blur(5px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes studioTileEntrance{from{opacity:0;scale:.87;filter:blur(6px)}to{opacity:1;scale:1;filter:blur(0)}}
 @media(max-width:767px){
  .introTerminal{top:calc(var(--intro-origin-y,40px) + 59px);width:calc(100vw - 40px);left:20px}
  .introCode{font-size:10px}
@@ -326,4 +316,4 @@
  .introCode{padding-top:5px;padding-bottom:3px;gap:3px}
  .introBuildSuccess{padding-top:5px;padding-bottom:6px}
 }
-@media(prefers-reduced-motion:reduce){.introOverlay,.introBlueprint,.introTerminal{display:none!important}}
+@media(prefers-reduced-motion:reduce){.introOverlay,.introTerminal{display:none!important}}

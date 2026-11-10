@@ -110,7 +110,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: '(function(){if(location.pathname!=="/")return;var root=document.documentElement;if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){root.dataset.homeIntro="skip";return;}var replay=new URLSearchParams(location.search).get("intro")==="1";try{var key="bernecki-home-intro-v3";if(sessionStorage.getItem(key)&&!replay){root.dataset.homeIntro="skip";return;}sessionStorage.setItem(key,"1");root.dataset.homeIntro="armed";}catch(e){root.dataset.homeIntro="armed";}window.setTimeout(function(){if(root.dataset.homeIntro==="armed"){root.dataset.homeIntro="skip";}},2800);})();',
+            __html: '(function(){if(location.pathname!=="/")return;var root=document.documentElement;if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){root.dataset.homeIntro="skip";return;}var replay=new URLSearchParams(location.search).get("intro")==="1";try{var key="bernecki-home-intro-v4";if(sessionStorage.getItem(key)&&!replay){root.dataset.homeIntro="skip";return;}sessionStorage.setItem(key,"1");root.dataset.homeIntro="armed";}catch(e){root.dataset.homeIntro="armed";}window.setTimeout(function(){if(root.dataset.homeIntro==="armed"){root.dataset.homeIntro="skip";}},4150);})();',
           }}
         />
       </head>

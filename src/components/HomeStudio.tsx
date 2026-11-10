@@ -53,7 +53,7 @@ export function HomeStudio() {
       root.dataset.homeIntro = "skip";
       flight.cancel(); // The real logo stays exactly where the navbar laid it out.
     };
-    const done = window.setTimeout(finish, 2480);
+    const done = window.setTimeout(finish, 3770);
     const onResize = () => finish(); // No misaligned landing if the viewport changes mid-flight.
     window.addEventListener("resize", onResize, { passive: true });
     return () => {
@@ -68,24 +68,21 @@ export function HomeStudio() {
       <div className={styles.introGrid} />
       <div className={styles.introHalo} />
     </div>
-    <div className={styles.introBlueprint} aria-hidden="true">
-      <span className={styles.introTraceHorizontal} />
-      <span className={styles.introTraceVertical} />
-      <span className={styles.introTraceOrigin} />
-    </div>
     <div className={styles.introTerminal} aria-hidden="true">
       <div className={styles.introTerminalTop}>
         <span className={styles.introDots}><i /><i /><i /></span>
         <span>BERNECKI.DEV <em>/</em> AI / BUILD ENGINE</span>
-        <span className={styles.introTerminalState}>LIVE</span>
+        <span className={styles.introTerminalState}>BUILDING</span>
       </div>
       <div className={styles.introCode}>
-        <div className={styles.introCodeRowOne}><b>01</b><code><span>›</span> compose(<strong>&lt;Hero /&gt;</strong>)</code></div>
-        <div className={styles.introCodeRowTwo}><b>02</b><code><span>›</span> mount(<strong>portrait, copy</strong>)</code></div>
-        <div className={styles.introCodeRowThree}><b>03</b><code><span>›</span> render(<strong>3 projects</strong>)</code></div>
+        <div className={styles.introCodeRowOne}><b>01</b><code><span>›</span> init(<strong>bernecki.dev</strong>)</code></div>
+        <div className={styles.introCodeRowTwo}><b>02</b><code><span>›</span> compile(<strong>&lt;Header /&gt;</strong>)</code></div>
+        <div className={styles.introCodeRowThree}><b>03</b><code><span>›</span> write(<strong>hero + copy</strong>)</code></div>
+        <div className={styles.introCodeRowFour}><b>04</b><code><span>›</span> load(<strong>portrait.png</strong>)</code></div>
+        <div className={styles.introCodeRowFive}><b>05</b><code><span>›</span> mount(<strong>projects[3]</strong>)</code></div>
       </div>
       <div className={styles.introProgress}><i /></div>
-      <div className={styles.introBuildSuccess}>✓ BUILD COMPLETE <span>100%</span></div>
+      <div className={styles.introBuildSuccess}>✓ PAGE READY <span>100%</span></div>
     </div>
     <section id="home" className={[styles.hero, "hero-night"].join(" ")} aria-labelledby="hero-title">
       <div className={styles.heroCopy}>
