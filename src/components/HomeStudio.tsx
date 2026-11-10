@@ -6,6 +6,7 @@ import { ArrowUpRight, ArrowRight, Github, Linkedin, BookOpen, BrainCircuit, New
 import { useLanguage } from "@/contexts/LanguageContext";
 import { homepageCopy } from "@/content/homepage-copy";
 import { ClientMarquee } from "./ClientMarquee";
+import { ClientTestimonials } from "./ClientTestimonials";
 import { FractionalLeadershipTeaser } from "./FractionalLeadershipTeaser";
 import { Projects } from "./Projects";
 import { ContactReveal } from "./ContactReveal";
@@ -54,6 +55,7 @@ export function HomeStudio() {
     </section>
     <ClientMarquee/>
     <Projects/>
+    <ClientTestimonials/>
     <FractionalLeadershipTeaser english={lang === "en"}/>
     <section id="services" className={styles.section}>
       <p className={styles.eyebrow}>{lang === "pl" ? "Oferta" : "Services"}</p><h2>{c.services}</h2>
