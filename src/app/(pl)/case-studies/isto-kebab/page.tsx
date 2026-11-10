@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const url="https://bernecki.dev/case-studies/isto-kebab";
 export const metadata: Metadata = {
- title:"Isto Kebab — strona restauracji, menu i zamówienia | Case study",
+ title:{absolute:"Isto Kebab – strona i zamówienia | Kacper Bernecki"},
  description:"Zobacz realizację strony Isto Kebab: mobilne menu, prezentacja produktów, wybór wariantów i proces składania zamówień. Rzeczywisty zrzut ekranu.",
  alternates:{canonical:url},
  openGraph:{title:"Isto Kebab — strona i zamówienia",description:"Wdrożenie witryny restauracji i interaktywnego menu.",url,type:"article",locale:"pl_PL",images:[{url:"/images/projects/isto-live-nov08.jpg",alt:"Zrzut rzeczywistej witryny Isto Kebab"}]},

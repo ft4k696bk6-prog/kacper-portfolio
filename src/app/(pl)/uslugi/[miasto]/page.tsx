@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const city = getServiceCity(miasto);
   if (!city) return {};
   const title = `Strony, CRM, marketing i AI dla firm – ${city.name}`;
-  const description = `Tworzenie stron internetowych, CRM, aplikacje, reklamy i automatyzacje AI dla firm ${city.from}. Obsługa zdalna w całej Polsce, zakres i wycena ustalane indywidualnie.`;
+  const description = `Strony internetowe, CRM, aplikacje i reklamy Meta Ads dla firm ${city.from}. Współpraca zdalna w całej Polsce. Indywidualna wycena.`;
   const url = `${base}/uslugi/${city.slug}`;
   return {
     title: { absolute: seoTitle(title) },

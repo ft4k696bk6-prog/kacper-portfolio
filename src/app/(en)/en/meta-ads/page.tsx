@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 const canonical="https://bernecki.dev/en/meta-ads";
 export const metadata:Metadata={
- title:"Meta Ads for Businesses: Facebook, Instagram and Leads | Kacper Bernecki",
+ title:{absolute:"Meta Ads & Lead Generation | Kacper Bernecki"},
  description:"Meta Ads campaigns for businesses: creative, lead forms, contact qualification and CRM follow-up. See the Re-Energy System case study.",
  alternates:{canonical,languages:{en:canonical,"pl-PL":"https://bernecki.dev/reklamy-meta-ads-dla-firm"}},
  openGraph:{title:"Meta Ads and lead generation | Kacper Bernecki",description:"Facebook and Instagram advertising connected to lead forms and CRM.",url:canonical,type:"website",locale:"en_US"}
@@ -25,7 +25,7 @@ export default function MetaAdsEnglish(){
    <p className="text-xs uppercase tracking-[0.2em] text-white/65">Facebook Ads · Instagram Ads · Lead generation</p>
    <h1 className="mt-5 text-4xl leading-tight md:text-6xl">Meta Ads designed to generate enquiries, not just impressions.</h1>
    <p className="mt-7 text-lg leading-8 text-white/75">I plan and manage campaigns that connect advertising to lead forms, landing pages and customer follow-up. The aim is a clear process from the first enquiry to a conversation with your sales team.</p>
-   <div className="mt-8 flex flex-wrap gap-3"><Link href="/#contact" className="brand-action rounded-lg px-5 py-3 text-black">Discuss your campaign</Link><Link href="/en/case-studies/re-energy-meta-ads" className="brand-outline rounded-lg px-5 py-3">Re-Energy System results</Link></div>
+   <div className="mt-8 flex flex-wrap gap-3"><Link href="/kontakt?usluga=Marketing%20i%20reklamy" className="brand-action rounded-lg px-5 py-3 text-black">Discuss your campaign</Link><Link href="/en/case-studies/re-energy-meta-ads" className="brand-outline rounded-lg px-5 py-3">Re-Energy System results</Link></div>
   </header>
   <section className="mt-20">
    <h2 className="text-3xl">How I approach campaigns</h2>

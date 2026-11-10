@@ -25,13 +25,15 @@ Service pages:
 - [CRM and web applications](https://bernecki.dev/crm-i-aplikacje-webowe)
 - [Marketing and advertising landing pages](https://bernecki.dev/marketing-i-reklamy)
 
+- [Re-Energy System](https://re-energysystem.pl) — photovoltaic systems and energy storage company; website and a real-world Meta Ads lead-generation case study: https://bernecki.dev/case-studies/re-energy-meta-ads.
+
 Machine-readable project and positioning summary: [bernecki.dev/llms.txt](https://bernecki.dev/llms.txt)
 
 ## Selected projects
 
 - [B-CRM](https://demo-crm.bernecki.dev/login) — production-like CRM demo with role-aware sales and operations workflows.
 - [Motomizer](https://motomizer.pl) — product landing page with responsive presentation and variant galleries.
-- [StarCars Import](https://star-cars.us) — business website with an import-cost estimator and enquiry flow.
+- [StarCars Import](https://www.star-cars.us) — business website with an import-cost estimator and enquiry flow.
 - [BeatMarket](https://beatmarket.bernecki.dev) — beat discovery and licensing marketplace in active development.
 
 Case studies are available at https://bernecki.dev/case-studies.

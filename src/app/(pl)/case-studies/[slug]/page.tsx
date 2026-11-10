@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CaseStudyPage } from "@/components/CaseStudyPage";
 import { pl } from "@/i18n/pl";
+import { seoTitle, seoDescription } from "@/lib/seo";
 
 type CaseStudyRouteProps = {
   params: Promise<{
@@ -30,14 +31,14 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${study.title} — Case study`,
-    description: study.summary,
+    title: { absolute: seoTitle(`${study.title} – realizacja`) },
+    description: seoDescription(study.summary, "Zakres wdrożenia, funkcje, technologie i efekty projektu."),
     alternates: {
       canonical: `${siteUrl}/case-studies/${study.slug}`,
     },
     twitter: {
       card: "summary_large_image",
-      title: `${study.title} — Case study | Kacper Bernecki`,
+      title: seoTitle(`${study.title} – realizacja`),
       description: study.summary,
       images: study.images?.[0] ? [{ url: study.images[0].src, alt: study.images[0].alt }] : ["/opengraph-image"],
     },
