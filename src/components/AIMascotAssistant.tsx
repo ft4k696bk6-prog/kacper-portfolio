@@ -144,6 +144,35 @@ function extractWebsiteUrl(message:string):string|null {
   return url.href;
  }catch{return null;}
 }
+
+function toolSuggestionForQuestion(text:string):string|null{
+ const normalized=normalizeCommand(text);
+ const entries:[RegExp,string][]=[
+  [/\b(roas|return on ad spend)\b/,"kalkulator-roas"],
+  [/\b(cpl|cost per lead|koszt lead)/,"kalkulator-cpl"],
+  [/\b(cpc|cost per click)\b/,"kalkulator-cpc"],
+  [/\b(cpm|cost per mille)\b/,"kalkulator-cpm"],
+  [/\b(utm|campaign tracking link|parametr.*utm)/,"generator-utm"],
+  [/meta ads.*(error|problem|odrzucon|nieaktywn|rejected|inactive|not spending)|\b(zestaw reklam|reklam.*odrzucon)/,"diagnostyka-meta-ads"],
+  [/(meta pixel|facebook pixel|piksel meta|pixel tracking)/,"tester-meta-pixel"],
+  [/(google tag manager|\bgtm\b)/,"tester-google-tag-manager"],
+  [/(spf|dmarc|dns poczt|email authentication)/,"test-spf-dmarc"],
+  [/(ssl|tls|certyfikat)/,"sprawdzanie-certyfikatu-ssl"],
+  [/(\bjwt\b|token decoder)/,"dekoder-jwt"],
+  [/(formatter json|walidator json|validate json|json formatter)/,"formatter-json"],
+  [/(sitemap|mapa strony)/,"walidator-sitemap-xml"],
+  [/(robots\.txt|robots txt)/,"walidator-robots-txt"],
+  [/(schema\.org|json-ld|structured data|dane strukturalne)/,"walidator-schema-org"],
+  [/(kolor.*kontrast|color contrast|wcag contrast)/,"tester-kontrastu-kolorow"],
+  [/(ile kosztuje strona|website price|website cost|koszt strony)/,"kalkulator-kosztu-strony"],
+  [/(automatyzacj.*oszczed|automation savings)/,"kalkulator-oszczednosci-automatyzacji"],
+  [/(roi crm|zwrot.*crm)/,"kalkulator-roi-crm"],
+  [/(pozyskani.*klient|customer acquisition cost|\bcac\b)/,"kalkulator-cac"],
+  [/(backlink|seo|audyt stron|website audit)/,"audyt-strony"]
+ ];
+ return entries.find(([pattern])=>pattern.test(normalized))?.[1]||null;
+}
+
 function renderLinkedMessage(content:string){
  return content.split(/(https:\/\/bernecki\.dev\/[a-z0-9/_-]+(?:\?[^\s]+)?)/gi).map((part,index)=>
   /^https:\/\/bernecki\.dev\/[a-z0-9/_-]+/i.test(part)
@@ -341,6 +370,17 @@ export function AIMascotAssistant() {
     }
     if(localAction&&!options.retry){
       window.setTimeout(()=>handleQuickAction(localAction),0);
+      return;
+    }
+    // Deterministic tool navigation needs no AI request or hallucinated analysis.
+    const suggestedTool=toolSuggestionForQuestion(question);
+    if(suggestedTool&&!options.retry){
+      const link="https://bernecki.dev"+localizedToolPath(suggestedTool,lang);
+      const answer=lang==="pl"
+       ?"Mam do tego darmowe narzędzie. Uruchom je tutaj: "+link
+       :"There is a free tool for that. Open it here: "+link;
+      setMessages(current=>[...current,createMessage("assistant",answer)]);
+      setBehavior({mood:"curious"});
       return;
     }
     setLoading(true);
