@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any -- pinned external Transformers.js runtime */
 import {useEffect,useRef,useState} from "react";
-import {AlertTriangle,Camera,FileText,Lock,ScanSearch,ShieldCheck} from "lucide-react";
+import {Camera,FileText,Lock,ScanSearch,ShieldCheck} from "lucide-react";
 import {aiScore,imageFileAllowed,inspectGeneratorMarkers} from "@/lib/ai-origin";
 
 const moduleUrl="https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js";
