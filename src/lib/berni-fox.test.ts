@@ -12,7 +12,7 @@ describe("One-source, continuous animated Berni", () => {
     expect(existsSync("public/images/berni/berni-fox-head.png")).toBe(true);
     expect(existsSync("public/images/berni/eyelids-closed.jpg")).toBe(true);
     expect(portrait).toContain('src="/images/berni/berni-fox-head.png"');
-    expect(rig).toContain('const SOURCE = "/images/berni/berni-fox-head.png"');
+    expect(rig).toContain('const BASE = "/images/berni/berni-fox-head.png"');
     expect(portrait).toContain('from "next/image"');
     expect(portrait).toContain("<BerniLivingFace");
     expect(portrait).not.toContain("FACE_ASSETS");
