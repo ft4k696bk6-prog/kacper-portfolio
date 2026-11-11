@@ -3,7 +3,7 @@ export const ARCADE_GAMES = [
  {id:"reflex",pl:"Test refleksu",en:"Reaction test",plDesc:"Złap zielony sygnał i pobij swój wynik.",enDesc:"React when the signal turns green."},
  {id:"kids",pl:"Klawiaturowa galaktyka",en:"Keyboard Galaxy",plDesc:"Kosmos, litery i efekty na dotyk.",enDesc:"A touch-friendly galaxy of letters and stars."},
  {id:"maze",pl:"Pac-Man — labirynt",en:"Maze Chomp (Pac-Man style)",plDesc:"Gra w stylu Pac-Mana z duchami i kropkami.",enDesc:"An original Pac-Man-style maze game."},
- {id:"fps",pl:"Retro FPS — styl Doom",en:"Retro FPS (Doom style)",plDesc:"Lekka strzelanka 3D w stylu Dooma, także na telefon.",enDesc:"A lightweight Doom-style 3D shooter for touch screens."}
+ {id:"fps",pl:"Retro FPS — styl Doom",en:"Retro FPS (Doom style)",plDesc:"Lekka strzelanka 3D w stylu Dooma, także na telefon.",enDesc:"A lightweight Doom-style 3D shooter for touch screens."},
  {id:"memory",pl:"Memory",en:"Memory pairs",plDesc:"Odkrywaj i zapamiętuj 6 par kart.",enDesc:"Find six matching pairs."},
  {id:"tictactoe",pl:"Kółko i krzyżyk",en:"Tic-tac-toe",plDesc:"Zagraj przeciwko komputerowi.",enDesc:"Challenge the computer."},
  {id:"merge",pl:"2048",en:"2048",plDesc:"Łącz kafelki i zdobądź 2048.",enDesc:"Merge tiles and reach 2048."},
