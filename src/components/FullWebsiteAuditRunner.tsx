@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, AlertTriangle, ClipboardCopy, Download, Globe2, LoaderCircle } from "lucide-react";
+import { ArrowRight, AlertTriangle, ClipboardCopy, Download, Globe2, LoaderCircle, X } from "lucide-react";
 
 type Severity="critical"|"warning"|"info";
 type Issue={id:string;severity:Severity;category:string;title:string;detail:string;fix:string;page?:string};
@@ -77,6 +77,13 @@ export function FullWebsiteAuditRunner(){
  const [busy,setBusy]=useState(false);
  const [error,setError]=useState("");
  const [report,setReport]=useState<Report|null>(null);
+ useEffect(()=>{
+  if(!report)return;
+  const original=document.body.style.overflow;document.body.style.overflow="hidden";
+  const onEscape=(event:KeyboardEvent)=>{if(event.key==="Escape")setReport(null);};
+  document.addEventListener("keydown",onEscape);
+  return()=>{document.body.style.overflow=original;document.removeEventListener("keydown",onEscape);};
+ },[report]);
  const [view,setView]=useState<"issues"|"pages"|"technical">("issues");
  const [filter,setFilter]=useState<"all"|Severity>("all");
  async function handleSubmit(event:React.FormEvent<HTMLFormElement>){
@@ -118,12 +125,14 @@ export function FullWebsiteAuditRunner(){
    {error&&<p className="mt-4 rounded-xl border border-rose-400/35 bg-rose-500/5 p-4 text-sm leading-6 text-rose-200" role="alert">{error}</p>}
    <p className="mt-4 text-xs leading-6 text-white/50">Skan jest ograniczony do maksymalnie 7 podstron i nie zastępuje pełnego crawla, Lighthouse ani Search Console. Nie zapisujemy obowiązkowo danych kontaktowych.</p>
   </form>
-  {!report&&!busy&&<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-   {["SEO i indeksowanie","Dostępność i obrazy","SSL, DNS i nagłówki","Meta Pixel i Google Tag"].map((name,i)=><div key={name} className="rounded-xl border border-white/15 bg-[#101010] p-5">
-    <span className="font-mono text-xs text-white/35">0{i+1}</span><h3 className="mt-4 text-sm font-medium text-white/80">{name}</h3><p className="mt-2 text-xs text-white/45">Wyniki w jednym raporcie</p>
-   </div>)}
-  </div>}
-  {report&&<section aria-live="polite" className="space-y-6">
+  {report&&<div role="presentation" className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm sm:p-5" onMouseDown={event=>{if(event.target===event.currentTarget)setReport(null);}}>
+   <div role="dialog" aria-modal="true" aria-label="Raport audytu strony" className="flex h-[100dvh] w-full max-w-5xl flex-col overflow-hidden border border-white/20 bg-[#0a0a0a] shadow-2xl sm:h-[min(92dvh,900px)] sm:rounded-2xl">
+    <header className="flex shrink-0 items-center justify-between gap-4 border-b border-white/15 bg-[#111] px-4 py-4 sm:px-7">
+     <div className="min-w-0"><p className="text-[10px] font-medium uppercase tracking-[.18em] text-white/50">KOMPLEKSOWY AUDYT</p><h2 className="mt-1 truncate text-lg font-semibold">{report.host}</h2></div>
+     <button type="button" onClick={()=>setReport(null)} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/20 px-4 text-sm text-white transition hover:border-white/60"><X size={17}/>Zamknij</button>
+    </header>
+    <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-7">
+     <section aria-live="polite" className="space-y-6">
    <div className="rounded-2xl border border-white/20 bg-[#111111] p-5 md:p-7">
     <div className="flex flex-wrap items-start justify-between gap-5">
      <div><p className="text-[10px] uppercase tracking-[.2em] text-white/50">Wyniki audytu · {new Date(report.analyzedAt).toLocaleString("pl-PL")}</p>
@@ -180,6 +189,9 @@ export function FullWebsiteAuditRunner(){
     <div><h3 className="text-xl font-medium">Chcesz usunąć wykryte problemy?</h3><p className="mt-2 max-w-xl text-sm leading-6 text-white/65">Mogę sprawdzić szczegóły i wycenić konkretne poprawki — raport możesz dołączyć do zgłoszenia.</p></div>
     <Link href="/kontakt" className="brand-action inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 text-sm font-medium">Zapytaj o poprawki <ArrowRight size={16}/></Link>
    </div>
-  </section>}
+     </section>
+    </div>
+   </div>
+  </div>}
  </div>;
 }

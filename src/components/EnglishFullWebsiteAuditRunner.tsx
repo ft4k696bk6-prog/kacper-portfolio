@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
-import { ArrowRight, ClipboardCopy, Download, LoaderCircle, Globe2 } from "lucide-react";
+import { ArrowRight, ClipboardCopy, Download, LoaderCircle, Globe2, X } from "lucide-react";
 
 type Issue={id:string;severity:"critical"|"warning"|"info";category:string;title:string;detail:string;fix:string;page?:string};
 type Page={url:string;status:number;ttfb:number;sizeKb:number;html:{title:string;headings:{level:number;text:string}[];imagesMissingAlt:number}};
@@ -56,6 +56,13 @@ export function EnglishFullWebsiteAuditRunner() {
  const [busy,setBusy]=useState(false);
  const [error,setError]=useState("");
  const [audit,setAudit]=useState<Audit|null>(null);
+ useEffect(()=>{
+  if(!audit)return;
+  const original=document.body.style.overflow;document.body.style.overflow="hidden";
+  const onEscape=(event:KeyboardEvent)=>{if(event.key==="Escape")setAudit(null);};
+  document.addEventListener("keydown",onEscape);
+  return()=>{document.body.style.overflow=original;document.removeEventListener("keydown",onEscape);};
+ },[audit]);
  const [tab,setTab]=useState<"issues"|"pages"|"technical">("issues");
  const [filter,setFilter]=useState<"all"|"critical"|"warning"|"info">("all");
  async function run(e:FormEvent<HTMLFormElement>){
@@ -90,8 +97,14 @@ export function EnglishFullWebsiteAuditRunner() {
    {error&&<p role="alert" className="mt-4 rounded-xl border border-rose-400/30 p-4 text-sm text-rose-200">{error}</p>}
    <p className="mt-4 text-xs leading-6 text-white/45">No account required. Limited to a sample of seven public pages; not a full SEO or accessibility audit.</p>
   </form>
-  {!audit&&!busy&&<div className="grid gap-3 md:grid-cols-4">{["SEO & indexing","Accessibility & images","SSL, DNS & security","Pixel & Google Tags"].map((s,i)=><div key={s} className="rounded-xl border border-white/15 bg-[#101010] p-5"><span className="text-xs text-white/40">0{i+1}</span><h3 className="mt-4 text-sm font-medium">{s}</h3></div>)}</div>}
-  {audit&&<section aria-live="polite" className="space-y-6">
+  {audit&&<div role="presentation" className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm sm:p-5" onMouseDown={event=>{if(event.target===event.currentTarget)setAudit(null);}}>
+   <div role="dialog" aria-modal="true" aria-label="Website audit report" className="flex h-[100dvh] w-full max-w-5xl flex-col overflow-hidden border border-white/20 bg-[#0a0a0a] shadow-2xl sm:h-[min(92dvh,900px)] sm:rounded-2xl">
+    <header className="flex shrink-0 items-center justify-between gap-4 border-b border-white/15 bg-[#111] px-4 py-4 sm:px-7">
+     <div className="min-w-0"><p className="text-[10px] font-medium uppercase tracking-[.18em] text-white/50">FULL WEBSITE AUDIT</p><h2 className="mt-1 truncate text-lg font-semibold">{audit.host}</h2></div>
+     <button type="button" onClick={()=>setAudit(null)} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/20 px-4 text-sm text-white transition hover:border-white/60"><X size={17}/>Close</button>
+    </header>
+    <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-7">
+     <section aria-live="polite" className="space-y-6">
    <div className="rounded-2xl border border-white/20 bg-[#111111] p-5 md:p-7">
     <div className="flex flex-wrap items-start justify-between gap-5">
      <div><p className="text-[10px] uppercase tracking-[.2em] text-white/50">Website report · {new Date(audit.analyzedAt).toLocaleString("en-GB")}</p>
@@ -133,6 +146,9 @@ export function EnglishFullWebsiteAuditRunner() {
    ].map(([name,value])=><div key={name} className="min-w-0 rounded-xl border border-white/15 bg-[#111111] p-5"><p className="text-xs text-white/55">{name}</p><p className="mt-2 break-words text-sm font-medium">{value}</p></div>)}</div>}
    <div className="rounded-xl border border-white/15 p-5"><h3 className="text-sm font-medium">Important limitations</h3>{limitations.map(v=><p key={v} className="mt-2 text-xs leading-6 text-white/55">{v}</p>)}</div>
    <div className="flex flex-wrap items-center justify-between gap-5 rounded-xl border border-white/25 bg-[#121212] p-6"><div><h3 className="text-xl font-medium">Want these issues fixed?</h3><p className="mt-2 text-sm text-white/65">I can review the findings and suggest practical next steps.</p></div><Link href="/kontakt" className="brand-action inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 text-sm">Discuss the fixes <ArrowRight size={16}/></Link></div>
-  </section>}
+     </section>
+    </div>
+   </div>
+  </div>}
  </div>;
 }
