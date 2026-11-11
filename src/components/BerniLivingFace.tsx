@@ -37,6 +37,7 @@ const FRAGMENT_SHADER = `
 precision highp float;
 varying vec2 vUV;
 uniform sampler2D uPortrait;
+uniform sampler2D uClosedEyes;
 uniform vec4 uFace;   // blink, mouth, smile, surprise
 uniform vec4 uMotion; // lookX, lookY, worried, breathing
 
@@ -65,16 +66,10 @@ void main() {
   float f = eyeMask(p, farEye, farRadius);
   vec2 source = p;
 
-  // Source-region contraction is continuous (not a hard image swap).
-  // Nearby eyelid skin naturally slides into the gap as the eyes close.
-  float nearClosure = blink * n;
-  float farClosure = blink * f;
-  float nearScale = 1.0 - .86 * blink;
-  float farScale = 1.0 - .86 * blink;
-  source.y += n * (p.y - nearEye.y) * (1.0 / nearScale - 1.0);
-  source.y += f * (p.y - farEye.y) * (1.0 / farScale - 1.0);
-  source.y += surprise * (n * (p.y - nearEye.y) * -.11
-                          + f * (p.y - farEye.y) * -.09);
+  // The exact neutral texture remains fixed. Eyes can glance and widen without
+  // a large UV stretch (which previously produced double pupils).
+  source.y += surprise * (n * (p.y - nearEye.y) * -.06
+                          + f * (p.y - farEye.y) * -.045);
 
   // Pupils track the visitor gently, only inside the orbital masks.
   source.x -= uMotion.x * (.012 * n + .006 * f) * (1.0 - blink);
@@ -89,39 +84,47 @@ void main() {
 
   vec4 skin = texture2D(uPortrait, clamp(source, .001, .999));
 
-  // Draw an eyelid line *from the same source palette*. It follows
-  // the perspective of each eye and fades in with closure.
-  float nLine = n * exp(-pow((p.y - nearEye.y) / .005, 2.0));
-  float fLine = f * exp(-pow((p.y - farEye.y) / .004, 2.0));
-  float lid = max(nLine, fLine) * smoothstep(.48, .96, blink) * .56;
-  skin.rgb = mix(skin.rgb, vec3(.20, .23, .30), lid * skin.a);
+  // Match only the exact eyelid areas against a fixed reference expression.
+  // The eyelid reveal is continuous in a shader, not an image-frame swap.
+  // Eyes, eyebrows, nose, fur, headphones and both B logos keep one original
+  // neutral image, with the small inner-eye patch fading gradually.
+  vec4 closedEye = texture2D(uClosedEyes, p);
+  float nearEyeArea = 1.0 - smoothstep(.50, .90,
+    dot((p - nearEye) / vec2(.082, .053),
+        (p - nearEye) / vec2(.082, .053)));
+  float farEyeArea = 1.0 - smoothstep(.50, .92,
+    dot((p - farEye) / vec2(.034, .039),
+        (p - farEye) / vec2(.034, .039)));
+  float eyelidMask = clamp(max(nearEyeArea, farEyeArea), 0.0, 1.0);
+  float shut = smoothstep(.04, .93, blink);
+  skin.rgb = mix(skin.rgb, closedEye.rgb, eyelidMask * shut);
 
-  // A continuously opening, tapered mouth under Berni's ORIGINAL smile.
-  // It does not replace his muzzle with a different generated muzzle.
-  vec2 mouthCenter = vec2(.641, .666 + mouth * .004);
-  float mw = mix(.044, .058, smile > 0.0 ? smile : 0.0);
-  mw = mix(mw, .034, surprise);
-  float mh = .004 + mouth * (surprise > .4 ? .026 : .018);
-  vec2 mouthLocal = (p - mouthCenter) / vec2(mw, max(mh,.003));
-  // Mild curve follows his natural smile rather than a flat ellipse.
-  mouthLocal.y += (mouthLocal.x * mouthLocal.x) * .21 * (1.0 - surprise);
-  float edge = dot(mouthLocal, mouthLocal);
-  float cavity = (1.0 - smoothstep(.79, 1.06, edge))
-                 * smoothstep(.09, .27, mouth);
-  vec3 darkMouth = mix(vec3(.10,.062,.087), vec3(.17,.083,.107),
-                        smoothstep(-.15, .9, mouthLocal.y));
-  // Pink tongue is visible only in the lower open-mouth region.
-  float tongue = (1.0 - smoothstep(.32, .62,
-                  length(vec2(mouthLocal.x * 1.1, (mouthLocal.y - .49) * 1.4))))
-                  * smoothstep(.32,.64,mouth);
-  darkMouth = mix(darkMouth, vec3(.53,.25,.33), tongue * .74);
-  skin.rgb = mix(skin.rgb, darkMouth, cavity * skin.a * .93);
+  // The opening follows the EXISTING curved dark smile instead of
+  // stamping a round ellipse over a different muzzle.
+  float t = clamp((p.x - .566) / .147, 0.0, 1.0);
+  float taper = pow(max(0.0, sin(3.14159265 * t)), .6);
+  float lip = .620 + .058 * smoothstep(0.0, .65, t)
+            + .009 * sin(3.14159265 * t);
+  float depth = mouth * mix(.034, .039, smile > 0.0 ? smile : 0.0) * taper;
+  float aperture = smoothstep(lip - .002, lip + .004, p.y)
+                 * (1.0 - smoothstep(lip + depth - .006, lip + depth + .002, p.y));
+  aperture *= smoothstep(0.0, .13, t)
+            * (1.0 - smoothstep(.88, 1.0, t))
+            * taper * smoothstep(.05, .25, mouth);
+  vec3 darkMouth = vec3(.070, .047, .062);
+  vec2 tonguePos = vec2((p.x - .645) / .054,
+                        (p.y - (lip + depth * .75)) / (depth * .35 + .001));
+  float tongue = (1.0 - smoothstep(.23, .45, dot(tonguePos, tonguePos)))
+               * smoothstep(.35, .70, mouth);
+  darkMouth = mix(darkMouth, vec3(.47, .18, .27), tongue);
+  skin.rgb = mix(skin.rgb, darkMouth, aperture * skin.a * .98);
 
   gl_FragColor = skin;
 }
 `;
 
 const SOURCE = "/images/berni/berni-fox-head.png";
+const CLOSED_EYES = "/images/berni/eyelids-closed.jpg";
 const defaultExpression: Expression = {
   blink: 0, mouth: 0, smile: 0, surprise: 0,
   lookX: 0, lookY: 0, worried: 0,
@@ -203,6 +206,7 @@ export function BerniLivingFace({
     let current: Expression = { ...defaultExpression };
     let program: WebGLProgram | null = null;
     let texture: WebGLTexture | null = null;
+    let closedTexture: WebGLTexture | null = null;
     let buffer: WebGLBuffer | null = null;
     let observer: IntersectionObserver | undefined;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -224,7 +228,7 @@ export function BerniLivingFace({
     }
     function draw(now: number) {
       raf = 0;
-      if (!alive || document.hidden || !visible || !program || !texture || !buffer) return;
+      if (!alive || document.hidden || !visible || !program || !texture || !closedTexture || !buffer) return;
       raf = requestAnimationFrame(draw);
       // 45 fps cap keeps three tiny widgets cheap on iPhone.
       if (now - lastFrame < 22 && !reduced.matches) return;
@@ -273,6 +277,9 @@ export function BerniLivingFace({
       gl!.activeTexture(gl!.TEXTURE0);
       gl!.bindTexture(gl!.TEXTURE_2D, texture);
       gl!.uniform1i(gl!.getUniformLocation(program, "uPortrait"), 0);
+      gl!.activeTexture(gl!.TEXTURE1);
+      gl!.bindTexture(gl!.TEXTURE_2D, closedTexture);
+      gl!.uniform1i(gl!.getUniformLocation(program, "uClosedEyes"), 1);
       gl!.uniform4f(gl!.getUniformLocation(program, "uFace"),
         current.blink, current.mouth, current.smile, current.surprise);
       gl!.uniform4f(gl!.getUniformLocation(program, "uMotion"),
@@ -309,31 +316,51 @@ export function BerniLivingFace({
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      closedTexture = gl.createTexture();
+      if (!closedTexture) throw new Error("Unable to create Berni eyelid texture");
+      gl.bindTexture(gl.TEXTURE_2D, closedTexture);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     } catch (error) {
       if (process.env.NODE_ENV !== "production") console.warn("Berni graphics fallback", error);
       if (program) gl.deleteProgram(program);
       if (buffer) gl.deleteBuffer(buffer);
       if (texture) gl.deleteTexture(texture);
+      if (closedTexture) gl.deleteTexture(closedTexture);
       canvas.removeEventListener("berni-force-blink", onBlink);
       document.removeEventListener("visibilitychange", onPageVisibility);
       return;
     }
 
-    const portrait = new window.Image();
-    portrait.src = SOURCE;
-    portrait.onload = () => {
-      if (!alive || !texture) return;
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,
-        gl.UNSIGNED_BYTE, portrait);
-      draw(performance.now());
-      setLoaded(true);
-      onReady?.();
-    };
-    portrait.onerror = () => {
-      // Keep the original Next Image visible. No blank chatbot.
-    };
+    function loadImage(url: string): Promise<HTMLImageElement> {
+      return new Promise((resolve, reject) => {
+        const img = new window.Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error("Berni image unavailable: " + url));
+        img.src = url;
+      });
+    }
+    void Promise.all([loadImage(SOURCE), loadImage(CLOSED_EYES)])
+      .then(([portrait, eyelid]) => {
+        if (!alive || !texture || !closedTexture) return;
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,
+          gl.UNSIGNED_BYTE, portrait);
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, closedTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,
+          gl.UNSIGNED_BYTE, eyelid);
+        draw(performance.now());
+        setLoaded(true);
+        onReady?.();
+      })
+      .catch(() => {
+        // Never hide the matching static portrait if a texture fails to load.
+      });
     if ("IntersectionObserver" in window) {
       observer = new IntersectionObserver(entries => {
         visible = entries[0]?.isIntersecting ?? true;
@@ -349,6 +376,7 @@ export function BerniLivingFace({
       canvas.removeEventListener("berni-force-blink", onBlink);
       document.removeEventListener("visibilitychange", onPageVisibility);
       if (texture) gl.deleteTexture(texture);
+      if (closedTexture) gl.deleteTexture(closedTexture);
       if (buffer) gl.deleteBuffer(buffer);
       if (program) gl.deleteProgram(program);
     };
