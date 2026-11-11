@@ -80,7 +80,7 @@ function sceneGeometry(c:CanvasRenderingContext2D,f:SignatureFields,a:SceneAsset
  const color=hex(f.accent);
  c.fillStyle="#fff";c.fillRect(0,0,520,208);
  // Contact details are already present in the mail (the original video keeps them stable).
- const contactFade=phase(p,0,.09);
+ const contactFade=1; // Name and contact stay visible while brand/photo collapse.
  text(c,nameOf(f),27,102,290,"bold 23px Arial","#1b1a21",contactFade);
  text(c,roleOf(f),27,121,287,"13px Arial","#605e68",contactFade);
  text(c,f.company||"",27,148,277,"bold 11px Arial",color,contactFade);
