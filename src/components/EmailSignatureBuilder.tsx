@@ -231,7 +231,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
     <div className="mt-4 min-w-0 overflow-x-auto rounded-xl border border-[#d5d5d5] bg-white px-3 py-6 sm:p-6">
      {mode==="static"?<div className="w-max min-w-0 max-w-full" aria-label={en?"Static signature preview":"Podgląd zwykłej stopki"} dangerouslySetInnerHTML={{__html:previewHtml}}/>:
       gifPreview?<div className="min-w-[260px] max-w-[520px]"><img src={gifPreview} alt={en?"Animated signature preview":"Podgląd animowanej stopki"} width={520} height={178} className="h-auto w-full"/>
-       <div className="mt-2 max-w-full" dangerouslySetInnerHTML={{__html:signatureHtml({...output,animationUrl:""}).match(/<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse"><tbody><tr>.*?<\/tr><\/tbody><\/table>/)?.[0]||""}}/>
+       <div className="mt-3 flex flex-wrap gap-2">{SIGNATURE_SOCIALS.filter(x=>socialValues[x.id]&&signatureSafeLink(socialValues[x.id]||"")).map(x=><a key={x.id} href={signatureSafeLink(socialValues[x.id]||"")} target="_blank" rel="noopener noreferrer" className="rounded border border-[#ddd] bg-[#f1f1f1] px-2 py-1 text-xs font-bold text-[#252525]">{x.short}</a>)}</div>
       </div>:
       <div key={replay} className="relative h-[188px] min-w-[300px] max-w-[520px] overflow-hidden rounded-lg border border-[#e5e5e5] bg-[#fafafa] p-5 font-sans">
        <div className="signature-motion-item absolute bottom-4 left-4 top-4 w-[3px] rounded-full" style={{background:fields.accent,animation:"sigAppear .5s ease .1s both"}}/>
