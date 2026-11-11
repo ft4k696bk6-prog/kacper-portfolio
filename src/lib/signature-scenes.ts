@@ -96,16 +96,21 @@ export const REFERENCE_PHOTO_GRID={
  photoH:193
 } as const;
 
+function photoGridFacet(bottomLeft:number,topY:number,bottomY:number,width:number):number[][]{
+ const g=REFERENCE_PHOTO_GRID;
+ const topOffset=(bottomY-topY)*g.topShiftX/(g.bottomY-g.topY);
+ return [
+  [bottomLeft+topOffset,topY],
+  [bottomLeft+topOffset+width,topY],
+  [bottomLeft+width,bottomY],
+  [bottomLeft,bottomY]
+ ];
+}
 export function referencePhotoPolygons():number[][][]{
  const g=REFERENCE_PHOTO_GRID;
  return Array.from({length:g.bandCount},(_,i)=>{
   const x=g.bottomStartX+i*(g.bandWidth+g.gapWidth);
-  return [
-   [x+g.topShiftX,g.topY],
-   [x+g.topShiftX+g.bandWidth,g.topY],
-   [x+g.bandWidth,g.bottomY],
-   [x,g.bottomY]
-  ];
+  return photoGridFacet(x,g.topY,g.bottomY,g.bandWidth);
  });
 }
 
@@ -124,8 +129,8 @@ function sceneGeometry(c:CanvasRenderingContext2D,f:SignatureFields,a:SceneAsset
  // Keep facets BEHIND the portrait instead of covering the face.
  const base=phase(p,.08,.55);
  c.save();c.globalAlpha=base;c.fillStyle="#dedce3";
- polygon(c,[[355,52],[407,52],[353,190],[302,190]]);c.fill();
- c.fillStyle="#696673";polygon(c,[[465,22],[504,22],[454,159],[415,159]]);c.fill();
+ polygon(c,photoGridFacet(302,52,190,51));c.fill();
+ c.fillStyle="#696673";polygon(c,photoGridFacet(415,22,159,39));c.fill();
  c.restore();
 
  const bands=referencePhotoPolygons();
@@ -149,12 +154,7 @@ function sceneGeometry(c:CanvasRenderingContext2D,f:SignatureFields,a:SceneAsset
   c.save();c.globalAlpha=reveal;c.fillStyle="#fff";
   for(let i=0;i<g.bandCount-1;i++){
    const x=g.bottomStartX+(i+1)*g.bandWidth+i*g.gapWidth;
-   polygon(c,[
-    [x+g.topShiftX,g.topY],
-    [x+g.topShiftX+g.gapWidth,g.topY],
-    [x+g.gapWidth,g.bottomY],
-    [x,g.bottomY]
-   ]);
+   polygon(c,photoGridFacet(x,g.topY,g.bottomY,g.gapWidth));
    c.fill();
   }
   c.restore();
