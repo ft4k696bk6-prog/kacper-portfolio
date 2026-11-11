@@ -25,7 +25,7 @@ function loadViewer():Promise<void>{
  viewerScript=new Promise<void>((resolve,reject)=>{
   const script=document.createElement("script");
   script.type="module";script.src=SCRIPT;
-  script.onload=()=>{customElements.whenDefined("model-viewer").then(resolve,reject)};
+  script.onload=()=>{customElements.whenDefined("model-viewer").then(()=>resolve(),reject)};
   script.onerror=()=>reject(Error("3D runtime blocked"));
   document.head.appendChild(script);
  });
