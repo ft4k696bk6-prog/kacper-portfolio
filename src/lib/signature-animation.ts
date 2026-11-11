@@ -153,6 +153,7 @@ export async function makeSignatureGif(fields:SignatureFields,motion:SignatureMo
  const ctx=canvas.getContext("2d",{willReadFrequently:true});
  if(!ctx)throw new Error("Canvas is not available");
  const [logo,photo]=await Promise.all([imageFrom(fields.logo),imageFrom(fields.photo)]);
+ if((fields.logo&&!logo)||(fields.photo&&!photo))throw new Error("Nie można wczytać grafiki do GIF. Wgraj obraz lokalnie albo użyj serwera pozwalającego na CORS.");
  const colors=palette(fields.accent);
  const frames:{indices:Uint8Array;delay:number}[]=[];
  // Complete fallback first: Outlook versions without GIF playback show useful content.
