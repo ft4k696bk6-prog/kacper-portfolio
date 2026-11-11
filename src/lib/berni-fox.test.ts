@@ -35,24 +35,25 @@ describe("One-source, continuous animated Berni", () => {
     expect(chat).toContain('"/api/booking"');
   });
   it("smoothly deforms original eye and muzzle pixels rather than crossfading generated faces", () => {
-    expect(rig).toContain("FRAGMENT_SHADER");
-    expect(rig).toContain("texture2D(uPortrait");
-    expect(rig).toContain("uniform sampler2D uClosedEyes");
-    expect(rig).toContain("eyelidMask * shut");
-    expect(rig).toContain("source.x -= uMotion.x");
-    expect(rig).toContain("float aperture =");
-    expect(rig).toContain("float lip =");
+    expect(rig).toContain('canvas?.getContext("2d"');
+    expect(rig).toContain("ctx!.drawImage(base, 0, 0, 640, 640)");
+    expect(rig).toContain("drawBlink(current.blink, true)");
+    expect(rig).toContain("drawBlink(current.blink, false)");
+    expect(rig).toContain("drawEyes(current.gazeX, current.gazeY)");
+    expect(rig).toContain("function drawExpression(face: Face)");
+    expect(rig).toContain("const depth = amount *");
     expect(rig).toContain('data-testid="berni-continuous-face"');
     expect(rig).toContain("requestAnimationFrame");
-    expect(rig).toContain("Math.exp(-dt / 180)");
-    expect(rig).toContain("blinkCurve");
-    expect(rig).toContain("Math.sin(now / 178)");
+    expect(rig).toContain("Math.exp(-dt / tau)");
+    expect(rig).toContain("timeSinceBlink");
+    expect(rig).toContain("Math.sin(now / 170)");
     expect(rig).not.toContain('FACE_ASSETS');
-    expect(rig).not.toContain('crossfade');
+    expect(rig).not.toContain("WebGLRenderingContext");
+    expect(rig).not.toContain("FRAGMENT_SHADER");
   });
   it("preserves iPhone and reduced-motion fallbacks", () => {
-    expect(rig).toContain('canvas.getContext("webgl"');
-    expect(rig).toContain('powerPreference: "low-power"');
+    expect(rig).toContain('canvas?.getContext("2d"');
+    expect(rig).toContain("const interval = size <= 72 ? 33 : 22");
     expect(rig).toContain('prefers-reduced-motion: reduce');
     expect(rig).toContain("IntersectionObserver");
     expect(rig).toContain("document.hidden");
