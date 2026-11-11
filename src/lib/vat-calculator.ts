@@ -14,7 +14,10 @@ export function parseVatAmount(raw: string): number | null {
     integer = value.slice(0, separator);
     fraction = value.slice(separator + 1);
     const thousands = value[separator] === "," ? "." : ",";
-    if (!new RegExp("^\\d{1,3}(?:\\\\" + thousands + "\\d{3})+$").test(integer)) return null;
+    const groups = integer.split(thousands);
+    if (!groups.length || !/^[0-9]{1,3}$/.test(groups[0]) ||
+      !groups.slice(1).every(group => /^[0-9]{3}$/.test(group)) ||
+      groups.length < 2) return null;
     integer = integer.split(thousands).join("");
     if (!/^\d{1,2}$/.test(fraction)) return null;
   } else if (/^\d{1,3}(?:[,.]\d{3})+$/.test(value)) {
