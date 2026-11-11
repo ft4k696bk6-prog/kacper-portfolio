@@ -88,7 +88,8 @@ describe("Berni presentation and voice regression", () => {
     }
     expect(pet).not.toContain("listening");
     expect(assistant).toContain("placeholder={t.aiMascot.placeholder}");
-    expect(assistant).toContain("<BerniCompanion");
+    expect(assistant).toContain('data-testid="ai-chat-bubble"');
+    expect(assistant).not.toContain("<BerniCompanion");
     expect(assistant).toContain('"/api/ai-consultant"');
   });
 
