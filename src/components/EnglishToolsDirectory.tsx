@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ToolboxHubs } from "@/components/ToolboxHubs";
 import { useMemo, useState } from "react";
 import { ArrowUpRight, Search, Globe, Megaphone, Bot, Code2, Workflow, LayoutGrid } from "lucide-react";
 import { englishToolPath } from "@/lib/toolbox-en";
@@ -30,18 +31,7 @@ export function EnglishToolsDirectory() {
    </div>
    <span className="brand-action inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-medium">Audit my website <ArrowUpRight size={17}/></span>
   </Link>
-  <div className="mt-4 grid gap-3 md:grid-cols-2">
-   <Link href="/en/tools/everyday" className="group rounded-2xl border border-white/20 bg-[#131313] p-6 transition-colors hover:border-white/60">
-    <p className="page-eyebrow">NEW / EVERYDAY</p><h2 className="mt-3 text-xl font-medium">8 everyday utilities and games</h2>
-    <p className="mt-3 text-sm leading-6 text-white/60">Images, text, passwords, percentages, email signatures, random picker and games. No account.</p>
-    <span className="mt-5 inline-flex items-center gap-2 text-sm">Open everyday tools <ArrowUpRight size={16}/></span>
-   </Link>
-   <Link href="/en/tools/everyday#kids" className="group rounded-2xl border border-white/20 bg-[#131313] p-6 transition-colors hover:border-white/60">
-    <p className="page-eyebrow">PLAY / FOR KIDS</p><h2 className="mt-3 text-xl font-medium">Keyboard Galaxy</h2>
-    <p className="mt-3 text-sm leading-6 text-white/60">An original letter, number and space game. Works with keyboards, touch and full screen.</p>
-    <span className="mt-5 inline-flex items-center gap-2 text-sm">Play the game <ArrowUpRight size={16}/></span>
-   </Link>
-  </div>
+  <ToolboxHubs lang="en"/>
   <div className="mt-6 flex flex-wrap gap-2" aria-label="Tool categories">
    {filters.map(c=>{const Icon=icons[c];return <button key={c} type="button" aria-pressed={category===c} onClick={()=>setCategory(c)} className={"inline-flex min-h-10 items-center gap-2 rounded-full border px-4 py-2 text-xs transition-colors "+(category===c?"border-white/70 bg-[#dedede] text-black":"border-white/20 bg-[#101010] text-white/70 hover:border-white/50")}><Icon size={15}/>{c}</button>;})}
   </div>
