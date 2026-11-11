@@ -267,9 +267,20 @@ export function AIMascotAssistant() {
     lastReactionMessageId.current = lastMessage.id;
     const detected = detectBerniReaction(lastMessage.content);
     setFoxReaction(detected === "idle" ? "happy" : detected);
+    // Rare playful accessories after a real answer; festive hats take priority.
+    if (seasonalBerniAccessory(new Date()) === "none" && Math.random() < 0.12) {
+      const extras: BerniFoxAccessory[] = ["glasses", "alien", "crown", "cap"];
+      setFoxAccessory(extras[Math.floor(Math.random() * extras.length)]);
+    }
     const timer = window.setTimeout(() => setFoxReaction("idle"), 4300);
     return () => window.clearTimeout(timer);
   }, [messages]);
+
+  useEffect(() => {
+    if (foxAccessory === "none" || seasonalBerniAccessory(new Date()) !== "none") return;
+    const timeout = window.setTimeout(() => setFoxAccessory("none"), 6000);
+    return () => window.clearTimeout(timeout);
+  }, [foxAccessory]);
 
   const foxMood: BerniFoxMood = loading ? "thinking" : error ? "worried" : foxReaction !== "idle" ? foxReaction : open ? "listening" : nudge ? "curious" : "idle";
   const restorePositionClass = cookieBannerVisible
