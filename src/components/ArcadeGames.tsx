@@ -21,7 +21,7 @@ function Memory({en}:{en:boolean}){
  useEffect(()=>{
   if(open.length!==2)return;
   if(deck[open[0]]===deck[open[1]]){
-   setMatched(m=>[...m,...open]);setOpen([]);return;
+   setMatched(m=>[...m,...open]);setOpen([]);setBusy(false);return;
   }
   const t=window.setTimeout(()=>{setOpen([]);setBusy(false);},850);
   return()=>window.clearTimeout(t);
