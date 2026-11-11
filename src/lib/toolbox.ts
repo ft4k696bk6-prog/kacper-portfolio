@@ -459,7 +459,7 @@ export const toolboxItems: ToolboxItem[] =  [
     "hint": "Wybierz stawkę 8% albo 23%, kierunek przeliczenia i wpisz kwotę. Kalkulator natychmiast pokazuje netto, VAT i brutto. Przeliczanie odbywa się lokalnie w przeglądarce z dokładnością do grosza.",
     "question": "Czy z kwoty brutto mogę wyliczyć netto i sam VAT?",
     "answer": "Tak. Kalkulator dzieli kwotę brutto przez 1,08 lub 1,23 i zaokrągla wynik do grosza. Pamiętaj, że prawidłowa stawka VAT zależy od rodzaju towaru lub usługi."
-  }
+  },
   {
     "slug": "edytor-pdf",
     "title": "Darmowy edytor PDF online — bez rejestracji",
