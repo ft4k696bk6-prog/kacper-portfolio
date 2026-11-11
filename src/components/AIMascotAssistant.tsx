@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { usePathname, useRouter } from "next/navigation";
 import { CalendarDays, Eye, Loader2, RotateCcw, Send, X } from "lucide-react";
@@ -238,6 +238,29 @@ export function AIMascotAssistant() {
   const [serverContext, setServerContext] = useState<CompanionServerContext | null>(null);
   const [cookieBannerVisible, setCookieBannerVisible] = useState(false);
   const [isCompactViewport, setIsCompactViewport] = useState(false);
+  const [dragPlacement, setDragPlacement] = useState<{
+    below: boolean;
+    offsetX: number;
+    room: number;
+    nudgeOffsetX: number;
+  } | null>(null);
+  const handleBerniDragEnd = useCallback((bounds: { x: number; y: number; width: number; height: number }) => {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const belowRoom = Math.max(0, vh - bounds.y - bounds.height - 14);
+    const aboveRoom = Math.max(0, bounds.y - 14);
+    const below = belowRoom > aboveRoom;
+    const panelWidth = Math.min(isCompactViewport ? 344 : 384, vw - 20);
+    const panelLeft = Math.max(10, Math.min(vw - panelWidth - 10, bounds.x));
+    const nudgeWidth = Math.min(304, vw - 20);
+    const nudgeLeft = Math.max(10, Math.min(vw - nudgeWidth - 10, bounds.x));
+    setDragPlacement({
+      below,
+      offsetX: Math.round(panelLeft - bounds.x),
+      room: Math.max(150, below ? belowRoom : aboveRoom),
+      nudgeOffsetX: Math.round(nudgeLeft - bounds.x),
+    });
+  }, [isCompactViewport]);
   const [messages, setMessages] = useState<ChatMessage[]>([
     createMessage("assistant", t.aiMascot.initialMessage),
   ]);
@@ -261,9 +284,11 @@ export function AIMascotAssistant() {
   const restorePositionClass = cookieBannerVisible
     ? "bottom-[14.5rem] right-4 md:bottom-4"
     : "bottom-4 right-4";
-  const companionPanelPositionClass = isCompactViewport
-    ? "bottom-[calc(100%+0.7rem)] right-0 w-[min(21.5rem,calc(100vw-1.25rem))]"
-    : "bottom-[calc(100%+0.9rem)] right-0 w-[24rem]";
+  const companionPanelPositionClass = dragPlacement
+    ? `${dragPlacement.below ? "top-[calc(100%+0.7rem)]" : "bottom-[calc(100%+0.7rem)]"} ${isCompactViewport ? "w-[min(21.5rem,calc(100vw-1.25rem))]" : "w-[24rem]"}`
+    : isCompactViewport
+      ? "bottom-[calc(100%+0.7rem)] right-0 w-[min(21.5rem,calc(100vw-1.25rem))]"
+      : "bottom-[calc(100%+0.9rem)] right-0 w-[24rem]";
   const companionPanelSizeClass = isCompactViewport
     ? "h-[min(36rem,calc(100dvh-9.5rem))]"
     : "h-[min(36rem,calc(100dvh-10rem))]";
@@ -782,6 +807,7 @@ export function AIMascotAssistant() {
         {!hidden ? (
           <motion.div
             className={`fixed z-[75] ${restorePositionClass}`}
+            data-berni-floating
             initial={{ opacity: 0, scale: 0.82 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.82 }}
@@ -794,6 +820,7 @@ export function AIMascotAssistant() {
                     role="dialog"
                     aria-label={t.aiMascot.chatTitle}
                     className={`absolute z-30 flex max-h-[min(36rem,calc(100dvh-7rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/95 shadow-[0_28px_90px_rgba(0,0,0,0.58)] backdrop-blur-2xl ${companionPanelPositionClass} ${companionPanelSizeClass}`}
+                    style={dragPlacement ? { left: dragPlacement.offsetX, right: "auto", maxHeight: dragPlacement.room } : undefined}
                     initial={{ opacity: 0, y: 12, scale: 0.96 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 12, scale: 0.96 }}
@@ -951,6 +978,7 @@ export function AIMascotAssistant() {
                     role="status"
                     aria-live="polite"
                     data-testid="ai-mascot-nudge"
+                    style={dragPlacement ? { left: dragPlacement.nudgeOffsetX, right: "auto" } : undefined}
                     className="absolute bottom-[calc(100%+0.7rem)] right-0 z-40 w-[min(19rem,calc(100vw-1.25rem))] overflow-hidden rounded-2xl border border-white/15 bg-[#121317]/95 text-white shadow-[0_18px_48px_rgba(0,0,0,0.38)] backdrop-blur-xl"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -984,6 +1012,7 @@ export function AIMascotAssistant() {
                 nudgeText={nudge?.text ?? ""}
                 weatherContext={serverContext?.weather ?? null}
                 onOpen={() => openChat()}
+                onDragEnd={handleBerniDragEnd}
               />
             </div>
           </motion.div>
