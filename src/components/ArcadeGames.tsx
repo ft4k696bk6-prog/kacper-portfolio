@@ -3,6 +3,8 @@ import {useCallback,useEffect,useRef,useState} from "react";
 import {ArrowDown,ArrowLeft,ArrowRight,ArrowUp,Flag,RotateCcw,Timer, Trophy} from "lucide-react";
 import {canMove2048,initialSnake,mathQuestion,memoryCards,minesWon,move2048,new2048,newMineBoard,newSecret,nextSnake,revealMineBoard,spawnTile,tttBotMove,tttWinner} from "@/lib/arcade-logic";
 import type {ArcadeId,Direction,MineCell,SnakeState} from "@/lib/arcade-logic";
+import {MazeChomp} from "./MazeChomp";
+import {RetroFps} from "./RetroFps";
 
 const box="rounded-2xl border border-white/15 bg-[#111] p-4 sm:p-6";
 const btn="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/5 px-4 py-2 text-sm font-medium text-white hover:border-white/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:cursor-not-allowed disabled:opacity-35";
