@@ -110,7 +110,7 @@ export function ToolboxHub({ lang }: { lang: Language }) {
             {filtered.map(t => <Link key={t.id} href={t.href} className={cardClass}>
               <div className="min-w-0">
                 <p className="text-[10px] uppercase tracking-[.14em] text-white/45">{t.category}</p>
-                <h3 className="mt-3 text-lg font-semibold leading-snug">{en ? (/^free\b/i.test(t.title) ? t.title : "Free " + t.title) : (/^darmow/i.test(t.title) ? t.title : "Darmowy " + t.title)}</h3>
+                <h3 className="mt-3 text-lg font-semibold leading-snug">{en ? (/^free\b/i.test(t.title) ? t.title : "Free " + t.title) : (/^darmow/i.test(t.title) ? t.title : "Darmowe narzędzie: " + t.title)}</h3>
                 <p className="mt-2 text-sm leading-6 text-white/60">{t.description}</p>
               </div>
               <span className="inline-flex items-center gap-2 text-sm font-medium text-white/90">{en ? "Open tool" : "Otwórz narzędzie"}<ArrowUpRight size={16}/></span>
