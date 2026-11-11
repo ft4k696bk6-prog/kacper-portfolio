@@ -65,5 +65,8 @@ describe("One-source, continuous animated Berni", () => {
     expect(preview).toContain("size={320}");
     expect(preview).toContain("size={56}");
     expect(preview).toContain("blinkToken={blinkToken}");
+    expect(preview).toContain("reactionToken={reactionToken}");
+    expect(preview).toContain("setReactionToken(x => x + 1)");
+    expect(rig).toContain("onReactionReplay");
   });
 });

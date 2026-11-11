@@ -17,12 +17,14 @@ export function BerniPremiumPortrait({
   className = "",
   priority = false,
   blinkToken = 0,
+  reactionToken = 0,
 }: {
   mood?: BerniPortraitMood;
   size?: number;
   className?: string;
   priority?: boolean;
   blinkToken?: number;
+  reactionToken?: number;
 }) {
   const [hovered, setHovered] = useState(false);
   const actualMood = mood === "idle" && hovered ? "curious" : mood;
@@ -44,7 +46,7 @@ export function BerniPremiumPortrait({
           priority={priority} quality={90} sizes={imgSizes}
           draggable={false} className={styles.art} aria-hidden="true" />
 
-        <BerniLivingFace mood={actualMood} size={size} blinkToken={blinkToken} />
+        <BerniLivingFace mood={actualMood} size={size} blinkToken={blinkToken} reactionToken={reactionToken} />
       </span>
     </span>
   );

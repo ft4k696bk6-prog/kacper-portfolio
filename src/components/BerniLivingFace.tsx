@@ -15,26 +15,30 @@ const EYELIDS = "/images/berni/eyelids-closed.jpg";
  * An inline SVG or morphing a second head is intentionally not used.
  */
 export function BerniLivingFace({
-  mood, size, blinkToken = 0,
+  mood, size, blinkToken = 0, reactionToken = 0,
 }: {
   mood: BerniLivingMood;
   size: number;
   blinkToken?: number;
+  reactionToken?: number;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
-  const live = useRef({ mood, blinkToken, changedAt: 0 });
+  const live = useRef({ mood, blinkToken, reactionToken, changedAt: 0 });
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (mood !== live.current.mood) {
+    const replayed = reactionToken !== live.current.reactionToken;
+    if (mood !== live.current.mood || replayed) {
       live.current.mood = mood;
+      live.current.reactionToken = reactionToken;
       live.current.changedAt = performance.now();
+      if (replayed) ref.current?.dispatchEvent(new Event("berni-reaction-replay"));
     }
     if (blinkToken !== live.current.blinkToken) {
       live.current.blinkToken = blinkToken;
       if (blinkToken > 0) ref.current?.dispatchEvent(new Event("berni-blink-now"));
     }
-  }, [mood, blinkToken]);
+  }, [mood, blinkToken, reactionToken]);
 
   useEffect(() => {
     const canvas = ref.current;
@@ -58,6 +62,12 @@ export function BerniLivingFace({
     let current: Face = createNeutralFace();
     let watcher: IntersectionObserver | null = null;
     const onForceBlink = () => { lastBlink = performance.now(); };
+    const onReactionReplay = () => {
+      current.mouth *= .15;
+      current.surprise *= .3;
+      current.gazeX *= .3;
+      current.gazeY *= .3;
+    };
 
     function load(src: string): Promise<HTMLImageElement> {
       return new Promise((resolve, reject) => {
@@ -188,23 +198,6 @@ export function BerniLivingFace({
         ctx!.restore();
       }
 
-      // Distinct shocked "O" mouth, softly blended over the same original muzzle.
-      if (face.surprise > .4 && amount > .25) {
-        ctx!.save();
-        ctx!.globalAlpha = Math.min(.96, (face.surprise - .35) * 1.3);
-        const rx = 7 + face.surprise * 9;
-        const ry = 10 + amount * 12;
-        const shocked = ctx!.createRadialGradient(423, 438, 2, 425, 437, ry);
-        shocked.addColorStop(0, "#201018");
-        shocked.addColorStop(.8, "#120e17");
-        shocked.addColorStop(1, "#55515b");
-        ctx!.fillStyle = shocked;
-        ctx!.beginPath();
-        ctx!.ellipse(423, 435 + amount * 4, rx, ry, -.22, 0, Math.PI * 2);
-        ctx!.fill();
-        ctx!.restore();
-      }
-
       // Expressive fur-compatible brow highlights respond to worry and surprise.
       // Raised or worried eyebrows move by fractions of a pixel; keep
       // existing realistic source eyebrows visible underneath.
@@ -277,6 +270,7 @@ export function BerniLivingFace({
       if (active && !document.hidden && visible && !raf) raf = requestAnimationFrame(render);
     }
     canvas.addEventListener("berni-blink-now", onForceBlink);
+    canvas.addEventListener("berni-reaction-replay", onReactionReplay);
     document.addEventListener("visibilitychange", visibilityChanged);
     if ("IntersectionObserver" in window) {
       watcher = new IntersectionObserver(entries => {
@@ -308,6 +302,7 @@ export function BerniLivingFace({
       if (raf) cancelAnimationFrame(raf);
       watcher?.disconnect();
       canvas.removeEventListener("berni-blink-now", onForceBlink);
+      canvas.removeEventListener("berni-reaction-replay", onReactionReplay);
       document.removeEventListener("visibilitychange", visibilityChanged);
     };
   }, [size]);
