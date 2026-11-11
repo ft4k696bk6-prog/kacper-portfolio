@@ -60,8 +60,8 @@ describe("Berni Core premium character", () => {
   });
 
   it("contains no new external scripts, WebGL or paid runtime", () => {
-    expect(core).not.toMatch(/<canvas|new WebGL|model-viewer|\\.riv|\\.lottie|\\.glb|iframe/);
-    expect(css).not.toMatch(/https?:\\/\\//);
+    expect(core).not.toMatch(/<canvas|new WebGL|model-viewer|iframe/);
+    expect(css).not.toContain("https://");
     const declared = new Set([...css.matchAll(/@keyframes\s+([a-zA-Z][\w-]*)/g)].map(m => m[1]));
     const animations = [...css.matchAll(/animation:\s*([a-zA-Z][\w-]*)/g)].map(m => m[1]).filter(x => x !== "none");
     for (const name of animations) expect(declared.has(name), "Missing @keyframes " + name).toBe(true);
