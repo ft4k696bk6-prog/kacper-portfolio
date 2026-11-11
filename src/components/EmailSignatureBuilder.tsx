@@ -226,11 +226,11 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
    <section className="min-w-0 self-start rounded-2xl border border-white/20 bg-[#141414] p-5 xl:sticky xl:top-28 md:p-6">
     <div className="flex items-center justify-between gap-3">
      <div><p className="text-xs font-semibold uppercase tracking-[.15em] text-white/50">{en?"LIVE PREVIEW":"PODGLĄD NA ŻYWO"}</p><p className="mt-2 text-xs text-white/65">{en?"As seen in an email message":"Tak wygląda w wiadomości e-mail"}</p></div>
-     {mode==="animated"&&<button type="button" onClick={()=>{setReplay(v=>v+1);if(gifPreview){setGifPreview("");window.setTimeout(()=>setGifPreview(gifPreview),20);}}} className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 px-3 py-2 text-xs hover:border-white/50"><Play size={14}/>{en?"Replay":"Odtwórz"}</button>}
+     {mode==="animated"&&<button type="button" onClick={()=>{setReplay(v=>v+1);if(gifBlob)setGifPreview(URL.createObjectURL(gifBlob));}} className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 px-3 py-2 text-xs hover:border-white/50"><Play size={14}/>{en?"Replay":"Odtwórz"}</button>}
     </div>
     <div className="mt-4 min-w-0 overflow-x-auto rounded-xl border border-[#d5d5d5] bg-white px-3 py-6 sm:p-6">
      {mode==="static"?<div className="w-max min-w-0 max-w-full" aria-label={en?"Static signature preview":"Podgląd zwykłej stopki"} dangerouslySetInnerHTML={{__html:previewHtml}}/>:
-      gifPreview?<div className="min-w-[260px] max-w-[520px]"><img src={gifPreview} alt={en?"Animated signature preview":"Podgląd animowanej stopki"} width={520} height={178} className="h-auto w-full"/>
+      gifPreview?<div className="min-w-[260px] max-w-[520px]"><img key={replay} src={gifPreview} alt={en?"Animated signature preview":"Podgląd animowanej stopki"} width={520} height={178} className="h-auto w-full"/>
        <div className="mt-3 flex flex-wrap gap-2">{SIGNATURE_SOCIALS.filter(x=>socialValues[x.id]&&signatureSafeLink(socialValues[x.id]||"")).map(x=><a key={x.id} href={signatureSafeLink(socialValues[x.id]||"")} target="_blank" rel="noopener noreferrer" className="rounded border border-[#ddd] bg-[#f1f1f1] px-2 py-1 text-xs font-bold text-[#252525]">{x.short}</a>)}</div>
       </div>:
       <div key={replay} className="relative h-[188px] min-w-[300px] max-w-[520px] overflow-hidden rounded-lg border border-[#e5e5e5] bg-[#fafafa] p-5 font-sans">
