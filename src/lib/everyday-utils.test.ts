@@ -111,4 +111,23 @@ describe("Everyday Tools",()=>{
   expect(premium).not.toContain("user:secret@");
  });
 
+ it("uses real rasterized brand logos instead of letter abbreviations in every email layout",()=>{
+  const socials=Object.fromEntries(SIGNATURE_SOCIALS.map(item=>[item.id,"https://example.org/"+item.id]));
+  const shared={name:"Jan",role:"CEO",company:"Acme",email:"jan@acme.pl",phone:"",website:"",accent:"#333333",socials};
+  const plain=signatureHtml({...shared,layout:"side"});
+  const premium=signatureHtml({...shared,animationUrl:"https://cdn.example.org/signature.gif",animationStyle:"geometry"});
+  for(const html of [plain,premium]){
+   for(const social of SIGNATURE_SOCIALS){
+    expect(html).toContain('src="https://bernecki.dev/api/signature-icon/'+social.id+'"');
+    expect(html).toContain('alt="'+social.name+'"');
+    expect(html).toContain('href="https://example.org/'+social.id+'"');
+   }
+   expect(html).not.toContain(">ig</a>");
+   expect(html).not.toContain(">GH</a>");
+   expect(html).not.toContain(">↗</a>");
+   expect(html).not.toContain("<svg");
+  }
+  expect(premium).toContain('src="https://bernecki.dev/api/signature-icon/calendar"');
+ });
+
 });
