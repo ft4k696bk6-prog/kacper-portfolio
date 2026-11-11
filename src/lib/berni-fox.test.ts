@@ -10,6 +10,7 @@ const preview = readFileSync("src/app/(pl)/berni-preview/page.tsx", "utf8");
 describe("One-source, continuous animated Berni", () => {
   it("always renders the same approved neutral character", () => {
     expect(existsSync("public/images/berni/berni-fox-head.png")).toBe(true);
+    expect(existsSync("public/images/berni/eyelids-closed.jpg")).toBe(true);
     expect(portrait).toContain('src="/images/berni/berni-fox-head.png"');
     expect(rig).toContain('const SOURCE = "/images/berni/berni-fox-head.png"');
     expect(portrait).toContain('from "next/image"');
@@ -36,9 +37,11 @@ describe("One-source, continuous animated Berni", () => {
   it("smoothly deforms original eye and muzzle pixels rather than crossfading generated faces", () => {
     expect(rig).toContain("FRAGMENT_SHADER");
     expect(rig).toContain("texture2D(uPortrait");
-    expect(rig).toContain("source.y += n * (p.y - nearEye.y)");
+    expect(rig).toContain("uniform sampler2D uClosedEyes");
+    expect(rig).toContain("eyelidMask * shut");
     expect(rig).toContain("source.x -= uMotion.x");
-    expect(rig).toContain("mouthLocal");
+    expect(rig).toContain("float aperture =");
+    expect(rig).toContain("float lip =");
     expect(rig).toContain('data-testid="berni-continuous-face"');
     expect(rig).toContain("requestAnimationFrame");
     expect(rig).toContain("Math.exp(-dt / 180)");
