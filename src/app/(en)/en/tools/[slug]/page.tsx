@@ -6,6 +6,7 @@ import { englishToolboxItems, englishToolForSlug, englishToolPath } from "@/lib/
 import { visibleEnglishToolboxItems } from "@/lib/toolbox-visibility";
 import { EnglishToolRunner } from "@/components/EnglishToolRunner";
 import { EnglishFullWebsiteAuditRunner } from "@/components/EnglishFullWebsiteAuditRunner";
+import { VatCalculator } from "@/components/VatCalculator";
 
 type Params={params:Promise<{slug:string}>};
 const site="https://bernecki.dev";
@@ -46,7 +47,7 @@ export default async function EnglishToolPage({params}:Params){
    <h1 className="mt-5 max-w-5xl">{tool.title}</h1><p className="page-intro mt-6 max-w-3xl text-base md:text-lg">{tool.description}</p>
    <div className="mt-6 flex flex-wrap gap-3 text-xs text-white/60"><span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-2"><ShieldCheck size={14}/> No sign-up</span><span className="rounded-full border border-white/15 px-3 py-2">Results immediately</span><span className="rounded-full border border-white/15 px-3 py-2">Export or copy results</span></div>
   </header>
-  {isFull?<EnglishFullWebsiteAuditRunner/>:<EnglishToolRunner mode={tool.mode} slug={tool.slug}/>}
+  {isFull?<EnglishFullWebsiteAuditRunner/>:tool.mode==="vat"?<VatCalculator lang="en"/>:<EnglishToolRunner mode={tool.mode} slug={tool.slug}/>}
   {!isFull&&(["Website & SEO","AI & search"].includes(tool.category))&&<Link href={englishToolPath("audyt-strony")} className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/20 bg-[#141414] p-5 transition-colors hover:border-white/50">
    <div><span className="text-xs font-medium text-white/50">One check instead of many</span><h2 className="mt-2 text-base font-medium">Run a combined audit for SEO, images, SSL, DNS and more.</h2></div><span className="inline-flex items-center gap-2 text-sm">Free website audit <ArrowUpRight size={16}/></span>
   </Link>}
