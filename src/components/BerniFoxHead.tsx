@@ -2,18 +2,11 @@
 
 import { useId } from "react";
 import styles from "./BerniFoxHead.module.css";
+import type { BerniFoxAccessory } from "@/lib/berni-seasonal";
+export { seasonalBerniAccessory } from "@/lib/berni-seasonal";
+export type { BerniFoxAccessory } from "@/lib/berni-seasonal";
 
 export type BerniFoxMood = "idle" | "curious" | "thinking" | "happy" | "excited" | "sleeping" | "typing" | "listening" | "surprised" | "worried" | "working" | "grabbed";
-export type BerniFoxAccessory = "none" | "santa" | "elf" | "alien" | "crown" | "cap" | "glasses";
-
-export function seasonalBerniAccessory(date: Date): BerniFoxAccessory {
-  const month = date.getMonth();
-  const day = date.getDate();
-  if (month === 11 && day >= 1 && day <= 26) return day % 4 === 0 ? "elf" : "santa";
-  if (month === 0 && day <= 6) return "santa";
-  return "none";
-}
-
 export function BerniFoxHead({
   mood = "idle",
   accessory = "none",
