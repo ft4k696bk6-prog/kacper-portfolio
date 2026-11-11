@@ -79,6 +79,7 @@
 
 /* Look down at the chat field while typing, not at the pointer. */
 .stage[data-mood="typing"] .eyes { transform: translate(0px, 7px); }
+.stage[data-mood="curious"] .head { animation: curiousTilt 2.6s ease-in-out infinite; }
 .stage[data-mood="typing"] .head { animation: typingFocus 1.1s ease-in-out infinite; }
 .stage[data-mood="typing"] .tail { animation: tailWag 1.3s ease-in-out infinite; }
 .keyboardRig { opacity: 0; pointer-events: none; transform-origin: 85px 136px; transform: translateY(9px) scale(.92); transition: transform .24s ease, opacity .24s ease; }
