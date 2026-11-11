@@ -37,7 +37,7 @@ function GeometryCardPreview({fields,socials,gif,replay,lang}:{fields:SignatureF
   <div className="flex items-stretch">
    <div className="z-10 flex w-[13%] min-w-10 shrink-0 flex-col items-center gap-2 border-r border-[#e3e0e6] bg-[#faf9fb] p-2 sm:w-14">
     <span className="mb-1 flex h-7 w-7 items-center justify-center rounded-md border border-[#ddd9e1] bg-white text-base font-bold" style={{color:fields.accent}}>{(fields.company||fields.name||"B").slice(0,1).toUpperCase()}</span>
-    {valid.slice(0,6).map(({item,href})=><a key={item.id} href={href} title={item.name} target="_blank" rel="noopener noreferrer" className="flex min-h-6 min-w-7 items-center justify-center rounded-md border border-[#e2e0e4] bg-white px-1 text-[10px] font-bold text-[#24222a] hover:bg-[#ebe9ee]">{item.short}</a>)}
+    {valid.slice(0,6).map(({item,href})=><a key={item.id} href={href} title={item.name} target="_blank" rel="noopener noreferrer" className="signature-motion-item flex min-h-6 min-w-7 items-center justify-center rounded-md border border-[#e2e0e4] bg-white px-1 text-[10px] font-bold text-[#24222a] hover:bg-[#ebe9ee]" style={{animation:"sigAppear .45s ease "+(0.55+valid.indexOf(valid.find(v=>v.item.id===item.id)!)*0.12)+"s both"}}>{item.short}</a>)}
    </div>
    <div className="min-w-0 flex-1 bg-[#fbfafc]">
     {gif?<img key={replay} src={gif} alt={en?"Animated geometric email signature":"Animowana stopka geometryczna"} width={520} height={208} className="block h-auto w-full"/>:
@@ -79,6 +79,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
  const [fields,setFields]=useState<SignatureFields>({...initial,language:lang});
  const [mode,setMode]=useState<"static"|"animated">("static");
  const [motion,setMotion]=useState<SignatureMotion>("geometry");
+ const [loop,setLoop]=useState(false);
  const [enabled,setEnabled]=useState<Partial<Record<SignatureSocial,boolean>>>({});
  const [uploadNames,setUploadNames]=useState<{logo:string;photo:string}>({logo:"",photo:""});
  const [errors,setErrors]=useState<{logo:string;photo:string}>({logo:"",photo:""});
@@ -112,7 +113,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
  };
  const changeMode=(value:"static"|"animated")=>{setMode(value);if(value==="animated")setMotion("geometry");invalidateGif();setNotice("");setReplay(v=>v+1);};
  const reset=()=>{
-  setFields({...initial,language:lang});setMode("static");setMotion("geometry");setEnabled({});
+  setFields({...initial,language:lang});setMode("static");setMotion("geometry");setLoop(false);setEnabled({});
   setUploadNames({logo:"",photo:""});setErrors({logo:"",photo:""});
   setHostedGif("");setNotice("");setShowCode(false);invalidateGif();
  };
@@ -151,7 +152,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
  const makeGif=async()=>{
   setBusy(true);setNotice("");
   try{
-   const blob=await makeSignatureGif({...fields,socials:socialValues},motion);
+   const blob=await makeSignatureGif({...fields,socials:socialValues,language:lang},motion,loop);
    const objectUrl=URL.createObjectURL(blob);
    const reader=new FileReader();
    const data=await new Promise<string>((resolve,reject)=>{
@@ -260,8 +261,19 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
       <span className="block text-sm font-medium">{en?item.en:item.pl}</span><span className="mt-2 block text-[11px] leading-5 text-white/55">{en?item.hintEN:item.hintPL}</span>
      </button>)}</div>:<>
       <div className="mt-4 grid gap-2 sm:grid-cols-2">{motions.map(item=><button key={item.id} type="button" aria-pressed={motion===item.id} onClick={()=>{setMotion(item.id);invalidateGif();setReplay(v=>v+1);}} className={"rounded-xl border px-3 py-4 text-left "+(motion===item.id?"border-white/70 bg-white/10":"border-white/15 bg-black/30 hover:border-white/40")}>
+       {item.id==="geometry"&&<div className="relative mb-3 h-[70px] overflow-hidden rounded-md border border-white/20 bg-[#f9f8fa] text-[#1c1b20]">
+        <div className="absolute inset-y-0 left-0 w-6 border-r border-[#ddd] bg-[#eeedf0]"><span className="absolute left-1 top-2 text-[10px] font-black">B</span><span className="absolute bottom-2 left-1 text-[9px] font-bold">in</span></div>
+        <div className="absolute left-9 top-3 text-[11px] font-black tracking-[.13em]">BRAND</div>
+        <div className="absolute bottom-3 left-9"><div className="h-1.5 w-20 rounded-sm bg-[#3b3940]"/><div className="mt-1 h-1 w-14 rounded-sm bg-[#a4a0a9]"/></div>
+        <div className="absolute inset-y-1 right-2 w-[40%] bg-[#cac7d0]" style={{clipPath:"polygon(35% 0,78% 0,25% 100%,0 100%)"}}/>
+        <div className="absolute inset-y-1 right-0 w-[27%] bg-[#56525e]" style={{clipPath:"polygon(65% 0,100% 0,36% 100%,0 100%)"}}/>
+       </div>}
        <span className="block text-sm font-medium">{en?item.en:item.pl}</span><span className="mt-2 block text-[11px] leading-5 text-white/55">{en?item.descEN:item.descPL}</span>
       </button>)}</div>
+      <label className="mt-4 flex cursor-pointer items-center gap-3 rounded-xl border border-white/15 bg-black/20 p-3 text-xs text-white/75">
+       <input type="checkbox" className="h-4 w-4 accent-white" checked={loop} onChange={event=>{setLoop(event.target.checked);invalidateGif();}}/>
+       <span>{en?"Loop animation (off: plays once, stays complete)":"Powtarzaj animację w pętli (domyślnie odtworzy się raz i zostanie gotowa stopka)"}</span>
+      </label>
       <button type="button" disabled={busy} onClick={makeGif} className="brand-action mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium disabled:opacity-50"><Sparkles size={17}/>{busy?(en?"Generating GIF…":"Generowanie GIF…"):(en?"Generate animated GIF":"Generuj animowany GIF")}</button>
       {gifBlob&&<button type="button" onClick={()=>download(gifBlob,"animowana-stopka-bernecki.gif")} className="mt-2 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-white/30 px-4 text-sm"><Download size={16}/>{en?"Download GIF":"Pobierz GIF"}</button>}
       <label className="mt-5 block text-xs leading-5 text-white/70">{en?"Public GIF URL (recommended for Gmail / Outlook)":"Publiczny adres GIF (zalecany do Gmaila / Outlooka)"}
