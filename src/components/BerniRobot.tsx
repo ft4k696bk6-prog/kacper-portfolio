@@ -36,6 +36,9 @@ function WeatherFX({ condition }: { condition: BerniWeatherCondition }) {
  */
 export function BerniRobot({ mood, weather, lang, compact = false }: Props) {
   const id = useId().replace(/:/g, "");
+  const paint = (name: string) => `url(#${id}${name})`;
+  const isJoy = mood === "happy" || mood === "excited";
+  const isWorking = mood === "typing" || mood === "working";
   const thermal = weather ? getBerniTemperatureMood(weather.temperature) : "normal";
   const label = (lang === "pl" ? "Berni, robot-pies. " : "Berni, robot dog. ") +
     (weather ? getBerniWeatherLabel(weather.condition, lang) + ", " + Math.round(weather.temperature) + "°C" : "");
@@ -49,20 +52,30 @@ export function BerniRobot({ mood, weather, lang, compact = false }: Props) {
       aria-label={label}
       role="img"
     >
-      <svg className={styles.robot} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 156" fill="none" aria-hidden="true">
+      <svg className={styles.robot} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none" aria-hidden="true">
+
         <defs>
-          <linearGradient id={id + "metal"} x1="20" y1="35" x2="135" y2="146" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#fff" /><stop offset=".22" stopColor="#a6b0bc" /><stop offset=".54" stopColor="#eff2f6"/><stop offset=".8" stopColor="#727c88"/><stop offset="1" stopColor="#d4dae2"/>
+          <linearGradient id={id+"metal"} x1="27" y1="28" x2="136" y2="145" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#fff"/><stop offset=".17" stopColor="#d7dce2"/><stop offset=".39" stopColor="#8f9aa7"/><stop offset=".59" stopColor="#f9fafc"/><stop offset=".8" stopColor="#9aa5b2"/><stop offset="1" stopColor="#e8edf1"/>
           </linearGradient>
-          <linearGradient id={id + "visor"} x1="48" y1="52" x2="107" y2="104" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#2b3440"/><stop offset=".36" stopColor="#11161d"/><stop offset="1" stopColor="#020408"/>
+          <linearGradient id={id+"shell"} x1="27" y1="43" x2="132" y2="128" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#fafcff"/><stop offset=".25" stopColor="#c5cdd6"/><stop offset=".48" stopColor="#718091"/><stop offset=".7" stopColor="#e3e9ee"/><stop offset="1" stopColor="#657180"/>
           </linearGradient>
-          <linearGradient id={id + "edge"} x1="45" y1="40" x2="104" y2="101" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#fff"/><stop offset=".5" stopColor="#b2bcc8"/><stop offset="1" stopColor="#535d69"/>
+          <linearGradient id={id+"visor"} x1="52" y1="47" x2="115" y2="105" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#24303d"/><stop offset=".27" stopColor="#121821"/><stop offset=".73" stopColor="#06090f"/><stop offset="1" stopColor="#1f2834"/>
           </linearGradient>
-          <filter id={id + "glow"} x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="1.4"/>
-          </filter>
+          <linearGradient id={id+"glass"} x1="44" y1="49" x2="110" y2="114" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#fff" stopOpacity=".18"/><stop offset=".3" stopColor="#e5f0ff" stopOpacity=".04"/><stop offset=".84" stopColor="#bcc8d6" stopOpacity=".01"/><stop offset="1" stopColor="#fff" stopOpacity=".11"/>
+          </linearGradient>
+          <linearGradient id={id+"chrome"} x1="26" y1="60" x2="138" y2="114" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#fefeff"/><stop offset=".18" stopColor="#8a96a2"/><stop offset=".43" stopColor="#fff"/><stop offset=".71" stopColor="#8592a0"/><stop offset="1" stopColor="#eaf1fa"/>
+          </linearGradient>
+          <radialGradient id={id+"eyeLight"}><stop stopColor="#fdfdff"/><stop offset=".5" stopColor="#d7e6f3"/><stop offset="1" stopColor="#aeb9c6"/></radialGradient>
+          <linearGradient id={id+"sole"} x1="39" y1="131" x2="60" y2="152" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#697686"/><stop offset="1" stopColor="#171d28"/>
+          </linearGradient>
+          <filter id={id+"shadowBlur"} x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.3"/></filter>
+          <filter id={id+"eyeBlur"} x="-75%" y="-75%" width="250%" height="250%"><feGaussianBlur stdDeviation="1.2"/></filter>
         </defs>
         <ellipse cx="84" cy="145" rx="52" ry="5" fill="#d9e2ef" opacity=".15" className={styles.shadow}/>
         <g className={styles.tail}>
