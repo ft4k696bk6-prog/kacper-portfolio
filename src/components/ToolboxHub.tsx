@@ -14,7 +14,7 @@ const dailyTools = [
   { id: "password", pl: "Generator haseł", en: "Password generator", plDesc: "Bezpieczne losowe hasła tworzone na Twoim urządzeniu.", enDesc: "Secure random passwords generated on your device." },
   { id: "image", pl: "Konwerter zdjęć", en: "Image converter", plDesc: "Zmiana formatu i kompresja JPG, PNG i WebP.", enDesc: "Convert and compress JPG, PNG and WebP files." },
   { id: "random", pl: "Losowanie", en: "Random picker", plDesc: "Wylosuj jedną z podanych opcji lub zwycięzcę.", enDesc: "Randomly pick a winner or an option." },
-  { id: "signature", pl: "Generator stopki e-mail", en: "Email signature generator", plDesc: "Utwórz i skopiuj stopkę z podglądem HTML.", enDesc: "Create and copy an HTML email signature." },
+  { id: "signature", pl: "Darmowy generator stopki e-mail", en: "Free email signature generator", plDesc: "Stopki klasyczne i animowane GIF, logo, zdjęcie oraz klikalne social media.", enDesc: "Classic and animated GIF signatures with photos, logos and clickable socials." },
 ] as const;
 
 const priority = ["signature", "ai-image", "vat", "image", "dekoder-jwt"];
@@ -62,7 +62,7 @@ export function ToolboxHub({ lang }: { lang: Language }) {
   return <div className="mt-10">
     {featuredVisible && <Link href={auditHref} className="group block overflow-hidden rounded-[1.6rem] border border-white/30 bg-[radial-gradient(ellipse_at_90%_10%,#373737_0%,#191919_42%,#0e0e0e_90%)] p-6 transition-colors hover:border-white/65 sm:p-9">
       <p className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[.16em] text-white/55"><Sparkles size={15}/>{en ? "START HERE • ALL-IN-ONE" : "ZACZNIJ TUTAJ • WSZYSTKO W JEDNYM"}</p>
-      <h2 className="mt-5 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">{en ? "Comprehensive website audit" : "Kompleksowy audyt strony WWW"}</h2>
+      <h2 className="mt-5 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">{en ? "Free comprehensive website audit" : "Darmowy kompleksowy audyt strony WWW"}</h2>
       <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65">{en ? "Enter your website address to check SEO, indexability, images, SSL, DNS and analytics. Get a clear report with recommended fixes." : "Wpisz adres witryny. Sprawdzisz SEO, indeksowanie, obrazy, SSL, DNS i analitykę, a następnie otrzymasz czytelny raport z zaleceniami."}</p>
       <span className="brand-action mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-center text-sm font-semibold sm:w-auto sm:px-7">{en ? "Analyze my website for free" : "Przeanalizuj stronę za darmo"}<ArrowUpRight size={18} className="shrink-0"/></span>
       <div className="mt-6 flex flex-wrap gap-2">{["SEO", "SSL / DNS", en ? "Indexing" : "Indeksowanie", en ? "Analytics" : "Analityka"].map(t => <span key={t} className="rounded-full border border-white/15 bg-white/[.04] px-3 py-1.5 text-xs text-white/60">{t}</span>)}</div>
@@ -75,7 +75,7 @@ export function ToolboxHub({ lang }: { lang: Language }) {
           <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">{en ? "Choose a tool" : "Wybierz narzędzie"}</h2>
           <p className="mt-2 max-w-xl text-sm leading-6 text-white/55">{en ? "Find the right tool by name or category. Free and without sign-up." : "Znajdź narzędzie po nazwie lub kategorii. Bez opłat i rejestracji."}</p>
         </div>
-        <Link href={gamesHref} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/20 px-4 py-2.5 text-sm text-white/75 transition hover:border-white/60 hover:text-white"><Gamepad2 size={18}/>{en ? "Mini-games" : "Minigry"}<ArrowUpRight size={14}/></Link>
+        <Link href={gamesHref} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/20 px-4 py-2.5 text-sm text-white/75 transition hover:border-white/60 hover:text-white"><Gamepad2 size={18}/>{en ? "Free mini-games" : "Darmowe minigry"}<ArrowUpRight size={14}/></Link>
       </div>
 
       <label className="relative mt-6 block">
@@ -110,7 +110,7 @@ export function ToolboxHub({ lang }: { lang: Language }) {
             {filtered.map(t => <Link key={t.id} href={t.href} className={cardClass}>
               <div className="min-w-0">
                 <p className="text-[10px] uppercase tracking-[.14em] text-white/45">{t.category}</p>
-                <h3 className="mt-3 text-lg font-semibold leading-snug">{t.title}</h3>
+                <h3 className="mt-3 text-lg font-semibold leading-snug">{en ? (/^free\b/i.test(t.title) ? t.title : "Free " + t.title) : (/^darmow/i.test(t.title) ? t.title : "Darmowy " + t.title)}</h3>
                 <p className="mt-2 text-sm leading-6 text-white/60">{t.description}</p>
               </div>
               <span className="inline-flex items-center gap-2 text-sm font-medium text-white/90">{en ? "Open tool" : "Otwórz narzędzie"}<ArrowUpRight size={16}/></span>
