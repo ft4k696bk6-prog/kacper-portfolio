@@ -221,3 +221,5 @@
     transition: none !important;
   }
 }
+
+.mouth { opacity: .96; transition: opacity 180ms ease-in-out; }
