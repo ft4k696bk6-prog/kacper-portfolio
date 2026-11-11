@@ -49,6 +49,16 @@ describe("Berni full portrait masters, not drawing eyes or mouths over the head"
   expect(engine).toContain("document.hidden");
   expect(css).toContain("prefers-reduced-motion:reduce");
  });
+ it("cycles through aligned mouth poses and avoids loading every portrait on iPhone",()=>{
+  for(const pose of ["typing-low","typing-mid","typing-high","excited-soft"]){
+    expect(generator).toContain(pose);
+    expect(engine).toContain(pose);
+  }
+  expect(engine).toContain("const syllables=Math.abs(Math.sin(now/185)*Math.cos(now/501))");
+  expect(engine).toContain("wctx!.globalAlpha=scaled<1?scaled:scaled-1");
+  expect(engine).toContain("const PRELOAD:");
+  expect(engine).not.toContain("for(const next of POSES)");
+ });
  it("uses cinematic transitions only where needed",()=>{
   expect(transitions).toContain("transitionLevel");
   expect(transitions).toContain("chooseBerniTransition");
