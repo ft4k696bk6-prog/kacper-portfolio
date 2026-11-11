@@ -1,7 +1,7 @@
 export type PercentMode = "increase" | "decrease" | "part" | "difference";
 export type SignatureLayout = "side" | "stacked" | "compact";
 export type SignatureSocial = "facebook" | "linkedin" | "instagram" | "youtube" | "tiktok" | "x" | "github" | "whatsapp" | "calendar";
-export type SignatureFields = { name: string; role: string; company: string; email: string; phone: string; website: string; accent: string; logo?: string; photo?: string; logoWidth?: number; layout?: SignatureLayout; language?: "pl" | "en"; socials?: Partial<Record<SignatureSocial,string>>; animationUrl?: string };
+export type SignatureFields = { name: string; role: string; company: string; email: string; phone: string; website: string; accent: string; logo?: string; photo?: string; logoWidth?: number; layout?: SignatureLayout; language?: "pl" | "en"; socials?: Partial<Record<SignatureSocial,string>>; animationUrl?: string; animationStyle?: "geometry"|"slices"|"cinematic"|"reveal"|"slide"|"pulse" };
 
 export function parseNumber(value: string): number {
   const compact=value.trim().replace(/\s/g,"").replace(/,/g,".");
@@ -116,9 +116,30 @@ export function signatureHtml(s:SignatureFields):string {
  const base='role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;border-spacing:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#171717"';
  const animation=(s.animationUrl||"").trim();
  const animationSrc=signatureSafeLink(animation)||
-  (/^data:image\/gif;base64,[A-Za-z0-9+/=]+$/i.test(animation)&&animation.length<3500000?animation:"");
+  (/^data:image\/gif;base64,[A-Za-z0-9+/=]+$/i.test(animation)&&animation.length<7000000?animation:"");
  if(animationSrc){
   const alt=[s.name,s.role,s.company,s.email].filter(Boolean).join(" · ");
+  const premium=["geometry","slices","cinematic"].includes(s.animationStyle||"");
+  if(premium){
+   const valid=SIGNATURE_SOCIALS.flatMap(item=>{
+    const href=signatureSafeLink(s.socials?.[item.id]||"");
+    return href?[{item,href}]:[];
+   });
+   const rail=valid.slice(0,6).map(({item,href})=>
+    '<tr><td align="center" style="padding:0 0 6px"><a href="'+escapeHtml(href)+'" title="'+escapeHtml(item.name)+'" target="_blank" rel="noopener noreferrer" style="display:inline-block;min-width:25px;padding:5px 2px;border:1px solid #e2e0e4;border-radius:5px;background:#fff;text-align:center;color:#23212a;font-size:10px;line-height:17px;text-decoration:none;font-weight:700">'+escapeHtml(item.short)+'</a></td></tr>'
+   ).join("");
+   const leftover=valid.slice(6).map(({item,href})=>
+    '<a href="'+escapeHtml(href)+'" title="'+escapeHtml(item.name)+'" style="display:inline-block;margin:4px 8px 0 0;padding:5px 8px;color:#242329;background:#f4f3f5;text-decoration:none;font-size:11px;font-weight:700">'+escapeHtml(item.short)+'</a>'
+   ).join("");
+   return '<table '+base+' width="578" style="border:1px solid #dedbe1;border-collapse:separate;border-spacing:0;border-radius:9px;background:#fff;font-family:Arial,Helvetica,sans-serif"><tbody><tr>'+
+    '<td width="56" valign="middle" style="width:56px;padding:12px 6px;background:#faf9fb;border-right:1px solid #e5e3e8"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tbody>'+
+    '<tr><td align="center" style="padding:0 0 13px;font-size:16px;font-weight:700;color:'+accent+'">'+escapeHtml((s.company.trim()||s.name.trim()||"B").slice(0,1).toUpperCase())+'</td></tr>'+
+    rail+'</tbody></table></td>'+
+    '<td width="520" valign="middle" style="padding:0;background:#fff">'+
+    '<img src="'+escapeHtml(animationSrc)+'" alt="'+escapeHtml(alt)+'" width="520" height="208" style="display:block;width:520px;max-width:100%;height:auto;border:0;outline:none;text-decoration:none"/></td></tr>'+
+    ((links.length||leftover)?'<tr><td colspan="2" style="border-top:1px solid #e9e8eb;padding:8px 12px;font-size:11px;line-height:20px;color:#555">'+links.join(' &nbsp;·&nbsp; ')+(leftover?'<div>'+leftover+'</div>':"")+'</td></tr>':"")+
+    '</tbody></table>';
+  }
   return '<table '+base+'><tbody><tr><td><img src="'+escapeHtml(animationSrc)+'" width="520" alt="'+escapeHtml(alt)+'" style="display:block;width:520px;max-width:100%;height:auto;border:0" /></td></tr>'+
    (links.length?'<tr><td style="padding-top:8px;font-size:11px;line-height:19px">'+links.join(' &nbsp;·&nbsp; ')+'</td></tr>':"")+
    (socialRow?'<tr><td>'+socialRow+'</td></tr>':"")+'</tbody></table>';

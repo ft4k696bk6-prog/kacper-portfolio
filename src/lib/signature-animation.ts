@@ -5,9 +5,9 @@ import type { SignatureFields } from "./everyday-utils";
  * Outlook clients that only render one frame; subsequent frames play the reveal.
  * Everything is generated locally, with no tracking or external image service.
  */
-export type SignatureMotion="reveal"|"slide"|"pulse";
+export type SignatureMotion="geometry"|"slices"|"cinematic"|"reveal"|"slide"|"pulse";
 
-const WIDTH=520, HEIGHT=178;
+const WIDTH=520, HEIGHT=208;
 const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 const mix=(a:number,b:number,t:number)=>a+(b-a)*clamp(t);
 
@@ -78,8 +78,108 @@ function label(ctx:CanvasRenderingContext2D,txt:string,x:number,y:number,maxWidt
  if(!txt||alpha<=0)return;
  ctx.save();ctx.globalAlpha=clamp(alpha);ctx.font=font;ctx.fillStyle=color;ctx.fillText(txt.slice(0,80),x,y,maxWidth);ctx.restore();
 }
+
+function ease(t:number){const v=clamp(t);return 1-Math.pow(1-v,3);}
+function polygon(ctx:CanvasRenderingContext2D,points:Array<[number,number]>){
+ ctx.beginPath();
+ points.forEach(([x,y],i)=>i===0?ctx.moveTo(x,y):ctx.lineTo(x,y));
+ ctx.closePath();
+}
+function coverPhoto(ctx:CanvasRenderingContext2D,photo:HTMLImageElement|null,x:number,y:number,w:number,h:number){
+ if(photo){
+  const scale=Math.max(w/photo.naturalWidth,h/photo.naturalHeight);
+  const sw=photo.naturalWidth*scale,sh=photo.naturalHeight*scale;
+  ctx.drawImage(photo,x+(w-sw)/2,y+(h-sh)/2,sw,sh);
+ }else{
+  ctx.fillStyle="#e6e6e8";ctx.fillRect(x,y,w,h);
+  ctx.fillStyle="#aeafb4";ctx.beginPath();ctx.arc(x+w/2,y+h*.36,w*.23,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.ellipse(x+w/2,y+h*1.02,w*.42,h*.42,0,0,Math.PI*2);ctx.fill();
+ }
+}
+function paintGeometry(ctx:CanvasRenderingContext2D,fields:SignatureFields,motion:SignatureMotion,
+ progress:number,logo:HTMLImageElement|null,photo:HTMLImageElement|null){
+ const p=clamp(progress),accent=/^#[0-9a-f]{6}$/i.test(fields.accent)?fields.accent:"#6f6f79";
+ const visible=(a:number,b:number)=>ease((p-a)/(b-a));
+ const layout=visible(.02,.22),brand=visible(.13,.39),text=visible(.26,.53),detail=visible(.39,.7);
+ const slices=visible(.28,.88),finish=visible(.74,.98);
+ ctx.clearRect(0,0,WIDTH,HEIGHT);
+ ctx.fillStyle="#ffffff";ctx.fillRect(0,0,WIDTH,HEIGHT);
+ // The mail-safe linked navigation bar is an HTML table outside this moving graphic.
+ // The GIF begins with an entirely clean field and draws itself into place.
+ ctx.fillStyle="#fbfafc";ctx.fillRect(0,0,WIDTH,HEIGHT);
+ ctx.save();
+ ctx.globalAlpha=layout;
+ ctx.strokeStyle="#e8e5eb";ctx.lineWidth=1;
+ ctx.beginPath();ctx.moveTo(0,16);ctx.lineTo(500,16);ctx.stroke();
+ ctx.restore();
+ // Accent geometry is unique to the user's company, not copied artwork.
+ ctx.save();ctx.globalAlpha=brand*.13;
+ ctx.fillStyle=accent;
+ polygon(ctx,[[322,0],[390,0],[288,208],[222,208]]);ctx.fill();
+ ctx.restore();
+ // Logo + company wordmark enter before the personal details.
+ ctx.save();
+ ctx.globalAlpha=brand;
+ if(motion==="cinematic")ctx.translate((1-brand)*-18,0);
+ if(logo){
+  const scale=Math.min(165/logo.naturalWidth,49/logo.naturalHeight);
+  ctx.drawImage(logo,27,29,logo.naturalWidth*scale,logo.naturalHeight*scale);
+ }else{
+  label(ctx,(fields.company||"YOUR BRAND").toUpperCase(),27,58,285,"bold 25px Arial","#1c1b20",1);
+ }
+ ctx.restore();
+ // Headline, title and contact are staggered separately, leaving breathing room.
+ const mx=motion==="slices"?(1-text)*10:0;
+ ctx.save();ctx.translate(mx,0);
+ label(ctx,fields.name||(fields.language==="en"?"Your Name":"Imię i nazwisko"),27,108,308,"bold 24px Arial","#151417",text);
+ label(ctx,fields.role||(fields.language==="en"?"Position":"Stanowisko"),27,128,305,"13px Arial","#62616a",visible(.32,.60));
+ label(ctx,fields.company||"",27,150,280,"bold 12px Arial",accent,visible(.39,.66));
+ label(ctx,fields.email||"",27,171,298,"12px Arial","#56545d",detail);
+ label(ctx,fields.website||fields.phone||"",27,188,298,"12px Arial","#56545d",finish);
+ ctx.restore();
+ // Build the portrait from interlocking diagonal windows. Each piece moves on
+ // its own curve, with angled cuts and a separate top facet to match the reference.
+ const shapes:Array<{poly:Array<[number,number]>,begin:number,end:number,shift:number}>= [
+  {poly:[[398,39],[453,39],[378,196],[328,196]],begin:.3,end:.59,shift:62},
+  {poly:[[456,21],[502,21],[420,196],[380,196]],begin:.46,end:.77,shift:65},
+  {poly:[[503,53],[522,53],[467,178],[444,178]],begin:.59,end:.91,shift:50}
+ ];
+ for(const sh of shapes){
+  const t=visible(sh.begin,sh.end);
+  if(t<=0)continue;
+  ctx.save();
+  ctx.globalAlpha=t;
+  const ofs=(1-t)*sh.shift;
+  polygon(ctx,sh.poly.map(([x,y])=>[x+ofs,y]));ctx.clip();
+  coverPhoto(ctx,photo,327+ofs,13,200,193);
+  ctx.restore();
+ }
+ // A clean diagonal metallic plate gives a deliberate 3D-layered look.
+ ctx.save();ctx.globalAlpha=slices*.88;ctx.fillStyle=accent;
+ polygon(ctx,[[442,15],[480,15],[412,194],[386,194]]);ctx.fill();
+ ctx.restore();
+ // Restore a slim center photo slice above the metallic plate.
+ if(photo&&p>.58){
+  const t=visible(.58,.88);
+  ctx.save();ctx.globalAlpha=t;
+  polygon(ctx,[[425+(1-t)*28,60],[447+(1-t)*28,60],[399+(1-t)*28,181],[379+(1-t)*28,181]]);ctx.clip();
+  coverPhoto(ctx,photo,325+(1-t)*28,15,200,194);ctx.restore();
+ }
+ // Only the selected "cinematic" preset has a small glossy sweep.
+ if(motion==="cinematic"&&p>.57&&p<.98){
+  ctx.save();ctx.globalAlpha=.17;
+  const shift=260+visible(.58,.97)*245;
+  const grad=ctx.createLinearGradient(shift-60,0,shift+35,0);
+  grad.addColorStop(0,"rgba(255,255,255,0)");grad.addColorStop(.5,"#ffffff");grad.addColorStop(1,"rgba(255,255,255,0)");
+  ctx.fillStyle=grad;polygon(ctx,[[shift-20,5],[shift+18,5],[shift-46,203],[shift-83,203]]);ctx.fill();ctx.restore();
+ }
+ // Fine divider comes in last: no gratuitous looping glints.
+ ctx.save();ctx.globalAlpha=finish;ctx.fillStyle=accent;ctx.fillRect(27,197,275*finish,2);ctx.restore();
+}
+
 function paint(ctx:CanvasRenderingContext2D,fields:SignatureFields,motion:SignatureMotion,
  progress:number,logo:HTMLImageElement|null,photo:HTMLImageElement|null){
+ if(motion==="geometry"||motion==="slices"||motion==="cinematic"){paintGeometry(ctx,fields,motion,progress,logo,photo);return;}
  const p=clamp(progress),accent=/^#[0-9a-f]{6}$/i.test(fields.accent)?fields.accent:"#777777";
  ctx.clearRect(0,0,WIDTH,HEIGHT);
  ctx.fillStyle="#ffffff";ctx.fillRect(0,0,WIDTH,HEIGHT);
@@ -127,11 +227,11 @@ function paint(ctx:CanvasRenderingContext2D,fields:SignatureFields,motion:Signat
  }
  ctx.restore();
 }
-function assemble(frames:{indices:Uint8Array;delay:number}[],colors:Uint8Array):Blob {
+function assemble(frames:{indices:Uint8Array;delay:number}[],colors:Uint8Array,loop:boolean):Blob {
  const bytes:number[]=[];
  writeText(bytes,"GIF89a");writeShort(bytes,WIDTH);writeShort(bytes,HEIGHT);
  bytes.push(0xf7,0,0,...colors);
- bytes.push(0x21,0xff,11);writeText(bytes,"NETSCAPE2.0");bytes.push(3,1,0,0,0);
+ if(loop){bytes.push(0x21,0xff,11);writeText(bytes,"NETSCAPE2.0");bytes.push(3,1,0,0,0);}
  for(const frame of frames){
   const delay=Math.max(2,Math.round(frame.delay/10));
   bytes.push(0x21,0xf9,4,0);writeShort(bytes,delay);bytes.push(0,0);
@@ -147,7 +247,7 @@ function assemble(frames:{indices:Uint8Array;delay:number}[],colors:Uint8Array):
  return new Blob([new Uint8Array(bytes)],{type:"image/gif"});
 }
 
-export async function makeSignatureGif(fields:SignatureFields,motion:SignatureMotion):Promise<Blob>{
+export async function makeSignatureGif(fields:SignatureFields,motion:SignatureMotion,loop=false):Promise<Blob>{
  if(typeof document==="undefined")throw new Error("GIF export requires a browser");
  const canvas=document.createElement("canvas");canvas.width=WIDTH;canvas.height=HEIGHT;
  const ctx=canvas.getContext("2d",{willReadFrequently:true});
@@ -157,7 +257,9 @@ export async function makeSignatureGif(fields:SignatureFields,motion:SignatureMo
  const colors=palette(fields.accent);
  const frames:{indices:Uint8Array;delay:number}[]=[];
  // Complete fallback first: Outlook versions without GIF playback show useful content.
- const stages=[{p:1,d:30},{p:0,d:160},...Array.from({length:11},(_,i)=>({p:(i+1)/11,d:95})),{p:1,d:1650}];
+ const premium=motion==="geometry"||motion==="slices"||motion==="cinematic";
+ const steps=premium?21:11;
+ const stages=[{p:1,d:50},{p:0,d:180},...Array.from({length:steps},(_,i)=>({p:(i+1)/steps,d:premium?95:95})),{p:1,d:premium?2600:1650}];
  for(const stage of stages){
   paint(ctx,fields,motion,stage.p,logo,photo);
   let pixels:Uint8ClampedArray;
@@ -165,5 +267,5 @@ export async function makeSignatureGif(fields:SignatureFields,motion:SignatureMo
   catch{throw new Error("The image server blocks cross-origin GIF export. Upload images locally instead.");}
   frames.push({indices:indexColors(pixels,colors),delay:stage.d});
  }
- return assemble(frames,colors);
+ return assemble(frames,colors,loop);
 }
