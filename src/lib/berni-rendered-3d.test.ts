@@ -11,8 +11,10 @@ describe("Static AI chat bubble", () => {
   expect(ai).not.toContain("BerniCompanion");
   expect(ai).not.toContain("BerniRendered3D");
  });
- it("disables visual effects and drag controls", () => {
-  for(const item of ["<motion.", "AnimatePresence", "dragPlacement","handleBerniDragEnd","model-viewer","animate-spin"]) expect(ai).not.toContain(item);
+ it("keeps the static mascot and avoids drag controls, while allowing chat-panel transitions", () => {
+  for(const item of ["dragPlacement","handleBerniDragEnd","model-viewer","animate-spin"]) expect(ai).not.toContain(item);
+  expect(ai).toContain("<motion.aside");
+  expect(ai).toContain("AnimatePresence");
  });
  it("preserves all contextual messages and manual opt-out", () => {
   expect(ai).toContain("pickCompanionNudge(context, history.ids");
