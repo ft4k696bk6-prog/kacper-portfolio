@@ -142,39 +142,73 @@ export function BerniLivingFace({
       ctx!.save();
       eyeClip(near);
       ctx!.clip();
+      // The solid part of the eyelid slides down, then the last 6px fade
+      // into the original iris. No rectangular hard edge mid-blink.
+      const edge = top + extent;
+      const feather = 7;
+      ctx!.save();
       ctx!.beginPath();
-      ctx!.rect(left, top, right - left, extent);
+      ctx!.rect(left, top, right - left, Math.max(0, extent - feather));
       ctx!.clip();
       ctx!.drawImage(lids, 0, 0, 640, 640);
+      ctx!.restore();
+      for (let band = 0; band < 7; band++) {
+        const y = edge - feather + band;
+        if (y < top || y > bottom) continue;
+        ctx!.save();
+        ctx!.beginPath();
+        ctx!.rect(left, y, right - left, 1.4);
+        ctx!.clip();
+        ctx!.globalAlpha = Math.max(0, 1 - band / 7);
+        ctx!.drawImage(lids, 0, 0, 640, 640);
+        ctx!.restore();
+      }
       ctx!.restore();
     }
 
     function drawExpression(face: Face) {
-      // Curved mouth follows the same smile on the base illustration.
+      // Organic curved lip geometry follows Berni's APPROVED smile,
+      // not an oval painted over his muzzle. Continuous depth parameter.
       const amount = Math.max(0, Math.min(1, face.mouth));
-      if (amount > .015) {
-        const depth = amount * (19 + face.surprise * 7);
+      if (amount > .02) {
+        const depth = 22 * amount;
+        const left = 362;
+        const right = 457;
+        const smooth = (value: number) => {
+          const t = Math.max(0, Math.min(1, value));
+          return t * t * (3 - 2 * t);
+        };
+        const upper = (t: number) =>
+          397 + 37 * smooth(t / .65) + 6 * Math.sin(Math.PI * t);
+        const lower = (t: number) =>
+          upper(t) + depth * Math.pow(Math.max(0, Math.sin(Math.PI * t)), .6);
+
         ctx!.save();
-        ctx!.globalAlpha = Math.min(1, amount * 1.35);
+        ctx!.globalAlpha = Math.min(1, amount * 1.25);
         ctx!.beginPath();
-        ctx!.moveTo(364, 397);
-        ctx!.bezierCurveTo(385, 420, 422, 439, 460, 421);
-        ctx!.bezierCurveTo(461, 425 + depth * .4, 448, 436 + depth * .75, 421, 440 + depth);
-        ctx!.bezierCurveTo(396, 442 + depth * .78, 376, 423 + depth * .24, 364, 397);
+        for (let i = 0; i <= 40; i++) {
+          const t = i / 40, x = left + (right - left) * t;
+          if (i === 0) ctx!.moveTo(x, upper(t));
+          else ctx!.lineTo(x, upper(t));
+        }
+        for (let i = 40; i >= 0; i--) {
+          const t = i / 40;
+          ctx!.lineTo(left + (right - left) * t, lower(t));
+        }
         ctx!.closePath();
-        const mouth = ctx!.createLinearGradient(0, 412, 0, 451 + depth);
-        mouth.addColorStop(0, "#100d16");
-        mouth.addColorStop(.57, "#211019");
-        mouth.addColorStop(1, "#442831");
-        ctx!.fillStyle = mouth;
+        const gradient = ctx!.createLinearGradient(0, 412, 0, 460);
+        gradient.addColorStop(0, "#120b16");
+        gradient.addColorStop(.6, "#190d14");
+        gradient.addColorStop(1, "#52303e");
+        ctx!.fillStyle = gradient;
         ctx!.fill();
 
-        const tongueAlpha = Math.max(0, (amount - .33) / .67);
-        if (tongueAlpha > .02) {
-          ctx!.globalAlpha = tongueAlpha * .85;
-          ctx!.fillStyle = "#b26177";
+        if (amount > .42) {
+          ctx!.globalAlpha = Math.min(.7, (amount - .42) * 1.1);
+          ctx!.fillStyle = "#a4566d";
           ctx!.beginPath();
-          ctx!.ellipse(416, 444 + depth * .6, 17 * amount, 3.5 + 2 * amount, -.08, 0, Math.PI * 2);
+          ctx!.ellipse(417, 440 + depth * .6,
+            14 * amount, 3.2 + 1.6 * amount, -.05, 0, Math.PI * 2);
           ctx!.fill();
         }
         ctx!.restore();
