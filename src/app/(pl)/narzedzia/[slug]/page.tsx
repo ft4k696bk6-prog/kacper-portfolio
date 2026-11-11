@@ -15,7 +15,9 @@ export function generateStaticParams(){return toolboxItems.map(t=>({slug:t.slug}
 export async function generateMetadata({params}:Props):Promise<Metadata>{
  const {slug}=await params;const t=findTool(slug);if(!t)return {};
  const url="https://bernecki.dev/narzedzia/"+slug;
- const seoDescription = t.title+". "+t.description+" Darmowe narzędzie online bez rejestracji, bez logowania i bez karty kredytowej.";
+ const seoDescription = t.mode==="pdf"
+  ? "Darmowy edytor PDF online. Dodaj tekst, zdjęcia i podpisy, obracaj i porządkuj strony. Bez rejestracji, logowania i karty kredytowej."
+  : t.title+". "+t.description+" Bez rejestracji i karty kredytowej.";
  return {title:t.title+" | bernecki.dev",description:seoDescription,alternates:{canonical:url,languages:{"pl-PL":url,en:"https://bernecki.dev"+englishToolPath(slug)}},
   openGraph:{title:t.title+" | bernecki.dev",description:seoDescription,url,type:"website"}};
 }
@@ -25,7 +27,7 @@ export default async function ToolPage({params}:Props){
  const service=tool.category==="Reklamy i marketing"?"/marketing-i-reklamy":tool.category==="CRM i sprzedaż"?"/crm-i-aplikacje-webowe":"/tworzenie-stron-internetowych";
  const jsonLd={"@context":"https://schema.org","@graph":[
   {"@type":"WebApplication",name:tool.title,url:"https://bernecki.dev/narzedzia/"+slug,description:tool.description,
-   applicationCategory:"BusinessApplication",operatingSystem:"Web",inLanguage:"pl-PL",offers:{"@type":"Offer",price:"0",priceCurrency:"PLN"}},
+   applicationCategory:"BusinessApplication",operatingSystem:"Web",inLanguage:"pl-PL",isAccessibleForFree:true,offers:{"@type":"Offer",price:"0",priceCurrency:"PLN"}},
   {"@type":"FAQPage",mainEntity:[{"@type":"Question",name:tool.question,acceptedAnswer:{"@type":"Answer",text:tool.answer}}]},
   {"@type":"BreadcrumbList",itemListElement:[{"@type":"ListItem",position:1,name:"Strona główna",item:"https://bernecki.dev/"},{"@type":"ListItem",position:2,name:"Darmowe narzędzia",item:"https://bernecki.dev/narzedzia"},{"@type":"ListItem",position:3,name:tool.title,item:"https://bernecki.dev/narzedzia/"+slug}]}
  ]};
