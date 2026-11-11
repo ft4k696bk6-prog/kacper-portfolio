@@ -11,7 +11,7 @@ const btn="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bor
 const cell="flex items-center justify-center rounded-lg border border-white/15 font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-white";
 const L=({en,pl}:{en:boolean;pl:string})=>en?null:<span className="sr-only">{pl}</span>;
 function GameTitle({en,pl,title,desc}:{en:boolean;pl:string;title:string;desc:string}){
- return <header className="mb-6 flex flex-wrap items-start justify-between gap-3"><div><p className="text-[10px] font-semibold uppercase tracking-[.2em] text-white/45">{en?"BROWSER ARCADE":"MINIGRA ONLINE"}</p><h2 className="mt-2 text-2xl font-semibold tracking-tight">{title}</h2><p className="mt-2 text-sm leading-6 text-white/60">{desc}</p></div><L en={en} pl={pl}/></header>;
+ return <header className="mb-6 flex flex-wrap items-start justify-between gap-3"><div><p className="text-[10px] font-semibold uppercase tracking-[.2em] text-white/45">{en?"FREE BROWSER ARCADE":"DARMOWA MINIGRA ONLINE"}</p><h2 className="mt-2 text-2xl font-semibold tracking-tight">{title}</h2><p className="mt-2 text-sm leading-6 text-white/60">{desc}</p></div><L en={en} pl={pl}/></header>;
 }
 function Memory({en}:{en:boolean}){
  const [deck,setDeck]=useState<string[]>(()=>memoryCards());
