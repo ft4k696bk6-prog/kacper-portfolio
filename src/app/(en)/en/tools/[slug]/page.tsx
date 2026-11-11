@@ -17,7 +17,7 @@ export async function generateMetadata({params}:Params):Promise<Metadata>{
  const url=site+"/en/tools/"+slug;
  return {
   title:tool.title+" | bernecki.dev",
-  description:tool.description+" Free online with no registration, no login and no credit card required.",
+  description:tool.mode==="pdf"?"Free PDF editor online. Add text, images and signatures; rotate and reorder pages. No sign-up, login, upload or credit card required.":tool.description+" Free online; no registration or credit card required.",
   alternates:{canonical:url,languages:{en:url,"pl-PL":site+"/narzedzia/"+tool.slug}},
   openGraph:{title:tool.title+" | bernecki.dev",description:tool.description,url,type:"website",locale:"en_US"}
  };
@@ -31,7 +31,7 @@ export default async function EnglishToolPage({params}:Params){
  const faqAnswer=isFull?"No. It scans a sample of up to seven publicly accessible pages and performs selected technical checks. It is not a full site crawl, Core Web Vitals test or Google indexation report.":"Yes. This tool is available without signing up. Its results depend on the data you enter and the limitations described on this page.";
  const url=site+"/en/tools/"+slug;
  const jsonLd={"@context":"https://schema.org","@graph":[
-  {"@type":"WebApplication",name:tool.title,url,description:tool.description,applicationCategory:"BusinessApplication",operatingSystem:"Web",inLanguage:"en",offers:{"@type":"Offer",price:"0",priceCurrency:"PLN"}},
+  {"@type":"WebApplication",name:tool.title,url,description:tool.description,applicationCategory:"BusinessApplication",operatingSystem:"Web",inLanguage:"en",isAccessibleForFree:true,offers:{"@type":"Offer",price:"0",priceCurrency:"PLN"}},
   {"@type":"FAQPage",mainEntity:[{"@type":"Question",name:faqQuestion,acceptedAnswer:{"@type":"Answer",text:faqAnswer}}]},
   {"@type":"BreadcrumbList",itemListElement:[
    {"@type":"ListItem",position:1,name:"Home",item:site},
