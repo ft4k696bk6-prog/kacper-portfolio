@@ -17,7 +17,7 @@ const dailyTools = [
   { id: "signature", pl: "Generator stopki e-mail", en: "Email signature generator", plDesc: "Utwórz i skopiuj stopkę z podglądem HTML.", enDesc: "Create and copy an HTML email signature." },
 ] as const;
 
-const priority = ["ai-image", "vat", "text", "image", "percentage", "password"];
+const priority = ["signature", "ai-image", "vat", "image", "dekoder-jwt"];
 const cardClass = "group flex min-w-0 min-h-[142px] flex-col justify-between gap-4 rounded-2xl border border-white/15 bg-[#111] p-5 transition-colors hover:border-white/50 hover:bg-[#1b1b1b] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
 
 export function ToolboxHub({ lang }: { lang: Language }) {
@@ -54,7 +54,7 @@ export function ToolboxHub({ lang }: { lang: Language }) {
   const filtered = cards.filter(c => {
     const matches = !term || (c.title + " " + c.description + " " + c.category).toLocaleLowerCase(en ? "en" : "pl").includes(term);
     return matches && (term || category === "all" || category === "featured" && priority.includes(c.id) || category === c.category);
-  });
+  }).sort((a, b) => category === "featured" && !term ? priority.indexOf(a.id) - priority.indexOf(b.id) : 0);
   const featuredVisible = !term || (en ? "free comprehensive website audit seo ssl dns analytics" : "darmowy kompleksowy audyt strony www seo ssl dns analityka").includes(term);
   const auditHref = en ? englishToolPath("audyt-strony") : "/narzedzia/audyt-strony";
   const gamesHref = en ? "/en/games" : "/minigry";
