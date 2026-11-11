@@ -1,5 +1,6 @@
 export type PercentMode = "increase" | "decrease" | "part" | "difference";
-export type SignatureFields = { name: string; role: string; company: string; email: string; phone: string; website: string; accent: string };
+export type SignatureLayout = "side" | "stacked" | "compact";
+export type SignatureFields = { name: string; role: string; company: string; email: string; phone: string; website: string; accent: string; logo?: string; logoWidth?: number; layout?: SignatureLayout; language?: "pl" | "en" };
 
 export function parseNumber(value: string): number {
   const compact=value.trim().replace(/\s/g,"").replace(/,/g,".");
@@ -53,17 +54,47 @@ export function escapeHtml(value:string):string {
 }
 
 export function signatureHtml(s:SignatureFields):string {
- const name=escapeHtml(s.name.trim()),role=escapeHtml(s.role.trim()),company=escapeHtml(s.company.trim());
+ const name=escapeHtml(s.name.trim())||(s.language==="en"?"Your name":"Imię i nazwisko");
+ const role=escapeHtml(s.role.trim()),company=escapeHtml(s.company.trim());
  const email=escapeHtml(s.email.trim()),phone=escapeHtml(s.phone.trim()),website=escapeHtml(s.website.trim());
  const accent=/^#[0-9a-fA-F]{6}$/.test(s.accent)?s.accent:"#b7b7b7";
+ const lineColor="#d9d9d9", muted="#555555";
  const links:string[]=[];
- if(email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim())) links.push('<a href="mailto:'+encodeURI(s.email.trim())+'" style="color:#555555;text-decoration:none">'+email+'</a>');
- if(phone&&/^[+()\d\s-]+$/.test(s.phone.trim())) links.push('<a href="tel:'+s.phone.replace(/[^+\d]/g,"")+'" style="color:#555555;text-decoration:none">'+phone+'</a>');
- if(website){try{const u=new URL(s.website.startsWith("http")?s.website:"https://"+s.website);if(["https:","http:"].includes(u.protocol)) links.push('<a href="'+escapeHtml(u.href)+'" style="color:#555555;text-decoration:none">'+website+'</a>');}catch{/* Ignore invalid links */}}
- return '<table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#171717"><tr>'+
- '<td style="border-left:3px solid '+accent+';padding:7px 16px">'+
- '<div style="font-size:17px;font-weight:700;line-height:1.35">'+(name||"Your name")+'</div>'+
- (role||company?'<div style="margin-top:3px;color:#505050">'+[role,company].filter(Boolean).join(" · ")+'</div>':"")+
- (links.length?'<div style="margin-top:11px;line-height:1.8">'+links.join(" &nbsp;|&nbsp; ")+'</div>':"")+
- '</td></tr></table>';
+ if(email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim())) {
+  links.push('<a href="mailto:'+escapeHtml("mailto:"+s.email.trim()).replace(/^mailto:/,"")+'" style="color:#505050;text-decoration:none">'+email+'</a>');
+ }
+ if(phone&&/^[+()\d\s-]+$/.test(s.phone.trim())) {
+  links.push('<a href="tel:'+escapeHtml(s.phone.replace(/[^\d+]/g,""))+'" style="color:#505050;text-decoration:none">'+phone+'</a>');
+ }
+ if(website){try{
+  const raw=s.website.trim(),url=new URL(/^https?:\/\//i.test(raw)?raw:"https://"+raw);
+  if(["https:","http:"].includes(url.protocol)&&!url.username&&!url.password)links.push('<a href="'+escapeHtml(url.href)+'" style="color:#505050;text-decoration:none">'+website+'</a>');
+ }catch{/* Ignore invalid URLs */}}
+ let logoSrc="";
+ const rawLogo=(s.logo||"").trim();
+ if(/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/i.test(rawLogo)&&rawLogo.length<=500000){
+  logoSrc=rawLogo;
+ }else if(rawLogo){try{
+  const url=new URL(rawLogo);
+  if(url.protocol==="https:"&&!url.username&&!url.password&&url.href.length<=2000)logoSrc=url.href;
+ }catch{/* Unsupported logo URL */}}
+ const logoWidth=Math.max(60,Math.min(180,Math.round(Number(s.logoWidth)||110)));
+ const logo=logoSrc?'<img src="'+escapeHtml(logoSrc)+'" width="'+logoWidth+'" alt="'+escapeHtml(s.company.trim()||"Logo")+'" style="display:block;width:'+logoWidth+'px;max-width:100%;height:auto;border:0;outline:none;text-decoration:none" />':"";
+ const details='<div style="font-size:11px;line-height:17px;letter-spacing:0.5px;color:'+muted+'">'+
+  [role,company].filter(Boolean).join(" &nbsp;·&nbsp; ")+'</div>';
+ const contacts=links.length?'<div style="padding-top:9px;font-size:12px;line-height:20px;color:#505050">'+links.join(' &nbsp;<span style="color:#a0a0a0">·</span>&nbsp; ')+'</div>':"";
+ const content='<div style="font-size:17px;line-height:23px;font-weight:700;color:#171717">'+name+'</div>'+
+  (role||company?'<div style="padding-top:3px">'+details+'</div>':"")+contacts;
+ const layout=s.layout||"side";
+ const base='role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;border-spacing:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#171717"';
+ if(layout==="stacked"){
+  return '<table '+base+'><tbody><tr><td style="padding:0 0 13px 0">'+(logo?logo:'<span style="font-size:12px;font-weight:700;letter-spacing:1px;color:'+accent+'">'+company+'</span>')+
+   '</td></tr><tr><td style="border-top:3px solid '+accent+';padding:13px 2px 0 0">'+content+'</td></tr></tbody></table>';
+ }
+ if(layout==="compact"){
+  return '<table '+base+'><tbody><tr><td style="vertical-align:middle;padding:4px 20px 4px 0;border-bottom:2px solid '+accent+'">'+content+
+   '</td>'+(logo?'<td style="vertical-align:middle;padding:4px 0 4px 14px;border-bottom:2px solid '+accent+'">'+logo+'</td>':"")+'</tr></tbody></table>';
+ }
+ return '<table '+base+'><tbody><tr>'+(logo?'<td style="vertical-align:middle;padding:5px 17px 5px 0">'+logo+'</td>':"")+
+  '<td style="vertical-align:middle;border-left:3px solid '+accent+';padding:7px 0 7px 16px">'+content+'</td></tr></tbody></table>';
 }
