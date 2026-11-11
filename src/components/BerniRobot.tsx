@@ -113,46 +113,64 @@ export function BerniRobot({ mood, weather, lang, compact = false }: Props) {
             <path d="M72 124q4-5 8 0-4 5-8 0Zm10-5h4q7 0 2 5 6 5-3 5h-3" stroke="#f0f5fa" strokeWidth="1.5" strokeLinejoin="round" fill="none"/>
           </g>
         </g>
+
         <g className={styles.ears}>
           <g className={styles.earLeft}>
-            <path d="M50 61Q20 36 22 69q1 20 14 18l17-10Z" fill={"url(#" + id + "metal)"} stroke="#555f6d" strokeWidth="2"/>
-            <path d="M45 71Q29 54 32 75l7 3Z" fill="#434e5a"/>
+            <path d="M46 53 32 26Q27 18 23 27q-10 28-2 48l19 6Z" fill={paint("shell")} stroke="#505d6b" strokeWidth="1.6"/>
+            <path d="M37 56 29 39q-5 16-2 28l10 5Z" fill="#293645"/>
+            <path d="M26 33q-2 12-2 18" stroke="#fff" strokeWidth="1.5" opacity=".7" strokeLinecap="round"/>
           </g>
           <g className={styles.earRight}>
-            <path d="M113 61q30-24 30 7 0 20-16 18l-18-10Z" fill={"url(#" + id + "metal)"} stroke="#555f6d" strokeWidth="2"/>
-            <path d="M116 71q20-17 17 3l-9 5Z" fill="#434e5a"/>
+            <path d="m116 53 13-27q5-8 10 1 10 28 2 48l-20 6Z" fill={paint("shell")} stroke="#505d6b" strokeWidth="1.6"/>
+            <path d="m126 56 7-17q6 16 3 28l-10 5Z" fill="#293645"/>
+            <path d="M136 33q2 12 2 18" stroke="#fff" strokeWidth="1.5" opacity=".7" strokeLinecap="round"/>
           </g>
         </g>
         <g className={styles.head}>
-          <path d="M41 71Q40 45 82 43q41 0 43 29v23q-3 23-43 24-41-1-43-24Z" fill={"url(#" + id + "metal)"} stroke="#5a6370" strokeWidth="1.6"/>
-          <path d="M48 72q0-22 34-22 36 0 36 22v20q-2 18-36 19-34-1-35-19Z" fill={"url(#" + id + "visor)"} stroke={"url(#" + id + "edge)"} strokeWidth="2.6"/>
-          <path d="M53 69q8-17 30-16 20 0 28 11" stroke="#fff" strokeWidth="2.4" opacity=".17" strokeLinecap="round"/>
+          <ellipse cx="39" cy="75" rx="12" ry="18" fill="#626f7e" stroke="#e4edf4" strokeWidth="1.4"/>
+          <ellipse cx="123" cy="75" rx="12" ry="18" fill="#626f7e" stroke="#e4edf4" strokeWidth="1.4"/>
+          <ellipse cx="40" cy="75" rx="7" ry="13" fill="#222d39"/>
+          <ellipse cx="122" cy="75" rx="7" ry="13" fill="#222d39"/>
+          <path d="M33 69q-1-33 48-37 49 4 48 37v28q-4 25-48 26-45-1-48-26Z" fill={paint("metal")} stroke="#5b6674" strokeWidth="2"/>
+          <path d="M41 73q0-29 40-30 40 1 40 30v23q-2 18-40 19-39-1-40-19Z" fill={paint("visor")} stroke={paint("chrome")} strokeWidth="3"/>
+          <path d="M45 64q8-18 37-18 23 0 33 15" stroke="#fff" strokeWidth="2.4" opacity=".47" strokeLinecap="round"/>
+          <path d="M47 54q27-21 68-1v16q-42-15-68 2Z" fill={paint("glass")}/>
+          <path d="M51 101q31 11 62-2" stroke="#9aa8b8" strokeWidth="1.4" opacity=".32" strokeLinecap="round"/>
           <g className={styles.eyes}>
             {mood === "sleeping" ? (
-              <g className={styles.eyeLights}><path d="M60 84q9 6 18 0M88 84q9 6 18 0" stroke="#f2f7ff" strokeWidth="3.8" strokeLinecap="round" /></g>
-            ) : mood === "grabbed" ? (
-              <g className={styles.eyeLights}>
-                <ellipse cx="70" cy="84" rx="6" ry="9" fill="#f4f8ff"/>
-                <ellipse cx="96" cy="84" rx="6" ry="9" fill="#f4f8ff"/>
-                <circle cx="71" cy="85" r="2.4" fill="#1a2431"/>
-                <circle cx="97" cy="85" r="2.4" fill="#1a2431"/>
-              </g>
-            ) : mood === "happy" || mood === "excited" ? (
-              <g className={styles.eyeLights}><path d="M61 88q8-14 17 0M88 88q8-14 17 0" stroke="#f2f7ff" strokeWidth="4.2" strokeLinecap="round"/></g>
+              <g className={styles.eyeLights}><path d="M55 81q9 10 18 0M89 81q9 10 18 0" stroke="#f2f7ff" strokeWidth="4.2" strokeLinecap="round"/></g>
+            ) : isJoy ? (
+              <g className={styles.eyeLights}><path d="M56 87q8-16 17 0M89 87q8-16 17 0" stroke="#f2f7ff" strokeWidth="5" strokeLinecap="round"/></g>
             ) : mood === "worried" ? (
-              <g className={styles.eyeLights}><path d="M64 82l12 5M90 87l12-5" stroke="#f2f7ff" strokeWidth="4.4" strokeLinecap="round"/></g>
+              <g className={styles.eyeLights}><path d="M57 79l15 8M90 87l15-8" stroke="#e8f2ff" strokeWidth="4.5" strokeLinecap="round"/></g>
+            ) : mood === "grabbed" || mood === "surprised" ? (
+              <g className={styles.eyeLights}>
+                <ellipse cx="64" cy="82" rx="8.2" ry="10.6" fill={paint("eyeLight")}/>
+                <ellipse cx="98" cy="82" rx="8.2" ry="10.6" fill={paint("eyeLight")}/>
+                <circle cx="66" cy="84" r="2.1" fill="#202b39"/><circle cx="100" cy="84" r="2.1" fill="#202b39"/>
+              </g>
             ) : (
               <g className={styles.eyeLights}>
-                <rect x="65" y="76" width="8" height="20" rx="4" fill="#f4f8ff"/>
-                <rect x="93" y="76" width="8" height="20" rx="4" fill="#f4f8ff"/>
+                <ellipse cx="64" cy="82" rx="8.4" ry="11" fill="#cbd7e7" opacity=".28" filter={paint("eyeBlur")}/>
+                <ellipse cx="98" cy="82" rx="8.4" ry="11" fill="#cbd7e7" opacity=".28" filter={paint("eyeBlur")}/>
+                <rect x="59" y="71" width="11" height="23" rx="5.5" fill={paint("eyeLight")}/>
+                <rect x="93" y="71" width="11" height="23" rx="5.5" fill={paint("eyeLight")}/>
+                <path d="M61 75v5M95 75v5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" opacity=".8"/>
               </g>
             )}
           </g>
           <g className={styles.mouth}>
-            {mood === "surprised" || mood === "grabbed" ? <ellipse cx="82" cy="101" rx="3" ry="4" fill="#e4f2ff"/> :
-              <path d="M78 100q4 4 8 0" stroke="#edf4ff" strokeWidth="2" strokeLinecap="round" />}
+            {mood === "grabbed" || mood === "surprised" ? <ellipse cx="81" cy="102" rx="3.2" ry="4.2" fill="#e9f2fb"/> :
+              mood === "worried" ? <path d="M75 104q6-5 12 0" stroke="#e9f2fb" strokeWidth="2.3" strokeLinecap="round"/> :
+              isJoy ? <path d="M73 100q8 11 17 0" stroke="#e9f2fb" strokeWidth="2.4" strokeLinecap="round"/> :
+              isWorking ? <path d="M76 102h10" stroke="#e9f2fb" strokeWidth="2.2" strokeLinecap="round"/> :
+              <path d="M76 100q5 4 10 0" stroke="#e9f2fb" strokeWidth="2.2" strokeLinecap="round"/>}
           </g>
-          <path d="M48 97q-4 5-6 2" stroke="#d0d8e3" strokeWidth="2" strokeLinecap="round"/>
+          <circle cx="48" cy="94" r="1" fill="#dce7ef" opacity=".5"/><circle cx="114" cy="94" r="1" fill="#dce7ef" opacity=".5"/>
+          <rect x="70" y="35" width="22" height="4" rx="2" fill="#606d7c" opacity=".7"/>
+          <rect x="77" y="36" width="8" height="1.5" rx=".75" fill="#fff" opacity=".8"/>
+          <path d="M37 73q-2-30 24-38" stroke="#fff" strokeWidth="2" opacity=".4" strokeLinecap="round"/>
+          <path d="M127 68q2-19-13-28" stroke="#fff" strokeWidth="1.4" opacity=".2" strokeLinecap="round"/>
         </g>
         {/* Real, visible mini keyboard and animated paws while the visitor types. */}
         <g className={styles.keyboardRig} aria-hidden="true">
