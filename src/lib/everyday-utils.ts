@@ -66,6 +66,11 @@ export const SIGNATURE_SOCIALS:{id:SignatureSocial;name:string;short:string}[]=[
  {id:"whatsapp",name:"WhatsApp",short:"WA"},
  {id:"calendar",name:"Kalendarz / Booking",short:"↗"}
 ];
+/** Public rasterized icons (PNG) for compatibility with Gmail, Outlook and Apple Mail. */
+export function signatureSocialIconUrl(id:SignatureSocial):string {
+ return "https://bernecki.dev/api/signature-icon/"+id;
+}
+
 export function signatureSafeLink(input:string):string {
  try {
   const raw=input.trim();
@@ -104,7 +109,7 @@ export function signatureHtml(s:SignatureFields):string {
  const logo=logoSrc?'<img src="'+escapeHtml(logoSrc)+'" width="'+logoWidth+'" alt="'+escapeHtml(s.company.trim()||"Logo")+'" style="display:block;width:'+logoWidth+'px;max-width:100%;height:auto;border:0;outline:none;text-decoration:none" />':"";
  const socialAnchors=SIGNATURE_SOCIALS.flatMap(item=>{
   const url=signatureSafeLink(s.socials?.[item.id]||"");
-  return url?['<td style="padding:9px 7px 0 0"><a href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer" title="'+escapeHtml(item.name)+'" style="display:inline-block;padding:6px 9px;background:#f1f1f1;border:1px solid #dedede;border-radius:5px;color:#262626;text-decoration:none;font-size:11px;font-weight:700;line-height:16px">'+escapeHtml(item.short)+'</a></td>']:[];
+  return url?['<td style="padding:9px 7px 0 0"><a href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer" title="'+escapeHtml(item.name)+'" style="display:inline-block;padding:5px;background:#fff;border:1px solid #dedede;border-radius:5px;text-decoration:none"><img src="'+signatureSocialIconUrl(item.id)+'" width="22" height="22" alt="'+escapeHtml(item.name)+'" style="display:block;width:22px;height:22px;border:0;outline:none" /></a></td>']:[];
  });
  const socialRow=socialAnchors.length?'<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse"><tbody><tr>'+socialAnchors.join("")+'</tr></tbody></table>':"";
  const details='<div style="font-size:11px;line-height:17px;letter-spacing:0.5px;color:'+muted+'">'+
@@ -126,10 +131,10 @@ export function signatureHtml(s:SignatureFields):string {
     return href?[{item,href}]:[];
    });
    const rail=valid.slice(0,6).map(({item,href})=>
-    '<tr><td align="center" style="padding:0 0 6px"><a href="'+escapeHtml(href)+'" title="'+escapeHtml(item.name)+'" target="_blank" rel="noopener noreferrer" style="display:inline-block;min-width:25px;padding:5px 2px;border:1px solid #e2e0e4;border-radius:5px;background:#fff;text-align:center;color:#23212a;font-size:10px;line-height:17px;text-decoration:none;font-weight:700">'+escapeHtml(item.short)+'</a></td></tr>'
+    '<tr><td align="center" style="padding:0 0 6px"><a href="'+escapeHtml(href)+'" title="'+escapeHtml(item.name)+'" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:5px;border:1px solid #e2e0e4;border-radius:5px;background:#fff;text-decoration:none"><img src="'+signatureSocialIconUrl(item.id)+'" width="22" height="22" alt="'+escapeHtml(item.name)+'" style="display:block;width:22px;height:22px;border:0;outline:none"/></a></td></tr>'
    ).join("");
    const leftover=valid.slice(6).map(({item,href})=>
-    '<a href="'+escapeHtml(href)+'" title="'+escapeHtml(item.name)+'" style="display:inline-block;margin:4px 8px 0 0;padding:5px 8px;color:#242329;background:#f4f3f5;text-decoration:none;font-size:11px;font-weight:700">'+escapeHtml(item.short)+'</a>'
+    '<a href="'+escapeHtml(href)+'" title="'+escapeHtml(item.name)+'" style="display:inline-block;margin:4px 8px 0 0;padding:5px;background:#fff;border:1px solid #e2e0e4;border-radius:5px;text-decoration:none"><img src="'+signatureSocialIconUrl(item.id)+'" width="22" height="22" alt="'+escapeHtml(item.name)+'" style="display:block;width:22px;height:22px;border:0;outline:none"/></a>'
    ).join("");
    return '<table '+base+' width="578" style="border:1px solid #dedbe1;border-collapse:separate;border-spacing:0;border-radius:9px;background:#fff;font-family:Arial,Helvetica,sans-serif"><tbody><tr>'+
     '<td width="56" valign="middle" style="width:56px;padding:12px 6px;background:#faf9fb;border-right:1px solid #e5e3e8"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tbody>'+

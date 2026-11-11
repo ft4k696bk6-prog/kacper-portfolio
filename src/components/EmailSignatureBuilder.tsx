@@ -30,6 +30,10 @@ const isData=(source?:string)=>Boolean(source?.startsWith("data:image/"));
 const fileHint="PNG / JPG / WebP · max 2 MB";
 
 
+function BrandGlyph({id}:{id:SignatureSocial}){
+ return <img src={"/api/signature-icon/"+id} alt="" aria-hidden="true" width={24} height={24} className="block h-6 w-6 shrink-0 object-contain" loading="lazy"/>;
+}
+
 function GeometryCardPreview({fields,socials,gif,replay,lang}:{fields:SignatureFields;socials:Partial<Record<SignatureSocial,string>>;gif:string;replay:number;lang:"pl"|"en"}){
  const valid=SIGNATURE_SOCIALS.flatMap(item=>{const href=signatureSafeLink(socials[item.id]||"");return href?[{item,href}]:[];});
  const en=lang==="en";
@@ -37,7 +41,7 @@ function GeometryCardPreview({fields,socials,gif,replay,lang}:{fields:SignatureF
   <div className="flex items-stretch">
    <div className="z-10 flex w-[13%] min-w-10 shrink-0 flex-col items-center gap-2 border-r border-[#e3e0e6] bg-[#faf9fb] p-2 sm:w-14">
     <span className="mb-1 flex h-7 w-7 items-center justify-center rounded-md border border-[#ddd9e1] bg-white text-base font-bold" style={{color:fields.accent}}>{(fields.company||fields.name||"B").slice(0,1).toUpperCase()}</span>
-    {valid.slice(0,6).map(({item,href},i)=><a key={item.id} href={href} title={item.name} target="_blank" rel="noopener noreferrer" className="signature-motion-item flex min-h-6 min-w-7 items-center justify-center rounded-md border border-[#e2e0e4] bg-white px-1 text-[10px] font-bold text-[#24222a] hover:bg-[#ebe9ee]" style={{animation:"sigAppear .45s ease "+(0.55+i*0.12)+"s both"}}>{item.short}</a>)}
+    {valid.slice(0,6).map(({item,href},i)=><a key={item.id} href={href} title={item.name} target="_blank" rel="noopener noreferrer" className="signature-motion-item flex min-h-8 min-w-8 items-center justify-center rounded-md border border-[#e2e0e4] bg-white p-1 hover:bg-[#ebe9ee]" style={{animation:"sigAppear .45s ease "+(0.55+i*0.12)+"s both"}}><BrandGlyph id={item.id}/></a>)}
    </div>
    <div className="min-w-0 flex-1 bg-[#fbfafc]">
     {gif?<img key={replay} src={gif} alt={en?"Animated geometric email signature":"Animowana stopka geometryczna"} width={520} height={208} className="block h-auto w-full"/>:
@@ -69,7 +73,7 @@ function GeometryCardPreview({fields,socials,gif,replay,lang}:{fields:SignatureF
    {fields.email&&<a href={"mailto:"+fields.email} className="underline underline-offset-2">{fields.email}</a>}
    {fields.phone&&<a href={"tel:"+fields.phone.replace(/[^\d+]/g,"")} className="underline underline-offset-2">{fields.phone}</a>}
    {signatureSafeLink(fields.website)&&<a href={signatureSafeLink(fields.website)} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">{fields.website}</a>}
-   {valid.slice(6).map(({item,href})=><a key={item.id} href={href} target="_blank" rel="noopener noreferrer" className="rounded bg-[#efedf0] px-2 py-1 font-semibold">{item.short}</a>)}
+   {valid.slice(6).map(({item,href})=><a key={item.id} href={href} target="_blank" rel="noopener noreferrer" className="flex h-8 w-8 items-center justify-center rounded-md border border-[#ddd] bg-white p-1"><BrandGlyph id={item.id}/></a>)}
   </div>}
  </div>;
 }
@@ -249,7 +253,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
      <div className="mt-4 grid gap-3 sm:grid-cols-2">{SIGNATURE_SOCIALS.map(item=><div key={item.id} className="rounded-xl border border-white/15 bg-black/20 p-3">
       <label className="flex cursor-pointer items-center gap-2 text-sm text-white/85">
        <input type="checkbox" checked={Boolean(enabled[item.id])} onChange={event=>{setEnabled(prev=>({...prev,[item.id]:event.target.checked}));setNotice("");}} className="h-4 w-4 accent-white"/>
-       <span className="flex h-7 min-w-7 items-center justify-center rounded-md bg-white/10 px-1 text-[11px] font-bold">{item.short}</span>{item.name}
+       <span className="flex h-8 min-w-8 items-center justify-center rounded-md border border-white/20 bg-white p-1"><BrandGlyph id={item.id}/></span>{item.name}
       </label>
       {enabled[item.id]&&<><input type="url" inputMode="url" aria-label={item.name+" URL"} className={inputStyle} placeholder="https://" value={fields.socials?.[item.id]||""} onChange={event=>socialChange(item.id,event.target.value)}/>
        {fields.socials?.[item.id]&&!signatureSafeLink(fields.socials[item.id]||"")&&<p className="mt-2 text-xs text-rose-300">{en?"Enter a public HTTPS URL":"Podaj poprawny link HTTPS"}</p>}</>}
@@ -293,7 +297,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
      {mode==="static"?<div className="w-max min-w-0 max-w-full" aria-label={en?"Static signature preview":"Podgląd zwykłej stopki"} dangerouslySetInnerHTML={{__html:previewHtml}}/>:
       premium?<GeometryCardPreview fields={fields} socials={socialValues} gif={gifPreview} replay={replay} lang={lang}/>:
       gifPreview?<div className="min-w-[260px] max-w-[520px]"><img key={replay} src={gifPreview} alt={en?"Animated signature preview":"Podgląd animowanej stopki"} width={520} height={178} className="h-auto w-full"/>
-       <div className="mt-3 flex flex-wrap gap-2">{SIGNATURE_SOCIALS.filter(x=>socialValues[x.id]&&signatureSafeLink(socialValues[x.id]||"")).map(x=><a key={x.id} href={signatureSafeLink(socialValues[x.id]||"")} target="_blank" rel="noopener noreferrer" className="rounded border border-[#ddd] bg-[#f1f1f1] px-2 py-1 text-xs font-bold text-[#252525]">{x.short}</a>)}</div>
+       <div className="mt-3 flex flex-wrap gap-2">{SIGNATURE_SOCIALS.filter(x=>socialValues[x.id]&&signatureSafeLink(socialValues[x.id]||"")).map(x=><a key={x.id} href={signatureSafeLink(socialValues[x.id]||"")} target="_blank" rel="noopener noreferrer" className="flex h-9 w-9 items-center justify-center rounded-md border border-[#ddd] bg-white p-1"><BrandGlyph id={x.id}/></a>)}</div>
       </div>:
       <div key={replay} className="relative h-[188px] min-w-[300px] max-w-[520px] overflow-hidden rounded-lg border border-[#e5e5e5] bg-[#fafafa] p-5 font-sans">
        <div className="signature-motion-item absolute bottom-4 left-4 top-4 w-[3px] rounded-full" style={{background:fields.accent,animation:"sigAppear .5s ease .1s both"}}/>
@@ -304,7 +308,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
         <p className="mt-2 truncate text-xs text-[#777]">{fields.email||fields.website}</p>
        </div>
        <div className="signature-motion-item absolute right-4 top-6 h-28 w-20 overflow-hidden rounded-xl bg-[#e8e8e8]" style={{animation:"sigAppear .9s ease .85s both"}}>{fields.photo?<img src={fields.photo} alt="" className="h-full w-full object-cover"/>:<div className="flex h-full items-center justify-center text-3xl text-[#aaa]">◉</div>}</div>
-       <div className="signature-motion-item absolute bottom-3 left-8 flex gap-2" style={{animation:"sigAppear .8s ease 1.2s both"}}>{SIGNATURE_SOCIALS.filter(x=>enabled[x.id]&&signatureSafeLink(fields.socials?.[x.id]||"")).slice(0,6).map(x=><span key={x.id} className="rounded border border-[#ddd] bg-[#eee] px-2 py-1 text-[10px] font-bold text-[#333]">{x.short}</span>)}</div>
+       <div className="signature-motion-item absolute bottom-3 left-8 flex gap-2" style={{animation:"sigAppear .8s ease 1.2s both"}}>{SIGNATURE_SOCIALS.filter(x=>enabled[x.id]&&signatureSafeLink(fields.socials?.[x.id]||"")).slice(0,6).map(x=><span key={x.id} className="flex h-8 w-8 items-center justify-center rounded-md border border-[#ddd] bg-white p-1"><BrandGlyph id={x.id}/></span>)}</div>
       </div>}
     </div>
     <div className="mt-4 grid gap-2 sm:grid-cols-2">
@@ -315,6 +319,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
     {notice&&<p role="status" className="mt-3 flex items-start gap-2 text-xs leading-6 text-white/75"><Check size={15} className="mt-1 shrink-0"/>{notice}</p>}
     <div className="mt-5 border-t border-white/10 pt-4">
      <p className="text-xs leading-6 text-white/55">{en?"Linked social buttons remain real HTML links. Some mail apps only display the first GIF frame or block images. The generated GIF starts with a complete fallback frame.":"Ikony social media pozostają prawdziwymi linkami HTML. Niektóre programy wyświetlają tylko pierwszą klatkę GIF lub blokują obrazy. Pierwsza klatka zawiera pełną stopkę."}</p>
+     <p className="mt-3 text-[11px] text-white/40">{en?"Social platform icons:":"Ikony platform:"} <a href="https://fontawesome.com/license/free" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">Font Awesome Free, CC BY 4.0</a>. {en?"Booking calendar icon: Lucide.":"Ikona kalendarza: Lucide."}</p>
      <button type="button" onClick={()=>setShowCode(v=>!v)} aria-expanded={showCode} className="mt-4 text-xs text-white/75 underline underline-offset-4">{showCode?(en?"Hide HTML":"Ukryj HTML"):(en?"Show HTML":"Pokaż HTML")}</button>
      {showCode&&<div className="mt-3 space-y-2"><textarea readOnly rows={6} className={inputStyle+" resize-y font-mono text-xs"} value={html} aria-label={en?"Signature HTML code":"Kod HTML stopki"}/><button type="button" className="text-xs underline" onClick={async()=>{try{await navigator.clipboard.writeText(html);setNotice(en?"HTML copied.":"HTML skopiowany.");}catch{setNotice(en?"Select and copy the code.":"Zaznacz i skopiuj kod.");}}}>{en?"Copy HTML code":"Kopiuj HTML"}</button></div>}
     </div>
