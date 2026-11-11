@@ -9,7 +9,9 @@ export const ARCADE_GAMES = [
  {id:"mines",pl:"Saper",en:"Minesweeper",plDesc:"Odkryj pola, omijaj miny.",enDesc:"Reveal cells without hitting a mine."},
  {id:"math",pl:"Szybka matematyka",en:"Quick math",plDesc:"10 pytań na szybkość i celność.",enDesc:"Ten quick arithmetic questions."},
  {id:"guess",pl:"Zgadnij liczbę",en:"Guess the number",plDesc:"Odgadnij liczbę od 1 do 100.",enDesc:"Find a secret number from 1 to 100."},
- {id:"target",pl:"Łap cel",en:"Target rush",plDesc:"Trafiaj pojawiające się cele przez 20 sekund.",enDesc:"Hit as many targets as you can in 20 seconds."}
+ {id:"target",pl:"Łap cel",en:"Target rush",plDesc:"Trafiaj pojawiające się cele przez 20 sekund.",enDesc:"Hit as many targets as you can in 20 seconds."},
+ {id:"maze",pl:"Pożeracz labiryntu",en:"Maze Chomp",plDesc:"Gra w stylu Pac-Mana z duchami i kropkami.",enDesc:"An original Pac-Man-style maze game."},
+ {id:"fps",pl:"Retro FPS",en:"Retro FPS",plDesc:"Lekka strzelanka 3D w stylu Dooma, także na telefon.",enDesc:"A lightweight Doom-style 3D shooter for touch screens."}
 ] as const;
 export type ArcadeId = typeof ARCADE_GAMES[number]["id"];
 export const newSecret = () => 1 + Math.floor(Math.random() * 100);
