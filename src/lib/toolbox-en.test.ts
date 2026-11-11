@@ -4,8 +4,8 @@ import { englishToolboxItems,englishToolForSlug,englishToolPath,localizedToolPat
 import { buildPortfolioOpenRouterPrompt,isPortfolioTopic } from "./portfolio-openrouter";
 import { standaloneWebsiteCheckerSlugs,visibleToolboxItems,visibleEnglishToolboxItems,catalogToolboxCount,isShownInToolboxCatalog } from "./toolbox-visibility";
 describe("bilingual toolbox SEO and assistant integration",()=>{
- it("provides one distinct English page for each of the 46 tools",()=>{
-  expect(englishToolboxItems).toHaveLength(46);
+ it("provides one distinct English page for each of the 47 tools",()=>{
+  expect(englishToolboxItems).toHaveLength(47);
   expect(new Set(englishToolboxItems.map(t=>t.englishSlug)).size).toBe(46);
   expect(new Set(englishToolboxItems.map(t=>t.slug)).size).toBe(46);
   for(const t of englishToolboxItems){
@@ -19,8 +19,8 @@ describe("bilingual toolbox SEO and assistant integration",()=>{
    expect(localizedToolPath(t.slug,"pl")).toBe("/narzedzia/"+t.slug);
   }
  });
- it("preserves the original 45 Polish URLs",()=>{
-  expect(toolboxItems).toHaveLength(46);
+ it("preserves the existing Polish URLs",()=>{
+  expect(toolboxItems).toHaveLength(47);
   expect(localizedToolboxPath("pl")).toBe("/narzedzia");
   expect(localizedToolboxPath("en")).toBe("/en/tools");
   expect(englishToolPath("audyt-strony")).toBe("/en/tools/free-website-audit");
@@ -28,8 +28,8 @@ describe("bilingual toolbox SEO and assistant integration",()=>{
   expect(englishToolPath("kalkulator-roas")).toBe("/en/tools/roas-calculator");
   expect(englishToolPath("kalkulator-vat")).toBe("/en/tools/vat-calculator");
  });
- it("has translations for all five tool categories",()=>{
-  expect(Object.values(englishToolboxCategories)).toHaveLength(5);
+ it("has translations for all six tool categories",()=>{
+  expect(Object.values(englishToolboxCategories)).toHaveLength(6);
   expect(englishToolboxItems.every(t=>Object.values(englishToolboxCategories).includes(t.category))).toBe(true);
  });
  it("instructs the assistant to recommend existing tools without inventing results",()=>{
@@ -47,9 +47,9 @@ describe("bilingual toolbox SEO and assistant integration",()=>{
 describe("focused public toolbox",()=>{
  it("keeps the 12 overlapping checkers out of both catalogs",()=>{
   expect(standaloneWebsiteCheckerSlugs).toHaveLength(12);
-  expect(catalogToolboxCount).toBe(34);
-  expect(visibleToolboxItems).toHaveLength(33);
-  expect(visibleEnglishToolboxItems).toHaveLength(33);
+  expect(catalogToolboxCount).toBe(35);
+  expect(visibleToolboxItems).toHaveLength(34);
+  expect(visibleEnglishToolboxItems).toHaveLength(34);
   expect(visibleToolboxItems.some(x=>x.slug==="audyt-strony")).toBe(false);
   expect(visibleEnglishToolboxItems.some(x=>x.slug==="audyt-strony")).toBe(false);
   for(const slug of standaloneWebsiteCheckerSlugs){
