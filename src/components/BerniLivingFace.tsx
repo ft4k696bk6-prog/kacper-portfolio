@@ -196,7 +196,7 @@ export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0}:Control
     ctx!.rotate(anim.rotate);
     ctx!.scale(anim.scaleX,anim.scaleY);
     ctx!.globalAlpha=anim.opacity;
-    if("filter" in ctx)ctx!.filter="blur("+Math.min(4,anim.blur*dimension/320).toFixed(1)+"px)";
+    if("filter" in ctx!)ctx!.filter="blur("+Math.min(4,anim.blur*dimension/320).toFixed(1)+"px)";
    }
    ctx!.drawImage(working,-dimension/2,-dimension/2,dimension,dimension);
    ctx!.restore();
