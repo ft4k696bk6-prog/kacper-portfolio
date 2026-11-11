@@ -103,3 +103,123 @@
 @keyframes grabbedTail { from { transform: rotate(-18deg); } to { transform: rotate(6deg); } }
 @keyframes grabbedBody { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
 @keyframes grabSpark { from { opacity: .3; } to { opacity: 1; } }
+
+/* Premium Berni v2: movement follows the mass of the metal shell, rather
+   than shaking every part on the same cycle. No external animation assets. */
+.stage {
+  filter: drop-shadow(0 4px 5px rgba(0,0,0,.28));
+}
+.robot {
+  overflow: visible;
+  animation: premiumReveal 620ms cubic-bezier(.16,1,.3,1) both;
+}
+.stage[data-compact="true"] .robot { animation-duration: 240ms; }
+.feet { transform-origin: 81px 142px; }
+.arms { transform-origin: 81px 114px; }
+.armLeft, .armRight {
+  transform-box: view-box;
+  transform-origin: 50px 112px;
+  transition: transform 260ms cubic-bezier(.22,1,.36,1);
+}
+.armRight { transform-origin: 111px 112px; }
+.earLeft {
+  transform-box: view-box;
+  transform-origin: 40px 67px;
+  animation: earBerniLeft 5.2s cubic-bezier(.45,.05,.55,.95) infinite;
+}
+.earRight {
+  transform-box: view-box;
+  transform-origin: 123px 67px;
+  animation: earBerniRight 4.9s cubic-bezier(.45,.05,.55,.95) -1.4s infinite;
+}
+.head {
+  transform-origin: 81px 109px;
+  animation: premiumHeadIdle 4.6s cubic-bezier(.45,.05,.55,.95) infinite;
+}
+.body { transform-origin: 82px 125px; animation: premiumBreathe 3.5s ease-in-out infinite; }
+.tail { transform-origin: 119px 116px; animation: premiumTail 3.1s ease-in-out infinite; }
+.shadow { transform-origin: 81px 148px; animation: premiumShadow 3.5s ease-in-out infinite; }
+.eyeLights { transform-box: fill-box; transform-origin: center; animation: premiumBlink 5.6s linear infinite; }
+.eyes { transition: transform 180ms cubic-bezier(.22,1,.36,1); }
+.coreLight { animation: coreBreathe 3.2s ease-in-out infinite; transform-origin: 81px 124px; }
+.stage[data-mood="curious"] .head {
+  animation: premiumCurious 1.85s cubic-bezier(.45,.05,.55,.95) infinite;
+}
+.stage[data-mood="curious"] .earLeft { animation-duration: 1.8s; }
+.stage[data-mood="curious"] .earRight { animation-duration: 2.05s; }
+.stage[data-mood="happy"] .armRight, .stage[data-mood="excited"] .armRight {
+  animation: friendlyWave .65s ease-in-out 2;
+}
+.stage[data-mood="happy"] .tail, .stage[data-mood="excited"] .tail {
+  animation: happyTail .56s ease-in-out infinite;
+}
+.stage[data-mood="excited"] .body {
+  animation: premiumJoy .65s cubic-bezier(.26,.72,.27,1.22) infinite;
+}
+.stage[data-mood="sleeping"] .head {
+  animation: premiumSleep 5.1s ease-in-out infinite;
+}
+.stage[data-mood="sleeping"] .body { animation-duration: 5.1s; }
+.stage[data-mood="thinking"] .head, .stage[data-mood="working"] .head {
+  animation: premiumThink 2.5s ease-in-out infinite;
+}
+.stage[data-mood="typing"] .head { animation: typingFocus 1.15s ease-in-out infinite; }
+.stage[data-mood="typing"] .eyes { transform: translate(0,6px); }
+.stage[data-mood="surprised"] .head { animation: premiumSurprise .66s cubic-bezier(.22,1,.36,1) both; }
+.stage[data-mood="worried"] .head { animation: premiumWorried 2.6s ease-in-out infinite; }
+.stage[data-mood="grabbed"] .robot { animation: premiumPickedUp .58s ease-in-out infinite alternate; }
+.stage[data-mood="grabbed"] .head { animation: premiumGrabHead .55s ease-in-out infinite alternate; }
+.stage[data-mood="grabbed"] .ears { animation: premiumGrabEars .62s ease-in-out infinite alternate; }
+.stage[data-mood="grabbed"] .tail { animation: premiumGrabTail .6s ease-in-out infinite alternate; }
+.stage[data-mood="grabbed"] .body { animation: premiumGrabBody .74s ease-in-out infinite alternate; }
+.stage[data-mood="grabbed"] .feet { animation: premiumDangle .55s ease-in-out infinite alternate; }
+.stage[data-thermal="cold"] .body, .stage[data-thermal="cold"] .head {
+  animation: premiumShiver .28s ease-in-out infinite alternate;
+}
+.stage[data-thermal="hot"] .head { animation: premiumHot 2s ease-in-out infinite; }
+.stage[data-mood="sleeping"] .head { animation: premiumSleep 5.1s ease-in-out infinite; }
+.stage[data-mood="grabbed"] .keyboardRig { opacity: 0; }
+@keyframes premiumReveal {
+  from { transform: translateY(13px) scale(.88); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes premiumHeadIdle {
+  0%,100% { transform: rotate(-1.5deg) translateY(0); }
+  29% { transform: rotate(2.4deg) translateY(-1.5px); }
+  61% { transform: rotate(-1deg) translateY(.4px); }
+  82% { transform: rotate(1deg) translateY(-1.1px); }
+}
+@keyframes premiumBreathe { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.018) translateY(-.45px); } }
+@keyframes premiumTail { 0%,100% { transform: rotate(-6deg); } 35% { transform: rotate(8deg); } 70% { transform: rotate(-2deg); } }
+@keyframes premiumShadow { 0%,100% { transform: scaleX(.94); opacity:.16; } 50% { transform: scaleX(1); opacity:.09; } }
+@keyframes premiumBlink {
+  0%,16%,17.5%,50%,51%,79%,80%,100% { transform: scaleY(1); }
+  16.7%,50.5%,79.4% { transform: scaleY(.08); }
+}
+@keyframes coreBreathe { 0%,100% { opacity:.6; } 50% { opacity:1; } }
+@keyframes earBerniLeft { 0%,70%,100% { transform: rotate(0); } 77% { transform: rotate(-8deg); } 86% { transform: rotate(4deg); } }
+@keyframes earBerniRight { 0%,61%,100% { transform: rotate(0); } 68% { transform: rotate(7deg); } 77% { transform: rotate(-3deg); } }
+@keyframes premiumCurious { 0%,100% { transform: rotate(-5deg) translateY(-1px); } 50% { transform: rotate(7deg) translateY(-2px); } }
+@keyframes friendlyWave { 0%,100% { transform: rotate(0); } 40%,70% { transform: rotate(-30deg); } }
+@keyframes happyTail { from { transform: rotate(-15deg); } to { transform: rotate(20deg); } }
+@keyframes premiumJoy { 0%,100% { transform: translateY(0); } 45% { transform: translateY(-3px); } }
+@keyframes premiumSleep { 0%,100% { transform: rotate(3deg) translateY(2px); } 50% { transform: rotate(5deg) translateY(4px); } }
+@keyframes premiumThink { 0%,100% { transform: rotate(-1deg); } 50% { transform: rotate(4deg) translateY(-2px); } }
+@keyframes premiumSurprise { 0% { transform: translateY(4px) scale(.96); } 55% { transform: translateY(-6px) scale(1.025); } 100% { transform:none; } }
+@keyframes premiumWorried { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(4deg) translateY(1px); } }
+@keyframes premiumPickedUp { from { transform: translateY(-3px) rotate(-2deg); } to { transform: translateY(-7px) rotate(3deg); } }
+@keyframes premiumGrabHead { from { transform: rotate(-6deg); } to { transform: rotate(6deg); } }
+@keyframes premiumGrabEars { from { transform: rotate(-3deg); } to { transform: rotate(5deg); } }
+@keyframes premiumGrabTail { from { transform: rotate(-16deg); } to { transform: rotate(12deg); } }
+@keyframes premiumGrabBody { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+@keyframes premiumDangle { from { transform: rotate(-3deg) translateY(1px); } to { transform: rotate(3deg) translateY(4px); } }
+@keyframes premiumShiver { from { transform: translateX(-.85px); } to { transform: translateX(.85px); } }
+@keyframes premiumHot { 0%,100% { transform: translateY(0); } 50% { transform: translateY(2px); } }
+@media (prefers-reduced-motion: reduce) {
+  .stage, .stage *, .stage *::before, .stage *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.mouth { opacity: .96; transition: opacity 180ms ease-in-out; }

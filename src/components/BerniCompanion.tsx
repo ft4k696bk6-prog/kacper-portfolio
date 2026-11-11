@@ -63,7 +63,7 @@ export function BerniCompanion({
       return () => window.clearTimeout(clear);
     }
     const start = window.setTimeout(() => setReaction(detectBerniReaction(lastReply)), 0);
-    const end = window.setTimeout(() => setReaction(null), 6200);
+    const end = window.setTimeout(() => setReaction(null), 4800);
     return () => { window.clearTimeout(start); window.clearTimeout(end); };
   }, [lastReply]);
 
@@ -73,7 +73,7 @@ export function BerniCompanion({
       const eventMood = detectBerniReaction(nudgeText);
       setReaction(eventMood === "idle" ? "curious" : eventMood);
     }, 0);
-    const end = window.setTimeout(() => setReaction(null), 12500);
+    const end = window.setTimeout(() => setReaction(null), 5200);
     return () => { window.clearTimeout(start); window.clearTimeout(end); };
   }, [nudgeText]);
 
@@ -98,7 +98,7 @@ export function BerniCompanion({
         setIdleGesture(null);
         setGestureCycle(current => current + 1);
       }, 1350 + Math.floor(Math.random() * 850));
-    }, 3300 + Math.floor(Math.random() * 3600));
+    }, 2900 + Math.floor(Math.random() * 3200));
     return () => {
       window.clearTimeout(startTimer);
       if (resetTimer !== undefined) window.clearTimeout(resetTimer);
