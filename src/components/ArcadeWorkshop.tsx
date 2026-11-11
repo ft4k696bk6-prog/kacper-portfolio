@@ -1,6 +1,6 @@
 "use client";
 import {useCallback,useEffect,useMemo,useRef,useState} from "react";
-import {ArrowDown,ArrowLeft,ArrowRight,ArrowUp,Flag,Gamepad2,Pause,Play,RefreshCcw,Trophy} from "lucide-react";
+import {ArrowDown,ArrowLeft,ArrowRight,ArrowUp,Flag,Pause,Play,RefreshCcw,Trophy} from "lucide-react";
 import {addTile,makeMines,move2048,revealMines,stepSnake,wordHints} from "@/lib/arcade-engine";
 import type {MineCell,Slide,SnakePoint} from "@/lib/arcade-engine";
 import {KeyboardGalaxy} from "./KeyboardGalaxy";
