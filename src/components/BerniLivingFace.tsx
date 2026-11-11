@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { type BerniLivingMood } from "@/lib/berni-face-state";
-import { berniTransitionFrame, chooseBerniTransition, emptyTransitionMemory, type TransitionChoice } from "@/lib/berni-transition";
+import { berniTransitionFrame, chooseBerniTransition, emptyTransitionMemory, type BerniTransitionName, type TransitionChoice } from "@/lib/berni-transition";
 export type { BerniLivingMood } from "@/lib/berni-face-state";
 
 const ROOT="/images/berni/poses/";
@@ -19,10 +19,10 @@ function getPortrait(src:string):Promise<HTMLImageElement>{
 function bounded(n:number,a=-1,b=1){return Math.max(a,Math.min(b,n));}
 
 type InternalTransition={from:BerniLivingMood;to:BerniLivingMood;choice:TransitionChoice;start:number};
-type Controller={mood:BerniLivingMood;blinkToken:number;reactionToken:number};
-export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0}:Controller & {size:number}){
+type Controller={mood:BerniLivingMood;blinkToken:number;reactionToken:number;transitionToken:number;transitionPreset:BerniTransitionName|null};
+export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0,transitionToken=0,transitionPreset=null}:Partial<Controller> & {mood:BerniLivingMood;size:number}){
  const ref=useRef<HTMLCanvasElement>(null);
- const input=useRef<Controller>({mood,blinkToken,reactionToken});
+ const input=useRef<Controller>({mood,blinkToken,reactionToken,transitionToken,transitionPreset});
  const [ready,setReady]=useState(false);
 
  useEffect(()=>{
@@ -30,12 +30,14 @@ export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0}:Control
   const hasChange=mood!==previous.mood;
   const forceBlink=blinkToken!==previous.blinkToken && blinkToken>0;
   const replay=reactionToken!==previous.reactionToken;
-  input.current={mood,blinkToken,reactionToken};
+  const forceTransition=transitionToken!==previous.transitionToken;
+  input.current={mood,blinkToken,reactionToken,transitionToken,transitionPreset};
   const node=ref.current;
   if(hasChange)node?.dispatchEvent(new Event("berni-state-change"));
   if(forceBlink)node?.dispatchEvent(new Event("berni-blink-now"));
   if(replay)node?.dispatchEvent(new Event("berni-reaction-replay"));
- },[mood,blinkToken,reactionToken]);
+  if(forceTransition)node?.dispatchEvent(new Event("berni-force-transition"));
+ },[mood,blinkToken,reactionToken,transitionToken,transitionPreset]);
 
  useEffect(()=>{
   const canvas=ref.current,ctx=canvas?.getContext("2d",{alpha:true});
@@ -73,6 +75,18 @@ export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0}:Control
    showing=previous;
    effect=selected?{from:previous,to:next,choice:selected,start:now}:null;
    if(!selected)showing=next;
+  }
+  function onForcedTransition(){
+   const next=input.current.mood,chosen=input.current.transitionPreset;
+   if(!chosen)return;
+   if(!portraits.has(next)){
+     void requestPose(next).then(()=>{if(active)onForcedTransition();}).catch(()=>{});
+     return;
+   }
+   const now=performance.now();
+   const previous=effect?(now-effect.start>effect.choice.duration/2?effect.to:effect.from):showing;
+   showing=previous;
+   effect={from:previous,to:next,choice:{name:chosen,duration:720,strength:"large"},start:now};
   }
   function onBlink(){lastBlink=performance.now();nextBlink=lastBlink+4300+Math.random()*3200;}
   function onReplay(){replayAt=performance.now();}
@@ -226,6 +240,7 @@ export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0}:Control
   canvas.addEventListener("berni-state-change",onChange);
   canvas.addEventListener("berni-blink-now",onBlink);
   canvas.addEventListener("berni-reaction-replay",onReplay);
+  canvas.addEventListener("berni-force-transition",onForcedTransition);
   window.addEventListener("pointermove",onPointerMove,{passive:true});
   window.addEventListener("pointerdown",onPointerDown,{passive:true});
   document.addEventListener("visibilitychange",changedVisibility);
@@ -253,6 +268,7 @@ export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0}:Control
    canvas.removeEventListener("berni-state-change",onChange);
    canvas.removeEventListener("berni-blink-now",onBlink);
    canvas.removeEventListener("berni-reaction-replay",onReplay);
+   canvas.removeEventListener("berni-force-transition",onForcedTransition);
    window.removeEventListener("pointermove",onPointerMove);
    window.removeEventListener("pointerdown",onPointerDown);
    document.removeEventListener("visibilitychange",changedVisibility);
