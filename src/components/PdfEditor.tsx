@@ -109,6 +109,7 @@ export function PdfEditor({ lang = "pl" }: { lang?: "pl" | "en" }) {
   const fileInput = useRef<HTMLInputElement>(null);
   const drag = useRef<{ id: string; startX: number; startY: number; x: number; y: number } | null>(null);
   const drawing = useRef(false);
+  const draggingPage = useRef<string | null>(null);
   const history = useRef<Snapshot[]>([]);
   const future = useRef<Snapshot[]>([]);
   const pagesRef = useRef(pages);
@@ -286,6 +287,16 @@ export function PdfEditor({ lang = "pl" }: { lang?: "pl" | "en" }) {
     saveHistory();
     setPages(prev => { const next = [...prev]; const tmp = next[activeIndex]; next[activeIndex] = next[activeIndex + shift]; next[activeIndex + shift] = tmp; return next; });
   };
+  const dropPage = (targetId: string) => {
+    const draggedId = draggingPage.current;
+    draggingPage.current = null;
+    if (!draggedId || draggedId === targetId) return;
+    const from = pages.findIndex(p => p.id === draggedId);
+    const to = pages.findIndex(p => p.id === targetId);
+    if (from < 0 || to < 0) return;
+    saveHistory();
+    setPages(prev => { const next = [...prev]; const [moved] = next.splice(from, 1); next.splice(to, 0, moved); return next; });
+  };
   const duplicatePage = () => {
     if (!activePage) return;
     saveHistory();
@@ -311,7 +322,7 @@ export function PdfEditor({ lang = "pl" }: { lang?: "pl" | "en" }) {
   const rotatePage = () => {
     if (!activePage) return;
     saveHistory(); setPages(prev => prev.map(pg => pg.id === activeId ? { ...pg, rotation: (pg.rotation + 90) % 360 } : pg));
-    setNotice(t("Obrót strony będzie widoczny w pobranym pliku.", "Page rotation is applied in the downloaded file."));
+    setNotice(t("Strona została obrócona. Eksport zachowa aktualny obrót.", "Page rotated. Export will preserve this orientation."));
   };
 
   const insertImage = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -351,8 +362,11 @@ export function PdfEditor({ lang = "pl" }: { lang?: "pl" | "en" }) {
     const el = elementsRef.current.find(x => x.id === d.id);
     if (!el) return;
     const dx = (event.clientX - d.startX) / zoom, dy = (event.clientY - d.startY) / zoom;
-    const x = clamp(d.x + dx, 0, activePage.width - el.w);
-    const y = clamp(d.y + dy, 0, activePage.height - el.h);
+    const radians = activePage.rotation * Math.PI / 180;
+    const localDx = Math.cos(radians) * dx + Math.sin(radians) * dy;
+    const localDy = -Math.sin(radians) * dx + Math.cos(radians) * dy;
+    const x = clamp(d.x + localDx, 0, activePage.width - el.w);
+    const y = clamp(d.y + localDy, 0, activePage.height - el.h);
     setElements(prev => prev.map(item => item.id === d.id ? { ...item, x, y } : item));
   };
 
@@ -440,7 +454,7 @@ export function PdfEditor({ lang = "pl" }: { lang?: "pl" | "en" }) {
         <aside className="min-w-0 rounded-xl border border-white/10 bg-[#151515] p-3">
           <div className="flex items-center justify-between gap-2"><h3 className="text-sm font-semibold">{t("Strony", "Pages")} ({pages.length})</h3><button type="button" onClick={addPage} title={t("Dodaj pustą stronę", "Add blank page")} className={action}><FilePlus2 size={15}/></button></div>
           <div className="mt-3 flex gap-2 overflow-x-auto pb-2 xl:max-h-[625px] xl:flex-col xl:overflow-y-auto">
-            {pages.map((p, i) => <button type="button" key={p.id} onClick={() => { setActiveId(p.id); setSelectedId(""); }} className={"flex min-w-[95px] shrink-0 flex-col items-center rounded-xl border p-2 transition xl:w-full " + (p.id === activeId ? "border-white/65 bg-white/10" : "border-white/10 hover:border-white/35")}>
+            {pages.map((p, i) => <button type="button" key={p.id} draggable onDragStart={() => { draggingPage.current = p.id; }} onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); dropPage(p.id); }} onDragEnd={() => { draggingPage.current = null; }} onClick={() => { setActiveId(p.id); setSelectedId(""); }} className={"flex min-w-[95px] shrink-0 flex-col items-center rounded-xl border p-2 transition xl:w-full " + (p.id === activeId ? "border-white/65 bg-white/10" : "border-white/10 hover:border-white/35")}>
               <div className="flex h-[110px] w-[80px] items-center justify-center overflow-hidden rounded-md bg-white text-zinc-600">
                 {p.source !== null && thumbnailUrls[p.source] ? <img src={thumbnailUrls[p.source]} alt="" className="max-h-full max-w-full object-contain"/> : <span className="text-xs">{p.source === null ? "A4" : "PDF"}</span>}
               </div>
@@ -469,7 +483,8 @@ export function PdfEditor({ lang = "pl" }: { lang?: "pl" | "en" }) {
             </div>
           </div>
           <div className="max-h-[780px] min-h-[430px] overflow-auto p-4 sm:p-6">
-            <div className="relative mx-auto bg-white shadow-2xl" style={{ width: activePage.width * zoom, height: activePage.height * zoom }} onClick={() => setSelectedId("")}>
+            <div className="relative mx-auto" style={{ width: (activePage.rotation % 180 ? activePage.height : activePage.width) * zoom, height: (activePage.rotation % 180 ? activePage.width : activePage.height) * zoom }}>
+            <div className="absolute left-1/2 top-1/2 bg-white shadow-2xl" style={{ width: activePage.width * zoom, height: activePage.height * zoom, transform: "translate(-50%, -50%) rotate(" + activePage.rotation + "deg)" }} onClick={() => setSelectedId("")}>
               <canvas ref={canvasRef} className="block"/>
               {pickText && textSpots.map((spot, i) => <button key={i} type="button" aria-label={t("Zastąp tekst: ", "Replace text: ") + spot.text} title={spot.text} onClick={e => { e.stopPropagation(); addReplacement(spot); }}
                 className="absolute z-10 cursor-text rounded-sm bg-amber-400/15 outline outline-1 outline-amber-400/35 hover:bg-amber-400/35" style={{ left: spot.x * zoom, top: spot.y * zoom, width: spot.w * zoom, height: spot.h * zoom }}/>)}
@@ -482,6 +497,7 @@ export function PdfEditor({ lang = "pl" }: { lang?: "pl" | "en" }) {
                 : el.kind === "image" && el.image ? <img src={el.image} alt={t("Dodany obraz", "Inserted image")} className="h-full w-full object-fill" draggable={false}/>
                 : <div className="h-full w-full" style={{ backgroundColor: el.fill }}/>}
               </div>)}
+            </div>
             </div>
           </div>
         </div>
