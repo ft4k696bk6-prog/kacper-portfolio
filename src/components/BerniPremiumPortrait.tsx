@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { BerniLivingFace, type BerniLivingMood } from "./BerniLivingFace";
+import type { BerniTransitionName } from "@/lib/berni-transition";
 import styles from "./BerniPremiumPortrait.module.css";
 
 export type BerniPortraitMood = BerniLivingMood;
@@ -18,6 +19,8 @@ export function BerniPremiumPortrait({
   priority = false,
   blinkToken = 0,
   reactionToken = 0,
+  transitionToken = 0,
+  transitionPreset = null,
 }: {
   mood?: BerniPortraitMood;
   size?: number;
@@ -25,6 +28,8 @@ export function BerniPremiumPortrait({
   priority?: boolean;
   blinkToken?: number;
   reactionToken?: number;
+  transitionToken?: number;
+  transitionPreset?: BerniTransitionName | null;
 }) {
   const [hovered, setHovered] = useState(false);
   const actualMood = mood === "idle" && hovered ? "curious" : mood;
@@ -46,7 +51,8 @@ export function BerniPremiumPortrait({
           priority={priority} quality={90} sizes={imgSizes}
           draggable={false} className={styles.art} aria-hidden="true" />
 
-        <BerniLivingFace mood={actualMood} size={size} blinkToken={blinkToken} reactionToken={reactionToken} />
+        <BerniLivingFace mood={actualMood} size={size} blinkToken={blinkToken} reactionToken={reactionToken}
+          transitionToken={transitionToken} transitionPreset={transitionPreset} />
       </span>
     </span>
   );
