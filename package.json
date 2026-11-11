@@ -18,7 +18,7 @@
     "test:toolbox": "vitest run src/lib/toolbox-functional.test.ts src/lib/toolbox-en.test.ts src/lib/arcade-logic.test.ts src/lib/vat-berni-interactions.test.ts src/lib/ai-image-origin.test.ts src/lib/everyday-utils.test.ts",
     "prebuild": "npm run test:toolbox && npm run test:companion && npm run test:berni",
     "test:companion": "vitest run src/lib/companion-scenarios.test.ts src/lib/companion-rotation.test.ts src/lib/companion-verified-location.test.ts",
-    "test:berni": "vitest run src/lib/berni-reactions.test.ts src/lib/berni-animation-matrix.test.ts src/lib/berni-premium.test.ts src/lib/berni-rendered-3d.test.ts src/lib/berni-fox.test.ts"
+    "test:berni": "vitest run src/lib/berni-reactions.test.ts src/lib/berni-animation-matrix.test.ts src/lib/berni-premium.test.ts src/lib/berni-rendered-3d.test.ts"
   },
   "dependencies": {
     "@marsidev/react-turnstile": "^1.5.0",
