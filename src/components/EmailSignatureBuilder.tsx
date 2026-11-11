@@ -19,9 +19,12 @@ const templates:{id:SignatureLayout;pl:string;en:string;hintPL:string;hintEN:str
  {id:"compact",pl:"Editorial",en:"Editorial",hintPL:"Typografia i mocna linia",hintEN:"Typography with a bold rule"}
 ];
 const motions:{id:SignatureMotion;pl:string;en:string;descPL:string;descEN:string}[]=[
- {id:"reveal",pl:"Odsłanianie",en:"Reveal",descPL:"Elementy pojawiają się po kolei",descEN:"Elements appear one by one"},
- {id:"slide",pl:"Płynne wejście",en:"Slide in",descPL:"Logo i dane płynnie wjeżdżają",descEN:"Logo and details slide into view"},
- {id:"pulse",pl:"Linia i światło",en:"Light sweep",descPL:"Delikatne akcenty podkreślają stopkę",descEN:"Subtle light and accent movement"}
+ {id:"geometry",pl:"Geometria Premium",en:"Premium Geometry",descPL:"WZÓR Z REFERENCJI · Portret z ukośnych fragmentów, logo i dane pojawiające się etapami",descEN:"REFERENCE STYLE · Diagonal portrait slices, animated logo and sequential details"},
+ {id:"slices",pl:"Geometric Split",en:"Geometric Split",descPL:"Osobne geometryczne fragmenty zdjęcia wchodzą jeden po drugim",descEN:"Layered diagonal portrait pieces appear one after another"},
+ {id:"cinematic",pl:"Cinematic",en:"Cinematic",descPL:"Sekwencyjne odsłanianie i jeden delikatny przebłysk",descEN:"Staggered reveal with one subtle finishing sheen"},
+ {id:"reveal",pl:"Klasyczne odsłanianie",en:"Classic Reveal",descPL:"Prostszy styl z elementami pojawiającymi się po kolei",descEN:"Simpler layout with staggered elements"},
+ {id:"slide",pl:"Płynne wejście",en:"Slide In",descPL:"Logo i dane płynnie wjeżdżają",descEN:"Logo and details slide into view"},
+ {id:"pulse",pl:"Linia i światło",en:"Line Accent",descPL:"Delikatne akcenty podkreślają stopkę",descEN:"Subtle finishing line"}
 ];
 const isData=(source?:string)=>Boolean(source?.startsWith("data:image/"));
 const fileHint="PNG / JPG / WebP · max 2 MB";
@@ -30,7 +33,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
  const en=lang==="en";
  const [fields,setFields]=useState<SignatureFields>({...initial,language:lang});
  const [mode,setMode]=useState<"static"|"animated">("static");
- const [motion,setMotion]=useState<SignatureMotion>("reveal");
+ const [motion,setMotion]=useState<SignatureMotion>("geometry");
  const [enabled,setEnabled]=useState<Partial<Record<SignatureSocial,boolean>>>({});
  const [uploadNames,setUploadNames]=useState<{logo:string;photo:string}>({logo:"",photo:""});
  const [errors,setErrors]=useState<{logo:string;photo:string}>({logo:"",photo:""});
@@ -48,7 +51,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
   return values;
  },[enabled,fields.socials]);
  const output=useMemo(()=>({...fields,socials:socialValues,language:lang,
-  animationUrl:mode==="animated"?(signatureSafeLink(hostedGif)||gifData):""}),[fields,socialValues,lang,mode,hostedGif,gifData]);
+  animationUrl:mode==="animated"?(signatureSafeLink(hostedGif)||gifData):"",animationStyle:motion}),[fields,socialValues,lang,mode,hostedGif,gifData,motion]);
  const html=useMemo(()=>signatureHtml(output),[output]);
  const previewHtml=useMemo(()=>signatureHtml({...output,animationUrl:""}),[output]);
  const hostedIsValid=!hostedGif.trim()||Boolean(signatureSafeLink(hostedGif));
@@ -61,9 +64,9 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
  const socialChange=(key:SignatureSocial,url:string)=>{
   setFields(previous=>({...previous,socials:{...previous.socials,[key]:url}}));invalidateGif();setNotice("");
  };
- const changeMode=(value:"static"|"animated")=>{setMode(value);setNotice("");setReplay(v=>v+1);};
+ const changeMode=(value:"static"|"animated")=>{setMode(value);if(value==="animated")setMotion("geometry");invalidateGif();setNotice("");setReplay(v=>v+1);};
  const reset=()=>{
-  setFields({...initial,language:lang});setMode("static");setMotion("reveal");setEnabled({});
+  setFields({...initial,language:lang});setMode("static");setMotion("geometry");setEnabled({});
   setUploadNames({logo:"",photo:""});setErrors({logo:"",photo:""});
   setHostedGif("");setNotice("");setShowCode(false);invalidateGif();
  };
@@ -210,7 +213,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
      {mode==="static"?<div className="mt-4 grid gap-2 sm:grid-cols-3">{templates.map(item=><button type="button" key={item.id} aria-pressed={(fields.layout||"side")===item.id} onClick={()=>set("layout",item.id)} className={"rounded-xl border px-3 py-4 text-left "+((fields.layout||"side")===item.id?"border-white/70 bg-white/10":"border-white/15 bg-black/30 hover:border-white/40")}>
       <span className="block text-sm font-medium">{en?item.en:item.pl}</span><span className="mt-2 block text-[11px] leading-5 text-white/55">{en?item.hintEN:item.hintPL}</span>
      </button>)}</div>:<>
-      <div className="mt-4 grid gap-2 sm:grid-cols-3">{motions.map(item=><button key={item.id} type="button" aria-pressed={motion===item.id} onClick={()=>{setMotion(item.id);invalidateGif();setReplay(v=>v+1);}} className={"rounded-xl border px-3 py-4 text-left "+(motion===item.id?"border-white/70 bg-white/10":"border-white/15 bg-black/30 hover:border-white/40")}>
+      <div className="mt-4 grid gap-2 sm:grid-cols-2">{motions.map(item=><button key={item.id} type="button" aria-pressed={motion===item.id} onClick={()=>{setMotion(item.id);invalidateGif();setReplay(v=>v+1);}} className={"rounded-xl border px-3 py-4 text-left "+(motion===item.id?"border-white/70 bg-white/10":"border-white/15 bg-black/30 hover:border-white/40")}>
        <span className="block text-sm font-medium">{en?item.en:item.pl}</span><span className="mt-2 block text-[11px] leading-5 text-white/55">{en?item.descEN:item.descPL}</span>
       </button>)}</div>
       <button type="button" disabled={busy} onClick={makeGif} className="brand-action mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium disabled:opacity-50"><Sparkles size={17}/>{busy?(en?"Generating GIF…":"Generowanie GIF…"):(en?"Generate animated GIF":"Generuj animowany GIF")}</button>
