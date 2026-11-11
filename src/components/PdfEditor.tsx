@@ -87,7 +87,7 @@ const input = "min-h-11 w-full rounded-xl border border-white/20 bg-[#191919] px
 
 export function PdfEditor({ lang = "pl" }: { lang?: "pl" | "en" }) {
   const en = lang === "en";
-  const t = (pl: string, english: string) => en ? english : pl;
+  const t = useCallback((pl: string, english: string) => en ? english : pl, [en]);
   const [pages, setPages] = useState<Page[]>([]);
   const [elements, setElements] = useState<Element[]>([]);
   const [activeId, setActiveId] = useState("");
