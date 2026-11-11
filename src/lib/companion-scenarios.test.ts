@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
+import { classifyCompanionActivity, pickCompanionActivityNudge, COMPANION_ACTIVITY_COUNT } from "./companion-activity";
 import {
   COMPANION_SCENARIO_COUNT,
   formatCompanionPlace,
@@ -148,5 +149,50 @@ describe("companion wow copy: grounded context", () => {
     expect(popup).not.toContain("Prognoza: MET Norway");
     expect(popup).not.toContain("handleNudgeAction");
     expect(popup).not.toContain("onClick={dismissNudge}");
+  });
+});
+
+
+describe("contextual Berni messages for real browsing activity", () => {
+  it.each([
+    ["/realizacje/re-energy", "reenergy"],
+    ["StarCars", "starcars"],
+    ["/projects/b-crm", "bcrm"],
+    ["BeatMarket", "beatmarket"],
+    ["Isto Kebab", "isto"],
+    ["/narzedzia/generator-stopki-email", "signature"],
+    ["/en/tools/free-pdf-editor", "pdf"],
+    ["Kalkulator brutto netto", "vat"],
+    ["Sprawdź czy zdjęcie jest AI", "aiimage"],
+    ["Czy tekst ma ukryte znaki AI", "aitext"],
+    ["/narzedzia/dekoder-jwt", "jwt"],
+    ["Pac-Man — labirynt", "maze"],
+    ["Retro FPS — styl Doom", "fps"],
+    ["Klawiaturowa galaktyka", "galaxy"],
+    ["Kółko i krzyżyk", "tictactoe"],
+    ["Saper", "mines"],
+    ["2048", "merge"],
+    ["#projects", "projects"],
+    ["#contact", "contact"],
+    ["/en/games", "games"],
+    ["Darmowe narzędzia", "tools"],
+  ] as const)("detects %s as %s", (label, expected) => {
+    expect(classifyCompanionActivity(label)).toBe(expected);
+  });
+
+  it("ships many short authored bilingual variants", () => {
+    expect(COMPANION_ACTIVITY_COUNT).toBeGreaterThan(95);
+    const seen: string[] = [];
+    const seenTexts: string[] = [];
+    for (let index = 0; index < 4; index++) {
+      const selected = pickCompanionActivityNudge("starcars", "pl", seen, seenTexts, () => 0);
+      expect(selected.id).toMatch(/^activity-starcars-/);
+      expect(selected.text).toMatch(/StarCars|USA|Amerykańsk|samochod/);
+      expect(seen).not.toContain(selected.id);
+      seen.push(selected.id);
+      seenTexts.push(selected.text);
+    }
+    const english = pickCompanionActivityNudge("reenergy", "en", [], [], () => 0);
+    expect(english.text).toMatch(/energy|Re-Energy/i);
   });
 });
