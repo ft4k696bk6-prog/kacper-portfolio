@@ -9,15 +9,15 @@ import { englishToolPath } from "@/lib/toolbox-en";
 type Language = "pl" | "en";
 type ToolCard = { id: string; title: string; description: string; category: string; href: string };
 const dailyTools = [
-  { id: "text", pl: "Porządkowanie tekstu", en: "Text cleaner", plDesc: "Usuwanie duplikatów, ukrytych znaków AI i formatowania.", enDesc: "Remove duplicate lines, invisible characters and unwanted formatting." },
-  { id: "percentage", pl: "Kalkulator procentów", en: "Percentage calculator", plDesc: "Rabaty, podwyżki i różnice procentowe.", enDesc: "Discounts, increases and percentage differences." },
-  { id: "password", pl: "Generator haseł", en: "Password generator", plDesc: "Bezpieczne losowe hasła tworzone na Twoim urządzeniu.", enDesc: "Secure random passwords generated on your device." },
-  { id: "image", pl: "Konwerter zdjęć", en: "Image converter", plDesc: "Zmiana formatu i kompresja JPG, PNG i WebP.", enDesc: "Convert and compress JPG, PNG and WebP files." },
-  { id: "random", pl: "Losowanie", en: "Random picker", plDesc: "Wylosuj jedną z podanych opcji lub zwycięzcę.", enDesc: "Randomly pick a winner or an option." },
-  { id: "signature", pl: "Generator stopki e-mail", en: "Email signature generator", plDesc: "Utwórz i skopiuj stopkę z podglądem HTML.", enDesc: "Create and copy an HTML email signature." },
+  { id: "text", pl: "Darmowe porządkowanie tekstu", en: "Free text cleaner", plDesc: "Usuwanie duplikatów, ukrytych znaków AI i formatowania.", enDesc: "Remove duplicate lines, invisible characters and unwanted formatting." },
+  { id: "percentage", pl: "Darmowy kalkulator procentów", en: "Free percentage calculator", plDesc: "Rabaty, podwyżki i różnice procentowe.", enDesc: "Discounts, increases and percentage differences." },
+  { id: "password", pl: "Darmowy generator haseł", en: "Free password generator", plDesc: "Bezpieczne losowe hasła tworzone na Twoim urządzeniu.", enDesc: "Secure random passwords generated on your device." },
+  { id: "image", pl: "Darmowy konwerter zdjęć", en: "Free image converter", plDesc: "Zmiana formatu i kompresja JPG, PNG i WebP.", enDesc: "Convert and compress JPG, PNG and WebP files." },
+  { id: "random", pl: "Darmowe losowanie", en: "Free random picker", plDesc: "Wylosuj jedną z podanych opcji lub zwycięzcę.", enDesc: "Randomly pick a winner or an option." },
+  { id: "signature", pl: "Darmowy generator stopki e-mail", en: "Free email signature generator", plDesc: "Utwórz i skopiuj stopkę z podglądem HTML.", enDesc: "Create and copy an HTML email signature." },
 ] as const;
 
-const priority = ["signature", "ai-image", "vat", "image", "dekoder-jwt"];
+const priority = ["signature", "edytor-pdf", "ai-image", "vat", "image", "dekoder-jwt"];
 const cardClass = "group flex min-w-0 min-h-[142px] flex-col justify-between gap-4 rounded-2xl border border-white/15 bg-[#111] p-5 transition-colors hover:border-white/50 hover:bg-[#1b1b1b] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
 
 export function ToolboxHub({ lang }: { lang: Language }) {
@@ -30,12 +30,12 @@ export function ToolboxHub({ lang }: { lang: Language }) {
   const aiCategory = en ? "AI & images" : "AI i zdjęcia";
   const cards: ToolCard[] = useMemo(() => [
     {
-      id: "ai-image", title: en ? "Was this image made by AI?" : "Sprawdź, czy zdjęcie jest AI",
+      id: "ai-image", title: en ? "Free AI image metadata checker" : "Darmowe sprawdzanie, czy zdjęcie jest AI",
       description: en ? "Check image metadata for AI origin clues. A result is not proof of authorship." : "Sprawdź metadane zdjęcia pod kątem śladów AI. Wynik nie jest dowodem pochodzenia.",
       category: aiCategory, href: en ? "/en/tools/ai-image-check" : "/narzedzia/sprawdz-czy-zdjecie-ai",
     },
     {
-      id: "vat", title: en ? "Net / gross VAT calculator (8% and 23%)" : "Kalkulator brutto–netto (8% i 23%)",
+      id: "vat", title: en ? "Free net / gross VAT calculator (8% and 23%)" : "Darmowy kalkulator brutto–netto (8% i 23%)",
       description: en ? "Convert net to gross and gross to net, with the VAT amount." : "Przelicz brutto na netto lub netto na brutto i sprawdź kwotę VAT.",
       category: calculatorCategory, href: en ? englishToolPath("kalkulator-vat") : "/narzedzia/kalkulator-vat",
     },
@@ -62,7 +62,7 @@ export function ToolboxHub({ lang }: { lang: Language }) {
   return <div className="mt-10">
     {featuredVisible && <Link href={auditHref} className="group block overflow-hidden rounded-[1.6rem] border border-white/30 bg-[radial-gradient(ellipse_at_90%_10%,#373737_0%,#191919_42%,#0e0e0e_90%)] p-6 transition-colors hover:border-white/65 sm:p-9">
       <p className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[.16em] text-white/55"><Sparkles size={15}/>{en ? "START HERE • ALL-IN-ONE" : "ZACZNIJ TUTAJ • WSZYSTKO W JEDNYM"}</p>
-      <h2 className="mt-5 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">{en ? "Comprehensive website audit" : "Kompleksowy audyt strony WWW"}</h2>
+      <h2 className="mt-5 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">{en ? "Free comprehensive website audit" : "Darmowy kompleksowy audyt strony WWW"}</h2>
       <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65">{en ? "Enter your website address to check SEO, indexability, images, SSL, DNS and analytics. Get a clear report with recommended fixes." : "Wpisz adres witryny. Sprawdzisz SEO, indeksowanie, obrazy, SSL, DNS i analitykę, a następnie otrzymasz czytelny raport z zaleceniami."}</p>
       <span className="brand-action mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-center text-sm font-semibold sm:w-auto sm:px-7">{en ? "Analyze my website for free" : "Przeanalizuj stronę za darmo"}<ArrowUpRight size={18} className="shrink-0"/></span>
       <div className="mt-6 flex flex-wrap gap-2">{["SEO", "SSL / DNS", en ? "Indexing" : "Indeksowanie", en ? "Analytics" : "Analityka"].map(t => <span key={t} className="rounded-full border border-white/15 bg-white/[.04] px-3 py-1.5 text-xs text-white/60">{t}</span>)}</div>
@@ -73,7 +73,7 @@ export function ToolboxHub({ lang }: { lang: Language }) {
         <div>
           <p className="text-[11px] uppercase tracking-[.2em] text-white/45">{en ? "TOOLS LIBRARY" : "KATALOG NARZĘDZI"}</p>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">{en ? "Choose a tool" : "Wybierz narzędzie"}</h2>
-          <p className="mt-2 max-w-xl text-sm leading-6 text-white/55">{en ? "Find the right tool by name or category. Free and without sign-up." : "Znajdź narzędzie po nazwie lub kategorii. Bez opłat i rejestracji."}</p>
+          <p className="mt-2 max-w-xl text-sm leading-6 text-white/55">{en ? "Choose a free online tool. No registration, no login, no credit card required." : "Wybierz darmowe narzędzie online. Bez rejestracji, bez logowania i bez karty kredytowej."}</p>
         </div>
         <Link href={gamesHref} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/20 px-4 py-2.5 text-sm text-white/75 transition hover:border-white/60 hover:text-white"><Gamepad2 size={18}/>{en ? "Mini-games" : "Minigry"}<ArrowUpRight size={14}/></Link>
       </div>
