@@ -26,7 +26,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}) {
  const [showCode,setShowCode]=useState(false);
  const html=useMemo(()=>signatureHtml({...fields,language:lang}),[fields,lang]);
  const hasLocalLogo=Boolean(fields.logo?.startsWith("data:"));
- const hasOnlineLogo=Boolean(fields.logo?.startsWith("https://"));
+ const hasOnlineLogo=Boolean(/^https:\/\//i.test(fields.logo||""));
  const set=(key:keyof SignatureFields,value:string|number)=>{
   setFields(previous=>({...previous,[key]:value}));
   setMessage("");
@@ -120,11 +120,11 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}) {
       <input type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" className="sr-only" onChange={uploadLogo}/>
      </label>
      <label className="flex min-w-0 flex-col justify-center rounded-xl border border-white/15 bg-[#0b0b0b] p-4 text-sm text-white/75"><span className="flex items-center gap-2"><Link2 size={16}/>{en?"Or paste logo URL":"Lub wklej link do logo"}</span>
-      <input type="url" inputMode="url" className={fieldClass} placeholder="https://firma.pl/logo.png" value={hasOnlineLogo?fields.logo||"":""} onChange={e=>{set("logo",e.target.value);setUploadName("");setLogoError("");}}/>
+      <input type="url" inputMode="url" className={fieldClass} placeholder="https://firma.pl/logo.png" value={!hasLocalLogo?fields.logo||"":""} onChange={e=>{set("logo",e.target.value);setUploadName("");setLogoError("");}}/>
      </label>
     </div>
     {(fields.logo||logoError)&&<div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-     <p className={"text-xs leading-6 "+(logoError?"text-rose-300":"text-white/55")}>{logoError||(hasLocalLogo?(en?"Logo loaded locally and resized.":"Logo wczytane lokalnie i zmniejszone."):(en?"HTTPS logo address selected.":"Wybrano adres HTTPS logo."))}</p>
+     <p className={"text-xs leading-6 "+(logoError?"text-rose-300":"text-white/55")}>{logoError||(hasLocalLogo?(en?"Logo loaded locally and resized.":"Logo wczytane lokalnie i zmniejszone."):(hasOnlineLogo?(en?"HTTPS logo address selected.":"Wybrano adres HTTPS logo."):(en?"Enter the full public HTTPS logo URL.":"Wpisz pełny publiczny adres HTTPS logo.")))}</p>
      {fields.logo&&<button type="button" onClick={()=>{set("logo","");setUploadName("");setLogoError("");}} className="inline-flex items-center gap-1 text-xs text-white/70 hover:text-white"><Trash2 size={13}/>{en?"Remove logo":"Usuń logo"}</button>}
     </div>}
     <div className="mt-6">
