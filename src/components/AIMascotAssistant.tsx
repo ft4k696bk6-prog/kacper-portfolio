@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { usePathname, useRouter } from "next/navigation";
 import { CalendarDays, Eye, Loader2, MessageCircle, RotateCcw, Send, X } from "lucide-react";
-import { BerniFoxHead, seasonalBerniAccessory, type BerniFoxMood, type BerniFoxAccessory } from "@/components/BerniFoxHead";
+import { BerniPremiumPortrait, type BerniPortraitMood } from "@/components/BerniPremiumPortrait";
 import { detectBerniReaction } from "@/lib/berni-reactions";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { DEFAULT_BOOKING_TIME_ZONE, formatSlotDate } from "@/lib/booking";
@@ -240,8 +240,7 @@ export function AIMascotAssistant() {
   const [website, setWebsite] = useState("");
   const [awaitingAuditUrl, setAwaitingAuditUrl] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [foxReaction, setFoxReaction] = useState<BerniFoxMood>("idle");
-  const [foxAccessory, setFoxAccessory] = useState<BerniFoxAccessory>("none");
+  const [foxReaction, setFoxReaction] = useState<BerniPortraitMood>("idle");
   const lastReactionMessageId = useRef("");
   const [error, setError] = useState("");
   const [lastFailedQuestion, setLastFailedQuestion] = useState("");
@@ -258,31 +257,16 @@ export function AIMascotAssistant() {
   const locale = lang === "pl" ? "pl-PL" : "en-US";
   const timeZone = process.env.NEXT_PUBLIC_CALENDAR_TIMEZONE || DEFAULT_BOOKING_TIME_ZONE;
   useEffect(() => {
-    setFoxAccessory(seasonalBerniAccessory(new Date()));
-  }, []);
-
-  useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     if (messages.length < 2 || !lastMessage || lastMessage.role !== "assistant" || lastReactionMessageId.current === lastMessage.id) return;
     lastReactionMessageId.current = lastMessage.id;
     const detected = detectBerniReaction(lastMessage.content);
     setFoxReaction(detected === "idle" ? "happy" : detected);
-    // Rare playful accessories after a real answer; festive hats take priority.
-    if (seasonalBerniAccessory(new Date()) === "none" && Math.random() < 0.12) {
-      const extras: BerniFoxAccessory[] = ["glasses", "alien", "crown", "cap"];
-      setFoxAccessory(extras[Math.floor(Math.random() * extras.length)]);
-    }
     const timer = window.setTimeout(() => setFoxReaction("idle"), 4300);
     return () => window.clearTimeout(timer);
   }, [messages]);
 
-  useEffect(() => {
-    if (foxAccessory === "none" || seasonalBerniAccessory(new Date()) !== "none") return;
-    const timeout = window.setTimeout(() => setFoxAccessory("none"), 6000);
-    return () => window.clearTimeout(timeout);
-  }, [foxAccessory]);
-
-  const foxMood: BerniFoxMood = loading ? "thinking" : error ? "worried" : foxReaction !== "idle" ? foxReaction : open ? "listening" : nudge ? "curious" : "idle";
+  const foxMood: BerniPortraitMood = loading ? "thinking" : error ? "worried" : foxReaction !== "idle" ? foxReaction : open ? "listening" : nudge ? "curious" : "idle";
   const restorePositionClass = cookieBannerVisible
     ? "bottom-[14.5rem] right-4 md:bottom-4"
     : "bottom-4 right-4";
@@ -863,7 +847,7 @@ export function AIMascotAssistant() {
                     <div className="flex items-start justify-between gap-3 border-b border-white/[0.07] px-4 py-3">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/20 bg-white/[0.07]"><BerniFoxHead size={36} mood={foxMood} accessory={foxAccessory} /></span>
+                          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/20 bg-white/[0.07]"><BerniPremiumPortrait size={36} mood={foxMood} /></span>
                           <div><p className="truncate text-sm font-medium text-white">{lang === "pl" ? "Asystent AI" : "AI assistant"}</p><p className="text-[11px] text-white/55">Berni</p></div>
                         </div>
                       </div>
@@ -1041,7 +1025,7 @@ export function AIMascotAssistant() {
                  onClick={() => openChat()}
                  className="relative grid h-14 w-14 place-items-center rounded-full border border-white/30 bg-[#15171a] text-white shadow-[0_8px_28px_rgba(0,0,0,0.42)] hover:border-white/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                >
-                 <BerniFoxHead mood={foxMood} accessory={foxAccessory} size={56} className="pointer-events-none" />
+                 <BerniPremiumPortrait mood={foxMood} size={56} className="pointer-events-none" />
                </button>
             </div>
           </div>
