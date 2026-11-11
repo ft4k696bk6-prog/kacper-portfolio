@@ -2,11 +2,12 @@ import type { NextConfig } from "next";
 
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://challenges.cloudflare.com;
-  script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com;
+  script-src 'self' blob: 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://challenges.cloudflare.com https://cdn.jsdelivr.net;
+  script-src-elem 'self' blob: 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com https://cdn.jsdelivr.net;
   style-src 'self' 'unsafe-inline';
-  img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://s0.wp.com;
-  connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://challenges.cloudflare.com;
+  img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://s0.wp.com https:;
+  connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://tessdata.projectnaptha.com https://huggingface.co https://*.huggingface.co https://*.hf.co https://*.xethub.hf.co;
+  worker-src 'self' blob: https://cdn.jsdelivr.net;
   frame-src https://www.googletagmanager.com https://challenges.cloudflare.com;
   font-src 'self' data:;
   object-src 'none';
