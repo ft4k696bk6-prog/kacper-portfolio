@@ -36,22 +36,22 @@ function text(c:CanvasRenderingContext2D,value:string,x:number,y:number,max:numb
  c.save();c.globalAlpha=clamp(opacity);c.fillStyle=color;c.font=font;c.textBaseline="alphabetic";
  c.fillText(value.slice(0,96),x,y,max);c.restore();
 }
-function cover(c:CanvasRenderingContext2D,img:HTMLImageElement|null,x:number,y:number,w:number,h:number,bg="#d0cdd4"){
+function cover(c:CanvasRenderingContext2D,img:HTMLImageElement|null,x:number,y:number,w:number,h:number,bg="#d0cdd4",focusX=50,focusY=42){
  c.fillStyle=bg;c.fillRect(x,y,w,h);
  if(img){
   const ratio=Math.max(w/img.naturalWidth,h/img.naturalHeight);
   const dw=img.naturalWidth*ratio,dh=img.naturalHeight*ratio;
-  c.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
+  c.drawImage(img,x+(w-dw)*clamp(focusX/100),y+(h-dh)*clamp(focusY/100),dw,dh);
  }else{
   c.fillStyle="#aaa6b1";c.beginPath();c.arc(x+w*.5,y+h*.31,w*.20,0,Math.PI*2);c.fill();
   c.beginPath();c.ellipse(x+w*.5,y+h*1.02,w*.42,h*.49,0,0,Math.PI*2);c.fill();
  }
 }
 function photoPiece(c:CanvasRenderingContext2D,img:HTMLImageElement|null,
- pts:number[][],x:number,y:number,w:number,h:number,opacity:number,dx=0,dy=0,bg="#d0cdd4"){
+ pts:number[][],x:number,y:number,w:number,h:number,opacity:number,dx=0,dy=0,bg="#d0cdd4",focusX=50,focusY=42){
  if(opacity<=0)return;
  c.save();c.globalAlpha=clamp(opacity);polygon(c,pts.map(([a,b])=>[a+dx,b+dy]));c.clip();
- cover(c,img,x+dx,y+dy,w,h,bg);c.restore();
+ cover(c,img,x+dx,y+dy,w,h,bg,focusX,focusY);c.restore();
 }
 function logo(c:CanvasRenderingContext2D,f:SignatureFields,img:HTMLImageElement|null,x:number,y:number,
  maxW:number,maxH:number,p:number,color="#242328",size=20){
@@ -66,34 +66,71 @@ function logo(c:CanvasRenderingContext2D,f:SignatureFields,img:HTMLImageElement|
 function rule(c:CanvasRenderingContext2D,x:number,y:number,w:number,color:string,p:number,h=2){
  if(p<=0)return;c.fillStyle=color;c.globalAlpha=clamp(p);c.fillRect(x,y,w*clamp(p),h);c.globalAlpha=1;
 }
+/**
+ * Reference-derived composition (user-supplied video):
+ * - static white signature card / contact details
+ * - left icon rail stays separate clickable HTML
+ * - the wordmark reveals left-to-right over the existing copy
+ * - the portrait assembles bottom-to-top in three diagonal shards
+ * - grey solid facet sits BEHIND the portrait, never across the face
+ *
+ * The same scene renders to the live preview and the exported GIF.
+ */
 function sceneGeometry(c:CanvasRenderingContext2D,f:SignatureFields,a:SceneAssets,p:number){
  const color=hex(f.accent);
- c.fillStyle="#fbfafc";c.fillRect(0,0,520,208);
- c.save();c.globalAlpha=phase(p,0,.18)*.14;c.fillStyle=color;
- polygon(c,[[350,0],[390,0],[318,208],[275,208]]);c.fill();c.restore();
- // Exact compositional idea from the user's reference: wordmark left, diagonal portrait right.
- const label=phase(p,.12,.34),detail=phase(p,.26,.52),contact=phase(p,.49,.81);
- c.save();c.translate((1-label)*-25,0);
- logo(c,f,a.logo,29,20,205,44,label,"#1e1e22",25);
+ c.fillStyle="#fff";c.fillRect(0,0,520,208);
+ // Contact details are already present in the mail (the original video keeps them stable).
+ const contactFade=phase(p,0,.09);
+ text(c,nameOf(f),27,102,290,"bold 23px Arial","#1b1a21",contactFade);
+ text(c,roleOf(f),27,121,287,"13px Arial","#605e68",contactFade);
+ text(c,f.company||"",27,148,277,"bold 11px Arial",color,contactFade);
+ text(c,f.email||"",27,171,283,"12px Arial","#56545d",contactFade);
+ text(c,f.website||f.phone||"",27,192,283,"12px Arial","#56545d",contactFade);
+
+ // Backdrop geometry frames the face without covering it.
+ const mount=phase(p,.07,.58);
+ c.save();c.globalAlpha=mount;
+ c.fillStyle="#dad8df";
+ polygon(c,[[353,51],[407,51],[344,184],[308,184]]);c.fill();
+ c.fillStyle="#5e5b67";
+ polygon(c,[[460,19],[505,19],[452,164],[410,164]]);c.fill();
+ c.fillStyle="#a8a5b0";
+ polygon(c,[[482,85],[508,85],[464,181],[444,181]]);c.fill();
  c.restore();
- text(c,nameOf(f),29,104,287,"bold 23px Arial","#1b1920",detail);
- text(c,roleOf(f),29,125,280,"13px Arial","#625f69",phase(p,.33,.59));
- text(c,f.company||"",29,145,268,"bold 11px Arial",color,phase(p,.41,.67));
- text(c,f.email||"",29,170,268,"12px Arial","#55535b",contact);
- text(c,f.website||f.phone||"",29,190,270,"12px Arial","#55535b",phase(p,.61,.9));
- const parts=[
-  {pts:[[360,50],[420,42],[358,200],[306,200]],a:.32,b:.59,move:75},
-  {pts:[[421,14],[477,14],[407,201],[350,201]],a:.46,b:.76,move:84},
-  {pts:[[479,38],[516,38],[460,190],[422,190]],a:.61,b:.9,move:90}
+
+ const focusX=f.photoFocusX??50,focusY=f.photoFocusY??42;
+ const face=[
+  {pts:[[349,59],[400,59],[338,195],[298,195]],begin:.12,end:.63},
+  {pts:[[406,29],[470,29],[404,196],[344,196]],begin:.24,end:.78},
+  {pts:[[476,56],[498,56],[449,177],[424,177]],begin:.43,end:.91}
  ];
- parts.forEach((part,i)=>{
-  const t=phase(p,part.a,part.b);
-  photoPiece(c,a.photo,part.pts,306,8,215,202,t,(1-t)*(i===1?-part.move:part.move),0);
- });
- c.save();c.globalAlpha=phase(p,.42,.79)*.92;c.fillStyle=color;
- polygon(c,[[451,6],[482,6],[419,201],[390,201]]);c.fill();c.restore();
- if(a.photo)photoPiece(c,a.photo,[[428,68],[448,68],[408,180],[385,180]],306,8,215,202,phase(p,.7,.95));
- rule(c,29,201,235,color,phase(p,.78,1),2);
+ // Clip each shard from bottom upward. The pixels all use one common photo crop,
+ // which keeps facial features aligned across the diagonal gaps.
+ for(const part of face){
+  const q=phase(p,part.begin,part.end);
+  if(q<=0)continue;
+  c.save();
+  c.beginPath();c.rect(293,204-q*204,220,q*204);c.clip();
+  photoPiece(c,a.photo,part.pts,292,8,224,195,1,0,0,"#d0cdd4",focusX,focusY);
+  c.restore();
+ }
+ // The central face must remain visible and never be covered by a solid stripe.
+ // Thin white diagonal gutters separate the fragments rather than obscuring them.
+ c.save();
+ c.globalAlpha=phase(p,.5,.92)*.97;
+ c.strokeStyle="#fff";c.lineWidth=3;
+ c.beginPath();c.moveTo(406,29);c.lineTo(344,196);
+ c.moveTo(471,30);c.lineTo(405,194);
+ c.stroke();c.restore();
+
+ // Brand symbol appears first; remaining logo/wordmark is traced horizontally.
+ const mark=phase(p,.03,.27),wordmark=phase(p,.30,.98);
+ const revealed=0.14*mark+0.86*wordmark;
+ if(revealed>0){
+  c.save();c.beginPath();c.rect(27,19,217*revealed,48);c.clip();
+  logo(c,f,a.logo,27,22,205,43,1,"#222128",25);
+  c.restore();
+ }
 }
 function sceneSlices(c:CanvasRenderingContext2D,f:SignatureFields,a:SceneAssets,p:number){
  const accent=hex(f.accent);c.fillStyle="#13151b";c.fillRect(0,0,520,208);
