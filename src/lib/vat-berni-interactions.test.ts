@@ -69,8 +69,8 @@ describe("Berni drag behavior and animations", () => {
       "onPointerCancel={finishPointer}", "setPointerCapture", "releasePointerCapture", "suppressClickRef.current", "touch-none", "onDragEnd?."]) {
       expect(pet).toContain(event);
     }
-    expect(assistant).toContain("data-berni-floating");
-    expect(assistant).toContain("onDragEnd={handleBerniDragEnd}");
+    expect(assistant).toContain("data-ai-chat-widget");
+    expect(assistant).not.toContain("onDragEnd={handleBerniDragEnd}");
   });
   it("switches to visible typing and picked-up moods", () => {
     expect(pet).toContain('dragging ? "grabbed"');
