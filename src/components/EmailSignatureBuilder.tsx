@@ -37,7 +37,7 @@ function GeometryCardPreview({fields,socials,gif,replay,lang}:{fields:SignatureF
   <div className="flex items-stretch">
    <div className="z-10 flex w-[13%] min-w-10 shrink-0 flex-col items-center gap-2 border-r border-[#e3e0e6] bg-[#faf9fb] p-2 sm:w-14">
     <span className="mb-1 flex h-7 w-7 items-center justify-center rounded-md border border-[#ddd9e1] bg-white text-base font-bold" style={{color:fields.accent}}>{(fields.company||fields.name||"B").slice(0,1).toUpperCase()}</span>
-    {valid.slice(0,6).map(({item,href})=><a key={item.id} href={href} title={item.name} target="_blank" rel="noopener noreferrer" className="signature-motion-item flex min-h-6 min-w-7 items-center justify-center rounded-md border border-[#e2e0e4] bg-white px-1 text-[10px] font-bold text-[#24222a] hover:bg-[#ebe9ee]" style={{animation:"sigAppear .45s ease "+(0.55+valid.indexOf(valid.find(v=>v.item.id===item.id)!)*0.12)+"s both"}}>{item.short}</a>)}
+    {valid.slice(0,6).map(({item,href},i)=><a key={item.id} href={href} title={item.name} target="_blank" rel="noopener noreferrer" className="signature-motion-item flex min-h-6 min-w-7 items-center justify-center rounded-md border border-[#e2e0e4] bg-white px-1 text-[10px] font-bold text-[#24222a] hover:bg-[#ebe9ee]" style={{animation:"sigAppear .45s ease "+(0.55+i*0.12)+"s both"}}>{item.short}</a>)}
    </div>
    <div className="min-w-0 flex-1 bg-[#fbfafc]">
     {gif?<img key={replay} src={gif} alt={en?"Animated geometric email signature":"Animowana stopka geometryczna"} width={520} height={208} className="block h-auto w-full"/>:
