@@ -169,3 +169,19 @@ a.surface-card:hover { border-color: var(--brand-accent); background: var(--surf
 @media (prefers-reduced-motion: reduce) {
   .brand-action, .studio-cta, a.surface-card, .project-book-preview { transition: none; }
 }
+
+
+/* iOS Safari zooms the entire page on focus when an editable control is below
+   16px. Keep the effective size >=16px across all tools, filters and forms.
+   Do not disable pinch-to-zoom: accessibility and user scaling must still work. */
+@media (hover: none) and (pointer: coarse) {
+  :is(
+    input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]):not([type="hidden"]),
+    textarea,
+    select,
+    [contenteditable="true"],
+    [contenteditable="plaintext-only"]
+  ) {
+    font-size: max(16px, 1em) !important;
+  }
+}

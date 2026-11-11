@@ -15,11 +15,12 @@ describe("portfolio mobile review", () => {
 
   it("keeps the assistant usable on short-height mobile screens", () => {
     const assistant = get("../components/AIMascotAssistant.tsx");
-    // The booking flow needs more than 22rem; the actual compact panel is
-    // bounded by the dynamic viewport and lets its message history scroll.
-    expect(assistant).toContain('h-[min(36rem,calc(100dvh-9.5rem))]');
+    // Mobile layout follows the visual viewport above the keyboard; the
+    // message history scrolls inside instead of shrinking the booking form.
+    expect(assistant).toContain("mobilePanelHeight");
+    expect(assistant).toContain("top:mobileViewport.top");
     expect(assistant).toContain('h-[min(36rem,calc(100dvh-10rem))]');
-    expect(assistant).toContain('className="min-h-0 max-h-80 flex-1');
+    expect(assistant).toContain("overflow-y-auto overscroll-contain");
     expect(assistant).not.toContain("calc(100vh-19rem)");
   });
 

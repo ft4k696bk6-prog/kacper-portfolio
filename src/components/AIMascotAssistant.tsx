@@ -1,6 +1,7 @@
 "use client";
 
 import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { usePathname, useRouter } from "next/navigation";
 import { CalendarDays, Eye, Loader2, MessageCircle, RotateCcw, Send, X } from "lucide-react";
@@ -216,6 +217,7 @@ const defaultBookingState: BookingState = {
 
 export function AIMascotAssistant() {
   const { lang, t } = useLanguage();
+  const prefersReducedMotion = useReducedMotion();
   const assistantRuntimeCopy = useMemo(() => getAssistantRuntimeCopy(lang), [lang]);
   const router = useRouter();
   const pathname = usePathname();
@@ -253,12 +255,12 @@ export function AIMascotAssistant() {
   const restorePositionClass = cookieBannerVisible
     ? "bottom-[14.5rem] right-4 md:bottom-4"
     : "bottom-4 right-4";
-  const companionPanelPositionClass = isCompactViewport
-    ? "inset-x-0 top-0 w-screen"
-    : "bottom-[calc(100%+0.9rem)] right-0 w-[24rem]";
-  const companionPanelSizeClass = isCompactViewport
-    ? "h-[100dvh]"
-    : "h-[min(36rem,calc(100dvh-10rem))]";
+  // Animate the real mobile dialog rectangle from the 56px bubble to the
+  // visual viewport; do not switch between two unanimated layouts.
+  const mobilePanelWidth = typeof window === "undefined" ? 390 : window.innerWidth;
+  const mobilePanelHeight = mobileViewport.height || (typeof window === "undefined" ? 800 : window.innerHeight);
+  const closedBubbleTop = typeof window === "undefined" ? 0 : Math.max(0, window.innerHeight - 72);
+  const closedBubbleRect = { top: closedBubbleTop, right: 16, width: 56, height: 56, borderRadius: 28, opacity: 0.95 };
   useEffect(() => {
     setMounted(true);
     const hiddenUntil = Number(localStorage.getItem(HIDDEN_UNTIL_KEY) || 0);
@@ -801,13 +803,32 @@ export function AIMascotAssistant() {
           >
             <div className="relative">
               
+                <AnimatePresence>
                 {open ? (
-                  <aside
+                  <motion.aside
                     role="dialog"
+                    aria-modal={isCompactViewport}
                     aria-label={t.aiMascot.chatTitle}
-                    className={`${isCompactViewport?"fixed z-30 flex max-h-none flex-col overflow-hidden border-0 bg-[#080808] shadow-2xl":"absolute z-30 flex max-h-[min(36rem,calc(100dvh-7rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/95 shadow-[0_28px_90px_rgba(0,0,0,0.58)] backdrop-blur-2xl"} ${companionPanelPositionClass} ${companionPanelSizeClass}`}
-                    style={isCompactViewport&&mobileViewport.height?{top:mobileViewport.top,height:mobileViewport.height,maxHeight:mobileViewport.height,paddingBottom:"env(safe-area-inset-bottom)"}:undefined}
+                    className={isCompactViewport
+                      ? "fixed z-30 flex max-h-none flex-col overflow-hidden border-0 bg-[#080808] shadow-2xl"
+                      : "absolute bottom-[calc(100%+0.9rem)] right-0 z-30 flex h-[min(36rem,calc(100dvh-10rem))] w-[24rem] max-h-[min(36rem,calc(100dvh-7rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/95 shadow-[0_28px_90px_rgba(0,0,0,0.58)] backdrop-blur-2xl"}
+                    style={isCompactViewport ? {paddingBottom:"env(safe-area-inset-bottom)",transformOrigin:"bottom right"} : {transformOrigin:"bottom right"}}
+                    initial={isCompactViewport ? closedBubbleRect : {opacity:0,scale:0.95,y:14}}
+                    animate={isCompactViewport
+                      ? {top:mobileViewport.top,right:0,width:mobilePanelWidth,height:mobilePanelHeight,borderRadius:0,opacity:1}
+                      : {opacity:1,scale:1,y:0}}
+                    exit={isCompactViewport ? closedBubbleRect : {opacity:0,scale:0.95,y:14}}
+                    transition={prefersReducedMotion
+                      ? {duration:0}
+                      : {type:"tween",duration:isCompactViewport?0.4:0.23,ease:[0.22,1,0.36,1]}}
                   >
+                    <motion.div
+                      className="flex min-h-0 flex-1 flex-col"
+                      initial={{opacity:0}}
+                      animate={{opacity:1}}
+                      exit={{opacity:0}}
+                      transition={{duration:prefersReducedMotion?0:0.16,delay:isCompactViewport&&!prefersReducedMotion?0.12:0}}
+                    >
                     <div className="flex items-start justify-between gap-3 border-b border-white/[0.07] px-4 py-3">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
@@ -826,7 +847,7 @@ export function AIMascotAssistant() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => setOpen(false)}
+                          onClick={() => { inputRef.current?.blur(); setOpen(false); }}
                           aria-label={t.aiMascot.closeLabel}
                           className="grid h-8 w-8 place-items-center rounded-full text-white/70 transition hover:bg-[var(--brand-black)] hover:text-white"
                         >
@@ -950,8 +971,10 @@ export function AIMascotAssistant() {
                         </div>
                       </form>
                     </div>
-                  </aside>
+                    </motion.div>
+                  </motion.aside>
                 ) : null}
+                </AnimatePresence>
               
 
               
