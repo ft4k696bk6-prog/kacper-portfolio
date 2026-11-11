@@ -2,41 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export type BerniLivingMood =
-  | "idle" | "curious" | "thinking" | "happy" | "excited"
-  | "sleeping" | "typing" | "listening" | "surprised"
-  | "worried" | "working" | "grabbed";
-
-type Face = {
-  blink: number;
-  mouth: number;
-  smile: number;
-  surprise: number;
-  gazeX: number;
-  gazeY: number;
-  worried: number;
-};
+import { createNeutralFace, faceTargetForMood, type Face, type BerniLivingMood } from "@/lib/berni-face-state";
+export type { BerniLivingMood } from "@/lib/berni-face-state";
 
 const BASE = "/images/berni/berni-fox-head.png";
 const EYELIDS = "/images/berni/eyelids-closed.jpg";
-const zero: Face = { blink: 0, mouth: 0, smile: 0, surprise: 0, gazeX: 0, gazeY: 0, worried: 0 };
-
-function forMood(mood: BerniLivingMood): Face {
-  switch (mood) {
-    case "curious": return { ...zero, gazeX: .65, gazeY: -.3, smile: .16 };
-    case "listening": return { ...zero, gazeX: .4, smile: .12 };
-    case "thinking": return { ...zero, gazeX: -.5, gazeY: -.7, worried: .2 };
-    case "working": return { ...zero, gazeX: -.3, gazeY: -.4 };
-    case "happy": return { ...zero, smile: .82, mouth: .23 };
-    case "excited": return { ...zero, smile: 1, surprise: .3, mouth: .65 };
-    case "surprised": return { ...zero, surprise: 1, mouth: .78 };
-    case "grabbed": return { ...zero, surprise: .65, mouth: .4 };
-    case "typing": return { ...zero, smile: .3, mouth: .48 };
-    case "worried": return { ...zero, worried: .9, gazeY: .35 };
-    case "sleeping": return { ...zero, blink: 1 };
-    // Never return the shared neutral preset: blink updates target on every frame.\n    // Mutating that singleton made the first blink permanent.\n    default: return { ...zero };
-  }
-}
 
 /**
  * Canvas2D animation deliberately uses only the approved source portrait.
@@ -82,7 +52,7 @@ export function BerniLivingFace({
     let nextBlink = performance.now() + 1400 + Math.random() * 1000;
     let base: HTMLImageElement | null = null;
     let lids: HTMLImageElement | null = null;
-    let current: Face = { ...zero };
+    let current: Face = createNeutralFace();
     let watcher: IntersectionObserver | null = null;
     const onForceBlink = () => { lastBlink = performance.now(); };
 
@@ -243,7 +213,7 @@ export function BerniLivingFace({
       lastPaint = now;
 
       const status = live.current.mood;
-      // Always allocate a fresh frame target; automatic blink must not mutate presets.\n      const target = { ...forMood(status) };
+      // Always allocate a fresh frame target; automatic blink must not mutate presets.\n      const target = faceTargetForMood(status);
       if (!motionQuery.matches) {
         if (now >= nextBlink && status !== "sleeping") {
           lastBlink = now;
@@ -268,7 +238,7 @@ export function BerniLivingFace({
           current[key] += (target[key] - current[key]) * alpha;
         }
       } else {
-        current = { ...zero }; // A static, open-eyed portrait for reduced motion.
+        current = createNeutralFace(); // A static, open-eyed portrait for reduced motion.
       }
 
       ctx!.clearRect(0, 0, renderSize, renderSize);
