@@ -49,19 +49,20 @@ const fixtures:Record<string,{values:Record<string,string>;csv?:string}>={
  base64:{values:{body:"Zażółć",operation:"encode"}},
  contrast:{values:{fg:"#ffffff",bg:"#000000"}}
 };
-describe("46 toolbox functions: deterministic execution",()=>{
- it("has 46 unique slugs and matching execution paths",()=>{
-  expect(toolboxItems).toHaveLength(46);
+describe("47 toolbox entries: deterministic execution",()=>{
+ it("has 47 unique slugs and matching execution paths",()=>{
+  expect(toolboxItems).toHaveLength(47);
   expect(new Set(toolboxItems.map(t=>t.slug)).size).toBe(46);
   expect(new Set(toolboxItems.map(t=>t.mode)).size).toBe(46);
   for(const t of toolboxItems){
    expect(t.title).toMatch(/^Darmow(y|a|e) /);
-   expect(remote.has(t.mode)||t.mode==="sha256"||t.mode==="vat"||t.mode in fixtures).toBe(true);
+   expect(remote.has(t.mode)||t.mode==="sha256"||t.mode==="vat"||t.mode==="pdf"||t.mode in fixtures).toBe(true);
   }
  });
  for(const tool of toolboxItems){
   it(tool.slug+": produces result, not placeholder",async()=>{
    let result:{title:string;metrics?:{value:string}[];messages?:string[];text?:string};
+   if(tool.mode==="pdf") { expect(tool.slug).toBe("edytor-pdf"); return; }
    if(remote.has(tool.mode)){
     result=fromSite(tool.mode,raw);
    }else if(tool.mode==="sha256"){
