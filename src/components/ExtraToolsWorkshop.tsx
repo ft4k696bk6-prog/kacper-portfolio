@@ -78,21 +78,21 @@ export function ExtraToolsWorkshop({lang}:{lang:"pl"|"en"}){
   try{
    const n=(key:string)=>number(val(key));let out="";
    switch(mode){
-    case "vat":{const v=vatBreakdown(n("amount"),n("rate"),val("basis") as "net"|"gross");out="Net: "+money(v.net,lang)+"\nGross: "+money(v.gross,lang)+"\nVAT: "+money(v.vat,lang);break;}
-    case "margin":{const v=marginMarkup(n("cost"),n("price"));out="Profit: "+money(v.profit,lang)+"\nMargin: "+v.margin+"%\nMarkup: "+(v.markup??"N/A")+"%";break;}
-    case "loan":{const monthly=monthlyPayment(n("principal"),n("rate"),n("months"));out=(en?"Payment: ":"Rata: ")+money(monthly,lang)+"\nTotal: "+money(monthly*n("months"),lang)+"\nInterest (estimate): "+money(monthly*n("months")-n("principal"),lang);break;}
-    case "savings":{const v=savingProjection(n("principal"),n("monthly"),n("rate"),n("years"));out="Balance: "+money(v.total,lang)+"\nDeposits: "+money(v.deposits,lang)+"\nInterest (hypothetical): "+money(v.interest,lang);break;}
-    case "trip":{const v=tripCost(n("distance"),n("consumption"),n("fuel"),n("people"));out="Fuel: "+v.litres+" L\nTotal: "+money(v.total,lang)+"\nPer person: "+money(v.perPerson,lang);break;}
+    case "vat":{const v=vatBreakdown(n("amount"),n("rate"),val("basis") as "net"|"gross");out=(en?"Net: ":"Netto: ")+money(v.net,lang)+(en?"\nGross: ":"\nBrutto: ")+money(v.gross,lang)+"\nVAT: "+money(v.vat,lang);break;}
+    case "margin":{const v=marginMarkup(n("cost"),n("price"));out=(en?"Profit: ":"Zysk: ")+money(v.profit,lang)+(en?"\nMargin: ":"\nMarża: ")+v.margin+"%"+(en?"\nMarkup: ":"\nNarzut: ")+(v.markup===null?"—":v.markup+"%");break;}
+    case "loan":{const monthly=monthlyPayment(n("principal"),n("rate"),n("months"));out=(en?"Payment: ":"Rata: ")+money(monthly,lang)+(en?"\nTotal payments: ":"\nSuma spłat: ")+money(monthly*n("months"),lang)+(en?"\nInterest (estimate): ":"\nOdsetki (szacunek): ")+money(monthly*n("months")-n("principal"),lang);break;}
+    case "savings":{const v=savingProjection(n("principal"),n("monthly"),n("rate"),n("years"));out=(en?"Balance: ":"Kapitał końcowy: ")+money(v.total,lang)+(en?"\nDeposits: ":"\nWpłaty: ")+money(v.deposits,lang)+(en?"\nInterest (hypothetical): ":"\nZysk (hipotetyczny): ")+money(v.interest,lang);break;}
+    case "trip":{const v=tripCost(n("distance"),n("consumption"),n("fuel"),n("people"));out=(en?"Fuel: ":"Paliwo: ")+v.litres+" l"+(en?"\nTotal: ":"\nSuma: ")+money(v.total,lang)+(en?"\nPer person: ":"\nNa osobę: ")+money(v.perPerson,lang);break;}
     case "dates":out=(en?"Days: ":"Dni: ")+dayDifference(val("from"),val("to"));break;
     case "units":out=String(convertUnits(n("value"),val("from"),val("to")));break;
     case "discount":out=(en?"After discount: ":"Po rabacie: ")+money(n("price")*(1-n("rate")/100),lang);break;
     case "split":out=(en?"Per person: ":"Na osobę: ")+money(n("price")*(1+n("rate")/100)/n("people"),lang);break;
-    case "subscription":{const years=n("years");if(years<0||years>50||!Number.isInteger(years))throw Error("Years must be 0-50");let sum=0;for(let y=0;y<years;y++)sum+=n("price")*12*Math.pow(1+n("increase")/100,y);out=(en?"Total nominal cost: ":"Suma nominalna: ")+money(sum,lang);break;}
+    case "subscription":{const years=n("years");if(years<0||years>50||!Number.isInteger(years))throw Error(en?"Years must be 0–50":"Lata muszą być w zakresie 0–50");let sum=0;for(let y=0;y<years;y++)sum+=n("price")*12*Math.pow(1+n("increase")/100,y);out=(en?"Total nominal cost: ":"Suma nominalna: ")+money(sum,lang);break;}
     case "csvjson":out=JSON.stringify(csvToObjects(val("body")),null,2);break;
-    case "jsoncsv":{const j=JSON.parse(val("body"));if(!Array.isArray(j)||j.some(x=>!x||typeof x!=="object"||Array.isArray(x)))throw Error("Expected an array of JSON objects");out=objectsToCsv(j);break;}
+    case "jsoncsv":{const j=JSON.parse(val("body"));if(!Array.isArray(j)||j.some(x=>!x||typeof x!=="object"||Array.isArray(x)))throw Error(en?"Expected an array of JSON objects":"Wymagana tablica obiektów JSON");out=objectsToCsv(j);break;}
     case "regex":out=await regexSafe(val("pattern"),val("flags"),val("body"));break;
     case "gradient":{if(!hex(val("a"))||!hex(val("b"))||n("angle")<0||n("angle")>360)throw Error("Invalid gradient settings");out="background: linear-gradient("+n("angle")+"deg, "+val("a")+", "+val("b")+");";break;}
-    case "contrast":{if(!hex(val("a"))||!hex(val("b")))throw Error("Invalid HEX");const a=luminance(val("a")),b=luminance(val("b"));const ratio=(Math.max(a,b)+.05)/(Math.min(a,b)+.05);out="Contrast: "+ratio.toFixed(2)+":1\nWCAG AA normal text: "+(ratio>=4.5?"PASS":"FAIL")+"\nWCAG AAA normal text: "+(ratio>=7?"PASS":"FAIL");break;}
+    case "contrast":{if(!hex(val("a"))||!hex(val("b")))throw Error("Invalid HEX");const a=luminance(val("a")),b=luminance(val("b"));const ratio=(Math.max(a,b)+.05)/(Math.min(a,b)+.05);out=(en?"Contrast: ":"Kontrast: ")+ratio.toFixed(2)+":1"+(en?"\nWCAG AA normal text: ":"\nWCAG AA tekst zwykły: ")+(ratio>=4.5?"PASS":"FAIL")+(en?"\nWCAG AAA normal text: ":"\nWCAG AAA tekst zwykły: ")+(ratio>=7?"PASS":"FAIL");break;}
     case "favicon":{if(!hex(val("a"))||!hex(val("b")))throw Error("Invalid HEX");const canvas=document.createElement("canvas");canvas.width=256;canvas.height=256;const ctx=canvas.getContext("2d");if(!ctx)throw Error("Canvas unsupported");ctx.fillStyle=val("a");ctx.fillRect(0,0,256,256);ctx.font="bold 110px Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle=val("b");ctx.fillText(val("name").slice(0,3),128,132,225);const blob=await new Promise<Blob|null>(resolve=>canvas.toBlob(resolve,"image/png"));if(blob)saveBlob(blob,"bernecki-favicon.png");out=en?"PNG icon saved (256 × 256).":"Zapisano ikonkę PNG (256 × 256).";break;}
    }
    setResult(out);
