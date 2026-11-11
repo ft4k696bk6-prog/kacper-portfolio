@@ -6,7 +6,8 @@ export type { BerniLivingMood } from "@/lib/berni-face-state";
 
 const ROOT="/images/berni/poses/";
 const CLOSED="/images/berni/eyelids-closed.jpg";
-const POSES: BerniLivingMood[]=["idle","curious","thinking","happy","excited","sleeping","typing","listening","surprised","worried","working","grabbed"];
+type FrameKey = BerniLivingMood | "typing-low" | "typing-mid" | "typing-high" | "excited-soft";
+const PRELOAD: FrameKey[] = ["typing-low","typing-mid","typing-high","happy","excited","excited-soft","sleeping"];
 const imagePromises=new Map<string,Promise<HTMLImageElement>>();
 function getPortrait(src:string):Promise<HTMLImageElement>{
  const cached=imagePromises.get(src);if(cached)return cached;
@@ -45,8 +46,8 @@ export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0}:Control
   const working=document.createElement("canvas");working.width=640;working.height=640;
   const wctx=working.getContext("2d",{willReadFrequently:true});
   if(!wctx)return;
-  const portraits=new Map<BerniLivingMood,HTMLImageElement>();
-  const textureData=new Map<BerniLivingMood,Uint8ClampedArray>();
+  const portraits=new Map<FrameKey,HTMLImageElement>();
+  const textureData=new Map<FrameKey,Uint8ClampedArray>();
   const history=emptyTransitionMemory();
   let active=true,visible=true,raf=0,lastPaint=0,lastTick=0;
   let showing:BerniLivingMood="idle",effect:InternalTransition|null=null;
@@ -55,7 +56,7 @@ export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0}:Control
   let gazeX=0,gazeY=0,lookX=0,lookY=0,touchUntil=0,replayAt=0;
   let observer:IntersectionObserver|null=null;
 
-  function requestPose(next:BerniLivingMood){
+  function requestPose(next:FrameKey){
    if(portraits.has(next))return Promise.resolve(portraits.get(next)!);
    return getPortrait(ROOT+next+".png").then(img=>{if(active)portraits.set(next,img);return img;});
   }
@@ -114,7 +115,7 @@ export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0}:Control
    wctx!.drawImage(lids,0,0,640,640);
    wctx!.restore();
   }
-  function rasterFor(pose:BerniLivingMood,img:HTMLImageElement){
+  function rasterFor(pose:FrameKey,img:HTMLImageElement){
    const cached=textureData.get(pose);if(cached)return cached;
    const el=document.createElement("canvas");el.width=640;el.height=640;
    const ec=el.getContext("2d",{willReadFrequently:true});
@@ -172,7 +173,26 @@ export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0}:Control
    const alpha=1-Math.exp(-dt/150);
    gazeX+=(targetX-gazeX)*alpha;gazeY+=(targetY-gazeY)*alpha;
    wctx!.clearRect(0,0,640,640);
-   wctx!.drawImage(sprite,0,0,640,640);
+   // Organic speech loop: three perfectly aligned complete portraits,
+   // only their baked lip shapes differ. No separate sticker mouth.
+   if(currentMood==="typing"&&!reduced.matches
+      &&portraits.has("typing-low")&&portraits.has("typing-mid")&&portraits.has("typing-high")){
+     const syllables=Math.abs(Math.sin(now/185)*Math.cos(now/501));
+     const scaled=syllables*2;
+     const first=scaled<1?"typing-low":"typing-mid";
+     const second=scaled<1?"typing-mid":"typing-high";
+     wctx!.drawImage(portraits.get(first)!,0,0,640,640);
+     wctx!.globalAlpha=scaled<1?scaled:scaled-1;
+     wctx!.drawImage(portraits.get(second)!,0,0,640,640);
+     wctx!.globalAlpha=1;
+   } else if(currentMood==="excited"&&!reduced.matches&&portraits.has("excited-soft")){
+     wctx!.drawImage(portraits.get("excited-soft")!,0,0,640,640);
+     wctx!.globalAlpha=.5+.5*Math.sin(now/275);
+     wctx!.drawImage(sprite,0,0,640,640);
+     wctx!.globalAlpha=1;
+   } else {
+     wctx!.drawImage(sprite,0,0,640,640);
+   }
    if(!reduced.matches)morphPupils(currentMood,sprite);
    if(now>=nextBlink&&currentMood!=="sleeping"&&!reduced.matches){
     lastBlink=now;nextBlink=now+3800+Math.random()*3300;
@@ -225,7 +245,7 @@ export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0}:Control
    ensureLoop();
    // Decode only after the idle pose is visible. All three portrait instances
    // reuse one shared image cache, so iPhone network requests are deduplicated.
-   for(const next of POSES){if(next!=="idle")void requestPose(next).catch(()=>{});}
+   for(const next of PRELOAD){void requestPose(next).catch(()=>{});}
   }).catch(()=>{});
   return()=>{
    active=false;if(raf)cancelAnimationFrame(raf);
