@@ -1,0 +1,301 @@
+/* Berni Core — original satin-titanium/obsidian robot companion.
+   No blue, purple, heavy textures, image assets, WebGL or animation dependencies. */
+.stage {
+  position: relative;
+  display: block;
+  isolation: isolate;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  overflow: visible;
+  pointer-events: none;
+  user-select: none;
+  --berni-eye: #f8fbfc;
+  --berni-shadow: rgba(0, 0, 0, .45);
+}
+.ambient {
+  position: absolute;
+  inset: 12% 9% 6%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 65%, rgba(200,210,220,.11) 0%, transparent 69%);
+  filter: blur(7px);
+}
+.groundShadow {
+  position: absolute;
+  bottom: 4%;
+  left: 23%;
+  width: 54%;
+  height: 9%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .48);
+  filter: blur(5px);
+  animation: shadowFloat 4.4s ease-in-out infinite;
+}
+.character {
+  position: absolute;
+  inset: 3% 6% 10%;
+  transform-origin: 50% 76%;
+  animation: breatheFloat 4.4s cubic-bezier(.45,0,.55,1) infinite;
+  filter: drop-shadow(0 3px 4px rgba(0,0,0,.32));
+}
+.helmet {
+  position: absolute;
+  z-index: 2;
+  inset: 9% 5% 15%;
+  border-radius: 35% 35% 39% 39% / 33% 33% 40% 40%;
+  overflow: hidden;
+  background: linear-gradient(145deg,#fafcfe 0%,#8e99a2 10%,#202930 19%,#525c65 28%,#c1cbd2 44%,#64707a 62%,#e1e7eb 79%,#606b74 100%);
+  border: 1px solid rgba(252,254,255,.76);
+  box-shadow:
+    0 2px 2px rgba(255,255,255,.25) inset,
+    -3px -3px 5px rgba(9,14,18,.62) inset,
+    3px 4px 7px rgba(255,255,255,.18) inset,
+    0 6px 13px var(--berni-shadow);
+}
+.shellReflection {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(110deg,transparent 7%,rgba(255,255,255,.45) 16%,transparent 29%,transparent 72%,rgba(255,255,255,.18) 88%,transparent);
+  opacity: .45;
+  pointer-events: none;
+}
+.visor {
+  position: absolute;
+  z-index: 2;
+  inset: 13% 9.5% 18%;
+  overflow: hidden;
+  border-radius: 31% 31% 36% 36% / 31% 31% 37% 37%;
+  border: 1px solid rgba(12,16,19,.95);
+  background: radial-gradient(ellipse at 45% 20%,#283036 0%,#080b0e 48%,#040609 100%);
+  box-shadow: 0 0 0 1px rgba(232,238,240,.5),inset 0 3px 6px #000,inset 1px -2px 6px rgba(87,106,119,.29);
+}
+.matrix {
+  position: absolute;
+  inset: 13% 10%;
+  border-radius: 34%;
+  background-image: radial-gradient(circle,rgba(212,224,235,.14) .65px,transparent 1px);
+  background-size: 5.8px 5.8px;
+  opacity: .52;
+  mask-image: linear-gradient(180deg,transparent,#000 20%,#000 83%,transparent);
+}
+.faceSheen {
+  position: absolute;
+  inset: -2%;
+  background:
+    radial-gradient(ellipse at 40% -9%,rgba(242,249,250,.12),transparent 56%),
+    linear-gradient(145deg,rgba(245,249,252,.15),transparent 26%,transparent 78%,rgba(219,227,230,.07));
+}
+.eyes {
+  position: absolute;
+  left: 18%;
+  top: 33%;
+  width: 64%;
+  height: 31%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transform: translate(calc(var(--berni-look-x, 0px) * .26),calc(var(--berni-look-y, 0px) * .26));
+  transition: transform 180ms ease-out;
+}
+.eyeLeft, .eyeRight {
+  display: block;
+  width: 32%;
+  height: 75%;
+  border-radius: 50% 50% 42% 42%;
+  background: linear-gradient(175deg,#ffffff,#e8f1f3 80%);
+  box-shadow: 0 0 4px rgba(255,255,255,.82),0 0 8px rgba(226,237,240,.38);
+  animation: gentleBlink 6.1s linear infinite;
+  transition: border-radius .19s ease,transform .19s ease,width .19s ease,height .19s ease;
+}
+.eyeRight { animation-delay: -.08s; }
+.mouth {
+  position: absolute;
+  top: 75%;
+  left: 43%;
+  width: 14%;
+  height: 4%;
+  border-radius: 0 0 9px 9px;
+  border-bottom: 2px solid rgba(237,248,250,.77);
+  opacity: .78;
+  transition: all .2s ease;
+}
+.scanline {
+  position: absolute;
+  height: 1px;
+  width: 85%;
+  left: 8%;
+  top: 20%;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.24),transparent);
+  opacity: .15;
+}
+.chinPlate {
+  position: absolute;
+  z-index: 4;
+  bottom: 2%;
+  left: 35%;
+  width: 30%;
+  height: 11%;
+  border-radius: 40% 40% 50% 50%;
+  background: linear-gradient(180deg,#b9c3ca,#535d65 80%,#202b34);
+  box-shadow: inset 0 1px 2px rgba(245,249,250,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.makerMark {
+  font: 800 clamp(6px, 1.25vw, 10px)/1 ui-sans-serif,system-ui,sans-serif;
+  letter-spacing: -.5px;
+  color: #172029;
+  opacity: .8;
+}
+.chinGlint { position: absolute;top: 16%;width: 36%;height: 1px;background: #f4f7f999; }
+.leftFin,.rightFin {
+  position: absolute;
+  z-index: 1;
+  top: 35%;
+  width: 19%;
+  height: 34%;
+  border-radius: 41%;
+  background: linear-gradient(132deg,#d5dde3,#58646d 32%,#182028 62%,#a8b5be 91%);
+  border: 1px solid rgba(232,239,242,.65);
+  box-shadow: 0 4px 8px rgba(0,0,0,.26),inset 0 1px 2px #fff5;
+}
+.leftFin {left: -5%;transform: rotate(-17deg);transform-origin: 100% 50%;animation: earLeft 6s ease-in-out infinite;}
+.rightFin {right: -5%;transform: rotate(17deg);transform-origin: 0 50%;animation: earRight 6.4s ease-in-out -1.2s infinite;}
+.leftFin>span,.rightFin>span {position:absolute;inset: 14% 28%;border-radius: 35%;background: linear-gradient(180deg,#11181d,#65717c 52%,#11181d);box-shadow: inset 0 0 3px #0008;}
+.neck {
+  position: absolute;
+  z-index: 1;
+  bottom: 8%;
+  left: 35%;
+  width: 30%;
+  height: 17%;
+  border-radius: 20% 20% 45% 45%;
+  background: linear-gradient(90deg,#11191f,#a9b5bf 34%,#d9e0e5 53%,#36414a 92%);
+  border-bottom: 2px solid #11191f;
+}
+.coreLight {
+  position: absolute;
+  z-index: 2;
+  bottom: 5%;
+  left: 47%;
+  width: 6%;
+  height: 3%;
+  border-radius: 100%;
+  background: #eef7f8;
+  box-shadow: 0 0 3px #fff,0 0 9px #c3d4d2;
+  opacity: .72;
+  animation: corePulse 3.2s ease-in-out infinite;
+}
+.typeConsole {
+  position: absolute;
+  z-index: 6;
+  left: 23%;
+  width: 54%;
+  height: 17%;
+  bottom: 1%;
+  transform: perspective(130px) rotateX(35deg);
+  background: linear-gradient(155deg,#b6c2cc,#444f5c 22%,#161d23 68%,#9caab3);
+  border: 1px solid #d6e1e7bb;
+  border-radius: 14% 14% 20% 20%;
+  box-shadow: 0 5px 9px #0009,inset 0 1px 2px #fff9;
+  animation: keyboardEnter .28s ease-out both;
+}
+.typeKeyRow {
+  position: absolute;
+  inset: 22% 13%;
+  background: repeating-linear-gradient(90deg,transparent 0 7%,#e9eff6a8 7% 11%,transparent 11% 17%),repeating-linear-gradient(0deg,transparent 0 25%,#d4dde6a4 25% 35%,transparent 35% 50%);
+  animation: keysGlow .32s steps(2) infinite alternate;
+}
+.typeHandLeft,.typeHandRight {
+  position: absolute;
+  z-index: 2;
+  top: -7%;
+  width: 16%;
+  height: 50%;
+  border-radius: 47%;
+  background: linear-gradient(150deg,#f0f4f6,#84919c 65%,#303a43);
+  border: 1px solid #c1cbd2;
+  box-shadow: inset 0 1px 1px #fff9;
+  animation: tap .31s ease-in-out infinite alternate;
+}
+.typeHandLeft {left:-3%;transform-origin: 15% 75%;}
+.typeHandRight {right:-3%;animation-delay:-.15s;transform-origin:85% 75%;}
+.sleepMarker {
+  position: absolute;
+  top: 7%;
+  right: 5%;
+  color: #f0f5f5;
+  text-shadow: 0 0 4px #fff7;
+  font: 700 13px/1 system-ui,sans-serif;
+  animation: sleepUp 2.3s ease-in-out infinite;
+}
+.sleepMarker span {position:absolute;left:10px;top:-9px;font-size:9px;}
+.thinkingMarker {
+  display: flex;
+  gap: 3px;
+  position: absolute;
+  right: 0%;
+  top: 14%;
+}
+.thinkingMarker i {display:block;width:3px;height:3px;border-radius:50%;background:#eaf1f3;animation: thoughtPulse .75s ease-in-out infinite alternate;}
+.thinkingMarker i:nth-child(2){animation-delay:.18s;}
+.thinkingMarker i:nth-child(3){animation-delay:.36s;}
+
+/* All moods are visually distinct, but subtle in the resting state. */
+.stage[data-mood="curious"] .character {animation:curiousTilt 2.6s ease-in-out infinite;}
+.stage[data-mood="curious"] .eyeRight {transform:translateY(-16%) scaleY(1.07);}
+.stage[data-mood="happy"] .eyeLeft,.stage[data-mood="happy"] .eyeRight,
+.stage[data-mood="excited"] .eyeLeft,.stage[data-mood="excited"] .eyeRight {
+  height:37%; background:transparent;
+  box-shadow:none; border-top:3px solid var(--berni-eye);border-radius:100% 100% 0 0;
+  animation:none;transform:translateY(15%);
+}
+.stage[data-mood="happy"] .mouth,
+.stage[data-mood="excited"] .mouth {width:21%;left:39.5%;height:8%;border-bottom-width:2.5px;border-radius:0 0 60% 60%;}
+.stage[data-mood="excited"] .character {animation:excitedBounce .58s ease-in-out infinite;}
+.stage[data-mood="surprised"] .eyeLeft,.stage[data-mood="surprised"] .eyeRight {
+  width:28%;height:95%;border-radius:50%;animation:none;
+}
+.stage[data-mood="surprised"] .mouth {width:6%;height:8%;left:47%;border:2px solid #f1f6f7;border-radius:50%;}
+.stage[data-mood="worried"] .eyeLeft{transform:rotate(18deg);}
+.stage[data-mood="worried"] .eyeRight{transform:rotate(-18deg);}
+.stage[data-mood="worried"] .mouth{border-radius:60% 60% 0 0;border-bottom:0;border-top:2px solid #eaf1f3;}
+.stage[data-mood="thinking"] .eyes {transform:translate(8%,-22%);}
+.stage[data-mood="typing"] .eyes,.stage[data-mood="working"] .eyes {transform:translateY(20%);}
+.stage[data-mood="typing"] .eyeLeft,.stage[data-mood="typing"] .eyeRight,
+.stage[data-mood="working"] .eyeLeft,.stage[data-mood="working"] .eyeRight{height:46%;border-radius:18%;animation:typingEyes .45s steps(2) infinite alternate;}
+.stage[data-mood="sleeping"] .eyeLeft,.stage[data-mood="sleeping"] .eyeRight{
+  height:6%;border-radius:100%;animation:none;
+}
+.stage[data-mood="sleeping"] .character{animation:sleepBob 6s ease-in-out infinite;filter:brightness(.73);}
+.stage[data-mood="listening"] .coreLight {animation:corePulse .55s ease-in-out infinite;}
+.stage[data-mood="grabbed"] .character{animation:grabbed  .42s ease-in-out infinite alternate;}
+.stage[data-mood="grabbed"] .eyeLeft,.stage[data-mood="grabbed"] .eyeRight{height:89%;width:31%;animation:none;border-radius:50%;}
+.stage[data-thermal="cold"]:not([data-mood="grabbed"]) .character {animation:shiver .22s ease-in-out 5 alternate;}
+.stage[data-thermal="hot"] .eyes {filter:brightness(.81);}
+.stage[data-weather="rain"] .scanline {animation:rainScan 1.7s ease-in-out infinite;}
+.stage[data-compact="true"] .ambient,.stage[data-compact="true"] .groundShadow{display:none;}
+.stage[data-compact="true"] .makerMark{font-size:6px;}
+@keyframes breatheFloat{0%,100%{transform:translateY(0) rotate(0)}45%{transform:translateY(-2.5%) rotate(.5deg)}}
+@keyframes shadowFloat{0%,100%{opacity:.45;transform:scaleX(.85)}50%{opacity:.24;transform:scaleX(1)}}
+@keyframes earLeft{0%,72%,100%{transform:rotate(-17deg)}78%{transform:rotate(-24deg)}84%{transform:rotate(-13deg)}}
+@keyframes earRight{0%,68%,100%{transform:rotate(17deg)}75%{transform:rotate(24deg)}83%{transform:rotate(13deg)}}
+@keyframes corePulse{0%,100%{opacity:.52}50%{opacity:1}}
+@keyframes gentleBlink{0%,12%,14%,57%,59%,100%{transform:scaleY(1)}13%,58%{transform:scaleY(.08)}}
+@keyframes curiousTilt{0%,100%{transform:rotate(-5deg) translateY(-1%)}50%{transform:rotate(5deg) translateY(-2%)}}
+@keyframes excitedBounce{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-7%) rotate(3deg)}}
+@keyframes typingEyes{from{opacity:.7;transform:scaleY(.84)}to{opacity:1;transform:scaleY(1.1)}}
+@keyframes sleepBob{0%,100%{transform:rotate(4deg) translateY(2%)}50%{transform:rotate(5deg) translateY(5%)}}
+@keyframes grabbed{from{transform:translateY(-6%) rotate(-7deg)}to{transform:translateY(-11%) rotate(7deg)}}
+@keyframes shiver{from{transform:translateX(-1%)}to{transform:translateX(1%)}}
+@keyframes rainScan{from{opacity:.12;transform:translateY(-20px)}to{opacity:.28;transform:translateY(30px)}}
+@keyframes keyboardEnter{from{opacity:0;transform:translateY(7px) perspective(130px) rotateX(35deg)}to{opacity:1;transform:translateY(0) perspective(130px) rotateX(35deg)}}
+@keyframes keysGlow{from{opacity:.35}to{opacity:1}}
+@keyframes tap{from{transform:translateY(-1px) rotate(-5deg)}to{transform:translateY(3px) rotate(6deg)}}
+@keyframes sleepUp{0%,100%{transform:translateY(3px);opacity:.3}50%{transform:translateY(-4px);opacity:1}}
+@keyframes thoughtPulse{from{opacity:.2;transform:translateY(3px)}to{opacity:1;transform:translateY(-2px)}}
+@media (prefers-reduced-motion: reduce) {
+  .stage *, .stage *::before,.stage *::after {animation:none!important;transition:none!important;}
+}
