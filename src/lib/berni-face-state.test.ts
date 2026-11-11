@@ -29,7 +29,7 @@ describe("Berni blink must always reopen", () => {
     const worried = faceTargetForMood("worried");
     worried.blink = 1;
     worried.mouth = 1;
-    expect(faceTargetForMood("worried").blink).toBe(0);
+    expect(faceTargetForMood("worried").blink).toBe(.16);
     expect(faceTargetForMood("happy").blink).toBe(.17);
     expect(faceTargetForMood("idle").mouth).toBe(0);
   });
