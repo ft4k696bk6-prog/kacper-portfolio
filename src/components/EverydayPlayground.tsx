@@ -1,12 +1,13 @@
 "use client";
 import { useEffect,useMemo,useRef,useState } from "react";
 import { ArrowRight, Check, Clipboard, Download, FileImage, Gamepad2, Image as ImageIcon, Keyboard, LockKeyhole, Mail, Percent, RefreshCcw, Shuffle, Type, Zap } from "lucide-react";
-import { cleanText,dedupeLines,parseNumber,percentage,password,pickRandom,signatureHtml } from "@/lib/everyday-utils";
-import type { PercentMode,SignatureFields } from "@/lib/everyday-utils";
+import { cleanText,dedupeLines,parseNumber,percentage,password,pickRandom } from "@/lib/everyday-utils";
+import type { PercentMode } from "@/lib/everyday-utils";
 import { KeyboardGalaxy } from "./KeyboardGalaxy";
 import { ArcadeGames } from "./ArcadeGames";
 import { ARCADE_GAMES } from "@/lib/arcade-logic";
 import { GameThumbnail } from "./GameThumbnail";
+import { EmailSignatureBuilder } from "./EmailSignatureBuilder";
 import type { ArcadeId } from "@/lib/arcade-logic";
 
 type Tab="text"|"percentage"|"password"|"image"|"random"|"signature"|ArcadeId;
@@ -24,7 +25,6 @@ const entries:{id:Tab;icon:typeof Type;group:"utility"|"play";pl:string;en:strin
 const fieldClass="w-full rounded-xl border border-white/20 bg-[#090909] px-4 py-3 text-sm text-white outline-none placeholder:text-white/35 focus:border-white/60";
 const panelClass="rounded-2xl border border-white/15 bg-[#111111] p-5 md:p-7";
 const actionClass="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/25 px-4 py-2.5 text-sm transition-colors hover:border-white/60";
-const originalSignature:SignatureFields={name:"",role:"",company:"",email:"",phone:"",website:"",accent:"#b7b7b7"};
 
 export function EverydayPlayground({lang,mode="utility"}:{lang:"pl"|"en";mode?:"utility"|"games"}){
  const en=lang==="en";
@@ -47,9 +47,6 @@ export function EverydayPlayground({lang,mode="utility"}:{lang:"pl"|"en";mode?:"
  const [convertedSize,setConvertedSize]=useState(0);
  const [choices,setChoices]=useState("");
  const [chosen,setChosen]=useState("");
- const [signature,setSignature]=useState<SignatureFields>(originalSignature);
- const [signatureCopied,setSignatureCopied]=useState("");
- const [animatedPreview,setAnimatedPreview]=useState(false);
  const [reflex,setReflex]=useState<"idle"|"waiting"|"ready"|"early"|"done">("idle");
  const [reaction,setReaction]=useState(0);
  const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
@@ -58,7 +55,6 @@ export function EverydayPlayground({lang,mode="utility"}:{lang:"pl"|"en";mode?:"
  const texts=useMemo(()=>entries.filter(e=>e.group===(mode==="games"?"play":"utility")&&(en?e.en+" "+e.descEN:e.pl+" "+e.descPL).toLocaleLowerCase().includes(filter.toLocaleLowerCase().trim())),[filter,en,mode]);
  const selected=entries.find(x=>x.id===tab)!;
  const result=percentage(parseNumber(base),parseNumber(rate),percentMode);
- const sigHtml=useMemo(()=>signatureHtml(signature),[signature]);
  useEffect(()=>{
   const hash=location.hash.replace("#","");
   const target=entries.find(x=>x.id===hash);
@@ -102,17 +98,6 @@ export function EverydayPlayground({lang,mode="utility"}:{lang:"pl"|"en";mode?:"
  const downloadImage=()=>{
   if(!photo||!converted)return;
   const link=document.createElement("a");link.href=converted;link.download=photo.name.replace(/\.[^.]+$/,"")+"-bernecki."+(imageType==="image/jpeg"?"jpg":imageType==="image/png"?"png":"webp");link.click();
- };
- const copySignature=async()=>{
-  try{
-   if(typeof ClipboardItem!=="undefined"&&navigator.clipboard.write){
-    await navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([sigHtml],{type:"text/html"}),"text/plain":new Blob([[signature.name,signature.role,signature.company,signature.email,signature.phone,signature.website].filter(Boolean).join("\n")],{type:"text/plain"})})]);
-    setSignatureCopied(en?"Rich signature copied. Paste into your email settings.":"Skopiowano sformatowaną stopkę. Wklej ją w ustawieniach poczty.");
-   }else{
-    await navigator.clipboard.writeText(sigHtml);
-    setSignatureCopied(en?"HTML code copied. Your browser does not support rich copying.":"Skopiowano kod HTML. Przeglądarka nie obsługuje kopiowania formatowanego.");
-   }
-  }catch{setSignatureCopied(en?"Could not copy automatically. Select and copy the HTML code below.":"Nie udało się skopiować. Zaznacz kod HTML poniżej.");}
  };
  const reflexClick=()=>{
   if(reflex==="waiting"){if(timer.current)clearTimeout(timer.current);setReflex("early");return;}
@@ -192,18 +177,7 @@ export function EverydayPlayground({lang,mode="utility"}:{lang:"pl"|"en";mode?:"
     <button className={actionClass} disabled={!choices.trim()} onClick={()=>setChosen(pickRandom(choices))}><Shuffle size={16}/>{en?"Pick a winner":"Losuj wynik"}</button>
     {chosen&&<div aria-live="polite" className="rounded-xl border border-white/35 bg-[#171717] p-7 text-center"><p className="text-xs text-white/55">{en?"Winner":"Wylosowano"}</p><p className="mt-3 break-words text-3xl font-medium">{chosen}</p></div>}
    </div>}
-   {tab==="signature"&&<div className={panelClass+" space-y-5"}>
-    <div className="grid gap-4 sm:grid-cols-2">
-     {([["name",en?"Name":"Imię i nazwisko"],["role",en?"Job title":"Stanowisko"],["company",en?"Company":"Firma"],["email","E-mail"],["phone",en?"Phone":"Telefon"],["website",en?"Website":"Strona WWW"]] as const).map(([key,label])=><label key={key} className="text-sm">{label}<input className={fieldClass+" mt-2"} value={signature[key]} onChange={e=>{setSignature(s=>({...s,[key]:e.target.value}));setSignatureCopied("");}} placeholder={key==="website"?"example.com":undefined}/></label>)}
-    </div>
-    <label className="flex items-center gap-3 text-sm">{en?"Accent color":"Kolor akcentu"}<input type="color" value={signature.accent} onChange={e=>setSignature(s=>({...s,accent:e.target.value}))} className="h-10 w-16 cursor-pointer rounded border border-white/20 bg-transparent"/></label>
-    <label className="flex items-center gap-3 text-xs text-white/70"><input type="checkbox" checked={animatedPreview} onChange={e=>setAnimatedPreview(e.target.checked)} className="size-4 accent-white"/>{en?"Animate the web preview only":"Animuj tylko podgląd na stronie"}</label>
-    <div className={"rounded-xl border border-white/20 bg-white p-5 text-black "+(animatedPreview?"animate-pulse":"")} dangerouslySetInnerHTML={{__html:sigHtml}}/>
-    <button type="button" className={actionClass} onClick={copySignature}><Clipboard size={16}/>{en?"Copy formatted signature":"Kopiuj sformatowaną stopkę"}</button>
-    {signatureCopied&&<p className="text-xs text-white/70" role="status">{signatureCopied}</p>}
-    <label className="block text-xs text-white/60">{en?"HTML source (fallback)":"Kod HTML (wersja zapasowa)"}<textarea readOnly value={sigHtml} rows={4} className={fieldClass+" mt-2 font-mono text-xs"}/></label>
-    <p className="text-xs leading-6 text-white/55">{en?"Email clients often block CSS animation. The copied signature is intentionally static for compatibility; moving effects are limited to the website preview.":"Programy pocztowe często blokują animacje CSS. Kopiowana stopka jest celowo statyczna dla kompatybilności. Efekt ruchu działa wyłącznie w podglądzie WWW."}</p>
-   </div>}
+   {tab==="signature"&&<EmailSignatureBuilder lang={lang}/>}
    {tab==="reflex"&&<div className={panelClass+" space-y-4"}>
     <p className="text-sm leading-6 text-white/60">{en?"Click to start. Wait for green, then click as quickly as possible.":"Kliknij, żeby zacząć. Poczekaj na zielony kolor i kliknij jak najszybciej."}</p>
     <button type="button" onClick={reflexClick} aria-live="polite" className={"flex min-h-72 w-full flex-col items-center justify-center rounded-2xl p-8 text-center text-xl font-semibold transition-colors "+(reflex==="ready"?"bg-emerald-700":reflex==="waiting"?"bg-rose-800":"bg-[#252525]")}>
