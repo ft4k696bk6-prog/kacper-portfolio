@@ -2,7 +2,10 @@
 .portrait{position:absolute;inset:0;display:block;filter:drop-shadow(0 6px 12px rgba(0,0,0,.36));transform-origin:53% 55%;animation:berniBreathing 7s ease-in-out infinite}
 .art{object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none}
 .expressionLayer,.mouthLayer,.blinkLayer,.winkLayer,.manualBlink{position:absolute;inset:0;pointer-events:none;display:block}
-.expressionLayer{-webkit-mask-image:radial-gradient(ellipse 27% 21% at 60% 54%,#000 46%,transparent 100%);mask-image:radial-gradient(ellipse 27% 21% at 60% 54%,#000 46%,transparent 100%)}
+.expressionLayer{position:absolute;inset:0}
+.expressionEyes,.expressionMouth{position:absolute;inset:0;display:block;pointer-events:none}
+.expressionEyes{-webkit-mask-image:radial-gradient(ellipse 25% 14% at 59% 50%,#000 45%,transparent 98%);mask-image:radial-gradient(ellipse 25% 14% at 59% 50%,#000 45%,transparent 98%)}
+.expressionMouth{-webkit-mask-image:radial-gradient(ellipse 16% 11% at 66% 64%,#000 43%,transparent 100%);mask-image:radial-gradient(ellipse 16% 11% at 66% 64%,#000 43%,transparent 100%)}
 .mouthLayer{-webkit-mask-image:radial-gradient(ellipse 15% 10% at 65.5% 64%,#000 43%,transparent 100%);mask-image:radial-gradient(ellipse 15% 10% at 65.5% 64%,#000 43%,transparent 100%);animation:berniSpeak 1.12s ease-in-out infinite}
 .blinkLayer,.winkLayer,.manualBlink{-webkit-mask-image:radial-gradient(ellipse 27% 13% at 60% 50.5%,#000 46%,transparent 100%);mask-image:radial-gradient(ellipse 27% 13% at 60% 50.5%,#000 46%,transparent 100%)}
 .blinkLayer{opacity:0;animation:berniEyelids 6.3s linear infinite}
