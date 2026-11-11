@@ -77,18 +77,41 @@ export function BerniRobot({ mood, weather, lang, compact = false }: Props) {
           <filter id={id+"shadowBlur"} x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.3"/></filter>
           <filter id={id+"eyeBlur"} x="-75%" y="-75%" width="250%" height="250%"><feGaussianBlur stdDeviation="1.2"/></filter>
         </defs>
-        <ellipse cx="84" cy="145" rx="52" ry="5" fill="#d9e2ef" opacity=".15" className={styles.shadow}/>
+
+        <ellipse className={styles.shadow} cx="81" cy="148" rx="42" ry="6.5" fill="#aab4c2" opacity=".25" filter={paint("shadowBlur")}/>
         <g className={styles.tail}>
-          <path d="M119 111q26-4 22-25" stroke={"url(#" + id + "metal)"} strokeWidth="11" strokeLinecap="round" />
-          <path d="M141 85l1-7" stroke="#e4eaf4" strokeWidth="4" strokeLinecap="round"/>
+          <path d="M117 122q23 2 25-19 2-13-8-18" stroke="#313a47" strokeWidth="15" strokeLinecap="round"/>
+          <path d="M117 122q24 1 25-19 1-13-8-18" stroke={paint("chrome")} strokeWidth="10" strokeLinecap="round"/>
+          <ellipse cx="134" cy="84" rx="6" ry="8" fill={paint("metal")} stroke="#52606f" strokeWidth="1.3"/>
+          <path d="M132 80q4 1 4 4" stroke="#fff" strokeWidth="1.4" opacity=".75" strokeLinecap="round"/>
+        </g>
+        <g className={styles.feet}>
+          <rect x="43" y="126" width="23" height="21" rx="9" fill={paint("shell")} stroke="#414d5b" strokeWidth="1.5"/>
+          <rect x="94" y="126" width="23" height="21" rx="9" fill={paint("shell")} stroke="#414d5b" strokeWidth="1.5"/>
+          <path d="M43 139q0-7 10-7h4q9 0 9 8v6H43Z" fill={paint("sole")}/>
+          <path d="M94 139q0-7 10-7h4q9 0 9 8v6H94Z" fill={paint("sole")}/>
+          <path d="M46 142h16M98 142h16" stroke="#edf3fb" strokeWidth="1.25" opacity=".62" strokeLinecap="round"/>
+        </g>
+        <g className={styles.arms}>
+          <g className={styles.armLeft}>
+            <path d="M51 113q-16-1-17 14" stroke="#3b4655" strokeWidth="14" strokeLinecap="round"/>
+            <path d="M50 112q-16 1-16 13" stroke={paint("metal")} strokeWidth="10" strokeLinecap="round"/>
+            <circle cx="34" cy="126" r="6" fill={paint("shell")} stroke="#5b6877" strokeWidth="1.2"/>
+          </g>
+          <g className={styles.armRight}>
+            <path d="M111 113q16-1 17 14" stroke="#3b4655" strokeWidth="14" strokeLinecap="round"/>
+            <path d="M111 112q16 1 17 13" stroke={paint("metal")} strokeWidth="10" strokeLinecap="round"/>
+            <circle cx="128" cy="126" r="6" fill={paint("shell")} stroke="#5b6877" strokeWidth="1.2"/>
+          </g>
         </g>
         <g className={styles.body}>
-          <path d="M55 92q-12 2-14 19v12q3 16 20 15h48q20-1 22-20v-9q-2-18-22-20Z" fill={"url(#" + id + "metal)"} stroke="#4d5865" strokeWidth="1.8" />
-          <path d="M60 109v25M113 109v25" stroke="#4d5865" strokeWidth="1.3" opacity=".5"/>
-          <path d="M53 115q-10 1-10 10v11q0 5 7 5h11q6 0 6-5v-11q-1-9-14-10ZM111 115q-11 1-11 10v11q0 5 7 5h11q6 0 6-5v-11q0-9-13-10Z" fill={"url(#" + id + "metal)"} stroke="#49515f" strokeWidth="1.7" />
-          <path d="M51 135h9M109 135h9" stroke="#555e6c" strokeWidth="2" strokeLinecap="round"/>
-          <circle cx="85" cy="117" r="12.3" fill="#202a35" stroke="#cdd5e0" strokeWidth="2"/>
-          <path d="M79 115l-4 3 4 3M90 115l4 3-4 3M87 113l-4 10" stroke="#f1f5fc" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M50 99q32-16 60 0 15 12 12 31-2 12-12 13H51q-12-2-13-13-3-19 12-31Z" fill={paint("shell")} stroke="#404b5a" strokeWidth="1.5"/>
+          <path d="M49 115q31-15 62 0l2 15q-31 8-66 0Z" fill="#aab5c1" opacity=".24"/>
+          <rect x="61" y="111" width="38" height="26" rx="12" fill="#1b2430" stroke="#c1cbd7" strokeWidth="1.7"/>
+          <rect x="65" y="115" width="30" height="18" rx="9" fill="#101720" stroke="#5a6879" strokeWidth=".7"/>
+          <g className={styles.coreLight}>
+            <path d="M72 124q4-5 8 0-4 5-8 0Zm10-5h4q7 0 2 5 6 5-3 5h-3" stroke="#f0f5fa" strokeWidth="1.5" strokeLinejoin="round" fill="none"/>
+          </g>
         </g>
         <g className={styles.ears}>
           <g className={styles.earLeft}>
