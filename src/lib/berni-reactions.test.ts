@@ -72,8 +72,9 @@ describe("Berni conversation and interaction scenarios", () => {
     expect(detectBerniReaction(message)).toBe(expected);
   });
 
-  it("replaces the old chat bubble without removing the existing chat functions", () => {
-    expect(assistant).toContain("<BerniCompanion");
+  it("restores the classic AI bubble without removing existing chat functions", () => {
+    expect(assistant).toContain('data-testid="ai-chat-bubble"');
+    expect(assistant).not.toContain("<BerniCompanion");
     expect(assistant).not.toContain('data-testid="ai-mascot-open"');
     expect(companion).toContain('data-testid="ai-mascot-open"');
     for (const kept of ['sendMessage(', 'renderBookingPanel()', '"/api/ai-consultant"', '"/api/tools/inspect"']) {
