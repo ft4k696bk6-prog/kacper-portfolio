@@ -39,6 +39,25 @@ describe("Premium 3/4 Berni on the actual website", () => {
     expect(defined.size).toBeGreaterThanOrEqual(8);
     for (const keyframe of used) expect(defined.has(keyframe)).toBe(true);
   });
+  it("renders actual expression image assets with eye and mouth masks", () => {
+    for (const emotion of ["blink", "happy", "surprised", "thinking", "worried", "talking", "wink"]) {
+      expect(existsSync("public/images/berni/moods/" + emotion + ".jpg")).toBe(true);
+      expect(portrait).toContain('moods/' + emotion + '.jpg');
+    }
+    expect(portrait).toContain('data-testid="berni-eye-blink"');
+    expect(portrait).toContain('data-testid="berni-mouth-animation"');
+    expect(portrait).toContain("facialFrameForMood(actualMood)");
+    expect(css).toContain("@keyframes berniEyelids");
+    expect(css).toContain("@keyframes berniSpeak");
+    expect(css).toContain("-webkit-mask-image");
+    expect(css).toContain("mask-image");
+  });
+  it("actually speaks first and then reacts to each assistant response", () => {
+    expect(chat).toContain('setFoxReaction("typing")');
+    expect(chat).toContain('setFoxReaction(detected === "idle" ? "happy" : detected)');
+    expect(chat).toContain("speakTimer");
+    expect(chat).toContain("resetTimer");
+  });
   it("has a dedicated preview featuring large and 56px portraits", () => {
     expect(preview).toContain('size={320}');
     expect(preview).toContain('size={56}');
