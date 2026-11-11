@@ -27,6 +27,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {url:siteUrl+"/en/tools",changeFrequency:"monthly",priority:0.9,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia",en:siteUrl+"/en/tools"}}},
     {url:siteUrl+"/narzedzia/codzienne",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/codzienne",en:siteUrl+"/en/tools/everyday"}}},
     {url:siteUrl+"/en/tools/everyday",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/codzienne",en:siteUrl+"/en/tools/everyday"}}},
+    {url:siteUrl+"/narzedzia/sprawdz-czy-zdjecie-ai",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/sprawdz-czy-zdjecie-ai",en:siteUrl+"/en/tools/ai-image-check"}}},
+    {url:siteUrl+"/en/tools/ai-image-check",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/sprawdz-czy-zdjecie-ai",en:siteUrl+"/en/tools/ai-image-check"}}},
     ...toolboxItems.map(tool=>({url:siteUrl+"/narzedzia/"+tool.slug,changeFrequency:"monthly" as const,priority:0.75,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/"+tool.slug,en:siteUrl+englishToolPath(tool.slug)}}})),
     ...englishToolboxItems.map(tool=>({url:siteUrl+"/en/tools/"+tool.englishSlug,changeFrequency:"monthly" as const,priority:0.75,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/"+tool.slug,en:siteUrl+"/en/tools/"+tool.englishSlug}}})),
     { url: siteUrl + "/partner-w-rozwoju-biznesu", changeFrequency: "monthly", priority: 0.95 },
