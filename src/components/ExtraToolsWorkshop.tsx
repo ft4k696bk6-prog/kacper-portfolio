@@ -54,7 +54,7 @@ async function regexSafe(pattern:string,flags:string,body:string):Promise<string
   const src='self.onmessage=function(e){try{const r=new RegExp(e.data.p,e.data.f);const m=Array.from(e.data.s.matchAll(new RegExp(r.source,r.flags.includes("g")?r.flags:r.flags+"g"))).slice(0,80).map(x=>({match:x[0],index:x.index}));postMessage({ok:true,matches:m});}catch(e){postMessage({ok:false,error:String(e.message)})}};';
   const url=URL.createObjectURL(new Blob([src],{type:"text/javascript"}));const w=new Worker(url);
   const timer=setTimeout(()=>{w.terminate();URL.revokeObjectURL(url);reject(Error("Regex evaluation exceeded 1 second."));},1000);
-  w.onmessage=e=>{clearTimeout(timer);w.terminate();URL.revokeObjectURL(url);e.data.ok?resolve(JSON.stringify(e.data.matches,null,2)):reject(Error(e.data.error));};
+  w.onmessage=e=>{clearTimeout(timer);w.terminate();URL.revokeObjectURL(url);if(e.data.ok)resolve(JSON.stringify(e.data.matches,null,2));else reject(Error(e.data.error));};
   w.onerror=()=>{clearTimeout(timer);w.terminate();URL.revokeObjectURL(url);reject(Error("Regex worker failed"));};
   w.postMessage({p:pattern,f:flags,s:body});
  });
