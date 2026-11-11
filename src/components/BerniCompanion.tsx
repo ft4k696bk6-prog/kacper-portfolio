@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
-import { BerniRobot } from "@/components/BerniRobot";
+import { BerniRendered3D } from "@/components/BerniRendered3D";
 import {
   classifyBerniWeather, detectBerniReaction,
   type BerniMood, type BerniWeather,
@@ -31,6 +31,7 @@ export function BerniCompanion({
   const [sleeping, setSleeping] = useState(false);
   const [reaction, setReaction] = useState<BerniMood | null>(null);
   const [idleGesture, setIdleGesture] = useState<BerniMood | null>(null);
+  const [nudgeWriting, setNudgeWriting] = useState(false);
   const [gestureCycle, setGestureCycle] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -52,8 +53,7 @@ export function BerniCompanion({
 
   const robotMood: BerniMood =
     dragging ? "grabbed" :
-    input.trim() ? "typing" :
-    loading ? "thinking" :
+    (loading || nudgeWriting) ? "typing" :
     reaction ?? (sleeping && !open ? "sleeping" :
       idleGesture ?? (hovered ? "curious" : (mood === "joking" ? "happy" : mood === "idle" ? "idle" : mood)));
 
@@ -69,12 +69,22 @@ export function BerniCompanion({
 
   useEffect(() => {
     if (!nudgeText) return;
+    // The pet types only while IT is preparing a reply or initiating a
+    // contextual note; never because the visitor is entering text.
+    const beginWriting = window.setTimeout(() => setNudgeWriting(true), 0);
+    const stopWriting = window.setTimeout(() => setNudgeWriting(false), 850);
     const start = window.setTimeout(() => {
       const eventMood = detectBerniReaction(nudgeText);
       setReaction(eventMood === "idle" ? "curious" : eventMood);
     }, 0);
     const end = window.setTimeout(() => setReaction(null), 5200);
-    return () => { window.clearTimeout(start); window.clearTimeout(end); };
+    return () => {
+      window.clearTimeout(beginWriting);
+      window.clearTimeout(stopWriting);
+      window.clearTimeout(start);
+      window.clearTimeout(end);
+      setNudgeWriting(false);
+    };
   }, [nudgeText]);
 
   // Berni has a short, randomized idle action every few seconds even if no
@@ -266,7 +276,7 @@ export function BerniCompanion({
   }, []);
 
   return (
-    <div ref={hostRef} className="relative h-[6.2rem] w-[6.2rem] sm:h-28 sm:w-28"
+    <div ref={hostRef} className="relative h-28 w-28 sm:h-32 sm:w-32"
       data-testid="berni-companion" data-mood={robotMood} data-weather={weather?.condition ?? "unknown"} data-dragging={dragging ? "true" : "false"}>
       <button type="button"
         onMouseEnter={() => { setSleeping(false); setHovered(true); }}
@@ -286,7 +296,7 @@ export function BerniCompanion({
         data-testid="ai-mascot-open"
         className={`group relative block h-full w-full touch-none select-none rounded-[2rem] bg-transparent p-0 outline-none transition-transform duration-200 hover:scale-105 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95 ${dragging ? "cursor-grabbing scale-110" : "cursor-grab"}`} style={{ WebkitUserSelect: "none", WebkitTouchCallout: "none" } as React.CSSProperties}>
         <span className="absolute inset-x-3 bottom-2 h-9 rounded-full bg-white/[0.055] blur-xl transition group-hover:bg-white/[0.12]" />
-        <BerniRobot mood={robotMood} weather={weather} lang={lang} />
+        <BerniRendered3D mood={robotMood} weather={weather} lang={lang} />
       </button>
 
     </div>

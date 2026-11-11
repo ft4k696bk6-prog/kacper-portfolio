@@ -55,12 +55,14 @@ describe("Berni complete animation coverage", () => {
     expect(companion).toContain("prefers-reduced-motion: reduce");
   });
 
-  it("responds to text input before idle, loading or message reaction", () => {
+  it("types while Berni answers or composes a note, not while a visitor writes", () => {
     const begin = companion.indexOf("const robotMood:");
     const section = companion.slice(begin, begin + 310);
     expect(begin).toBeGreaterThan(0);
-    expect(section.indexOf('dragging ? "grabbed"')).toBeLessThan(section.indexOf('input.trim() ? "typing"'));
-    expect(section.indexOf('input.trim() ? "typing"')).toBeLessThan(section.indexOf('loading ? "thinking"'));
+    expect(section).toContain('dragging ? "grabbed"');
+    expect(section).toContain('(loading || nudgeWriting) ? "typing"');
+    expect(section).not.toContain('input.trim() ? "typing"');
+    expect(companion).toContain('setNudgeWriting(false), 850');
   });
 
   it("lets CSS inherit actual pointer tracking from the host", () => {
