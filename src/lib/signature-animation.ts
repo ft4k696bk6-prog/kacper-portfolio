@@ -1,5 +1,6 @@
 import type { SignatureFields } from "./everyday-utils";
 import { loadSignatureSceneAssets, renderSignatureScene } from "./signature-scenes";
+import { signatureGifStages } from "./signature-timing";
 import type { SignatureMotion } from "./signature-scenes";
 export type { SignatureMotion } from "./signature-scenes";
 
@@ -90,15 +91,13 @@ export async function makeSignatureGif(fields:SignatureFields,motion:SignatureMo
  if((fields.logo&&!assets.logo)||(fields.photo&&!assets.photo))throw new Error("Nie można wczytać grafiki do GIF. Wgraj obraz lokalnie albo użyj serwera pozwalającego na CORS.");
  const colors=palette(fields.accent);
  const frames:{indices:Uint8Array;delay:number}[]=[];
- // Complete fallback first: Outlook versions without GIF playback show useful content.
- const steps=24;
- const stages=[{p:1,d:40},{p:0,d:150},...Array.from({length:steps},(_,i)=>({p:(i+1)/steps,d:88})),{p:1,d:2200}];
- for(const stage of stages){
+ // Complete first frame in Outlook, then reference-derived reveal / hold / rewind.
+ for(const stage of signatureGifStages(loop)){
   renderSignatureScene(ctx,fields,motion,stage.p,assets);
   let pixels:Uint8ClampedArray;
   try{pixels=ctx.getImageData(0,0,WIDTH,HEIGHT).data;}
   catch{throw new Error("The image server blocks cross-origin GIF export. Upload images locally instead.");}
-  frames.push({indices:indexColors(pixels,colors),delay:stage.d});
+  frames.push({indices:indexColors(pixels,colors),delay:stage.delay});
  }
  return assemble(frames,colors,loop);
 }
