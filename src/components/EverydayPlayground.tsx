@@ -4,8 +4,11 @@ import { ArrowRight, Check, Clipboard, Download, FileImage, Gamepad2, Image as I
 import { cleanText,dedupeLines,parseNumber,percentage,password,pickRandom,signatureHtml } from "@/lib/everyday-utils";
 import type { PercentMode,SignatureFields } from "@/lib/everyday-utils";
 import { KeyboardGalaxy } from "./KeyboardGalaxy";
+import { ArcadeGames } from "./ArcadeGames";
+import { ARCADE_GAMES } from "@/lib/arcade-logic";
+import type { ArcadeId } from "@/lib/arcade-logic";
 
-type Tab="text"|"percentage"|"password"|"image"|"random"|"signature"|"reflex"|"kids";
+type Tab="text"|"percentage"|"password"|"image"|"random"|"signature"|ArcadeId;
 const entries:{id:Tab;icon:typeof Type;group:"utility"|"play";pl:string;en:string;descPL:string;descEN:string}[]=[
  {id:"text",icon:Type,group:"utility",pl:"Porządkowanie tekstu",en:"Text cleaner",descPL:"Usuń ukryte znaki i duplikaty.",descEN:"Remove hidden characters and duplicates."},
  {id:"percentage",icon:Percent,group:"utility",pl:"Kalkulator procentów",en:"Percentage calculator",descPL:"Rabaty, podwyżki i różnice.",descEN:"Discounts, increases and differences."},
@@ -14,7 +17,8 @@ const entries:{id:Tab;icon:typeof Type;group:"utility"|"play";pl:string;en:strin
  {id:"random",icon:Shuffle,group:"utility",pl:"Losowanie",en:"Random picker",descPL:"Wybierz losowo spośród wpisanych opcji.",descEN:"Pick a random choice from a list."},
  {id:"signature",icon:Mail,group:"utility",pl:"Generator stopki e-mail",en:"Email signature maker",descPL:"Prosta stopka HTML do poczty.",descEN:"Simple HTML signature for email."},
  {id:"reflex",icon:Zap,group:"play",pl:"Test refleksu",en:"Reaction speed test",descPL:"Sprawdź swój czas reakcji.",descEN:"Check your reaction time."},
- {id:"kids",icon:Gamepad2,group:"play",pl:"Gra dla dzieci",en:"Kids keyboard game",descPL:"Litery, cyfry, kosmos i efekty.",descEN:"Letters, numbers and space effects."}
+ {id:"kids",icon:Gamepad2,group:"play",pl:"Klawiaturowa galaktyka",en:"Keyboard Galaxy",descPL:"Litery, cyfry, kosmos i efekty.",descEN:"Letters, numbers and space effects."},
+ ...ARCADE_GAMES.filter(game=>game.id!=="reflex"&&game.id!=="kids").map(game=>({id:game.id,icon:Gamepad2,group:"play" as const,pl:game.pl,en:game.en,descPL:game.plDesc,descEN:game.enDesc}))
 ];
 const fieldClass="w-full rounded-xl border border-white/20 bg-[#090909] px-4 py-3 text-sm text-white outline-none placeholder:text-white/35 focus:border-white/60";
 const panelClass="rounded-2xl border border-white/15 bg-[#111111] p-5 md:p-7";
@@ -116,16 +120,24 @@ export function EverydayPlayground({lang}:{lang:"pl"|"en"}){
   <aside className="min-w-0">
    <label className="block"><span className="sr-only">{en?"Search tools":"Szukaj narzędzi"}</span>
     <input type="search" className={fieldClass} value={filter} onChange={e=>setFilter(e.target.value)} placeholder={en?"Find a tool…":"Znajdź narzędzie…"}/></label>
-   <nav className="mt-4 flex gap-2 overflow-x-auto pb-3 lg:flex-col lg:overflow-visible" aria-label={en?"Tool selection":"Wybór narzędzia"}>
-    {texts.map(item=>{const Icon=item.icon;return <button type="button" key={item.id} onClick={()=>go(item.id)}
-      className={"flex min-w-48 items-center gap-3 rounded-xl border px-4 py-3 text-left transition-colors lg:min-w-0 "+(tab===item.id?"border-white/55 bg-white/15 text-white":"border-white/10 bg-[#111111] text-white/70 hover:border-white/35")}>
-      <Icon size={18} className="shrink-0"/><span className="text-sm">{en?item.en:item.pl}</span></button>;})}
+   <nav className="mt-4 space-y-6" aria-label={en?"Tool and game selection":"Wybór narzędzi i gier"}>
+    {(["utility","play"] as const).map(group=>{
+     const groupItems=texts.filter(item=>item.group===group);
+     if(!groupItems.length)return null;
+     return <div key={group}>
+      <p className="mb-3 text-[11px] font-semibold uppercase tracking-[.16em] text-white/50">{group==="utility"?(en?"02 / Tools":"02 / Narzędzia"):(en?"01 / Games & entertainment":"01 / Gry i rozrywka")} <span className="ml-2 text-white/35">{groupItems.length}</span></p>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-1">{groupItems.map(item=>{const Icon=item.icon;return <button type="button" key={item.id} onClick={()=>go(item.id)}
+       aria-current={tab===item.id?"page":undefined}
+       className={"flex min-h-[58px] min-w-0 items-center gap-3 rounded-xl border px-3 py-3 text-left transition-colors "+(tab===item.id?"border-white/55 bg-white/15 text-white":"border-white/10 bg-[#111111] text-white/70 hover:border-white/35")}>
+       <Icon size={18} className="shrink-0"/><span className="min-w-0 text-xs leading-5 sm:text-sm">{en?item.en:item.pl}</span></button>;})}</div>
+     </div>;
+    })}
    </nav>
    {!texts.length&&<p className="mt-3 text-sm text-white/50">{en?"No matching tools.":"Brak pasujących narzędzi."}</p>}
    <p className="mt-3 text-xs leading-6 text-white/45">{en?"Tools run locally in your browser, without account creation.":"Narzędzia działają lokalnie w przeglądarce, bez zakładania konta."}</p>
   </aside>
   <div className="min-w-0 space-y-5">
-   {tab!=="kids"&&<header className={panelClass}>
+   {(selected.group==="utility"||tab==="reflex")&&<header className={panelClass}>
     <div className="flex items-center gap-3"><selected.icon size={22}/><h2 className="text-2xl font-medium">{en?selected.en:selected.pl}</h2></div>
     <p className="mt-3 text-sm leading-6 text-white/65">{en?selected.descEN:selected.descPL}</p>
    </header>}
@@ -197,6 +209,7 @@ export function EverydayPlayground({lang}:{lang:"pl"|"en"}){
     </button>
    </div>}
    {tab==="kids"&&<div className={panelClass}><KeyboardGalaxy lang={lang}/></div>}
+   {selected.group==="play"&&tab!=="kids"&&tab!=="reflex"&&<ArcadeGames lang={lang} game={tab as ArcadeId}/>}
    {toast&&<p role="status" className="fixed bottom-6 right-6 z-50 rounded-xl bg-white px-5 py-3 text-sm text-black shadow-xl"><Check size={15} className="mr-2 inline"/>{toast}</p>}
    <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-5 text-xs text-white/50">
     <span>{en?"Made for everyday use. No sign-up.":"Stworzone do codziennego użytku. Bez logowania."}</span>
