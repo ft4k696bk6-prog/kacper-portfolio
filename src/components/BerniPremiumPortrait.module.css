@@ -1,4 +1,16 @@
 .stage{position:relative;isolation:isolate;display:inline-flex;flex:0 0 auto;vertical-align:middle;user-select:none;-webkit-user-select:none;overflow:visible}
-.portrait{position:absolute;inset:0;display:block;filter:drop-shadow(0 6px 12px rgba(0,0,0,.36));transform-origin:50% 54%}
+.portrait{position:absolute;inset:0;display:block;filter:drop-shadow(0 6px 12px rgba(0,0,0,.36));transform-origin:50% 54%;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
 .art{object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none}
-@media(prefers-reduced-motion:reduce){.portrait{animation:none!important;transition:none!important}}
+.stage[data-mood="curious"] .portrait{transform:rotate(2.4deg) translate(1%,-1%)}
+.stage[data-mood="listening"] .portrait{transform:rotate(-1.5deg)}
+.stage[data-mood="thinking"] .portrait{transform:rotate(-3.3deg) translateY(1%)}
+.stage[data-mood="working"] .portrait{transform:rotate(-1.7deg)}
+.stage[data-mood="happy"] .portrait{transform:rotate(1.3deg) scale(1.015)}
+.stage[data-mood="excited"] .portrait{animation:berniJoy 1.4s ease-in-out infinite}
+.stage[data-mood="surprised"] .portrait{transform:scale(1.035)}
+.stage[data-mood="grabbed"] .portrait{transform:rotate(2.8deg) scale(1.02)}
+.stage[data-mood="worried"] .portrait{transform:rotate(-2.2deg)}
+.stage[data-mood="sleeping"] .portrait{animation:berniRest 4.2s ease-in-out infinite}
+@keyframes berniJoy{0%,100%{transform:translateY(0) rotate(1deg)}50%{transform:translateY(-2%) rotate(-1deg)}}
+@keyframes berniRest{0%,100%{transform:translateY(1%) rotate(2deg)}50%{transform:translateY(2%) rotate(3deg)}}
+@media(prefers-reduced-motion:reduce){.portrait{animation:none!important;transition:none!important;transform:none!important}}
