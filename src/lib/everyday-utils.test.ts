@@ -1,5 +1,5 @@
 import { describe,expect,it } from "vitest";
-import { cleanText,dedupeLines,percentage,parseNumber,password,pickRandom,signatureHtml } from "./everyday-utils";
+import { cleanText,dedupeLines,percentage,parseNumber,password,pickRandom,signatureHtml,signatureSafeLink,SIGNATURE_SOCIALS } from "./everyday-utils";
 
 describe("Everyday Tools",()=>{
  it("supports localized numbers and rejects invalid input",()=>{
@@ -57,4 +57,28 @@ describe("Everyday Tools",()=>{
   expect(signatureHtml({...s,logo:"https://cdn.example.org/?x=%22%3E"})).not.toContain('src="https://cdn.example.org/?x=">');
   expect(signatureHtml({...s,logo:"https://cdn.example.org/?x=1&y=2"})).toContain("&amp;y=2");
  });
+ it("creates independently clickable safe social links for every supported service",()=>{
+  const socials=Object.fromEntries(SIGNATURE_SOCIALS.map(item=>[item.id,"https://example.org/"+item.id]));
+  const html=signatureHtml({name:"Ania",role:"CEO",company:"Example",email:"a@example.org",phone:"",website:"",accent:"#555555",socials});
+  for(const item of SIGNATURE_SOCIALS){
+   expect(html).toContain('href="https://example.org/'+item.id+'"');
+   expect(html).toContain('title="'+item.name+'"');
+  }
+  expect(signatureSafeLink("javascript:alert(1)")).toBe("");
+  expect(signatureSafeLink("https://user:pass@example.org")).toBe("");
+  expect(signatureSafeLink("https://example.org/valid")).toBe("https://example.org/valid");
+  expect(signatureHtml({name:"X",role:"",company:"",email:"",phone:"",website:"",accent:"#555555",socials:{facebook:"javascript:alert(1)",linkedin:"https://linkedin.com/in/example"}}))
+   .not.toContain('href="javascript:');
+ });
+ it("uses an Outlook-safe animated image and retains real email/social links",()=>{
+  const html=signatureHtml({name:"Anna",role:"CEO",company:"Acme",email:"anna@acme.org",phone:"",website:"",accent:"#888888",
+   animationUrl:"https://cdn.example.org/signature.gif",socials:{linkedin:"https://linkedin.com/in/anna"}});
+  expect(html).toContain('src="https://cdn.example.org/signature.gif"');
+  expect(html).toContain("Anna · CEO · Acme · anna@acme.org");
+  expect(html).toContain('href="mailto:anna@acme.org"');
+  expect(html).toContain('href="https://linkedin.com/in/anna"');
+  const unsafe=signatureHtml({name:"Anna",role:"",company:"",email:"",phone:"",website:"",accent:"#888888",animationUrl:"javascript:evil()"});
+  expect(unsafe).not.toContain("javascript:");
+ });
+
 });
