@@ -261,9 +261,16 @@ export function AIMascotAssistant() {
     if (messages.length < 2 || !lastMessage || lastMessage.role !== "assistant" || lastReactionMessageId.current === lastMessage.id) return;
     lastReactionMessageId.current = lastMessage.id;
     const detected = detectBerniReaction(lastMessage.content);
-    setFoxReaction(detected === "idle" ? "happy" : detected);
-    const timer = window.setTimeout(() => setFoxReaction("idle"), 4300);
-    return () => window.clearTimeout(timer);
+    // First he visibly speaks (mouth opens/closes), then reacts to the content.
+    setFoxReaction("typing");
+    const speakTimer = window.setTimeout(() => {
+      setFoxReaction(detected === "idle" ? "happy" : detected);
+    }, 1750);
+    const resetTimer = window.setTimeout(() => setFoxReaction("idle"), 5300);
+    return () => {
+      window.clearTimeout(speakTimer);
+      window.clearTimeout(resetTimer);
+    };
   }, [messages]);
 
   const foxMood: BerniPortraitMood = loading ? "thinking" : error ? "worried" : foxReaction !== "idle" ? foxReaction : open ? "listening" : nudge ? "curious" : "idle";
