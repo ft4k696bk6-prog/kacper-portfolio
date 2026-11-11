@@ -94,6 +94,13 @@ export function BerniRobot({ mood, weather, lang, compact = false }: Props) {
           <g className={styles.eyes}>
             {mood === "sleeping" ? (
               <g className={styles.eyeLights}><path d="M60 84q9 6 18 0M88 84q9 6 18 0" stroke="#f2f7ff" strokeWidth="3.8" strokeLinecap="round" /></g>
+            ) : mood === "grabbed" ? (
+              <g className={styles.eyeLights}>
+                <ellipse cx="70" cy="84" rx="6" ry="9" fill="#f4f8ff"/>
+                <ellipse cx="96" cy="84" rx="6" ry="9" fill="#f4f8ff"/>
+                <circle cx="71" cy="85" r="2.4" fill="#1a2431"/>
+                <circle cx="97" cy="85" r="2.4" fill="#1a2431"/>
+              </g>
             ) : mood === "happy" || mood === "excited" ? (
               <g className={styles.eyeLights}><path d="M61 88q8-14 17 0M88 88q8-14 17 0" stroke="#f2f7ff" strokeWidth="4.2" strokeLinecap="round"/></g>
             ) : mood === "worried" ? (
@@ -106,11 +113,32 @@ export function BerniRobot({ mood, weather, lang, compact = false }: Props) {
             )}
           </g>
           <g className={styles.mouth}>
-            {mood === "surprised" ? <ellipse cx="82" cy="101" rx="3" ry="4" fill="#e4f2ff"/> :
+            {mood === "surprised" || mood === "grabbed" ? <ellipse cx="82" cy="101" rx="3" ry="4" fill="#e4f2ff"/> :
               <path d="M78 100q4 4 8 0" stroke="#edf4ff" strokeWidth="2" strokeLinecap="round" />}
           </g>
           <path d="M48 97q-4 5-6 2" stroke="#d0d8e3" strokeWidth="2" strokeLinecap="round"/>
         </g>
+        {/* Real, visible mini keyboard and animated paws while the visitor types. */}
+        <g className={styles.keyboardRig} aria-hidden="true">
+          <rect x="48" y="116" width="72" height="26" rx="4.5" fill="#0c1119" stroke="#9baabc" strokeWidth="2" />
+          <rect x="53" y="120" width="62" height="9" rx="2" fill="#243246" stroke="#a6b7c9" strokeWidth=".8" />
+          <path d="M56 124h55M60 120v9M69 120v9M78 120v9M87 120v9M96 120v9M105 120v9" stroke="#d4e1f1" strokeWidth=".8" opacity=".7"/>
+          <path d="M62 135h45" stroke="#dfeaf5" strokeWidth="2" strokeLinecap="round" />
+          <g className={styles.typePawLeft}>
+            <path d="M49 121q-10-9-13 0-3 8 15 16" stroke="#b0bac6" strokeWidth="9" strokeLinecap="round" fill="none"/>
+            <ellipse cx="58" cy="134" rx="7" ry="4" fill="#f2f5f8" stroke="#566271" strokeWidth="1"/>
+          </g>
+          <g className={styles.typePawRight}>
+            <path d="M119 122q9-8 13 0 3 7-15 15" stroke="#b0bac6" strokeWidth="9" strokeLinecap="round" fill="none"/>
+            <ellipse cx="111" cy="134" rx="7" ry="4" fill="#f2f5f8" stroke="#566271" strokeWidth="1"/>
+          </g>
+          <circle cx="109" cy="124" r="2" fill="#eaf7ff" className={styles.keyFlash}/>
+        </g>
+        {mood === "grabbed" ? (
+          <g className={styles.grabFx} stroke="#edf5ff" strokeWidth="2" strokeLinecap="round" opacity=".9">
+            <path d="M18 52l-5-8M23 38l-1-9M142 52l6-8M136 38l2-10" />
+          </g>
+        ) : null}
         {weather ? <WeatherFX condition={weather.condition} /> : null}
         {thermal === "hot" ? <g className={styles.hot}><path d="M130 65q-10 13-2 13 9 0 2-13ZM36 85q-9 12-2 12 9 0 2-12Z" fill="#c0dff6"/></g> : null}
         {mood === "sleeping" ? <g className={styles.sleep}><text x="121" y="49">z</text><text x="134" y="35">Z</text></g> : null}

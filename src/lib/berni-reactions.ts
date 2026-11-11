@@ -1,6 +1,6 @@
 export type BerniMood =
   | "idle" | "curious" | "thinking" | "happy" | "excited" | "sleeping"
-  | "typing" | "listening" | "surprised" | "worried" | "working";
+  | "typing" | "listening" | "surprised" | "worried" | "working" | "grabbed";
 
 export type BerniWeatherCondition =
   | "clear" | "clouds" | "rain" | "snow" | "sleet"

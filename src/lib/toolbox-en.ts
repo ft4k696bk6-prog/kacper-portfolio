@@ -2,6 +2,11 @@ import { toolboxItems, type ToolboxItem } from "./toolbox";
 
 export type EnglishToolboxItem = ToolboxItem & { englishSlug:string };
 const englishData: Record<string,{slug:string;title:string;description:string}> = {
+  "kalkulator-vat": {
+    "slug": "vat-calculator",
+    "title": "Free VAT net-to-gross calculator — 8% and 23%",
+    "description": "Convert net to gross and gross to net at 8% or 23% VAT. See the VAT amount instantly and copy the results."
+  },
   "audyt-strony": {
     "slug": "free-website-audit",
     "title": "Free comprehensive website audit",

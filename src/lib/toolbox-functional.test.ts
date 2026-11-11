@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { toolboxItems } from "./toolbox";
 import { fromSite, localRun, calculateSha256 } from "./toolbox-engine";
+import { calculateVat, parseVatAmount } from "./vat-calculator";
 
 const raw = {
  status:200,url:"https://sagan.dev/",bytes:24000,ttfb:152,
@@ -48,14 +49,14 @@ const fixtures:Record<string,{values:Record<string,string>;csv?:string}>={
  base64:{values:{body:"Zażółć",operation:"encode"}},
  contrast:{values:{fg:"#ffffff",bg:"#000000"}}
 };
-describe("45 toolbox functions: deterministic execution",()=>{
- it("has 45 unique slugs and matching execution paths",()=>{
-  expect(toolboxItems).toHaveLength(45);
-  expect(new Set(toolboxItems.map(t=>t.slug)).size).toBe(45);
-  expect(new Set(toolboxItems.map(t=>t.mode)).size).toBe(45);
+describe("46 toolbox functions: deterministic execution",()=>{
+ it("has 46 unique slugs and matching execution paths",()=>{
+  expect(toolboxItems).toHaveLength(46);
+  expect(new Set(toolboxItems.map(t=>t.slug)).size).toBe(46);
+  expect(new Set(toolboxItems.map(t=>t.mode)).size).toBe(46);
   for(const t of toolboxItems){
    expect(t.title).toMatch(/^Darmow(y|a|e) /);
-   expect(remote.has(t.mode)||t.mode==="sha256"||t.mode in fixtures).toBe(true);
+   expect(remote.has(t.mode)||t.mode==="sha256"||t.mode==="vat"||t.mode in fixtures).toBe(true);
   }
  });
  for(const tool of toolboxItems){
@@ -65,6 +66,12 @@ describe("45 toolbox functions: deterministic execution",()=>{
     result=fromSite(tool.mode,raw);
    }else if(tool.mode==="sha256"){
     result={title:"SHA-256",text:await calculateSha256("abc")};
+   }else if (tool.mode === "vat") {
+    const amount = parseVatAmount("1000,00");
+    expect(amount).toBe(100000);
+    const calculation = calculateVat(amount!, 23, "net-to-gross");
+    expect(calculation).toMatchObject({ netCents: 100000, taxCents: 23000, grossCents: 123000 });
+    return;
    }else if(tool.mode==="sitemap"){
     // DOMParser is a browser API; validate it in a browser/integration test.
     expect(typeof fixtures.sitemap.values.body).toBe("string");

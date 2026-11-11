@@ -4,10 +4,10 @@ import { englishToolboxItems,englishToolForSlug,englishToolPath,localizedToolPat
 import { buildPortfolioOpenRouterPrompt,isPortfolioTopic } from "./portfolio-openrouter";
 import { standaloneWebsiteCheckerSlugs,visibleToolboxItems,visibleEnglishToolboxItems,catalogToolboxCount,isShownInToolboxCatalog } from "./toolbox-visibility";
 describe("bilingual toolbox SEO and assistant integration",()=>{
- it("provides one distinct English page for each of the 45 tools",()=>{
-  expect(englishToolboxItems).toHaveLength(45);
-  expect(new Set(englishToolboxItems.map(t=>t.englishSlug)).size).toBe(45);
-  expect(new Set(englishToolboxItems.map(t=>t.slug)).size).toBe(45);
+ it("provides one distinct English page for each of the 46 tools",()=>{
+  expect(englishToolboxItems).toHaveLength(46);
+  expect(new Set(englishToolboxItems.map(t=>t.englishSlug)).size).toBe(46);
+  expect(new Set(englishToolboxItems.map(t=>t.slug)).size).toBe(46);
   for(const t of englishToolboxItems){
    expect(t.title).toMatch(/^Free /);
    expect(t.title).not.toMatch(/darmow|bezpłatn/i);
@@ -20,12 +20,13 @@ describe("bilingual toolbox SEO and assistant integration",()=>{
   }
  });
  it("preserves the original 45 Polish URLs",()=>{
-  expect(toolboxItems).toHaveLength(45);
+  expect(toolboxItems).toHaveLength(46);
   expect(localizedToolboxPath("pl")).toBe("/narzedzia");
   expect(localizedToolboxPath("en")).toBe("/en/tools");
   expect(englishToolPath("audyt-strony")).toBe("/en/tools/free-website-audit");
   expect(englishToolPath("diagnostyka-meta-ads")).toBe("/en/tools/meta-ads-troubleshooter");
   expect(englishToolPath("kalkulator-roas")).toBe("/en/tools/roas-calculator");
+  expect(englishToolPath("kalkulator-vat")).toBe("/en/tools/vat-calculator");
  });
  it("has translations for all five tool categories",()=>{
   expect(Object.values(englishToolboxCategories)).toHaveLength(5);
@@ -46,9 +47,9 @@ describe("bilingual toolbox SEO and assistant integration",()=>{
 describe("focused public toolbox",()=>{
  it("keeps the 12 overlapping checkers out of both catalogs",()=>{
   expect(standaloneWebsiteCheckerSlugs).toHaveLength(12);
-  expect(catalogToolboxCount).toBe(33);
-  expect(visibleToolboxItems).toHaveLength(32);
-  expect(visibleEnglishToolboxItems).toHaveLength(32);
+  expect(catalogToolboxCount).toBe(34);
+  expect(visibleToolboxItems).toHaveLength(33);
+  expect(visibleEnglishToolboxItems).toHaveLength(33);
   expect(visibleToolboxItems.some(x=>x.slug==="audyt-strony")).toBe(false);
   expect(visibleEnglishToolboxItems.some(x=>x.slug==="audyt-strony")).toBe(false);
   for(const slug of standaloneWebsiteCheckerSlugs){
