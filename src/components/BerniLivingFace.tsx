@@ -34,7 +34,7 @@ function forMood(mood: BerniLivingMood): Face {
     case "typing": return { ...zero, smile: .3, mouth: .48 };
     case "worried": return { ...zero, worried: .9, gazeY: .35 };
     case "sleeping": return { ...zero, blink: 1 };
-    default: return zero;
+    // Never return the shared neutral preset: blink updates target on every frame.\n    // Mutating that singleton made the first blink permanent.\n    default: return { ...zero };
   }
 }
 
@@ -243,7 +243,7 @@ export function BerniLivingFace({
       lastPaint = now;
 
       const status = live.current.mood;
-      const target = forMood(status);
+      // Always allocate a fresh frame target; automatic blink must not mutate presets.\n      const target = { ...forMood(status) };
       if (!motionQuery.matches) {
         if (now >= nextBlink && status !== "sleeping") {
           lastBlink = now;
