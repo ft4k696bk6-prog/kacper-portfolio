@@ -1,7 +1,7 @@
 export type PercentMode = "increase" | "decrease" | "part" | "difference";
 export type SignatureLayout = "side" | "stacked" | "compact";
 export type SignatureSocial = "facebook" | "linkedin" | "instagram" | "youtube" | "tiktok" | "x" | "github" | "whatsapp" | "calendar";
-export type SignatureFields = { name: string; role: string; company: string; email: string; phone: string; website: string; accent: string; logo?: string; photo?: string; logoWidth?: number; layout?: SignatureLayout; language?: "pl" | "en"; socials?: Partial<Record<SignatureSocial,string>>; animationUrl?: string; animationStyle?: "geometry"|"slices"|"cinematic"|"reveal"|"slide"|"pulse" };
+export type SignatureFields = { name: string; role: string; company: string; email: string; phone: string; website: string; accent: string; logo?: string; photo?: string; photoFocusX?: number; photoFocusY?: number; logoWidth?: number; layout?: SignatureLayout; language?: "pl" | "en"; socials?: Partial<Record<SignatureSocial,string>>; animationUrl?: string; animationStyle?: "geometry"|"slices"|"cinematic"|"reveal"|"slide"|"pulse" };
 
 export function parseNumber(value: string): number {
   const compact=value.trim().replace(/\s/g,"").replace(/,/g,".");
