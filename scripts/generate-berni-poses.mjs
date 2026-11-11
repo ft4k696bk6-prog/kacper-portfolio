@@ -30,11 +30,15 @@ const moods={
  idle:[0,0,0,0,0,0],curious:[.8,-.25,.23,0,.2,.22],thinking:[-.68,-.35,-.08,0,-.1,-.08],
  happy:[.13,-.04,.78,.22,.15,.05],excited:[.30,-.18,1,.49,.45,.32],
  sleeping:[0,0,.1,0,-.08,-.15],typing:[.2,.40,.28,.55,.02,0],
+ 'typing-low':[.2,.40,.28,.12,.02,0],
+ 'typing-mid':[.2,.40,.28,.39,.02,0],
+ 'typing-high':[.2,.40,.28,.91,.02,0],
+ 'excited-soft':[.30,-.18,.95,.38,.45,.32],
  listening:[.66,-.04,.2,.08,.13,.08],surprised:[.10,-.28,-.02,.28,.8,.65],
  worried:[-.25,.38,-.28,.05,-.65,-.2],working:[-.58,.23,.08,.16,-.05,-.12],
  grabbed:[.30,-.18,.02,.3,.6,.35]
 };
-const depths={happy:4,excited:9,typing:5,surprised:3,grabbed:5,listening:1};
+const depths={happy:4,excited:9,typing:5,'typing-low':2,'typing-mid':8,'typing-high':21,'excited-soft':6,surprised:3,grabbed:5,listening:1};
 const {w,h,p:source}=decode(readFileSync(root+"/berni-fox-head.png"));
 if(w!==h)throw Error("Berni source must be square");
 const factor=w/640,clean=Uint8Array.from(source);
