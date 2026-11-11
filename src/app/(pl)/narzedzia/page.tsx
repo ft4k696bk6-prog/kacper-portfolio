@@ -5,9 +5,9 @@ import { toolboxItems } from "@/lib/toolbox";
 import { visibleToolboxItems } from "@/lib/toolbox-visibility";
 export const metadata: Metadata={
  title:"Darmowe narzędzia i audyt strony WWW | bernecki.dev",
- description:"Darmowy kompleksowy audyt strony WWW, SEO, Meta Ads, kalkulatory, konwertery i narzędzia dla firm. Bez rejestracji.",
+ description:"Darmowe narzędzia online: kompleksowy audyt WWW, edytor PDF, SEO, Meta Ads, kalkulatory i konwertery. Bez rejestracji, bez logowania i bez karty kredytowej.",
  alternates:{canonical:"https://bernecki.dev/narzedzia",languages:{"pl-PL":"https://bernecki.dev/narzedzia",en:"https://bernecki.dev/en/tools"}},
- openGraph:{title:"Darmowe narzędzia dla firm i programistów | bernecki.dev",description:"Sprawdź stronę internetową, SEO, reklamy i koszty sprzedaży. Darmowe narzędzia online bez rejestracji.",url:"https://bernecki.dev/narzedzia",type:"website"}
+ openGraph:{title:"Darmowe narzędzia dla firm i programistów | bernecki.dev",description:"Darmowy edytor PDF, audyt strony, kalkulatory i konwertery online. Bez rejestracji, bez karty kredytowej.",url:"https://bernecki.dev/narzedzia",type:"website"}
 };
 export default function FreeToolsPage(){
  const jsonLd={"@context":"https://schema.org","@type":"CollectionPage",name:"Darmowe narzędzia online – bernecki.dev",url:"https://bernecki.dev/narzedzia",inLanguage:"pl-PL",
@@ -18,7 +18,7 @@ export default function FreeToolsPage(){
   <header className="mt-12 max-w-4xl">
    <p className="page-eyebrow">DARMOWY AUDYT / NARZĘDZIA / BEZ REJESTRACJI</p>
    <h1 className="mt-6">Darmowe narzędzia online.</h1>
-   <p className="page-intro mt-6 max-w-3xl text-base md:text-lg">Zacznij od kompleksowego audytu strony WWW, a niżej znajdź kalkulatory, konwertery i praktyczne narzędzia dla biznesu. Prosto, czytelnie i bez rejestracji.</p>
+   <p className="page-intro mt-6 max-w-3xl text-base md:text-lg">Zacznij od darmowego audytu strony WWW, a niżej znajdź edytor PDF, kalkulatory, konwertery i inne bezpłatne narzędzia. Bez rejestracji, logowania, karty kredytowej i abonamentu.</p>
   </header>
   <FreeToolsDirectory/>
   <section className="mt-16 grid gap-6 rounded-2xl border border-white/15 bg-[#111111] p-6 md:grid-cols-[1fr_auto] md:items-center md:p-9">
