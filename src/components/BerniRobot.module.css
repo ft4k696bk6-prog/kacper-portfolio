@@ -11,14 +11,14 @@
   transform: translateZ(0);
 }
 .robot { width: 100%; height: 100%; overflow: visible; display: block; }
-.shadow { transform-origin: 84px 145px; animation: shadowPulse 4.5s ease-in-out infinite; }
-.body { transform-origin: 83px 123px; animation: breathe 4.5s ease-in-out infinite; }
-.head { transform-origin: 82px 112px; animation: headIdle 5.4s ease-in-out infinite; }
-.tail { transform-origin: 118px 113px; animation: tailWag 3.7s ease-in-out infinite; }
-.earLeft, .earRight { transform-box: fill-box; transform-origin: center top; animation: earTwitch 9s ease-in-out infinite; }
-.earRight { animation-delay: -4.4s; }
+.shadow { transform-origin: 84px 145px; animation: shadowPulse 3.6s ease-in-out infinite; }
+.body { transform-origin: 83px 123px; animation: breathe 3.4s ease-in-out infinite; }
+.head { transform-origin: 82px 112px; animation: headIdle 3.9s ease-in-out infinite; }
+.tail { transform-origin: 118px 113px; animation: tailWag 2.3s ease-in-out infinite; }
+.earLeft, .earRight { transform-box: fill-box; transform-origin: center top; animation: earTwitch 4.4s ease-in-out infinite; }
+.earRight { animation-delay: -1.8s; }
 .eyes { transform: translate(var(--berni-look-x), var(--berni-look-y)); transition: transform 115ms ease-out; }
-.eyeLights { transform-box: fill-box; transform-origin: center; animation: blink 7.2s infinite; }
+.eyeLights { transform-box: fill-box; transform-origin: center; animation: blink 4.6s infinite; }
 .cloud { fill: #9aa5b4; stroke: #e1e8f0; stroke-width: 1.5; }
 .forecast { opacity: .95; }
 .sun { stroke: #f3f6fb; stroke-width: 3; stroke-linecap: round; fill: #bfc7d2; animation: sunPulse 4s ease-in-out infinite; transform-origin: 81px 18px; }
@@ -34,7 +34,6 @@
 .sleep { fill: #eef4ff; font-size: 16px; font-weight: 800; animation: sleepFloat 3.5s ease-in-out infinite; }
 .thought { fill: #e2eaf4; animation: thoughtPulse 1.6s ease-in-out infinite; }
 .sparkles { animation: sparkle .65s ease-in-out infinite alternate; }
-.stage[data-mood="curious"] .head, .stage[data-mood="listening"] .head { animation: curiousTilt 2.6s ease-in-out infinite; }
 .stage[data-mood="typing"] .head { animation: typingLook .7s ease-in-out infinite; }
 .stage[data-mood="thinking"] .head, .stage[data-mood="working"] .head { animation: thinkingLook 2.8s ease-in-out infinite; }
 .stage[data-mood="sleeping"] .head { animation: asleep 5s ease-in-out infinite; }
@@ -49,10 +48,10 @@
 .stage[data-mood="sleeping"] .cold,
 .stage[data-mood="sleeping"] .hot { opacity: .3; }
 @keyframes breathe { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.035); } }
-@keyframes headIdle { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-1.3px) rotate(-1deg); } }
+@keyframes headIdle { 0%,100% { transform: translateY(0) rotate(0); } 24% { transform: translateY(-2.4px) rotate(-3deg); } 52% { transform: translateY(0) rotate(1deg); } 76% { transform: translateY(-1.8px) rotate(3deg); } }
 @keyframes tailWag { 0%,100% { transform: rotate(-11deg); } 50% { transform: rotate(16deg); } }
-@keyframes earTwitch { 0%,92%,100% { transform: rotate(0); } 95% { transform: rotate(8deg); } }
-@keyframes blink { 0%,27%,29%,72%,74%,100% { transform: scaleY(1); } 28%,73% { transform: scaleY(.06); } }
+@keyframes earTwitch { 0%,70%,100% { transform: rotate(0); } 77% { transform: rotate(11deg); } 83% { transform: rotate(-4deg); } 89% { transform: rotate(0); } }
+@keyframes blink { 0%,21%,23%,64%,66%,68%,100% { transform: scaleY(1); } 22%,65%,67% { transform: scaleY(.06); } }
 @keyframes curiousTilt { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(5deg); } }
 @keyframes typingLook { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(2px) rotate(2deg); } }
 @keyframes thinkingLook { 0%,100% { transform: rotate(4deg); } 50% { transform: rotate(-2deg) translateY(-1px); } }
@@ -82,5 +81,3 @@
 
 /* Look down at the chat field while typing, not at the pointer. */
 .stage[data-mood="typing"] .eyes { transform: translate(0px, 3px); }
-.stage[data-mood="listening"] .earLeft { animation: earTwitch 1.2s ease-in-out infinite; }
-.stage[data-mood="listening"] .earRight { animation: earTwitch 1.35s ease-in-out infinite reverse; }

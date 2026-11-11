@@ -3,7 +3,7 @@
 import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { usePathname, useRouter } from "next/navigation";
-import { CalendarDays, Eye, Loader2, Mic, MicOff, RotateCcw, Send, X } from "lucide-react";
+import { CalendarDays, Eye, Loader2, RotateCcw, Send, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { DEFAULT_BOOKING_TIME_ZONE, formatSlotDate } from "@/lib/booking";
@@ -12,6 +12,7 @@ import { COOKIE_CONSENT_EVENT, COOKIE_CONSENT_KEY, type CookieConsentState } fro
 import { localizedToolPath } from "@/lib/toolbox-en";
 import { BerniCompanion } from "@/components/BerniCompanion";
 import { BerniRobot } from "@/components/BerniRobot";
+import { verifyCompanionIpCity } from "@/lib/companion-verified-location";
 import {
   getCompanionContext,
   pickCompanionNudge,
@@ -53,45 +54,11 @@ type BookingState = {
 };
 
 type LocalAction = "projects" | "services" | "bcrm" | "book" | "contact" | "audit";
-type MascotMood = "idle" | "curious" | "joking" | "listening" | "thinking";
+type MascotMood = "idle" | "curious" | "joking" | "thinking";
 
 type MascotBehaviorState = {
   mood: MascotMood;
 };
-
-type SpeechRecognitionLike = {
-  lang: string;
-  continuous: boolean;
-  interimResults: boolean;
-  start: () => void;
-  stop: () => void;
-  abort: () => void;
-  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
-  onerror: ((event: { error?: string }) => void) | null;
-  onend: (() => void) | null;
-};
-
-type SpeechRecognitionEventLike = {
-  resultIndex: number;
-  results: {
-    length: number;
-    [index: number]: {
-      isFinal: boolean;
-      [index: number]: {
-        transcript: string;
-      };
-    };
-  };
-};
-
-type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
-
-declare global {
-  interface Window {
-    SpeechRecognition?: SpeechRecognitionConstructor;
-    webkitSpeechRecognition?: SpeechRecognitionConstructor;
-  }
-}
 
 const HIDE_DURATION_MS = 48 * 60 * 60 * 1000;
 const HIDDEN_UNTIL_KEY = "ai-mascot-hidden-until";
@@ -262,6 +229,7 @@ export function AIMascotAssistant() {
   const router = useRouter();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [introFinished, setIntroFinished] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const [nudge, setNudge] = useState<CompanionNudge | null>(null);
@@ -279,8 +247,6 @@ export function AIMascotAssistant() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [lastFailedQuestion, setLastFailedQuestion] = useState("");
-  const [dictationSupported, setDictationSupported] = useState(false);
-  const [listening, setListening] = useState(false);
   const [behavior, setBehavior] = useState<MascotBehaviorState>({ mood: "idle" });
   const [booking, setBooking] = useState<BookingState>(defaultBookingState);
   const [bookingName, setBookingName] = useState("");
@@ -288,7 +254,6 @@ export function AIMascotAssistant() {
   const [bookingTopic, setBookingTopic] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
-  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const locale = lang === "pl" ? "pl-PL" : "en-US";
@@ -315,7 +280,6 @@ export function AIMascotAssistant() {
     }
     setNudgeSettingsLoaded(true);
     syncCookieBannerVisibility();
-    setDictationSupported(Boolean(window.SpeechRecognition || window.webkitSpeechRecognition));
 
     const compactQuery = window.matchMedia("(max-width: 767px)");
     const syncCompactViewport = () => setIsCompactViewport(compactQuery.matches);
@@ -351,23 +315,59 @@ export function AIMascotAssistant() {
     };
   }, []);
 
-  // Public, zero-token messages. IP-based weather is optional and never needed
-  // for the chat itself. Only request location context after consent is accepted.
+  // Render Berni only after the actual intro finishes; no arbitrary delay.
   useEffect(() => {
+    const root = document.documentElement;
+    const sync = () => {
+      const phase = root.dataset.homeIntro;
+      setIntroFinished(phase !== "armed" && phase !== "running");
+    };
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(root, { attributes: true, attributeFilter: ["data-home-intro"] });
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  // IP city is merely a guess. Only use it when the visitor has already
+  // granted browser location AND that position agrees with the IP estimate.
+  // No location permission prompts are initiated by this component.
+  useEffect(() => {
+    setServerContext(null);
     if (!mounted || cookieBannerVisible || nudgesDisabled) return;
     if (localStorage.getItem(COOKIE_CONSENT_KEY) !== "accepted") return;
+    if (!navigator.permissions?.query || !navigator.geolocation) return;
+    let cancelled = false;
     const controller = new AbortController();
-    fetch("/api/companion-context", { signal: controller.signal, cache: "no-store" })
-      .then(response => response.ok ? response.json() : null)
-      .then((data: CompanionServerContext | null) => {
-        if (!controller.signal.aborted && data) setServerContext(data);
-      })
-      .catch(() => {});
-    return () => controller.abort();
+    async function load() {
+      try {
+        const permission = await navigator.permissions.query({ name: "geolocation" });
+        if (permission.state !== "granted" || cancelled) return;
+        const position = await new Promise<GeolocationPosition | null>((resolve) => {
+          navigator.geolocation.getCurrentPosition(
+            resolve, () => resolve(null),
+            { enableHighAccuracy: false, maximumAge: 300000, timeout: 5000 },
+          );
+        });
+        if (!position || cancelled) return;
+        const response = await fetch("/api/companion-context", { signal: controller.signal, cache: "no-store" });
+        if (!response.ok || cancelled) return;
+        const data = (await response.json()) as CompanionServerContext;
+        const verified = verifyCompanionIpCity(data, {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy,
+        });
+        if (!cancelled) setServerContext(verified);
+      } catch {
+        // If the two independent signals cannot agree, do not name a city.
+      }
+    }
+    void load();
+    return () => { cancelled = true; controller.abort(); };
   }, [mounted, cookieBannerVisible, nudgesDisabled]);
 
   useEffect(() => {
-    if (!mounted || !nudgeSettingsLoaded || cookieBannerVisible || hidden || open || nudge || nudgesDisabled) return;
+    if (!mounted || !introFinished || !nudgeSettingsLoaded || cookieBannerVisible || hidden || open || nudge || nudgesDisabled) return;
     const alreadyShown = Number(sessionStorage.getItem(NUDGE_SESSION_COUNT_KEY) || 0);
     if (alreadyShown >= 2) return;
 
@@ -411,7 +411,7 @@ export function AIMascotAssistant() {
     }
     timer = window.setTimeout(maybeShow, alreadyShown === 0 ? 10500 : 120000);
     return () => window.clearTimeout(timer);
-  }, [mounted, nudgeSettingsLoaded, cookieBannerVisible, hidden, open, nudge, nudgesDisabled, pathname, lang, serverContext]);
+  }, [mounted, introFinished, nudgeSettingsLoaded, cookieBannerVisible, hidden, open, nudge, nudgesDisabled, pathname, lang, serverContext]);
 
   useEffect(() => {
     if (!nudge) return;
@@ -573,71 +573,6 @@ export function AIMascotAssistant() {
       setLoading(false);
       inputRef.current?.focus();
     }
-  }
-
-  function startDictation() {
-    if (!dictationSupported || listening || loading) return;
-
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      setError(t.aiMascot.dictationUnsupported);
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognitionRef.current = recognition;
-    recognition.lang = lang === "pl" ? "pl-PL" : "en-US";
-    recognition.continuous = false;
-    recognition.interimResults = true;
-    setError("");
-    setListening(true);
-    setBehavior((current) => ({ ...current, mood: "listening" }));
-
-    recognition.onresult = (event) => {
-      let transcript = "";
-      let finalTranscript = "";
-
-      for (let index = event.resultIndex; index < event.results.length; index += 1) {
-        transcript += event.results[index][0].transcript;
-        if (event.results[index].isFinal) {
-          finalTranscript += event.results[index][0].transcript;
-        }
-      }
-
-      const cleanTranscript = transcript.trim();
-      if (cleanTranscript) setInput(cleanTranscript);
-
-      const cleanFinal = finalTranscript.trim();
-      if (cleanFinal) {
-        setInput(cleanFinal);
-        recognition.stop();
-        window.setTimeout(() => inputRef.current?.focus(), 80);
-      }
-    };
-
-    recognition.onerror = () => {
-      setListening(false);
-      setError(t.aiMascot.dictationPermissionError);
-      setBehavior((current) => ({ ...current, mood: "curious" }));
-    };
-    recognition.onend = () => {
-      setListening(false);
-      setBehavior((current) => ({ ...current, mood: "idle" }));
-    };
-
-    try {
-      recognition.start();
-    } catch {
-      setListening(false);
-      setError(t.aiMascot.dictationPermissionError);
-      setBehavior((current) => ({ ...current, mood: "curious" }));
-    }
-  }
-
-  function stopDictation() {
-    recognitionRef.current?.stop();
-    setListening(false);
-    setBehavior((current) => ({ ...current, mood: "idle" }));
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -823,7 +758,7 @@ export function AIMascotAssistant() {
     [t.aiMascot.quickActions,lang],
   );
 
-  if (!mounted || cookieBannerVisible) return null;
+  if (!mounted || cookieBannerVisible || !introFinished) return null;
 
   return (
     <>
@@ -990,25 +925,11 @@ export function AIMascotAssistant() {
                                 void sendMessage();
                               }
                             }}
-                            placeholder={dictationSupported ? t.aiMascot.placeholderDictation : t.aiMascot.placeholder}
+                            placeholder={t.aiMascot.placeholder}
                             rows={1}
                             maxLength={250}
                             className="max-h-28 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-6 text-white outline-none placeholder:text-white/70"
                           />
-                          {dictationSupported ? (
-                            <button
-                              type="button"
-                              onClick={listening ? stopDictation : startDictation}
-                              aria-label={listening ? t.aiMascot.stopMicLabel : t.aiMascot.micLabel}
-                              className={`grid h-10 w-10 shrink-0 place-items-center rounded-full transition ${
-                                listening
-                                  ? "bg-[var(--brand-black)] text-white"
-                                  : "bg-[var(--brand-black)] text-white hover:bg-[var(--brand-black)]"
-                              }`}
-                            >
-                              {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-                            </button>
-                          ) : null}
                           <button
                             type="submit"
                             disabled={loading || !input.trim()}
@@ -1018,9 +939,6 @@ export function AIMascotAssistant() {
                             <Send className="h-4 w-4" />
                           </button>
                         </div>
-                        <p className="mt-2 text-xs leading-5 text-white/70">
-                          {dictationSupported ? t.aiMascot.dictationHint : t.aiMascot.dictationUnsupported}
-                        </p>
                       </form>
                     </div>
                   </motion.aside>
@@ -1061,7 +979,6 @@ export function AIMascotAssistant() {
                 mood={behavior.mood}
                 input={input}
                 loading={loading}
-                listening={listening}
                 open={open}
                 lastReply={messages[messages.length - 1]?.role === "assistant" ? messages[messages.length - 1].content : ""}
                 nudgeText={nudge?.text ?? ""}

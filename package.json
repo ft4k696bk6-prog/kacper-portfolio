@@ -17,7 +17,7 @@
     "pseo:autopilot": "node scripts/pseo-autopilot.mjs",
     "test:toolbox": "vitest run src/lib/toolbox-functional.test.ts src/lib/toolbox-en.test.ts",
     "prebuild": "npm run test:toolbox && npm run test:companion && npm run test:berni",
-    "test:companion": "vitest run src/lib/companion-scenarios.test.ts src/lib/companion-rotation.test.ts",
+    "test:companion": "vitest run src/lib/companion-scenarios.test.ts src/lib/companion-rotation.test.ts src/lib/companion-verified-location.test.ts",
     "test:berni": "vitest run src/lib/berni-reactions.test.ts"
   },
   "dependencies": {

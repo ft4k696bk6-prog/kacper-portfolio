@@ -10,10 +10,9 @@ import type { CompanionWeather } from "@/lib/companion-scenarios";
 
 type Props = {
   lang: "pl" | "en";
-  mood: "idle" | "curious" | "joking" | "listening" | "thinking";
+  mood: "idle" | "curious" | "joking" | "thinking";
   input: string;
   loading: boolean;
-  listening: boolean;
   open: boolean;
   lastReply: string;
   nudgeText: string;
@@ -23,12 +22,14 @@ type Props = {
 
 /** Companion visuals are intentionally independent of the chat backend. */
 export function BerniCompanion({
-  lang, mood, input, loading, listening, open, lastReply, nudgeText, weatherContext, onOpen,
+  lang, mood, input, loading, open, lastReply, nudgeText, weatherContext, onOpen,
 }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const lastActivityRef = useRef(0);
   const [sleeping, setSleeping] = useState(false);
   const [reaction, setReaction] = useState<BerniMood | null>(null);
+  const [idleGesture, setIdleGesture] = useState<BerniMood | null>(null);
+  const [gestureCycle, setGestureCycle] = useState(0);
   // Context is inferred server-side from approximate IP region after consent.
   // It only influences expressions, never adds a standalone forecast or GPS prompt.
   const weather: BerniWeather | null = weatherContext && Number.isFinite(weatherContext.temperature)
@@ -42,10 +43,9 @@ export function BerniCompanion({
 
   const robotMood: BerniMood =
     loading ? "thinking" :
-    listening ? "listening" :
     input.trim() ? "typing" :
     reaction ?? (sleeping && !open ? "sleeping" :
-      mood === "joking" ? "happy" : mood === "idle" ? "idle" : mood);
+      idleGesture ?? (mood === "joking" ? "happy" : mood === "idle" ? "idle" : mood));
 
   useEffect(() => {
     if (!lastReply) {
@@ -66,6 +66,34 @@ export function BerniCompanion({
     const end = window.setTimeout(() => setReaction(null), 12500);
     return () => { window.clearTimeout(start); window.clearTimeout(end); };
   }, [nudgeText]);
+
+  // Berni has a short, randomized idle action every few seconds even if no
+  // visitor interacts with him. Timers are paused for open chat, active text,
+  // reduced motion and sleeping. No animation libraries or network calls.
+  useEffect(() => {
+    if (open || loading || input.trim() || sleeping || reaction ||
+        document.visibilityState !== "visible" ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setIdleGesture(null);
+      return;
+    }
+
+    const actions: BerniMood[] = ["curious", "happy", "surprised", "excited", "thinking"];
+    let resetTimer: number | undefined;
+    const startTimer = window.setTimeout(() => {
+      if (document.visibilityState !== "visible") return;
+      const next = actions[Math.floor(Math.random() * actions.length)];
+      setIdleGesture(next);
+      resetTimer = window.setTimeout(() => {
+        setIdleGesture(null);
+        setGestureCycle(current => current + 1);
+      }, 1350 + Math.floor(Math.random() * 850));
+    }, 3300 + Math.floor(Math.random() * 3600));
+    return () => {
+      window.clearTimeout(startTimer);
+      if (resetTimer !== undefined) window.clearTimeout(resetTimer);
+    };
+  }, [open, loading, input, sleeping, reaction, gestureCycle]);
 
   useEffect(() => {
     if (!lastActivityRef.current) lastActivityRef.current = Date.now();

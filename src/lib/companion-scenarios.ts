@@ -14,7 +14,13 @@ export type CompanionWeather = {
   sourceUrl: string;
 };
 export type CompanionServerContext = {
-  location: { city: string | null; country: string | null; approximate: true };
+  location: {
+    city: string | null;
+    country: string | null;
+    approximate: true;
+    /** Unverified coarse IP estimate, never presented as the actual town. */
+    candidate?: { city: string; latitude: number; longitude: number } | null;
+  };
   weather: CompanionWeather | null;
 };
 export type CompanionContext = {
