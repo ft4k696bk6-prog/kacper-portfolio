@@ -74,7 +74,8 @@ describe("Berni drag behavior and animations", () => {
   });
   it("switches to visible typing and picked-up moods", () => {
     expect(pet).toContain('dragging ? "grabbed"');
-    expect(pet).toContain('input.trim() ? "typing"');
+    expect(pet).toContain('(loading || nudgeWriting) ? "typing"');
+    expect(pet).not.toContain('input.trim() ? "typing"');
     expect(robot).toContain("keyboardRig");
     expect(robot).toContain('mood === "grabbed"');
     expect(css).toContain(".stage[data-mood=\"typing\"] .keyboardRig");
