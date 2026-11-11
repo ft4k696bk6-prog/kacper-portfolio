@@ -4,8 +4,8 @@ import { FreeToolsDirectory } from "@/components/FreeToolsDirectory";
 import { toolboxItems } from "@/lib/toolbox";
 import { visibleToolboxItems } from "@/lib/toolbox-visibility";
 export const metadata: Metadata={
- title:"Darmowe narzędzia SEO, WWW, Meta Ads i CRM | bernecki.dev",
- description:"Darmowe testery stron WWW, SEO i botów AI, kalkulatory Meta Ads, ROAS, CPL, CRM oraz narzędzia techniczne. Bez rejestracji.",
+ title:"Darmowe narzędzia oraz 10 gier online | bernecki.dev",
+ description:"Dwie przejrzyste kategorie: gry i rozrywka oraz narzędzia. 10 darmowych gier, audyt WWW, SEO, Meta Ads, kalkulatory i konwertery. Bez rejestracji.",
  alternates:{canonical:"https://bernecki.dev/narzedzia",languages:{"pl-PL":"https://bernecki.dev/narzedzia",en:"https://bernecki.dev/en/tools"}},
  openGraph:{title:"Darmowe narzędzia dla firm i programistów | bernecki.dev",description:"Sprawdź stronę internetową, SEO, reklamy i koszty sprzedaży. Darmowe narzędzia online bez rejestracji.",url:"https://bernecki.dev/narzedzia",type:"website"}
 };
@@ -16,9 +16,9 @@ export default function FreeToolsPage(){
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(jsonLd).replace(/</g,"\\u003c")}}/>
   <nav className="text-xs text-white/50" aria-label="Ścieżka strony"><Link href="/" className="underline underline-offset-4">Strona główna</Link><span className="mx-2">/</span>Narzędzia</nav>
   <header className="mt-12 max-w-4xl">
-   <p className="page-eyebrow">TOOLBOX / AUDYT WWW + KALKULATORY / BEZ REJESTRACJI</p>
-   <h1 className="mt-6">Darmowe narzędzia do stron, reklam i sprzedaży.</h1>
-   <p className="page-intro mt-6 max-w-3xl text-base md:text-lg">Nie musisz zakładać konta ani podawać maila. Sprawdź swoją witrynę, diagnozuj najczęstsze problemy z reklamami, analizuj kampanie i przeliczaj opłacalność działań. Wybierz główny audyt strony lub oddzielne narzędzie do konkretnego zadania. Szczegółowe testery techniczne pozostają dostępne pod swoimi adresami.</p>
+   <p className="page-eyebrow">GRY I ROZRYWKA / NARZĘDZIA / ZA DARMO</p>
+   <h1 className="mt-6">Darmowe narzędzia i gry online.</h1>
+   <p className="page-intro mt-6 max-w-3xl text-base md:text-lg">Wybierz jedną z dwóch kategorii: gry i rozrywka albo narzędzia. Zagraj w 10 minigier na telefonie i komputerze albo skorzystaj z audytu WWW, kalkulatorów, konwerterów i narzędzi do reklamy. Bez logowania, instalowania i zbędnego przeklikiwania.</p>
   </header>
   <FreeToolsDirectory/>
   <section className="mt-16 grid gap-6 rounded-2xl border border-white/15 bg-[#111111] p-6 md:grid-cols-[1fr_auto] md:items-center md:p-9">

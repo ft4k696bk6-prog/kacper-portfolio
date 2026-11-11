@@ -6,8 +6,8 @@ import { visibleEnglishToolboxItems } from "@/lib/toolbox-visibility";
 
 const root="https://bernecki.dev/en/tools";
 export const metadata:Metadata={
- title:"Free Website Audit, Meta Ads & CRM Tools | bernecki.dev",
- description:"Free website audit, SEO checks, Meta Ads troubleshooting, ROAS and CRM calculators, and developer utilities. No account required.",
+ title:"Free Online Tools and 10 Browser Games | bernecki.dev",
+ description:"Two clear categories: games and entertainment, and tools. Play 10 free games or use website audits, marketing calculators and image utilities. No account needed.",
  alternates:{canonical:root,languages:{en:root,"pl-PL":"https://bernecki.dev/narzedzia"}},
  openGraph:{title:"Free website, marketing and developer tools",description:"Free online tools. Check your website, ads and business metrics with no sign-up.",url:root,locale:"en_US",type:"website"}
 };
@@ -17,9 +17,9 @@ export default function EnglishToolsPage(){
  return <main lang="en" className="site-page mx-auto max-w-7xl px-5 pb-24 pt-36 md:px-8">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(data).replace(/</g,"\\u003c")}}/>
   <nav className="text-xs text-white/50" aria-label="Breadcrumbs"><Link href="/" className="underline underline-offset-4">Home</Link><span className="mx-2">/</span>Free tools</nav>
-  <header className="mt-12 max-w-4xl"><p className="page-eyebrow">TOOLBOX / WEBSITE AUDIT + CALCULATORS / NO SIGN-UP</p>
-   <h1 className="mt-6">Free tools for websites, advertising and business.</h1>
-   <p className="page-intro mt-6 max-w-3xl text-base md:text-lg">Audit your site, troubleshoot Meta Ads, analyze campaign performance and calculate marketing or CRM costs. Start with the all-in-one website audit or choose a standalone tool for a specific task. No account or email gate required.</p>
+  <header className="mt-12 max-w-4xl"><p className="page-eyebrow">GAMES & ENTERTAINMENT / TOOLS / FREE</p>
+   <h1 className="mt-6">Free online tools and games.</h1>
+   <p className="page-intro mt-6 max-w-3xl text-base md:text-lg">Choose one of two categories: Games & entertainment or Tools. Play ten mini-games on your phone or computer, or use the website audit, calculators, converters and advertising helpers. No account, downloads or unnecessary navigation.</p>
   </header>
   <EnglishToolsDirectory/>
   <section className="mt-16 grid gap-6 rounded-2xl border border-white/15 bg-[#111111] p-6 md:grid-cols-[1fr_auto] md:items-center md:p-9">
