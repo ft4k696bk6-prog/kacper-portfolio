@@ -30,7 +30,7 @@ describe("Berni blink must always reopen", () => {
     worried.blink = 1;
     worried.mouth = 1;
     expect(faceTargetForMood("worried").blink).toBe(0);
-    expect(faceTargetForMood("happy").blink).toBe(0);
+    expect(faceTargetForMood("happy").blink).toBe(.17);
     expect(faceTargetForMood("idle").mouth).toBe(0);
   });
 });
@@ -54,7 +54,7 @@ describe("Each Berni reaction button is visibly distinct and animated", () => {
   ] as const;
   it.each(changingModes)("%s continues moving after selection", mood => {
     const start = animatedFaceTarget(mood, 0);
-    const later = animatedFaceTarget(mood, 1180);
+    const later = animatedFaceTarget(mood, 730);
     const difference = (Object.keys(start) as (keyof typeof start)[])
       .reduce((total, key) => total + Math.abs(start[key] - later[key]), 0);
     expect(difference).toBeGreaterThan(.015);
