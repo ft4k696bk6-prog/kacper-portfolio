@@ -1,6 +1,6 @@
 "use client";
 import {useMemo,useState} from "react";
-import {ArrowRight,Calculator,Check,Clipboard,Code2,Download,Palette} from "lucide-react";
+import {ArrowRight,Calculator,Clipboard,Code2} from "lucide-react";
 import {convertUnits,csvToObjects,dayDifference,marginMarkup,monthlyPayment,objectsToCsv,savingProjection,tripCost,vatBreakdown} from "@/lib/extra-calculators";
 import {saveBlob} from "@/lib/browser-toolkit";
 
