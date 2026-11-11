@@ -31,8 +31,8 @@ function WeatherFX({ condition }: { condition: BerniWeatherCondition }) {
 }
 
 /**
- * Lightweight, resolution-independent SVG robot dog.
- * Facial expression and motion use CSS; no 3D engine, canvas or animation files.
+ * Bespoke, resolution-independent premium robotic companion.
+ * Polished SVG materials and expressive CSS micro-animation, no video, canvas or 3D libraries.
  */
 export function BerniRobot({ mood, weather, lang, compact = false }: Props) {
   const id = useId().replace(/:/g, "");
@@ -198,7 +198,6 @@ export function BerniRobot({ mood, weather, lang, compact = false }: Props) {
         {mood === "sleeping" ? <g className={styles.sleep}><text x="121" y="49">z</text><text x="134" y="35">Z</text></g> : null}
         {mood === "thinking" || mood === "working" ? <g className={styles.thought}><circle cx="127" cy="52" r="2.5"/><circle cx="137" cy="45" r="3.2"/><circle cx="146" cy="32" r="4"/></g> : null}
         {mood === "excited" ? <g className={styles.sparkles}><path d="M28 42v-9m-5 5h10M136 101v-12m-6 6h12" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"/></g> : null}
-        <rect x="66" y="79" width="9" height="17" rx="4.5" fill="#eaf6ff" opacity=".1" filter={"url(#" + id + "glow)"} />
       </svg>
     </span>
   );
