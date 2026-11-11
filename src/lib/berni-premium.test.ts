@@ -58,9 +58,10 @@ describe("Berni premium custom vector", () => {
   });
 
   it("keeps all expected weather effects and small chat portrait", () => {
-    for (const condition of ["clear", "clouds", "rain", "snow", "sleet", "thunder", "hail", "fog", "wind"]) {
+    for (const condition of ["clear", "rain", "snow", "sleet", "thunder", "hail", "fog", "wind"]) {
       expect(robot).toContain('condition === "' + condition + '"');
     }
+    expect(robot).toContain('["clouds", "rain", "snow", "sleet", "thunder", "hail"].includes(condition)');
     expect(robot).toContain('data-compact={compact ? "true" : "false"}');
     expect(css).toContain('.stage[data-compact="true"]');
   });
