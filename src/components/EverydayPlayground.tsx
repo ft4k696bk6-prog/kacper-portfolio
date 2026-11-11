@@ -56,11 +56,17 @@ export function EverydayPlayground({lang,mode="utility"}:{lang:"pl"|"en";mode?:"
  const selected=entries.find(x=>x.id===tab)!;
  const result=percentage(parseNumber(base),parseNumber(rate),percentMode);
  useEffect(()=>{
-  const hash=location.hash.replace("#","");
-  const target=entries.find(x=>x.id===hash);
-   if(target?.group===(mode==="games"?"play":"utility"))setTab(hash as Tab);
-   else if(target?.group==="play"&&mode==="utility")window.location.replace((en?"/en/games":"/minigry")+"#"+hash);
-  return()=>{if(timer.current)clearTimeout(timer.current);};
+  const syncHash=()=>{
+   const hash=window.location.hash.replace("#","");
+   const target=entries.find(x=>x.id===hash);
+   if(target?.group===(mode==="games"?"play":"utility")){
+    setTab(hash as Tab);
+    if(mode==="games")window.requestAnimationFrame(()=>window.requestAnimationFrame(()=>document.getElementById("game-stage")?.scrollIntoView({behavior:"smooth",block:"start"})));
+   }else if(target?.group==="play"&&mode==="utility")window.location.replace((en?"/en/games":"/minigry")+"#"+hash);
+  };
+  syncHash();
+  window.addEventListener("hashchange",syncHash);
+  return()=>{window.removeEventListener("hashchange",syncHash);if(timer.current)clearTimeout(timer.current);};
  },[mode,en]);
  useEffect(()=>()=>{if(converted)URL.revokeObjectURL(converted);},[converted]);
  const go=(id:Tab)=>{setTab(id);history.replaceState(null,"","#"+id);setToast("");if(mode==="games")window.requestAnimationFrame(()=>document.getElementById("game-stage")?.scrollIntoView({behavior:"smooth",block:"start"}));};

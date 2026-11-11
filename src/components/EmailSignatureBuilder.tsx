@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ChangeEvent } from "react";
 import { Check, Clipboard, Download, ImagePlus, Link2, Play, RotateCcw, Sparkles, Trash2 } from "lucide-react";
 import { signatureHtml, signatureSafeLink, SIGNATURE_SOCIALS } from "@/lib/everyday-utils";
 import type { SignatureFields, SignatureLayout, SignatureSocial } from "@/lib/everyday-utils";
 import { makeSignatureGif } from "@/lib/signature-animation";
+import { loadSignatureSceneAssets, renderSignatureScene } from "@/lib/signature-scenes";
 import type { SignatureMotion } from "@/lib/signature-animation";
 
 const initial:SignatureFields={
@@ -19,12 +20,12 @@ const templates:{id:SignatureLayout;pl:string;en:string;hintPL:string;hintEN:str
  {id:"compact",pl:"Editorial",en:"Editorial",hintPL:"Typografia i mocna linia",hintEN:"Typography with a bold rule"}
 ];
 const motions:{id:SignatureMotion;pl:string;en:string;descPL:string;descEN:string}[]=[
- {id:"geometry",pl:"Geometria Premium",en:"Premium Geometry",descPL:"WZÓR Z REFERENCJI · Portret z ukośnych fragmentów, logo i dane pojawiające się etapami",descEN:"REFERENCE STYLE · Diagonal portrait slices, animated logo and sequential details"},
- {id:"slices",pl:"Geometric Split",en:"Geometric Split",descPL:"Osobne geometryczne fragmenty zdjęcia wchodzą jeden po drugim",descEN:"Layered diagonal portrait pieces appear one after another"},
- {id:"cinematic",pl:"Cinematic",en:"Cinematic",descPL:"Sekwencyjne odsłanianie i jeden delikatny przebłysk",descEN:"Staggered reveal with one subtle finishing sheen"},
- {id:"reveal",pl:"Klasyczne odsłanianie",en:"Classic Reveal",descPL:"Prostszy styl z elementami pojawiającymi się po kolei",descEN:"Simpler layout with staggered elements"},
- {id:"slide",pl:"Płynne wejście",en:"Slide In",descPL:"Logo i dane płynnie wjeżdżają",descEN:"Logo and details slide into view"},
- {id:"pulse",pl:"Linia i światło",en:"Line Accent",descPL:"Delikatne akcenty podkreślają stopkę",descEN:"Subtle finishing line"}
+ {id:"geometry",pl:"Geometria Premium",en:"Premium Geometry",descPL:"Wzór z referencji: jasna karta, ukośne pasy portretu i etapowe odsłanianie",descEN:"Reference-inspired white card, sliced portrait and staged reveal"},
+ {id:"slices",pl:"Noir Split",en:"Noir Split",descPL:"Ciemna wizytówka, trzy fotograficzne żaluzje przesuwane z przeciwnych stron",descEN:"Dark business card with three alternating photo shutters"},
+ {id:"cinematic",pl:"Cinematic Editorial",en:"Cinematic Editorial",descPL:"Kremowa okładka, kadrowany portret, napis odsłaniany jak w magazynie",descEN:"Cream editorial layout, portrait window and masked typography"},
+ {id:"reveal",pl:"Minimal Reveal",en:"Minimal Reveal",descPL:"Biała, czysta wizytówka z dwoma osobnymi odsłonięciami",descEN:"Bright minimal business card with two independent wipes"},
+ {id:"slide",pl:"Split Color",en:"Split Color",descPL:"Dwukolorowy podział: ciemny blok wjeżdża z lewej, informacje z prawej",descEN:"Two-tone split; dark block and contact information slide from both sides"},
+ {id:"pulse",pl:"Digital Orbit",en:"Digital Orbit",descPL:"Ciemny cyfrowy styl, okrężnie rysowane pierścienie i świetlna linia",descEN:"Dark digital look with circular orbit strokes and illuminated line"}
 ];
 const isData=(source?:string)=>Boolean(source?.startsWith("data:image/"));
 const fileHint="PNG / JPG / WebP · max 2 MB";
@@ -34,47 +35,54 @@ function BrandGlyph({id}:{id:SignatureSocial}){
  return <img src={"/api/signature-icon/"+id} alt="" aria-hidden="true" width={24} height={24} className="block h-6 w-6 shrink-0 object-contain" loading="lazy"/>;
 }
 
-function GeometryCardPreview({fields,socials,gif,replay,lang}:{fields:SignatureFields;socials:Partial<Record<SignatureSocial,string>>;gif:string;replay:number;lang:"pl"|"en"}){
+
+function SignatureSceneCanvas({fields,motion,replay,thumbnail=false}:{fields:SignatureFields;motion:SignatureMotion;replay:number;thumbnail?:boolean}){
+ const canvas=useRef<HTMLCanvasElement>(null);
+ useEffect(()=>{
+  let canceled=false,frameId=0;
+  const ctx=canvas.current?.getContext("2d",{alpha:false});
+  if(!ctx)return;
+  const validCtx=ctx;
+  void loadSignatureSceneAssets(fields).then(assets=>{
+   if(canceled)return;
+   if(thumbnail||window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    renderSignatureScene(validCtx,fields,motion,1,assets);
+    return;
+   }
+   let started=-1;
+   const frame=(stamp:number)=>{
+    if(canceled)return;
+    if(started<0)started=stamp;
+    const p=Math.min(1,(stamp-started)/2350);
+    renderSignatureScene(validCtx,fields,motion,p,assets);
+    if(p<1)frameId=requestAnimationFrame(frame);
+   };
+   frameId=requestAnimationFrame(frame);
+  });
+  return()=>{canceled=true;cancelAnimationFrame(frameId);};
+ },[fields,motion,replay,thumbnail]);
+ return <canvas ref={canvas} width={520} height={208} aria-hidden={thumbnail} aria-label={thumbnail?undefined:"Animowany podgląd stopki e-mail"} className="block h-auto w-full" style={{aspectRatio:"520 / 208"}}/>;
+}
+
+function GeometryCardPreview({fields,socials,gif,replay,lang,motion}:{fields:SignatureFields;socials:Partial<Record<SignatureSocial,string>>;gif:string;replay:number;lang:"pl"|"en";motion:SignatureMotion}){
  const valid=SIGNATURE_SOCIALS.flatMap(item=>{const href=signatureSafeLink(socials[item.id]||"");return href?[{item,href}]:[];});
- const en=lang==="en";
- return <div className="mx-auto w-full max-w-[578px] overflow-hidden rounded-xl border border-[#e0dde3] bg-[#fcfbfd] font-sans text-[#18171c]" aria-label={en?"Reference-inspired premium geometric signature":"Stopka Geometria Premium inspirowana referencją"}>
+ const premium=["geometry","slices","cinematic"].includes(motion);
+ const scene=gif?<img key={replay} src={gif} alt={lang==="en"?"Animated email signature":"Animowana stopka e-mail"} width={520} height={208} className="block h-auto w-full"/>:
+  <SignatureSceneCanvas fields={fields} motion={motion} replay={replay}/>;
+ return <div className="mx-auto w-full max-w-[578px] overflow-hidden rounded-xl border border-[#dcdbe0] bg-white text-[#1b1b20]" aria-label={lang==="en"?"Actual signature and animation preview":"Podgląd rzeczywistej stopki i animacji"}>
   <div className="flex items-stretch">
-   <div className="z-10 flex w-[13%] min-w-10 shrink-0 flex-col items-center gap-2 border-r border-[#e3e0e6] bg-[#faf9fb] p-2 sm:w-14">
+   {premium&&<div className="flex w-[12%] min-w-10 shrink-0 flex-col items-center gap-2 border-r border-[#e4e2e8] bg-[#faf9fb] p-1.5 sm:w-14">
     <span className="mb-1 flex h-7 w-7 items-center justify-center rounded-md border border-[#ddd9e1] bg-white text-base font-bold" style={{color:fields.accent}}>{(fields.company||fields.name||"B").slice(0,1).toUpperCase()}</span>
-    {valid.slice(0,6).map(({item,href},i)=><a key={item.id} href={href} title={item.name} target="_blank" rel="noopener noreferrer" className="signature-motion-item flex min-h-8 min-w-8 items-center justify-center rounded-md border border-[#e2e0e4] bg-white p-1 hover:bg-[#ebe9ee]" style={{animation:"sigAppear .45s ease "+(0.55+i*0.12)+"s both"}}><BrandGlyph id={item.id}/></a>)}
-   </div>
-   <div className="min-w-0 flex-1 bg-[#fbfafc]">
-    {gif?<img key={replay} src={gif} alt={en?"Animated geometric email signature":"Animowana stopka geometryczna"} width={520} height={208} className="block h-auto w-full"/>:
-    <div key={replay} className="relative min-h-[185px] w-full overflow-hidden bg-[#fbfafc]" style={{aspectRatio:"520 / 208"}}>
-     <div className="signature-geometry-plate absolute inset-y-0 right-[29%] w-[20%] opacity-10" style={{background:fields.accent,clipPath:"polygon(65% 0,100% 0,35% 100%,0 100%)"}}/>
-     <div className="signature-geometry-brand absolute left-[5%] top-[14%] z-10 max-w-[57%]">
-      {fields.logo?<img src={fields.logo} alt={fields.company||"Logo"} className="max-h-10 w-auto max-w-[160px] object-contain"/>:<span className="block truncate text-[clamp(13px,2.5vw,23px)] font-black tracking-[.13em]">{(fields.company||(en?"YOUR BRAND":"TWOJA MARKA")).toUpperCase()}</span>}
-     </div>
-     <div className="absolute bottom-[7%] left-[5%] z-10 max-w-[57%]">
-      <p className="signature-geometry-title truncate text-[clamp(14px,2.1vw,23px)] font-bold leading-tight">{fields.name||(en?"Your Name":"Imię i nazwisko")}</p>
-      <p className="signature-geometry-info mt-1 truncate text-[clamp(10px,1.2vw,12px)] text-[#66616b]">{fields.role||(en?"Position":"Stanowisko")}</p>
-      <p className="signature-geometry-info mt-1 truncate text-[clamp(10px,1.2vw,12px)] font-bold" style={{color:fields.accent}}>{fields.company}</p>
-      <p className="signature-geometry-info mt-2 truncate text-[10px] text-[#65616b]">{fields.email}</p>
-      <p className="signature-geometry-info truncate text-[10px] text-[#65616b]">{fields.website||fields.phone}</p>
-     </div>
-     <div className="absolute inset-y-0 right-0 w-[39%] overflow-hidden">
-      <div className="signature-geometry-face absolute inset-y-[9%] left-0 right-0">
-       {fields.photo?<img src={fields.photo} alt="" className="h-full w-full object-cover" style={{clipPath:"polygon(34% 10%,74% 10%,49% 95%,0 95%)"}}/>:
-        <div className="h-full w-full bg-[#d3d0d7]" style={{clipPath:"polygon(34% 10%,74% 10%,49% 95%,0 95%)"}}><div className="absolute left-[25%] top-[25%] h-[34%] w-[26%] rounded-full bg-[#a39eab]"/><div className="absolute bottom-[8%] left-[15%] h-[42%] w-[60%] rounded-full bg-[#a39eab]"/></div>}
-      </div>
-      <div className="signature-geometry-slice absolute inset-y-[4%] right-[8%] w-[52%]" style={{background:fields.accent,opacity:.85,clipPath:"polygon(48% 0,100% 0,35% 100%,0 100%)"}}/>
-      {fields.photo&&<img src={fields.photo} alt="" className="signature-geometry-front absolute inset-y-[9%] right-[4%] h-[82%] w-[96%] object-cover" style={{clipPath:"polygon(69% 22%,86% 22%,48% 92%,30% 92%)"}}/>}
-     </div>
-     <div className="signature-geometry-info absolute bottom-[3%] left-[5%] h-[2px] w-[40%]" style={{background:fields.accent}}/>
-    </div>}
-   </div>
+    {valid.slice(0,6).map(({item,href})=><a key={item.id} href={href} title={item.name} target="_blank" rel="noopener noreferrer" className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e2e0e4] bg-white p-1 hover:bg-[#ebe9ee]"><BrandGlyph id={item.id}/></a>)}
+   </div>}
+   <div className="min-w-0 flex-1">{scene}</div>
   </div>
-  {(fields.email||fields.phone||fields.website||valid.length>6)&&<div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-[#eae7ec] px-3 py-2 text-[10px] text-[#54515a]">
+  <div className="flex flex-wrap items-center gap-2 border-t border-[#eae7ec] px-3 py-2 text-xs text-[#54515a]">
    {fields.email&&<a href={"mailto:"+fields.email} className="underline underline-offset-2">{fields.email}</a>}
    {fields.phone&&<a href={"tel:"+fields.phone.replace(/[^\d+]/g,"")} className="underline underline-offset-2">{fields.phone}</a>}
    {signatureSafeLink(fields.website)&&<a href={signatureSafeLink(fields.website)} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">{fields.website}</a>}
-   {valid.slice(6).map(({item,href})=><a key={item.id} href={href} target="_blank" rel="noopener noreferrer" className="flex h-8 w-8 items-center justify-center rounded-md border border-[#ddd] bg-white p-1"><BrandGlyph id={item.id}/></a>)}
-  </div>}
+   {valid.slice(premium?6:0).map(({item,href})=><a key={item.id} href={href} target="_blank" rel="noopener noreferrer" title={item.name} className="flex h-8 w-8 items-center justify-center rounded-md border border-[#ddd] bg-white p-1"><BrandGlyph id={item.id}/></a>)}
+  </div>
  </div>;
 }
 
@@ -105,7 +113,6 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
  const html=useMemo(()=>signatureHtml(output),[output]);
  const previewHtml=useMemo(()=>signatureHtml({...output,animationUrl:""}),[output]);
  const hostedIsValid=!hostedGif.trim()||Boolean(signatureSafeLink(hostedGif));
- const premium=mode==="animated"&&["geometry","slices","cinematic"].includes(motion);
  useEffect(()=>()=>{if(gifPreview)URL.revokeObjectURL(gifPreview);},[gifPreview]);
 
  const invalidateGif=()=>{setGifBlob(null);setGifPreview("");setGifData("");};
@@ -211,7 +218,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
   </div>
  );
  return <div className="min-w-0">
-  <style>{String.raw`@keyframes sigAppear{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}@keyframes sigSlice{from{opacity:0;transform:translateX(60px) scale(.96)}to{opacity:1;transform:translateX(0) scale(1)}}@keyframes sigFrame{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}.signature-geometry-plate{animation:sigFrame .6s ease .2s both}.signature-geometry-brand{animation:sigFrame .75s ease .4s both}.signature-geometry-title{animation:sigAppear .7s ease .75s both}.signature-geometry-info{animation:sigAppear .7s ease 1s both}.signature-geometry-face{animation:sigSlice 1s cubic-bezier(.2,.8,.2,1) .65s both}.signature-geometry-slice{animation:sigSlice .9s cubic-bezier(.2,.8,.2,1) 1s both}.signature-geometry-front{animation:sigSlice .8s ease 1.35s both}@media(prefers-reduced-motion:reduce){.signature-motion-item,.signature-geometry-plate,.signature-geometry-brand,.signature-geometry-title,.signature-geometry-info,.signature-geometry-face,.signature-geometry-slice,.signature-geometry-front{animation:none!important}}`}</style>
+
   <div className="mb-6">
    <p className="text-xs uppercase tracking-[.17em] text-white/45">{en?"FREE EMAIL SIGNATURE STUDIO":"DARMOWY GENERATOR STOPKI E-MAIL"}</p>
    <h2 className="mt-2 text-2xl font-semibold tracking-tight">{en?"Create a signature that stands out.":"Stwórz stopkę, którą zapamiętają."}</h2>
@@ -265,13 +272,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
       <span className="block text-sm font-medium">{en?item.en:item.pl}</span><span className="mt-2 block text-[11px] leading-5 text-white/55">{en?item.hintEN:item.hintPL}</span>
      </button>)}</div>:<>
       <div className="mt-4 grid gap-2 sm:grid-cols-2">{motions.map(item=><button key={item.id} type="button" aria-pressed={motion===item.id} onClick={()=>{setMotion(item.id);invalidateGif();setReplay(v=>v+1);}} className={"rounded-xl border px-3 py-4 text-left "+(motion===item.id?"border-white/70 bg-white/10":"border-white/15 bg-black/30 hover:border-white/40")}>
-       {item.id==="geometry"&&<div className="relative mb-3 h-[70px] overflow-hidden rounded-md border border-white/20 bg-[#f9f8fa] text-[#1c1b20]">
-        <div className="absolute inset-y-0 left-0 w-6 border-r border-[#ddd] bg-[#eeedf0]"><span className="absolute left-1 top-2 text-[10px] font-black">B</span><span className="absolute bottom-2 left-1 text-[9px] font-bold">in</span></div>
-        <div className="absolute left-9 top-3 text-[11px] font-black tracking-[.13em]">BRAND</div>
-        <div className="absolute bottom-3 left-9"><div className="h-1.5 w-20 rounded-sm bg-[#3b3940]"/><div className="mt-1 h-1 w-14 rounded-sm bg-[#a4a0a9]"/></div>
-        <div className="absolute inset-y-1 right-2 w-[40%] bg-[#cac7d0]" style={{clipPath:"polygon(35% 0,78% 0,25% 100%,0 100%)"}}/>
-        <div className="absolute inset-y-1 right-0 w-[27%] bg-[#56525e]" style={{clipPath:"polygon(65% 0,100% 0,36% 100%,0 100%)"}}/>
-       </div>}
+       <div className="mb-3 overflow-hidden rounded-lg border border-white/20 bg-white"><SignatureSceneCanvas fields={fields} motion={item.id} replay={0} thumbnail/></div>
        <span className="block text-sm font-medium">{en?item.en:item.pl}</span><span className="mt-2 block text-[11px] leading-5 text-white/55">{en?item.descEN:item.descPL}</span>
       </button>)}</div>
       <label className="mt-4 flex cursor-pointer items-center gap-3 rounded-xl border border-white/15 bg-black/20 p-3 text-xs text-white/75">
@@ -293,23 +294,9 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
      <div><p className="text-xs font-semibold uppercase tracking-[.15em] text-white/50">{en?"LIVE PREVIEW":"PODGLĄD NA ŻYWO"}</p><p className="mt-2 text-xs text-white/65">{en?"As seen in an email message":"Tak wygląda w wiadomości e-mail"}</p></div>
      {mode==="animated"&&<button type="button" onClick={()=>{setReplay(v=>v+1);if(gifBlob)setGifPreview(URL.createObjectURL(gifBlob));}} className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 px-3 py-2 text-xs hover:border-white/50"><Play size={14}/>{en?"Replay":"Odtwórz"}</button>}
     </div>
-    <div className="mt-4 min-w-0 overflow-x-auto rounded-xl border border-[#d5d5d5] bg-white px-3 py-6 sm:p-6">
+    <div className="mt-4 min-w-0 overflow-x-auto rounded-xl border border-[#d5d5d5] bg-white px-2 py-5 sm:p-5">
      {mode==="static"?<div className="w-max min-w-0 max-w-full" aria-label={en?"Static signature preview":"Podgląd zwykłej stopki"} dangerouslySetInnerHTML={{__html:previewHtml}}/>:
-      premium?<GeometryCardPreview fields={fields} socials={socialValues} gif={gifPreview} replay={replay} lang={lang}/>:
-      gifPreview?<div className="min-w-[260px] max-w-[520px]"><img key={replay} src={gifPreview} alt={en?"Animated signature preview":"Podgląd animowanej stopki"} width={520} height={178} className="h-auto w-full"/>
-       <div className="mt-3 flex flex-wrap gap-2">{SIGNATURE_SOCIALS.filter(x=>socialValues[x.id]&&signatureSafeLink(socialValues[x.id]||"")).map(x=><a key={x.id} href={signatureSafeLink(socialValues[x.id]||"")} target="_blank" rel="noopener noreferrer" className="flex h-9 w-9 items-center justify-center rounded-md border border-[#ddd] bg-white p-1"><BrandGlyph id={x.id}/></a>)}</div>
-      </div>:
-      <div key={replay} className="relative h-[188px] min-w-[300px] max-w-[520px] overflow-hidden rounded-lg border border-[#e5e5e5] bg-[#fafafa] p-5 font-sans">
-       <div className="signature-motion-item absolute bottom-4 left-4 top-4 w-[3px] rounded-full" style={{background:fields.accent,animation:"sigAppear .5s ease .1s both"}}/>
-       <div className="signature-motion-item ml-3 max-w-[65%]" style={{animation:"sigAppear .85s ease .35s both"}}>
-        {fields.logo?<img src={fields.logo} alt="" className="mb-3 max-h-10 max-w-28 object-contain"/>:<span className="mb-3 block text-xs font-bold tracking-[.15em] text-[#333]">{fields.company||"YOUR BRAND"}</span>}
-        <p className="truncate text-lg font-bold text-[#1b1b1b]">{fields.name||(en?"Your Name":"Imię i nazwisko")}</p>
-        <p className="truncate text-xs text-[#555]">{fields.role}</p>
-        <p className="mt-2 truncate text-xs text-[#777]">{fields.email||fields.website}</p>
-       </div>
-       <div className="signature-motion-item absolute right-4 top-6 h-28 w-20 overflow-hidden rounded-xl bg-[#e8e8e8]" style={{animation:"sigAppear .9s ease .85s both"}}>{fields.photo?<img src={fields.photo} alt="" className="h-full w-full object-cover"/>:<div className="flex h-full items-center justify-center text-3xl text-[#aaa]">◉</div>}</div>
-       <div className="signature-motion-item absolute bottom-3 left-8 flex gap-2" style={{animation:"sigAppear .8s ease 1.2s both"}}>{SIGNATURE_SOCIALS.filter(x=>enabled[x.id]&&signatureSafeLink(fields.socials?.[x.id]||"")).slice(0,6).map(x=><span key={x.id} className="flex h-8 w-8 items-center justify-center rounded-md border border-[#ddd] bg-white p-1"><BrandGlyph id={x.id}/></span>)}</div>
-      </div>}
+      <GeometryCardPreview fields={fields} socials={socialValues} gif={gifPreview} replay={replay} lang={lang} motion={motion}/>}
     </div>
     <div className="mt-4 grid gap-2 sm:grid-cols-2">
      <button type="button" onClick={copyRich} disabled={mode==="animated"&&!gifData&&!signatureSafeLink(hostedGif)} className="brand-action inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-3 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-45"><Clipboard size={17}/>{en?"Copy signature":"Kopiuj stopkę"}</button>

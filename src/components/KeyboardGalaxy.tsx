@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Maximize, Minimize, RefreshCw } from "lucide-react";
 
 type Particle={id:number;x:number;y:number;symbol:string;color:string;trail:boolean};
@@ -51,10 +52,12 @@ export function KeyboardGalaxy({lang}:{lang:"pl"|"en"}){
  useEffect(()=>{
   if(!simulatedFullscreen)return;
   const original=document.body.style.overflow;
+  const previousRoot=document.documentElement.style.overflow;
   document.body.style.overflow="hidden";
+  document.documentElement.style.overflow="hidden";
   const onEscape=(e:KeyboardEvent)=>{if(e.key==="Escape")setSimulatedFullscreen(false);};
   window.addEventListener("keydown",onEscape);
-  return()=>{document.body.style.overflow=original;window.removeEventListener("keydown",onEscape);};
+  return()=>{document.body.style.overflow=original;document.documentElement.style.overflow=previousRoot;window.removeEventListener("keydown",onEscape);};
  },[simulatedFullscreen]);
  const fullscreen=async()=>{
   const el=area.current;if(!el)return;
@@ -68,20 +71,16 @@ export function KeyboardGalaxy({lang}:{lang:"pl"|"en"}){
   }
   setSimulatedFullscreen(true);
  };
- return <section className="space-y-4">
-  <div className="flex flex-wrap items-center justify-between gap-3">
-   <div><h2 className="text-2xl font-medium">{en?"Keyboard Galaxy — for kids":"Klawiaturowa galaktyka — dla dzieci"}</h2>
-    <p className="mt-2 text-sm leading-6 text-white/65">{en?"Press any key or tap anywhere to create letters, numbers and surprises. No ads or account.":"Naciskaj klawisze lub dotykaj ekranu. Pojawią się litery, cyfry i niespodzianki. Bez reklam i konta."}</p></div>
-   <div className="flex gap-2">
-    <button type="button" onClick={()=>setItems([])} className="flex min-h-11 items-center gap-2 rounded-lg border border-white/25 px-3 text-sm"><RefreshCw size={16}/>{en?"Clear":"Wyczyść"}</button>
-    <button type="button" onClick={fullscreen} aria-pressed={expanded} className="flex min-h-11 items-center gap-2 rounded-lg border border-white/25 px-3 text-sm">{expanded?<Minimize size={16}/>:<Maximize size={16}/>} {expanded?(en?"Exit full screen":"Wyjdź z pełnego ekranu"):(en?"Full screen":"Pełny ekran")}</button>
-   </div>
-  </div>
-  <div className="flex flex-wrap gap-2" role="group" aria-label={en?"Background":"Tło"}>
-   {themes.map(t=><button key={t.id} type="button" aria-pressed={theme===t.id} onClick={()=>setTheme(t.id)} className={"min-h-10 rounded-full border px-4 text-xs "+(theme===t.id?"border-white bg-white text-black":"border-white/25 text-white/75")}>{en?t.en:t.pl}</button>)}
-  </div>
+ const stage=(
   <div ref={area} tabIndex={0} role="application" aria-label={en?"Interactive keyboard playground":"Interaktywna zabawa klawiaturą"}
-    onPointerDown={e=>{if(!active)setActive(true);pointer(e,false);area.current?.focus();}}
+    onPointerDown={e=>{
+     if(!active){
+      setActive(true);
+      const r=e.currentTarget.getBoundingClientRect();
+      emit("",(e.clientX-r.left)/r.width*100,(e.clientY-r.top)/r.height*100);
+     }else pointer(e,false);
+     area.current?.focus();
+    }}
     onPointerMove={e=>pointer(e,true)}
     className={"kids-stage relative h-[420px] w-full select-none overflow-hidden rounded-2xl border border-white/25 outline-none focus-visible:ring-2 focus-visible:ring-white md:h-[560px]"+(simulatedFullscreen?" is-expanded":"")}
     style={{background:themes.find(t=>t.id===theme)?.background,touchAction:"none"}}>
@@ -94,6 +93,20 @@ export function KeyboardGalaxy({lang}:{lang:"pl"|"en"}){
    </button>}
    {active&&<span className="pointer-events-none absolute bottom-3 left-4 rounded-full bg-black/30 px-3 py-1 text-xs text-white/70">{en?"Press Esc to stop":"Esc — zakończ"}</span>}
   </div>
+ );
+ return <section className="space-y-4">
+  <div className="flex flex-wrap items-center justify-between gap-3">
+   <div><h2 className="text-2xl font-medium">{en?"Keyboard Galaxy — for kids":"Klawiaturowa galaktyka — dla dzieci"}</h2>
+    <p className="mt-2 text-sm leading-6 text-white/65">{en?"Press any key or tap anywhere to create letters, numbers and surprises. No ads or account.":"Naciskaj klawisze lub dotykaj ekranu. Pojawią się litery, cyfry i niespodzianki. Bez reklam i konta."}</p></div>
+   <div className="flex gap-2">
+    <button type="button" onClick={()=>setItems([])} className="flex min-h-11 items-center gap-2 rounded-lg border border-white/25 px-3 text-sm"><RefreshCw size={16}/>{en?"Clear":"Wyczyść"}</button>
+    <button type="button" onClick={fullscreen} aria-pressed={expanded} className="flex min-h-11 items-center gap-2 rounded-lg border border-white/25 px-3 text-sm">{expanded?<Minimize size={16}/>:<Maximize size={16}/>} {expanded?(en?"Exit full screen":"Wyjdź z pełnego ekranu"):(en?"Full screen":"Pełny ekran")}</button>
+   </div>
+  </div>
+  <div className="flex flex-wrap gap-2" role="group" aria-label={en?"Background":"Tło"}>
+   {themes.map(t=><button key={t.id} type="button" aria-pressed={theme===t.id} onClick={()=>setTheme(t.id)} className={"min-h-10 rounded-full border px-4 text-xs "+(theme===t.id?"border-white bg-white text-black":"border-white/25 text-white/75")}>{en?t.en:t.pl}</button>)}
+  </div>
+  {simulatedFullscreen && typeof document!=="undefined" ? createPortal(stage,document.body) : stage}
   <p className="text-xs leading-6 text-white/50">{en?"Original browser mini-game. Muted by default. Parents should supervise small children.":"Autorska minigra przeglądarkowa. Domyślnie bez dźwięku. Małe dzieci powinny bawić się pod opieką dorosłego."}</p>
   <style>{".kids-stage:fullscreen,.kids-stage.is-expanded{position:fixed;inset:0;z-index:2147483647;width:100vw!important;height:100dvh!important;max-width:none;border-radius:0;border:0}.kids-stage.is-expanded{background-color:#090b17}.kids-stage:fullscreen{position:fixed}.kids-pop{animation:kids-pop 1.65s ease-out both}.kids-trail{animation:kids-trail 1s ease-out both}@keyframes kids-pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.25) rotate(-20deg)}22%{opacity:1;transform:translate(-50%,-50%) scale(1.22) rotate(5deg)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-85%) scale(.88)}}@keyframes kids-trail{from{opacity:.75;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(-50%,-120%) scale(2)}}"}</style>
  </section>;

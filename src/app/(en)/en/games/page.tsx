@@ -13,6 +13,10 @@ export default function GamesEnglishPage(){
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(jsonLd)}}/>
   <nav className="text-xs text-white/55"><Link href="/" className="underline underline-offset-4">Home</Link><span className="mx-2">/</span><Link href="/en/tools" className="underline underline-offset-4">Tools</Link><span className="mx-2">/</span>Mini-games</nav>
   <header className="mt-12 max-w-4xl"><p className="page-eyebrow inline-flex items-center gap-2"><Gamepad2 size={16}/>FREE MINI-GAMES / EXTRA</p><h1 className="mt-5">Free browser mini-games.</h1><p className="page-intro mt-5 max-w-3xl">Play 12 free mini-games in your browser on desktop or mobile. No download, no registration, no login and no credit card required.</p><Link href="/en/tools" className="mt-6 inline-flex items-center gap-2 text-sm text-white/75 underline underline-offset-4">← Back to free tools</Link></header>
+  <a href="#kids" className="mt-8 flex min-h-24 items-center justify-between gap-4 rounded-2xl border border-white/30 bg-white/[.06] p-5 transition hover:border-white/65">
+   <span><span className="block text-xs uppercase tracking-[.14em] text-white/50">Kids’ game · available on mobile</span><strong className="mt-2 block text-lg">Keyboard Galaxy</strong><span className="mt-1 block text-sm text-white/60">Tap the screen, discover letters and try full-screen mode.</span></span>
+   <span className="shrink-0 rounded-lg border border-white/25 px-4 py-3 text-sm font-semibold">Play</span>
+  </a>
   <EverydayPlayground lang="en" mode="games"/>
  </main>;
 }
