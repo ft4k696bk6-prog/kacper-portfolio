@@ -83,7 +83,7 @@ export function ToolboxHub({lang}:{lang:"pl"|"en"}){
     {businessResults.length?categories.filter(cat=>sector==="all"||cat===sector).map(cat=>{
      const list=businessResults.filter(item=>item.category===cat);
      if(!list.length)return null;
-     return <details key={cat+"-"+term+"-"+sector} defaultOpen={Boolean(term)||sector!=="all"||cat===categories[0]} className="group/section mb-3 rounded-2xl border border-white/15 bg-[#121212] p-4 sm:p-5">
+     return <details key={cat+"-"+term+"-"+sector} open={Boolean(term)||sector!=="all"||cat===categories[0]} className="group/section mb-3 rounded-2xl border border-white/15 bg-[#121212] p-4 sm:p-5">
       <summary className="flex min-h-10 cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden"><h4 className="text-sm font-semibold text-white/80">{cat}</h4><span className="text-xs text-white/40">{list.length}</span><span className="flex-1"/><ChevronDown size={18} className="text-white/50 transition-transform group-open/section:rotate-180"/></summary>
       <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">{list.map(t=><Link key={t.slug} href={en?englishToolPath(t.slug):"/narzedzia/"+t.slug} className={card}><div><p className="text-[10px] uppercase tracking-[.16em] text-white/45">{cat}</p><h5 className="mt-5 text-lg font-semibold leading-7">{t.title}</h5><p className="mt-3 text-sm leading-6 text-white/60">{t.description}</p></div><span className="mt-5 inline-flex items-center gap-2 text-sm">{en?"Use for free":"Uruchom za darmo"}<ArrowUpRight size={16}/></span></Link>)}</div>
      </details>;
