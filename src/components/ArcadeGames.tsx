@@ -95,6 +95,7 @@ const opposite:Record<Direction,Direction>={up:"down",down:"up",left:"right",rig
 function Snake({en}:{en:boolean}){
  const [state,setState]=useState<SnakeState>(()=>initialSnake());
  const [running,setRunning]=useState(false);
+ const [everStarted,setEverStarted]=useState(false);
  const direction=useRef<Direction>("right");
  const change=useCallback((d:Direction)=>{if(d!==opposite[direction.current])direction.current=d;},[]);
  useEffect(()=>{
@@ -108,10 +109,10 @@ function Snake({en}:{en:boolean}){
   const t=window.setInterval(()=>setState(s=>nextSnake(s,direction.current)),180);
   return()=>window.clearInterval(t);
  },[running,state.alive,state.won]);
- const restart=()=>{direction.current="right";setState(initialSnake());setRunning(true);};
+ const restart=()=>{direction.current="right";setState(initialSnake());setEverStarted(true);setRunning(true);};
  return <section className={box}>
   <GameTitle en={en} pl="snake" title="Snake" desc={en?"Collect bright food. Avoid walls and your own tail. Use arrows, WASD or buttons.":"Zbieraj jasne punkty. Unikaj ścian i własnego ogona. Steruj strzałkami, WASD lub przyciskami."}/>
-  <div className="mb-4 flex items-center justify-between gap-3"><span className="text-sm">{en?"Score":"Wynik"}: <strong>{state.points}</strong></span><div className="flex flex-wrap gap-2"><button className={btn} onClick={()=>running?setRunning(false):state.alive?setRunning(true):restart()}>{running?(en?"Pause":"Pauza"):state.alive?(en?"Resume":"Wznów"):(en?"Start":"Start")}</button><button className={btn} onClick={restart}><RotateCcw size={16}/></button></div></div>
+  <div className="mb-4 flex items-center justify-between gap-3"><span className="text-sm">{en?"Score":"Wynik"}: <strong>{state.points}</strong></span><div className="flex flex-wrap gap-2"><button className={btn} onClick={()=>{if(running)setRunning(false);else if(state.alive){setEverStarted(true);setRunning(true);}else restart();}}>{running?(en?"Pause":"Pauza"):!everStarted?(en?"Start":"Rozpocznij"):state.alive?(en?"Resume":"Wznów"):(en?"Restart":"Zagraj ponownie")}</button><button className={btn} onClick={restart}><RotateCcw size={16}/></button></div></div>
   <div className="mx-auto grid aspect-square max-w-[420px] grid-cols-12 gap-[2px] rounded-xl border border-white/15 bg-[#121212] p-2">{Array.from({length:144},(_,i)=><div key={i} className={"rounded-[2px] "+(state.body[0]===i?"bg-white":state.body.includes(i)?"bg-white/55":state.food===i?"bg-white/90 ring-2 ring-white/20":"bg-white/[.04]")}/>)}</div>
   <div className="mt-4 flex flex-col items-center gap-1">
    <button className={btn+" w-12 px-0"} onClick={()=>change("up")} aria-label={en?"Up":"Góra"}><ArrowUp size={18}/></button>
