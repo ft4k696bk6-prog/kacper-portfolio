@@ -70,6 +70,16 @@ describe("Berni full portrait masters, not drawing eyes or mouths over the head"
   expect(engine).toContain("pointermove");
   expect(engine).toContain("pointerdown");
  });
+ it("offers hands-on controls for all 18 effects in preview only",()=>{
+  expect(preview).toContain("Przetestuj 18 animacji przejścia");
+  expect(preview).toContain("transitionToken={transitionToken}");
+  expect(preview).toContain("transitionPreset={transitionPreset}");
+  expect(preview).toContain("setTransitionToken(t=>t+1)");
+  expect(engine).toContain("onForcedTransition");
+  expect(engine).toContain("berni-force-transition");
+  expect(portrait).toContain("transitionToken={transitionToken}");
+  expect(chat).not.toContain("transitionPreset=");
+ });
  it("keeps chat actions, booking, and pinch zoom accessibility",()=>{
   expect(chat).toContain('"/api/ai-consultant"');
   expect(chat).toContain('"/api/booking"');
