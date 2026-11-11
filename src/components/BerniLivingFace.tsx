@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { createNeutralFace, faceTargetForMood, type Face, type BerniLivingMood } from "@/lib/berni-face-state";
+import { createNeutralFace, animatedFaceTarget, type Face, type BerniLivingMood } from "@/lib/berni-face-state";
 export type { BerniLivingMood } from "@/lib/berni-face-state";
 
 const BASE = "/images/berni/berni-fox-head.png";
@@ -22,11 +22,14 @@ export function BerniLivingFace({
   blinkToken?: number;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
-  const live = useRef({ mood, blinkToken });
+  const live = useRef({ mood, blinkToken, changedAt: 0 });
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    live.current.mood = mood;
+    if (mood !== live.current.mood) {
+      live.current.mood = mood;
+      live.current.changedAt = performance.now();
+    }
     if (blinkToken !== live.current.blinkToken) {
       live.current.blinkToken = blinkToken;
       if (blinkToken > 0) ref.current?.dispatchEvent(new Event("berni-blink-now"));
@@ -82,8 +85,8 @@ export function BerniLivingFace({
     }
 
     function drawEyes(gazeX: number, gazeY: number) {
-      // Only the detailed original eye texture is translated, not its fur,
-      // headphones, or muzzle. A soft central iris region avoids seams.
+      // Shift the irises far enough to be visible at 56px and 320px.
+      // Clip strictly inside the eye whites: unchanged fur and headphones.
       if (!base || (Math.abs(gazeX) < .05 && Math.abs(gazeY) < .05)) return;
       const eyes = [
         { x: 338, y: 325, rx: 28, ry: 31 },
@@ -94,8 +97,9 @@ export function BerniLivingFace({
         ctx!.beginPath();
         ctx!.ellipse(eye.x, eye.y, eye.rx, eye.ry, -.14, 0, Math.PI * 2);
         ctx!.clip();
-        ctx!.globalAlpha = .55;
-        ctx!.drawImage(base, -gazeX * 2.8, -gazeY * 2, 640, 640);
+        ctx!.globalAlpha = .95;
+        ctx!.drawImage(base, -gazeX * (eye.rx > 20 ? 12 : 6),
+          -gazeY * (eye.ry > 25 ? 8 : 5), 640, 640);
         ctx!.restore();
       }
     }
@@ -141,7 +145,7 @@ export function BerniLivingFace({
       // not an oval painted over his muzzle. Continuous depth parameter.
       const amount = Math.max(0, Math.min(1, face.mouth));
       if (amount > .02) {
-        const depth = 22 * amount;
+        const depth = (23 + 9 * face.smile + 5 * face.surprise) * amount;
         const left = 362;
         const right = 457;
         const smooth = (value: number) => {
@@ -154,7 +158,7 @@ export function BerniLivingFace({
           upper(t) + depth * Math.pow(Math.max(0, Math.sin(Math.PI * t)), .6);
 
         ctx!.save();
-        ctx!.globalAlpha = Math.min(1, amount * 1.25);
+        ctx!.globalAlpha = Math.min(1, amount * 1.55) * (1 - face.surprise * .65);
         ctx!.beginPath();
         for (let i = 0; i <= 40; i++) {
           const t = i / 40, x = left + (right - left) * t;
@@ -184,6 +188,24 @@ export function BerniLivingFace({
         ctx!.restore();
       }
 
+      // Distinct shocked "O" mouth, softly blended over the same original muzzle.
+      if (face.surprise > .4 && amount > .25) {
+        ctx!.save();
+        ctx!.globalAlpha = Math.min(.96, (face.surprise - .35) * 1.3);
+        const rx = 7 + face.surprise * 9;
+        const ry = 10 + amount * 12;
+        const shocked = ctx!.createRadialGradient(423, 438, 2, 425, 437, ry);
+        shocked.addColorStop(0, "#201018");
+        shocked.addColorStop(.8, "#120e17");
+        shocked.addColorStop(1, "#55515b");
+        ctx!.fillStyle = shocked;
+        ctx!.beginPath();
+        ctx!.ellipse(423, 435 + amount * 4, rx, ry, -.22, 0, Math.PI * 2);
+        ctx!.fill();
+        ctx!.restore();
+      }
+
+      // Expressive fur-compatible brow highlights respond to worry and surprise.
       // Raised or worried eyebrows move by fractions of a pixel; keep
       // existing realistic source eyebrows visible underneath.
       const intensity = Math.max(face.surprise, face.worried * .65);
@@ -214,7 +236,7 @@ export function BerniLivingFace({
 
       const status = live.current.mood;
       // Always use a new frame target; never mutate the neutral preset.
-      const target = faceTargetForMood(status);
+      const target = animatedFaceTarget(status, now - live.current.changedAt);
       if (!motionQuery.matches) {
         if (now >= nextBlink && status !== "sleeping") {
           lastBlink = now;
@@ -225,16 +247,12 @@ export function BerniLivingFace({
           ? Math.pow(Math.sin(Math.PI * timeSinceBlink), 1.3)
           : 0;
         target.blink = Math.max(target.blink, pulse);
-        if (status === "typing") {
-          target.mouth = .18 + .63 * (.5 + .5 * Math.sin(now / 170))
-            * (.78 + .22 * Math.cos(now / 590));
-        }
         if (status === "idle") {
           target.gazeX = .19 * Math.sin(now / 2600);
           target.gazeY = .12 * Math.sin(now / 4200);
         }
         for (const key of Object.keys(target) as (keyof Face)[]) {
-          const tau = key === "blink" ? 28 : 170;
+          const tau = key === "blink" ? 45 : key === "mouth" ? 105 : 160;
           const alpha = 1 - Math.exp(-dt / tau);
           current[key] += (target[key] - current[key]) * alpha;
         }
