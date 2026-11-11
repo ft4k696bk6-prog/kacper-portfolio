@@ -8,8 +8,8 @@ import styles from "./BerniPremiumPortrait.module.css";
 export type BerniPortraitMood = BerniLivingMood;
 
 /**
- * One character, one illustration, one continuous facial rig.
- * No crossfades between differently generated heads or muzzle colors.
+ * One character, one approved illustration rasterized as complete pose masters.
+ * No sticker mouths, no overlapping irises, no visible texture changes.
  */
 export function BerniPremiumPortrait({
   mood = "idle",
@@ -39,10 +39,10 @@ export function BerniPremiumPortrait({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       role="img"
-      aria-label="Berni — lisek AI z płynną mimiką oczu, brwi i pyska"
+      aria-label="Berni — animowany lisek AI, płynne spojrzenia i wyrazy twarzy"
     >
       <span className={styles.portrait}>
-        <Image src="/images/berni/berni-fox-head.png" alt="" fill
+        <Image src="/images/berni/poses/idle.png" alt="" fill
           priority={priority} quality={90} sizes={imgSizes}
           draggable={false} className={styles.art} aria-hidden="true" />
 
