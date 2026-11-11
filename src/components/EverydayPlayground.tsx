@@ -6,6 +6,7 @@ import type { PercentMode,SignatureFields } from "@/lib/everyday-utils";
 import { KeyboardGalaxy } from "./KeyboardGalaxy";
 import { ArcadeGames } from "./ArcadeGames";
 import { ARCADE_GAMES } from "@/lib/arcade-logic";
+import { GameThumbnail } from "./GameThumbnail";
 import type { ArcadeId } from "@/lib/arcade-logic";
 
 type Tab="text"|"percentage"|"password"|"image"|"random"|"signature"|ArcadeId;
@@ -25,9 +26,9 @@ const panelClass="rounded-2xl border border-white/15 bg-[#111111] p-5 md:p-7";
 const actionClass="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/25 px-4 py-2.5 text-sm transition-colors hover:border-white/60";
 const originalSignature:SignatureFields={name:"",role:"",company:"",email:"",phone:"",website:"",accent:"#b7b7b7"};
 
-export function EverydayPlayground({lang}:{lang:"pl"|"en"}){
+export function EverydayPlayground({lang,mode="utility"}:{lang:"pl"|"en";mode?:"utility"|"games"}){
  const en=lang==="en";
- const [tab,setTab]=useState<Tab>("text");
+ const [tab,setTab]=useState<Tab>(mode==="games"?"reflex":"text");
  const [filter,setFilter]=useState("");
  const [input,setInput]=useState("");
  const [output,setOutput]=useState("");
@@ -54,17 +55,19 @@ export function EverydayPlayground({lang}:{lang:"pl"|"en"}){
  const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
  const started=useRef(0);
  const [toast,setToast]=useState("");
- const texts=useMemo(()=>entries.filter(e=>(en?e.en+" "+e.descEN:e.pl+" "+e.descPL).toLocaleLowerCase().includes(filter.toLocaleLowerCase().trim())),[filter,en]);
+ const texts=useMemo(()=>entries.filter(e=>e.group===(mode==="games"?"play":"utility")&&(en?e.en+" "+e.descEN:e.pl+" "+e.descPL).toLocaleLowerCase().includes(filter.toLocaleLowerCase().trim())),[filter,en,mode]);
  const selected=entries.find(x=>x.id===tab)!;
  const result=percentage(parseNumber(base),parseNumber(rate),percentMode);
  const sigHtml=useMemo(()=>signatureHtml(signature),[signature]);
  useEffect(()=>{
   const hash=location.hash.replace("#","");
-  if(entries.some(x=>x.id===hash))setTab(hash as Tab);
+  const target=entries.find(x=>x.id===hash);
+   if(target?.group===(mode==="games"?"play":"utility"))setTab(hash as Tab);
+   else if(target?.group==="play"&&mode==="utility")window.location.replace((en?"/en/games":"/minigry")+"#"+hash);
   return()=>{if(timer.current)clearTimeout(timer.current);};
- },[]);
+ },[mode,en]);
  useEffect(()=>()=>{if(converted)URL.revokeObjectURL(converted);},[converted]);
- const go=(id:Tab)=>{setTab(id);history.replaceState(null,"","#"+id);setToast("");};
+ const go=(id:Tab)=>{setTab(id);history.replaceState(null,"","#"+id);setToast("");if(mode==="games")window.requestAnimationFrame(()=>document.getElementById("game-stage")?.scrollIntoView({behavior:"smooth",block:"start"}));};
  const notify=(message:string)=>{setToast(message);window.setTimeout(()=>setToast(""),2600);};
  const copy=async(value:string)=>{try{await navigator.clipboard.writeText(value);notify(en?"Copied":"Skopiowano");}catch{notify(en?"Copy unavailable in this browser":"Kopiowanie niedostępne w tej przeglądarce");}};
  const generatePassword=()=>{
@@ -116,27 +119,27 @@ export function EverydayPlayground({lang}:{lang:"pl"|"en"}){
   if(reflex==="ready"){setReaction(Math.round(performance.now()-started.current));setReflex("done");return;}
   setReflex("waiting");timer.current=setTimeout(()=>{started.current=performance.now();setReflex("ready");},1200+Math.random()*2400);
  };
- return <div className="mt-9 grid gap-6 lg:grid-cols-[290px_minmax(0,1fr)]">
+ return <div className={mode==="games"?"mt-9 space-y-8":"mt-9 grid gap-6 lg:grid-cols-[290px_minmax(0,1fr)]"}>
   <aside className="min-w-0">
    <label className="block"><span className="sr-only">{en?"Search tools":"Szukaj narzędzi"}</span>
     <input type="search" className={fieldClass} value={filter} onChange={e=>setFilter(e.target.value)} placeholder={en?"Find a tool…":"Znajdź narzędzie…"}/></label>
-   <nav className="mt-4 space-y-6" aria-label={en?"Tool and game selection":"Wybór narzędzi i gier"}>
-    {(["utility","play"] as const).map(group=>{
+   <nav className="mt-4 space-y-6" aria-label={mode==="games"?(en?"Choose a game":"Wybierz grę"):(en?"Tool selection":"Wybierz narzędzie")}>
+    {([mode==="games"?"play":"utility"] as const).map(group=>{
      const groupItems=texts.filter(item=>item.group===group);
      if(!groupItems.length)return null;
      return <div key={group}>
       <p className="mb-3 text-[11px] font-semibold uppercase tracking-[.16em] text-white/50">{group==="utility"?(en?"02 / Tools":"02 / Narzędzia"):(en?"01 / Games & entertainment":"01 / Gry i rozrywka")} <span className="ml-2 text-white/35">{groupItems.length}</span></p>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-1">{groupItems.map(item=>{const Icon=item.icon;return <button type="button" key={item.id} onClick={()=>go(item.id)}
-       aria-current={tab===item.id?"page":undefined}
-       className={"flex min-h-[58px] min-w-0 items-center gap-3 rounded-xl border px-3 py-3 text-left transition-colors "+(tab===item.id?"border-white/55 bg-white/15 text-white":"border-white/10 bg-[#111111] text-white/70 hover:border-white/35")}>
-       <Icon size={18} className="shrink-0"/><span className="min-w-0 text-xs leading-5 sm:text-sm">{en?item.en:item.pl}</span></button>;})}</div>
+      <div className={mode==="games"?"grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5":"grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-1"}>{groupItems.map(item=>{const Icon=item.icon;return <button type="button" key={item.id} onClick={()=>go(item.id)}
+       aria-current={tab===item.id?"page":undefined} aria-pressed={tab===item.id}
+       className={(mode==="games"?"flex min-w-0 flex-col gap-3 rounded-2xl border p-2.5 text-left transition-colors ":"flex min-h-[58px] min-w-0 items-center gap-3 rounded-xl border px-3 py-3 text-left transition-colors ")+(tab===item.id?"border-white/60 bg-white/15 text-white":"border-white/10 bg-[#111111] text-white/70 hover:border-white/35")}>
+       {mode==="games"?<><GameThumbnail game={item.id as ArcadeId}/><span className="px-1 pb-1 text-sm font-medium leading-5">{en?item.en:item.pl}</span></>:<><Icon size={18} className="shrink-0"/><span className="min-w-0 text-xs leading-5 sm:text-sm">{en?item.en:item.pl}</span></>}</button>;})}</div>
      </div>;
     })}
    </nav>
    {!texts.length&&<p className="mt-3 text-sm text-white/50">{en?"No matching tools.":"Brak pasujących narzędzi."}</p>}
-   <p className="mt-3 text-xs leading-6 text-white/45">{en?"Tools run locally in your browser, without account creation.":"Narzędzia działają lokalnie w przeglądarce, bez zakładania konta."}</p>
+   <p className="mt-3 text-xs leading-6 text-white/45">{mode==="games"?(en?"Play on your device — no download or account.":"Graj bez pobierania i bez konta."):(en?"Tools run locally in your browser, without account creation.":"Narzędzia działają lokalnie w przeglądarce, bez zakładania konta.")}</p>
   </aside>
-  <div className="min-w-0 space-y-5">
+  <div id={mode==="games"?"game-stage":undefined} className="min-w-0 scroll-mt-28 space-y-5">
    {(selected.group==="utility"||tab==="reflex")&&<header className={panelClass}>
     <div className="flex items-center gap-3"><selected.icon size={22}/><h2 className="text-2xl font-medium">{en?selected.en:selected.pl}</h2></div>
     <p className="mt-3 text-sm leading-6 text-white/65">{en?selected.descEN:selected.descPL}</p>
@@ -213,7 +216,7 @@ export function EverydayPlayground({lang}:{lang:"pl"|"en"}){
    {toast&&<p role="status" className="fixed bottom-6 right-6 z-50 rounded-xl bg-white px-5 py-3 text-sm text-black shadow-xl"><Check size={15} className="mr-2 inline"/>{toast}</p>}
    <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-5 text-xs text-white/50">
     <span>{en?"Made for everyday use. No sign-up.":"Stworzone do codziennego użytku. Bez logowania."}</span>
-    <a className="inline-flex items-center gap-1 underline underline-offset-4" href={en?"/en/tools":"/narzedzia"}>{en?"Browse business tools":"Narzędzia biznesowe"}<ArrowRight size={14}/></a>
+    <a className="inline-flex items-center gap-1 underline underline-offset-4" href={en?"/en/tools":"/narzedzia"}>{en?"Browse tools":"Wszystkie narzędzia"}<ArrowRight size={14}/></a>
    </div>
   </div>
  </div>;
