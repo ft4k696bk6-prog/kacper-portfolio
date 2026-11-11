@@ -40,12 +40,5 @@ export function SiteFooter() {
         <Link className="block" href="/polityka-prywatnosci">{english?"Privacy policy":"Polityka prywatności"}</Link>
         <Link className="block" href="/kontakt">{english?"Contact and booking":"Kontakt i wycena"}</Link>
       </nav>
-    </div>
-    <div className="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-4 text-[11px] text-white/40">
-      {english ? "Forecast data, rounded and simplified: " : "Dane pogodowe, wartości zaokrąglone i uproszczone: "}
-      <a href="https://www.met.no/en" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white/70">MET Norway</a>
-      {" · "}
-      <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white/70">CC BY 4.0</a>
-    </div>
-  </footer>;
+    </div>  </footer>;
 }
