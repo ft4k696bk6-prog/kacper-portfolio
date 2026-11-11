@@ -52,8 +52,8 @@ const fixtures:Record<string,{values:Record<string,string>;csv?:string}>={
 describe("47 toolbox entries: deterministic execution",()=>{
  it("has 47 unique slugs and matching execution paths",()=>{
   expect(toolboxItems).toHaveLength(47);
-  expect(new Set(toolboxItems.map(t=>t.slug)).size).toBe(46);
-  expect(new Set(toolboxItems.map(t=>t.mode)).size).toBe(46);
+  expect(new Set(toolboxItems.map(t=>t.slug)).size).toBe(47);
+  expect(new Set(toolboxItems.map(t=>t.mode)).size).toBe(47);
   for(const t of toolboxItems){
    expect(t.title).toMatch(/^Darmow(y|a|e) /);
    expect(remote.has(t.mode)||t.mode==="sha256"||t.mode==="vat"||t.mode==="pdf"||t.mode in fixtures).toBe(true);
