@@ -51,6 +51,7 @@ export function ArcadeWorkshop({lang}:{lang:"pl"|"en"}){
  const [mines,setMines]=useState<MineCell[]>([]);const [flagging,setFlagging]=useState(false);const [mineLost,setMineLost]=useState(false);
  const [word,setWord]=useState("");const [wordGuess,setWordGuess]=useState("");const [wordRows,setWordRows]=useState<string[]>([]);
  const [typed,setTyped]=useState("");const [typingStart,setTypingStart]=useState(0);const [seconds,setSeconds]=useState(0);
+ const memoryTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
  const [balloonScore,setBalloonScore]=useState(0);const [target,setTarget]=useState(0);
  const answer=useMemo(()=>word||((en?wordsEN:wordsPL)[0]),[word,en]);
  const resetSnake=()=>{const start=blankSnake();setSnake(start);snakeRef.current=start;snakeDir.current={x:1,y:0};setSnakeFood({x:13,y:8});snakeFoodRef.current={x:13,y:8};setSnakePlaying(false);setSnakeDead(false);setSnakeScore(0);};
@@ -58,7 +59,7 @@ export function ArcadeWorkshop({lang}:{lang:"pl"|"en"}){
   setGame(name);
   if(name==="snake")resetSnake();
   if(name==="tiles"){setBoard(initialTiles());setTileScore(0);}
-  if(name==="memory"){setDeck(memoryDeck());setMatched([]);setFlipped([]);memoryLock.current=false;}
+  if(name==="memory"){if(memoryTimer.current)clearTimeout(memoryTimer.current);setDeck(memoryDeck());setMatched([]);setFlipped([]);memoryLock.current=false;}
   if(name==="tic")setTic(Array(9).fill(""));
   if(name==="mines"){setMines([]);setFlagging(false);setMineLost(false);}
   if(name==="word"){setWord((en?wordsEN:wordsPL)[Math.floor(Math.random()*8)]);setWordGuess("");setWordRows([]);}
@@ -98,7 +99,7 @@ export function ArcadeWorkshop({lang}:{lang:"pl"|"en"}){
   if(matched.includes(i)||flipped.includes(i)||memoryLock.current)return;
   const next=[...flipped,i];setFlipped(next);
   if(next.length===2){memoryLock.current=true;
-   window.setTimeout(()=>{if(deck[next[0]]===deck[next[1]])setMatched(old=>[...old,...next]);setFlipped([]);memoryLock.current=false;},650);
+   memoryTimer.current=window.setTimeout(()=>{if(deck[next[0]]===deck[next[1]])setMatched(old=>[...old,...next]);setFlipped([]);memoryLock.current=false;memoryTimer.current=null;},650);
   }
  };
  const ticWinner=(values:string[]):string=>{
@@ -116,7 +117,7 @@ export function ArcadeWorkshop({lang}:{lang:"pl"|"en"}){
  const clickMine=(i:number)=>{
   const field=mines.length?mines:makeMines(64,10,i);
   if(mineLost)return;
-  if(flagging){setMines(field.map((m,j)=>j===i?{...m,flag:!m.flag}:m));return;}
+  if(flagging){setMines(field.map((m,j)=>j===i&&!m.open?{...m,flag:!m.flag}:m));return;}
   if(field[i].flag)return;
   const opened=revealMines(field,i);
   if(opened[i].mine){setMineLost(true);setMines(opened.map(m=>m.mine?{...m,open:true}:m));}
@@ -127,7 +128,10 @@ export function ArcadeWorkshop({lang}:{lang:"pl"|"en"}){
   if(val.length!==5||wordRows.length>=6||wordRows.includes(answer))return;
   setWordRows(old=>[...old,val]);setWordGuess("");
  };
- const onTyped=(v:string)=>{if(!typingStart&&v)setTypingStart(Date.now());setTyped(v);if(v=== (en?promptEN:promptPL))setSeconds(Math.round((Date.now()-(typingStart||Date.now()))/1000));};
+ const onTyped=(v:string)=>{if(!typingStart&&v)setTypingStart(Date.now());setTyped(v);if(v===(en?promptEN:promptPL))setSeconds(Math.max(1,Math.round((Date.now()-(typingStart||Date.now()))/1000)));};
+ useEffect(()=>{if(game!=="type"||!typingStart||typed===(en?promptEN:promptPL))return;
+  const id=setInterval(()=>setSeconds(Math.floor((Date.now()-typingStart)/1000)),500);return()=>clearInterval(id);
+ },[game,typingStart,typed,en]);
  const selected=catalog.find(g=>g.id===game)!;
  const gameOver=game==="snake"&&snakeDead;
  return <section className="space-y-6">
@@ -166,7 +170,7 @@ export function ArcadeWorkshop({lang}:{lang:"pl"|"en"}){
    </div>}
    {game==="mines"&&<div className="space-y-4">
     <div className="flex flex-wrap items-center justify-between gap-2 text-sm"><span>{en?"Mines":"Miny"}: 10</span><button type="button" aria-pressed={flagging} onClick={()=>setFlagging(v=>!v)} className={button+" "+(flagging?"bg-white/20":"")}><Flag size={16}/>{en?"Flag mode":"Tryb flagowania"}</button></div>
-    <div className="mx-auto grid aspect-square max-w-[480px] grid-cols-8 gap-1">{Array.from({length:64},(_,i)=>{const c=mines[i];return <button key={i} type="button" onContextMenu={e=>{e.preventDefault();setFlagging(true);clickMine(i);}}
+    <div className="mx-auto grid aspect-square max-w-[480px] grid-cols-8 gap-1">{Array.from({length:64},(_,i)=>{const c=mines[i];return <button key={i} type="button" onContextMenu={e=>{e.preventDefault();if(mineLost)return;const field=mines.length?mines:makeMines(64,10,i);setMines(field.map((m,j)=>j===i&&!m.open?{...m,flag:!m.flag}:m));}}
       onClick={()=>clickMine(i)} aria-label={(en?"Cell ":"Pole ")+(i+1)}
       className={"rounded border border-white/15 text-sm font-bold sm:text-lg "+(c?.open?"bg-[#101010]":"bg-[#404040] hover:bg-[#555555]")}>
       {c?.open?(c.mine?"💣":c.near||""):(c?.flag?"🚩":"")}</button>})}</div>
@@ -184,7 +188,7 @@ export function ArcadeWorkshop({lang}:{lang:"pl"|"en"}){
    {game==="type"&&<div className="space-y-4">
     <p className="rounded-xl bg-white/10 p-5 font-mono text-base leading-8">{en?promptEN:promptPL}</p>
     <textarea className="min-h-32 w-full rounded-xl border border-white/20 bg-[#121212] p-4 outline-none" value={typed} onChange={e=>onTyped(e.target.value)} placeholder={en?"Type the text above":"Przepisz tekst powyżej"}/>
-    <p className="text-sm text-white/70">{en?"Characters":"Znaki"}: {typed.length} · {en?"Elapsed":"Czas"}: {seconds|| (typingStart?Math.floor((Date.now()-typingStart)/1000):0)} s</p>
+    <p className="text-sm text-white/70">{en?"Characters":"Znaki"}: {typed.length} · {en?"Elapsed":"Czas"}: {seconds} s · WPM: {typingStart?Math.round((typed.length/5)*60/Math.max(1,seconds)):0} · {en?"Accuracy":"Dokładność"}: {typed.length?Math.round(typed.split("").filter((v,i)=>v===(en?promptEN:promptPL)[i]).length/typed.length*100):100}%</p>
     {typed===(en?promptEN:promptPL)&&<p role="status">{en?"Completed!":"Ukończono!"}</p>}
    </div>}
    {game==="color"&&<div className="space-y-5">
@@ -201,7 +205,7 @@ export function ArcadeWorkshop({lang}:{lang:"pl"|"en"}){
 
 function CanvasArcade({kind,lang}:{kind:"pong"|"breakout"|"space";lang:"pl"|"en"}){
  const en=lang==="en";const canvas=useRef<HTMLCanvasElement>(null);
- const held=useRef(new Set<string>());const pointer=useRef(320);const paused=useRef(false);
+ const held=useRef(new Set<string>());const pointer=useRef(320);const touchShot=useRef(false);const paused=useRef(false);
  const [score,setScore]=useState(0);const [lost,setLost]=useState(false);const [round,setRound]=useState(0);
  useEffect(()=>{
   const c=canvas.current;if(!c)return;const ctx=c.getContext("2d");if(!ctx)return;
@@ -245,8 +249,10 @@ function CanvasArcade({kind,lang}:{kind:"pong"|"breakout"|"space";lang:"pl"|"en"
      ctx.fillStyle="#dedede";ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);
      for(const e of enemies)if(e.alive){ctx.fillStyle=e.y<70?"#a3b2bd":"#6d879a";ctx.fillRect(e.x-27,e.y-10,54,19);}
     }else{
-     if(left)ship-=290*dt;if(right)ship+=290*dt;ship=Math.max(24,Math.min(615,ship));
-     cooldown-=dt;if((held.current.has("Space")||pointer.current>=0)&&cooldown<=0){bullets.push({x:ship,y:345});cooldown=.48;pointer.current=-1;}
+     if(left)ship-=290*dt;if(right)ship+=290*dt;
+     if(pointer.current>=0&&touchShot.current)ship=pointer.current;
+     ship=Math.max(24,Math.min(615,ship));
+     cooldown-=dt;if((held.current.has("Space")||touchShot.current)&&cooldown<=0){bullets.push({x:ship,y:345});cooldown=.48;touchShot.current=false;}
      for(let i=bullets.length-1;i>=0;i--){bullets[i].y-=350*dt;if(bullets[i].y<0){bullets.splice(i,1);continue;}
       for(const e of enemies)if(e.alive&&Math.abs(bullets[i].x-e.x)<21&&Math.abs(bullets[i].y-e.y)<14){e.alive=false;bullets.splice(i,1);points+=10;setScore(points);break;}
      }
@@ -268,7 +274,7 @@ function CanvasArcade({kind,lang}:{kind:"pong"|"breakout"|"space";lang:"pl"|"en"
  return <div className="space-y-3">
   <div className="flex items-center justify-between text-sm"><span>{en?"Score":"Punkty"}: {score}</span><button type="button" className={button} onClick={()=>{setLost(false);setScore(0);setRound(n=>n+1);}}><RefreshCcw size={15}/>{en?"Restart":"Restart"}</button></div>
   <canvas ref={canvas} width={640} height={400} onPointerMove={e=>{const r=e.currentTarget.getBoundingClientRect();pointer.current=(e.clientX-r.left)/r.width*640;}}
-   onPointerDown={e=>{const r=e.currentTarget.getBoundingClientRect();pointer.current=(e.clientX-r.left)/r.width*640;}}
+   onPointerDown={e=>{const r=e.currentTarget.getBoundingClientRect();pointer.current=(e.clientX-r.left)/r.width*640;if(kind==="space")touchShot.current=true;}}
    className="aspect-[8/5] w-full touch-none rounded-xl border border-white/20 bg-[#080e18]" aria-label={en?"Arcade game canvas":"Plansza gry arcade"}/>
   <div className="flex justify-center gap-3">{[["ArrowLeft",ArrowLeft],["ArrowRight",ArrowRight],["Space",Trophy]] .map(([key,Icon])=>{const K=Icon as typeof ArrowLeft;return <button type="button" key={key as string} className={button} onPointerDown={()=>held.current.add(key as string)} onPointerUp={()=>held.current.delete(key as string)} onPointerLeave={()=>held.current.delete(key as string)}><K size={19}/></button>})}</div>
   <p className="text-center text-xs text-white/55">{en?"Arrow keys / touch to move. Space to shoot.":"Strzałki lub dotyk — sterowanie, spacja — strzał."}</p>
