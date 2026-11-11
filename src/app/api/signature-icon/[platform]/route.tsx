@@ -3,7 +3,7 @@ import {
  faFacebookF, faLinkedinIn, faInstagram, faYoutube,
  faTiktok, faXTwitter, faGithub, faWhatsapp
 } from "@fortawesome/free-brands-svg-icons";
-import type { IconDefinition } from "@fortawesome/free-brands-svg-icons";
+type IconDefinition = typeof faFacebookF;
 
 export const runtime = "nodejs";
 
