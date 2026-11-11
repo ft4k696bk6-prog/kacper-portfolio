@@ -3,7 +3,7 @@
 import { useId } from "react";
 import styles from "./BerniFoxHead.module.css";
 
-export type BerniFoxMood = "idle" | "curious" | "thinking" | "happy" | "excited" | "sleeping" | "typing" | "listening" | "surprised" | "worried" | "working";
+export type BerniFoxMood = "idle" | "curious" | "thinking" | "happy" | "excited" | "sleeping" | "typing" | "listening" | "surprised" | "worried" | "working" | "grabbed";
 export type BerniFoxAccessory = "none" | "santa" | "elf" | "alien" | "crown" | "cap" | "glasses";
 
 export function seasonalBerniAccessory(date: Date): BerniFoxAccessory {
