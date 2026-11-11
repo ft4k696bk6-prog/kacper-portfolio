@@ -1,25 +1,34 @@
-.stage{position:relative;isolation:isolate;display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;overflow:visible;vertical-align:middle;user-select:none;-webkit-user-select:none}
-.motion{position:absolute;inset:0;display:block;transform-origin:50% 57%;animation:berniPremiumIdle 5.8s ease-in-out infinite}
-.art{object-fit:contain;user-select:none;pointer-events:none;filter:drop-shadow(0 6px 12px rgba(0,0,0,.35))}
-.stage[data-mood="thinking"] .motion,.stage[data-mood="working"] .motion{animation:berniPremiumThink 3.5s ease-in-out infinite}
-.stage[data-mood="curious"] .motion,.stage[data-mood="listening"] .motion{animation:berniPremiumCurious 3s ease-in-out infinite}
-.stage[data-mood="happy"] .motion{animation:berniPremiumHappy 1.9s ease-in-out 2}
-.stage[data-mood="excited"] .motion{animation:berniPremiumCelebrate .8s ease-in-out 3}
-.stage[data-mood="surprised"] .motion{animation:berniPremiumStartle .9s ease-out 1}
-.stage[data-mood="worried"] .motion{animation:berniPremiumWorried 3s ease-in-out infinite}
-.stage[data-mood="sleeping"] .motion{animation:berniPremiumSleep 4s ease-in-out infinite;opacity:.72}
-.stage[data-mood="typing"] .motion{animation:berniPremiumAnswer 1.6s ease-in-out infinite}
-.thinking{position:absolute;z-index:1;top:6%;right:3%;display:flex;align-items:center;gap:3px;pointer-events:none}
-.thinking i{display:block;width:3px;height:3px;border-radius:50%;background:#e6edf5;opacity:.4;animation:berniPremiumDots 1.4s ease-in-out infinite}
-.thinking i:nth-child(2){animation-delay:.18s}.thinking i:nth-child(3){animation-delay:.36s}
-@keyframes berniPremiumIdle{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-1.5%) rotate(.8deg)}}
-@keyframes berniPremiumThink{0%,100%{transform:rotate(0)}35%,65%{transform:translateY(-1%) rotate(-3deg)}}
-@keyframes berniPremiumCurious{0%,100%{transform:rotate(0)}45%,70%{transform:rotate(3.5deg)}}
-@keyframes berniPremiumHappy{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-3%) rotate(-3deg)}55%{transform:translateY(-1%) rotate(2deg)}}
-@keyframes berniPremiumCelebrate{0%,100%{transform:translateY(0)}40%{transform:translateY(-6%) scale(1.03)}70%{transform:translateY(-2%)}}
-@keyframes berniPremiumStartle{0%,100%{transform:scale(1)}30%{transform:scale(1.065)}}
-@keyframes berniPremiumWorried{0%,100%{transform:rotate(0)}35%,65%{transform:rotate(-2.8deg)}}
-@keyframes berniPremiumSleep{0%,100%{transform:translateY(3%) rotate(5deg)}50%{transform:translateY(4%) rotate(6deg)}}
-@keyframes berniPremiumAnswer{0%,100%{transform:translateY(0)}50%{transform:translateY(1.5%)}}
-@keyframes berniPremiumDots{0%,100%{opacity:.3;transform:scale(.7)}50%{opacity:1;transform:scale(1.12)}}
-@media(prefers-reduced-motion:reduce){.motion,.thinking i{animation:none!important;transition:none!important}.stage[data-mood="sleeping"] .motion{transform:rotate(5deg)}}
+.stage{position:relative;isolation:isolate;display:inline-flex;flex:0 0 auto;vertical-align:middle;user-select:none;-webkit-user-select:none;overflow:visible}
+.portrait{position:absolute;inset:0;display:block;filter:drop-shadow(0 6px 12px rgba(0,0,0,.36));transform-origin:53% 55%;animation:berniBreathing 7s ease-in-out infinite}
+.art{object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.expressionLayer,.mouthLayer,.blinkLayer,.winkLayer,.manualBlink{position:absolute;inset:0;pointer-events:none;display:block}
+.expressionLayer{-webkit-mask-image:radial-gradient(ellipse 27% 21% at 60% 54%,#000 46%,transparent 100%);mask-image:radial-gradient(ellipse 27% 21% at 60% 54%,#000 46%,transparent 100%)}
+.mouthLayer{-webkit-mask-image:radial-gradient(ellipse 15% 10% at 65.5% 64%,#000 43%,transparent 100%);mask-image:radial-gradient(ellipse 15% 10% at 65.5% 64%,#000 43%,transparent 100%);animation:berniSpeak 1.12s ease-in-out infinite}
+.blinkLayer,.winkLayer,.manualBlink{-webkit-mask-image:radial-gradient(ellipse 27% 13% at 60% 50.5%,#000 46%,transparent 100%);mask-image:radial-gradient(ellipse 27% 13% at 60% 50.5%,#000 46%,transparent 100%)}
+.blinkLayer{opacity:0;animation:berniEyelids 6.3s linear infinite}
+.winkLayer{opacity:0;animation:berniWink 17.8s linear infinite}
+.manualBlink{opacity:0;animation:berniBlinkOnce .37s ease-in-out 1}
+.stage[data-mood="sleeping"] .blinkLayer{animation:none;opacity:1}
+.stage[data-mood="sleeping"] .winkLayer,.stage[data-mood="happy"] .blinkLayer,.stage[data-mood="excited"] .blinkLayer{animation:none;opacity:0}
+.stage[data-mood="typing"] .blinkLayer{animation:berniEyelids 6.3s linear infinite}
+.stage[data-mood="sleeping"] .portrait{animation:berniRest 5s ease-in-out infinite}
+.stage[data-mood="surprised"] .portrait,.stage[data-mood="grabbed"] .portrait{animation:berniStartle .7s ease-in-out 1}
+.stage[data-mood="excited"] .portrait{animation:berniCelebrate 1.3s ease-in-out 2}
+.stage[data-mood="thinking"] .portrait,.stage[data-mood="working"] .portrait{animation:berniBreathing 7s ease-in-out infinite}
+@keyframes berniEyelids{
+  0%,18%,19.9%,64%,66.2%,100%{opacity:0}
+  18.35%,19.2%,64.4%,65.5%{opacity:1}
+}
+@keyframes berniWink{0%,71%,72.9%,100%{opacity:0}71.5%,72.2%{opacity:1}}
+@keyframes berniBlinkOnce{0%,100%{opacity:0}28%,70%{opacity:1}}
+@keyframes berniSpeak{0%,100%{opacity:.1}32%,65%{opacity:1}82%{opacity:.45}}
+@keyframes berniBreathing{0%,100%{transform:translateY(0)}50%{transform:translateY(-.5%)}}
+@keyframes berniRest{0%,100%{transform:rotate(1deg)}50%{transform:rotate(2deg) translateY(1%)}}
+@keyframes berniStartle{0%,100%{transform:scale(1)}35%{transform:scale(1.03)}}
+@keyframes berniCelebrate{0%,100%{transform:translateY(0)}50%{transform:translateY(-3%)}}
+@media(prefers-reduced-motion:reduce){
+  .portrait,.blinkLayer,.winkLayer,.mouthLayer,.manualBlink{animation:none!important;transition:none!important}
+  .stage[data-mood="sleeping"] .blinkLayer{opacity:1}
+  .blinkLayer,.winkLayer,.mouthLayer,.manualBlink{opacity:0}
+  .stage[data-mood="typing"] .mouthLayer{opacity:1}
+}
