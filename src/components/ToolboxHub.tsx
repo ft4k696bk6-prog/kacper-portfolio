@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Gamepad2, Search, Sparkles } from "lucide-react";
+import { ArrowUpRight, ChevronDown, Gamepad2, Search, Sparkles } from "lucide-react";
 import { visibleToolboxItems, visibleEnglishToolboxItems } from "@/lib/toolbox-visibility";
 import { englishToolPath } from "@/lib/toolbox-en";
 
@@ -84,13 +84,23 @@ export function ToolboxHub({ lang }: { lang: Language }) {
         <input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder={en ? "Search: AI photo, VAT, SEO, Meta Ads…" : "Szukaj: zdjęcie AI, VAT, SEO, Meta Ads…"} className="min-h-12 w-full rounded-xl border border-white/20 bg-[#101010] py-3 pl-12 pr-4 text-base text-white outline-none placeholder:text-white/40 focus:border-white/60"/>
       </label>
 
-      <div role="group" aria-label={en ? "Filter by category" : "Filtruj według kategorii"} className="mt-5 flex w-full gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {[
-          { id: "featured", title: en ? "Recommended" : "Polecane" },
-          { id: "all", title: en ? "All tools" : "Wszystkie" },
-          ...categories.map(c => ({ id: c, title: c })),
-        ].map(c => <button type="button" key={c.id} aria-pressed={category === c.id} onClick={() => setCategory(c.id)}
-          className={"shrink-0 rounded-full border px-4 py-2.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white " + (category === c.id ? "border-white/80 bg-white text-black" : "border-white/20 bg-[#161616] text-white/70 hover:border-white/55 hover:text-white")}>{c.title}</button>)}
+      <div className="mt-5 w-full max-w-sm">
+        <label htmlFor={`tool-category-${lang}`} className="mb-2 block text-xs font-medium uppercase tracking-[.12em] text-white/50">
+          {en ? "Category" : "Kategoria"}
+        </label>
+        <div className="relative">
+          <select
+            id={`tool-category-${lang}`}
+            value={category}
+            onChange={e => setCategory(e.target.value)}
+            className="min-h-12 w-full appearance-none rounded-xl border border-white/25 bg-[#161616] px-4 py-3 pr-12 text-base text-white outline-none transition-colors focus:border-white/70 focus:ring-2 focus:ring-white/15"
+          >
+            <option value="featured">{en ? "Recommended" : "Polecane"}</option>
+            <option value="all">{en ? "All tools" : "Wszystkie"}</option>
+            {categories.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+          <ChevronDown size={18} aria-hidden="true" className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-white/65"/>
+        </div>
       </div>
 
       <div aria-live="polite" className="mt-6">
