@@ -81,4 +81,34 @@ describe("Everyday Tools",()=>{
   expect(unsafe).not.toContain("javascript:");
  });
 
+ it("exports reference-inspired premium signature with a separate clickable vertical icon rail",()=>{
+  const socials={
+   facebook:"https://facebook.com/example",linkedin:"https://linkedin.com/in/example",
+   instagram:"https://instagram.com/example",youtube:"https://youtube.com/@example",
+   tiktok:"https://tiktok.com/@example",x:"https://x.com/example",
+   github:"https://github.com/example",calendar:"https://cal.com/example"
+  };
+  const html=signatureHtml({name:"Jan Kowalski",role:"Founder",company:"Brand",email:"jan@brand.pl",phone:"+48 500 600 700",website:"brand.pl",
+   accent:"#787878",animationStyle:"geometry",animationUrl:"https://cdn.example.com/geometric.gif",socials});
+  expect(html).toContain('width="578"');
+  expect(html).toContain('height="208"');
+  expect(html).toContain('border-right:1px solid #e5e3e8');
+  expect(html).toContain('src="https://cdn.example.com/geometric.gif"');
+  expect(html).toContain('href="mailto:jan@brand.pl"');
+  expect(html).toContain('href="tel:+48500600700"');
+  expect(html).toContain('href="https://brand.pl/"');
+  for(const link of Object.values(socials)) expect(html).toContain('href="'+link+'"');
+  expect(html).not.toContain("<script");
+  expect(html).not.toContain("<style");
+ });
+ it("keeps previous animated formats unchanged and rejects malicious rail URLs",()=>{
+  const base={name:"A",role:"CEO",company:"Company",email:"",phone:"",website:"",accent:"#777777",animationUrl:"https://a.example.org/a.gif"};
+  const classic=signatureHtml({...base,animationStyle:"reveal"});
+  expect(classic).toContain('width="520"');
+  expect(classic).not.toContain('width="578"');
+  const premium=signatureHtml({...base,animationStyle:"geometry",socials:{linkedin:'javascript:alert(1)',facebook:"https://user:secret@example.com"}});
+  expect(premium).not.toContain("javascript:");
+  expect(premium).not.toContain("user:secret@");
+ });
+
 });
