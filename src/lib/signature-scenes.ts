@@ -76,62 +76,99 @@ function rule(c:CanvasRenderingContext2D,x:number,y:number,w:number,color:string
  *
  * The same scene renders to the live preview and the exported GIF.
  */
-function sceneGeometry(c:CanvasRenderingContext2D,f:SignatureFields,a:SceneAssets,p:number){
- const color=hex(f.accent);
- c.fillStyle="#fff";c.fillRect(0,0,520,208);
- // Contact details are already present in the mail (the original video keeps them stable).
- const contactFade=1; // Name and contact stay visible while brand/photo collapse.
- text(c,nameOf(f),27,102,290,"bold 23px Arial","#1b1a21",contactFade);
- text(c,roleOf(f),27,121,287,"13px Arial","#605e68",contactFade);
- text(c,f.company||"",27,148,277,"bold 11px Arial",color,contactFade);
- text(c,f.email||"",27,171,283,"12px Arial","#56545d",contactFade);
- text(c,f.website||f.phone||"",27,192,283,"12px Arial","#56545d",contactFade);
+/**
+ * One photo, three PARALLEL equal-width parallelograms. Widths, slant and
+ * gutters are computed rather than manually positioning arbitrary polygons.
+ * All fragments draw the same uncropped source transform. Hence each eye,
+ * facial feature and garment edge continues perfectly across the gutters.
+ */
+export const REFERENCE_PHOTO_GRID={
+ topY:34,
+ bottomY:195,
+ bottomStartX:303,
+ bandWidth:46,
+ gapWidth:5,
+ topShiftX:58,
+ bandCount:3,
+ photoX:291,
+ photoY:12,
+ photoW:227,
+ photoH:193
+} as const;
 
- // Backdrop geometry frames the face without covering it.
- const mount=phase(p,.07,.58);
- c.save();c.globalAlpha=mount;
- c.fillStyle="#dad8df";
- polygon(c,[[353,51],[407,51],[344,184],[308,184]]);c.fill();
- c.fillStyle="#5e5b67";
- polygon(c,[[460,19],[505,19],[452,164],[410,164]]);c.fill();
- c.fillStyle="#a8a5b0";
- polygon(c,[[482,85],[508,85],[464,181],[444,181]]);c.fill();
+export function referencePhotoPolygons():number[][][]{
+ const g=REFERENCE_PHOTO_GRID;
+ return Array.from({length:g.bandCount},(_,i)=>{
+  const x=g.bottomStartX+i*(g.bandWidth+g.gapWidth);
+  return [
+   [x+g.topShiftX,g.topY],
+   [x+g.topShiftX+g.bandWidth,g.topY],
+   [x+g.bandWidth,g.bottomY],
+   [x,g.bottomY]
+  ];
+ });
+}
+
+function sceneGeometry(c:CanvasRenderingContext2D,f:SignatureFields,a:SceneAssets,p:number){
+ const accent=hex(f.accent),g=REFERENCE_PHOTO_GRID;
+ c.fillStyle="#fff";c.fillRect(0,0,SCENE_WIDTH,SCENE_HEIGHT);
+
+ // Contact copy is fixed, as in the supplied reference video.
+ text(c,nameOf(f),27,102,267,"bold 23px Arial","#19181e",1);
+ text(c,roleOf(f),27,122,266,"13px Arial","#605e68",1);
+ text(c,f.company||"",27,147,264,"bold 11px Arial",accent,1);
+ text(c,f.email||"",27,169,265,"12px Arial","#56545d",1);
+ text(c,f.website||f.phone||"",27,190,266,"12px Arial","#56545d",1);
+
+ // Subtle background facets only; actual PHOTO fragments share one grid.
+ // Keep facets BEHIND the portrait instead of covering the face.
+ const base=phase(p,.08,.55);
+ c.save();c.globalAlpha=base;c.fillStyle="#dedce3";
+ polygon(c,[[355,52],[407,52],[353,190],[302,190]]);c.fill();
+ c.fillStyle="#696673";polygon(c,[[465,22],[504,22],[454,159],[415,159]]);c.fill();
  c.restore();
 
- const focusX=f.photoFocusX??50,focusY=f.photoFocusY??42;
- const face=[
-  {pts:[[349,59],[400,59],[338,195],[298,195]],begin:.12,end:.63},
-  {pts:[[406,29],[470,29],[404,196],[344,196]],begin:.24,end:.78},
-  {pts:[[476,56],[498,56],[449,177],[424,177]],begin:.43,end:.91}
- ];
- // Clip each shard from bottom upward. The pixels all use one common photo crop,
- // which keeps facial features aligned across the diagonal gaps.
- for(const part of face){
-  const q=phase(p,part.begin,part.end);
-  if(q<=0)continue;
+ const bands=referencePhotoPolygons();
+ const focusX=f.photoFocusX??50, focusY=f.photoFocusY??42;
+ // Bottom-up clipping is the reveal. NO lateral shifts: every pixel
+ // is sampled at identical canvas coordinates for all three pieces.
+ bands.forEach((poly,i)=>{
+  const progress=phase(p,.15+i*.07,.65+i*.07);
+  if(progress<=0)return;
   c.save();
-  c.beginPath();c.rect(293,204-q*204,220,q*204);c.clip();
-  photoPiece(c,a.photo,part.pts,292,8,224,195,1,0,0,"#d0cdd4",focusX,focusY);
+  c.beginPath();
+  c.rect(g.photoX,g.bottomY-(g.bottomY-g.topY)*progress,g.photoW,(g.bottomY-g.topY)*progress);
+  c.clip();
+  photoPiece(c,a.photo,poly,g.photoX,g.photoY,g.photoW,g.photoH,1,0,0,"#d0cdd4",focusX,focusY);
+  c.restore();
+ });
+ // White, constant-width gutters make the alignment unambiguous even where
+ // the grey backing would otherwise show through the cuts.
+ const reveal=phase(p,.2,.82);
+ if(reveal>0){
+  c.save();c.globalAlpha=reveal;c.fillStyle="#fff";
+  for(let i=0;i<g.bandCount-1;i++){
+   const x=g.bottomStartX+(i+1)*g.bandWidth+i*g.gapWidth;
+   polygon(c,[
+    [x+g.topShiftX,g.topY],
+    [x+g.topShiftX+g.gapWidth,g.topY],
+    [x+g.gapWidth,g.bottomY],
+    [x,g.bottomY]
+   ]);
+   c.fill();
+  }
   c.restore();
  }
- // The central face must remain visible and never be covered by a solid stripe.
- // Thin white diagonal gutters separate the fragments rather than obscuring them.
- c.save();
- c.globalAlpha=phase(p,.5,.92)*.97;
- c.strokeStyle="#fff";c.lineWidth=3;
- c.beginPath();c.moveTo(406,29);c.lineTo(344,196);
- c.moveTo(471,30);c.lineTo(405,194);
- c.stroke();c.restore();
 
- // Brand symbol appears first; remaining logo/wordmark is traced horizontally.
- const mark=phase(p,.03,.27),wordmark=phase(p,.30,.98);
- const revealed=0.14*mark+0.86*wordmark;
- if(revealed>0){
-  c.save();c.beginPath();c.rect(27,19,217*revealed,48);c.clip();
-  logo(c,f,a.logo,27,22,205,43,1,"#222128",25);
-  c.restore();
+ // The logo is written across the top without moving its final position.
+ const symbol=phase(p,.02,.24),wordmark=phase(p,.26,.95);
+ const clipFraction=.14*symbol+.86*wordmark;
+ if(clipFraction>0){
+  c.save();c.beginPath();c.rect(27,19,217*clipFraction,48);c.clip();
+  logo(c,f,a.logo,27,22,205,43,1,"#222128",25);c.restore();
  }
 }
+
 function sceneSlices(c:CanvasRenderingContext2D,f:SignatureFields,a:SceneAssets,p:number){
  const accent=hex(f.accent);c.fillStyle="#13151b";c.fillRect(0,0,520,208);
  // A genuinely different dark collage, with shutter strips moving vertically.
