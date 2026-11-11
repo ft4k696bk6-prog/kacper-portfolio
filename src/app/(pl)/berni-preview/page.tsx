@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { BerniPremiumPortrait, type BerniPortraitMood } from "@/components/BerniPremiumPortrait";
+import type { BerniTransitionName } from "@/lib/berni-transition";
 
 const moods: { value: BerniPortraitMood; pl: string; en: string }[] = [
   { value: "idle", pl: "Spokojny", en: "Idle" },
@@ -15,10 +16,15 @@ const moods: { value: BerniPortraitMood; pl: string; en: string }[] = [
   { value: "worried", pl: "Zmartwiony", en: "Worried" },
 ];
 
+
+const transitions: {id:BerniTransitionName;label:string}[]=[{"id":"dive","label":"Nurek"},{"id":"tuck","label":"Schowanie"},{"id":"drop","label":"Opadnięcie"},{"id":"boomerang","label":"Bumerang"},{"id":"swoop-left","label":"Ślizg w lewo"},{"id":"swoop-right","label":"Ślizg w prawo"},{"id":"orbit-left","label":"Orbita lewa"},{"id":"orbit-right","label":"Orbita prawa"},{"id":"micro-tornado","label":"Mini-tornado"},{"id":"blur-twist","label":"Rozmyty obrót"},{"id":"spiral","label":"Spirala"},{"id":"pearl","label":"Zniknięcie"},{"id":"zoom-pop","label":"Wyskoczenie"},{"id":"whiplash","label":"Szybki zwrot"},{"id":"side-arc","label":"Łuk boczny"},{"id":"roll-in","label":"Przetoczenie"},{"id":"flip-peek","label":"Przekręcenie"},{"id":"bounce-swirl","label":"Wir i odbicie"}];
+
 export default function BerniPreview() {
   const [mood, setMood] = useState<BerniPortraitMood>("idle");
   const [blinkToken, setBlinkToken] = useState(0);
   const [reactionToken, setReactionToken] = useState(0);
+  const [transitionToken, setTransitionToken] = useState(0);
+  const [transitionPreset, setTransitionPreset] = useState<BerniTransitionName|null>(null);
   return (
     <main className="min-h-screen bg-[#090b0e] px-4 pb-16 pt-36 text-white sm:pt-40">
       <div className="mx-auto max-w-5xl">
@@ -29,7 +35,7 @@ export default function BerniPreview() {
         </p>
         <div className="mt-8 grid gap-5 lg:grid-cols-[minmax(0,1fr)_290px]">
           <div className="relative flex min-h-[410px] flex-col items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_50%_35%,#29313c,#0e1116_68%,#090b0e)] p-5">
-            <BerniPremiumPortrait mood={mood} size={320} priority blinkToken={blinkToken} reactionToken={reactionToken} />
+            <BerniPremiumPortrait mood={mood} size={320} priority blinkToken={blinkToken} reactionToken={reactionToken} transitionToken={transitionToken} transitionPreset={transitionPreset} />
             <p className="mt-4 text-sm text-white/60">Stan: <strong className="text-white">{mood}</strong></p>
             <button type="button" onClick={() => setReactionToken(x => x + 1)}
               className="mt-4 rounded-full border border-white/15 px-4 py-2 text-xs text-white/70 hover:bg-white/10">
@@ -63,6 +69,24 @@ export default function BerniPreview() {
               </button>
             ))}
           </div>
+          <details className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+            <summary className="cursor-pointer select-none text-sm font-medium text-white">
+              Przetestuj 18 animacji przejścia
+            </summary>
+            <p className="mt-3 text-xs leading-6 text-white/55">
+              Każdy przycisk odtwarza osobny efekt, aby łatwo porównać ruchy.
+              Zwykłe zmiany spojrzenia i mruganie nie używają tych efektów.
+            </p>
+            <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {transitions.map(item=>(
+                <button key={item.id} type="button"
+                  onClick={()=>{setTransitionPreset(item.id);setMood(m=>m==="surprised"?"happy":"surprised");setTransitionToken(t=>t+1);}}
+                  className="rounded-xl border border-white/15 px-3 py-2.5 text-xs text-white/80 transition hover:border-white/50 hover:bg-white/10">
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </details>
           <p className="mt-5 text-xs leading-6 text-white/50">
             Pełne portrety mają identyczny kolor i obrys głowy. Do większej zmiany miny Berni używa jednego z 18 efektów: nurek, zwrot, blur, spirala, mini-tornado i inne. Podmiana następuje dopiero, gdy głowa jest ukryta w ruchu. Efekty mają historię i ograniczenie powtórek. Zwykłe spojrzenie, mrugnięcie i myślenie nie uruchamiają efektu specjalnego.
           </p>
