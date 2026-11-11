@@ -2,6 +2,11 @@ import { toolboxItems, type ToolboxItem } from "./toolbox";
 
 export type EnglishToolboxItem = ToolboxItem & { englishSlug:string };
 const englishData: Record<string,{slug:string;title:string;description:string}> = {
+  "edytor-pdf": {
+    "slug": "free-pdf-editor",
+    "title": "Free online PDF editor — no sign-up",
+    "description": "Edit PDF files online for free. Add text, signatures and images, reorder and rotate pages, download your PDF. No registration, no credit card, and no file upload to our servers."
+  },
   "kalkulator-vat": {
     "slug": "vat-calculator",
     "title": "Free VAT net-to-gross calculator — 8% and 23%",
@@ -238,7 +243,8 @@ export const englishToolboxCategories: Record<string,string> = {
   "Reklamy i marketing":"Advertising & marketing",
   "CRM i sprzedaż":"CRM & sales",
   "AI i wyszukiwarki":"AI & search",
-  "Dla programistów":"Developer tools"
+  "Dla programistów":"Developer tools",
+  "Dokumenty i pliki":"Documents & files"
 };
 export const englishToolboxItems: EnglishToolboxItem[] = toolboxItems.map(tool=>({
  ...tool,
