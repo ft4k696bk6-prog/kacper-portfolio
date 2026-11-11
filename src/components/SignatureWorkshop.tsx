@@ -1,6 +1,6 @@
 "use client";
 import {useMemo,useState} from "react";
-import {Check,Clipboard,Download,Image as ImageIcon,Lightning,Mail,Palette,ShieldCheck} from "lucide-react";
+import {Check,Clipboard,Download,ShieldCheck} from "lucide-react";
 import {advancedSignatureHtml,signatureDefaults} from "@/lib/signature-pro";
 import type {ProSignature,SignatureTheme} from "@/lib/signature-pro";
 import {saveBlob} from "@/lib/browser-toolkit";
