@@ -129,7 +129,6 @@ export function ArcadeWorkshop({lang}:{lang:"pl"|"en"}){
  };
  const onTyped=(v:string)=>{if(!typingStart&&v)setTypingStart(Date.now());setTyped(v);if(v=== (en?promptEN:promptPL))setSeconds(Math.round((Date.now()-(typingStart||Date.now()))/1000));};
  const selected=catalog.find(g=>g.id===game)!;
- const gameText=game==="kids"?(en?"All letters and symbols, no score.":"Wszystkie litery i symbole, bez punktów."):"";
  const gameOver=game==="snake"&&snakeDead;
  return <section className="space-y-6">
   <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -207,9 +206,10 @@ function CanvasArcade({kind,lang}:{kind:"pong"|"breakout"|"space";lang:"pl"|"en"
  useEffect(()=>{
   const c=canvas.current;if(!c)return;const ctx=c.getContext("2d");if(!ctx)return;
   let raf=0,last=performance.now(),points=0,over=false;
-  let ball={x:320,y:240,vx:185,vy:155,r:8};let paddle={x:275,y:363,w:90,h:10};
-  let enemies=Array.from({length:18},(_,i)=>({x:35+(i%9)*64,y:45+Math.floor(i/9)*25,alive:true}));
+  let ball={x:320,y:240,vx:185,vy:155,r:8};const paddle={x:275,y:363,w:90,h:10};
+  const enemies=Array.from({length:18},(_,i)=>({x:35+(i%9)*64,y:45+Math.floor(i/9)*25,alive:true}));
   const bullets:{x:number;y:number}[]=[];let cooldown=0,ship=320;
+  const heldKeys=held.current;
   const down=(e:KeyboardEvent)=>{if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Space"].includes(e.code))e.preventDefault();held.current.add(e.code);};
   const up=(e:KeyboardEvent)=>held.current.delete(e.code);
   window.addEventListener("keydown",down);window.addEventListener("keyup",up);
@@ -263,7 +263,7 @@ function CanvasArcade({kind,lang}:{kind:"pong"|"breakout"|"space";lang:"pl"|"en"
    raf=requestAnimationFrame(render);
   };
   raf=requestAnimationFrame(render);
-  return()=>{cancelAnimationFrame(raf);window.removeEventListener("keydown",down);window.removeEventListener("keyup",up);held.current.clear();};
+  return()=>{cancelAnimationFrame(raf);window.removeEventListener("keydown",down);window.removeEventListener("keyup",up);heldKeys.clear();};
  },[kind,round]);
  return <div className="space-y-3">
   <div className="flex items-center justify-between text-sm"><span>{en?"Score":"Punkty"}: {score}</span><button type="button" className={button} onClick={()=>{setLost(false);setScore(0);setRound(n=>n+1);}}><RefreshCcw size={15}/>{en?"Restart":"Restart"}</button></div>
