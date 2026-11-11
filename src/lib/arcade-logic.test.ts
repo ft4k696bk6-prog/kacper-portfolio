@@ -2,9 +2,11 @@ import {describe,expect,it} from "vitest";
 import {ARCADE_GAMES,canMove2048,initialSnake,mathQuestion,memoryCards,minesWon,move2048,new2048,newMineBoard,nextSnake,revealMineBoard,tttBotMove,tttWinner} from "./arcade-logic";
 
 describe("arcade catalog and game rules",()=>{
- it("offers exactly ten distinct games for Polish and English visitors",()=>{
-  expect(ARCADE_GAMES).toHaveLength(10);
-  expect(new Set(ARCADE_GAMES.map(x=>x.id)).size).toBe(10);
+ it("offers twelve distinct games for Polish and English visitors",()=>{
+  expect(ARCADE_GAMES).toHaveLength(12);
+  expect(new Set(ARCADE_GAMES.map(x=>x.id)).size).toBe(12);
+  expect(ARCADE_GAMES.some(g=>g.id==="maze")).toBe(true);
+  expect(ARCADE_GAMES.some(g=>g.id==="fps")).toBe(true);
   for(const g of ARCADE_GAMES){
    expect(g.pl.length).toBeGreaterThan(2);expect(g.en.length).toBeGreaterThan(2);
    expect(g.plDesc.length).toBeGreaterThan(12);expect(g.enDesc.length).toBeGreaterThan(12);

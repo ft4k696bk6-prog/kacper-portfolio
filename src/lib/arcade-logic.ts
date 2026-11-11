@@ -2,6 +2,8 @@ export type Direction = "up" | "down" | "left" | "right";
 export const ARCADE_GAMES = [
  {id:"reflex",pl:"Test refleksu",en:"Reaction test",plDesc:"Złap zielony sygnał i pobij swój wynik.",enDesc:"React when the signal turns green."},
  {id:"kids",pl:"Klawiaturowa galaktyka",en:"Keyboard Galaxy",plDesc:"Kosmos, litery i efekty na dotyk.",enDesc:"A touch-friendly galaxy of letters and stars."},
+ {id:"maze",pl:"Pac-Man — labirynt",en:"Maze Chomp (Pac-Man style)",plDesc:"Gra w stylu Pac-Mana z duchami i kropkami.",enDesc:"An original Pac-Man-style maze game."},
+ {id:"fps",pl:"Retro FPS — styl Doom",en:"Retro FPS (Doom style)",plDesc:"Lekka strzelanka 3D w stylu Dooma, także na telefon.",enDesc:"A lightweight Doom-style 3D shooter for touch screens."},
  {id:"memory",pl:"Memory",en:"Memory pairs",plDesc:"Odkrywaj i zapamiętuj 6 par kart.",enDesc:"Find six matching pairs."},
  {id:"tictactoe",pl:"Kółko i krzyżyk",en:"Tic-tac-toe",plDesc:"Zagraj przeciwko komputerowi.",enDesc:"Challenge the computer."},
  {id:"merge",pl:"2048",en:"2048",plDesc:"Łącz kafelki i zdobądź 2048.",enDesc:"Merge tiles and reach 2048."},
@@ -9,7 +11,7 @@ export const ARCADE_GAMES = [
  {id:"mines",pl:"Saper",en:"Minesweeper",plDesc:"Odkryj pola, omijaj miny.",enDesc:"Reveal cells without hitting a mine."},
  {id:"math",pl:"Szybka matematyka",en:"Quick math",plDesc:"10 pytań na szybkość i celność.",enDesc:"Ten quick arithmetic questions."},
  {id:"guess",pl:"Zgadnij liczbę",en:"Guess the number",plDesc:"Odgadnij liczbę od 1 do 100.",enDesc:"Find a secret number from 1 to 100."},
- {id:"target",pl:"Łap cel",en:"Target rush",plDesc:"Trafiaj pojawiające się cele przez 20 sekund.",enDesc:"Hit as many targets as you can in 20 seconds."}
+ {id:"target",pl:"Łap cel",en:"Target rush",plDesc:"Trafiaj pojawiające się cele przez 20 sekund.",enDesc:"Hit as many targets as you can in 20 seconds."},
 ] as const;
 export type ArcadeId = typeof ARCADE_GAMES[number]["id"];
 export const newSecret = () => 1 + Math.floor(Math.random() * 100);
