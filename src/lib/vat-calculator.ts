@@ -28,25 +28,20 @@ export function parseVatAmount(raw: string): number | null {
     integer = match[1];
     fraction = match[2] || "";
   }
-  const cents = BigInt(integer) * 100n + BigInt((fraction + "00").slice(0, 2));
-  // Value cap prevents pathological inputs and protects consumers expecting JS numbers.
-  return cents <= 1_000_000_000_000n ? Number(cents) : null;
+  const cents = Number(integer) * 100 + Number((fraction + "00").slice(0, 2));
+  // Every intermediate remains an exact safe integer below this limit.
+  return Number.isSafeInteger(cents) && cents <= 1_000_000_000_000 ? cents : null;
 }
 
 export function calculateVat(amountCents: number, rate: VatRate, direction: VatDirection): VatAmounts | null {
   if (!Number.isSafeInteger(amountCents) || amountCents < 0 || amountCents > 1_000_000_000_000 || (rate !== 8 && rate !== 23)) return null;
-  const amount = BigInt(amountCents);
-  const grossFactor = BigInt(100 + rate);
-  let net: bigint;
-  let gross: bigint;
-  if (direction === "net-to-gross") {
-    net = amount;
-    gross = (amount * grossFactor + 50n) / 100n;
-  } else {
-    gross = amount;
-    net = (amount * 100n + grossFactor / 2n) / grossFactor;
-  }
-  return { netCents: Number(net), grossCents: Number(gross), taxCents: Number(gross - net), rate };
+  // Max 1e12 cents ensures amount * 123 stays below Number.MAX_SAFE_INTEGER.
+  // All calculations use whole grosz, rounded only at the conversion boundary.
+  const gross = direction === "net-to-gross"
+    ? Math.round(amountCents * (100 + rate) / 100) : amountCents;
+  const net = direction === "gross-to-net"
+    ? Math.round(amountCents * 100 / (100 + rate)) : amountCents;
+  return { netCents: net, grossCents: gross, taxCents: gross - net, rate };
 }
 
 export function formatVatCurrency(cents: number, language: "pl" | "en" = "pl"): string {
