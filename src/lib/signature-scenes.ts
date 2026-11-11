@@ -143,7 +143,7 @@ function sceneSlices(c:CanvasRenderingContext2D,f:SignatureFields,a:SceneAssets,
  ];
  strips.forEach(it=>{
   const t=phase(p,it.begin,it.end);
-  photoPiece(c,a.photo,it.pts,305,0,220,208,t,0,(1-t)*it.y,"#8b8a94");
+  photoPiece(c,a.photo,it.pts,305,0,220,208,t,0,(1-t)*it.y,"#8b8a94",f.photoFocusX??50,f.photoFocusY??42);
  });
  c.save();c.globalAlpha=phase(p,.58,.9)*.95;c.fillStyle=accent;
  polygon(c,[[326,0],[341,0],[302,208],[288,208]]);c.fill();c.restore();
@@ -160,7 +160,7 @@ function sceneCinematic(c:CanvasRenderingContext2D,f:SignatureFields,a:SceneAsse
  c.fillStyle="#e4ded4";c.fillRect(315,0,205,208);
  // Magazine composition: central portrait window, oversized brand mark and bottom strap.
  const shutter=phase(p,.24,.72);
- c.save();rounded(c,335,15,151*shutter,151,8);c.clip();cover(c,a.photo,335,15,151,151,"#c8c3c0");c.restore();
+ c.save();rounded(c,335,15,151*shutter,151,8);c.clip();cover(c,a.photo,335,15,151,151,"#c8c3c0",f.photoFocusX??50,f.photoFocusY??42);c.restore();
  c.save();c.globalAlpha=phase(p,.50,.86)*.86;c.fillStyle=accent;
  polygon(c,[[488,12],[507,12],[454,175],[433,175]]);c.fill();c.restore();
  c.save();c.globalAlpha=phase(p,.06,.27)*.8;
@@ -229,7 +229,7 @@ function scenePulse(c:CanvasRenderingContext2D,f:SignatureFields,a:SceneAssets,p
  c.beginPath();c.arc(82,103,48,-Math.PI/2,-Math.PI/2+Math.PI*2*orbit);c.stroke();
  c.beginPath();c.arc(82,103,34,Math.PI,Math.PI+Math.PI*2*orbit);c.stroke();
  c.restore();
- c.save();rounded(c,54,74,56,56,9);c.clip();cover(c,a.photo,54,74,56,56,"#37455b");c.restore();
+ c.save();rounded(c,54,74,56,56,9);c.clip();cover(c,a.photo,54,74,56,56,"#37455b",f.photoFocusX??50,f.photoFocusY??42);c.restore();
  logo(c,f,a.logo,163,30,195,40,phase(p,.2,.55),"#f9faff",19);
  text(c,nameOf(f),163,100,295,"bold 23px Arial","#f4f7ff",phase(p,.42,.75));
  text(c,roleOf(f),163,122,290,"12px Arial","#c0c8d6",phase(p,.55,.82));
