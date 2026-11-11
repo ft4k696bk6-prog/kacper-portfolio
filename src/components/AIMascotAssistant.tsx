@@ -253,6 +253,7 @@ export function AIMascotAssistant() {
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
   const widgetRef = useRef<HTMLDivElement | null>(null);
   const [mobileViewport,setMobileViewport] = useState({height:0,top:0});
+  const [bubbleViewport,setBubbleViewport] = useState({scale:1,right:16,bottom:16});
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const locale = lang === "pl" ? "pl-PL" : "en-US";
   const timeZone = process.env.NEXT_PUBLIC_CALENDAR_TIMEZONE || DEFAULT_BOOKING_TIME_ZONE;
@@ -364,6 +365,32 @@ export function AIMascotAssistant() {
       document.body.style.overflow=original;
     };
   },[open,isCompactViewport]);
+
+  // Zoom-safe launcher: iOS Safari magnifies fixed elements with the page.
+  // Only compensate the 56px collapsed bubble. The open chat retains
+  // browser zoom/accessibility and never disables pinch-to-zoom globally.
+  useEffect(()=>{
+    const viewport=window.visualViewport;
+    const sync=()=>{
+      const scale=viewport?.scale||1;
+      if(scale<1.02){
+        setBubbleViewport(previous=>previous.scale===1?previous:{scale:1,right:16,bottom:16});
+        return;
+      }
+      const right=window.innerWidth-(viewport!.offsetLeft+viewport!.width)+16/scale;
+      const bottom=window.innerHeight-(viewport!.offsetTop+viewport!.height)+16/scale;
+      setBubbleViewport({scale,right:Math.max(0,right),bottom:Math.max(0,bottom)});
+    };
+    sync();
+    viewport?.addEventListener("resize",sync,{passive:true});
+    viewport?.addEventListener("scroll",sync,{passive:true});
+    window.addEventListener("resize",sync,{passive:true});
+    return()=>{
+      viewport?.removeEventListener("resize",sync);
+      viewport?.removeEventListener("scroll",sync);
+      window.removeEventListener("resize",sync);
+    };
+  },[]);
 
   // Display the static chat bubble after the home intro.
   useEffect(() => {
@@ -822,6 +849,12 @@ export function AIMascotAssistant() {
             className={`fixed z-[75] ${restorePositionClass}`}
             data-ai-chat-widget
             ref={widgetRef}
+            style={!open&&bubbleViewport.scale>1.02 ? {
+              right:bubbleViewport.right,
+              bottom:bubbleViewport.bottom,
+              transform:"scale("+1/bubbleViewport.scale+")",
+              transformOrigin:"bottom right",
+            }:undefined}
           >
             <div className="relative">
               
