@@ -1,72 +1,113 @@
 import type { BerniLivingMood } from "./berni-face-state";
+
 export type BerniTransitionName =
  | "dive" | "tuck" | "drop" | "boomerang" | "swoop-left" | "swoop-right"
  | "orbit-left" | "orbit-right" | "micro-tornado" | "blur-twist"
  | "spiral" | "pearl" | "zoom-pop" | "whiplash" | "side-arc"
  | "roll-in" | "flip-peek" | "bounce-swirl";
-export type TransitionChoice = { name: BerniTransitionName; duration: number; strength: "medium" | "large" };
-export type TransitionMemory = { previous: BerniTransitionName[]; used: Partial<Record<BerniTransitionName,number>>; lastBigAt:number };
-export type TransitionFrame = { x:number;y:number;rotate:number;scaleX:number;scaleY:number;blur:number;opacity:number };
-const definitions: {name:BerniTransitionName;strength:"medium"|"large";ms:number;cooldown:number}[]=[
- ["dive","medium",550,7000],["tuck","medium",510,9000],["drop","medium",600,7000],
- ["boomerang","medium",650,8500],["swoop-left","medium",600,7500],["swoop-right","medium",610,7500],
- ["orbit-left","large",740,18000],["orbit-right","large",720,18000],["micro-tornado","large",780,19000],
- ["blur-twist","medium",590,9500],["spiral","large",790,22000],["pearl","medium",540,9000],
- ["zoom-pop","medium",610,10500],["whiplash","medium",560,10000],["side-arc","medium",690,11000],
- ["roll-in","large",790,19000],["flip-peek","large",720,18000],["bounce-swirl","large",800,20000],
-].map(([name,strength,ms,cooldown])=>({name:name as BerniTransitionName,strength:strength as "medium"|"large",ms:ms as number,cooldown:cooldown as number}));
-const big=new Set<BerniLivingMood>(["surprised","excited","grabbed","sleeping"]);
-const meaningful=new Set<BerniLivingMood>(["happy","worried","typing"]);
-export function transitionLevel(a:BerniLivingMood,b:BerniLivingMood): "none"|"medium"|"large" {
+
+export type TransitionChoice = {
+ name:BerniTransitionName; duration:number; strength:"small"|"medium"|"large";
+};
+export type TransitionMemory = {
+ previous:BerniTransitionName[];
+ used:Partial<Record<BerniTransitionName,number>>;
+ lastBigAt:number;
+};
+
+export type TransitionFrame = {
+ phase:"exit"|"hidden"|"enter";
+ visible:boolean;
+ x:number;y:number;rotate:number;scaleX:number;scaleY:number;
+ blur:number;opacity:number;
+ accent:"dust"|"spin"|"speed"|"spark"|"none";
+};
+
+// Coordinates are measured in whole portraits, not tiny CSS pixel nudges.
+// Exit poses end fully beyond the crop (or vanish to a point), and the new
+// character enters only after the empty interval.
+type PoseTransform={x:number;y:number;spin:number;sx:number;sy:number};
+type Definition={
+ name:BerniTransitionName;
+ strength:"small"|"medium"|"large";
+ ms:number; cooldown:number;
+ out:PoseTransform; enter:PoseTransform;
+ accent:TransitionFrame["accent"];
+};
+const profile=(name:BerniTransitionName,strength:Definition["strength"],ms:number,cooldown:number,
+ out:PoseTransform,enter:PoseTransform,accent:Definition["accent"]):Definition=>({
+ name,strength,ms,cooldown,out,enter,accent
+});
+const effects:Definition[]=[
+ profile("dive","medium",680,6500,{x:0,y:1.4,spin:-.1,sx:.82,sy:.66},{x:0,y:1.45,spin:.1,sx:.75,sy:.8},"dust"),
+ profile("tuck","small",410,5200,{x:0,y:.28,spin:-.3,sx:.08,sy:.15},{x:0,y:-.22,spin:.2,sx:.06,sy:.25},"spark"),
+ profile("drop","medium",720,7400,{x:.08,y:1.7,spin:0,sx:.95,sy:.68},{x:-.07,y:-1.55,spin:0,sx:1,sy:1.25},"dust"),
+ profile("boomerang","medium",710,7500,{x:1.32,y:-.72,spin:1.6,sx:.75,sy:.75},{x:-1.30,y:.55,spin:-1.4,sx:.8,sy:.8},"speed"),
+ profile("swoop-left","medium",650,7500,{x:-1.65,y:.14,spin:-.7,sx:1.05,sy:.75},{x:1.65,y:-.13,spin:.65,sx:1.08,sy:.8},"speed"),
+ profile("swoop-right","medium",650,7500,{x:1.65,y:-.15,spin:.68,sx:1.1,sy:.75},{x:-1.65,y:.17,spin:-.75,sx:1.1,sy:.8},"speed"),
+ profile("orbit-left","large",850,14000,{x:-1.35,y:-1.1,spin:-5.8,sx:.4,sy:.4},{x:1.28,y:.95,spin:5.2,sx:.46,sy:.46},"spin"),
+ profile("orbit-right","large",850,14000,{x:1.35,y:-1.1,spin:5.8,sx:.4,sy:.4},{x:-1.26,y:.9,spin:-5.2,sx:.45,sy:.45},"spin"),
+ profile("micro-tornado","large",930,17500,{x:0,y:.58,spin:9.4,sx:.02,sy:.05},{x:0,y:.62,spin:-8.8,sx:.02,sy:.08},"spin"),
+ profile("blur-twist","medium",590,8000,{x:-.4,y:.12,spin:-2.9,sx:.06,sy:.08},{x:.4,y:-.12,spin:2.5,sx:.06,sy:.08},"spark"),
+ profile("spiral","large",950,16000,{x:.26,y:-.26,spin:11,sx:.01,sy:.01},{x:-.18,y:.20,spin:-10,sx:.01,sy:.01},"spin"),
+ profile("pearl","small",430,5000,{x:0,y:-.06,spin:0,sx:.01,sy:.01},{x:0,y:.1,spin:0,sx:.01,sy:.01},"spark"),
+ profile("zoom-pop","small",520,6000,{x:0,y:0,spin:.15,sx:2.4,sy:2.4},{x:0,y:0,spin:-.12,sx:.05,sy:.05},"spark"),
+ profile("whiplash","medium",550,8000,{x:1.8,y:.02,spin:.4,sx:1.55,sy:.56},{x:-1.8,y:.03,spin:-.4,sx:1.5,sy:.55},"speed"),
+ profile("side-arc","medium",760,9500,{x:-1.36,y:-.92,spin:-2.1,sx:.64,sy:.64},{x:1.42,y:-.92,spin:2.0,sx:.64,sy:.64},"speed"),
+ profile("roll-in","large",850,17000,{x:-1.38,y:.88,spin:-6.1,sx:.92,sy:.92},{x:1.38,y:-.84,spin:6.3,sx:.92,sy:.92},"spin"),
+ profile("flip-peek","small",480,6200,{x:0,y:.02,spin:.13,sx:.008,sy:1},{x:0,y:0,spin:-.13,sx:.008,sy:1},"spark"),
+ profile("bounce-swirl","large",970,15000,{x:.45,y:1.34,spin:5.0,sx:.24,sy:.20},{x:-.44,y:-1.38,spin:-5.2,sx:.24,sy:.2},"dust"),
+];
+const big=new Set<BerniLivingMood>(["excited","surprised","grabbed","sleeping"]);
+const medium=new Set<BerniLivingMood>(["happy","worried","typing"]);
+export function transitionLevel(a:BerniLivingMood,b:BerniLivingMood):"none"|"small"|"medium"|"large"{
  if(a===b)return "none";
  if(big.has(a)||big.has(b))return "large";
- if(meaningful.has(a)||meaningful.has(b))return "medium";
- return "none"; // blinking, looking and ordinary thinking have no flashy transitions
+ if(medium.has(a)||medium.has(b))return "medium";
+ return "small";
 }
 export function emptyTransitionMemory():TransitionMemory{return {previous:[],used:{},lastBigAt:-Infinity};}
-export function chooseBerniTransition(a:BerniLivingMood,b:BerniLivingMood,now:number,mem:TransitionMemory,rng=Math.random):TransitionChoice|null {
- const level=transitionLevel(a,b); if(level==="none")return null;
+export function chooseBerniTransition(a:BerniLivingMood,b:BerniLivingMood,now:number,mem:TransitionMemory,rng=Math.random):TransitionChoice|null{
+ const level=transitionLevel(a,b);if(level==="none")return null;
+ const grades=level==="small"?["small"]:level==="medium"?["medium","small"]:["large","medium"];
+ const eligible=effects.filter(f=>grades.includes(f.strength));
  const recent=new Set(mem.previous.slice(-5));
- const allowed=definitions.filter(d=>level==="large"||d.strength==="medium");
- const usable=allowed.filter(d=>!recent.has(d.name));
- let pool=usable.filter(d=>now-(mem.used[d.name]??-Infinity)>d.cooldown
-   &&(d.strength!=="large"||now-mem.lastBigAt>1300));
- // Even under frantic clicking, a large change must NEVER hard-swap an entire
- // face in plain sight. Gracefully relax cooldowns while still avoiding the
- // five most recent effects; cooldowns are strict whenever sufficient choices exist.
- if(!pool.length)pool=usable.filter(d=>d.strength==="medium"||now-mem.lastBigAt>450);
- if(!pool.length)pool=usable;
- if(!pool.length)pool=allowed.slice().sort((u,v)=>(mem.used[u.name]??-Infinity)-(mem.used[v.name]??-Infinity)).slice(0,3);
- if(!pool.length)return null;
- const i=Math.min(pool.length-1,Math.floor(Math.max(0,Math.min(.999999,rng()))*pool.length));
- const item=pool[i];mem.previous.push(item.name);
- if(mem.previous.length>8)mem.previous.shift();
+ let pool=eligible.filter(e=>!recent.has(e.name)&&now-(mem.used[e.name]??-Infinity)>e.cooldown
+   &&(e.strength!=="large"||now-mem.lastBigAt>1200));
+ if(!pool.length)pool=eligible.filter(e=>!recent.has(e.name));
+ if(!pool.length)pool=eligible.slice().sort((u,v)=>(mem.used[u.name]??-Infinity)-(mem.used[v.name]??-Infinity)).slice(0,2);
+ const item=pool[Math.min(pool.length-1,Math.floor(Math.max(0,Math.min(.99999,rng()))*pool.length))];
+ if(!item)return null;
+ mem.previous.push(item.name);if(mem.previous.length>8)mem.previous.shift();
  mem.used[item.name]=now;if(item.strength==="large")mem.lastBigAt=now;
- return {name:item.name,duration:item.ms,strength:item.strength};
+ return{name:item.name,duration:item.ms,strength:item.strength};
 }
+const clamp=(x:number)=>Math.max(0,Math.min(1,x));
+const smooth=(x:number)=>{const p=clamp(x);return p*p*(3-2*p);};
+const outEase=(x:number)=>Math.pow(clamp(x),2.4);
+const elastic=(x:number)=>{const p=clamp(x);return p===0?0:p===1?1:1+2.6*Math.pow(p-1,3)+1.6*Math.pow(p-1,2);};
+const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
+
 export function berniTransitionFrame(name:BerniTransitionName,progress:number):TransitionFrame {
- const p=Math.min(1,Math.max(0,progress)),a=Math.sin(Math.PI*p);
- let x=0,y=0,r=0,s=1-.55*a,squeeze=1;
- switch(name){
- case "dive":y=.60*a;s=1-.72*a;break;
- case "tuck":y=.26*a;r=-.20*a;s=1-.70*a;break;
- case "drop":y=.73*a;r=.15*a;s=1-.62*a;break;
- case "boomerang":x=.46*a;y=-.28*a;r=-.4*a;break;
- case "swoop-left":x=-.67*a;y=.20*a;r=-.28*a;break;
- case "swoop-right":x=.67*a;y=.20*a;r=.28*a;break;
- case "orbit-left":x=-.37*a;y=-.44*a;r=-2.2*a;break;
- case "orbit-right":x=.37*a;y=-.44*a;r=2.2*a;break;
- case "micro-tornado":r=5.1*a;y=.21*a;s=1-.76*a;break;
- case "blur-twist":r=-.65*a;y=-.13*a;s=1-.65*a;break;
- case "spiral":r=4.6*a;x=.33*a;y=.25*a;s=1-.79*a;break;
- case "pearl":s=1-.88*a;y=-.08*a;break;
- case "zoom-pop":s=1+.31*a;r=.12*a;break;
- case "whiplash":x=-.43*a;r=.65*a;squeeze=1-.25*a;break;
- case "side-arc":x=.34*a;y=-.44*a;r=.68*a;break;
- case "roll-in":x=-.58*a;r=3.2*a;s=1-.65*a;break;
- case "flip-peek":squeeze=1-.94*a;y=.18*a;break;
- case "bounce-swirl":y=.50*a;x=.19*a;r=-3.1*a;s=1-.70*a;break;
+ const def=effects.find(x=>x.name===name);if(!def)throw Error("Unknown Berni effect "+name);
+ const p=clamp(progress);
+ // REAL empty interval. There is never one frame with both characters,
+ // and no stationary portrait hiding underneath the canvas.
+ const EXIT_END=.43, ENTER_START=.58;
+ if(p>=EXIT_END&&p<=ENTER_START){
+   return{phase:"hidden",visible:false,x:0,y:0,rotate:0,scaleX:1,scaleY:1,blur:0,opacity:0,accent:def.accent};
  }
- // Full-face swap only at p=.5, when the outgoing frame is fully hidden.
- return {x,y,rotate:r,scaleX:s*squeeze,scaleY:s,blur:2.2*a,opacity:Math.pow(Math.abs(2*p-1),.8)};
+ const exit=p<EXIT_END;
+ const u=exit?outEase(p/EXIT_END):elastic((p-ENTER_START)/(1-ENTER_START));
+ const target=exit?def.out:def.enter;
+ const k=exit?u:1-u;
+ const scaleX=mix(1,target.sx,k),scaleY=mix(1,target.sy,k);
+ const opacity=exit?1-smooth((p/EXIT_END-.67)/.33):smooth(((p-ENTER_START)/(1-ENTER_START))/.33);
+ return{
+   phase:exit?"exit":"enter",visible:opacity>.005,
+   x:target.x*k,y:target.y*k,rotate:target.spin*k,
+   scaleX:Math.max(.002,scaleX),scaleY:Math.max(.002,scaleY),
+   blur:exit?6*u:6*(1-clamp((p-ENTER_START)/(1-ENTER_START))),
+   opacity,accent:def.accent
+ };
 }
