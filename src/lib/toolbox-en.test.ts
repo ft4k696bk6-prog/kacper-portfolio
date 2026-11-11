@@ -47,7 +47,7 @@ describe("bilingual toolbox SEO and assistant integration",()=>{
 describe("focused public toolbox",()=>{
  it("keeps the 12 overlapping checkers out of both catalogs",()=>{
   expect(standaloneWebsiteCheckerSlugs).toHaveLength(12);
-  expect(catalogToolboxCount).toBe(33);
+  expect(catalogToolboxCount).toBe(34);
   expect(visibleToolboxItems).toHaveLength(33);
   expect(visibleEnglishToolboxItems).toHaveLength(33);
   expect(visibleToolboxItems.some(x=>x.slug==="audyt-strony")).toBe(false);
