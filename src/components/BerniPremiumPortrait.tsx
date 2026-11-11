@@ -94,7 +94,8 @@ export function BerniPremiumPortrait({
             <motion.span key={faceFrame} className={styles.expressionLayer}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               transition={{ duration: reduceMotion ? 0 : 0.22 }}>
-              {frameImage(FACE_ASSETS[faceFrame])}
+              <span className={styles.expressionEyes}>{frameImage(FACE_ASSETS[faceFrame])}</span>
+              <span className={styles.expressionMouth}>{frameImage(FACE_ASSETS[faceFrame])}</span>
             </motion.span>
           )}
         </AnimatePresence>
