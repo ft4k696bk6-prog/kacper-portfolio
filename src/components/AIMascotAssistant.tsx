@@ -979,7 +979,7 @@ export function AIMascotAssistant() {
                     aria-live="polite"
                     data-testid="ai-mascot-nudge"
                     style={dragPlacement ? { left: dragPlacement.nudgeOffsetX, right: "auto" } : undefined}
-                    className="absolute bottom-[calc(100%+0.7rem)] right-0 z-40 w-[min(19rem,calc(100vw-1.25rem))] overflow-hidden rounded-2xl border border-white/15 bg-[#121317]/95 text-white shadow-[0_18px_48px_rgba(0,0,0,0.38)] backdrop-blur-xl"
+                    className={`${dragPlacement?.below ? "top-[calc(100%+0.7rem)]" : "bottom-[calc(100%+0.7rem)]"} absolute right-0 z-40 w-[min(19rem,calc(100vw-1.25rem))] overflow-hidden rounded-2xl border border-white/15 bg-[#121317]/95 text-white shadow-[0_18px_48px_rgba(0,0,0,0.38)] backdrop-blur-xl`}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 8 }}
