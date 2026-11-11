@@ -46,7 +46,8 @@ describe("One-source, continuous animated Berni", () => {
     expect(rig).toContain("requestAnimationFrame");
     expect(rig).toContain("Math.exp(-dt / tau)");
     expect(rig).toContain("timeSinceBlink");
-    expect(rig).toContain("Math.sin(now / 170)");
+    expect(rig).toContain("animatedFaceTarget(status");
+    expect(readFileSync("src/lib/berni-face-state.ts", "utf8")).toContain("Math.sin(t / 151)");
     expect(rig).not.toContain('FACE_ASSETS');
     expect(rig).not.toContain("WebGLRenderingContext");
     expect(rig).not.toContain("FRAGMENT_SHADER");
