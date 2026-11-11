@@ -1,6 +1,6 @@
 "use client";
 import {useCallback,useEffect,useRef,useState} from "react";
-import {ArrowDown,ArrowLeft,ArrowRight,ArrowUp,Crosshair,Play,RotateCcw} from "lucide-react";
+import {ArrowDown,ArrowLeft,ArrowRight,ArrowUp,Crosshair,RotateCcw} from "lucide-react";
 import type {ReactNode} from "react";
 
 const level=[
