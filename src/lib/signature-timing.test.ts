@@ -17,7 +17,7 @@ function getDrawImageArgs(f:SignatureFields):number[][]{
   set:(target,k,v)=>Reflect.set(target,k,v)
  });
  renderSignatureScene(fake,f,"geometry",1,{
-  logo:null,photo:{naturalWidth:360,naturalHeight:640} as HTMLImageElement
+  logo:null,photo:{naturalWidth:640,naturalHeight:360} as HTMLImageElement
  });
  return draws;
 }
