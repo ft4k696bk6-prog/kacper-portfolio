@@ -449,6 +449,16 @@ export const toolboxItems: ToolboxItem[] =  [
     "hint": "Podaj dwa kolory w formacie HEX, aby obliczyć współczynnik kontrastu.",
     "question": "Czy samo AA zapewnia zgodność WCAG?",
     "answer": "Nie. Kontrast dotyczy tylko jednego kryterium dostępności; potrzebne są także inne kontrole."
+  },
+  {
+    "slug": "kalkulator-vat",
+    "title": "Darmowy kalkulator VAT netto brutto — 8% i 23%",
+    "description": "Błyskawicznie przelicz cenę netto na brutto i brutto na netto. Wybierz VAT 8% lub 23%, sprawdź podatek i skopiuj wynik.",
+    "category": "CRM i sprzedaż",
+    "mode": "vat",
+    "hint": "Wybierz stawkę 8% albo 23%, kierunek przeliczenia i wpisz kwotę. Kalkulator natychmiast pokazuje netto, VAT i brutto. Przeliczanie odbywa się lokalnie w przeglądarce z dokładnością do grosza.",
+    "question": "Czy z kwoty brutto mogę wyliczyć netto i sam VAT?",
+    "answer": "Tak. Kalkulator dzieli kwotę brutto przez 1,08 lub 1,23 i zaokrągla wynik do grosza. Pamiętaj, że prawidłowa stawka VAT zależy od rodzaju towaru lub usługi."
   }
 ];
 export const toolboxCategories = ["Wszystkie", "WWW i SEO", "Reklamy i marketing", "CRM i sprzedaż", "AI i wyszukiwarki", "Dla programistów"];
