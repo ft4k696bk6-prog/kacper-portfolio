@@ -31,4 +31,30 @@ describe("Everyday Tools",()=>{
   expect(html).toContain("mailto:a@example.com");
   expect(html).toContain("#dfdfdf");
  });
+ it("renders three compatible logo signature layouts",()=>{
+  const base={name:"Anna Nowak",role:"CEO",company:"Nowak Sp. z o.o.",email:"anna@example.com",phone:"+48 500 000 001",website:"example.com",accent:"#aabbcc",logo:"https://cdn.example.com/logo.png",logoWidth:135};
+  const side=signatureHtml({...base,layout:"side"});
+  const stacked=signatureHtml({...base,layout:"stacked"});
+  const compact=signatureHtml({...base,layout:"compact"});
+  for(const html of [side,stacked,compact]){
+   expect(html).toContain('src="https://cdn.example.com/logo.png"');
+   expect(html).toContain('width="135"');
+   expect(html).toContain('role="presentation"');
+   expect(html).toContain("Anna Nowak");
+   expect(html).toContain("mailto:anna@example.com");
+   expect(html).not.toContain("<style");
+  }
+  expect(side).toContain("border-left:3px solid #aabbcc");
+  expect(stacked).toContain("border-top:3px solid #aabbcc");
+  expect(compact).toContain("border-bottom:2px solid #aabbcc");
+ });
+ it("rejects unsafe logo URLs and clamps dimensions",()=>{
+  const s={name:"Safe",role:"",company:"& Sons",email:"",phone:"",website:"",accent:"#abcdef"};
+  expect(signatureHtml({...s,logo:'javascript:alert(1)'})).not.toContain("<img");
+  expect(signatureHtml({...s,logo:'https://user:password@cdn.example.org/logo.png'})).not.toContain("<img");
+  expect(signatureHtml({...s,logo:'data:image/svg+xml;base64,PHN2Zz4='})).not.toContain("<img");
+  expect(signatureHtml({...s,logo:"data:image/png;base64,aGVsbG8=",logoWidth:999})).toContain('width="180"');
+  expect(signatureHtml({...s,logo:"https://cdn.example.org/?x=%22%3E"})).not.toContain('src="https://cdn.example.org/?x=">');
+  expect(signatureHtml({...s,logo:"https://cdn.example.org/?x=1&y=2"})).toContain("&amp;y=2");
+ });
 });
