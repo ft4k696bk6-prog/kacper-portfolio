@@ -1,17 +1,14 @@
 "use client";
 
-import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { usePathname, useRouter } from "next/navigation";
-import { CalendarDays, Eye, Loader2, RotateCcw, Send, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { CalendarDays, Eye, Loader2, MessageCircle, RotateCcw, Send, X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { DEFAULT_BOOKING_TIME_ZONE, formatSlotDate } from "@/lib/booking";
 import type { AvailableBookingDay } from "@/lib/calcom";
 import { COOKIE_CONSENT_EVENT, COOKIE_CONSENT_KEY, type CookieConsentState } from "@/lib/preferences";
 import { localizedToolPath } from "@/lib/toolbox-en";
-import { BerniCompanion } from "@/components/BerniCompanion";
-import { BerniRendered3D } from "@/components/BerniRendered3D";
 import { verifyCompanionIpCity } from "@/lib/companion-verified-location";
 import {
   getCompanionContext,
@@ -54,12 +51,6 @@ type BookingState = {
 };
 
 type LocalAction = "projects" | "services" | "bcrm" | "book" | "contact" | "audit";
-type MascotMood = "idle" | "curious" | "joking" | "thinking";
-
-type MascotBehaviorState = {
-  mood: MascotMood;
-};
-
 const HIDE_DURATION_MS = 48 * 60 * 60 * 1000;
 const HIDDEN_UNTIL_KEY = "ai-mascot-hidden-until";
 const NUDGE_OPT_OUT_KEY = "kb-companion-nudges-off";
@@ -238,29 +229,6 @@ export function AIMascotAssistant() {
   const [serverContext, setServerContext] = useState<CompanionServerContext | null>(null);
   const [cookieBannerVisible, setCookieBannerVisible] = useState(false);
   const [isCompactViewport, setIsCompactViewport] = useState(false);
-  const [dragPlacement, setDragPlacement] = useState<{
-    below: boolean;
-    offsetX: number;
-    room: number;
-    nudgeOffsetX: number;
-  } | null>(null);
-  const handleBerniDragEnd = useCallback((bounds: { x: number; y: number; width: number; height: number }) => {
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const belowRoom = Math.max(0, vh - bounds.y - bounds.height - 14);
-    const aboveRoom = Math.max(0, bounds.y - 14);
-    const below = belowRoom > aboveRoom;
-    const panelWidth = Math.min(isCompactViewport ? 344 : 384, vw - 20);
-    const panelLeft = Math.max(10, Math.min(vw - panelWidth - 10, bounds.x));
-    const nudgeWidth = Math.min(304, vw - 20);
-    const nudgeLeft = Math.max(10, Math.min(vw - nudgeWidth - 10, bounds.x));
-    setDragPlacement({
-      below,
-      offsetX: Math.round(panelLeft - bounds.x),
-      room: Math.max(150, below ? belowRoom : aboveRoom),
-      nudgeOffsetX: Math.round(nudgeLeft - bounds.x),
-    });
-  }, [isCompactViewport]);
   const [messages, setMessages] = useState<ChatMessage[]>([
     createMessage("assistant", t.aiMascot.initialMessage),
   ]);
@@ -270,7 +238,6 @@ export function AIMascotAssistant() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [lastFailedQuestion, setLastFailedQuestion] = useState("");
-  const [behavior, setBehavior] = useState<MascotBehaviorState>({ mood: "idle" });
   const [booking, setBooking] = useState<BookingState>(defaultBookingState);
   const [bookingName, setBookingName] = useState("");
   const [bookingEmail, setBookingEmail] = useState("");
@@ -284,11 +251,9 @@ export function AIMascotAssistant() {
   const restorePositionClass = cookieBannerVisible
     ? "bottom-[14.5rem] right-4 md:bottom-4"
     : "bottom-4 right-4";
-  const companionPanelPositionClass = dragPlacement
-    ? `${dragPlacement.below ? "top-[calc(100%+0.7rem)]" : "bottom-[calc(100%+0.7rem)]"} ${isCompactViewport ? "w-[min(21.5rem,calc(100vw-1.25rem))]" : "w-[24rem]"}`
-    : isCompactViewport
-      ? "bottom-[calc(100%+0.7rem)] right-0 w-[min(21.5rem,calc(100vw-1.25rem))]"
-      : "bottom-[calc(100%+0.9rem)] right-0 w-[24rem]";
+  const companionPanelPositionClass = isCompactViewport
+    ? "bottom-[calc(100%+0.7rem)] right-0 w-[min(21.5rem,calc(100vw-1.25rem))]"
+    : "bottom-[calc(100%+0.9rem)] right-0 w-[24rem]";
   const companionPanelSizeClass = isCompactViewport
     ? "h-[min(36rem,calc(100dvh-9.5rem))]"
     : "h-[min(36rem,calc(100dvh-10rem))]";
@@ -340,7 +305,7 @@ export function AIMascotAssistant() {
     };
   }, []);
 
-  // Render Berni only after the actual intro finishes; no arbitrary delay.
+  // Display the static chat bubble after the home intro.
   useEffect(() => {
     const root = document.documentElement;
     const sync = () => {
@@ -474,7 +439,6 @@ export function AIMascotAssistant() {
     setNudge(null);
     setHidden(false);
     setOpen(true);
-    setBehavior({ mood: "curious" });
     if (prefill) {
       setInput(prefill);
     }
@@ -493,7 +457,6 @@ export function AIMascotAssistant() {
     localStorage.removeItem(HIDDEN_UNTIL_KEY);
     setHidden(false);
     setOpen(true);
-    setBehavior({ mood: "curious" });
     window.setTimeout(() => inputRef.current?.focus(), 80);
   }
 
@@ -519,7 +482,6 @@ export function AIMascotAssistant() {
     setInput("");
     setError("");
     setLastFailedQuestion("");
-    setBehavior({ mood: localAction ? "curious" : "thinking" });
 
     const websiteUrl=extractWebsiteUrl(question);
     if((awaitingAuditUrl||localAction==="audit")&&!options.retry){
@@ -528,7 +490,6 @@ export function AIMascotAssistant() {
         setMessages(current=>[...current,createMessage("assistant",lang==="pl"
           ?"Podaj publiczny adres strony (np. https://example.com), a przeprowadzę automatyczny audyt SEO, SSL, DNS i podstron. Bez rejestracji."
           :"Paste a public website URL (e.g. https://example.com). I'll run an SEO, SSL, DNS and multi-page audit without registration.")]);
-        setBehavior({mood:"curious"});
         return;
       }
       setAwaitingAuditUrl(false);
@@ -545,7 +506,6 @@ export function AIMascotAssistant() {
           ?"Przeanalizowałem "+data.summary.scanned+" publicznych podstron. Wykryłem "+data.summary.critical+" problemów krytycznych, "+data.summary.warning+" do poprawy i "+data.summary.info+" do weryfikacji. To próbka, nie pełna analiza witryny."
           :"I scanned "+data.summary.scanned+" public pages and found "+data.summary.critical+" critical issues, "+data.summary.warning+" issues to fix and "+data.summary.info+" items to review. This is a sample, not a full-site crawl.";
         setMessages(current=>[...current,createMessage("assistant",summary+"\n"+(lang==="pl"?"Zobacz pełny raport: ":"View the full report: ")+reportLink)]);
-        setBehavior({mood:"joking"});
       }catch{
         setMessages(current=>[...current,createMessage("assistant",lang==="pl"
           ?"Skanowanie nie powiodło się. Spróbuj bezpośrednio: https://bernecki.dev/narzedzia/audyt-strony"
@@ -565,7 +525,6 @@ export function AIMascotAssistant() {
        ?"Mam do tego darmowe narzędzie. Uruchom je tutaj: "+link
        :"There is a free tool for that. Open it here: "+link;
       setMessages(current=>[...current,createMessage("assistant",answer)]);
-      setBehavior({mood:"curious"});
       return;
     }
     setLoading(true);
@@ -589,11 +548,9 @@ export function AIMascotAssistant() {
       }
 
       setMessages((current) => [...current, createMessage("assistant", result.answer ?? "")]);
-      setBehavior((current) => ({ ...current, mood: "joking" }));
     } catch (caughtError) {
       setLastFailedQuestion(question);
       setError(caughtError instanceof Error ? caughtError.message : t.aiMascot.errorMessage);
-      setBehavior((current) => ({ ...current, mood: "curious" }));
     } finally {
       setLoading(false);
       inputRef.current?.focus();
@@ -607,7 +564,6 @@ export function AIMascotAssistant() {
 
   function handleQuickAction(action: "projects" | "services" | "bcrm" | "book" | "contact" | "code" | "audit") {
     setError("");
-    setBehavior((current) => ({ ...current, mood: "joking" }));
 
     if(action==="audit"){
       setOpen(true);
@@ -787,50 +743,38 @@ export function AIMascotAssistant() {
 
   return (
     <>
-      <AnimatePresence>
+      
         {hidden ? (
-          <motion.button
+          <button
             type="button"
             onClick={restoreMascot}
             className={`fixed z-[75] inline-flex items-center gap-2 rounded-full border border-white/10 bg-[var(--brand-black)]/90 px-4 py-3 text-sm text-white shadow-[0_18px_55px_rgba(0,0,0,0.42)] backdrop-blur-xl transition hover:border-[var(--brand-accent)] ${restorePositionClass}`}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
           >
-            <span className="inline-block h-7 w-7"><BerniRendered3D mood="sleeping" lang={lang} compact /></span>
+            <MessageCircle className="h-5 w-5" aria-hidden="true" />
             {t.aiMascot.restoreLabel}
-          </motion.button>
+          </button>
         ) : null}
-      </AnimatePresence>
+      
 
-      <AnimatePresence>
+      
         {!hidden ? (
-          <motion.div
+          <div
             className={`fixed z-[75] ${restorePositionClass}`}
-            data-berni-floating
-            initial={{ opacity: 0, scale: 0.82 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.82 }}
-            transition={{ opacity: { duration: 0.22 }, scale: { duration: 0.22 } }}
+            data-ai-chat-widget
           >
             <div className="relative">
-              <AnimatePresence>
+              
                 {open ? (
-                  <motion.aside
+                  <aside
                     role="dialog"
                     aria-label={t.aiMascot.chatTitle}
                     className={`absolute z-30 flex max-h-[min(36rem,calc(100dvh-7rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/95 shadow-[0_28px_90px_rgba(0,0,0,0.58)] backdrop-blur-2xl ${companionPanelPositionClass} ${companionPanelSizeClass}`}
-                    style={dragPlacement ? { left: dragPlacement.offsetX, right: "auto", maxHeight: dragPlacement.room } : undefined}
-                    initial={{ opacity: 0, y: 12, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 12, scale: 0.96 }}
-                    transition={{ duration: 0.2 }}
                   >
                     <div className="flex items-start justify-between gap-3 border-b border-white/[0.07] px-4 py-3">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="inline-block h-8 w-8 shrink-0"><BerniRendered3D mood={loading ? "typing" : "happy"} lang={lang} compact /></span>
-                          <p className="truncate text-sm font-medium text-white">Berni · {lang === "pl" ? "Asystent AI" : "AI assistant"}</p>
+                          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/20 bg-white/[0.07]"><MessageCircle className="h-4 w-4 text-white" aria-hidden="true" /></span>
+                          <p className="truncate text-sm font-medium text-white">{lang === "pl" ? "Asystent AI" : "AI assistant"}</p>
                         </div>
                       </div>
                       <div className="flex shrink-0 items-center gap-1">
@@ -876,7 +820,7 @@ export function AIMascotAssistant() {
                           role="status"
                           className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[var(--brand-black)] px-4 py-3 text-sm text-white"
                         >
-                          <Loader2 className="h-4 w-4 animate-spin text-white" />
+                          <Loader2 className="h-4 w-4  text-white" />
                           {t.aiMascot.thinkingLabel}
                         </div>
                       ) : null}
@@ -961,29 +905,24 @@ export function AIMascotAssistant() {
                             type="submit"
                             disabled={loading || !input.trim()}
                             aria-label={t.aiMascot.sendLabel}
-                            className="brand-action grid h-10 w-10 shrink-0 place-items-center rounded-full  text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
+                            className="brand-action grid h-10 w-10 shrink-0 place-items-center rounded-full  text-black transition disabled:cursor-not-allowed disabled:opacity-55"
                           >
                             <Send className="h-4 w-4" />
                           </button>
                         </div>
                       </form>
                     </div>
-                  </motion.aside>
+                  </aside>
                 ) : null}
-              </AnimatePresence>
+              
 
-              <AnimatePresence>
+              
                 {!open && nudge && !nudgesDisabled ? (
-                  <motion.div
+                  <div
                     role="status"
                     aria-live="polite"
                     data-testid="ai-mascot-nudge"
-                    style={dragPlacement ? { left: dragPlacement.nudgeOffsetX, right: "auto" } : undefined}
-                    className={`${dragPlacement?.below ? "top-[calc(100%+0.7rem)]" : "bottom-[calc(100%+0.7rem)]"} absolute right-0 z-40 w-[min(19rem,calc(100vw-1.25rem))] overflow-hidden rounded-2xl border border-white/15 bg-[#121317]/95 text-white shadow-[0_18px_48px_rgba(0,0,0,0.38)] backdrop-blur-xl`}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 8 }}
-                    transition={{ duration: 0.18 }}
+                    className="absolute bottom-[calc(100%+0.7rem)] right-0 z-40 w-[min(19rem,calc(100vw-1.25rem))] overflow-hidden rounded-2xl border border-white/15 bg-[#121317]/95 text-white shadow-[0_18px_48px_rgba(0,0,0,0.38)] backdrop-blur-xl"
                   >
                     <p className="px-3.5 pb-2 pt-3.5 text-[13px] leading-[1.55] text-white/95">
                       {nudge.text}
@@ -998,26 +937,25 @@ export function AIMascotAssistant() {
                         {lang === "en" || pathname.startsWith("/en") ? "Don't show again" : "Nie pokazuj więcej"}
                       </button>
                     </div>
-                  </motion.div>
+                  </div>
                 ) : null}
-              </AnimatePresence>
+              
 
-              <BerniCompanion
-                lang={lang}
-                mood={behavior.mood}
-                input={input}
-                loading={loading}
-                open={open}
-                lastReply={messages[messages.length - 1]?.role === "assistant" ? messages[messages.length - 1].content : ""}
-                nudgeText={nudge?.text ?? ""}
-                weatherContext={serverContext?.weather ?? null}
-                onOpen={() => openChat()}
-                onDragEnd={handleBerniDragEnd}
-              />
+              <button
+                 type="button"
+                 data-testid="ai-chat-bubble"
+                 aria-label={lang === "pl" ? "Otwórz czat z asystentem AI" : "Open the AI assistant chat"}
+                 aria-expanded={open}
+                 onClick={() => openChat()}
+                 className="relative grid h-14 w-14 place-items-center rounded-full border border-white/30 bg-[#15171a] text-white shadow-[0_8px_28px_rgba(0,0,0,0.42)] hover:border-white/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+               >
+                 <MessageCircle className="h-7 w-7" strokeWidth={1.6} aria-hidden="true" />
+                 <span className="pointer-events-none absolute top-[19px] text-[9px] font-bold tracking-tight">AI</span>
+               </button>
             </div>
-          </motion.div>
+          </div>
         ) : null}
-      </AnimatePresence>
+      
     </>
   );
 
@@ -1025,7 +963,7 @@ export function AIMascotAssistant() {
     if (booking.step === "loading-days") {
       return (
         <div className="rounded-2xl border border-white/10 bg-[var(--brand-black)] p-4 text-sm text-white">
-          <Loader2 className="mr-2 inline h-4 w-4 animate-spin text-white" />
+          <Loader2 className="mr-2 inline h-4 w-4  text-white" />
           {t.aiMascot.booking.loadingDays}
         </div>
       );
@@ -1068,7 +1006,7 @@ export function AIMascotAssistant() {
     if (booking.step === "loading-slots") {
       return (
         <div className="rounded-2xl border border-white/10 bg-[var(--brand-black)] p-4 text-sm text-white">
-          <Loader2 className="mr-2 inline h-4 w-4 animate-spin text-white" />
+          <Loader2 className="mr-2 inline h-4 w-4  text-white" />
           {t.aiMascot.booking.loadingSlots}
         </div>
       );
@@ -1148,9 +1086,9 @@ export function AIMascotAssistant() {
           <button
             type="submit"
             disabled={bookingDisabled}
-            className="brand-action mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full  px-4 py-3 text-sm font-medium text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-55"
+            className="brand-action mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full  px-4 py-3 text-sm font-medium text-black transition disabled:cursor-not-allowed disabled:opacity-55"
           >
-            {booking.step === "booking" ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarDays className="h-4 w-4" />}
+            {booking.step === "booking" ? <Loader2 className="h-4 w-4 " /> : <CalendarDays className="h-4 w-4" />}
             {t.aiMascot.booking.submit}
           </button>
         </form>
