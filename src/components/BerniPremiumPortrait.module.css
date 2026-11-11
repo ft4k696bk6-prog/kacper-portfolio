@@ -1,0 +1,37 @@
+.stage{position:relative;isolation:isolate;display:inline-flex;flex:0 0 auto;vertical-align:middle;user-select:none;-webkit-user-select:none;overflow:visible}
+.portrait{position:absolute;inset:0;display:block;filter:drop-shadow(0 6px 12px rgba(0,0,0,.36));transform-origin:53% 55%;animation:berniBreathing 7s ease-in-out infinite}
+.art{object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.expressionLayer,.mouthLayer,.blinkLayer,.winkLayer,.manualBlink{position:absolute;inset:0;pointer-events:none;display:block}
+.expressionLayer{position:absolute;inset:0}
+.expressionEyes,.expressionMouth{position:absolute;inset:0;display:block;pointer-events:none}
+.expressionEyes{-webkit-mask-image:radial-gradient(ellipse 25% 14% at 59% 50%,#000 45%,transparent 98%);mask-image:radial-gradient(ellipse 25% 14% at 59% 50%,#000 45%,transparent 98%)}
+.expressionMouth{-webkit-mask-image:radial-gradient(ellipse 16% 11% at 66% 64%,#000 43%,transparent 100%);mask-image:radial-gradient(ellipse 16% 11% at 66% 64%,#000 43%,transparent 100%)}
+.mouthLayer{-webkit-mask-image:radial-gradient(ellipse 15% 10% at 65.5% 64%,#000 43%,transparent 100%);mask-image:radial-gradient(ellipse 15% 10% at 65.5% 64%,#000 43%,transparent 100%);animation:berniSpeak 1.12s ease-in-out infinite}
+.blinkLayer,.winkLayer,.manualBlink{-webkit-mask-image:radial-gradient(ellipse 27% 13% at 60% 50.5%,#000 46%,transparent 100%);mask-image:radial-gradient(ellipse 27% 13% at 60% 50.5%,#000 46%,transparent 100%)}
+.blinkLayer{opacity:0;animation:berniEyelids 6.3s linear infinite}
+.winkLayer{opacity:0;animation:berniWink 17.8s linear infinite}
+.manualBlink{opacity:0;animation:berniBlinkOnce .37s ease-in-out 1}
+.stage[data-mood="sleeping"] .blinkLayer{animation:none;opacity:1}
+.stage[data-mood="sleeping"] .winkLayer,.stage[data-mood="happy"] .blinkLayer,.stage[data-mood="excited"] .blinkLayer{animation:none;opacity:0}
+.stage[data-mood="typing"] .blinkLayer{animation:berniEyelids 6.3s linear infinite}
+.stage[data-mood="sleeping"] .portrait{animation:berniRest 5s ease-in-out infinite}
+.stage[data-mood="surprised"] .portrait,.stage[data-mood="grabbed"] .portrait{animation:berniStartle .7s ease-in-out 1}
+.stage[data-mood="excited"] .portrait{animation:berniCelebrate 1.3s ease-in-out 2}
+.stage[data-mood="thinking"] .portrait,.stage[data-mood="working"] .portrait{animation:berniBreathing 7s ease-in-out infinite}
+@keyframes berniEyelids{
+  0%,18%,19.9%,64%,66.2%,100%{opacity:0}
+  18.35%,19.2%,64.4%,65.5%{opacity:1}
+}
+@keyframes berniWink{0%,71%,72.9%,100%{opacity:0}71.5%,72.2%{opacity:1}}
+@keyframes berniBlinkOnce{0%,100%{opacity:0}28%,70%{opacity:1}}
+@keyframes berniSpeak{0%,100%{opacity:.1}32%,65%{opacity:1}82%{opacity:.45}}
+@keyframes berniBreathing{0%,100%{transform:translateY(0)}50%{transform:translateY(-.5%)}}
+@keyframes berniRest{0%,100%{transform:rotate(1deg)}50%{transform:rotate(2deg) translateY(1%)}}
+@keyframes berniStartle{0%,100%{transform:scale(1)}35%{transform:scale(1.03)}}
+@keyframes berniCelebrate{0%,100%{transform:translateY(0)}50%{transform:translateY(-3%)}}
+@media(prefers-reduced-motion:reduce){
+  .portrait,.blinkLayer,.winkLayer,.mouthLayer,.manualBlink{animation:none!important;transition:none!important}
+  .stage[data-mood="sleeping"] .blinkLayer{opacity:1}
+  .blinkLayer,.winkLayer,.mouthLayer,.manualBlink{opacity:0}
+  .stage[data-mood="typing"] .mouthLayer{opacity:1}
+}
