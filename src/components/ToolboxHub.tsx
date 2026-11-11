@@ -14,7 +14,7 @@ const dailyTools = [
   { id: "password", pl: "Darmowy generator haseł", en: "Free password generator", plDesc: "Bezpieczne losowe hasła tworzone na Twoim urządzeniu.", enDesc: "Secure random passwords generated on your device." },
   { id: "image", pl: "Darmowy konwerter zdjęć", en: "Free image converter", plDesc: "Zmiana formatu i kompresja JPG, PNG i WebP.", enDesc: "Convert and compress JPG, PNG and WebP files." },
   { id: "random", pl: "Darmowe losowanie", en: "Free random picker", plDesc: "Wylosuj jedną z podanych opcji lub zwycięzcę.", enDesc: "Randomly pick a winner or an option." },
-  { id: "signature", pl: "Darmowy generator stopki e-mail", en: "Free email signature generator", plDesc: "Utwórz i skopiuj stopkę z podglądem HTML.", enDesc: "Create and copy an HTML email signature." },
+  { id: "signature", pl: "Darmowy generator stopki e-mail", en: "Free email signature generator", plDesc: "Stopki klasyczne i animowane GIF, logo, zdjęcie oraz klikalne social media.", enDesc: "Classic and animated GIF signatures with photos, logos and clickable socials." },
 ] as const;
 
 const priority = ["signature", "edytor-pdf", "ai-image", "vat", "image", "dekoder-jwt"];
@@ -75,7 +75,7 @@ export function ToolboxHub({ lang }: { lang: Language }) {
           <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">{en ? "Choose a tool" : "Wybierz narzędzie"}</h2>
           <p className="mt-2 max-w-xl text-sm leading-6 text-white/55">{en ? "Choose a free online tool. No registration, no login, no credit card required." : "Wybierz darmowe narzędzie online. Bez rejestracji, bez logowania i bez karty kredytowej."}</p>
         </div>
-        <Link href={gamesHref} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/20 px-4 py-2.5 text-sm text-white/75 transition hover:border-white/60 hover:text-white"><Gamepad2 size={18}/>{en ? "Mini-games" : "Minigry"}<ArrowUpRight size={14}/></Link>
+        <Link href={gamesHref} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/20 px-4 py-2.5 text-sm text-white/75 transition hover:border-white/60 hover:text-white"><Gamepad2 size={18}/>{en ? "Free mini-games" : "Darmowe minigry"}<ArrowUpRight size={14}/></Link>
       </div>
 
       <label className="relative mt-6 block">
@@ -110,7 +110,7 @@ export function ToolboxHub({ lang }: { lang: Language }) {
             {filtered.map(t => <Link key={t.id} href={t.href} className={cardClass}>
               <div className="min-w-0">
                 <p className="text-[10px] uppercase tracking-[.14em] text-white/45">{t.category}</p>
-                <h3 className="mt-3 text-lg font-semibold leading-snug">{t.title}</h3>
+                <h3 className="mt-3 text-lg font-semibold leading-snug">{en ? (/^free\b/i.test(t.title) ? t.title : "Free " + t.title) : (/^darmow/i.test(t.title) ? t.title : "Darmowe narzędzie: " + t.title)}</h3>
                 <p className="mt-2 text-sm leading-6 text-white/60">{t.description}</p>
               </div>
               <span className="inline-flex items-center gap-2 text-sm font-medium text-white/90">{en ? "Open tool" : "Otwórz narzędzie"}<ArrowUpRight size={16}/></span>

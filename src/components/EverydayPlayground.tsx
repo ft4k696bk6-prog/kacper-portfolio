@@ -17,7 +17,7 @@ const entries:{id:Tab;icon:typeof Type;group:"utility"|"play";pl:string;en:strin
  {id:"password",icon:LockKeyhole,group:"utility",pl:"Generator haseł",en:"Password generator",descPL:"Losowe hasła tworzone lokalnie.",descEN:"Cryptographically secure local passwords."},
  {id:"image",icon:ImageIcon,group:"utility",pl:"Konwerter zdjęć",en:"Image converter",descPL:"JPG, PNG, WebP i zmniejszanie zdjęć.",descEN:"JPG, PNG, WebP and image resizing."},
  {id:"random",icon:Shuffle,group:"utility",pl:"Losowanie",en:"Random picker",descPL:"Wybierz losowo spośród wpisanych opcji.",descEN:"Pick a random choice from a list."},
- {id:"signature",icon:Mail,group:"utility",pl:"Generator stopki e-mail",en:"Email signature maker",descPL:"Prosta stopka HTML do poczty.",descEN:"Simple HTML signature for email."},
+ {id:"signature",icon:Mail,group:"utility",pl:"Darmowy generator stopki e-mail",en:"Free email signature maker",descPL:"Stopki statyczne i animowane GIF z linkami do social mediów.",descEN:"Classic and animated GIF signatures with social links."},
  {id:"reflex",icon:Zap,group:"play",pl:"Test refleksu",en:"Reaction speed test",descPL:"Sprawdź swój czas reakcji.",descEN:"Check your reaction time."},
  {id:"kids",icon:Gamepad2,group:"play",pl:"Klawiaturowa galaktyka",en:"Keyboard Galaxy",descPL:"Litery, cyfry, kosmos i efekty.",descEN:"Letters, numbers and space effects."},
  ...ARCADE_GAMES.filter(game=>game.id!=="reflex"&&game.id!=="kids").map(game=>({id:game.id,icon:Gamepad2,group:"play" as const,pl:game.pl,en:game.en,descPL:game.plDesc,descEN:game.enDesc}))
@@ -117,7 +117,7 @@ export function EverydayPlayground({lang,mode="utility"}:{lang:"pl"|"en";mode?:"
       <div className={mode==="games"?"grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5":"grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-1"}>{groupItems.map(item=>{const Icon=item.icon;return <button type="button" key={item.id} onClick={()=>go(item.id)}
        aria-current={tab===item.id?"page":undefined} aria-pressed={tab===item.id}
        className={(mode==="games"?"flex min-w-0 flex-col gap-3 rounded-2xl border p-2.5 text-left transition-colors ":"flex min-h-[58px] min-w-0 items-center gap-3 rounded-xl border px-3 py-3 text-left transition-colors ")+(tab===item.id?"border-white/60 bg-white/15 text-white":"border-white/10 bg-[#111111] text-white/70 hover:border-white/35")}>
-       {mode==="games"?<><GameThumbnail game={item.id as ArcadeId}/><span className="px-1 pb-1 text-sm font-medium leading-5">{en?item.en:item.pl}</span></>:<><Icon size={18} className="shrink-0"/><span className="min-w-0 text-xs leading-5 sm:text-sm">{en?item.en:item.pl}</span></>}</button>;})}</div>
+       {mode==="games"?<><GameThumbnail game={item.id as ArcadeId}/><span className="px-1 pb-1 text-sm font-medium leading-5">{en?"Free "+item.en:"Darmowa gra: "+item.pl}</span></>:<><Icon size={18} className="shrink-0"/><span className="min-w-0 text-xs leading-5 sm:text-sm">{en?(item.en.startsWith("Free ")?item.en:"Free "+item.en):(item.pl.startsWith("Darmow")?item.pl:"Darmowe narzędzie: "+item.pl)}</span></>}</button>;})}</div>
      </div>;
     })}
    </nav>
@@ -126,7 +126,7 @@ export function EverydayPlayground({lang,mode="utility"}:{lang:"pl"|"en";mode?:"
   </aside>
   <div id={mode==="games"?"game-stage":undefined} className="min-w-0 scroll-mt-28 space-y-5">
    {(selected.group==="utility"||tab==="reflex")&&<header className={panelClass}>
-    <div className="flex items-center gap-3"><selected.icon size={22}/><h2 className="text-2xl font-medium">{en?selected.en:selected.pl}</h2></div>
+    <div className="flex items-center gap-3"><selected.icon size={22}/><h2 className="text-2xl font-medium">{en?(selected.en.startsWith("Free ")?selected.en:"Free "+selected.en):(selected.pl.startsWith("Darmow")?selected.pl:(selected.group==="play"?"Darmowa gra: ":"Darmowe narzędzie: ")+selected.pl)}</h2></div>
     <p className="mt-3 text-sm leading-6 text-white/65">{en?selected.descEN:selected.descPL}</p>
    </header>}
    {tab==="text"&&<div className={panelClass+" space-y-4"}>
