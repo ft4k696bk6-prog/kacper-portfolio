@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any -- pdf-lib, PDF.js, QR and OCR browser APIs are loaded as pinned third-party UMD modules */
 import {useMemo,useRef,useState} from "react";
-import {ArrowDownToLine,Files,FileText,Image as ImageIcon,ScanLine,Shield, QrCode,RotateCw,Layers3} from "lucide-react";
+import {ArrowDownToLine,Files,RotateCw} from "lucide-react";
 import {browserLibrary,makeWifiQrPayload,parsePageSelection,saveBlob} from "@/lib/browser-toolkit";
 
 type Mode="merge"|"extract"|"rotate"|"watermark"|"images"|"render"|"inspect"|"qr"|"ocr"|"picture";
