@@ -227,11 +227,11 @@ function paint(ctx:CanvasRenderingContext2D,fields:SignatureFields,motion:Signat
  }
  ctx.restore();
 }
-function assemble(frames:{indices:Uint8Array;delay:number}[],colors:Uint8Array):Blob {
+function assemble(frames:{indices:Uint8Array;delay:number}[],colors:Uint8Array,loop:boolean):Blob {
  const bytes:number[]=[];
  writeText(bytes,"GIF89a");writeShort(bytes,WIDTH);writeShort(bytes,HEIGHT);
  bytes.push(0xf7,0,0,...colors);
- bytes.push(0x21,0xff,11);writeText(bytes,"NETSCAPE2.0");bytes.push(3,1,0,0,0);
+ if(loop){bytes.push(0x21,0xff,11);writeText(bytes,"NETSCAPE2.0");bytes.push(3,1,0,0,0);}
  for(const frame of frames){
   const delay=Math.max(2,Math.round(frame.delay/10));
   bytes.push(0x21,0xf9,4,0);writeShort(bytes,delay);bytes.push(0,0);
@@ -247,7 +247,7 @@ function assemble(frames:{indices:Uint8Array;delay:number}[],colors:Uint8Array):
  return new Blob([new Uint8Array(bytes)],{type:"image/gif"});
 }
 
-export async function makeSignatureGif(fields:SignatureFields,motion:SignatureMotion):Promise<Blob>{
+export async function makeSignatureGif(fields:SignatureFields,motion:SignatureMotion,loop=false):Promise<Blob>{
  if(typeof document==="undefined")throw new Error("GIF export requires a browser");
  const canvas=document.createElement("canvas");canvas.width=WIDTH;canvas.height=HEIGHT;
  const ctx=canvas.getContext("2d",{willReadFrequently:true});
@@ -267,5 +267,5 @@ export async function makeSignatureGif(fields:SignatureFields,motion:SignatureMo
   catch{throw new Error("The image server blocks cross-origin GIF export. Upload images locally instead.");}
   frames.push({indices:indexColors(pixels,colors),delay:stage.d});
  }
- return assemble(frames,colors);
+ return assemble(frames,colors,loop);
 }
