@@ -27,9 +27,16 @@ export function emptyTransitionMemory():TransitionMemory{return {previous:[],use
 export function chooseBerniTransition(a:BerniLivingMood,b:BerniLivingMood,now:number,mem:TransitionMemory,rng=Math.random):TransitionChoice|null {
  const level=transitionLevel(a,b); if(level==="none")return null;
  const recent=new Set(mem.previous.slice(-5));
- const pool=definitions.filter(d=>(level==="large"||d.strength==="medium")&&!recent.has(d.name)
-  &&now-(mem.used[d.name]??-Infinity)>d.cooldown
-  &&(d.strength!=="large"||now-mem.lastBigAt>1300));
+ const allowed=definitions.filter(d=>level==="large"||d.strength==="medium");
+ const usable=allowed.filter(d=>!recent.has(d.name));
+ let pool=usable.filter(d=>now-(mem.used[d.name]??-Infinity)>d.cooldown
+   &&(d.strength!=="large"||now-mem.lastBigAt>1300));
+ // Even under frantic clicking, a large change must NEVER hard-swap an entire
+ // face in plain sight. Gracefully relax cooldowns while still avoiding the
+ // five most recent effects; cooldowns are strict whenever sufficient choices exist.
+ if(!pool.length)pool=usable.filter(d=>d.strength==="medium"||now-mem.lastBigAt>450);
+ if(!pool.length)pool=usable;
+ if(!pool.length)pool=allowed.slice().sort((u,v)=>(mem.used[u.name]??-Infinity)-(mem.used[v.name]??-Infinity)).slice(0,3);
  if(!pool.length)return null;
  const i=Math.min(pool.length-1,Math.floor(Math.max(0,Math.min(.999999,rng()))*pool.length));
  const item=pool[i];mem.previous.push(item.name);
