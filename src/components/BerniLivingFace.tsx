@@ -52,7 +52,7 @@ export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0}:Control
   let showing:BerniLivingMood="idle",effect:InternalTransition|null=null;
   let lids:HTMLImageElement|null=null;
   let lastBlink=-10000, nextBlink=performance.now()+2300+Math.random()*1800;
-  let gazeX=0,gazeY=0,lookX=0,lookY=0,touchUntil=0,notedAt=0,replayAt=0;
+  let gazeX=0,gazeY=0,lookX=0,lookY=0,touchUntil=0,replayAt=0;
   let observer:IntersectionObserver|null=null;
 
   function requestPose(next:BerniLivingMood){
