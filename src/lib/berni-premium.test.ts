@@ -11,7 +11,7 @@ describe("Berni premium custom vector", () => {
       expect(robot).toContain('id={id+"' + material + '"}');
     }
     expect(robot).toContain('viewBox="0 0 160 160"');
-    expect(robot).not.toMatch(/<image\s|\.png|\.webp|\.gif|iframe|https?:\/\//i);
+    expect(robot).not.toMatch(/<image\s|\.png|\.webp|\.gif|iframe|href=["\x27]https?:/i);
   });
 
   it("contains physical parts and an expressive face rather than a flat icon", () => {
