@@ -1,6 +1,7 @@
 export type PercentMode = "increase" | "decrease" | "part" | "difference";
 export type SignatureLayout = "side" | "stacked" | "compact";
-export type SignatureFields = { name: string; role: string; company: string; email: string; phone: string; website: string; accent: string; logo?: string; logoWidth?: number; layout?: SignatureLayout; language?: "pl" | "en" };
+export type SignatureSocial = "facebook" | "linkedin" | "instagram" | "youtube" | "tiktok" | "x" | "github" | "whatsapp" | "calendar";
+export type SignatureFields = { name: string; role: string; company: string; email: string; phone: string; website: string; accent: string; logo?: string; photo?: string; logoWidth?: number; layout?: SignatureLayout; language?: "pl" | "en"; socials?: Partial<Record<SignatureSocial,string>>; animationUrl?: string };
 
 export function parseNumber(value: string): number {
   const compact=value.trim().replace(/\s/g,"").replace(/,/g,".");
@@ -53,6 +54,27 @@ export function escapeHtml(value:string):string {
  return value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 }
 
+
+export const SIGNATURE_SOCIALS:{id:SignatureSocial;name:string;short:string}[]=[
+ {id:"facebook",name:"Facebook",short:"f"},
+ {id:"linkedin",name:"LinkedIn",short:"in"},
+ {id:"instagram",name:"Instagram",short:"ig"},
+ {id:"youtube",name:"YouTube",short:"YT"},
+ {id:"tiktok",name:"TikTok",short:"TT"},
+ {id:"x",name:"X / Twitter",short:"X"},
+ {id:"github",name:"GitHub",short:"GH"},
+ {id:"whatsapp",name:"WhatsApp",short:"WA"},
+ {id:"calendar",name:"Kalendarz / Booking",short:"↗"}
+];
+export function signatureSafeLink(input:string):string {
+ try {
+  const raw=input.trim();
+  if(!raw||/\s/.test(raw)||raw.length>1800)return "";
+  const url=new URL(/^https?:\/\//i.test(raw)?raw:"https://"+raw);
+  return url.protocol==="https:"&&!url.username&&!url.password&&url.hostname.includes(".")?url.href:"";
+ }catch{return "";}
+}
+
 export function signatureHtml(s:SignatureFields):string {
  const name=escapeHtml(s.name.trim())||(s.language==="en"?"Your name":"Imię i nazwisko");
  const role=escapeHtml(s.role.trim()),company=escapeHtml(s.company.trim());
@@ -80,13 +102,27 @@ export function signatureHtml(s:SignatureFields):string {
  }catch{/* Unsupported logo URL */}}
  const logoWidth=Math.max(60,Math.min(180,Math.round(Number(s.logoWidth)||110)));
  const logo=logoSrc?'<img src="'+escapeHtml(logoSrc)+'" width="'+logoWidth+'" alt="'+escapeHtml(s.company.trim()||"Logo")+'" style="display:block;width:'+logoWidth+'px;max-width:100%;height:auto;border:0;outline:none;text-decoration:none" />':"";
+ const socialAnchors=SIGNATURE_SOCIALS.flatMap(item=>{
+  const url=signatureSafeLink(s.socials?.[item.id]||"");
+  return url?['<td style="padding:9px 7px 0 0"><a href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer" title="'+escapeHtml(item.name)+'" style="display:inline-block;padding:6px 9px;background:#f1f1f1;border:1px solid #dedede;border-radius:5px;color:#262626;text-decoration:none;font-size:11px;font-weight:700;line-height:16px">'+escapeHtml(item.short)+'</a></td>']:[];
+ });
+ const socialRow=socialAnchors.length?'<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse"><tbody><tr>'+socialAnchors.join("")+'</tr></tbody></table>':"";
  const details='<div style="font-size:11px;line-height:17px;letter-spacing:0.5px;color:'+muted+'">'+
   [role,company].filter(Boolean).join(" &nbsp;·&nbsp; ")+'</div>';
  const contacts=links.length?'<div style="padding-top:9px;font-size:12px;line-height:20px;color:#505050">'+links.join(' &nbsp;<span style="color:#a0a0a0">·</span>&nbsp; ')+'</div>':"";
  const content='<div style="font-size:17px;line-height:23px;font-weight:700;color:#171717">'+name+'</div>'+
-  (role||company?'<div style="padding-top:3px">'+details+'</div>':"")+contacts;
+  (role||company?'<div style="padding-top:3px">'+details+'</div>':"")+contacts+socialRow;
  const layout=s.layout||"side";
  const base='role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;border-spacing:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#171717"';
+ const animation=(s.animationUrl||"").trim();
+ const animationSrc=signatureSafeLink(animation)||
+  (/^data:image\/gif;base64,[A-Za-z0-9+/=]+$/i.test(animation)&&animation.length<3500000?animation:"");
+ if(animationSrc){
+  const alt=[s.name,s.role,s.company,s.email].filter(Boolean).join(" · ");
+  return '<table '+base+'><tbody><tr><td><img src="'+escapeHtml(animationSrc)+'" width="520" alt="'+escapeHtml(alt)+'" style="display:block;width:520px;max-width:100%;height:auto;border:0" /></td></tr>'+
+   (links.length?'<tr><td style="padding-top:8px;font-size:11px;line-height:19px">'+links.join(' &nbsp;·&nbsp; ')+'</td></tr>':"")+
+   (socialRow?'<tr><td>'+socialRow+'</td></tr>':"")+'</tbody></table>';
+ }
  if(layout==="stacked"){
   return '<table '+base+'><tbody><tr><td style="padding:0 0 13px 0">'+(logo?logo:'<span style="font-size:12px;font-weight:700;letter-spacing:1px;color:'+accent+'">'+company+'</span>')+
    '</td></tr><tr><td style="border-top:3px solid '+accent+';padding:13px 2px 0 0">'+content+'</td></tr></tbody></table>';
