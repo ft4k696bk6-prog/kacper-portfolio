@@ -8,13 +8,14 @@ import { visibleToolboxItems } from "@/lib/toolbox-visibility";
 import { FreeToolRunner } from "@/components/FreeToolRunner";
 import { FullWebsiteAuditRunner } from "@/components/FullWebsiteAuditRunner";
 import { VatCalculator } from "@/components/VatCalculator";
+import { PdfEditor } from "@/components/PdfEditor";
 
 type Props={params:Promise<{slug:string}>};
 export function generateStaticParams(){return toolboxItems.map(t=>({slug:t.slug}));}
 export async function generateMetadata({params}:Props):Promise<Metadata>{
  const {slug}=await params;const t=findTool(slug);if(!t)return {};
  const url="https://bernecki.dev/narzedzia/"+slug;
- const seoDescription = t.title+". "+t.description+" Bez opłat i rejestracji.";
+ const seoDescription = t.title+". "+t.description+" Darmowe narzędzie online bez rejestracji, bez logowania i bez karty kredytowej.";
  return {title:t.title+" | bernecki.dev",description:seoDescription,alternates:{canonical:url,languages:{"pl-PL":url,en:"https://bernecki.dev"+englishToolPath(slug)}},
   openGraph:{title:t.title+" | bernecki.dev",description:seoDescription,url,type:"website"}};
 }
@@ -37,9 +38,9 @@ export default async function ToolPage({params}:Props){
    <p className="page-eyebrow">{tool.category} <span className="mx-2">/</span> BEZPŁATNIE</p>
    <h1 className="mt-5 max-w-5xl">{tool.title}</h1>
    <p className="page-intro mt-6 max-w-3xl text-base md:text-lg">{tool.description}</p>
-   <div className="mt-6 flex flex-wrap gap-3 text-xs text-white/60"><span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-2"><ShieldCheck size={14}/> Bez konta</span><span className="rounded-full border border-white/15 px-3 py-2">Wynik od razu</span><span className="rounded-full border border-white/15 px-3 py-2">Raport do skopiowania</span></div>
+   <div className="mt-6 flex flex-wrap gap-3 text-xs text-white/60"><span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-2"><ShieldCheck size={14}/> Bez konta</span><span className="rounded-full border border-white/15 px-3 py-2">Wynik od razu</span><span className="rounded-full border border-white/15 px-3 py-2">Bez karty kredytowej</span></div>
   </header>
-  {tool.slug==="audyt-strony"?<FullWebsiteAuditRunner/>:tool.mode==="vat"?<VatCalculator lang="pl"/>:<FreeToolRunner mode={tool.mode} slug={tool.slug}/>}
+  {tool.slug==="audyt-strony"?<FullWebsiteAuditRunner/>:tool.mode==="vat"?<VatCalculator lang="pl"/>:tool.mode==="pdf"?<PdfEditor lang="pl"/>:<FreeToolRunner mode={tool.mode} slug={tool.slug}/>}
   {tool.slug!=="audyt-strony"&&["WWW i SEO","AI i wyszukiwarki"].includes(tool.category)&&<Link href="/narzedzia/audyt-strony" className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/20 bg-[#141414] p-5 transition-colors hover:border-white/50">
    <div><span className="text-xs font-medium text-white/50">Jedna analiza zamiast kilku</span><h2 className="mt-2 text-base font-medium">Sprawdź też SEO, obrazy, SSL, DNS i inne elementy w jednym audycie.</h2></div><span className="inline-flex items-center gap-2 text-sm">Darmowy audyt całej próbki <ArrowUpRight size={16}/></span>
   </Link>}
