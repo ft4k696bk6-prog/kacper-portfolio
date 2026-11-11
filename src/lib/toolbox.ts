@@ -460,6 +460,16 @@ export const toolboxItems: ToolboxItem[] =  [
     "question": "Czy z kwoty brutto mogę wyliczyć netto i sam VAT?",
     "answer": "Tak. Kalkulator dzieli kwotę brutto przez 1,08 lub 1,23 i zaokrągla wynik do grosza. Pamiętaj, że prawidłowa stawka VAT zależy od rodzaju towaru lub usługi."
   }
+  {
+    "slug": "edytor-pdf",
+    "title": "Darmowy edytor PDF online — bez rejestracji",
+    "description": "Edytuj PDF za darmo: dodawaj tekst, podpisy i zdjęcia, zmieniaj kolejność stron, obracaj je i pobieraj wynik. Bez rejestracji, bez karty kredytowej i bez przesyłania plików na serwer.",
+    "category": "Dokumenty i pliki",
+    "mode": "pdf",
+    "hint": "Otwórz PDF z dysku lub stwórz pusty dokument. Dodawaj tekst, podpisy, obrazy i kształty, edytuj je oraz porządkuj strony. Pobierz gotowy PDF bez logowania. Podmiana istniejącego tekstu PDF odbywa się przez wizualną nakładkę i nie usuwa oryginalnej zawartości.",
+    "question": "Czy mogę zmienić istniejący tekst w PDF jak w Wordzie?",
+    "answer": "Możesz kliknąć tekst i wizualnie zakryć go nową treścią. To nie jest pełna edycja oryginalnego strumienia tekstu PDF. Oryginał pozostaje w warstwie dokumentu, dlatego ta funkcja nie nadaje się do usuwania poufnych danych."
+  }
 ];
-export const toolboxCategories = ["Wszystkie", "WWW i SEO", "Reklamy i marketing", "CRM i sprzedaż", "AI i wyszukiwarki", "Dla programistów"];
+export const toolboxCategories = ["Wszystkie", "WWW i SEO", "Reklamy i marketing", "CRM i sprzedaż", "AI i wyszukiwarki", "Dla programistów", "Dokumenty i pliki"];
 export function findTool(slug:string){return toolboxItems.find(item=>item.slug===slug);}
