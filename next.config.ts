@@ -14,6 +14,11 @@ const ContentSecurityPolicy = `
   form-action 'self';
 `.replace(/\n/g, " ").trim();
 
+const pdfEditorCSP = ContentSecurityPolicy
+  .replaceAll("https://ajax.googleapis.com;", "https://ajax.googleapis.com https://cdn.jsdelivr.net;")
+  .replace("style-src 'self'", "worker-src 'self' blob:; style-src 'self'")
+  .replace("connect-src 'self'", "connect-src 'self' https://cdn.jsdelivr.net");
+
 const securityHeaders = [
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -32,6 +37,14 @@ const nextConfig: NextConfig = {
       {
         source: "/(.*)",
         headers: securityHeaders,
+      },
+      {
+        source: "/narzedzia/edytor-pdf",
+        headers: [{ key: "Content-Security-Policy", value: pdfEditorCSP }],
+      },
+      {
+        source: "/en/tools/free-pdf-editor",
+        headers: [{ key: "Content-Security-Policy", value: pdfEditorCSP }],
       },
     ];
   },
