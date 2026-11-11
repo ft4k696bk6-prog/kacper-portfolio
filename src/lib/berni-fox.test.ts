@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
-import { seasonalBerniAccessory } from "../components/BerniFoxHead";
+import { seasonalBerniAccessory } from "./berni-seasonal";
 const fox=readFileSync("src/components/BerniFoxHead.tsx","utf8");
 const css=readFileSync("src/components/BerniFoxHead.module.css","utf8");
 const chat=readFileSync("src/components/AIMascotAssistant.tsx","utf8");
