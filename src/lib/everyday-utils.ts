@@ -58,7 +58,7 @@ export function signatureHtml(s:SignatureFields):string {
  const role=escapeHtml(s.role.trim()),company=escapeHtml(s.company.trim());
  const email=escapeHtml(s.email.trim()),phone=escapeHtml(s.phone.trim()),website=escapeHtml(s.website.trim());
  const accent=/^#[0-9a-fA-F]{6}$/.test(s.accent)?s.accent:"#b7b7b7";
- const lineColor="#d9d9d9", muted="#555555";
+ const muted="#555555";
  const links:string[]=[];
  if(email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim())) {
   links.push('<a href="mailto:'+escapeHtml("mailto:"+s.email.trim()).replace(/^mailto:/,"")+'" style="color:#505050;text-decoration:none">'+email+'</a>');
