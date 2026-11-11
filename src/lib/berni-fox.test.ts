@@ -41,7 +41,7 @@ describe("One-source, continuous animated Berni", () => {
     expect(rig).toContain("drawBlink(current.blink, false)");
     expect(rig).toContain("drawEyes(current.gazeX, current.gazeY)");
     expect(rig).toContain("function drawExpression(face: Face)");
-    expect(rig).toContain("const depth = 22 * amount");
+    expect(rig).toContain("const depth = (23 + 9 * face.smile");
     expect(rig).toContain('data-testid="berni-continuous-face"');
     expect(rig).toContain("requestAnimationFrame");
     expect(rig).toContain("Math.exp(-dt / tau)");
