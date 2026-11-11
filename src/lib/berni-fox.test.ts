@@ -12,7 +12,7 @@ describe("Berni full portrait masters, not drawing eyes or mouths over the head"
   expect(existsSync("public/images/berni/berni-fox-head.png")).toBe(true);
   expect(existsSync("public/images/berni/eyelids-closed.jpg")).toBe(true);
   expect(generator).toContain("Berni master portraits generated");
-  expect(generator).toContain("rear");
+  expect(generator).toContain("clean=Uint8Array.from(source)");
   expect(generator).toContain("moods=");
   expect(portrait).toContain('src="/images/berni/poses/idle.png"');
   expect(portrait).toContain("BerniLivingFace");
