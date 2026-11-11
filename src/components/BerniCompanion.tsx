@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
-import { BerniRendered3D } from "@/components/BerniRendered3D";
+import { BerniCore } from "@/components/BerniCore";
 import {
   classifyBerniWeather, detectBerniReaction,
   type BerniMood, type BerniWeather,
@@ -296,7 +296,7 @@ export function BerniCompanion({
         data-testid="ai-mascot-open"
         className={`group relative block h-full w-full touch-none select-none rounded-[2rem] bg-transparent p-0 outline-none transition-transform duration-200 hover:scale-105 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95 ${dragging ? "cursor-grabbing scale-110" : "cursor-grab"}`} style={{ WebkitUserSelect: "none", WebkitTouchCallout: "none" } as React.CSSProperties}>
         <span className="absolute inset-x-3 bottom-2 h-9 rounded-full bg-white/[0.055] blur-xl transition group-hover:bg-white/[0.12]" />
-        <BerniRendered3D mood={robotMood} weather={weather} lang={lang} />
+        <BerniCore mood={robotMood} weather={weather} lang={lang} />
       </button>
 
     </div>
