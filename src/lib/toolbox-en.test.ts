@@ -6,8 +6,8 @@ import { standaloneWebsiteCheckerSlugs,visibleToolboxItems,visibleEnglishToolbox
 describe("bilingual toolbox SEO and assistant integration",()=>{
  it("provides one distinct English page for each of the 46 tools",()=>{
   expect(englishToolboxItems).toHaveLength(46);
-  expect(new Set(englishToolboxItems.map(t=>t.englishSlug)).size).toBe(45);
-  expect(new Set(englishToolboxItems.map(t=>t.slug)).size).toBe(45);
+  expect(new Set(englishToolboxItems.map(t=>t.englishSlug)).size).toBe(46);
+  expect(new Set(englishToolboxItems.map(t=>t.slug)).size).toBe(46);
   for(const t of englishToolboxItems){
    expect(t.title).toMatch(/^Free /);
    expect(t.title).not.toMatch(/darmow|bezpłatn/i);
