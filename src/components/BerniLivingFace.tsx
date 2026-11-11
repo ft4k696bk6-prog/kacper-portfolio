@@ -7,389 +7,296 @@ export type BerniLivingMood =
   | "sleeping" | "typing" | "listening" | "surprised"
   | "worried" | "working" | "grabbed";
 
-type Expression = {
+type Face = {
   blink: number;
   mouth: number;
   smile: number;
   surprise: number;
-  lookX: number;
-  lookY: number;
+  gazeX: number;
+  gazeY: number;
   worried: number;
 };
 
-const VERTEX_SHADER = `
-attribute vec2 aPosition;
-varying vec2 vUV;
-void main() {
-  gl_Position = vec4(aPosition, 0.0, 1.0);
-  vUV = vec2((aPosition.x + 1.0) * 0.5, (1.0 - aPosition.y) * 0.5);
+const BASE = "/images/berni/berni-fox-head.png";
+const EYELIDS = "/images/berni/eyelids-closed.jpg";
+const zero: Face = { blink: 0, mouth: 0, smile: 0, surprise: 0, gazeX: 0, gazeY: 0, worried: 0 };
+
+function forMood(mood: BerniLivingMood): Face {
+  switch (mood) {
+    case "curious": return { ...zero, gazeX: .65, gazeY: -.3, smile: .16 };
+    case "listening": return { ...zero, gazeX: .4, smile: .12 };
+    case "thinking": return { ...zero, gazeX: -.5, gazeY: -.7, worried: .2 };
+    case "working": return { ...zero, gazeX: -.3, gazeY: -.4 };
+    case "happy": return { ...zero, smile: .82, mouth: .23 };
+    case "excited": return { ...zero, smile: 1, surprise: .3, mouth: .65 };
+    case "surprised": return { ...zero, surprise: 1, mouth: .78 };
+    case "grabbed": return { ...zero, surprise: .65, mouth: .4 };
+    case "typing": return { ...zero, smile: .3, mouth: .48 };
+    case "worried": return { ...zero, worried: .9, gazeY: .35 };
+    case "sleeping": return { ...zero, blink: 1 };
+    default: return zero;
+  }
 }
-`;
 
 /**
- * Single-texture facial rig. Every frame is sampled from the EXACT same
- * approved neutral portrait; no AI-generated JPEG replaces the face.
- * Smooth local texture deformation affects the eyelids, pupils and eyebrows.
- * A small shaded mouth opening is synthesized under the original smile.
- * Therefore face shape, fur color, B logos and headphones never jump.
+ * Canvas2D animation deliberately uses only the approved source portrait.
+ * The eyelid reference appears ONLY inside the two eye sockets while blink
+ * progress grows. It is never rendered as a complete replacement face.
+ * An inline SVG or morphing a second head is intentionally not used.
  */
-const FRAGMENT_SHADER = `
-precision highp float;
-varying vec2 vUV;
-uniform sampler2D uPortrait;
-uniform sampler2D uClosedEyes;
-uniform vec4 uFace;   // blink, mouth, smile, surprise
-uniform vec4 uMotion; // lookX, lookY, worried, breathing
-
-float gaussian(vec2 xy, vec2 center, vec2 radius) {
-  vec2 q = (xy - center) / radius;
-  return exp(-2.0 * dot(q, q));
-}
-float eyeMask(vec2 p, vec2 c, vec2 r) {
-  vec2 d = (p - c) / r;
-  return 1.0 - smoothstep(.55, 1.3, dot(d, d));
-}
-void main() {
-  vec2 p = vUV;
-  float blink = clamp(uFace.x, 0.0, 1.0);
-  float mouth = clamp(uFace.y, 0.0, 1.0);
-  float smile = clamp(uFace.z, -0.4, 1.0);
-  float surprise = clamp(uFace.w, 0.0, 1.0);
-
-  // Landmark coordinates were measured from the 640px approved artwork.
-  // The far eye is perspective-correct: its region is much smaller.
-  vec2 nearEye = vec2(.515, .497);
-  vec2 farEye = vec2(.731, .537);
-  vec2 nearRadius = vec2(.098, .069);
-  vec2 farRadius = vec2(.044, .050);
-  float n = eyeMask(p, nearEye, nearRadius);
-  float f = eyeMask(p, farEye, farRadius);
-  vec2 source = p;
-
-  // The exact neutral texture remains fixed. Eyes can glance and widen without
-  // a large UV stretch (which previously produced double pupils).
-  source.y += surprise * (n * (p.y - nearEye.y) * -.06
-                          + f * (p.y - farEye.y) * -.045);
-
-  // Pupils track the visitor gently, only inside the orbital masks.
-  source.x -= uMotion.x * (.012 * n + .006 * f) * (1.0 - blink);
-  source.y -= uMotion.y * (.008 * n + .004 * f) * (1.0 - blink);
-
-  // Expressive eyebrows and tiny cheek lift, without re-rendering fur.
-  float nearBrow = gaussian(p, vec2(.503, .410), vec2(.100, .031));
-  float farBrow = gaussian(p, vec2(.733, .470), vec2(.043, .035));
-  source.y += (surprise * .012 - uMotion.z * .004) * (nearBrow + farBrow);
-  float cheek = gaussian(p, vec2(.631, .641), vec2(.111, .080));
-  source.y += smile * .004 * cheek;
-
-  vec4 skin = texture2D(uPortrait, clamp(source, .001, .999));
-
-  // Match only the exact eyelid areas against a fixed reference expression.
-  // The eyelid reveal is continuous in a shader, not an image-frame swap.
-  // Eyes, eyebrows, nose, fur, headphones and both B logos keep one original
-  // neutral image, with the small inner-eye patch fading gradually.
-  vec4 closedEye = texture2D(uClosedEyes, p);
-  float nearEyeArea = 1.0 - smoothstep(.50, .90,
-    dot((p - nearEye) / vec2(.082, .053),
-        (p - nearEye) / vec2(.082, .053)));
-  float farEyeArea = 1.0 - smoothstep(.50, .92,
-    dot((p - farEye) / vec2(.034, .039),
-        (p - farEye) / vec2(.034, .039)));
-  float eyelidMask = clamp(max(nearEyeArea, farEyeArea), 0.0, 1.0);
-  float shut = smoothstep(.04, .93, blink);
-  skin.rgb = mix(skin.rgb, closedEye.rgb, eyelidMask * shut);
-
-  // The opening follows the EXISTING curved dark smile instead of
-  // stamping a round ellipse over a different muzzle.
-  float t = clamp((p.x - .566) / .147, 0.0, 1.0);
-  float taper = pow(max(0.0, sin(3.14159265 * t)), .6);
-  float lip = .620 + .058 * smoothstep(0.0, .65, t)
-            + .009 * sin(3.14159265 * t);
-  float depth = mouth * mix(.034, .039, smile > 0.0 ? smile : 0.0) * taper;
-  float aperture = smoothstep(lip - .002, lip + .004, p.y)
-                 * (1.0 - smoothstep(lip + depth - .006, lip + depth + .002, p.y));
-  aperture *= smoothstep(0.0, .13, t)
-            * (1.0 - smoothstep(.88, 1.0, t))
-            * taper * smoothstep(.05, .25, mouth);
-  vec3 darkMouth = vec3(.070, .047, .062);
-  vec2 tonguePos = vec2((p.x - .645) / .054,
-                        (p.y - (lip + depth * .75)) / (depth * .35 + .001));
-  float tongue = (1.0 - smoothstep(.23, .45, dot(tonguePos, tonguePos)))
-               * smoothstep(.35, .70, mouth);
-  darkMouth = mix(darkMouth, vec3(.47, .18, .27), tongue);
-  skin.rgb = mix(skin.rgb, darkMouth, aperture * skin.a * .98);
-
-  gl_FragColor = skin;
-}
-`;
-
-const SOURCE = "/images/berni/berni-fox-head.png";
-const CLOSED_EYES = "/images/berni/eyelids-closed.jpg";
-const defaultExpression: Expression = {
-  blink: 0, mouth: 0, smile: 0, surprise: 0,
-  lookX: 0, lookY: 0, worried: 0,
-};
-
-function targetForMood(mood: BerniLivingMood): Expression {
-  switch (mood) {
-    case "curious": return { ...defaultExpression, lookX: .42, lookY: -.3, smile: .15 };
-    case "thinking": return { ...defaultExpression, lookX: -.40, lookY: -.64, worried: .2 };
-    case "listening": return { ...defaultExpression, lookX: .35, lookY: .02, smile: .12 };
-    case "working": return { ...defaultExpression, lookX: -.42, lookY: -.5 };
-    case "typing": return { ...defaultExpression, smile: .32, mouth: .45 };
-    case "happy": return { ...defaultExpression, smile: .72, mouth: .19 };
-    case "excited": return { ...defaultExpression, smile: 1, mouth: .55, surprise: .2 };
-    case "surprised": return { ...defaultExpression, surprise: .9, mouth: .76, lookY: -.1 };
-    case "grabbed": return { ...defaultExpression, surprise: .55, mouth: .35 };
-    case "worried": return { ...defaultExpression, worried: 1, smile: -.25, lookY: .36 };
-    case "sleeping": return { ...defaultExpression, blink: 1 };
-    default: return defaultExpression;
-  }
-}
-
-function compileShader(
-  gl: WebGLRenderingContext, kind: number, source: string,
-): WebGLShader {
-  const shader = gl.createShader(kind);
-  if (!shader) throw new Error("WebGL shader unavailable");
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    const log = gl.getShaderInfoLog(shader);
-    gl.deleteShader(shader);
-    throw new Error(log || "WebGL shader compile failed");
-  }
-  return shader;
-}
-
 export function BerniLivingFace({
-  mood, size, blinkToken = 0, onReady,
+  mood, size, blinkToken = 0,
 }: {
   mood: BerniLivingMood;
   size: number;
   blinkToken?: number;
-  onReady?: () => void;
 }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const liveRef = useRef({ mood, blinkToken, pointerX: 0, pointerY: 0 });
-  const [loaded, setLoaded] = useState(false);
+  const ref = useRef<HTMLCanvasElement>(null);
+  const live = useRef({ mood, blinkToken });
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    liveRef.current.mood = mood;
-    if (blinkToken !== liveRef.current.blinkToken) {
-      liveRef.current.blinkToken = blinkToken;
-      if (blinkToken > 0) {
-        canvasRef.current?.dispatchEvent(new CustomEvent("berni-force-blink"));
-      }
+    live.current.mood = mood;
+    if (blinkToken !== live.current.blinkToken) {
+      live.current.blinkToken = blinkToken;
+      if (blinkToken > 0) ref.current?.dispatchEvent(new Event("berni-blink-now"));
     }
   }, [mood, blinkToken]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const gl = canvas.getContext("webgl", {
-      alpha: true, antialias: false, depth: false, stencil: false,
-      preserveDrawingBuffer: false, premultipliedAlpha: false,
-      powerPreference: "low-power",
-    });
-    if (!gl) return; // Static, accessible original image remains underneath.
+    const canvas = ref.current;
+    const ctx = canvas?.getContext("2d", { alpha: true });
+    if (!canvas || !ctx) return;
 
-    let alive = true;
-    let raf = 0;
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const renderSize = Math.min(640, Math.max(128, Math.round(size * Math.min(2, window.devicePixelRatio || 1))));
+    canvas.width = renderSize;
+    canvas.height = renderSize;
+
+    let active = true;
     let visible = true;
-    let lastFrame = 0;
+    let raf = 0;
     let lastTick = 0;
-    let blinkStarted = -10000;
-    let manualBlinkStarted = -10000;
-    let nextBlink = 1500 + Math.random() * 1500;
-    let occasionalLookX = 0;
-    let current: Expression = { ...defaultExpression };
-    let program: WebGLProgram | null = null;
-    let texture: WebGLTexture | null = null;
-    let closedTexture: WebGLTexture | null = null;
-    let buffer: WebGLBuffer | null = null;
-    let observer: IntersectionObserver | undefined;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onBlink = () => { manualBlinkStarted = performance.now(); };
-    const onPageVisibility = () => {
-      if (!document.hidden && visible && !raf) raf = requestAnimationFrame(draw);
-    };
-    canvas.addEventListener("berni-force-blink", onBlink);
-    document.addEventListener("visibilitychange", onPageVisibility);
+    let lastPaint = 0;
+    let lastBlink = -10000;
+    let nextBlink = performance.now() + 1400 + Math.random() * 1000;
+    let base: HTMLImageElement | null = null;
+    let lids: HTMLImageElement | null = null;
+    let current: Face = { ...zero };
+    let watcher: IntersectionObserver | null = null;
+    const onForceBlink = () => { lastBlink = performance.now(); };
 
-    function easeToward(from: number, to: number, dt: number): number {
-      return from + (to - from) * (1 - Math.exp(-dt / 180));
+    function load(src: string): Promise<HTMLImageElement> {
+      return new Promise((resolve, reject) => {
+        const image = new window.Image();
+        image.onload = () => resolve(image);
+        image.onerror = reject;
+        image.src = src;
+      });
     }
-    function blinkCurve(now: number, start: number): number {
-      const progress = (now - start) / 255;
-      return progress >= 0 && progress <= 1
-        ? Math.pow(Math.sin(Math.PI * progress), 1.55)
-        : 0;
+
+    function eyeClip(near: boolean) {
+      ctx!.beginPath();
+      if (near) {
+        ctx!.moveTo(262, 320);
+        ctx!.bezierCurveTo(283, 286, 344, 271, 376, 304);
+        ctx!.bezierCurveTo(388, 316, 389, 349, 387, 367);
+        ctx!.bezierCurveTo(340, 359, 290, 349, 262, 320);
+      } else {
+        ctx!.moveTo(436, 348);
+        ctx!.bezierCurveTo(439, 320, 459, 308, 478, 326);
+        ctx!.bezierCurveTo(490, 337, 493, 371, 486, 381);
+        ctx!.bezierCurveTo(461, 378, 447, 363, 436, 348);
+      }
+      ctx!.closePath();
     }
-    function draw(now: number) {
+
+    function drawEyes(gazeX: number, gazeY: number) {
+      // Only the detailed original eye texture is translated, not its fur,
+      // headphones, or muzzle. A soft central iris region avoids seams.
+      if (!base || (Math.abs(gazeX) < .05 && Math.abs(gazeY) < .05)) return;
+      const eyes = [
+        { x: 338, y: 325, rx: 28, ry: 31 },
+        { x: 462, y: 347, rx: 15, ry: 22 },
+      ];
+      for (const eye of eyes) {
+        ctx!.save();
+        ctx!.beginPath();
+        ctx!.ellipse(eye.x, eye.y, eye.rx, eye.ry, -.14, 0, Math.PI * 2);
+        ctx!.clip();
+        ctx!.globalAlpha = .55;
+        ctx!.drawImage(base, -gazeX * 2.8, -gazeY * 2, 640, 640);
+        ctx!.restore();
+      }
+    }
+
+    function drawBlink(blink: number, near: boolean) {
+      if (!lids || blink < .015) return;
+      // Reveal reference eyelid TOP to BOTTOM as a smooth geometric wipe,
+      // rather than crossfading entire open vs closed characters.
+      const left = near ? 260 : 436;
+      const right = near ? 389 : 491;
+      const top = near ? 279 : 309;
+      const bottom = near ? 370 : 383;
+      const extent = (bottom - top) * Math.min(1, blink);
+      ctx!.save();
+      eyeClip(near);
+      ctx!.clip();
+      ctx!.beginPath();
+      ctx!.rect(left, top, right - left, extent);
+      ctx!.clip();
+      ctx!.drawImage(lids, 0, 0, 640, 640);
+      ctx!.restore();
+    }
+
+    function drawExpression(face: Face) {
+      // Curved mouth follows the same smile on the base illustration.
+      const amount = Math.max(0, Math.min(1, face.mouth));
+      if (amount > .015) {
+        const depth = amount * (19 + face.surprise * 7);
+        ctx!.save();
+        ctx!.globalAlpha = Math.min(1, amount * 1.35);
+        ctx!.beginPath();
+        ctx!.moveTo(364, 397);
+        ctx!.bezierCurveTo(385, 420, 422, 439, 460, 421);
+        ctx!.bezierCurveTo(461, 425 + depth * .4, 448, 436 + depth * .75, 421, 440 + depth);
+        ctx!.bezierCurveTo(396, 442 + depth * .78, 376, 423 + depth * .24, 364, 397);
+        ctx!.closePath();
+        const mouth = ctx!.createLinearGradient(0, 412, 0, 451 + depth);
+        mouth.addColorStop(0, "#100d16");
+        mouth.addColorStop(.57, "#211019");
+        mouth.addColorStop(1, "#442831");
+        ctx!.fillStyle = mouth;
+        ctx!.fill();
+
+        const tongueAlpha = Math.max(0, (amount - .33) / .67);
+        if (tongueAlpha > .02) {
+          ctx!.globalAlpha = tongueAlpha * .85;
+          ctx!.fillStyle = "#b26177";
+          ctx!.beginPath();
+          ctx!.ellipse(416, 444 + depth * .6, 17 * amount, 3.5 + 2 * amount, -.08, 0, Math.PI * 2);
+          ctx!.fill();
+        }
+        ctx!.restore();
+      }
+
+      // Raised or worried eyebrows move by fractions of a pixel; keep
+      // existing realistic source eyebrows visible underneath.
+      const intensity = Math.max(face.surprise, face.worried * .65);
+      if (intensity > .01) {
+        ctx!.save();
+        ctx!.globalAlpha = intensity * .28;
+        ctx!.strokeStyle = "#eef0f7";
+        ctx!.lineCap = "round";
+        ctx!.lineWidth = 3;
+        ctx!.beginPath();
+        ctx!.moveTo(284, 262 - 3 * face.surprise);
+        ctx!.quadraticCurveTo(333, 229 - 7 * face.surprise, 386, 276 - 4 * face.surprise);
+        ctx!.stroke();
+        ctx!.restore();
+      }
+    }
+
+    function render(now: number) {
       raf = 0;
-      if (!alive || document.hidden || !visible || !program || !texture || !closedTexture || !buffer) return;
-      raf = requestAnimationFrame(draw);
-      // 45 fps cap keeps three tiny widgets cheap on iPhone.
-      if (now - lastFrame < 22 && !reduced.matches) return;
-      const dt = Math.max(0, Math.min(48, now - (lastTick || now)));
-      lastFrame = now;
+      if (!active || !visible || document.hidden || !base) return;
+      raf = requestAnimationFrame(render);
+      // 30 fps on small widgets, 45 fps on preview. Both work in Safari.
+      const interval = size <= 72 ? 33 : 22;
+      if (now - lastPaint < interval && !motionQuery.matches) return;
+      const dt = Math.min(64, Math.max(0, now - (lastTick || now)));
       lastTick = now;
+      lastPaint = now;
 
-      const actualMood = liveRef.current.mood;
-      const target = targetForMood(actualMood);
-      if (!reduced.matches) {
-        if (now > nextBlink && actualMood !== "sleeping") {
-          blinkStarted = now;
-          nextBlink = now + 3100 + Math.random() * 2600;
+      const status = live.current.mood;
+      const target = forMood(status);
+      if (!motionQuery.matches) {
+        if (now >= nextBlink && status !== "sleeping") {
+          lastBlink = now;
+          nextBlink = now + 3600 + Math.random() * 2700;
         }
-        const naturalBlink = Math.max(
-          blinkCurve(now, blinkStarted),
-          blinkCurve(now, manualBlinkStarted),
-        );
-        target.blink = Math.max(target.blink, naturalBlink);
-        if (actualMood === "typing") {
-          // Natural, continuously interpolated visemes instead of a repeated GIF.
-          target.mouth = .25 + .42 * Math.abs(Math.sin(now / 178) * Math.cos(now / 491));
+        const timeSinceBlink = (now - lastBlink) / 240;
+        const pulse = timeSinceBlink >= 0 && timeSinceBlink <= 1
+          ? Math.pow(Math.sin(Math.PI * timeSinceBlink), 1.3)
+          : 0;
+        target.blink = Math.max(target.blink, pulse);
+        if (status === "typing") {
+          target.mouth = .18 + .63 * (.5 + .5 * Math.sin(now / 170))
+            * (.78 + .22 * Math.cos(now / 590));
         }
-        if (actualMood === "idle") {
-          occasionalLookX = Math.sin(now / 2500) * .22;
-          target.lookX = occasionalLookX;
-          target.lookY = Math.sin(now / 4100) * .12;
+        if (status === "idle") {
+          target.gazeX = .19 * Math.sin(now / 2600);
+          target.gazeY = .12 * Math.sin(now / 4200);
         }
-        for (const key of Object.keys(target) as (keyof Expression)[]) {
-          // Blink is quick, mood changes are gradual.
-          current[key] = easeToward(
-            current[key], target[key], key === "blink" ? dt * 1.8 : dt,
-          );
+        for (const key of Object.keys(target) as (keyof Face)[]) {
+          const tau = key === "blink" ? 28 : 170;
+          const alpha = 1 - Math.exp(-dt / tau);
+          current[key] += (target[key] - current[key]) * alpha;
         }
       } else {
-        current = target; // Respect reduced-motion; no automatic loops.
+        current = { ...zero }; // A static, open-eyed portrait for reduced motion.
       }
-      gl!.viewport(0, 0, canvas!.width, canvas!.height);
-      gl!.clearColor(0, 0, 0, 0);
-      gl!.clear(gl!.COLOR_BUFFER_BIT);
-      gl!.useProgram(program);
-      gl!.bindBuffer(gl!.ARRAY_BUFFER, buffer);
-      const position = gl!.getAttribLocation(program, "aPosition");
-      gl!.enableVertexAttribArray(position);
-      gl!.vertexAttribPointer(position, 2, gl!.FLOAT, false, 0, 0);
-      gl!.activeTexture(gl!.TEXTURE0);
-      gl!.bindTexture(gl!.TEXTURE_2D, texture);
-      gl!.uniform1i(gl!.getUniformLocation(program, "uPortrait"), 0);
-      gl!.activeTexture(gl!.TEXTURE1);
-      gl!.bindTexture(gl!.TEXTURE_2D, closedTexture);
-      gl!.uniform1i(gl!.getUniformLocation(program, "uClosedEyes"), 1);
-      gl!.uniform4f(gl!.getUniformLocation(program, "uFace"),
-        current.blink, current.mouth, current.smile, current.surprise);
-      gl!.uniform4f(gl!.getUniformLocation(program, "uMotion"),
-        current.lookX, current.lookY, current.worried, now / 1000);
-      gl!.drawArrays(gl!.TRIANGLE_STRIP, 0, 4);
+
+      ctx!.clearRect(0, 0, renderSize, renderSize);
+      ctx!.save();
+      ctx!.scale(renderSize / 640, renderSize / 640);
+      ctx!.drawImage(base, 0, 0, 640, 640);
+      if (!motionQuery.matches) {
+        drawEyes(current.gazeX, current.gazeY);
+        drawBlink(current.blink, true);
+        drawBlink(current.blink, false);
+        drawExpression(current);
+      }
+      ctx!.restore();
     }
 
-    try {
-      const vert = compileShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
-      const frag = compileShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
-      program = gl.createProgram();
-      if (!program) throw new Error("Unable to create Berni program");
-      gl.attachShader(program, vert);
-      gl.attachShader(program, frag);
-      gl.linkProgram(program);
-      gl.deleteShader(vert);
-      gl.deleteShader(frag);
-      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        throw new Error(gl.getProgramInfoLog(program) || "Berni WebGL link failed");
-      }
-      buffer = gl.createBuffer();
-      if (!buffer) throw new Error("Unable to create Berni vertex buffer");
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-        -1, -1, 1, -1, -1, 1, 1, 1,
-      ]), gl.STATIC_DRAW);
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
-      canvas.width = Math.min(512, Math.max(64, Math.round(size * dpr)));
-      canvas.height = canvas.width;
-      texture = gl.createTexture();
-      if (!texture) throw new Error("Unable to create Berni texture");
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      closedTexture = gl.createTexture();
-      if (!closedTexture) throw new Error("Unable to create Berni eyelid texture");
-      gl.bindTexture(gl.TEXTURE_2D, closedTexture);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    } catch (error) {
-      if (process.env.NODE_ENV !== "production") console.warn("Berni graphics fallback", error);
-      if (program) gl.deleteProgram(program);
-      if (buffer) gl.deleteBuffer(buffer);
-      if (texture) gl.deleteTexture(texture);
-      if (closedTexture) gl.deleteTexture(closedTexture);
-      canvas.removeEventListener("berni-force-blink", onBlink);
-      document.removeEventListener("visibilitychange", onPageVisibility);
-      return;
+    function visibilityChanged() {
+      if (active && !document.hidden && visible && !raf) raf = requestAnimationFrame(render);
     }
-
-    function loadImage(url: string): Promise<HTMLImageElement> {
-      return new Promise((resolve, reject) => {
-        const img = new window.Image();
-        img.onload = () => resolve(img);
-        img.onerror = () => reject(new Error("Berni image unavailable: " + url));
-        img.src = url;
-      });
-    }
-    void Promise.all([loadImage(SOURCE), loadImage(CLOSED_EYES)])
-      .then(([portrait, eyelid]) => {
-        if (!alive || !texture || !closedTexture) return;
-        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,
-          gl.UNSIGNED_BYTE, portrait);
-        gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, closedTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,
-          gl.UNSIGNED_BYTE, eyelid);
-        draw(performance.now());
-        setLoaded(true);
-        onReady?.();
-      })
-      .catch(() => {
-        // Never hide the matching static portrait if a texture fails to load.
-      });
+    canvas.addEventListener("berni-blink-now", onForceBlink);
+    document.addEventListener("visibilitychange", visibilityChanged);
     if ("IntersectionObserver" in window) {
-      observer = new IntersectionObserver(entries => {
-        visible = entries[0]?.isIntersecting ?? true;
-        if (visible && !raf && !document.hidden) raf = requestAnimationFrame(draw);
+      watcher = new IntersectionObserver(entries => {
+        visible = !!entries[0]?.isIntersecting;
         if (!visible && raf) { cancelAnimationFrame(raf); raf = 0; }
-      }, { threshold: 0 });
-      observer.observe(canvas);
+        if (visible && !raf && !document.hidden) raf = requestAnimationFrame(render);
+      });
+      watcher.observe(canvas);
     }
+
+    // Eyelids are optional. Even if the reference cannot load, the neutral
+    // illustration remains OPEN and the mouth keeps animating.
+    void Promise.all([
+      load(BASE),
+      load(EYELIDS).catch(() => null),
+    ]).then(([main, closed]) => {
+      if (!active) return;
+      base = main;
+      lids = closed;
+      ctx.drawImage(main, 0, 0, canvas.width, canvas.height);
+      setReady(true);
+      if (!raf && visible && !document.hidden) raf = requestAnimationFrame(render);
+    }).catch(() => {
+      // The Next Image under the canvas is the no-JS/no-image fallback.
+    });
+
     return () => {
-      alive = false;
+      active = false;
       if (raf) cancelAnimationFrame(raf);
-      observer?.disconnect();
-      canvas.removeEventListener("berni-force-blink", onBlink);
-      document.removeEventListener("visibilitychange", onPageVisibility);
-      if (texture) gl.deleteTexture(texture);
-      if (closedTexture) gl.deleteTexture(closedTexture);
-      if (buffer) gl.deleteBuffer(buffer);
-      if (program) gl.deleteProgram(program);
+      watcher?.disconnect();
+      canvas.removeEventListener("berni-blink-now", onForceBlink);
+      document.removeEventListener("visibilitychange", visibilityChanged);
     };
-  }, [size, onReady]);
+  }, [size]);
 
   return (
     <canvas
-      ref={canvasRef}
+      ref={ref}
       data-testid="berni-continuous-face"
-      data-ready={loaded ? "true" : "false"}
+      data-ready={ready ? "true" : "false"}
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 h-full w-full"
-      style={{ opacity: loaded ? 1 : 0, transition: "opacity 120ms ease-out" }}
+      style={{ opacity: ready ? 1 : 0, transition: "opacity 140ms ease-in-out" }}
     />
   );
 }
