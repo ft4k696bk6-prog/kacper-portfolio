@@ -18,7 +18,7 @@ export async function browserLibrary(key:ExtName):Promise<any>{
  const promise=new Promise<any>((resolve,reject)=>{
   const script=document.createElement("script");script.src=spec.url;script.integrity=spec.integrity;script.crossOrigin="anonymous";script.async=true;
   const timeout=window.setTimeout(()=>{script.remove();reject(Error("Library download timed out."));},25000);
-  script.onload=()=>{window.clearTimeout(timeout);const value=(window as any)[spec.name];value?resolve(value):reject(Error("Library did not initialize."));};
+  script.onload=()=>{window.clearTimeout(timeout);const value=(window as any)[spec.name];if(value)resolve(value);else reject(Error("Library did not initialize."));};
   script.onerror=()=>{window.clearTimeout(timeout);script.remove();reject(Error("Unable to download library. Check your network or ad blocker."));};
   document.head.appendChild(script);
  });
