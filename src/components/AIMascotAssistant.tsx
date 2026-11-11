@@ -11,6 +11,7 @@ import type { AvailableBookingDay } from "@/lib/calcom";
 import { COOKIE_CONSENT_EVENT, COOKIE_CONSENT_KEY, type CookieConsentState } from "@/lib/preferences";
 import { localizedToolPath } from "@/lib/toolbox-en";
 import { verifyCompanionIpCity } from "@/lib/companion-verified-location";
+import { classifyCompanionActivity, pickCompanionActivityNudge, type CompanionActivity } from "@/lib/companion-activity";
 import {
   getCompanionContext,
   pickCompanionNudge,
@@ -248,6 +249,7 @@ export function AIMascotAssistant() {
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
   const widgetRef = useRef<HTMLDivElement | null>(null);
+  const activityHistoryRef = useRef<{ lastKey: CompanionActivity | null; lastAt: number; shownAt: Record<string, number> }>({ lastKey: null, lastAt: 0, shownAt: {} });
   const [mobileViewport,setMobileViewport] = useState({height:0,top:0});
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const locale = lang === "pl" ? "pl-PL" : "en-US";
@@ -440,6 +442,84 @@ export function AIMascotAssistant() {
     timer = window.setTimeout(maybeShow, alreadyShown === 0 ? 10500 : 120000);
     return () => window.clearTimeout(timer);
   }, [mounted, introFinished, nudgeSettingsLoaded, cookieBannerVisible, hidden, open, nudge, nudgesDisabled, pathname, lang, serverContext]);
+
+  // React to the actual page/section/card being explored, not just the URL.
+  // All messages are local, bilingual and use the existing no-repeat memory.
+  useEffect(() => {
+    if (!mounted || !introFinished || cookieBannerVisible || hidden || open || nudgesDisabled) return;
+    let timer: number | undefined;
+    let disposed = false;
+
+    const showActivity = (key: CompanionActivity | null, delay = 1300) => {
+      if (!key) return;
+      if (timer !== undefined) window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (disposed || document.visibilityState !== "visible" || document.documentElement.dataset.homeIntro === "running") return;
+        const active = document.activeElement;
+        if (active instanceof HTMLElement && (["INPUT", "TEXTAREA", "SELECT"].includes(active.tagName) || active.isContentEditable)) return;
+        const now = Date.now();
+        const tracker = activityHistoryRef.current;
+        // Repeated clicks on one game or tool do not generate repeated popups.
+        if (now - (tracker.shownAt[key] ?? 0) < 95000 || now - tracker.lastAt < 4200) return;
+        const memory = readNudgeMemory();
+        const selected = pickCompanionActivityNudge(
+          key, pathname.startsWith("/en") ? "en" : lang, memory.ids, memory.texts,
+        );
+        activityHistoryRef.current = {
+          lastKey: key,
+          lastAt: now,
+          shownAt: { ...tracker.shownAt, [key]: now },
+        };
+        setNudge(selected);
+        writeNudgeMemory(memory, selected);
+      }, delay);
+    };
+
+    const routeContext = classifyCompanionActivity(pathname + window.location.search + window.location.hash);
+    if (routeContext) showActivity(routeContext, 1700);
+
+    const onClick = (event: MouseEvent) => {
+      if (!(event.target instanceof Element) || widgetRef.current?.contains(event.target)) return;
+      const control = event.target.closest("a, button, [role='button'], [data-project], [data-tool], [data-game]");
+      if (!control) return;
+      const hint = [
+        control.getAttribute("href"),
+        control.getAttribute("aria-label"),
+        control.getAttribute("data-project"),
+        control.getAttribute("data-tool"),
+        control.getAttribute("data-game"),
+        control.textContent?.trim().slice(0, 650),
+      ].filter(Boolean).join(" ");
+      const activity = classifyCompanionActivity(hint);
+      if (activity) showActivity(activity, 1100);
+    };
+
+    const onHashChange = () =>
+      showActivity(classifyCompanionActivity(window.location.hash), 1200);
+    document.addEventListener("click", onClick, true);
+    window.addEventListener("hashchange", onHashChange);
+
+    // The homepage is a single route: entering a section must still be noticed.
+    const observer = typeof IntersectionObserver !== "undefined"
+      ? new IntersectionObserver(entries => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting || entry.intersectionRatio < 0.5) continue;
+            const key = classifyCompanionActivity("#" + (entry.target as HTMLElement).id);
+            if (key) showActivity(key, 2100);
+          }
+        }, { threshold: [0.5] })
+      : null;
+    document.querySelectorAll<HTMLElement>("#projects, #realizacje, #tools, #narzedzia, #games, #minigry, #contact, #kontakt, #services, #uslugi")
+      .forEach(element => observer?.observe(element));
+
+    return () => {
+      disposed = true;
+      if (timer !== undefined) window.clearTimeout(timer);
+      document.removeEventListener("click", onClick, true);
+      window.removeEventListener("hashchange", onHashChange);
+      observer?.disconnect();
+    };
+  }, [mounted, introFinished, cookieBannerVisible, hidden, open, nudgesDisabled, pathname, lang]);
 
   useEffect(() => {
     if (!nudge) return;
