@@ -36,6 +36,17 @@ describe("Berni cinematic animation selection",()=>{
   }
   expect(new Set(seen).size).toBeGreaterThanOrEqual(6);
  });
+ it("never exposes instant full-face swaps during rapid mixed mood switching",()=>{
+   const mem=emptyTransitionMemory();
+   for(let i=0;i<30;i++){
+     const a=i%2===0?"idle":"happy";
+     const b=i%2===0?"surprised":"typing";
+     const chosen=chooseBerniTransition(a,b,100000+i*190,mem,()=>.92);
+     expect(chosen,"No transition for a large facial change").not.toBeNull();
+     const center=berniTransitionFrame(chosen!.name,.5);
+     expect(center.opacity).toBe(0);
+   }
+ });
  it("uses medium effects for mouth changes and longer cooldowns for impressive spins",()=>{
   expect(transitionLevel("idle","happy")).toBe("medium");
   expect(transitionLevel("typing","thinking")).toBe("medium");
