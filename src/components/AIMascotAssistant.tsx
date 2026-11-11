@@ -245,6 +245,8 @@ export function AIMascotAssistant() {
   const [turnstileToken, setTurnstileToken] = useState("");
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
+  const widgetRef = useRef<HTMLDivElement | null>(null);
+  const [mobileViewport,setMobileViewport] = useState({height:0,top:0});
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const locale = lang === "pl" ? "pl-PL" : "en-US";
   const timeZone = process.env.NEXT_PUBLIC_CALENDAR_TIMEZONE || DEFAULT_BOOKING_TIME_ZONE;
@@ -252,10 +254,10 @@ export function AIMascotAssistant() {
     ? "bottom-[14.5rem] right-4 md:bottom-4"
     : "bottom-4 right-4";
   const companionPanelPositionClass = isCompactViewport
-    ? "bottom-[calc(100%+0.7rem)] right-0 w-[min(21.5rem,calc(100vw-1.25rem))]"
+    ? "inset-x-0 top-0 w-screen"
     : "bottom-[calc(100%+0.9rem)] right-0 w-[24rem]";
   const companionPanelSizeClass = isCompactViewport
-    ? "h-[min(36rem,calc(100dvh-9.5rem))]"
+    ? "h-[100dvh]"
     : "h-[min(36rem,calc(100dvh-10rem))]";
   useEffect(() => {
     setMounted(true);
@@ -304,6 +306,40 @@ export function AIMascotAssistant() {
       window.removeEventListener("storage", handleStorage);
     };
   }, []);
+
+  // Close on outside interaction and keep the panel inside the visible viewport above iOS keyboard.
+  useEffect(()=>{
+    if(!open)return;
+    const onOutside=(event:PointerEvent)=>{
+      if(event.target instanceof Node&&!widgetRef.current?.contains(event.target))setOpen(false);
+    };
+    const onEscape=(event:KeyboardEvent)=>{
+      if(event.key==="Escape"){setOpen(false);inputRef.current?.blur();}
+    };
+    document.addEventListener("pointerdown",onOutside);
+    document.addEventListener("keydown",onEscape);
+    return()=>{document.removeEventListener("pointerdown",onOutside);document.removeEventListener("keydown",onEscape);};
+  },[open]);
+  useEffect(()=>{
+    if(!open||!isCompactViewport)return;
+    const viewport=window.visualViewport;
+    const sync=()=>setMobileViewport({
+      height:Math.max(1,Math.round(viewport?.height??window.innerHeight)),
+      top:Math.max(0,Math.round(viewport?.offsetTop??0))
+    });
+    sync();
+    viewport?.addEventListener("resize",sync);
+    viewport?.addEventListener("scroll",sync);
+    window.addEventListener("resize",sync);
+    const original=document.body.style.overflow;
+    document.body.style.overflow="hidden";
+    return()=>{
+      viewport?.removeEventListener("resize",sync);
+      viewport?.removeEventListener("scroll",sync);
+      window.removeEventListener("resize",sync);
+      document.body.style.overflow=original;
+    };
+  },[open,isCompactViewport]);
 
   // Display the static chat bubble after the home intro.
   useEffect(() => {
@@ -442,7 +478,7 @@ export function AIMascotAssistant() {
     if (prefill) {
       setInput(prefill);
     }
-    window.setTimeout(() => inputRef.current?.focus(), 80);
+    window.setTimeout(() => {if(!window.matchMedia("(max-width: 767px)").matches)inputRef.current?.focus();}, 80);
   }
 
   function hideMascot() {
@@ -457,7 +493,7 @@ export function AIMascotAssistant() {
     localStorage.removeItem(HIDDEN_UNTIL_KEY);
     setHidden(false);
     setOpen(true);
-    window.setTimeout(() => inputRef.current?.focus(), 80);
+    window.setTimeout(() => {if(!window.matchMedia("(max-width: 767px)").matches)inputRef.current?.focus();}, 80);
   }
 
   function scrollToStaticSection(hash: "#projects" | "#services" | "#contact") {
@@ -553,7 +589,7 @@ export function AIMascotAssistant() {
       setError(caughtError instanceof Error ? caughtError.message : t.aiMascot.errorMessage);
     } finally {
       setLoading(false);
-      inputRef.current?.focus();
+      if(!window.matchMedia("(max-width: 767px)").matches)inputRef.current?.focus();
     }
   }
 
@@ -761,6 +797,7 @@ export function AIMascotAssistant() {
           <div
             className={`fixed z-[75] ${restorePositionClass}`}
             data-ai-chat-widget
+            ref={widgetRef}
           >
             <div className="relative">
               
@@ -768,7 +805,8 @@ export function AIMascotAssistant() {
                   <aside
                     role="dialog"
                     aria-label={t.aiMascot.chatTitle}
-                    className={`absolute z-30 flex max-h-[min(36rem,calc(100dvh-7rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/95 shadow-[0_28px_90px_rgba(0,0,0,0.58)] backdrop-blur-2xl ${companionPanelPositionClass} ${companionPanelSizeClass}`}
+                    className={`${isCompactViewport?"fixed z-30 flex max-h-none flex-col overflow-hidden border-0 bg-[#080808] shadow-2xl":"absolute z-30 flex max-h-[min(36rem,calc(100dvh-7rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/95 shadow-[0_28px_90px_rgba(0,0,0,0.58)] backdrop-blur-2xl"} ${companionPanelPositionClass} ${companionPanelSizeClass}`}
+                    style={isCompactViewport&&mobileViewport.height?{top:mobileViewport.top,height:mobileViewport.height,maxHeight:mobileViewport.height,paddingBottom:"env(safe-area-inset-bottom)"}:undefined}
                   >
                     <div className="flex items-start justify-between gap-3 border-b border-white/[0.07] px-4 py-3">
                       <div className="min-w-0">
@@ -800,7 +838,7 @@ export function AIMascotAssistant() {
                     <div
                       ref={scrollAreaRef}
                       aria-live="polite"
-                      className="min-h-0 max-h-80 flex-1 space-y-2 overflow-y-auto px-4 py-3"
+                      className="min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain px-4 py-3 md:max-h-80"
                     >
                       {messages.slice(booking.step === "idle" ? -5 : -3).map((message) => (
                         <div
@@ -899,7 +937,7 @@ export function AIMascotAssistant() {
                             placeholder={t.aiMascot.placeholder}
                             rows={1}
                             maxLength={250}
-                            className="max-h-28 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-6 text-white outline-none placeholder:text-white/70"
+                            className="max-h-28 min-h-10 min-w-0 flex-1 resize-none bg-transparent px-2 py-2 text-base leading-6 text-white outline-none placeholder:text-white/70 md:text-sm"
                           />
                           <button
                             type="submit"
@@ -1051,14 +1089,14 @@ export function AIMascotAssistant() {
               value={bookingName}
               onChange={(event) => setBookingName(event.target.value)}
               placeholder={t.aiMascot.booking.name}
-              className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[var(--brand-accent)]"
+              className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-base text-white outline-none focus:border-[var(--brand-accent)] md:text-sm"
             />
             <input
               value={bookingEmail}
               onChange={(event) => setBookingEmail(event.target.value)}
               placeholder={t.aiMascot.booking.email}
               type="email"
-              className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-[var(--brand-accent)]"
+              className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 text-base text-white outline-none focus:border-[var(--brand-accent)] md:text-sm"
             />
             <textarea
               value={bookingTopic}
