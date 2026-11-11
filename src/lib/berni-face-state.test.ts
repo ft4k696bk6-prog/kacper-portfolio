@@ -9,7 +9,7 @@ describe("Berni blink must always reopen", () => {
     expect(faceTargetForMood("idle")).not.toBe(first);
   });
   it("survives thousands of successive blink pulses without staying closed", () => {
-    let face = createNeutralFace();
+    const face = createNeutralFace();
     for (let frame = 0; frame < 3000; frame++) {
       const target = faceTargetForMood("idle");
       const since = (frame % 200) / 60;
