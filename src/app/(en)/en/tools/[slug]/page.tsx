@@ -7,6 +7,7 @@ import { visibleEnglishToolboxItems } from "@/lib/toolbox-visibility";
 import { EnglishToolRunner } from "@/components/EnglishToolRunner";
 import { EnglishFullWebsiteAuditRunner } from "@/components/EnglishFullWebsiteAuditRunner";
 import { VatCalculator } from "@/components/VatCalculator";
+import { PdfEditor } from "@/components/PdfEditor";
 
 type Params={params:Promise<{slug:string}>};
 const site="https://bernecki.dev";
@@ -16,7 +17,7 @@ export async function generateMetadata({params}:Params):Promise<Metadata>{
  const url=site+"/en/tools/"+slug;
  return {
   title:tool.title+" | bernecki.dev",
-  description:tool.description+" Free to use, with no registration required.",
+  description:tool.description+" Free online with no registration, no login and no credit card required.",
   alternates:{canonical:url,languages:{en:url,"pl-PL":site+"/narzedzia/"+tool.slug}},
   openGraph:{title:tool.title+" | bernecki.dev",description:tool.description,url,type:"website",locale:"en_US"}
  };
@@ -45,9 +46,9 @@ export default async function EnglishToolPage({params}:Params){
   </nav>
   <header className="mb-10 mt-12"><p className="page-eyebrow">{tool.category} <span className="mx-2">/</span> FREE ONLINE TOOL</p>
    <h1 className="mt-5 max-w-5xl">{tool.title}</h1><p className="page-intro mt-6 max-w-3xl text-base md:text-lg">{tool.description}</p>
-   <div className="mt-6 flex flex-wrap gap-3 text-xs text-white/60"><span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-2"><ShieldCheck size={14}/> No sign-up</span><span className="rounded-full border border-white/15 px-3 py-2">Results immediately</span><span className="rounded-full border border-white/15 px-3 py-2">Export or copy results</span></div>
+   <div className="mt-6 flex flex-wrap gap-3 text-xs text-white/60"><span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-2"><ShieldCheck size={14}/> No sign-up</span><span className="rounded-full border border-white/15 px-3 py-2">Results immediately</span><span className="rounded-full border border-white/15 px-3 py-2">No credit card required</span></div>
   </header>
-  {isFull?<EnglishFullWebsiteAuditRunner/>:tool.mode==="vat"?<VatCalculator lang="en"/>:<EnglishToolRunner mode={tool.mode} slug={tool.slug}/>}
+  {isFull?<EnglishFullWebsiteAuditRunner/>:tool.mode==="vat"?<VatCalculator lang="en"/>:tool.mode==="pdf"?<PdfEditor lang="en"/>:<EnglishToolRunner mode={tool.mode} slug={tool.slug}/>}
   {!isFull&&(["Website & SEO","AI & search"].includes(tool.category))&&<Link href={englishToolPath("audyt-strony")} className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/20 bg-[#141414] p-5 transition-colors hover:border-white/50">
    <div><span className="text-xs font-medium text-white/50">One check instead of many</span><h2 className="mt-2 text-base font-medium">Run a combined audit for SEO, images, SSL, DNS and more.</h2></div><span className="inline-flex items-center gap-2 text-sm">Free website audit <ArrowUpRight size={16}/></span>
   </Link>}
