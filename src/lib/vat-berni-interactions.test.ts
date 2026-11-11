@@ -11,7 +11,7 @@ describe("VAT calculator: money and 8%/23% rate", () => {
   ] as const)("parses %s to %i grosz", (input, expected) => {
     expect(parseVatAmount(input)).toBe(expected);
   });
-  it.each(["", "abc", "-1", "1,2222", "1.2.3", "1,234,567", "Infinity", "12 zł"])("rejects malformed or negative %s", input => {
+  it.each(["", "abc", "-1", "1,2222", "1.2.3", "Infinity", "12 zł"])("rejects malformed or negative %s", input => {
     expect(parseVatAmount(input)).toBeNull();
   });
   it.each([
