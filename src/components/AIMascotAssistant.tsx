@@ -11,7 +11,7 @@ import type { AvailableBookingDay } from "@/lib/calcom";
 import { COOKIE_CONSENT_EVENT, COOKIE_CONSENT_KEY, type CookieConsentState } from "@/lib/preferences";
 import { localizedToolPath } from "@/lib/toolbox-en";
 import { BerniCompanion } from "@/components/BerniCompanion";
-import { BerniRendered3D } from "@/components/BerniRendered3D";
+import { BerniCore } from "@/components/BerniCore";
 import { verifyCompanionIpCity } from "@/lib/companion-verified-location";
 import {
   getCompanionContext,
@@ -797,7 +797,7 @@ export function AIMascotAssistant() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 16 }}
           >
-            <span className="inline-block h-7 w-7"><BerniRendered3D mood="sleeping" lang={lang} compact /></span>
+            <span className="inline-block h-7 w-7"><BerniCore mood="sleeping" lang={lang} compact /></span>
             {t.aiMascot.restoreLabel}
           </motion.button>
         ) : null}
@@ -829,7 +829,7 @@ export function AIMascotAssistant() {
                     <div className="flex items-start justify-between gap-3 border-b border-white/[0.07] px-4 py-3">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="inline-block h-8 w-8 shrink-0"><BerniRendered3D mood={loading ? "typing" : "happy"} lang={lang} compact /></span>
+                          <span className="inline-block h-8 w-8 shrink-0"><BerniCore mood={loading ? "typing" : "happy"} lang={lang} compact /></span>
                           <p className="truncate text-sm font-medium text-white">Berni · {lang === "pl" ? "Asystent AI" : "AI assistant"}</p>
                         </div>
                       </div>
