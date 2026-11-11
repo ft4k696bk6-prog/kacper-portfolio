@@ -124,12 +124,19 @@ export function signatureHtml(s:SignatureFields):string {
    (socialRow?'<tr><td>'+socialRow+'</td></tr>':"")+'</tbody></table>';
  }
  if(layout==="stacked"){
-  return '<table '+base+'><tbody><tr><td style="padding:0 0 13px 0">'+(logo?logo:'<span style="font-size:12px;font-weight:700;letter-spacing:1px;color:'+accent+'">'+company+'</span>')+
-   '</td></tr><tr><td style="border-top:3px solid '+accent+';padding:13px 2px 0 0">'+content+'</td></tr></tbody></table>';
+  const brand=logo||'<span style="font-size:14px;font-weight:700;letter-spacing:1px;color:#191919">'+(company||"BRAND")+'</span>';
+  return '<table '+base+'><tbody><tr><td style="padding:16px 20px 18px;background-color:#fafafa;border:1px solid #dedede;border-radius:7px">'+
+   '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse"><tbody>'+
+   '<tr><td style="padding:0 0 13px">'+brand+'</td></tr>'+
+   '<tr><td style="border-top:3px solid '+accent+';padding:14px 0 0">'+content+'</td></tr>'+
+   '</tbody></table></td></tr></tbody></table>';
  }
  if(layout==="compact"){
-  return '<table '+base+'><tbody><tr><td style="vertical-align:middle;padding:4px 20px 4px 0;border-bottom:2px solid '+accent+'">'+content+
-   '</td>'+(logo?'<td style="vertical-align:middle;padding:4px 0 4px 14px;border-bottom:2px solid '+accent+'">'+logo+'</td>':"")+'</tr></tbody></table>';
+  return '<table '+base+'><tbody>'+
+   (company?'<tr><td colspan="2" style="padding:0 0 10px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:'+accent+'">'+company+'</td></tr>':"")+
+   '<tr><td style="vertical-align:middle;padding:6px 22px 12px 0;border-bottom:2px solid '+accent+'">'+content+
+   '</td>'+(logo?'<td style="vertical-align:middle;padding:6px 0 12px 14px;border-bottom:2px solid '+accent+'">'+logo+'</td>':"")+'</tr>'+
+   '</tbody></table>';
  }
  return '<table '+base+'><tbody><tr>'+(logo?'<td style="vertical-align:middle;padding:5px 17px 5px 0">'+logo+'</td>':"")+
   '<td style="vertical-align:middle;border-left:3px solid '+accent+';padding:7px 0 7px 16px">'+content+'</td></tr></tbody></table>';
