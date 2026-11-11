@@ -213,7 +213,8 @@ export function BerniLivingFace({
       lastPaint = now;
 
       const status = live.current.mood;
-      // Always allocate a fresh frame target; automatic blink must not mutate presets.\n      const target = faceTargetForMood(status);
+      // Always use a new frame target; never mutate the neutral preset.
+      const target = faceTargetForMood(status);
       if (!motionQuery.matches) {
         if (now >= nextBlink && status !== "sleeping") {
           lastBlink = now;
