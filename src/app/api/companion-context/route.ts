@@ -38,7 +38,17 @@ export async function GET(request: NextRequest) {
   const country = request.headers.get("x-vercel-ip-country")?.slice(0, 2) || null;
   const lat = readCoordinate(request.headers.get("x-vercel-ip-latitude"), -90, 90);
   const lon = readCoordinate(request.headers.get("x-vercel-ip-longitude"), -180, 180);
-  const location = { city, country, approximate: true };
+  // The IP result is a *candidate*, not the user's verified town.
+  // The client never displays it without independent, previously permitted
+  // browser location that agrees within a small distance.
+  const location = {
+    city: null,
+    country,
+    approximate: true as const,
+    candidate: city && lat !== null && lon !== null
+      ? { city, latitude: lat, longitude: lon }
+      : null,
+  };
   const responseHeaders = { "Cache-Control": "private, no-store" };
 
   // Do not ask for precise browser location. A coarse Vercel IP position is optional.
