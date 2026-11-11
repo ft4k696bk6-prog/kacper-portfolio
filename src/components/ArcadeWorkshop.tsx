@@ -51,7 +51,7 @@ export function ArcadeWorkshop({lang}:{lang:"pl"|"en"}){
  const [mines,setMines]=useState<MineCell[]>([]);const [flagging,setFlagging]=useState(false);const [mineLost,setMineLost]=useState(false);
  const [word,setWord]=useState("");const [wordGuess,setWordGuess]=useState("");const [wordRows,setWordRows]=useState<string[]>([]);
  const [typed,setTyped]=useState("");const [typingStart,setTypingStart]=useState(0);const [seconds,setSeconds]=useState(0);
- const memoryTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+ const memoryTimer=useRef<number|null>(null);
  const [balloonScore,setBalloonScore]=useState(0);const [target,setTarget]=useState(0);
  const answer=useMemo(()=>word||((en?wordsEN:wordsPL)[0]),[word,en]);
  const resetSnake=()=>{const start=blankSnake();setSnake(start);snakeRef.current=start;snakeDir.current={x:1,y:0};setSnakeFood({x:13,y:8});snakeFoodRef.current={x:13,y:8};setSnakePlaying(false);setSnakeDead(false);setSnakeScore(0);};
