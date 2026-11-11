@@ -7,11 +7,12 @@ import { signatureHtml, signatureSafeLink, SIGNATURE_SOCIALS } from "@/lib/every
 import type { SignatureFields, SignatureLayout, SignatureSocial } from "@/lib/everyday-utils";
 import { makeSignatureGif } from "@/lib/signature-animation";
 import { loadSignatureSceneAssets, renderSignatureScene } from "@/lib/signature-scenes";
+import { signatureProgressAt } from "@/lib/signature-timing";
 import type { SignatureMotion } from "@/lib/signature-animation";
 
 const initial:SignatureFields={
  name:"",role:"",company:"",email:"",phone:"",website:"",
- accent:"#858585",layout:"side",logoWidth:110,language:"pl",socials:{}
+ accent:"#858585",layout:"side",logoWidth:110,photoFocusX:50,photoFocusY:42,language:"pl",socials:{}
 };
 const inputStyle="mt-2 w-full min-w-0 rounded-xl border border-white/20 bg-[#090909] px-4 py-3 text-base text-white outline-none placeholder:text-white/35 focus:border-white/60 sm:text-sm";
 const templates:{id:SignatureLayout;pl:string;en:string;hintPL:string;hintEN:string}[]=[
@@ -36,7 +37,7 @@ function BrandGlyph({id}:{id:SignatureSocial}){
 }
 
 
-function SignatureSceneCanvas({fields,motion,replay,thumbnail=false}:{fields:SignatureFields;motion:SignatureMotion;replay:number;thumbnail?:boolean}){
+function SignatureSceneCanvas({fields,motion,replay,thumbnail=false,loop=false}:{fields:SignatureFields;motion:SignatureMotion;replay:number;thumbnail?:boolean;loop?:boolean}){
  const canvas=useRef<HTMLCanvasElement>(null);
  useEffect(()=>{
   let canceled=false,frameId=0;
@@ -53,22 +54,23 @@ function SignatureSceneCanvas({fields,motion,replay,thumbnail=false}:{fields:Sig
    const frame=(stamp:number)=>{
     if(canceled)return;
     if(started<0)started=stamp;
-    const p=Math.min(1,(stamp-started)/2350);
+    const elapsed=stamp-started;
+    const p=signatureProgressAt(elapsed,loop);
     renderSignatureScene(validCtx,fields,motion,p,assets);
-    if(p<1)frameId=requestAnimationFrame(frame);
+    if(loop||p<1)frameId=requestAnimationFrame(frame);
    };
    frameId=requestAnimationFrame(frame);
   });
   return()=>{canceled=true;cancelAnimationFrame(frameId);};
- },[fields,motion,replay,thumbnail]);
+ },[fields,motion,replay,thumbnail,loop]);
  return <canvas ref={canvas} width={520} height={208} aria-hidden={thumbnail} aria-label={thumbnail?undefined:"Animowany podgląd stopki e-mail"} className="block h-auto w-full" style={{aspectRatio:"520 / 208"}}/>;
 }
 
-function GeometryCardPreview({fields,socials,gif,replay,lang,motion}:{fields:SignatureFields;socials:Partial<Record<SignatureSocial,string>>;gif:string;replay:number;lang:"pl"|"en";motion:SignatureMotion}){
+function GeometryCardPreview({fields,socials,gif,replay,lang,motion,loop}:{fields:SignatureFields;socials:Partial<Record<SignatureSocial,string>>;gif:string;replay:number;lang:"pl"|"en";motion:SignatureMotion;loop:boolean}){
  const valid=SIGNATURE_SOCIALS.flatMap(item=>{const href=signatureSafeLink(socials[item.id]||"");return href?[{item,href}]:[];});
  const premium=["geometry","slices","cinematic"].includes(motion);
  const scene=gif?<img key={replay} src={gif} alt={lang==="en"?"Animated email signature":"Animowana stopka e-mail"} width={520} height={208} className="block h-auto w-full"/>:
-  <SignatureSceneCanvas fields={fields} motion={motion} replay={replay}/>;
+  <SignatureSceneCanvas fields={fields} motion={motion} replay={replay} loop={loop}/>;
  return <div className="mx-auto w-full max-w-[578px] overflow-hidden rounded-xl border border-[#dcdbe0] bg-white text-[#1b1b20]" aria-label={lang==="en"?"Actual signature and animation preview":"Podgląd rzeczywistej stopki i animacji"}>
   <div className="flex items-stretch">
    {premium&&<div className="flex w-[12%] min-w-10 shrink-0 flex-col items-center gap-2 border-r border-[#e4e2e8] bg-[#faf9fb] p-1.5 sm:w-14">
@@ -91,7 +93,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
  const [fields,setFields]=useState<SignatureFields>({...initial,language:lang});
  const [mode,setMode]=useState<"static"|"animated">("static");
  const [motion,setMotion]=useState<SignatureMotion>("geometry");
- const [loop,setLoop]=useState(false);
+ const [loop,setLoop]=useState(true);
  const [enabled,setEnabled]=useState<Partial<Record<SignatureSocial,boolean>>>({});
  const [uploadNames,setUploadNames]=useState<{logo:string;photo:string}>({logo:"",photo:""});
  const [errors,setErrors]=useState<{logo:string;photo:string}>({logo:"",photo:""});
@@ -124,7 +126,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
  };
  const changeMode=(value:"static"|"animated")=>{setMode(value);if(value==="animated")setMotion("geometry");invalidateGif();setNotice("");setReplay(v=>v+1);};
  const reset=()=>{
-  setFields({...initial,language:lang});setMode("static");setMotion("geometry");setLoop(false);setEnabled({});
+  setFields({...initial,language:lang});setMode("static");setMotion("geometry");setLoop(true);setEnabled({});
   setUploadNames({logo:"",photo:""});setErrors({logo:"",photo:""});
   setHostedGif("");setNotice("");setShowCode(false);invalidateGif();
  };
@@ -248,6 +250,21 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
      <h3 className="text-base font-semibold">{en?"3. Logo and profile picture":"3. Logo i zdjęcie"}</h3>
      <p className="mt-2 text-xs leading-5 text-white/55">{en?"Your images remain in the browser. For a signature installed in email, hosted HTTPS images are recommended.":"Wgrywane zdjęcia pozostają w przeglądarce. Do trwałej stopki w poczcie najlepiej używać grafik dostępnych przez HTTPS."}</p>
      <div className="mt-4 grid gap-4 sm:grid-cols-2">{uploadBox("logo","Wgraj logo","Upload logo")}{uploadBox("photo","Dodaj zdjęcie","Add portrait")}</div>
+     <div className="mt-4 rounded-xl border border-white/15 bg-black/20 p-4">
+      <div className="flex items-center justify-between gap-3">
+       <span className="text-sm font-medium text-white/85">{en?"Portrait framing":"Kadrowanie zdjęcia"}</span>
+       <button type="button" className="text-xs text-white/60 underline underline-offset-4 hover:text-white" onClick={()=>{setFields(prev=>({...prev,photoFocusX:50,photoFocusY:42}));invalidateGif();}}>{en?"Reset crop":"Wyśrodkuj"}</button>
+      </div>
+      <p className="mt-1 text-xs leading-5 text-white/50">{en?"Move your portrait within the diagonal cutouts, so the face stays visible.":"Dostosuj pozycję zdjęcia w ukośnych wycinkach, żeby twarz nie była ucięta."}</p>
+      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+       <label className="text-xs text-white/70">{en?"Horizontal position":"Pozycja pozioma"}: {fields.photoFocusX??50}%
+        <input type="range" className="mt-2 w-full accent-white" min="0" max="100" step="5" value={fields.photoFocusX??50} onChange={e=>set("photoFocusX",Number(e.target.value))}/>
+       </label>
+       <label className="text-xs text-white/70">{en?"Vertical position":"Pozycja pionowa"}: {fields.photoFocusY??42}%
+        <input type="range" className="mt-2 w-full accent-white" min="0" max="100" step="5" value={fields.photoFocusY??42} onChange={e=>set("photoFocusY",Number(e.target.value))}/>
+       </label>
+      </div>
+     </div>
      <div className="mt-4 grid gap-4 sm:grid-cols-2">
       <label className="flex items-center justify-between rounded-xl border border-white/15 p-3 text-xs text-white/75">{en?"Accent colour":"Kolor akcentu"}<input type="color" className="h-9 w-12 bg-transparent" value={fields.accent} onChange={event=>set("accent",event.target.value)}/></label>
       <label className="rounded-xl border border-white/15 px-3 py-2 text-xs text-white/75">{en?"Logo width":"Szerokość logo"}: {fields.logoWidth} px
@@ -277,7 +294,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
       </button>)}</div>
       <label className="mt-4 flex cursor-pointer items-center gap-3 rounded-xl border border-white/15 bg-black/20 p-3 text-xs text-white/75">
        <input type="checkbox" className="h-4 w-4 accent-white" checked={loop} onChange={event=>{setLoop(event.target.checked);invalidateGif();}}/>
-       <span>{en?"Loop animation (off: plays once, stays complete)":"Powtarzaj animację w pętli (domyślnie odtworzy się raz i zostanie gotowa stopka)"}</span>
+       <span>{en?"Repeat reveal, hold and reverse like the reference video":"Powtarzaj animację jak na nagraniu: odsłanianie, pauza i ponowne składanie"}</span>
       </label>
       <button type="button" disabled={busy} onClick={makeGif} className="brand-action mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium disabled:opacity-50"><Sparkles size={17}/>{busy?(en?"Generating GIF…":"Generowanie GIF…"):(en?"Generate animated GIF":"Generuj animowany GIF")}</button>
       {gifBlob&&<button type="button" onClick={()=>download(gifBlob,"animowana-stopka-bernecki.gif")} className="mt-2 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-white/30 px-4 text-sm"><Download size={16}/>{en?"Download GIF":"Pobierz GIF"}</button>}
@@ -296,7 +313,7 @@ export function EmailSignatureBuilder({lang}:{lang:"pl"|"en"}){
     </div>
     <div className="mt-4 min-w-0 overflow-x-auto rounded-xl border border-[#d5d5d5] bg-white px-2 py-5 sm:p-5">
      {mode==="static"?<div className="w-max min-w-0 max-w-full" aria-label={en?"Static signature preview":"Podgląd zwykłej stopki"} dangerouslySetInnerHTML={{__html:previewHtml}}/>:
-      <GeometryCardPreview fields={fields} socials={socialValues} gif={gifPreview} replay={replay} lang={lang} motion={motion}/>}
+      <GeometryCardPreview fields={fields} socials={socialValues} gif={gifPreview} replay={replay} lang={lang} motion={motion} loop={loop}/>}
     </div>
     <div className="mt-4 grid gap-2 sm:grid-cols-2">
      <button type="button" onClick={copyRich} disabled={mode==="animated"&&!gifData&&!signatureSafeLink(hostedGif)} className="brand-action inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-3 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-45"><Clipboard size={17}/>{en?"Copy signature":"Kopiuj stopkę"}</button>
