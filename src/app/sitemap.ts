@@ -7,6 +7,7 @@ import { realizations } from "../content/realizations";
 import { englishServices, englishRealizations } from "../content/english-business";
 import {blogPosts, BLOG_PUBLISHED_DATE} from "../content/blog";
 import { serviceCities } from "../lib/service-cities";
+import { localOffers } from "../lib/local-offers";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = "https://bernecki.dev";
@@ -41,6 +42,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: siteUrl + "/realizacje", changeFrequency: "monthly", priority: 0.85 },
     { url: siteUrl + "/uslugi", changeFrequency: "monthly", priority: 0.75 },
     ...serviceCities.map(city => ({ url: `${siteUrl}/uslugi/${city.slug}`, changeFrequency: "monthly" as const, priority: 0.7 })),
+    ...localOffers.flatMap(offer =>
+      serviceCities.map(city => ({
+        url: siteUrl + "/oferta/" + offer.slug + "/" + city.slug,
+        changeFrequency: "monthly" as const,
+        priority: 0.78,
+      }))
+    ),
+
     { url: siteUrl + "/polityka-prywatnosci", changeFrequency: "yearly", priority: 0.2 },
     { url: siteUrl + "/wdrozenia-ai-dla-firm", changeFrequency: "monthly", priority: 0.9 },
     { url: siteUrl + "/crm-dla-firm-handlowych", changeFrequency: "monthly", priority: 0.9 },
