@@ -12,6 +12,7 @@ const offers = [
   ["Strony internetowe", "/tworzenie-stron-internetowych"],
   ["CRM i aplikacje webowe", "/crm-i-aplikacje-webowe"],
   ["Marketing i reklamy", "/marketing-i-reklamy"],
+  ["Google Ads – reklamy w Google", "/google-ads-dla-firm"],
   ["AI i automatyzacje", "/wdrozenia-ai-dla-firm"],
   ["Rozwój biznesu", "/rozwoj-biznesu"],
   ["Partner w rozwoju biznesu", "/partner-w-rozwoju-biznesu"],
@@ -91,6 +92,22 @@ export default function ServicesIndex() {
             <div><h3 className="text-lg font-semibold">Jak ustalana jest cena?</h3><p className="mt-2 leading-7 text-white/65">Po poznaniu celu, zakresu funkcji, liczby użytkowników i potrzebnych integracji. Nie podaję jednej ceny dla wszystkich projektów.</p></div>
           </div>
         </section>
+        <section className="mt-14 rounded-3xl border border-white/15 bg-white/[0.04] p-7 md:p-9" aria-labelledby="google-ads-heading">
+          <h2 id="google-ads-heading" className="text-2xl font-semibold">Google Ads, reklamy w Google i audyt kampanii</h2>
+          <p className="mt-4 max-w-3xl leading-7 text-white/65">
+            Pomagam uporządkować wyszukiwane frazy, wykluczenia, pomiar konwersji oraz połączenie kampanii
+            z formularzami i CRM. Kampanie dla firm z całej Polski — w tym Rzeszowa, Lublina i Warszawy.
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link href="/google-ads-dla-firm" className="rounded-full bg-white px-6 py-3 font-semibold text-black">
+              Oferta Google Ads
+            </Link>
+            <Link href="/narzedzia/kalkulator-budzetu-google-ads" className="rounded-full border border-white/25 px-6 py-3 text-white">
+              Darmowy kalkulator budżetu reklam
+            </Link>
+          </div>
+        </section>
+
         <h2 className="mt-14 text-2xl font-semibold">Miasta, dla których przygotowano informacje o ofercie</h2>
         <p className="mt-3 text-white/65">Wybierz miasto i sprawdź zakres współpracy, etapy realizacji oraz dostępne usługi.</p>
         <div className="mt-8 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
