@@ -902,7 +902,7 @@ export function AIMascotAssistant() {
     return () => window.clearInterval(interval);
   }, [mounted, introFinished, open, hidden, cookieBannerVisible, prefersReducedMotion]);
 
-  if (!mounted || cookieBannerVisible || !introFinished) return null;
+  if (!mounted || !introFinished) return null;
 
   return (
     <>
