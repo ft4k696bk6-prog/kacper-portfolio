@@ -27,13 +27,13 @@
   ],
   "rejectedTopics": [],
   "seenIssueUrls": [],
-  "lastRun": "2026-11-09T10:25:58.407Z",
-  "runCount": 4,
+  "lastRun": "2026-11-12T10:44:01.379Z",
+  "runCount": 5,
   "lastSummary": {
     "attempts": 60,
-    "approved": 1,
-    "rejected": 59,
-    "cost": 0.186
+    "approved": 0,
+    "rejected": 60,
+    "cost": 0
   },
   "failureHistory": {
     "Meta Ads: reklama zatwierdzona, ale nie ma wyświetleń": {
@@ -267,253 +267,303 @@
       "reason": "source"
     },
     "SEO: Google pokazuje inny opis niż meta description": {
-      "count": 2,
-      "lastAt": "2026-11-09T10:00:16.723Z",
-      "reason": "link broken"
+      "count": 3,
+      "lastAt": "2026-11-12T09:58:25.437Z",
+      "reason": "provider error"
     },
     "SEO: tag noindex pozostał po wersji testowej": {
-      "count": 2,
-      "lastAt": "2026-11-09T10:00:40.672Z",
-      "reason": "editorial length"
+      "count": 3,
+      "lastAt": "2026-11-12T09:59:12.102Z",
+      "reason": "provider error"
     },
     "SEO: Googlebot otrzymuje 403, użytkownik 200": {
-      "count": 2,
-      "lastAt": "2026-11-09T10:01:00.490Z",
-      "reason": "editorial length"
+      "count": 3,
+      "lastAt": "2026-11-12T09:59:58.488Z",
+      "reason": "provider error"
     },
     "Open Graph: stara miniatura po zmianie logo": {
-      "count": 2,
-      "lastAt": "2026-11-09T10:01:23.431Z",
-      "reason": "source"
+      "count": 3,
+      "lastAt": "2026-11-12T10:00:44.908Z",
+      "reason": "provider error"
     },
     "iCloud+: własna domena skonfigurowana, ale poczta nie dochodzi": {
-      "count": 2,
-      "lastAt": "2026-11-09T10:01:42.898Z",
-      "reason": "editorial length"
+      "count": 3,
+      "lastAt": "2026-11-12T10:01:31.188Z",
+      "reason": "provider error"
     },
     "iCloud: Ukryj mój adres e-mail nie przekazuje wiadomości": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:02:13.049Z",
-      "reason": "independent QA"
+      "count": 2,
+      "lastAt": "2026-11-12T10:02:17.431Z",
+      "reason": "provider error"
     },
     "iCloud Mail: dodany adres bez osobnego hasła do skrzynki": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:02:31.680Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:03:03.727Z",
+      "reason": "provider error"
     },
     "DNS: podwójny SPF powoduje błąd uwierzytelnienia": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:02:54.119Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:03:50.257Z",
+      "reason": "provider error"
     },
     "DNS: nieprawidłowe MX kierują pocztę do starego hostingu": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:03:14.089Z",
-      "reason": "source"
+      "count": 2,
+      "lastAt": "2026-11-12T10:04:36.578Z",
+      "reason": "provider error"
     },
     "DMARC: wiadomości z domeny lądują w spamie": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:03:35.445Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:05:22.802Z",
+      "reason": "provider error"
     },
     "DKIM: podpis nie przechodzi weryfikacji mimo ustawienia rekordu": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:04:03.269Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:06:09.016Z",
+      "reason": "provider error"
     },
     "Cloudflare: proxy DNS psuje weryfikację subdomeny": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:04:25.464Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:06:55.343Z",
+      "reason": "provider error"
     },
     "DNS: subdomena CRM kieruje do złego projektu": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:04:49.529Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:07:41.815Z",
+      "reason": "provider error"
     },
     "SSL: przeglądarka wyświetla ERR_CERT_COMMON_NAME_INVALID": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:05:15.076Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:08:28.101Z",
+      "reason": "provider error"
     },
     "Poczta: formularz wysyła 200, ale wiadomość nie dociera": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:05:39.639Z",
-      "reason": "source"
+      "count": 2,
+      "lastAt": "2026-11-12T10:09:14.423Z",
+      "reason": "provider error"
     },
     "DNS: propagacja zmian trwa dłużej niż planowano": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:06:00.845Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:10:01.084Z",
+      "reason": "provider error"
     },
     "Formularz kontaktowy: wysyła się bez błędu, lecz nie ma maila": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:06:25.444Z",
-      "reason": "source"
+      "count": 2,
+      "lastAt": "2026-11-12T10:10:47.355Z",
+      "reason": "provider error"
     },
     "Formularz: Turnstile token wygasa przed wysłaniem": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:06:43.561Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:11:33.804Z",
+      "reason": "provider error"
     },
     "API: 401 Unauthorized po odświeżeniu strony": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:07:07.592Z",
-      "reason": "source"
+      "count": 2,
+      "lastAt": "2026-11-12T10:12:20.011Z",
+      "reason": "provider error"
     },
     "API: CORS blocked by policy na domenie produkcyjnej": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:07:36.567Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:13:06.393Z",
+      "reason": "provider error"
     },
     "Webhook: serwer zwraca 200, ale zapis nie występuje": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:07:44.713Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:13:52.575Z",
+      "reason": "provider error"
     },
     "Webhook: ten sam event przychodzi wielokrotnie": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:08:06.634Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:14:38.793Z",
+      "reason": "provider error"
     },
     "Formularz: spam mimo honeypota i rate limitu": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:08:26.720Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:15:25.295Z",
+      "reason": "provider error"
     },
     "API: rate limit 429 po krótkim czasie": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:08:45.699Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:16:11.842Z",
+      "reason": "provider error"
     },
     "API: 413 Payload Too Large przy przesyłaniu zdjęć": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:09:07.047Z",
-      "reason": "source"
+      "count": 2,
+      "lastAt": "2026-11-12T10:16:58.066Z",
+      "reason": "provider error"
     },
     "Formularz: walidacja nie pokazuje błędnego pola": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:09:25.345Z",
-      "reason": "link broken"
+      "count": 2,
+      "lastAt": "2026-11-12T10:17:44.336Z",
+      "reason": "provider error"
     },
     "API: błędne odświeżanie access tokena integracji": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:09:49.147Z",
-      "reason": "source"
+      "count": 2,
+      "lastAt": "2026-11-12T10:18:30.546Z",
+      "reason": "provider error"
     },
     "API: różnica content-type psuje parsowanie JSON": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:10:06.884Z",
-      "reason": "source"
+      "count": 2,
+      "lastAt": "2026-11-12T10:19:16.969Z",
+      "reason": "provider error"
     },
     "WordPress: 404 na wpisach po zmianie permalinków": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:10:56.330Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:20:03.283Z",
+      "reason": "provider error"
     },
     "WordPress: mieszana zawartość HTTP i HTTPS": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:11:21.576Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:20:49.596Z",
+      "reason": "provider error"
     },
     "WordPress: formularz nie wysyła wiadomości przez SMTP": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:11:39.193Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:21:35.854Z",
+      "reason": "provider error"
     },
     "WordPress: cache nie pokazuje zmian w edytorze": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:12:01.571Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:22:22.118Z",
+      "reason": "provider error"
     },
     "WordPress: menu mobilne przysłania ekran": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:12:20.473Z",
-      "reason": "editorial length"
+      "count": 2,
+      "lastAt": "2026-11-12T10:23:08.615Z",
+      "reason": "provider error"
     },
     "WordPress: konflikt dwóch wtyczek SEO": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:13:29.696Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:23:54.979Z",
       "reason": "provider error"
     },
     "WordPress: zniknęły obrazki po migracji domeny": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:14:16.525Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:24:41.205Z",
       "reason": "provider error"
     },
     "WooCommerce: checkout nie kończy zamówienia": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:15:03.522Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:25:27.574Z",
       "reason": "provider error"
     },
     "WordPress: przekroczenie limitu pamięci PHP": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:15:50.557Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:26:13.805Z",
       "reason": "provider error"
     },
     "WordPress: nie da się wgrać pliku .webp": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:16:37.205Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:27:00.146Z",
       "reason": "provider error"
     },
     "WordPress: spam w komentarzach po wyłączeniu moderacji": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:17:23.949Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:27:46.536Z",
       "reason": "provider error"
     },
     "Mobile: tekst nachodzi na zdjęcie osoby": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:18:10.631Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:28:33.289Z",
       "reason": "provider error"
     },
     "Mobile: poziomy scroll przez element z position absolute": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:18:57.449Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:29:19.701Z",
       "reason": "provider error"
     },
     "Mobile: przycisk telefon jest za duży w nawigacji": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:19:44.201Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:30:05.972Z",
       "reason": "provider error"
     },
     "CSS: object-fit przycina zdjęcie produktu": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:20:30.950Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:30:52.435Z",
       "reason": "provider error"
     },
     "CSS: fixed header zasłania początek artykułu": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:21:17.736Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:31:39.086Z",
       "reason": "provider error"
     },
     "UX: slider projektów nie daje się przesuwać palcem": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:22:04.444Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:32:25.338Z",
       "reason": "provider error"
     },
     "WWW: logo z białym tłem na ciemnej stronie": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:22:51.229Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:33:11.764Z",
       "reason": "provider error"
     },
     "WWW: za duża pusta przestrzeń nad hero": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:23:38.137Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:33:57.990Z",
       "reason": "provider error"
     },
     "WWW: znikające ikony po aktualizacji biblioteki": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:24:24.770Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:34:44.481Z",
       "reason": "provider error"
     },
     "WWW: brak alt przy ważnych zdjęciach": {
-      "count": 1,
-      "lastAt": "2026-11-09T10:25:11.708Z",
+      "count": 2,
+      "lastAt": "2026-11-12T10:35:30.894Z",
       "reason": "provider error"
     },
     "WWW: błędy CLS przez obraz bez wymiarów": {
+      "count": 2,
+      "lastAt": "2026-11-12T10:36:17.199Z",
+      "reason": "provider error"
+    },
+    "WWW: formularz niewygodny na ekranie 320 px": {
       "count": 1,
-      "lastAt": "2026-11-09T10:25:58.407Z",
+      "lastAt": "2026-11-12T10:37:03.723Z",
+      "reason": "provider error"
+    },
+    "Cron: zadanie na Vercel nie wykonuje się w oczekiwanej godzinie": {
+      "count": 1,
+      "lastAt": "2026-11-12T10:37:50.185Z",
+      "reason": "provider error"
+    },
+    "Cron: webhook odpala się dwa razy i tworzy duplikaty": {
+      "count": 1,
+      "lastAt": "2026-11-12T10:38:36.539Z",
+      "reason": "provider error"
+    },
+    "GitHub Actions: workflow nie uruchamia się po merge": {
+      "count": 1,
+      "lastAt": "2026-11-12T10:39:22.865Z",
+      "reason": "provider error"
+    },
+    "GitHub Actions: brak sekretu w deployu z pull requesta": {
+      "count": 1,
+      "lastAt": "2026-11-12T10:40:09.387Z",
+      "reason": "provider error"
+    },
+    "Automatyzacja: utracony token Google Drive zatrzymuje synchronizację": {
+      "count": 1,
+      "lastAt": "2026-11-12T10:40:55.953Z",
+      "reason": "provider error"
+    },
+    "Automatyzacja: powiadomienia wysyłane na zły adres": {
+      "count": 1,
+      "lastAt": "2026-11-12T10:41:42.483Z",
+      "reason": "provider error"
+    },
+    "Automatyzacja: brak retry po błędzie API 503": {
+      "count": 1,
+      "lastAt": "2026-11-12T10:42:28.635Z",
+      "reason": "provider error"
+    },
+    "Automatyzacja: logi nie pozwalają powiązać zdarzenia z leadem": {
+      "count": 1,
+      "lastAt": "2026-11-12T10:43:14.812Z",
+      "reason": "provider error"
+    },
+    "Automatyzacja: przypomnienia CRM wysyłają się po terminie": {
+      "count": 1,
+      "lastAt": "2026-11-12T10:44:01.379Z",
       "reason": "provider error"
     }
   },
