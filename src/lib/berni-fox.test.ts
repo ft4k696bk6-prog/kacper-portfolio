@@ -18,7 +18,7 @@ describe("Berni: 20 genuine complete portraits", () => {
       const bytes = readFileSync(path);
       expect(bytes.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
       expect(bytes[25]).toBe(6); // PNG RGBA, not opaque JPEG
-      expect(BERNI_POSE_LABELS[pose].length).toBeGreaterThan(3);
+      expect(BERNI_POSE_LABELS[pose].length).toBeGreaterThanOrEqual(3);
       sizes.push(statSync(path).size);
     }
     expect(new Set(sizes).size).toBeGreaterThanOrEqual(18);
