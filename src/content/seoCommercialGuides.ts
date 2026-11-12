@@ -1,0 +1,132 @@
+/**
+ * Poradniki odpowiadające na pytania firm szukających rozwiązania, a nie tylko definicji.
+ * Każdy ma odrębny problem, procedurę diagnostyczną i kryterium sprawdzenia rezultatu.
+ */
+const entries = [
+  {
+    slug: "reklamy-meta-nie-dzialaja",
+    title: "Reklamy Meta nie działają — 7 rzeczy do sprawdzenia zanim zwiększysz budżet",
+    description: "Reklamy Meta Ads nie wydają budżetu, nie zbierają leadów albo mają wysoki koszt? Diagnostyka statusu, pomiaru, strony i oferty.",
+    intro: "Jeśli reklamy Meta nie działają, najpierw rozdziel problem techniczny (brak emisji) od problemu biznesowego (emisja jest, ale nie ma wartościowych zapytań). Bez tego zwiększanie budżetu zwykle tylko podnosi ryzyko straty.",
+    service: "/reklamy-meta-ads-dla-firm",
+    label: "Audyt i prowadzenie Meta Ads",
+    category: "meta-ads" as const,
+    sections: [
+      {title: "1. Czy reklama faktycznie się wyświetla?", paragraphs: ["Sprawdź status osobno dla kampanii, zestawu i reklamy. Obejrzyj daty harmonogramu, limit wydatków konta, rozliczenia, ewentualne odrzucenie i ograniczenia konta. Aktywny przełącznik nie jest dowodem, że system dostarcza wyświetlenia.", "Zanotuj dokładną datę, zakres i identyfikator konta. Porównanie różnych okresów lub kont reklamowych prowadzi do fałszywych wniosków."]},
+      {title: "2. Emisja jest, ale nie ma zapytań", paragraphs: ["Sprawdź całą ścieżkę z telefonu: reklama, kliknięcie, czas wczytywania landing page, widoczność oferty i możliwość wysłania formularza. Osobno wykonaj kontrolowany test formularza Lead Ads oraz odbioru zgłoszenia w CRM.", "Oceń, czy komunikat w reklamie odpowiada temu, co użytkownik widzi po kliknięciu. Inna obietnica w kreacji i inna oferta na stronie obniżają zaufanie."]},
+      {title: "3. Koszt rośnie — co zmienić w pierwszej kolejności?", paragraphs: ["Porównaj liczbę wyświetleń, koszt kliknięcia, odsetek kontaktów, koszt wartościowego leada i udział leadów zamkniętych sprzedażą. Zbyt mała liczba konwersji nie pozwala wiarygodnie oceniać każdej kreacji po kilku godzinach.", "Najpierw sprawdź błędy pomiaru i jakość formularza, potem testuj pojedynczo kreacje, ofertę, grupy odbiorców lub stronę docelową. Nie resetuj wszystkiego naraz."]},
+      {title: "4. Jak poznać, że poprawka działa?", paragraphs: ["Przyjmij stały okres porównania, ten sam etap lejka i podobne warunki budżetowe. Zmierz liczbę zapytań, które handlowiec rzeczywiście może obsłużyć, a nie same kliknięcia. Zachowaj historię zmian.", "Jeśli emisja jest zablokowana, rozwiązaniem jest usunięcie konkretnej blokady; dopiero potem optymalizacja kampanii. Nie obchodź zasad Meta przez fałszywe konta."]},
+    ],
+    sources: [{label:"Centrum pomocy Meta dla firm",url:"https://www.facebook.com/business/help"}],
+  },
+  {
+    slug: "reklamy-facebook-nie-dzialaja",
+    title: "Reklamy Facebook nie działają? Sprawdź leady, formularz i koszt pozyskania",
+    description: "Facebook Ads generują kliknięcia, ale nie klientów? Praktyczny audyt kreacji, formularzy i kontaktu handlowca.",
+    intro: "Kampania Facebook może poprawnie działać technicznie, a jednocześnie nie przynosić klientów. Najpierw prześledź, co dzieje się po kliknięciu i ile wartościowych kontaktów trafia do sprzedaży.",
+    service: "/reklamy-meta-ads-dla-firm", label: "Kampanie Facebook i Instagram", category: "meta-ads" as const,
+    sections: [
+      {title:"Rozdziel liczbę leadów od ich jakości",paragraphs:["Zbuduj prostą tabelę: wydatki, kliknięcia, formularze, kontakt telefoniczny, zakwalifikowany lead, oferta i sprzedaż. Kampania z najtańszym formularzem nie musi mieć najniższego kosztu pozyskania klienta.", "Ustal czas pierwszego kontaktu i przyczyny odrzucenia zgłoszeń. Brak szybkiego oddzwonienia nie powinien być interpretowany jako słaba skuteczność reklamy."]},
+      {title:"Sprawdź konfigurację formularza",paragraphs:["Wykonaj testowe zgłoszenie i sprawdź, czy trafia do właściwej osoby lub CRM. Upewnij się, że formularz zawiera pola potrzebne do kwalifikacji, ale nie wymaga zbędnego wysiłku.", "Zweryfikuj nazwę strony, uprawnienia do leadów, informację o prywatności oraz poprawność zgód tam, gdzie są wymagane."]},
+      {title:"Popraw kreację i ofertę",paragraphs:["Sprawdź, czy reklama podaje konkretną korzyść, zrozumiały warunek kontaktu i nie obiecuje rezultatów, których nie potrafisz dostarczyć. Przetestuj inne ujęcie problemu klienta, zamiast zmieniać wyłącznie kolor grafiki.", "Dopasuj format i długość komunikatu do odbiorcy. Utrzymuj wystarczający czas testu, aby pojedyncze wyniki nie dyktowały nieprzemyślanych zmian."]},
+      {title:"Mierz wynik w sprzedaży",paragraphs:["Połącz wyniki kampanii z etapami w CRM i okresowo porównuj przychód lub marżę z kosztem pozyskania. Zapisuj, z którego zestawu przyszło zapytanie, o ile jest to możliwe zgodnie z zasadami prywatności."]},
+    ],
+    sources:[{label:"Meta — Lead Ads",url:"https://www.facebook.com/business/ads/lead-ads"}],
+  },
+  {
+    slug: "reklamy-instagram-nie-dzialaja",
+    title: "Reklamy Instagram nie działają — co poprawić w kampanii, kreacji i stronie?",
+    description: "Instagram Ads bez zapytań? Sprawdź format, placement, odbiorców, ofertę, landing page i pomiar konwersji.",
+    intro: "Na Instagramie materiał może zbierać wyświetlenia i reakcje, ale nie przekładać się na sprzedaż. Kluczowe jest sprawdzenie, czy kreacja, miejsce emisji i dalsza ścieżka prowadzą do jednego celu.",
+    service: "/reklamy-meta-ads-dla-firm",label:"Audyt reklam Instagram",category:"meta-ads" as const,
+    sections:[
+      {title:"Nie myl zaangażowania z wynikiem",paragraphs:["Polubienia i obejrzenia wideo mogą wspierać zasięg, ale nie dowodzą skuteczności kampanii nastawionej na kontakty. Porównuj docelowe konwersje i jakość zapytań, a nie wyłącznie CPM czy liczbę reakcji.", "W raporcie sprawdź wyniki według umiejscowienia. Zachowaj ten sam cel i okres porównania."]},
+      {title:"Sprawdź format Reels i Stories",paragraphs:["Zwróć uwagę na bezpieczne obszary dla tekstu i przycisków interfejsu, czytelność pierwszych sekund, wyraźny przekaz i brak zasłoniętych informacji. Osobno skontroluj kreację w pionowych placementach i w aktualnościach.", "Nie zakładaj, że jedna pozioma grafika będzie czytelna we wszystkich umiejscowieniach."]},
+      {title:"Przetestuj stronę na telefonie",paragraphs:["Otwórz reklamowany adres z urządzenia mobilnego. Sprawdź, czy telefon nie przybliża pól formularza, czy CTA jest łatwe do naciśnięcia i czy formularz naprawdę wysyła wiadomość.", "Porównaj kliknięcia linku z faktycznymi wizytami i testowymi zgłoszeniami. Niektóre rozbieżności wynikają z czasu ładowania i ograniczeń pomiaru."]},
+      {title:"Poprawiaj po jednej hipotezie",paragraphs:["Przetestuj inny komunikat, lepszy materiał wideo, krótszą ścieżkę lub formularz. Zapisz datę zmiany i wynik. Przy niskim wolumenie nie podejmuj decyzji po jednej konwersji."]},
+    ],
+    sources:[{label:"Meta — reklamy Instagram",url:"https://www.facebook.com/business/ads/instagram-ad"}],
+  },
+  {
+    slug: "jak-poprawic-reklamy",
+    title: "Jak poprawić reklamy w internecie? Plan audytu na 7 dni",
+    description: "Jak poprawić skuteczność reklam Facebook, Instagram i kampanii internetowych? Plan pomiaru, lejka, kreacji i testów.",
+    intro: "Dobra optymalizacja reklam zaczyna się od sprawdzenia ekonomiki klienta i pomiaru, a nie od przypadkowej zmiany zainteresowań czy zwiększania budżetu.",
+    service: "/marketing-i-reklamy",label:"Marketing i reklamy dla firm",category:"meta-ads" as const,
+    sections:[
+      {title:"Dzień 1: wyznacz miernik biznesowy",paragraphs:["Zdefiniuj, co liczy się jako wartościowy kontakt, ile wynosi średnia marża transakcji i jak często zapytania kończą się sprzedażą. Dopiero na tej podstawie oszacuj dopuszczalny koszt leada.", "Nie opieraj strategii wyłącznie na CTR lub liczbie polubień."]},
+      {title:"Dzień 2–3: sprawdź całą ścieżkę klienta",paragraphs:["Sprawdź stronę i formularz w telefonie, szybkość wczytywania, kontakt, zgodność obietnicy reklamy z ofertą oraz przekazywanie leadów do handlowca. Zmierz czas reakcji na zapytanie.", "Weryfikuj zdarzenia konwersji i rozbieżności pomiarowe, pamiętając o zgodach i ograniczeniach prywatności."]},
+      {title:"Dzień 4–5: przygotuj jeden test",paragraphs:["Zapisz hipotezę, na przykład: konkretniejszy nagłówek poprawi odsetek zgłoszeń z landing page. Zmieniaj pojedynczy element przy możliwie zbliżonych warunkach emisji.", "Nie oceniaj kreatywnych wariantów na podstawie kilkunastu kliknięć."]},
+      {title:"Dzień 6–7: wyciągnij wnioski i ustal kolejny krok",paragraphs:["Porównaj wynik z okresem bazowym, sprawdź jakość zgłoszeń i spisz decyzję. Jeśli danych jest za mało, kontynuuj test zamiast ogłaszać zwycięzcę.", "Powtarzalny zapis zmian pozwala wyeliminować chaos, który często kosztuje więcej niż budżet testowy."]},
+    ],
+    sources:[{label:"Google Ads — pomiar konwersji",url:"https://support.google.com/google-ads/answer/1722022"},{label:"Meta Business Help",url:"https://www.facebook.com/business/help"}],
+  },
+  {
+    slug: "jak-poprawic-marketing-firmy",
+    title: "Jak poprawić marketing firmy bez przepalania budżetu?",
+    description: "Jak poprawić marketing małej lub średniej firmy: oferta, pozycjonowanie, kampanie, leady, CRM i kontrola kosztów.",
+    intro: "Zanim dołożysz kolejne kanały reklamowe, sprawdź, czy klient rozumie ofertę, łatwo się kontaktuje i otrzymuje szybką odpowiedź.",
+    service: "/rozwoj-biznesu",label:"Rozwój biznesu i marketing",category:"rozwoj-firmy" as const,
+    sections:[
+      {title:"Najpierw oferta i grupa klientów",paragraphs:["Opisz, komu pomagasz, jaki konkretny problem rozwiązujesz, dlaczego warto wybrać Twoją ofertę i co klient ma zrobić jako następny krok. Bez tego nawet wysoki ruch nie przekłada się na zaufanie.", "Sprawdź najczęstsze pytania z rozmów handlowych i wykorzystaj je w treści strony."]},
+      {title:"Poukładaj kanały pozyskiwania",paragraphs:["Rozdziel ruch z Google, rekomendacji, reklam i mediów społecznościowych. Dla każdego kanału policz wartościowe zapytania, oferty i sprzedaż. Dzięki temu nie mylisz popularności z przychodem.", "Nie musisz być wszędzie. Dobierz kanały do sposobu, w jaki klienci szukają usług."]},
+      {title:"Usuń tarcie w kontakcie",paragraphs:["Uprość formularz, sprawdź mobile, dodaj wyraźną ścieżkę kontaktu i zapewnij szybkie przekazanie zgłoszenia do osoby odpowiedzialnej. Przy większym wolumenie rozważ CRM i przypomnienia.", "Nie automatyzuj skomplikowanego procesu, zanim go nie uporządkujesz — automatyzacja powieli jego błędy."]},
+      {title:"Testuj i mierz wynik",paragraphs:["Co tydzień oceń koszt, liczbę wartościowych zapytań i tempo obsługi. Jedna dobrze przemyślana zmiana z pomiarem jest cenniejsza niż kilkanaście przypadkowych działań.", "Zwracaj uwagę na marżę i czas domknięcia sprzedaży, a nie sam zasięg."]},
+    ],
+    sources:[{label:"Google Search Central — treści dla użytkowników",url:"https://developers.google.com/search/docs/fundamentals/creating-helpful-content"}],
+  },
+  {
+    slug: "ile-kosztuje-crm-na-zamowienie",
+    title: "Ile kosztuje CRM na zamówienie? Co wpływa na wycenę?",
+    description: "Koszt dedykowanego CRM zależy od ról, danych, integracji, funkcji i utrzymania. Zobacz, co przygotować do rzetelnej wyceny.",
+    intro: "Cena CRM na zamówienie nie wynika z samej liczby ekranów. Najwięcej pracy często pochłaniają poprawne role użytkowników, migracja danych, automatyzacje i integracje z istniejącymi systemami.",
+    service:"/crm-i-aplikacje-webowe",label:"Dedykowane systemy CRM",category:"crm-leady" as const,
+    sections:[
+      {title:"Czynniki wpływające na koszt",paragraphs:["Określ liczbę ról i użytkowników, sposób przydzielania leadów, historię zmian, wymagania raportowe, kalendarz, pliki, powiadomienia oraz integracje z formularzami i pocztą.", "Nie pomijaj bezpieczeństwa, testów dostępu, kopii zapasowych i późniejszego utrzymania. Te elementy są częścią kosztu rozwiązania."]},
+      {title:"Kiedy gotowy system jest bardziej opłacalny?",paragraphs:["Jeżeli proces firmy jest standardowy i da się go odwzorować w gotowym narzędziu, abonament i konfiguracja mogą być rozsądniejsze niż budowa od zera.", "CRM dedykowany ma sens przede wszystkim wtedy, gdy ograniczenia gotowego produktu tworzą realne koszty lub utrudniają rozwój."]},
+      {title:"Jak przygotować brief",paragraphs:["Zrób listę najważniejszych działań użytkownika: dodanie leada, zmiana statusu, przypisanie, notatka, przypomnienie, raport i obsługa uprawnień. Dodaj przykładowy rekord i źródła danych.", "Podziel wymagania na niezbędne w pierwszym wdrożeniu i możliwe do dodania później."]},
+      {title:"Jak porównywać oferty",paragraphs:["Sprawdź nie tylko koszt startowy, ale także hosting, licencje, utrzymanie, wdrożenie danych, dokumentację, czas reakcji i możliwość dalszego rozwoju. Bez tych pozycji pozornie tańsza wycena bywa myląca."]},
+    ],
+    sources:[{label:"OWASP — kontrola dostępu w aplikacjach",url:"https://owasp.org/www-project-top-ten/"}],
+  },
+  {
+    slug: "wirtualna-recepcjonistka-ai-czy-warto",
+    title: "Wirtualna recepcjonistka AI — kiedy ma sens, a kiedy nie?",
+    description: "Recepcjonistka i asystentka AI dla firm: rozmowy, terminy, CRM, telefonia, bezpieczeństwo i ograniczenia.",
+    intro: "Wirtualna recepcjonistka AI może przyjąć powtarzalne pytania i pomóc w umawianiu terminów, ale nie jest bezobsługowym zastępstwem pracownika w każdej branży.",
+    service:"/wdrozenia-ai-dla-firm",label:"Asystenci i automatyzacje AI",category:"ai-w-firmie" as const,
+    sections:[
+      {title:"Kiedy takie wdrożenie się opłaca?",paragraphs:["Gdy firma regularnie traci powtarzalne zapytania poza godzinami pracy, ma ustalone zasady rezerwacji i jedno wiarygodne źródło wolnych terminów.", "Dobrym pierwszym krokiem może być bot na stronie lub czacie. Telefonia głosowa zwykle wymaga dodatkowej integracji i testów jakości połączeń."]},
+      {title:"Czego nie wolno obiecywać automatyzacji",paragraphs:["Asystent nie powinien wymyślać dostępności kalendarza, cen, warunków usług ani podejmować decyzji wymagających kwalifikacji człowieka. Potrzebuje zatwierdzonej wiedzy oraz możliwości przekazania sprawy pracownikowi.", "Użytkownik powinien wiedzieć, kiedy rozmawia z systemem automatycznym."]},
+      {title:"Jak zbudować bezpieczny proces",paragraphs:["Zacznij od 20–30 najczęstszych pytań, zasad rezerwacji, ścieżki eskalacji i minimalnych danych kontaktowych. Sprawdź zgody, sposób przechowywania danych, dostęp do CRM i rejestrowanie błędów.", "Testuj nie tylko poprawne rozmowy, lecz także pomyłki, brak wolnych terminów, odwołania i niejednoznaczne prośby."]},
+      {title:"Jak ocenić efekt",paragraphs:["Porównaj liczbę poprawnie obsłużonych rozmów, czas oszczędzony zespołowi i liczbę spraw przekazanych człowiekowi z kosztami narzędzi, utrzymania i kontroli jakości."]},
+    ],
+    sources:[{label:"UODO — ochrona danych osobowych",url:"https://uodo.gov.pl/"}],
+  },
+  {
+    slug: "ile-kosztuje-chatbot-ai-dla-firm",
+    title: "Ile kosztuje chatbot AI dla firmy? Integracje i koszty utrzymania",
+    description: "Koszt chatbota AI zależy od bazy wiedzy, modelu, integracji z CRM, skali rozmów i bezpieczeństwa. Poznaj kryteria wyceny.",
+    intro: "Nawet prosty chatbot wymaga przygotowania wiedzy o ofercie, testów odpowiedzi i mechanizmu przekazania rozmowy człowiekowi. Licencja modelu to tylko część kosztu.",
+    service:"/wdrozenia-ai-dla-firm",label:"Chatboty AI i automatyzacje",category:"ai-w-firmie" as const,
+    sections:[
+      {title:"Co składa się na cenę wdrożenia?",paragraphs:["Baza wiedzy, liczba języków, interfejs, integracja z formularzem i CRM, zakres automatycznych działań oraz testy błędnych odpowiedzi. Osobno policz hosting, wykorzystanie modeli i utrzymanie aktualnej wiedzy.", "Chatbot odpowiadający na FAQ jest czymś innym niż asystent, który może zapisać termin lub zmienić dane w CRM."]},
+      {title:"Jak przygotować zakres",paragraphs:["Wypisz najczęstsze pytania klientów, źródła odpowiedzi, sytuacje wymagające konsultanta i dokładne dane, które bot ma przekazać do obsługi.", "Zaplanuj też reakcję na brak wiedzy — odpowiedź „nie wiem” jest lepsza niż zmyślona cena lub termin."]},
+      {title:"Bezpieczeństwo i pomiar",paragraphs:["Ogranicz dostęp do danych, stosuj kontrolę uprawnień i prowadź testy prób wyłudzenia informacji. Rozważ zapisy rozmów tylko w zakresie niezbędnym do celu i zgodnie z obowiązującymi zasadami ochrony danych.", "Mierz odsetek skutecznie przekazanych zapytań, jakość odpowiedzi, koszt rozmowy i liczbę eskalacji."]},
+      {title:"Kiedy odpuścić własny bot?",paragraphs:["Jeśli dziennie wpływa zaledwie kilka prostych pytań, a informacje w ofercie są nieaktualne, lepszą inwestycją może być uporządkowana strona i formularz. Najpierw warto policzyć realną korzyść."]},
+    ],
+    sources:[{label:"OWASP — Top 10 zagrożeń dla aplikacji LLM",url:"https://genai.owasp.org/llm-top-10/"}],
+  },
+] as const;
+
+export const seoCommercialGuides = entries.map((guide) => ({
+  slug: guide.slug,
+  title: guide.title,
+  description: guide.description,
+  intro: guide.intro,
+  category: guide.category,
+  service: guide.service,
+  serviceLabel: guide.label,
+  sections: guide.sections,
+  sources: guide.sources,
+}));
