@@ -385,6 +385,29 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           </Link>
         </div>
       </section>
+      {kind === "marketing" && (
+        <section className="mx-auto max-w-6xl px-5 py-14 md:px-8" aria-labelledby="google-ads-marketing">
+          <div className="rounded-3xl border border-white/15 bg-white/[0.04] p-7 md:p-10">
+            <p className="text-xs font-medium uppercase tracking-[.16em] text-white/50">Nowa usługa · Cała Polska</p>
+            <h2 id="google-ads-marketing" className="mt-4 text-2xl font-semibold md:text-3xl">
+              Google Ads i reklamy w wyszukiwarce
+            </h2>
+            <p className="mt-4 max-w-3xl leading-7 text-white/65">
+              Kampanie na frazy z intencją zakupową, audyt istniejących reklam, optymalizacja słów,
+              wykluczeń i konwersji. Oferta obejmuje także Rzeszów, Lublin, Warszawę
+              oraz pozostałe miasta wojewódzkie — współpraca może odbywać się zdalnie.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link href="/google-ads-dla-firm" className="inline-flex min-h-12 items-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-black">
+                Zobacz ofertę Google Ads
+              </Link>
+              <Link href="/narzedzia/kalkulator-budzetu-google-ads" className="inline-flex min-h-12 items-center rounded-full border border-white/25 px-6 py-3 text-sm text-white">
+                Darmowy kalkulator budżetu
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
       <section className="mx-auto max-w-6xl px-5 pb-20 pt-6 md:px-8">
         <div className="rounded-xl border border-white/15 bg-white/[0.025] p-6">
           <p className="text-xs uppercase tracking-[.16em] text-white/55">Dodatkowe materiały</p>

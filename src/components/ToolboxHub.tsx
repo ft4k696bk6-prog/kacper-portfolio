@@ -17,7 +17,7 @@ const dailyTools = [
   { id: "signature", pl: "Darmowy generator stopki e-mail", en: "Free email signature generator", plDesc: "Stopki klasyczne i animowane GIF, logo, zdjęcie oraz klikalne social media.", enDesc: "Classic and animated GIF signatures with photos, logos and clickable socials." },
 ] as const;
 
-const priority = ["signature", "edytor-pdf", "ai-image", "vat", "image", "dekoder-jwt"];
+const priority = ["signature", "edytor-pdf", "ai-image", "vat", "image", "dekoder-jwt", "google-ads-budget"];
 const cardClass = "group flex min-w-0 min-h-[142px] flex-col justify-between gap-4 rounded-2xl border border-white/15 bg-[#111] p-5 transition-colors hover:border-white/50 hover:bg-[#1b1b1b] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
 
 export function ToolboxHub({ lang }: { lang: Language }) {
@@ -39,6 +39,13 @@ export function ToolboxHub({ lang }: { lang: Language }) {
       description: en ? "Convert net to gross and gross to net, with the VAT amount." : "Przelicz brutto na netto lub netto na brutto i sprawdź kwotę VAT.",
       category: calculatorCategory, href: en ? englishToolPath("kalkulator-vat") : "/narzedzia/kalkulator-vat",
     },
+    ...(!en ? [{
+      id: "google-ads-budget",
+      title: "Darmowy kalkulator Google Ads — budżet, CPC i CPL",
+      description: "Policz orientacyjny koszt kliknięcia, leada i klienta na swoich danych. Bez rejestracji i bez karty.",
+      category: "Reklamy i marketing",
+      href: "/narzedzia/kalkulator-budzetu-google-ads",
+    }] : []),
     ...dailyTools.map(t => ({
       id: t.id, title: en ? t.en : t.pl, description: en ? t.enDesc : t.plDesc,
       category: everydayCategory, href: (en ? "/en/tools/everyday" : "/narzedzia/codzienne") + "#" + t.id,
