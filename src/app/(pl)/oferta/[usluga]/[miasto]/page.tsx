@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cityExamples, getLocalOffer, getServiceCity, localOffers, serviceCities } from "@/lib/local-offers";
+import { getGoogleAdsCityPlan } from "@/lib/google-ads-local";
 
 type Props = { params: Promise<{ usluga: string; miasto: string }> };
 const site = "https://bernecki.dev";
@@ -68,12 +69,18 @@ export default async function LocalOfferPage({ params }: Props) {
     ],
   };
   const similar = localOffers.filter((other) => other.slug !== offer.slug).slice(0, 5);
+  const localAdsPlan = ["google-ads", "audyt-google-ads"].includes(offer.slug) ? getGoogleAdsCityPlan(city.slug) : undefined;
 
   const relatedGuides = offer.slug === "reklamy-meta" ? [
     ["Reklamy Meta nie działają — diagnostyka", "/poradniki/reklamy-meta-nie-dzialaja"],
     ["Reklamy Facebook nie działają", "/poradniki/reklamy-facebook-nie-dzialaja"],
     ["Reklamy Instagram nie działają", "/poradniki/reklamy-instagram-nie-dzialaja"],
     ["Jak poprawić reklamy w internecie?", "/poradniki/jak-poprawic-reklamy"],
+  ] : offer.slug === "google-ads" || offer.slug === "audyt-google-ads" ? [
+    ["Google Ads nie działa? Co sprawdzić", "/poradniki/google-ads-nie-dziala-co-sprawdzic"],
+    ["Dlaczego Google Ads nie ma konwersji?", "/poradniki/google-ads-brak-konwersji"],
+    ["Ile kosztuje reklama w Google?", "/poradniki/ile-kosztuje-reklama-google-ads"],
+    ["Google Ads czy Meta Ads?", "/poradniki/google-ads-czy-meta-ads"],
   ] : offer.slug === "marketing-internetowy" || offer.slug === "widocznosc-w-internecie" ? [
     ["Jak poprawić marketing firmy?", "/poradniki/jak-poprawic-marketing-firmy"],
     ["Jak poprawić reklamy w internecie?", "/poradniki/jak-poprawic-reklamy"],
@@ -116,6 +123,37 @@ export default async function LocalOfferPage({ params }: Props) {
           </Link>
         </div>
       </section>
+
+      {localAdsPlan && (
+        <section className="border-y border-white/10 bg-white/[0.035] px-5 py-14 md:px-8" aria-label="Lokalny plan kampanii Google Ads">
+          <div className="mx-auto max-w-6xl">
+            <h2 className="text-3xl font-semibold">Reklamy w Google – {city.name}: przykładowy plan</h2>
+            <p className="mt-5 max-w-4xl leading-7 text-white/65">
+              To scenariusz do omówienia podczas audytu, a nie obietnica wyników ani opis
+              przeprowadzonej kampanii w tym mieście.
+            </p>
+            <div className="mt-8 grid gap-5 md:grid-cols-3">
+              {[
+                ["Dla kogo", localAdsPlan.focus],
+                ["Słowa i lokalizacje", localAdsPlan.intent],
+                ["Strona docelowa", localAdsPlan.landing],
+              ].map(([heading, copy]) => (
+                <article className="rounded-2xl border border-white/10 bg-black/20 p-6" key={heading}>
+                  <h3 className="font-semibold text-lg">{heading}</h3>
+                  <p className="mt-3 leading-7 text-white/70">{copy}</p>
+                </article>
+              ))}
+            </div>
+            <p className="mt-7 max-w-4xl leading-7 text-white/65">
+              Zasięg kampanii dobieramy do faktycznej możliwości obsługi klientów. Nie wymaga to
+              lokalnego biura wykonawcy {city.where}.
+            </p>
+            <Link href="/google-ads-dla-firm" className="mt-6 inline-block font-semibold underline underline-offset-4">
+              Google Ads: pełny zakres i przebieg współpracy
+            </Link>
+          </div>
+        </section>
+      )}
 
       <section className="border-y border-white/10 bg-white/[0.035] px-5 py-16 md:px-8">
         <div className="mx-auto max-w-6xl">
