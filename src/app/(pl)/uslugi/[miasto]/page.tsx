@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServiceCity, serviceCities } from "@/lib/service-cities";
 import { seoTitle } from "@/lib/seo";
+import { localOffers } from "@/lib/local-offers";
 
 type PageProps = { params: Promise<{ miasto: string }> };
 const base = "https://bernecki.dev";
@@ -144,6 +145,27 @@ export default async function CityServicesPage({ params }: PageProps) {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-5 py-16 md:px-8" aria-labelledby="lokalne-uslugi">
+        <h2 id="lokalne-uslugi" className="text-3xl font-semibold md:text-4xl">Szczegółowe usługi dla firm – {city.name}</h2>
+        <p className="mt-4 max-w-3xl leading-7 text-white/65">
+          Wybierz konkretny zakres, jeśli szukasz strony WWW, landing page, CRM, kampanii Facebook i Instagram,
+          wirtualnej recepcjonistki AI, automatyzacji obsługi klienta lub wsparcia marketingowego.
+          Wszystkie usługi realizuję także zdalnie.
+        </p>
+        <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {localOffers.map((offer) => (
+            <Link key={offer.slug} href={"/oferta/" + offer.slug + "/" + city.slug}
+              className="group flex min-h-36 flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.035] p-5 transition hover:border-white/40 hover:bg-white/[0.07]">
+              <span className="text-lg font-semibold">{offer.title}</span>
+              <span className="mt-4 text-sm leading-6 text-white/55 group-hover:text-white/80">
+                {offer.intro}
+              </span>
+              <span className="mt-5 text-sm font-semibold text-white/80">Poznaj ofertę</span>
+            </Link>
+          ))}
         </div>
       </section>
 
