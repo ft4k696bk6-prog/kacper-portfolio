@@ -66,11 +66,12 @@ describe("Berni presentation and voice regression", () => {
   const css = readFileSync("src/components/BerniRobot.module.css", "utf8");
   const route = readFileSync("src/app/api/companion-context/route.ts", "utf8");
 
-  it("hides the WHOLE mascot until the actual intro is finished", () => {
-    expect(assistant).toContain("!mounted || cookieBannerVisible || !introFinished");
+  it("waits for intro, but keeps the mascot available without cookie consent", () => {
     expect(assistant).toContain('attributeFilter: ["data-home-intro"]');
     expect(assistant).toContain('phase !== "armed" && phase !== "running"');
     expect(assistant).toContain("!mounted || !introFinished");
+    expect(assistant).not.toContain("!mounted || cookieBannerVisible || !introFinished");
+    expect(assistant).toContain('if (localStorage.getItem(COOKIE_CONSENT_KEY) !== "accepted") return;');
   });
 
   it("does not auto-prompt for geolocation and fails closed on IP guesses", () => {
