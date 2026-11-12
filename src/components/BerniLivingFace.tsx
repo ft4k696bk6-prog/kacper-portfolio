@@ -1,281 +1,331 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
 import { type BerniLivingMood } from "@/lib/berni-face-state";
-import { berniTransitionFrame, chooseBerniTransition, emptyTransitionMemory, type BerniTransitionName, type TransitionChoice } from "@/lib/berni-transition";
+import { BERNI_MOOD_POSE, BERNI_POSE_MOOD, berniPoseUrl, type BerniPose } from "@/lib/berni-poses";
+import {
+  berniTransitionFrame, chooseBerniTransition, emptyTransitionMemory,
+  type BerniTransitionName, type TransitionChoice, type TransitionFrame,
+} from "@/lib/berni-transition";
+
 export type { BerniLivingMood } from "@/lib/berni-face-state";
 
-const ROOT="/images/berni/poses/";
-const CLOSED="/images/berni/eyelids-closed.jpg";
-type FrameKey = BerniLivingMood | "typing-low" | "typing-mid" | "typing-high" | "excited-soft";
-const PRELOAD: FrameKey[] = ["typing-low","typing-mid","typing-high","happy","excited","excited-soft","sleeping"];
-const imagePromises=new Map<string,Promise<HTMLImageElement>>();
-function getPortrait(src:string):Promise<HTMLImageElement>{
- const cached=imagePromises.get(src);if(cached)return cached;
- const promise=new Promise<HTMLImageElement>((resolve,reject)=>{
-  const img=new window.Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error(src));img.src=src;
- });
- imagePromises.set(src,promise);return promise;
+const cachedImages = new Map<string, Promise<HTMLImageElement>>();
+function loadPortrait(src: string): Promise<HTMLImageElement> {
+  const existing = cachedImages.get(src);
+  if (existing) return existing;
+  const result = new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new window.Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("Berni portrait could not load: " + src));
+    image.src = src;
+  });
+  cachedImages.set(src, result);
+  return result;
 }
-function bounded(n:number,a=-1,b=1){return Math.max(a,Math.min(b,n));}
 
-type InternalTransition={from:BerniLivingMood;to:BerniLivingMood;choice:TransitionChoice;start:number};
-type Controller={mood:BerniLivingMood;blinkToken:number;reactionToken:number;transitionToken:number;transitionPreset:BerniTransitionName|null};
-export function BerniLivingFace({mood,size,blinkToken=0,reactionToken=0,transitionToken=0,transitionPreset=null}:Partial<Controller> & {mood:BerniLivingMood;size:number}){
- const ref=useRef<HTMLCanvasElement>(null);
- const input=useRef<Controller>({mood,blinkToken,reactionToken,transitionToken,transitionPreset});
- const [ready,setReady]=useState(false);
+const clamp = (x: number, min = 0, max = 1) => Math.max(min, Math.min(max, x));
+type Inputs = {
+  mood: BerniLivingMood;
+  pose: BerniPose | null;
+  blinkToken: number;
+  reactionToken: number;
+  transitionToken: number;
+  transitionPreset: BerniTransitionName | null;
+};
+type Transition = {
+  from: BerniPose;
+  to: BerniPose;
+  start: number;
+  choice: TransitionChoice;
+};
 
- useEffect(()=>{
-  const previous=input.current;
-  const hasChange=mood!==previous.mood;
-  const forceBlink=blinkToken!==previous.blinkToken && blinkToken>0;
-  const replay=reactionToken!==previous.reactionToken;
-  const forceTransition=transitionToken!==previous.transitionToken;
-  input.current={mood,blinkToken,reactionToken,transitionToken,transitionPreset};
-  const node=ref.current;
-  if(hasChange)node?.dispatchEvent(new Event("berni-state-change"));
-  if(forceBlink)node?.dispatchEvent(new Event("berni-blink-now"));
-  if(replay)node?.dispatchEvent(new Event("berni-reaction-replay"));
-  if(forceTransition)node?.dispatchEvent(new Event("berni-force-transition"));
- },[mood,blinkToken,reactionToken,transitionToken,transitionPreset]);
-
- useEffect(()=>{
-  const canvas=ref.current,ctx=canvas?.getContext("2d",{alpha:true});
-  if(!canvas||!ctx)return;
-  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)");
-  const dimension=Math.min(640,Math.max(112,Math.round(size*Math.min(2,window.devicePixelRatio||1))));
-  canvas.width=dimension;canvas.height=dimension;
-  const working=document.createElement("canvas");working.width=640;working.height=640;
-  const wctx=working.getContext("2d",{willReadFrequently:true});
-  if(!wctx)return;
-  const portraits=new Map<FrameKey,HTMLImageElement>();
-  const textureData=new Map<FrameKey,Uint8ClampedArray>();
-  const history=emptyTransitionMemory();
-  let active=true,visible=true,raf=0,lastPaint=0,lastTick=0;
-  let showing:BerniLivingMood="idle",effect:InternalTransition|null=null;
-  let lids:HTMLImageElement|null=null;
-  let lastBlink=-10000, nextBlink=performance.now()+2300+Math.random()*1800;
-  let gazeX=0,gazeY=0,lookX=0,lookY=0,touchUntil=0,replayAt=0;
-  let observer:IntersectionObserver|null=null;
-
-  function requestPose(next:FrameKey){
-   if(portraits.has(next))return Promise.resolve(portraits.get(next)!);
-   return getPortrait(ROOT+next+".png").then(img=>{if(active)portraits.set(next,img);return img;});
-  }
-  function onChange(){
-   const next=input.current.mood;
-   if(!portraits.has(next)){
-    void requestPose(next).then(()=>{if(active)onChange();}).catch(()=>{});
-    return;
-   }
-   const now=performance.now();
-   const previous=effect?(now-effect.start>effect.choice.duration/2?effect.to:effect.from):showing;
-   if(next===previous && !effect)return;
-   const selected=reduced.matches?null:chooseBerniTransition(previous,next,now,history);
-   showing=previous;
-   effect=selected?{from:previous,to:next,choice:selected,start:now}:null;
-   if(!selected)showing=next;
-  }
-  function onForcedTransition(){
-   const next=input.current.mood,chosen=input.current.transitionPreset;
-   if(!chosen)return;
-   if(!portraits.has(next)){
-     void requestPose(next).then(()=>{if(active)onForcedTransition();}).catch(()=>{});
-     return;
-   }
-   const now=performance.now();
-   const previous=effect?(now-effect.start>effect.choice.duration/2?effect.to:effect.from):showing;
-   showing=previous;
-   effect={from:previous,to:next,choice:{name:chosen,duration:720,strength:"large"},start:now};
-  }
-  function onBlink(){lastBlink=performance.now();nextBlink=lastBlink+4300+Math.random()*3200;}
-  function onReplay(){replayAt=performance.now();}
-
-  function setLook(clientX:number,clientY:number,ttl:number){
-   const rect=canvas!.getBoundingClientRect();
-   const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
-   // The gaze is limited to the irises. No full head rotation on tap.
-   lookX=bounded((clientX-cx)/Math.max(130,window.innerWidth*.48));
-   lookY=bounded((clientY-cy)/Math.max(160,window.innerHeight*.48));
-   touchUntil=ttl;
-  }
-  function onPointerMove(event:PointerEvent){
-   if(!window.matchMedia("(hover: hover) and (pointer: fine)").matches)return;
-   setLook(event.clientX,event.clientY,performance.now()+1550);
-  }
-  function onPointerDown(event:PointerEvent){
-   setLook(event.clientX,event.clientY,performance.now()+1350);
-  }
-
-  function drawClosedEye(near:boolean,amount:number){
-   if(!lids||amount<=.001)return;
-   wctx!.save();
-   wctx!.beginPath();
-   if(near){
-    wctx!.moveTo(262,320);
-    wctx!.bezierCurveTo(283,286,344,271,376,304);
-    wctx!.bezierCurveTo(388,316,389,349,387,367);
-    wctx!.bezierCurveTo(340,359,290,349,262,320);
-   }else{
-    wctx!.moveTo(436,348);
-    wctx!.bezierCurveTo(439,320,459,308,478,326);
-    wctx!.bezierCurveTo(490,337,493,371,486,381);
-    wctx!.bezierCurveTo(461,378,447,363,436,348);
-   }
-   wctx!.closePath();wctx!.clip();
-   const top=near?282:311,bottom=near?370:382,left=near?259:434,right=near?391:493;
-   const edge=top+(bottom-top)*Math.min(1,amount);
-   wctx!.beginPath();wctx!.rect(left,top,right-left,Math.max(0,edge-top));wctx!.clip();
-   wctx!.drawImage(lids,0,0,640,640);
-   wctx!.restore();
-  }
-  function rasterFor(pose:FrameKey,img:HTMLImageElement){
-   const cached=textureData.get(pose);if(cached)return cached;
-   const el=document.createElement("canvas");el.width=640;el.height=640;
-   const ec=el.getContext("2d",{willReadFrequently:true});
-   if(!ec)return null;
-   ec.drawImage(img,0,0,640,640);
-   const data=ec.getImageData(0,0,640,640).data;
-   textureData.set(pose,data);return data;
-  }
-  function morphPupils(pose:BerniLivingMood,img:HTMLImageElement){
-   if(Math.abs(gazeX)<.018&&Math.abs(gazeY)<.018)return;
-   const source=rasterFor(pose,img);if(!source)return;
-   // In-place raster displacement; eye whites, fur and highlights come from
-   // the SAME full-frame portrait. No overlapping SVG mouths / pupil stickers.
-   const eyes=[
-    {x:274,y:285,w:116,h:84,cx:337,cy:323,rx:57,ry:39,sx:6.8,sy:5.2},
-    {x:435,y:316,w:58,h:72,cx:462,cy:348,rx:28,ry:33,sx:3.5,sy:3.2},
-   ];
-   for(const e of eyes){
-    const region=wctx!.createImageData(e.w,e.h);
-    for(let yy=0;yy<e.h;yy++)for(let xx=0;xx<e.w;xx++){
-     const px=e.x+xx,py=e.y+yy;
-     const ellipse=((px-e.cx)/e.rx)**2+((py-e.cy)/e.ry)**2;
-     const strength=Math.pow(Math.max(0,1-ellipse),2.6);
-     const sx=bounded(px-gazeX*e.sx*strength,0,639),sy=bounded(py-gazeY*e.sy*strength,0,639);
-     const x0=Math.floor(sx),y0=Math.floor(sy),x1=Math.min(639,x0+1),y1=Math.min(639,y0+1);
-     const u=sx-x0,v=sy-y0,i=(yy*e.w+xx)*4;
-     for(let c=0;c<4;c++){
-      const a=source[(y0*640+x0)*4+c],b=source[(y0*640+x1)*4+c],d=source[(y1*640+x0)*4+c],f=source[(y1*640+x1)*4+c];
-      region.data[i+c]=a*(1-u)*(1-v)+b*u*(1-v)+d*(1-u)*v+f*u*v;
-     }
+function paintAccent(
+  ctx: CanvasRenderingContext2D, fx: TransitionFrame, progress: number, size: number,
+) {
+  if (fx.accent === "none" || progress <= .08 || progress >= .95) return;
+  const middle = Math.max(0, 1 - Math.abs(progress - .5) * 2);
+  const intensity = Math.pow(middle, .6);
+  if (intensity < .05) return;
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+  ctx.strokeStyle = "rgba(218,225,241," + (.24 + intensity * .43) + ")";
+  ctx.fillStyle = "rgba(214,222,238," + (.12 + intensity * .28) + ")";
+  ctx.lineWidth = Math.max(1, size * .007);
+  if (fx.accent === "dust") {
+    // A Looney-Tunes-style dust burst survives the moment when Berni disappears.
+    for (let j = 0; j < 8; j++) {
+      const a = Math.PI * 2 * j / 8 + .2;
+      const r = size * (.08 + .26 * intensity) * (j % 2 ? 1.1 : .9);
+      ctx.beginPath();
+      ctx.arc(Math.cos(a) * r, size * .25 + Math.sin(a) * r * .5,
+        size * (.023 + (j % 3) * .008) * intensity, 0, Math.PI * 2);
+      ctx.fill();
     }
-    wctx!.putImageData(region,e.x,e.y);
-   }
+  } else if (fx.accent === "spin") {
+    for (let j = 0; j < 3; j++) {
+      const radius = size * (.10 + j * .095) * (.3 + intensity);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, radius, radius * .37, (j + progress * 4) * .65,
+        -.8, Math.PI * 1.38);
+      ctx.stroke();
+    }
+  } else if (fx.accent === "speed") {
+    for (let j = 0; j < 6; j++) {
+      const y = (j - 2.5) * size * .09;
+      const sign = j % 2 ? 1 : -1;
+      const x = sign * size * (.20 + .10 * intensity);
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + sign * size * (.15 + .12 * intensity), y);
+      ctx.stroke();
+    }
+  } else {
+    for (let j = 0; j < 7; j++) {
+      const a = 2 * Math.PI * j / 7 + progress;
+      const r = size * (.1 + .21 * intensity);
+      const x = Math.cos(a) * r, y = Math.sin(a) * r;
+      ctx.beginPath();ctx.moveTo(x - 5, y);ctx.lineTo(x + 5, y);
+      ctx.moveTo(x, y - 5);ctx.lineTo(x, y + 5);ctx.stroke();
+    }
   }
-  function render(now:number){
-   raf=0;
-   if(!active||!visible||document.hidden)return;
-   raf=requestAnimationFrame(render);
-   const interval=size<=72?36:25;
-   if(now-lastPaint<interval&&!reduced.matches)return;
-   const dt=Math.min(64,Math.max(0,now-(lastTick||now)));
-   lastTick=now;lastPaint=now;
-   let currentMood=showing;
-   let anim:ReturnType<typeof berniTransitionFrame>|null=null;
-   if(effect){
-    const p=bounded((now-effect.start)/effect.choice.duration,0,1);
-    currentMood=p<.5?effect.from:effect.to;
-    if(p>=1){showing=effect.to;effect=null;currentMood=showing;}
-    else anim=berniTransitionFrame(effect.choice.name,p);
-   }
-   const sprite=portraits.get(currentMood)||portraits.get("idle");
-   if(!sprite)return;
-   const lookActive=now<touchUntil&&!reduced.matches;
-   const targetX=lookActive?lookX:0,targetY=lookActive?lookY:0;
-   const alpha=1-Math.exp(-dt/150);
-   gazeX+=(targetX-gazeX)*alpha;gazeY+=(targetY-gazeY)*alpha;
-   wctx!.clearRect(0,0,640,640);
-   // Organic speech loop: three perfectly aligned complete portraits,
-   // only their baked lip shapes differ. No separate sticker mouth.
-   if(currentMood==="typing"&&!reduced.matches
-      &&portraits.has("typing-low")&&portraits.has("typing-mid")&&portraits.has("typing-high")){
-     const syllables=Math.abs(Math.sin(now/185)*Math.cos(now/501));
-     const scaled=syllables*2;
-     const first=scaled<1?"typing-low":"typing-mid";
-     const second=scaled<1?"typing-mid":"typing-high";
-     wctx!.drawImage(portraits.get(first)!,0,0,640,640);
-     wctx!.globalAlpha=scaled<1?scaled:scaled-1;
-     wctx!.drawImage(portraits.get(second)!,0,0,640,640);
-     wctx!.globalAlpha=1;
-   } else if(currentMood==="excited"&&!reduced.matches&&portraits.has("excited-soft")){
-     wctx!.drawImage(portraits.get("excited-soft")!,0,0,640,640);
-     wctx!.globalAlpha=.5+.5*Math.sin(now/275);
-     wctx!.drawImage(sprite,0,0,640,640);
-     wctx!.globalAlpha=1;
-   } else {
-     wctx!.drawImage(sprite,0,0,640,640);
-   }
-   if(!reduced.matches)morphPupils(currentMood,sprite);
-   if(now>=nextBlink&&currentMood!=="sleeping"&&!reduced.matches){
-    lastBlink=now;nextBlink=now+3800+Math.random()*3300;
-   }
-   const pulse=(now-lastBlink)/285;
-   const blink=currentMood==="sleeping"?1:(!reduced.matches&&pulse>=0&&pulse<=1?Math.pow(Math.sin(Math.PI*pulse),1.6):0);
-   drawClosedEye(true,blink);drawClosedEye(false,blink);
-   const ratio=dimension/640;
-   ctx!.clearRect(0,0,dimension,dimension);
-   ctx!.save();ctx!.translate(dimension/2,dimension/2);
-   const phase=now/1000;
-   const bounce=currentMood==="excited"?3*Math.sin(phase*7):
-     currentMood==="typing"?1.3*Math.sin(phase*8):
-     currentMood==="sleeping"?1.5*Math.sin(phase*1.2):1.2*Math.sin(phase*1.5);
-   const replayPulse=Math.max(0,1-(now-replayAt)/420);
-   const tilt=currentMood==="thinking"?-.035:currentMood==="curious"?.035:
-     currentMood==="worried"?-.038:currentMood==="surprised"?.025:currentMood==="excited"?.018:0;
-   if(!reduced.matches){ctx!.translate(0,(bounce-replayPulse*5)*ratio);ctx!.rotate(tilt+Math.sin(phase*.8)*.012);}
-   if(anim&&!reduced.matches){
-    ctx!.translate(anim.x*dimension,anim.y*dimension);
-    ctx!.rotate(anim.rotate);
-    ctx!.scale(anim.scaleX,anim.scaleY);
-    ctx!.globalAlpha=anim.opacity;
-    if("filter" in ctx!)ctx!.filter="blur("+Math.min(4,anim.blur*dimension/320).toFixed(1)+"px)";
-   }
-   ctx!.drawImage(working,-dimension/2,-dimension/2,dimension,dimension);
-   ctx!.restore();
-  }
-  function ensureLoop(){if(active&&visible&&!document.hidden&&!raf)raf=requestAnimationFrame(render);}
-  function changedVisibility(){ensureLoop();}
-  canvas.addEventListener("berni-state-change",onChange);
-  canvas.addEventListener("berni-blink-now",onBlink);
-  canvas.addEventListener("berni-reaction-replay",onReplay);
-  canvas.addEventListener("berni-force-transition",onForcedTransition);
-  window.addEventListener("pointermove",onPointerMove,{passive:true});
-  window.addEventListener("pointerdown",onPointerDown,{passive:true});
-  document.addEventListener("visibilitychange",changedVisibility);
-  if("IntersectionObserver" in window){
-   observer=new IntersectionObserver(entries=>{
-    visible=!!entries[0]?.isIntersecting;
-    if(!visible&&raf){cancelAnimationFrame(raf);raf=0;}
-    if(visible)ensureLoop();
-   });
-   observer.observe(canvas);
-  }
-  void getPortrait(CLOSED).then(img=>{if(active)lids=img;}).catch(()=>{});
-  void requestPose("idle").then(()=>{
-   if(!active)return;
-   setReady(true);
-   if(input.current.mood!=="idle")onChange();
-   ensureLoop();
-   // Decode only after the idle pose is visible. All three portrait instances
-   // reuse one shared image cache, so iPhone network requests are deduplicated.
-   for(const next of PRELOAD){void requestPose(next).catch(()=>{});}
-  }).catch(()=>{});
-  return()=>{
-   active=false;if(raf)cancelAnimationFrame(raf);
-   observer?.disconnect();
-   canvas.removeEventListener("berni-state-change",onChange);
-   canvas.removeEventListener("berni-blink-now",onBlink);
-   canvas.removeEventListener("berni-reaction-replay",onReplay);
-   canvas.removeEventListener("berni-force-transition",onForcedTransition);
-   window.removeEventListener("pointermove",onPointerMove);
-   window.removeEventListener("pointerdown",onPointerDown);
-   document.removeEventListener("visibilitychange",changedVisibility);
-  };
- },[size]);
+  ctx.restore();
+}
 
- return <canvas ref={ref} data-testid="berni-continuous-face" data-ready={ready?"true":"false"}
-  aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full"
-  style={{opacity:ready?1:0,transition:"opacity 160ms ease-out"}}/>;
+/**
+ * Draw ONE whole, artistically generated head per frame. Changing the pose
+ * always exits, clears the screen, then enters. NO stickers, layer overlays,
+ * morphing fur, translucent crossfades or background neutral head.
+ */
+export function BerniLivingFace({
+  mood, pose = null, size, blinkToken = 0, reactionToken = 0,
+  transitionToken = 0, transitionPreset = null, onReady,
+}: {
+  mood: BerniLivingMood;
+  pose?: BerniPose | null;
+  size: number;
+  blinkToken?: number;
+  reactionToken?: number;
+  transitionToken?: number;
+  transitionPreset?: BerniTransitionName | null;
+  onReady?: () => void;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const latest = useRef<Inputs>({
+    mood, pose, blinkToken, reactionToken, transitionToken, transitionPreset,
+  });
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const prev = latest.current;
+    const changed = mood !== prev.mood || pose !== prev.pose;
+    const blink = blinkToken !== prev.blinkToken && blinkToken > 0;
+    const replay = reactionToken !== prev.reactionToken;
+    const force = transitionToken !== prev.transitionToken;
+    latest.current = { mood, pose, blinkToken, reactionToken, transitionToken, transitionPreset };
+    const canvas = canvasRef.current;
+    if (changed || force) canvas?.dispatchEvent(new Event("berni-pose-change"));
+    if (blink) canvas?.dispatchEvent(new Event("berni-blink"));
+    if (replay) canvas?.dispatchEvent(new Event("berni-replay"));
+  }, [mood, pose, blinkToken, reactionToken, transitionToken, transitionPreset]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d", { alpha: true, desynchronized: true });
+    if (!canvas || !ctx) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const pixels = Math.min(640, Math.max(112, Math.round(size * Math.min(2, window.devicePixelRatio || 1))));
+    canvas.width = pixels;canvas.height = pixels;
+
+    let alive = true, visible = true, raf = 0, lastFrame = 0;
+    let showing: BerniPose = "neutral";
+    let transition: Transition | null = null;
+    let nextBlink = performance.now() + 2600 + Math.random() * 1800;
+    let blinkingAt = -100000;
+    let replayAt = 0;
+    let lookX = 0, lookY = 0, gazeX = 0, gazeY = 0, lookUntil = 0;
+    let observer: IntersectionObserver | null = null;
+    const history = emptyTransitionMemory();
+    const portraits = new Map<BerniPose, HTMLImageElement>();
+
+    function loadPose(p: BerniPose) {
+      if (portraits.has(p)) return Promise.resolve(portraits.get(p)!);
+      return loadPortrait(berniPoseUrl(p)).then(image => {
+        if (alive) portraits.set(p, image);
+        return image;
+      });
+    }
+
+    function requestChange() {
+      const desired = latest.current.pose ?? BERNI_MOOD_POSE[latest.current.mood];
+      if (!portraits.has(desired)) {
+        void loadPose(desired).then(() => { if (alive) requestChange(); }).catch(() => {});
+        return;
+      }
+      const now = performance.now();
+      const from = transition
+        ? ((now - transition.start) / transition.choice.duration < .5 ? transition.from : transition.to)
+        : showing;
+      const forced = latest.current.transitionToken > 0 && !!latest.current.transitionPreset;
+      const same = from === desired;
+      if (same && !forced) return;
+      const levelFrom = BERNI_POSE_MOOD[from];
+      const levelTo = BERNI_POSE_MOOD[desired];
+      // Even two poses classified under the same broad mood can be visually
+      // completely different. Never hard-swap them in full view.
+      const effectiveFrom = levelFrom === levelTo && !same ? "idle" : levelFrom;
+      const effectiveTo = levelFrom === levelTo && !same ? "happy" : levelTo;
+      let choice = reduceMotion.matches ? null
+        : chooseBerniTransition(effectiveFrom, effectiveTo, now, history);
+      if (!choice && !same && !reduceMotion.matches) {
+        choice = chooseBerniTransition("idle", "happy", now, history);
+      }
+      if (forced && !reduceMotion.matches && latest.current.transitionPreset) {
+        choice = {
+          name: latest.current.transitionPreset,
+          duration: 760,
+          strength: "large",
+        };
+      }
+      if (choice) {
+        showing = from;
+        transition = { from, to: desired, start: now, choice };
+      } else {
+        showing = desired;
+        transition = null;
+      }
+    }
+
+    function replay() { replayAt = performance.now(); }
+    function blink() { blinkingAt = performance.now(); nextBlink = blinkingAt + 3900; }
+
+    function track(x: number, y: number, duration: number) {
+      const rect = canvas!.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      lookX = clamp((x - centerX) / Math.max(180, window.innerWidth * .65), -.7, .7);
+      lookY = clamp((y - centerY) / Math.max(200, window.innerHeight * .65), -.7, .7);
+      lookUntil = performance.now() + duration;
+    }
+    function move(event: PointerEvent) {
+      if (window.matchMedia("(hover: hover) and (pointer: fine)").matches)
+        track(event.clientX, event.clientY, 700);
+    }
+    function tap(event: PointerEvent) { track(event.clientX, event.clientY, 1200); }
+
+    function draw(now: number) {
+      raf = 0;
+      if (!alive || document.hidden || !visible) return;
+      raf = requestAnimationFrame(draw);
+      if (now - lastFrame < (size <= 72 ? 32 : 23) && !reduceMotion.matches) return;
+      lastFrame = now;
+
+      let activePose = showing;
+      let frame: TransitionFrame | null = null;
+      let progress = 0;
+      if (transition) {
+        progress = clamp((now - transition.start) / transition.choice.duration);
+        if (progress >= 1) {
+          showing = transition.to; transition = null; activePose = showing;
+        } else {
+          frame = berniTransitionFrame(transition.choice.name, progress);
+          activePose = frame.phase === "exit" ? transition.from : transition.to;
+        }
+      }
+      const motionOff = reduceMotion.matches;
+      if (now >= nextBlink && activePose !== "sleeping" && !motionOff) {
+        blinkingAt = now;
+        nextBlink = now + 4000 + Math.random() * 4000;
+      }
+
+      ctx!.clearRect(0, 0, pixels, pixels);
+      if (frame) paintAccent(ctx!, frame, progress, pixels);
+      // The empty window is truly empty: NEVER render a fallback image behind.
+      if (frame && !frame.visible) return;
+
+      let picture = portraits.get(activePose) ?? portraits.get("neutral");
+      if (!picture) return;
+      if (activePose === "talk-small" && !motionOff && !transition) {
+        // Whole coherent portraits, one at a time. No alpha-mixed faces.
+        const speech = ["talk-small", "talk-open", "talk-small", "talk-round", "talk-open"] as const;
+        const index = Math.floor(now / 168) % speech.length;
+        picture = portraits.get(speech[index]) ?? picture;
+      }
+      if (activePose === "neutral" && now - blinkingAt > 105 && now - blinkingAt < 250 && !motionOff) {
+        picture = portraits.get("sleeping") ?? picture;
+      }
+      const aimX = now < lookUntil && !motionOff ? lookX : 0;
+      const aimY = now < lookUntil && !motionOff ? lookY : 0;
+      gazeX += (aimX - gazeX) * .14;
+      gazeY += (aimY - gazeY) * .14;
+      const breath = motionOff ? 0 : Math.sin(now / (activePose === "sleeping" ? 920 : 1250)) * .004;
+      const replayJump = motionOff ? 0 : Math.max(0, 1 - (now - replayAt) / 470) * -.018;
+      ctx!.save();
+      ctx!.translate(pixels / 2, pixels / 2);
+      ctx!.translate(gazeX * pixels * .012, gazeY * pixels * .008);
+      ctx!.translate(0, pixels * (breath + replayJump));
+      if (frame && !motionOff) {
+        ctx!.translate(frame.x * pixels, frame.y * pixels);
+        ctx!.rotate(frame.rotate);
+        ctx!.scale(frame.scaleX, frame.scaleY);
+        ctx!.globalAlpha = frame.opacity;
+        // A tiny blur is confined to the moving complete character.
+        if (frame.blur > .3) ctx!.filter = "blur(" + Math.min(6, frame.blur * pixels / 400).toFixed(1) + "px)";
+      }
+      ctx!.drawImage(picture, -pixels / 2, -pixels / 2, pixels, pixels);
+      ctx!.restore();
+    }
+    function run() { if (alive && visible && !document.hidden && !raf) raf = requestAnimationFrame(draw); }
+    function visibilityChanged() { run(); }
+
+    canvas.addEventListener("berni-pose-change", requestChange);
+    canvas.addEventListener("berni-blink", blink);
+    canvas.addEventListener("berni-replay", replay);
+    window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("pointerdown", tap, { passive: true });
+    document.addEventListener("visibilitychange", visibilityChanged);
+    if ("IntersectionObserver" in window) {
+      observer = new IntersectionObserver(entries => {
+        visible = !!entries[0]?.isIntersecting;
+        if (!visible && raf) { cancelAnimationFrame(raf); raf = 0; }
+        if (visible) run();
+      }, { threshold: 0 });
+      observer.observe(canvas);
+    }
+
+    void loadPose("neutral").then(() => {
+      if (!alive) return;
+      setIsReady(true);
+      onReady?.();
+      requestChange();
+      run();
+      // Keep only frequently used reactions warm; selected other poses load
+      // on demand. A small 56px launcher will not fetch all twenty PNG files.
+      for (const p of ["sleeping", "talk-small", "talk-open", "talk-round"] as const)
+        void loadPose(p).catch(() => {});
+    }).catch(() => { /* The neutral fallback stays visible. */ });
+
+    return () => {
+      alive = false;
+      if (raf) cancelAnimationFrame(raf);
+      observer?.disconnect();
+      canvas.removeEventListener("berni-pose-change", requestChange);
+      canvas.removeEventListener("berni-blink", blink);
+      canvas.removeEventListener("berni-replay", replay);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerdown", tap);
+      document.removeEventListener("visibilitychange", visibilityChanged);
+    };
+  }, [size, onReady]);
+
+  return (
+    <canvas ref={canvasRef}
+      data-testid="berni-continuous-face"
+      data-ready={isReady ? "true" : "false"}
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 h-full w-full"
+      style={{ opacity: isReady ? 1 : 0 }}
+    />
+  );
 }
