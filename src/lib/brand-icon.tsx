@@ -1,49 +1,24 @@
 import { ImageResponse } from "next/og";
-import { brand } from "@/lib/brand";
 
-/**
- * Rasterize the shared KB mark used by /favicon.svg for platforms
- * that require PNG icons (home screen and PWA installations).
- */
+/** Identical dark/silver circular KB mark as /favicon.svg. Never gold. */
 export function renderBrandIcon(size: number) {
   const scale = size / 64;
-
   return new ImageResponse(
-    <div
-      style={{
-        display: "flex",
-        width: "100%",
-        height: "100%",
-        background: brand.background,
-        padding: 5 * scale,
-        borderRadius: 14 * scale,
-        alignItems: "stretch",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flex: 1,
-          border: `${2 * scale}px solid ${brand.accent}`,
-          borderRadius: 11 * scale,
-          background: brand.background,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <span
-          style={{
-            display: "flex",
-            color: brand.foreground,
-            fontSize: 22 * scale,
-            fontWeight: 700,
-            letterSpacing: 1.5 * scale,
-          }}
-        >
-          KB
-        </span>
+    <div style={{
+      display: "flex", width:"100%",height:"100%",background:"#06080b",
+      borderRadius:"50%",padding:4*scale,alignItems:"center",justifyContent:"center"
+    }}>
+      <div style={{
+        display:"flex",flex:1,height:"100%",borderRadius:"50%",
+        border:`${2.8*scale}px solid #d9dee5`,background:"#11151b",
+        alignItems:"center",justifyContent:"center"
+      }}>
+        <span style={{
+          color:"#f9fafb",fontFamily:"Arial, sans-serif",fontSize:23.5*scale,
+          letterSpacing:-.7*scale,fontWeight:800,display:"flex"
+        }}>KB</span>
       </div>
     </div>,
-    { width: size, height: size },
+    {width:size,height:size}
   );
 }

@@ -1,21 +1,21 @@
 {
-  "name": "Kacper Bernecki Portfolio",
+  "name": "Kacper Bernecki — Strony WWW, CRM i automatyzacje AI",
   "short_name": "KB",
   "icons": [
     {
-      "src": "/favicon.svg?v=silver-20261108-01",
+      "src": "/favicon.svg?v=kb-silver-circle-20261112-02",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/icon?v=silver-20261108-01",
+      "src": "/icon?v=kb-silver-circle-20261112-02",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/apple-icon?v=silver-20261108-01",
+      "src": "/apple-icon?v=kb-silver-circle-20261112-02",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"

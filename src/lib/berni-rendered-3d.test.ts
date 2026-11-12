@@ -2,16 +2,17 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 const ai = readFileSync("src/components/AIMascotAssistant.tsx", "utf8");
 const copy = readFileSync("src/lib/companion-scenarios.ts", "utf8");
-describe("Static AI chat bubble", () => {
- it("shows accessible AI chat bubble and no animated mascot", () => {
+describe("Live Berni AI chat bubble", () => {
+ it("shows accessible AI chat bubble with the animated Berni mascot", () => {
   expect(ai).toContain('data-testid="ai-chat-bubble"');
   expect(ai).toContain("aria-expanded={open}");
   expect(ai).toContain("onClick={() => openChat()}");
-  expect(ai).toContain("MessageCircle");
+  expect(ai).toContain("<BerniLiveAvatar");
+  expect(ai).toContain("mascotReaction");
   expect(ai).not.toContain("BerniCompanion");
   expect(ai).not.toContain("BerniRendered3D");
  });
- it("keeps the static mascot and avoids drag controls, while allowing chat-panel transitions", () => {
+ it("keeps the live mascot and avoids drag controls, while allowing chat-panel transitions", () => {
   for(const item of ["dragPlacement","handleBerniDragEnd","model-viewer","animate-spin"]) expect(ai).not.toContain(item);
   expect(ai).toContain("<motion.aside");
   expect(ai).toContain("AnimatePresence");
@@ -34,6 +35,6 @@ describe("Static AI chat bubble", () => {
   expect(ai).toContain('"/api/tools/inspect"');
   expect(ai).toContain('"/api/booking"');
   expect(ai).toContain("t.aiMascot.initialMessage");
-  expect(ai).toContain('lang === "pl" ? "Asystent AI" : "AI assistant"');
+  expect(ai).toContain('lang === "pl" ? "Berni · Asystent AI" : "Berni · AI assistant"');
  });
 });

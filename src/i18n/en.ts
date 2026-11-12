@@ -13,7 +13,7 @@ export const en = {
     interactive: "Interactive portfolio",
   },
   meta: {
-    homeTitle: "Kacper Bernecki — Frontend / Web App Developer",
+    homeTitle: "Kacper Bernecki — Websites, CRM & AI Automation",
     homeDescription:
       "I build business web applications with React, TypeScript, Next.js and Supabase: CRMs, dashboards, forms and workflow tools.",
   },

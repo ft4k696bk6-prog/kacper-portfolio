@@ -16,7 +16,7 @@ const siteUrl = "https://bernecki.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Websites, CRM Software & Marketing | Kacper Bernecki",
+    default: "Kacper Bernecki — Websites, CRM & AI Automation",
     // Page titles are already composed by the route; appending the brand here duplicates it.
     template: "%s",
   },
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     title: "Kacper Bernecki — websites, CRM, marketing and AI",
     description:
       "Business development, websites, CRM, marketing and AI. Practical help from initial idea through implementation.",
-    siteName: "Kacper Bernecki Portfolio",
+    siteName: "Kacper Bernecki — Strony WWW, CRM i AI",
     type: "website",
     locale: "en_US",
     alternateLocale: "pl_PL",
@@ -74,11 +74,11 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   icons: {
     icon: [
-      { url: "/favicon.svg?v=silver-20261108-01", type: "image/svg+xml" },
-      { url: "/icon?v=silver-20261108-01", type: "image/png", sizes: "512x512" },
+      { url: "/favicon.svg?v=kb-silver-circle-20261112-02", type: "image/svg+xml" },
+      { url: "/icon?v=kb-silver-circle-20261112-02", type: "image/png", sizes: "512x512" },
     ],
-    shortcut: [{ url: "/favicon.svg?v=silver-20261108-01", type: "image/svg+xml" }],
-    apple: [{ url: "/apple-icon?v=silver-20261108-01", type: "image/png", sizes: "180x180" }],
+    shortcut: [{ url: "/favicon.svg?v=kb-silver-circle-20261112-02", type: "image/svg+xml" }],
+    apple: [{ url: "/apple-icon?v=kb-silver-circle-20261112-02", type: "image/png", sizes: "180x180" }],
   },
   robots: {
     index: true,
