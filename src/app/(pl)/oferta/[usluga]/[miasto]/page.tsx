@@ -69,6 +69,23 @@ export default async function LocalOfferPage({ params }: Props) {
   };
   const similar = localOffers.filter((other) => other.slug !== offer.slug).slice(0, 5);
 
+  const relatedGuides = offer.slug === "reklamy-meta" ? [
+    ["Reklamy Meta nie działają — diagnostyka", "/poradniki/reklamy-meta-nie-dzialaja"],
+    ["Reklamy Facebook nie działają", "/poradniki/reklamy-facebook-nie-dzialaja"],
+    ["Reklamy Instagram nie działają", "/poradniki/reklamy-instagram-nie-dzialaja"],
+    ["Jak poprawić reklamy w internecie?", "/poradniki/jak-poprawic-reklamy"],
+  ] : offer.slug === "marketing-internetowy" || offer.slug === "widocznosc-w-internecie" ? [
+    ["Jak poprawić marketing firmy?", "/poradniki/jak-poprawic-marketing-firmy"],
+    ["Jak poprawić reklamy w internecie?", "/poradniki/jak-poprawic-reklamy"],
+  ] : offer.slug === "crm-na-zamowienie" || offer.slug === "wdrozenie-crm" ? [
+    ["Ile kosztuje CRM na zamówienie?", "/poradniki/ile-kosztuje-crm-na-zamowienie"],
+  ] : offer.slug === "wirtualna-recepcjonistka-ai" ? [
+    ["Czy wirtualna recepcjonistka AI ma sens?", "/poradniki/wirtualna-recepcjonistka-ai-czy-warto"],
+  ] : offer.slug === "chatbot-ai-dla-firm" ? [
+    ["Ile kosztuje chatbot AI dla firmy?", "/poradniki/ile-kosztuje-chatbot-ai-dla-firm"],
+  ] : [];
+
+
   return (
     <main className="relative z-10 min-h-screen bg-[var(--brand-black)] text-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
@@ -177,6 +194,20 @@ export default async function LocalOfferPage({ params }: Props) {
           Szczegóły funkcjonalne ustalamy indywidualnie.
         </p>
       </section>
+
+      {relatedGuides.length > 0 && (
+        <section className="mx-auto max-w-6xl px-5 pb-14 md:px-8" aria-label="Powiązane poradniki">
+          <h2 className="text-2xl font-semibold">Poradniki i rozwiązania problemów</h2>
+          <div className="mt-5 flex flex-wrap gap-3">
+            {relatedGuides.map(([label, href]) => (
+              <Link key={href} href={href}
+                className="rounded-xl border border-white/20 px-4 py-3 text-sm text-white/75 transition hover:border-white/50 hover:text-white">
+                {label}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="mx-auto max-w-6xl px-5 pb-20 md:px-8">
         <div className="rounded-3xl bg-white p-8 text-black md:p-12">
