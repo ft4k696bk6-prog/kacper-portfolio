@@ -253,7 +253,7 @@ export function BerniLivingFace({
       // The empty window is truly empty: NEVER render a fallback image behind.
       if (frame && !frame.visible) return;
 
-      let picture = portraits.get(activePose) ?? portraits.get("neutral");
+      const picture = portraits.get(activePose) ?? portraits.get("neutral");
       if (!picture) return;
       // Avoid the old hard cuts between three completely different foxes
       // during speech, and the "sleeping" full-head replacement at blinks.
