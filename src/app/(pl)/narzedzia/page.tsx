@@ -25,6 +25,11 @@ export default function FreeToolsPage(){
    <div><p className="page-eyebrow">Potrzebujesz wdrożenia?</p><h2 className="mt-3 text-2xl font-medium">Wykryłeś problem? Mogę go naprawić.</h2><p className="mt-3 max-w-2xl text-sm leading-7 text-white/65">Zajmuję się stronami internetowymi, kampaniami Meta Ads, CRM i automatyzacją. Same testery są darmowe — możesz z nich korzystać bez zamawiania usług.</p></div>
    <Link href="/kontakt" className="brand-action inline-flex min-h-12 items-center justify-center rounded-lg px-5 text-sm">Porozmawiaj o rozwiązaniu</Link>
   </section>
+  <Link href="/narzedzia/test-mobilnosci-strony" className="mt-10 block max-w-3xl rounded-xl border border-white/15 p-5 transition-colors hover:border-white/40">
+    <h2 className="text-xl font-medium">Darmowy test strony na telefonie</h2>
+    <p className="mt-2 text-sm leading-7 text-white/65">Sprawdź techniczne sygnały mobilności i przejdź checklistę dla iPhone i Androida — bez rejestracji. Pełna ocena wyglądu wymaga też testu na urządzeniu.</p>
+    <span className="mt-3 inline-block text-sm underline underline-offset-4">Otwórz test mobilności</span>
+  </Link>
   <section className="mt-14 max-w-3xl space-y-4">
    <h2 className="text-2xl">Co obejmują darmowe testy?</h2>
    <p className="text-sm leading-7 text-white/65">Audyt HTML wykrywa wybrane problemy widoczne w publicznym kodzie strony. Nie zastępuje Search Console, pomiaru Core Web Vitals ani profesjonalnego audytu bezpieczeństwa. Kalkulatory prezentują wyniki zgodne z podanymi założeniami. Raporty reklam CSV i tokeny JWT analizowane są lokalnie w przeglądarce.</p>
