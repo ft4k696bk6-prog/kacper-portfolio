@@ -144,6 +144,7 @@ export function BerniLivingFace({
     let nextBlink = performance.now() + 2600 + Math.random() * 1800;
     let blinkingAt = -100000;
     let replayAt = 0;
+    let handledTransitionToken = 0;
     let lookX = 0, lookY = 0, gazeX = 0, gazeY = 0, lookUntil = 0;
     let observer: IntersectionObserver | null = null;
     const history = emptyTransitionMemory();
@@ -167,7 +168,7 @@ export function BerniLivingFace({
       const from = transition
         ? ((now - transition.start) / transition.choice.duration < .5 ? transition.from : transition.to)
         : showing;
-      const forced = latest.current.transitionToken > 0 && !!latest.current.transitionPreset;
+      const forced = latest.current.transitionToken !== handledTransitionToken && !!latest.current.transitionPreset;
       const same = from === desired;
       if (same && !forced) return;
       const levelFrom = BERNI_POSE_MOOD[from];
@@ -188,6 +189,7 @@ export function BerniLivingFace({
           strength: "large",
         };
       }
+      handledTransitionToken = latest.current.transitionToken;
       if (choice) {
         showing = from;
         transition = { from, to: desired, start: now, choice };
