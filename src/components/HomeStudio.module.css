@@ -317,3 +317,10 @@
  .introBuildSuccess{padding-top:5px;padding-bottom:6px}
 }
 @media(prefers-reduced-motion:reduce){.introOverlay,.introTerminal{display:none!important}}
+
+
+/* A visible, accessible escape hatch for the cinematic homepage build. */
+.skipIntro{display:none;position:fixed;z-index:250;right:max(22px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom));align-items:center;gap:10px;min-height:44px;padding:12px 17px;border:1px solid rgba(255,255,255,.32);border-radius:999px;background:rgba(14,14,17,.86);color:#f7f7f9;font:600 12px/1.1 var(--font-sans),system-ui,sans-serif;letter-spacing:.03em;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);cursor:pointer;touch-action:manipulation;transition:background .2s,border-color .2s}
+.skipIntro:hover,.skipIntro:focus-visible{background:#27272b;border-color:rgba(255,255,255,.75);outline-offset:3px}
+:global(html:is([data-home-intro="armed"],[data-home-intro="running"])) .skipIntro{display:inline-flex}
+@media(max-width:600px){.skipIntro{right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom))}}
