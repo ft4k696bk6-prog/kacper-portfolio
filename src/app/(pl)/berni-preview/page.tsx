@@ -1,95 +1,131 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
-import { BerniPremiumPortrait, type BerniPortraitMood } from "@/components/BerniPremiumPortrait";
+import { BerniPremiumPortrait } from "@/components/BerniPremiumPortrait";
+import {
+  BERNI_POSES, BERNI_POSE_LABELS, BERNI_POSE_MOOD,
+  berniPoseUrl, type BerniPose,
+} from "@/lib/berni-poses";
 import type { BerniTransitionName } from "@/lib/berni-transition";
 
-const moods: { value: BerniPortraitMood; pl: string; en: string }[] = [
-  { value: "idle", pl: "Spokojny", en: "Idle" },
-  { value: "curious", pl: "Ciekawski", en: "Curious" },
-  { value: "thinking", pl: "Myśli", en: "Thinking" },
-  { value: "happy", pl: "Zadowolony", en: "Happy" },
-  { value: "excited", pl: "Podekscytowany", en: "Excited" },
-  { value: "sleeping", pl: "Odpoczywa", en: "Resting" },
-  { value: "typing", pl: "Odpowiada", en: "Answering" },
-  { value: "surprised", pl: "Zaskoczony", en: "Surprised" },
-  { value: "worried", pl: "Zmartwiony", en: "Worried" },
+const transitions: { id: BerniTransitionName; label: string }[] = [
+  { id: "dive", label: "Nurek" },
+  { id: "tuck", label: "Schowanie" },
+  { id: "drop", label: "Opadnięcie" },
+  { id: "boomerang", label: "Bumerang" },
+  { id: "swoop-left", label: "Ślizg w lewo" },
+  { id: "swoop-right", label: "Ślizg w prawo" },
+  { id: "orbit-left", label: "Orbita lewa" },
+  { id: "orbit-right", label: "Orbita prawa" },
+  { id: "micro-tornado", label: "Mini-tornado" },
+  { id: "blur-twist", label: "Rozmyty obrót" },
+  { id: "spiral", label: "Spirala" },
+  { id: "pearl", label: "Zniknięcie" },
+  { id: "zoom-pop", label: "Wyskoczenie" },
+  { id: "whiplash", label: "Szybki zwrot" },
+  { id: "side-arc", label: "Łuk boczny" },
+  { id: "roll-in", label: "Przetoczenie" },
+  { id: "flip-peek", label: "Przekręcenie" },
+  { id: "bounce-swirl", label: "Wir i odbicie" },
 ];
 
-
-const transitions: {id:BerniTransitionName;label:string}[]=[{"id":"dive","label":"Nurek"},{"id":"tuck","label":"Schowanie"},{"id":"drop","label":"Opadnięcie"},{"id":"boomerang","label":"Bumerang"},{"id":"swoop-left","label":"Ślizg w lewo"},{"id":"swoop-right","label":"Ślizg w prawo"},{"id":"orbit-left","label":"Orbita lewa"},{"id":"orbit-right","label":"Orbita prawa"},{"id":"micro-tornado","label":"Mini-tornado"},{"id":"blur-twist","label":"Rozmyty obrót"},{"id":"spiral","label":"Spirala"},{"id":"pearl","label":"Zniknięcie"},{"id":"zoom-pop","label":"Wyskoczenie"},{"id":"whiplash","label":"Szybki zwrot"},{"id":"side-arc","label":"Łuk boczny"},{"id":"roll-in","label":"Przetoczenie"},{"id":"flip-peek","label":"Przekręcenie"},{"id":"bounce-swirl","label":"Wir i odbicie"}];
-
 export default function BerniPreview() {
-  const [mood, setMood] = useState<BerniPortraitMood>("idle");
+  const [pose, setPose] = useState<BerniPose>("neutral");
   const [blinkToken, setBlinkToken] = useState(0);
   const [reactionToken, setReactionToken] = useState(0);
   const [transitionToken, setTransitionToken] = useState(0);
-  const [transitionPreset, setTransitionPreset] = useState<BerniTransitionName|null>(null);
+  const [transitionPreset, setTransitionPreset] = useState<BerniTransitionName | null>(null);
+  const mood = BERNI_POSE_MOOD[pose];
+
+  function selectPose(value: BerniPose) {
+    setPose(value);
+    setReactionToken(x => x + 1);
+  }
+  function testTransition(id: BerniTransitionName) {
+    setTransitionPreset(id);
+    setPose(previous => previous === "surprised" ? "laughing" : "surprised");
+    setTransitionToken(t => t + 1);
+  }
+
   return (
     <main className="min-h-screen bg-[#090b0e] px-4 pb-16 pt-36 text-white sm:pt-40">
       <div className="mx-auto max-w-5xl">
-        <p className="text-xs uppercase tracking-[.3em] text-white/50">BERNECKI.DEV / PŁYNNA MIMIKA 2.5D</p>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">Berni — nowy asystent AI</h1>
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-white/60">
-          Każdy stan używa pełnego portretu z tej samej ilustracji. Mruganie nie uruchamia efektów przejścia. Kliknij stany, sprawdź płynność, a na telefonie dotykaj ekranu — Berni spojrzy w stronę dotknięcia.
+        <p className="text-xs uppercase tracking-[.25em] text-white/50">BERNECKI.DEV / BERNI — PODGLĄD TESTOWY</p>
+        <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">Berni — 20 różnych emocji</h1>
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-white/65">
+          To nowa wersja próbna. Każda mina to osobny pełny obraz — bez naklejanych ust i oczu.
+          Przy większej zmianie stara głowa całkowicie znika, następuje krótka przerwa
+          i nowa głowa wraca. Drobne mrugnięcie nie włącza filmowego przejścia.
         </p>
         <div className="mt-8 grid gap-5 lg:grid-cols-[minmax(0,1fr)_290px]">
-          <div className="relative flex min-h-[410px] flex-col items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_50%_35%,#29313c,#0e1116_68%,#090b0e)] p-5">
-            <BerniPremiumPortrait mood={mood} size={320} priority blinkToken={blinkToken} reactionToken={reactionToken} transitionToken={transitionToken} transitionPreset={transitionPreset} />
-            <p className="mt-4 text-sm text-white/60">Stan: <strong className="text-white">{mood}</strong></p>
-            <button type="button" onClick={() => setReactionToken(x => x + 1)}
-              className="mt-4 rounded-full border border-white/15 px-4 py-2 text-xs text-white/70 hover:bg-white/10">
-              Uruchom ponownie
-            </button>
-            <button type="button" onClick={() => setBlinkToken(x => x + 1)}
-              className="mt-3 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-xs text-white hover:bg-white/20">
-              Mrugnij teraz
-            </button>
+          <div className="relative flex min-h-[440px] flex-col items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_50%_35%,#29313c,#0e1116_68%,#090b0e)] p-5">
+            <BerniPremiumPortrait mood={mood} pose={pose} size={320} priority
+              blinkToken={blinkToken} reactionToken={reactionToken}
+              transitionToken={transitionToken} transitionPreset={transitionPreset} />
+            <p className="mt-4 text-sm text-white/60">
+              Stan: <strong className="text-white">{BERNI_POSE_LABELS[pose]}</strong>
+            </p>
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              <button type="button" onClick={() => setReactionToken(x => x + 1)}
+                className="rounded-full border border-white/20 px-4 py-2.5 text-xs text-white/80 hover:bg-white/10">
+                Uruchom ponownie
+              </button>
+              <button type="button" onClick={() => setBlinkToken(x => x + 1)}
+                className="rounded-full border border-white/30 bg-white/10 px-4 py-2.5 text-xs text-white hover:bg-white/20">
+                Mrugnij teraz
+              </button>
+            </div>
           </div>
           <div className="flex flex-col items-center justify-center rounded-[2rem] border border-white/10 bg-[#14171c] p-8">
             <p className="mb-5 text-sm font-medium">Rozmiar rzeczywistego dymka</p>
             <div className="grid h-14 w-14 place-items-center rounded-full border border-white/20 bg-[#15171a]">
-              <BerniPremiumPortrait mood={mood} size={56} reactionToken={reactionToken} />
+              <BerniPremiumPortrait mood={mood} pose={pose} size={56} reactionToken={reactionToken} />
             </div>
             <p className="mt-6 text-center text-xs leading-6 text-white/55">
-              Podgląd tego, co użytkownik zobaczy na bernecki.dev.
+              Podgląd ikony asystenta w rozmiarze mobilnym. Strona produkcyjna pozostaje bez zmian.
             </p>
           </div>
         </div>
-        <section className="mt-7 rounded-3xl border border-white/10 bg-[#14171c] p-6">
-          <h2 className="text-lg font-semibold">Animacje i stany rozmowy</h2>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {moods.map(item => (
-              <button type="button" key={item.value} onClick={() => { setMood(item.value); setReactionToken(x => x + 1); }}
-                aria-pressed={mood === item.value}
-                className={mood === item.value
-                  ? "rounded-full border border-white bg-white px-3 py-2 text-xs font-medium text-black"
-                  : "rounded-full border border-white/15 px-3 py-2 text-xs text-white/70 hover:border-white/50"}>
-                {item.pl}
+
+        <section className="mt-7 rounded-3xl border border-white/10 bg-[#14171c] p-5 sm:p-7">
+          <h2 className="text-lg font-semibold">Wybierz jedną z 20 min</h2>
+          <p className="mt-2 text-sm text-white/55">
+            Wybierz dowolny portret. Zmiany są wyraźne — oczy, brwi, pysk i emocje różnią się naprawdę.
+          </p>
+          <div className="mt-5 grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
+            {BERNI_POSES.map(item => (
+              <button type="button" key={item}
+                onClick={() => selectPose(item)}
+                aria-pressed={pose === item}
+                className={pose === item
+                  ? "overflow-hidden rounded-2xl border border-white bg-white/15 p-2 text-center"
+                  : "overflow-hidden rounded-2xl border border-white/10 bg-black/25 p-2 text-center hover:border-white/45"}>
+                <span className="relative mx-auto block aspect-square w-full">
+                  <Image src={berniPoseUrl(item)} alt="" fill sizes="(max-width: 640px) 30vw, 150px"
+                    className="object-contain" />
+                </span>
+                <span className="mt-2 block text-[11px] leading-4 text-white/85">{BERNI_POSE_LABELS[item]}</span>
               </button>
             ))}
           </div>
-          <details className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-            <summary className="cursor-pointer select-none text-sm font-medium text-white">
-              Przetestuj 18 animacji przejścia
-            </summary>
-            <p className="mt-3 text-xs leading-6 text-white/55">
-              Każdy przycisk odtwarza osobny efekt, aby łatwo porównać ruchy.
-              Zwykłe zmiany spojrzenia i mruganie nie używają tych efektów.
-            </p>
-            <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
-              {transitions.map(item=>(
-                <button key={item.id} type="button"
-                  onClick={()=>{setTransitionPreset(item.id);setMood(m=>m==="surprised"?"happy":"surprised");setTransitionToken(t=>t+1);}}
-                  className="rounded-xl border border-white/15 px-3 py-2.5 text-xs text-white/80 transition hover:border-white/50 hover:bg-white/10">
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </details>
-          <p className="mt-5 text-xs leading-6 text-white/50">
-            Pełne portrety mają identyczny kolor i obrys głowy. Do większej zmiany miny Berni używa jednego z 18 efektów: nurek, zwrot, blur, spirala, mini-tornado i inne. Podmiana następuje dopiero, gdy głowa jest ukryta w ruchu. Efekty mają historię i ograniczenie powtórek. Zwykłe spojrzenie, mrugnięcie i myślenie nie uruchamiają efektu specjalnego.
+        </section>
+
+        <section className="mt-7 rounded-3xl border border-white/10 bg-[#14171c] p-5 sm:p-7">
+          <h2 className="text-lg font-semibold">18 filmowych przejść</h2>
+          <p className="mt-2 text-sm leading-6 text-white/55">
+            Stara postać najpierw nurkuje, odlatuje lub znika. W środku przejścia
+            nie ma żadnej głowy — dopiero potem wchodzi nowa. Przejścia mają historię,
+            więc nie powinny powtarzać się co chwilę.
           </p>
+          <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+            {transitions.map(item => (
+              <button type="button" key={item.id} onClick={() => testTransition(item.id)}
+                className="rounded-xl border border-white/15 px-3 py-3 text-xs text-white/80 transition hover:border-white/50 hover:bg-white/10">
+                {item.label}
+              </button>
+            ))}
+          </div>
         </section>
       </div>
     </main>
