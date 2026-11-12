@@ -4,9 +4,7 @@ import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { usePathname, useRouter } from "next/navigation";
-import { CalendarDays, Eye, Loader2, MessageCircle, RotateCcw, Send, Smile, X } from "lucide-react";
-import { BerniLiveAvatar } from "@/components/BerniLiveAvatar";
-import { BERNI_GROUPS, BERNI_REACTIONS, detectBerniReaction, type ReactionGroup } from "@/lib/berni-reaction-model";
+import { CalendarDays, Eye, Loader2, MessageCircle, RotateCcw, Send, X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { DEFAULT_BOOKING_TIME_ZONE, formatSlotDate } from "@/lib/booking";
 import type { AvailableBookingDay } from "@/lib/calcom";
@@ -241,10 +239,6 @@ export function AIMascotAssistant() {
   const [website, setWebsite] = useState("");
   const [awaitingAuditUrl, setAwaitingAuditUrl] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [mascotReaction, setMascotReaction] = useState("face-neutral");
-  const [mascotRevision, setMascotRevision] = useState(0);
-  const [showReactions, setShowReactions] = useState(false);
-  const [reactionGroup, setReactionGroup] = useState<ReactionGroup>("klipy");
   const [error, setError] = useState("");
   const [lastFailedQuestion, setLastFailedQuestion] = useState("");
   const [booking, setBooking] = useState<BookingState>(defaultBookingState);
@@ -863,45 +857,6 @@ export function AIMascotAssistant() {
     [t.aiMascot.quickActions,lang],
   );
 
-  // The real assistant, not merely the demo, drives Berni from the conversation.
-  const latestMessage = messages[messages.length - 1];
-  useEffect(() => {
-    if (loading) {
-      setMascotReaction("clip-wariant-01");
-      return;
-    }
-    if (latestMessage?.content) {
-      setMascotReaction(detectBerniReaction(latestMessage.content));
-      setMascotRevision(count => count + 1);
-    }
-  }, [loading, latestMessage?.id, latestMessage?.content]);
-
-  useEffect(() => {
-    if (!open || !mounted) return;
-    setShowReactions(false);
-  }, [open, mounted]);
-
-  useEffect(() => {
-    if (!nudge?.text || open || loading) return;
-    setMascotReaction(detectBerniReaction(nudge.text));
-  }, [nudge?.id, nudge?.text, open, loading]);
-
-  // Occasional subtle reactions while closed; reduced motion and user preferences win.
-  useEffect(() => {
-    if (!mounted || !introFinished || open || hidden || cookieBannerVisible || prefersReducedMotion) return;
-    const sequence = [
-      "face-neutral", "clip-mruganie", "motion-peek", "clip-usmiech",
-      "motion-listen", "face-confident", "motion-think", "clip-ekscytacja",
-    ];
-    let index = 0;
-    const interval = window.setInterval(() => {
-      index = (index + 1) % sequence.length;
-      setMascotReaction(sequence[index]);
-      setMascotRevision(count => count + 1);
-    }, 7600);
-    return () => window.clearInterval(interval);
-  }, [mounted, introFinished, open, hidden, cookieBannerVisible, prefersReducedMotion]);
-
   if (!mounted || !introFinished) return null;
 
   return (
@@ -957,21 +912,11 @@ export function AIMascotAssistant() {
                     <div className="flex items-start justify-between gap-3 border-b border-white/[0.07] px-4 py-3">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <BerniLiveAvatar reactionId={mascotReaction} revision={mascotRevision} size={32} />
-                          <p className="truncate text-sm font-medium text-white">{lang === "pl" ? "Berni · Asystent AI" : "Berni · AI assistant"}</p>
+                          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/20 bg-white/10" aria-hidden="true"><MessageCircle className="h-4 w-4 text-white" /></span>
+                          <p className="truncate text-sm font-medium text-white">{t.aiMascot.chatTitle}</p>
                         </div>
                       </div>
                       <div className="flex shrink-0 items-center gap-1">
-                        <button
-                          type="button"
-                          onClick={() => setShowReactions(visible => !visible)}
-                          aria-label={lang === "pl" ? "Wybierz reakcję Berniego" : "Choose Berni's reaction"}
-                          aria-expanded={showReactions}
-                          data-testid="berni-choose-reaction"
-                          className="grid h-8 w-8 place-items-center rounded-full text-white/70 transition hover:bg-white/10 hover:text-white"
-                        >
-                          <Smile className="h-4 w-4" />
-                        </button>
                         <button
                           type="button"
                           onClick={hideMascot}
@@ -990,36 +935,6 @@ export function AIMascotAssistant() {
                         </button>
                       </div>
                     </div>
-
-                    {showReactions ? (
-                      <div data-testid="berni-live-reactions" className="max-h-44 shrink-0 overflow-y-auto overscroll-contain border-b border-white/10 bg-[#101318] p-3">
-                        <div className="mb-2 flex flex-wrap gap-1.5">
-                          {BERNI_GROUPS.map(group => (
-                            <button
-                              type="button" key={group.id}
-                              onClick={() => setReactionGroup(group.id)}
-                              aria-pressed={reactionGroup === group.id}
-                              className={reactionGroup === group.id
-                                ? "rounded-full border border-white/50 bg-white/15 px-2.5 py-1.5 text-[11px] text-white"
-                                : "rounded-full border border-white/15 px-2.5 py-1.5 text-[11px] text-white/65"}
-                            >{group.label}</button>
-                          ))}
-                        </div>
-                        <div className="grid grid-cols-3 gap-1.5">
-                          {BERNI_REACTIONS.filter(reaction => reaction.group === reactionGroup).map(reaction => (
-                            <button type="button" key={reaction.id}
-                              onClick={() => {
-                                setMascotReaction(reaction.id);
-                                setMascotRevision(value => value + 1);
-                                setShowReactions(false);
-                              }}
-                              data-testid={`live-reaction-${reaction.id}`}
-                              className="min-h-9 rounded-lg border border-white/10 bg-white/[0.04] px-1.5 py-1.5 text-[11px] leading-tight text-white/85 hover:bg-white/10"
-                            >{reaction.label}</button>
-                          ))}
-                        </div>
-                      </div>
-                    ) : null}
 
                     <div
                       ref={scrollAreaRef}
@@ -1113,11 +1028,7 @@ export function AIMascotAssistant() {
                             ref={inputRef}
                             id="ai-mascot-message"
                             value={input}
-                            onChange={(event) => {
-                              setInput(event.target.value);
-                              if (event.target.value.trim()) setMascotReaction("motion-listen");
-                            }}
-                            onFocus={() => setMascotReaction("motion-listen")}
+                            onChange={(event) => setInput(event.target.value)}
                             onKeyDown={(event) => {
                               if (event.key === "Enter" && !event.shiftKey) {
                                 event.preventDefault();
@@ -1179,7 +1090,7 @@ export function AIMascotAssistant() {
                  onClick={() => openChat()}
                  className="relative grid h-14 w-14 place-items-center rounded-full border border-white/30 bg-[#15171a] text-white shadow-[0_8px_28px_rgba(0,0,0,0.42)] hover:border-white/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                >
-                 <BerniLiveAvatar reactionId={mascotReaction} revision={mascotRevision} size={56} />
+                 <span className="select-none text-[15px] font-semibold tracking-[0.08em]" aria-hidden="true">AI</span>
                </button>
             </div>
           </div>

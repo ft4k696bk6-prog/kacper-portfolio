@@ -8,7 +8,7 @@ const assistant=readFileSync("src/components/AIMascotAssistant.tsx","utf8");
 const css=readFileSync("src/components/BerniLiveAvatar.module.css","utf8");
 const importer=readFileSync("scripts/fetch-berni-preview-gifs.mjs","utf8");
 
-describe("Berni in the real production assistant",()=>{
+describe("Berni legacy assets disconnected from the production chat",()=>{
  it("maps 48 unique reactions: 11 GIFs, 20 emotions and 17 gestures",()=>{
   expect(BERNI_REACTIONS).toHaveLength(48);
   expect(new Set(BERNI_REACTIONS.map(r=>r.id)).size).toBe(48);
@@ -17,18 +17,18 @@ describe("Berni in the real production assistant",()=>{
   expect(berniReactionCount("mimika")).toBe(20);
   expect(berniReactionCount("gesty")).toBe(17);
  });
- it("loads each animation in the actual chat, not only a test gallery",()=>{
+ it("keeps legacy asset integrity but does not render it in the actual chat",()=>{
   for(const reaction of BERNI_REACTIONS.filter(r=>r.clip)){
     expect(importer).toContain(`"name":"${reaction.clip}"`);
   }
   expect(avatar).toContain("BerniPremiumPortrait");
   expect(avatar).toContain("/images/berni/clips/");
-  expect(assistant).toContain("<BerniLiveAvatar");
+  expect(assistant).not.toContain("<BerniLiveAvatar");
   expect(assistant).toContain("data-testid=\"ai-chat-bubble\"");
-  expect(assistant).toContain("setMascotReaction");
-  expect(assistant).toContain("latestMessage.content");
-  expect(assistant).toContain("BERNI_REACTIONS.filter");
-  expect(assistant).toContain('data-testid="berni-choose-reaction"');
+  expect(assistant).not.toContain("setMascotReaction");
+  expect(assistant).toContain('"/api/ai-consultant"');
+  expect(assistant).not.toContain("BERNI_REACTIONS.filter");
+  expect(assistant).not.toContain('data-testid="berni-choose-reaction"');
  });
  it("reacts differently to context and text",()=>{
   const examples=[
