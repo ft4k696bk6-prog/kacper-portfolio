@@ -1,0 +1,4 @@
+.stage{position:relative;isolation:isolate;display:inline-flex;flex:0 0 auto;vertical-align:middle;user-select:none;-webkit-user-select:none;overflow:visible}
+.portrait{position:absolute;inset:0;display:block;filter:drop-shadow(0 6px 12px rgba(0,0,0,.36));transform-origin:50% 54%}
+.art{object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none}
+@media(prefers-reduced-motion:reduce){.portrait{animation:none!important;transition:none!important;transform:none!important}}

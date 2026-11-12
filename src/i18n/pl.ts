@@ -14,7 +14,7 @@ export const pl: Translations = {
     interactive: "Interaktywne portfolio",
   },
   meta: {
-    homeTitle: "Strony internetowe, CRM i aplikacje webowe | Kacper Bernecki",
+    homeTitle: "Kacper Bernecki — Strony WWW, CRM i automatyzacje AI",
     homeDescription:
       "Strony internetowe, landing page i CRM-y dla firm. Kacper Bernecki — bezpośredni kontakt, dopracowany wygląd i wycena dopasowana do zakresu.",
   },
