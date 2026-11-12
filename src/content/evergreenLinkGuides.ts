@@ -73,7 +73,7 @@ export const evergreenLinkGuides = [
     sources:[
       {label:"Google Search Central — wycofanie Mobile-Friendly Test",url:"https://developers.google.com/search/blog/2023/04/page-experience-in-search"},
       {label:"Google — PageSpeed Insights",url:"https://pagespeed.web.dev/"},
-      {label:"Darmowy audyt HTML i viewport",url:"https://bernecki.dev/narzedzia/audyt-strony"}
+      {label:"Darmowy test strony mobilnej i audyt viewport",url:"https://bernecki.dev/narzedzia/test-mobilnosci-strony"}
     ]
   }
 ] as const;
