@@ -88,6 +88,43 @@ export default function BerniPreview() {
           </div>
         </div>
 
+        <section className="mt-7 rounded-3xl border border-white/10 bg-[#14171c] p-5 sm:p-7" data-testid="berni-gif-gallery">
+          <h2 className="text-xl font-semibold">Berni — 11 animowanych GIF-ów</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-white/60">
+            Te same animacje, które przygotowaliśmy w rozmowie, odtwarzane w pętli.
+            Pierwsze pięć to nowe emocje, a sześć kolejnych to wcześniejsze warianty.
+            To wyłącznie podgląd testowy.
+          </p>
+          <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {([
+              ["smiech", "Śmiech"],
+              ["usmiech", "Uśmiech"],
+              ["mruganie", "Mruganie"],
+              ["ekscytacja", "Ekscytacja"],
+              ["zaskoczenie", "Zaskoczenie"],
+              ["wariant-01", "Wariant 01"],
+              ["wariant-02", "Wariant 02"],
+              ["wariant-03", "Wariant 03"],
+              ["wariant-04", "Wariant 04"],
+              ["wariant-05", "Wariant 05"],
+              ["wariant-06", "Wariant 06"],
+            ] as const).map(([key, label]) => (
+              <div key={key} className="min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-[#0a0d12] p-2.5">
+                <Image
+                  src={`/images/berni/clips/${key}.gif`}
+                  alt={`Berni — animacja: ${label}`}
+                  width={240}
+                  height={240}
+                  unoptimized
+                  className="aspect-square w-full rounded-xl object-cover"
+                  sizes="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 240px"
+                />
+                <p className="px-1 pb-1 pt-3 text-center text-sm text-white/85">{label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <section className="mt-7 rounded-3xl border border-white/10 bg-[#14171c] p-5 sm:p-7">
           <h2 className="text-lg font-semibold">Przetestuj żywą mimikę</h2>
           <p className="mt-2 text-sm leading-6 text-white/60">
