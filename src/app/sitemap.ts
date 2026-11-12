@@ -26,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {url:siteUrl+"/minigry",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/minigry",en:siteUrl+"/en/games"}}},
     {url:siteUrl+"/en/games",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/minigry",en:siteUrl+"/en/games"}}},
+    {url:siteUrl+"/narzedzia/test-mobilnosci-strony",changeFrequency:"monthly",priority:0.82},
     {url:siteUrl+"/narzedzia",changeFrequency:"monthly",priority:0.9,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia",en:siteUrl+"/en/tools"}}},
     {url:siteUrl+"/en/tools",changeFrequency:"monthly",priority:0.9,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia",en:siteUrl+"/en/tools"}}},
     {url:siteUrl+"/narzedzia/codzienne",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/codzienne",en:siteUrl+"/en/tools/everyday"}}},
