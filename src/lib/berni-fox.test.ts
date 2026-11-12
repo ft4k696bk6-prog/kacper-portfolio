@@ -46,10 +46,12 @@ describe("Berni: 20 genuine complete portraits", () => {
     expect(transitions).toContain("ENTER_START=.58");
     expect(transitions).toContain("EXIT_END=.43");
   });
-  it("speaking uses full expressions without crossfading heads", () => {
-    expect(engine).toContain('["talk-small", "talk-open", "talk-small", "talk-round", "talk-open"]');
-    expect(engine).toContain("const index = Math.floor(now / 168)");
-    expect(engine).not.toContain("globalAlpha=scaled");
+  it("animates mouth and blinking within one stable picture without changing the entire head", () => {
+    expect(engine).toContain("drawBerniMouth");
+    expect(engine).toContain("drawBerniBlink");
+    expect(engine).toContain("berniMouthOpenness");
+    expect(engine).not.toContain('const speech = ["talk-small"');
+    expect(engine).not.toContain('portraits.get("sleeping") ?? picture');
   });
   it("supports manual inspection of all twenty expressions and eighteen effects", () => {
     expect(preview).toContain("BERNI_POSES.map");
@@ -60,6 +62,7 @@ describe("Berni: 20 genuine complete portraits", () => {
     expect(preview).toContain("blinkToken={blinkToken}");
     expect(preview).toContain("setTransitionToken(t => t + 1)");
     expect(preview).toContain("18 filmowych przejść");
+    expect(preview).toContain("Przetestuj żywą mimikę");
     expect(preview).toContain("transitionPreset={transitionPreset}");
   });
   it("keeps interaction, zoom handling and chat backend intact", () => {

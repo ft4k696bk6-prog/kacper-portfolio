@@ -52,11 +52,11 @@ export default function BerniPreview() {
     <main className="min-h-screen bg-[#090b0e] px-4 pb-16 pt-36 text-white sm:pt-40">
       <div className="mx-auto max-w-5xl">
         <p className="text-xs uppercase tracking-[.25em] text-white/50">BERNECKI.DEV / BERNI — PODGLĄD TESTOWY</p>
-        <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">Berni — 20 różnych emocji</h1>
+        <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">Berni — żywa mimika i 20 emocji</h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-white/65">
-          To nowa wersja próbna. Każda mina to osobny pełny obraz — bez naklejanych ust i oczu.
-          Przy większej zmianie stara głowa całkowicie znika, następuje krótka przerwa
-          i nowa głowa wraca. Drobne mrugnięcie nie włącza filmowego przejścia.
+          Berni rusza pyskiem, śmieje się, mruga i oddycha bez podmieniania całej głowy
+          przy każdej klatce. Każda pętla zaczyna i kończy się identyczną miną.
+          Filmowe przejścia są osobnym testem — nie są potrzebne do animacji ust.
         </p>
         <div className="mt-8 grid gap-5 lg:grid-cols-[minmax(0,1fr)_290px]">
           <div className="relative flex min-h-[440px] flex-col items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_50%_35%,#29313c,#0e1116_68%,#090b0e)] p-5">
@@ -69,7 +69,7 @@ export default function BerniPreview() {
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               <button type="button" onClick={() => setReactionToken(x => x + 1)}
                 className="rounded-full border border-white/20 px-4 py-2.5 text-xs text-white/80 hover:bg-white/10">
-                Uruchom ponownie
+                Powtórz pętlę
               </button>
               <button type="button" onClick={() => setBlinkToken(x => x + 1)}
                 className="rounded-full border border-white/30 bg-white/10 px-4 py-2.5 text-xs text-white hover:bg-white/20">
@@ -87,6 +87,26 @@ export default function BerniPreview() {
             </p>
           </div>
         </div>
+
+        <section className="mt-7 rounded-3xl border border-white/10 bg-[#14171c] p-5 sm:p-7">
+          <h2 className="text-lg font-semibold">Przetestuj żywą mimikę</h2>
+          <p className="mt-2 text-sm leading-6 text-white/60">
+            Każda emocja jest animowana w pętli na jednym obrazie: bez przeskoków uszu, oczu ani słuchawek.
+            Otwieranie pyska i mruganie nie uruchamia filmowego przejścia.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {([
+              ["talk-small","Mówi"], ["laughing","Śmieje się"], ["happy","Uśmiecha się"],
+              ["excited","Cieszy się"], ["neutral","Spokojny"], ["surprised","Zaskoczony"]
+            ] as const).map(([value,label]) => (
+              <button key={value} type="button" onClick={() => selectPose(value)}
+                className={pose===value ? "rounded-full border border-white bg-white/15 px-4 py-2.5 text-xs" :
+                  "rounded-full border border-white/20 px-4 py-2.5 text-xs text-white/80 hover:bg-white/10"}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </section>
 
         <section className="mt-7 rounded-3xl border border-white/10 bg-[#14171c] p-5 sm:p-7">
           <h2 className="text-lg font-semibold">Wybierz jedną z 20 min</h2>
@@ -112,7 +132,7 @@ export default function BerniPreview() {
         </section>
 
         <section className="mt-7 rounded-3xl border border-white/10 bg-[#14171c] p-5 sm:p-7">
-          <h2 className="text-lg font-semibold">18 filmowych przejść</h2>
+          <h2 className="text-lg font-semibold">18 filmowych przejść (opcjonalnie)</h2>
           <p className="mt-2 text-sm leading-6 text-white/55">
             Stara postać najpierw nurkuje, odlatuje lub znika. W środku przejścia
             nie ma żadnej głowy — dopiero potem wchodzi nowa. Przejścia mają historię,

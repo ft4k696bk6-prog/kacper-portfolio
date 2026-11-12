@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { type BerniLivingMood } from "@/lib/berni-face-state";
+import { berniMouthOpenness, berniBlinkAmount, drawBerniMouth, drawBerniBlink } from "./BerniLiveFeatures";
 import { BERNI_MOOD_POSE, BERNI_POSE_MOOD, berniPoseUrl, type BerniPose } from "@/lib/berni-poses";
 import {
   berniTransitionFrame, chooseBerniTransition, emptyTransitionMemory,
@@ -93,9 +94,9 @@ function paintAccent(
 }
 
 /**
- * Draw ONE whole, artistically generated head per frame. Changing the pose
- * always exits, clears the screen, then enters. NO stickers, layer overlays,
- * morphing fur, translucent crossfades or background neutral head.
+ * Each emotion retains its own original artwork, but within an emotion the
+ * jaw and eyelids move continuously on ONE portrait. The whole head changes
+ * only for deliberately selected cinematic effects.
  */
 export function BerniLivingFace({
   mood, pose = null, size, blinkToken = 0, reactionToken = 0,
@@ -137,6 +138,10 @@ export function BerniLivingFace({
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const pixels = Math.min(640, Math.max(112, Math.round(size * Math.min(2, window.devicePixelRatio || 1))));
     canvas.width = pixels;canvas.height = pixels;
+    const mouthLayer = document.createElement("canvas");
+    mouthLayer.width = mouthLayer.height = pixels;
+    const mouthCtx = mouthLayer.getContext("2d");
+
 
     let alive = true, visible = true, raf = 0, lastFrame = 0;
     let showing: BerniPose = "neutral";
@@ -144,6 +149,7 @@ export function BerniLivingFace({
     let nextBlink = performance.now() + 2600 + Math.random() * 1800;
     let blinkingAt = -100000;
     let replayAt = 0;
+    let loopStart = performance.now();
     let handledTransitionToken = 0;
     let lookX = 0, lookY = 0, gazeX = 0, gazeY = 0, lookUntil = 0;
     let observer: IntersectionObserver | null = null;
@@ -196,10 +202,11 @@ export function BerniLivingFace({
       } else {
         showing = desired;
         transition = null;
+        loopStart = now;
       }
     }
 
-    function replay() { replayAt = performance.now(); }
+    function replay() { replayAt = performance.now(); loopStart = replayAt; }
     function blink() { blinkingAt = performance.now(); nextBlink = blinkingAt + 3900; }
 
     function track(x: number, y: number, duration: number) {
@@ -229,7 +236,7 @@ export function BerniLivingFace({
       if (transition) {
         progress = clamp((now - transition.start) / transition.choice.duration);
         if (progress >= 1) {
-          showing = transition.to; transition = null; activePose = showing;
+          showing = transition.to; transition = null; activePose = showing; loopStart = now;
         } else {
           frame = berniTransitionFrame(transition.choice.name, progress);
           activePose = frame.phase === "exit" ? transition.from : transition.to;
@@ -248,15 +255,9 @@ export function BerniLivingFace({
 
       let picture = portraits.get(activePose) ?? portraits.get("neutral");
       if (!picture) return;
-      if (activePose === "talk-small" && !motionOff && !transition) {
-        // Whole coherent portraits, one at a time. No alpha-mixed faces.
-        const speech = ["talk-small", "talk-open", "talk-small", "talk-round", "talk-open"] as const;
-        const index = Math.floor(now / 168) % speech.length;
-        picture = portraits.get(speech[index]) ?? picture;
-      }
-      if (activePose === "neutral" && now - blinkingAt > 105 && now - blinkingAt < 250 && !motionOff) {
-        picture = portraits.get("sleeping") ?? picture;
-      }
+      // Avoid the old hard cuts between three completely different foxes
+      // during speech, and the "sleeping" full-head replacement at blinks.
+      // Mouth animation is now an independent, seamless loop on this image.
       const aimX = now < lookUntil && !motionOff ? lookX : 0;
       const aimY = now < lookUntil && !motionOff ? lookY : 0;
       gazeX += (aimX - gazeX) * .14;
@@ -275,7 +276,16 @@ export function BerniLivingFace({
         // A tiny blur is confined to the moving complete character.
         if (frame.blur > .3) ctx!.filter = "blur(" + Math.min(6, frame.blur * pixels / 400).toFixed(1) + "px)";
       }
-      ctx!.drawImage(picture, -pixels / 2, -pixels / 2, pixels, pixels);
+      ctx!.translate(-pixels / 2, -pixels / 2);
+      ctx!.drawImage(picture, 0, 0, pixels, pixels);
+      if (!motionOff && mouthCtx && !transition) {
+        drawBerniMouth(ctx!, picture, activePose, pixels,
+          berniMouthOpenness(activePose, now - loopStart), mouthLayer, mouthCtx);
+      }
+      if (!motionOff && !transition) {
+        drawBerniBlink(ctx!, picture, activePose, pixels,
+          berniBlinkAmount(now - blinkingAt));
+      }
       ctx!.restore();
     }
     function run() { if (alive && visible && !document.hidden && !raf) raf = requestAnimationFrame(draw); }
@@ -304,7 +314,7 @@ export function BerniLivingFace({
       run();
       // Keep only frequently used reactions warm; selected other poses load
       // on demand. A small 56px launcher will not fetch all twenty PNG files.
-      for (const p of ["sleeping", "talk-small", "talk-open", "talk-round"] as const)
+      for (const p of ["talk-small", "happy", "laughing"] as const)
         void loadPose(p).catch(() => {});
     }).catch(() => { /* The neutral fallback stays visible. */ });
 
