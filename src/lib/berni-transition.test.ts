@@ -18,10 +18,12 @@ describe("Berni cinematic animation selection",()=>{
    expect(Number.isFinite(middle.blur)).toBe(true);
   }
  });
- it("does not use cinematic effects for blinking, gaze changes or the same expression",()=>{
+ it("uses brief masks for changed portraits, but none for blinking or looking",()=>{
   const mem=emptyTransitionMemory();
+  // A genuine full-head expression change gets a short masked transition.
+  // Blinking and merely looking around do not change the mood or pose.
   for(const mood of ["curious","thinking","listening","working"] as const)
-   expect(chooseBerniTransition("idle",mood,1000,mem,()=>0)).toBeNull();
+   expect(chooseBerniTransition("idle",mood,1000,mem,()=>0)).not.toBeNull();
   expect(transitionLevel("idle","idle")).toBe("none");
   expect(chooseBerniTransition("idle","idle",1000,mem)).toBeNull();
  });
