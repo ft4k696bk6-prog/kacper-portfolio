@@ -51,6 +51,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ),
 
     { url: siteUrl + "/polityka-prywatnosci", changeFrequency: "yearly", priority: 0.2 },
+    { url: siteUrl + "/google-ads-dla-firm", changeFrequency: "monthly", priority: 0.95 },
+    { url: siteUrl + "/narzedzia/kalkulator-budzetu-google-ads", changeFrequency: "monthly", priority: 0.85 },
     { url: siteUrl + "/wdrozenia-ai-dla-firm", changeFrequency: "monthly", priority: 0.9 },
     { url: siteUrl + "/crm-dla-firm-handlowych", changeFrequency: "monthly", priority: 0.9 },
     { url: siteUrl + "/automatyzacja-leadow-i-sprzedazy", changeFrequency: "monthly", priority: 0.9 },
