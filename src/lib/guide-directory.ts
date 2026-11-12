@@ -10,15 +10,17 @@ import { businessGrowthGuidesThree } from "../content/businessGrowthGuidesThree"
 import { businessGrowthGuidesFour } from "../content/businessGrowthGuidesFour";
 import { metaAdsTroubleshootingGuides } from "../content/metaAdsTroubleshootingGuides";
 import { seoCommercialGuides } from "../content/seoCommercialGuides";
+import { googleAdsAndDigitalGuides } from "../content/googleAdsAndDigitalGuides";
 
 /** Jeden katalog: zachowuje wszystkie poradniki tworzone równolegle w guides.ts. */
-export const allGuides = [...existingGuides, ...pseoGuides, ...offlineGuides, ...offlineBatchTwoGuides, ...businessGuides, ...aiGuides, ...businessGrowthGuidesOne, ...businessGrowthGuidesTwo, ...businessGrowthGuidesThree, ...businessGrowthGuidesFour, ...metaAdsTroubleshootingGuides, ...seoCommercialGuides];
+export const allGuides = [...existingGuides, ...pseoGuides, ...offlineGuides, ...offlineBatchTwoGuides, ...businessGuides, ...aiGuides, ...businessGrowthGuidesOne, ...businessGrowthGuidesTwo, ...businessGrowthGuidesThree, ...businessGrowthGuidesFour, ...metaAdsTroubleshootingGuides, ...seoCommercialGuides, ...googleAdsAndDigitalGuides];
 export type Guide = (typeof allGuides)[number];
 
 export const guideCategories = [
   { slug: "rozwoj-firmy", label: "Rozwój firmy, sprzedaż i marketing", description: "Praktyczne pytania właścicieli firm: klienci, marże, SEO, reklamy, CRM, automatyzacje i procesy." },
   { slug: "ai-w-firmie", label: "AI w firmie", description: "Promptowanie, API, chatboty, automatyzacja i bezpieczeństwo wdrożeń AI." },
   { slug: "meta-ads", label: "Meta Ads i reklamy", description: "Błędy Menedżera reklam, formularze Lead Ads, piksel i pomiar konwersji." },
+  { slug: "google-ads", label: "Google Ads i reklamy w wyszukiwarce", description: "Kampanie Google, wyszukiwane hasła, pomiar konwersji, audyty i budżety reklamowe." },
   { slug: "vercel-hosting", label: "Vercel i hosting", description: "Wdrożenia, statusy projektów, konfiguracja hostingu i domen." },
   { slug: "supabase-bazy", label: "Supabase i bazy danych", description: "SQL, RLS, uprawnienia, logowanie, błędy i dane w aplikacji." },
   { slug: "nextjs-react", label: "Next.js, React i TypeScript", description: "Błędy aplikacji, renderowania, komponentów i kompilacji." },
@@ -39,6 +41,7 @@ export type GuideCategorySlug = (typeof guideCategories)[number]["slug"];
 export const GUIDE_PAGE_SIZE = 24;
 
 const categoryRules: readonly [GuideCategorySlug, RegExp][] = [
+  ["google-ads", /google.ads|adwords|reklam.w.google/],
   ["meta-ads", /meta|facebook|instagram|pixel|conversions.api|kampani|reklam|lead.ads|capi|ads.manager/],
   ["vercel-hosting", /vercel|deployment|hosting|build.exited|preview.production|404.after.deploy/],
   ["supabase-bazy", /supabase|postgres|row.level|\brls\b|\bsql\b|baza.danych/],
