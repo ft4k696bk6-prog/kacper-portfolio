@@ -50,16 +50,48 @@ export function HomeStudio() {
     ], { duration: 2400, fill: "both" });
 
     root.dataset.homeIntro = "running";
+
+    // The CSS lock is active already in the server-rendered "armed" phase.
+    // Fix the body as well to prevent touch/momentum scrolling on iOS Safari.
+    const scrollTop = window.scrollY;
+    const bodyStyle = document.body.style;
+    const previousBody = {
+      position: bodyStyle.position,
+      top: bodyStyle.top,
+      left: bodyStyle.left,
+      right: bodyStyle.right,
+      width: bodyStyle.width,
+      overflow: bodyStyle.overflow,
+      touchAction: bodyStyle.touchAction,
+    };
+    bodyStyle.position = "fixed";
+    bodyStyle.top = `-${scrollTop}px`;
+    bodyStyle.left = "0";
+    bodyStyle.right = "0";
+    bodyStyle.width = "100%";
+    bodyStyle.overflow = "hidden";
+    bodyStyle.touchAction = "none";
+    let completed = false;
     const finish = () => {
+      if (completed) return;
+      completed = true;
       root.dataset.homeIntro = "skip";
-      flight.cancel(); // The real logo stays exactly where the navbar laid it out.
+      flight.cancel(); // The real logo stays in its native navbar position.
+      Object.assign(bodyStyle, previousBody);
+      window.scrollTo(0, scrollTop);
     };
     const done = window.setTimeout(finish, 3770);
-    const onResize = () => finish(); // No misaligned landing if the viewport changes mid-flight.
+    const onResize = () => finish(); // No misaligned landing after viewport changes.
+    const onSkip = () => {
+      window.clearTimeout(done);
+      finish();
+    };
     window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("bernecki:home-intro-skip", onSkip);
     return () => {
       window.clearTimeout(done);
       window.removeEventListener("resize", onResize);
+      window.removeEventListener("bernecki:home-intro-skip", onSkip);
       finish();
     };
   }, []);
@@ -85,6 +117,16 @@ export function HomeStudio() {
       <div className={styles.introProgress}><i /></div>
       <div className={styles.introBuildSuccess}>✓ PAGE READY <span>100%</span></div>
     </div>
+    <button
+      type="button"
+      className={styles.skipIntro}
+      onClick={() => {
+        window.dispatchEvent(new Event("bernecki:home-intro-skip"));
+        document.documentElement.dataset.homeIntro = "skip";
+      }}
+    >
+      {lang === "pl" ? "Pomiń intro" : "Skip intro"} <span aria-hidden="true">↗</span>
+    </button>
     <section id="home" className={[styles.hero, "hero-night"].join(" ")} aria-labelledby="hero-title">
       <div className={styles.heroCopy}>
         <p className={styles.eyebrow}>{c.signature}</p>
