@@ -88,11 +88,6 @@ export function ClientTestimonials() {
           <h2 id="testimonials-title" className="max-w-2xl text-3xl leading-tight tracking-tight text-white md:text-5xl">
             {pl ? "Co mówią firmy, z którymi pracuję." : "What the businesses I work with say."}
           </h2>
-          <p className="max-w-lg text-sm leading-7 text-white/60">
-            {pl
-              ? "Opinie przygotowane za zgodą firm, w oparciu o zrealizowane projekty."
-              : "Feedback prepared with permission from the businesses, based on our actual projects."}
-          </p>
         </div>
         <div className="mt-9 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {testimonials.map((item) => (
