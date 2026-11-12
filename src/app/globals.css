@@ -564,3 +564,16 @@ html:is([data-home-intro="armed"],[data-home-intro="running"]) .cookie-consent-b
 @media (prefers-reduced-motion: reduce) {
   .cookie-consent-banner { transition: none; }
 }
+
+
+/* Keep the document stationary while the homepage intro is armed or running.
+   Removing the data state on complete/skip immediately releases the CSS lock,
+   even if React is delayed or the animation is interrupted. */
+html:is([data-home-intro="armed"],[data-home-intro="running"]),
+html:is([data-home-intro="armed"],[data-home-intro="running"]) body {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+html:is([data-home-intro="armed"],[data-home-intro="running"]) body {
+  touch-action: none;
+}
