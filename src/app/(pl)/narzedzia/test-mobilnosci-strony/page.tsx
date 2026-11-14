@@ -3,8 +3,8 @@ import Link from "next/link";
 import { FullWebsiteAuditRunner } from "@/components/FullWebsiteAuditRunner";
 
 export const metadata:Metadata={
-  title:"Darmowy test strony na telefonie — mobilność, viewport i checklista | bernecki.dev",
-  description:"Darmowy wstępny test strony mobilnej: sprawdź meta viewport, HTML, SEO oraz listę 8 kontroli na iPhone i Androidzie. Bez rejestracji i karty kredytowej. Nie zastępuje Lighthouse.",
+  title:"Test strony na telefonie — bezpłatnie | bernecki.dev",
+  description:"Przetestuj meta viewport, HTML i SEO strony mobilnej. Sprawdź 8 punktów kontrolnych dla iPhone i Androida. Bez rejestracji. To nie Lighthouse.",
   alternates:{canonical:"https://bernecki.dev/narzedzia/test-mobilnosci-strony"},
   openGraph:{title:"Test strony mobilnej i darmowy audyt HTML",description:"Sprawdź viewport, SEO i praktyczną checklistę dla iPhone oraz Androida.",url:"https://bernecki.dev/narzedzia/test-mobilnosci-strony",type:"website"}
 };
