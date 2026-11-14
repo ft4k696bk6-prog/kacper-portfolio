@@ -35,6 +35,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {url:siteUrl+"/en/tools/ai-image-check",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/sprawdz-czy-zdjecie-ai",en:siteUrl+"/en/tools/ai-image-check"}}},
     ...toolboxItems.map(tool=>({url:siteUrl+"/narzedzia/"+tool.slug,changeFrequency:"monthly" as const,priority:0.75,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/"+tool.slug,en:siteUrl+englishToolPath(tool.slug)}}})),
     ...englishToolboxItems.map(tool=>({url:siteUrl+"/en/tools/"+tool.englishSlug,changeFrequency:"monthly" as const,priority:0.75,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/"+tool.slug,en:siteUrl+"/en/tools/"+tool.englishSlug}}})),
+    { url: siteUrl + "/wykonawca-stron-i-crm", changeFrequency: "monthly", priority: 0.95 },
+    { url: siteUrl + "/dla-agencji", changeFrequency: "monthly", priority: 0.85 },
     { url: siteUrl + "/partner-w-rozwoju-biznesu", changeFrequency: "monthly", priority: 0.95 },
     { url: siteUrl + "/kontakt", changeFrequency: "monthly", priority: 0.85 },
     { url: siteUrl + "/materialy/brief-strony", changeFrequency: "monthly", priority: 0.8 },
