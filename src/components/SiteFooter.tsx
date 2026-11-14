@@ -42,8 +42,8 @@ export function SiteFooter() {
       </nav>
     </div>
     <div className="mx-auto mt-12 max-w-7xl border-t border-white/10 pt-6">
-      <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs uppercase tracking-[0.16em] text-white/40">
+      <div className="flex flex-row flex-wrap items-center justify-between gap-x-5 gap-y-3">
+        <p className="text-[10px] uppercase tracking-[0.16em] text-white/40 sm:text-xs">
           {english ? "Industry profiles" : "Profile branżowe"}
         </p>
         <a
@@ -52,15 +52,15 @@ export function SiteFooter() {
           rel="noopener noreferrer"
           data-techbehemoths-verification
           aria-label={english ? "Company profile on TechBehemoths" : "Profil firmy w TechBehemoths"}
-          className="inline-flex max-w-full items-center opacity-90 transition-opacity hover:opacity-100"
+          className="inline-flex max-w-full items-center opacity-85 transition-opacity hover:opacity-100"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/techbehemoths-logo.png"
+            src="/images/techbehemoths-logo-transparent.png"
             alt="TechBehemoths"
-            width={322}
-            height={115}
-            className="block h-auto w-[210px] max-w-full object-contain"
+            width={300}
+            height={99}
+            className="block h-auto w-[116px] max-w-full object-contain sm:w-[128px]"
             loading="lazy"
           />
         </a>
