@@ -41,25 +41,38 @@ export function SiteFooter() {
         <Link className="block" href="/kontakt">{english?"Contact and booking":"Kontakt i wycena"}</Link>
       </nav>
     </div>
-    <div className="mx-auto mt-12 flex max-w-7xl flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6">
-      <p className="text-xs tracking-wide text-white/45">{english ? "Industry profiles" : "Profile branżowe"}</p>
-      <a
-        href="https://techbehemoths.com/company/kacper-bernecki"
-        target="_blank"
-        rel="noopener noreferrer"
-        data-techbehemoths-verification
-        aria-label={english ? "Company profile on TechBehemoths" : "Profil firmy w TechBehemoths"}
-        className="inline-flex items-center rounded-xl border border-white/10 bg-white px-3 py-2 transition-colors hover:bg-white/90"
-      >
-        {/* TechBehemoths verification requires this externally hosted badge. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://cdn.techbehemoths.com/public/static/validation/tb-verified-logo.svg"
-          alt="TechBehemoths Verification"
-          className="h-8 w-auto max-w-[190px]"
-          loading="lazy"
-        />
-      </a>
+    <div className="mx-auto mt-12 max-w-7xl border-t border-white/10 pt-6">
+      <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-xs uppercase tracking-[0.16em] text-white/40">
+          {english ? "Industry profiles" : "Profile branżowe"}
+        </p>
+        <a
+          href="https://techbehemoths.com/company/kacper-bernecki"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-techbehemoths-verification
+          aria-label={english ? "Company profile on TechBehemoths" : "Profil firmy w TechBehemoths"}
+          className="inline-flex min-h-9 max-w-full items-center p-0 opacity-85 transition-opacity hover:opacity-100"
+        >
+          {/* Keep the official verification image. On a dark footer, invert its white artwork
+              and use screen blending so any white SVG background becomes transparent. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://cdn.techbehemoths.com/public/static/validation/tb-verified-logo.svg"
+            alt="TechBehemoths Verification"
+            className="block h-9 w-auto max-w-[175px] object-contain"
+            style={{ filter: "invert(1) hue-rotate(180deg)", mixBlendMode: "screen" }}
+            loading="lazy"
+            onError={(event) => {
+              event.currentTarget.classList.add("hidden");
+              event.currentTarget.nextElementSibling?.classList.remove("hidden");
+            }}
+          />
+          <span className="hidden text-sm font-medium tracking-wide text-white/75">
+            TechBehemoths
+          </span>
+        </a>
+      </div>
     </div>
   </footer>;
 }
