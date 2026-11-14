@@ -52,25 +52,17 @@ export function SiteFooter() {
           rel="noopener noreferrer"
           data-techbehemoths-verification
           aria-label={english ? "Company profile on TechBehemoths" : "Profil firmy w TechBehemoths"}
-          className="inline-flex min-h-9 max-w-full items-center p-0 opacity-85 transition-opacity hover:opacity-100"
+          className="inline-flex max-w-full items-center opacity-90 transition-opacity hover:opacity-100"
         >
-          {/* Keep the official verification image. On a dark footer, invert its white artwork
-              and use screen blending so any white SVG background becomes transparent. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://cdn.techbehemoths.com/public/static/validation/tb-verified-logo.svg"
-            alt="TechBehemoths Verification"
-            className="block h-9 w-auto max-w-[175px] object-contain"
-            style={{ filter: "invert(1) hue-rotate(180deg)", mixBlendMode: "screen" }}
+            src="/images/techbehemoths-logo.png"
+            alt="TechBehemoths"
+            width={322}
+            height={115}
+            className="block h-auto w-[210px] max-w-full object-contain"
             loading="lazy"
-            onError={(event) => {
-              event.currentTarget.classList.add("hidden");
-              event.currentTarget.nextElementSibling?.classList.remove("hidden");
-            }}
           />
-          <span className="hidden text-sm font-medium tracking-wide text-white/75">
-            TechBehemoths
-          </span>
         </a>
       </div>
     </div>
