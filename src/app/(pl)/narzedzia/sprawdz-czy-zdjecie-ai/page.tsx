@@ -4,8 +4,8 @@ import { AiImageOriginChecker } from "@/components/AiImageOriginChecker";
 
 const url = "https://bernecki.dev/narzedzia/sprawdz-czy-zdjecie-ai";
 export const metadata: Metadata = {
-  title: "Sprawdź, czy zdjęcie jest AI — darmowa analiza | bernecki.dev",
-  description: "Darmowe sprawdzanie metadanych zdjęcia pod kątem śladów generatorów AI i znaczników C2PA. Lokalnie, bez przesyłania pliku, bez rejestracji i bez karty kredytowej. Wynik nie stanowi dowodu pochodzenia.",
+  title: "Czy zdjęcie jest AI? Sprawdź metadane | bernecki.dev",
+  description: "Sprawdź ślady generatorów AI i znaczniki C2PA w metadanych zdjęcia. Analiza lokalna, bez przesyłania pliku i rejestracji. Wynik nie potwierdza pochodzenia.",
   alternates: { canonical: url, languages: { "pl-PL": url, en: "https://bernecki.dev/en/tools/ai-image-check" } },
   openGraph: { title: "Czy zdjęcie powstało w AI? Sprawdź metadane", description: "Lokalna analiza śladów AI w zdjęciach JPEG, PNG i WebP.", url, type: "website" },
 };
