@@ -15,11 +15,15 @@ export function generateStaticParams(){return englishToolboxItems.map(t=>({slug:
 export async function generateMetadata({params}:Params):Promise<Metadata>{
  const {slug}=await params;const tool=englishToolForSlug(slug);if(!tool)return {};
  const url=site+"/en/tools/"+slug;
+ const title = tool.title.length > 43 ? tool.title : tool.title+" | bernecki.dev";
+ const description = tool.mode==="pdf"
+  ? "Free PDF editor online. Add text, images and signatures; rotate and reorder pages. No sign-up, login, upload or credit card required."
+  : tool.description.length <= 140 ? tool.description+" No sign-up required." : tool.description;
  return {
-  title:tool.title+" | bernecki.dev",
-  description:tool.mode==="pdf"?"Free PDF editor online. Add text, images and signatures; rotate and reorder pages. No sign-up, login, upload or credit card required.":tool.description+" Free online; no registration or credit card required.",
+  title,
+  description,
   alternates:{canonical:url,languages:{en:url,"pl-PL":site+"/narzedzia/"+tool.slug}},
-  openGraph:{title:tool.title+" | bernecki.dev",description:tool.description,url,type:"website",locale:"en_US"}
+  openGraph:{title,description,url,type:"website",locale:"en_US"}
  };
 }
 export default async function EnglishToolPage({params}:Params){
