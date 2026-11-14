@@ -40,5 +40,26 @@ export function SiteFooter() {
         <Link className="block" href="/polityka-prywatnosci">{english?"Privacy policy":"Polityka prywatności"}</Link>
         <Link className="block" href="/kontakt">{english?"Contact and booking":"Kontakt i wycena"}</Link>
       </nav>
-    </div>  </footer>;
+    </div>
+    <div className="mx-auto mt-12 flex max-w-7xl flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6">
+      <p className="text-xs tracking-wide text-white/45">{english ? "Industry profiles" : "Profile branżowe"}</p>
+      <a
+        href="https://techbehemoths.com/company/kacper-bernecki"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-techbehemoths-verification
+        aria-label={english ? "Company profile on TechBehemoths" : "Profil firmy w TechBehemoths"}
+        className="inline-flex items-center rounded-xl border border-white/10 bg-white px-3 py-2 transition-colors hover:bg-white/90"
+      >
+        {/* TechBehemoths verification requires this externally hosted badge. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://cdn.techbehemoths.com/public/static/validation/tb-verified-logo.svg"
+          alt="TechBehemoths Verification"
+          className="h-8 w-auto max-w-[190px]"
+          loading="lazy"
+        />
+      </a>
+    </div>
+  </footer>;
 }
