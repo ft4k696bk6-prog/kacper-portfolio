@@ -15,11 +15,14 @@ export function generateStaticParams(){return toolboxItems.map(t=>({slug:t.slug}
 export async function generateMetadata({params}:Props):Promise<Metadata>{
  const {slug}=await params;const t=findTool(slug);if(!t)return {};
  const url="https://bernecki.dev/narzedzia/"+slug;
+ // Avoid duplicating the full tool title in the description: it often made snippets
+ // longer than 160 characters. The visible H1 and tool copy remain unchanged.
+ const title = t.title.length > 43 ? t.title : t.title+" | bernecki.dev";
  const seoDescription = t.mode==="pdf"
   ? "Darmowy edytor PDF online. Dodaj tekst, zdjęcia i podpisy, obracaj i porządkuj strony. Bez rejestracji, logowania i karty kredytowej."
-  : t.title+". "+t.description+" Bez rejestracji i karty kredytowej.";
- return {title:t.title+" | bernecki.dev",description:seoDescription,alternates:{canonical:url,languages:{"pl-PL":url,en:"https://bernecki.dev"+englishToolPath(slug)}},
-  openGraph:{title:t.title+" | bernecki.dev",description:seoDescription,url,type:"website"}};
+  : t.description.length <= 140 ? t.description+" Bez rejestracji." : t.description;
+ return {title,description:seoDescription,alternates:{canonical:url,languages:{"pl-PL":url,en:"https://bernecki.dev"+englishToolPath(slug)}},
+  openGraph:{title,description:seoDescription,url,type:"website"}};
 }
 export default async function ToolPage({params}:Props){
  const {slug}=await params;const tool=findTool(slug);if(!tool)notFound();
