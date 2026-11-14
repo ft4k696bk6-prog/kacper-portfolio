@@ -9,6 +9,8 @@ export const metadata: Metadata = {
 };
 
 const offers = [
+  ["Znajdź wykonawcę strony lub CRM", "/wykonawca-stron-i-crm"],
+  ["Współpraca dla agencji i software house’ów", "/dla-agencji"],
   ["Strony internetowe", "/tworzenie-stron-internetowych"],
   ["CRM i aplikacje webowe", "/crm-i-aplikacje-webowe"],
   ["Marketing i reklamy", "/marketing-i-reklamy"],
