@@ -28,7 +28,7 @@ export default function ForAgenciesPage() {
       <div className="mx-auto max-w-6xl">
         <p className="text-sm font-semibold uppercase tracking-[.16em] text-white/60">Współpraca B2B · Polska i zdalnie</p>
         <h1 className="mt-6 max-w-5xl text-4xl font-semibold leading-tight md:text-6xl">Szukasz podwykonawcy stron, CRM lub aplikacji dla swojej agencji?</h1>
-        <p className="mt-7 max-w-3xl text-lg leading-8 text-white/75">Jestem otwarty na współpracę projektową z agencjami marketingowymi, studiami projektowymi i software house'ami. Mogę realizować techniczną część projektu lub wybrany moduł w zespole. Model white-label i NDA ustalamy przed rozpoczęciem prac.</p>
+        <p className="mt-7 max-w-3xl text-lg leading-8 text-white/75">Jestem otwarty na współpracę projektową z agencjami marketingowymi, studiami projektowymi i software house’ami. Mogę realizować techniczną część projektu lub wybrany moduł w zespole. Model white-label i NDA ustalamy przed rozpoczęciem prac.</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <a href="mailto:kacper@bernecki.dev?subject=Wspolpraca%20B2B%20-%20bernecki.dev" className="rounded-full bg-white px-7 py-4 font-semibold text-black">Napisz o współpracy</a>
           <Link href="/case-studies" className="rounded-full border border-white/25 px-7 py-4 font-semibold">Zobacz realizacje</Link>
