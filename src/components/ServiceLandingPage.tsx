@@ -315,6 +315,24 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           ))}
         </div>
       </section>
+      {kind === "apps" && (
+        <section className="mx-auto max-w-6xl px-5 py-12 md:px-8" aria-labelledby="crm-implementation">
+          <div className="rounded-2xl border border-white/20 bg-white/[0.035] p-7 md:p-10">
+            <p className="page-eyebrow">Dedykowany CRM / rzeczywiste wdrożenie</p>
+            <h2 id="crm-implementation" className="mt-4 text-2xl font-semibold md:text-3xl">B-CRM — autorski system do obsługi sprzedaży i handlowców</h2>
+            <p className="mt-4 max-w-3xl leading-8 text-white/75">
+              B-CRM łączy leady, statusy kontaktów, przypisania do handlowców, zadania,
+              kalendarz i obsługę umów. Zamiast obiecywać uniwersalny system dla każdej branży,
+              pokazuję istniejące rozwiązanie i zakres, który można dopasować do procesów firmy.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link href="/case-studies/b-crm" className="rounded-lg border border-white/30 px-5 py-3 text-sm text-white hover:border-white/60">Zobacz case study B-CRM <ArrowRight className="ml-2 inline h-4 w-4"/></Link>
+              <Link href="/b-crm-case-study" className="rounded-lg border border-white/30 px-5 py-3 text-sm text-white hover:border-white/60">Opis wdrożenia CRM <ArrowRight className="ml-2 inline h-4 w-4"/></Link>
+              <Link href="/crm-dla-firm-handlowych" className="rounded-lg border border-white/30 px-5 py-3 text-sm text-white hover:border-white/60">CRM dla zespołów handlowych <ArrowRight className="ml-2 inline h-4 w-4"/></Link>
+            </div>
+          </div>
+        </section>
+      )}
       {kind !== "marketing" && (
         <section className="mx-auto max-w-6xl px-5 py-16 md:px-8">
           <h2 className="text-3xl font-semibold tracking-tight">Jak wygląda współpraca i od czego zależy koszt?</h2>
