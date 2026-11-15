@@ -3,7 +3,7 @@ import { ServiceLandingPage } from "@/components/ServiceLandingPage";
 
 export const metadata = {
   ...serviceMetadata(
-  "CRM na zamówienie i aplikacje dla firm | bernecki.dev",
+  "CRM na zamówienie dla firm – wdrożenie, cena, demo B-CRM",
   "Szukasz wykonawcy CRM dla firmy? Kacper Bernecki tworzy dedykowane CRM, panele i aplikacje webowe. Zobacz wdrożenie B-CRM i omów potrzeby.",
   "crm-i-aplikacje-webowe",
 ),
