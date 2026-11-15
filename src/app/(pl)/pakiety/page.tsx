@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Pakiety usług: strony WWW, reklamy i CRM – ceny | bernecki.dev",
+  title: "Pakiety: strony, reklamy, CRM i rozwój firmy – cennik",
   description: "Porównaj pakiety: strona firmowa, reklamy Facebook i Google, strona z reklamami, CRM i automatyzacja. Ceny netto od i jasny zakres.",
   alternates: {canonical:"https://bernecki.dev/pakiety"}
 };
@@ -19,7 +19,7 @@ export default function PackagesPage() {
   <div className="mx-auto max-w-6xl">
    <nav className="text-sm text-white/60"><Link href="/">Start</Link> / <Link href="/#cennik">Cennik</Link> / Pakiety</nav>
    <p className="mt-12 text-xs uppercase tracking-widest text-white/60">Przejrzyste ceny i zakres</p>
-   <h1 className="mt-4 max-w-5xl text-4xl leading-tight md:text-6xl">Pakiety usług dla firm – strony, reklamy i CRM</h1>
+   <h1 className="mt-4 max-w-5xl text-4xl leading-tight md:text-6xl">Pakiety dla firm – strony, reklamy, CRM i rozwój biznesu</h1>
    <p className="mt-7 max-w-4xl text-lg leading-8 text-white/75">Wybierz to, co chcesz osiągnąć. Każdy pakiet zawiera najważniejsze elementy usługi oraz orientacyjną cenę początkową netto. Jeżeli potrzebujesz tylko jednej rzeczy, zobacz cennik pojedynczych usług.</p>
    <nav aria-label="Wybierz rodzaj cennika" className="mt-8 grid max-w-3xl gap-3 sm:grid-cols-2">
      <Link href="/pakiety" aria-current="page" className="rounded-xl border border-white/70 bg-white/15 p-5 font-semibold">Pakiety – usługi w zestawie</Link>
@@ -38,6 +38,26 @@ export default function PackagesPage() {
         <Link href={p.href} className="rounded-lg border border-white/25 px-5 py-3 hover:border-white/60">Szczegóły usługi</Link>
       </div>
     </article>)}
+   </section>
+
+   <section className="mt-20" aria-labelledby="strategy-packages">
+     <h2 id="strategy-packages" className="text-3xl font-semibold">Pakiety rozwoju biznesu</h2>
+     <p className="mt-4 max-w-4xl leading-8 text-white/70">Jeśli potrzebujesz nie tylko strony lub reklam, ale też analizy sprzedaży, planu rozwoju i nadzoru nad działaniami firmy, są trzy dodatkowe warianty. To te same pakiety, które są opisane w ofercie współpracy biznesowej.</p>
+     <div className="mt-8 grid gap-5 md:grid-cols-3">
+       {[
+         {id:"audyt",name:"Audyt i plan działania",price:"od 3 900 zł",period:"jednorazowo",desc:"Analiza strony, reklam i obsługi zapytań oraz plan priorytetów na 30 dni."},
+         {id:"partner",name:"Partner ds. wzrostu",price:"od 7 900 zł",period:"miesięcznie",desc:"Stała analiza pozyskiwania klientów, reklam, SEO i procesu sprzedaży."},
+         {id:"dyrektor",name:"Partner strategiczno-operacyjny",price:"od 12 900 zł",period:"miesięcznie",desc:"Szersze wsparcie właściciela: marketing, CRM, sprzedaż i nadzór nad zmianami."}
+       ].map(p=><article key={p.id} className="flex flex-col rounded-2xl border border-white/20 p-7">
+         <h3 className="text-2xl">{p.name}</h3>
+         <p className="mt-3 text-2xl font-semibold">{p.price} <span className="text-sm font-normal text-white/60">netto · {p.period}</span></p>
+         <p className="mt-5 leading-7 text-white/70">{p.desc}</p>
+         <div className="mt-auto flex flex-col gap-4 pt-7">
+           <Link href={"/kontakt?usluga=Rozw%C3%B3j%20biznesu&pakiet="+p.id} className="brand-action rounded-xl px-5 py-3 text-center font-semibold text-black">Zapytaj o pakiet</Link>
+           <Link href="/partner-w-rozwoju-biznesu#pakiety" className="text-center underline underline-offset-4">Zobacz cały zakres</Link>
+         </div>
+       </article>)}
+     </div>
    </section>
    <section className="mt-16 rounded-2xl border border-white/20 bg-white/[0.035] p-7 md:p-10">
     <h2 className="text-3xl">Co jest dodatkowo płatne?</h2>
