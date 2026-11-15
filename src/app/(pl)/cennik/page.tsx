@@ -28,10 +28,14 @@ export default function PricingPage() {
   return <main className="site-page min-h-screen bg-[var(--brand-black)] px-5 pb-24 pt-32 text-white md:px-8 md:pt-40">
     <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(data)}} />
     <div className="mx-auto max-w-6xl">
-      <nav className="text-sm text-white/60"><Link href="/">Start</Link> / Cennik</nav>
+      <nav className="text-sm text-white/60"><Link href="/">Start</Link> / Cennik / Ceny pojedynczych usług</nav>
       <p className="mt-12 text-sm uppercase tracking-[0.2em] text-white/65">Przejrzyste widełki • Bez ukrytego budżetu reklamowego</p>
       <h1 className="mt-5 max-w-5xl text-4xl leading-tight md:text-6xl">Ile kosztuje strona, CRM, reklamy lub automatyzacja?</h1>
       <p className="mt-7 max-w-4xl text-lg leading-8 text-white/75">Poniżej podaję orientacyjne ceny początkowe netto za najprostszy sensowny zakres. To nie jest automatyczny kosztorys ani gwarancja przyjęcia każdego projektu w tej cenie. Po krótkiej analizie otrzymasz indywidualną ofertę z zakresem, etapami i kosztami utrzymania.</p>
+      <nav aria-label="Wybierz rodzaj cennika" className="mt-8 grid max-w-3xl gap-3 sm:grid-cols-2">
+        <Link href="/pakiety" className="rounded-xl border border-white/25 p-5 font-semibold hover:border-white/60">Pakiety – usługi w zestawie</Link>
+        <Link href="/cennik" aria-current="page" className="rounded-xl border border-white/70 bg-white/15 p-5 font-semibold">Cennik pojedynczych usług</Link>
+      </nav>
       <div className="mt-8 flex flex-wrap gap-4"><Link href="/kontakt" className="brand-action rounded-xl px-6 py-3 font-semibold text-black">Poproś o konkretną wycenę</Link><Link href="/case-studies" className="rounded-xl border border-white/25 px-6 py-3">Zobacz realizacje</Link></div>
       <section className="mt-16 grid gap-5 sm:grid-cols-2" aria-label="Orientacyjny cennik">
         {offers.map(o=><article key={o.name} className="surface-card rounded-2xl border border-white/20 p-6 md:p-8">
