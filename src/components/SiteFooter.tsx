@@ -6,7 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export function SiteFooter() {
   const {lang} = useLanguage();
   const pathname = usePathname();
-  const english = pathname.startsWith("/en/") || (!pathname.startsWith("/poradniki") && !pathname.startsWith("/blog") && lang === "en");
+  const english = pathname === "/en" || pathname.startsWith("/en/") || (!pathname.startsWith("/poradniki") && !pathname.startsWith("/blog") && lang === "en");
   return <footer className="site-footer relative z-10 border-t border-white/10 bg-[var(--brand-black)] px-5 py-14 md:px-8">
     <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-3">
       <div>
@@ -36,11 +36,11 @@ export function SiteFooter() {
         <Link className="block" href={english?"/en/case-studies":"/case-studies"}>{english?"Case studies and live projects":"Realizacje i działające projekty"}</Link>
         {!english && <Link className="block" href="/realizacje">Pozostałe realizacje</Link>}
         <div className="mt-7 space-y-3 border-t border-white/15 pt-5"><p className="text-xs font-semibold uppercase tracking-widest text-white/60">{english?"Pricing":"Cennik"}</p><Link className="block" href={english?"/en/packages":"/pakiety"}>{english?"Business packages":"Pakiety dla firm"}</Link><Link className="block" href={english?"/en/pricing":"/cennik"}>{english?"Individual service prices":"Ceny pojedynczych usług"}</Link></div>
-        <Link className="block" href="/#collaborations">{english?"Client collaborations":"Współprace z firmami"}</Link>
+        <Link className="block" href={english?"/en#collaborations":"/#collaborations"}>{english?"Client collaborations":"Współprace z firmami"}</Link>
         <Link className="block" href={english?"/en/guides":"/poradniki"}>{english?"Practical troubleshooting guides":"Poradniki dla przedsiębiorców"}</Link>
         <Link className="block" href={english?"/en/blog":"/blog"}>{english?"Articles and insights":"Blog i artykuły"}</Link>
         <Link className="block" href={english?"/en/tools":"/narzedzia"}>{english?"Free online tools":"Darmowe narzędzia online"}</Link>
-        <Link className="block" href="/#faq">{english?"Questions about collaboration":"Pytania o współpracę"}</Link>
+        <Link className="block" href={english?"/en#faq":"/#faq"}>{english?"Questions about collaboration":"Pytania o współpracę"}</Link>
         <Link className="block" href={english?"/en/privacy":"/polityka-prywatnosci"}>{english?"Privacy policy":"Polityka prywatności"}</Link>
         <Link className="block" href={english?"/en/contact":"/kontakt"}>{english?"Contact and booking":"Kontakt i wycena"}</Link>
       </nav>
