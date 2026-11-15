@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Reklamy Google, Meta, TikTok, YouTube i LinkedIn | bernecki.dev",
   description: "Kampanie Google Ads, Facebook/Instagram, TikTok, YouTube i LinkedIn: dobór kanału, budżety testowe, grupy docelowe, analityka i CRM. Wycena obsługi.",
-  alternates: { canonical: "https://bernecki.dev/reklamy-online" },
+  alternates: { canonical: "https://bernecki.dev/reklamy-online",languages:{"pl-PL":"https://bernecki.dev/reklamy-online",en:"https://bernecki.dev/en/advertising"} },
 };
 const channels=[
  {name:"Google Ads",when:"Gdy klient aktywnie szuka rozwiązania, np. określonej usługi w mieście.",first:"Zacznij od Search, sensownych słów kluczowych, zapytań wykluczających i pomiaru realnego formularza.",budget:"Test planistyczny: 1 500–4 000 zł/mies. na kliknięcia dla wąskiej usługi; w konkurencyjnych branżach może być potrzebne więcej.",href:"/google-ads-dla-firm",guide:"/poradniki/jak-ustawic-google-ads-dla-firmy-uslugowej"},
