@@ -7,6 +7,7 @@ const root=process.cwd();
 const read=p=>fs.readFileSync(path.join(root,p),"utf8");
 const errors=[];
 const pair=[
+ ["","en"],
  ["cennik","en/pricing"],["pakiety","en/packages"],
  ["pozyskiwanie-klientow","en/customer-acquisition"],["reklamy-online","en/advertising"],
  ["kontakt","en/contact"],["polityka-prywatnosci","en/privacy"],
@@ -45,7 +46,7 @@ for(const guide of source){
 for(const slug of Object.keys(translations))if(!known.has(slug))errors.push("Orphan English sales translation: "+slug);
 const sitemap=read("src/app/sitemap.ts"),language=read("src/components/LanguageSwitcher.tsx");
 for(const [pl,en] of pair){
- const plPath="src/app/(pl)/"+pl+"/page.tsx",enPath="src/app/(en)/"+en+"/page.tsx";
+ const plPath=pl?"src/app/(pl)/"+pl+"/page.tsx":"src/app/(pl)/page.tsx",enPath="src/app/(en)/"+en+"/page.tsx";
  for(const file of [plPath,enPath])if(!fs.existsSync(path.join(root,file)))errors.push("Missing translated page "+file);
  if(!sitemap.includes('"/'+pl+'"')||!sitemap.includes('"/'+en+'"'))errors.push("Sitemap missing reciprocal pair: "+pl+" / "+en);
  if(!language.includes('"/'+pl+'": "/'+en+'"'))errors.push("Language switch missing "+pl+" → "+en);
