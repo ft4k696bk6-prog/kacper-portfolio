@@ -9,6 +9,7 @@ import { englishToolboxItems, englishToolPath, localizedToolboxPath } from "@/li
 
 const navItems = [
   { href: "#services", pl: "Oferta", en: "Services" },
+  { href: "#cennik", pl: "Cennik", en: "Pricing" },
   { href: "#projects", pl: "Realizacje", en: "Projects" },
   { href: "#guides", pl: "Poradniki", en: "Guides" },
   { href: "/narzedzia", pl: "Darmowe narzędzia", en: "Free tools" },
@@ -98,7 +99,7 @@ export function LanguageSwitcher() {
     if (pathname.startsWith("/en/") && lang !== "en") setLang("en");
     if ((pathname.startsWith("/narzedzia") || pathname.startsWith("/poradniki") || pathname.startsWith("/blog") || pathname.startsWith("/realizacje/") ||
       ["/case-studies","/case-studies/re-energy-meta-ads","/reklamy-meta-ads-dla-firm",
-       "/tworzenie-stron-internetowych","/crm-i-aplikacje-webowe","/marketing-i-reklamy","/rozwoj-biznesu"].includes(pathname)) &&
+       "/tworzenie-stron-internetowych","/crm-i-aplikacje-webowe","/marketing-i-reklamy","/rozwoj-biznesu","/cennik","/pakiety","/reklamy-online"].includes(pathname)) &&
        lang !== "pl") setLang("pl");
   }, [pathname, lang, setLang]);
 
