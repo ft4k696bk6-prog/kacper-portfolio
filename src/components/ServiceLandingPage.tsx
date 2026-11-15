@@ -315,6 +315,19 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           ))}
         </div>
       </section>
+      {kind === "apps" && <section className="mx-auto max-w-6xl px-5 py-14 md:px-8">
+        <div className="rounded-2xl border border-white/25 bg-white/[0.035] p-7 md:p-10">
+          <p className="text-xs uppercase tracking-widest text-white/55">CRM na zamówienie / decyzja zakupowa</p>
+          <h2 className="mt-4 text-3xl font-semibold">Gotowy CRM czy własna aplikacja?</h2>
+          <p className="mt-5 max-w-4xl leading-8 text-white/75">Nie każda firma potrzebuje własnego systemu. Przy standardowym procesie często lepiej zacząć od gotowego CRM. Jeżeli jednak masz wieloetapową sprzedaż, różne role, niestandardowe przydziały leadów i integracje z reklamami, projekt na zamówienie może zmniejszyć ręczną pracę. Porównuję obie opcje przed wyceną.</p>
+          <div className="mt-7 grid gap-4 md:grid-cols-2">
+            <div className="rounded-xl border border-white/15 p-6"><h3 className="text-xl">Pierwszy moduł CRM – od 12 000 zł netto</h3><p className="mt-3 leading-7 text-white/70">Przykładowy zakres: leady, statusy, role i zadania. Dodatkowe integracje oraz utrzymanie wyceniane osobno.</p></div>
+            <div className="rounded-xl border border-white/15 p-6"><h3 className="text-xl">System wielomodułowy – od 25 000 zł netto</h3><p className="mt-3 leading-7 text-white/70">Dalsze etapy realizacji, dokumenty, raportowanie i integracje. Orientacyjne ceny początkowe, nie sztywna oferta.</p></div>
+          </div>
+          <div className="mt-8 flex flex-wrap gap-4"><Link href="/cennik" className="underline underline-offset-4">Cennik i zakres wdrożenia</Link><Link href="/poradniki/jaki-crm-wybrac-dla-malej-firmy" className="underline underline-offset-4">Jak wybrać CRM?</Link><Link href="/poradniki/jak-wybrac-wykonawce-crm" className="underline underline-offset-4">Jak wybrać wykonawcę?</Link><Link href="/kontakt" className="underline underline-offset-4">Wyceń mój proces</Link></div>
+        </div>
+      </section>}
+      {kind === "marketing" && <section className="mx-auto max-w-6xl px-5 py-14 md:px-8"><div className="rounded-2xl border border-white/20 p-7 md:p-10"><h2 className="text-3xl">Google, Meta, TikTok, YouTube – jeden cel biznesowy</h2><p className="mt-5 leading-8 text-white/75">Dobieram kanał do intencji zakupowej i sposobu prezentacji produktu. Możemy zacząć od audytu za orientacyjnie 590 zł netto albo konfiguracji jednej platformy od 990 zł netto. Koszt emisji reklam jest osobny. Przed startem ustalamy prawdziwą konwersję i sposób obsługi zapytań.</p><div className="mt-6 flex flex-wrap gap-5"><Link href="/reklamy-online" className="underline underline-offset-4">Kanały i przykładowe budżety</Link><Link href="/cennik" className="underline underline-offset-4">Cennik reklam</Link><Link href="/poradniki/reklamy-samodzielnie-czy-agencja" className="underline underline-offset-4">Samemu czy ze specjalistą?</Link></div></div></section>}
       {kind === "apps" && (
         <section className="mx-auto max-w-6xl px-5 py-12 md:px-8" aria-labelledby="crm-implementation">
           <div className="rounded-2xl border border-white/20 bg-white/[0.035] p-7 md:p-10">
