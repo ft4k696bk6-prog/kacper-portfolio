@@ -36,6 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...toolboxItems.map(tool=>({url:siteUrl+"/narzedzia/"+tool.slug,changeFrequency:"monthly" as const,priority:0.75,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/"+tool.slug,en:siteUrl+englishToolPath(tool.slug)}}})),
     ...englishToolboxItems.map(tool=>({url:siteUrl+"/en/tools/"+tool.englishSlug,changeFrequency:"monthly" as const,priority:0.75,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/"+tool.slug,en:siteUrl+"/en/tools/"+tool.englishSlug}}})),
     { url: siteUrl + "/cennik", changeFrequency: "monthly", priority: 0.95 },
+    { url: siteUrl + "/pakiety", changeFrequency: "monthly", priority: 0.95 },
     { url: siteUrl + "/reklamy-online", changeFrequency: "monthly", priority: 0.95 },
     { url: siteUrl + "/wykonawca-stron-i-crm", changeFrequency: "monthly", priority: 0.95 },
     { url: siteUrl + "/dla-agencji", changeFrequency: "monthly", priority: 0.85 },
