@@ -17,6 +17,19 @@ const options=[
  ["Rozwój biznesu","Rozwój biznesu"],
  ["Inne / jeszcze nie wiem","Inne / jeszcze nie wiem"]
 ] as const;
+const englishOptions:Record<string,string> = {
+ "":"Choose a topic",
+ "Pozyskiwanie klientów":"Customer acquisition",
+ "Pakiety usług":"Service packages",
+ "Reklamy Google Ads":"Google Ads campaigns",
+ "Reklamy Facebook i Instagram":"Facebook and Instagram Ads",
+ "Strona internetowa lub sklep":"Business website or online shop",
+ "CRM i aplikacja":"CRM and web application",
+ "AI i automatyzacja":"AI and automation",
+ "Marketing i reklamy":"Marketing and advertising",
+ "Rozwój biznesu":"Business development",
+ "Inne / jeszcze nie wiem":"Other / not sure yet"
+};
 type Status="idle"|"sending"|"success"|"notice"|"error";
 type Proof={nonce:string;expiresAt:number;signature:string;difficulty:number;solution:number};
 
@@ -95,7 +108,7 @@ export function LeadContactForm({initialService="",initialMessage="",english=fal
     </label>
     <label className="grid gap-2 text-sm text-white/85">{english?"Project type":"Czego potrzebujesz?"}
      <select className={field} name="service" value={service} onChange={e=>setService(e.target.value)}>
-      {options.map(([value,label])=><option key={value} value={value}>{english&&value===""?"Choose a topic":label}</option>)}
+      {options.map(([value,label])=><option key={value} value={value}>{english?englishOptions[value]||label:label}</option>)}
      </select>
     </label>
    </div>
@@ -105,7 +118,7 @@ export function LeadContactForm({initialService="",initialMessage="",english=fal
    <div className="absolute -left-[10000px]" aria-hidden="true"><label>Website <input name="website" value={website} onChange={e=>setWebsite(e.target.value)} autoComplete="off" tabIndex={-1}/></label></div>
    <label className="flex items-start gap-3 text-xs leading-6 text-white/70">
     <input type="checkbox" name="privacy" checked={readPolicy} onChange={e=>setReadPolicy(e.target.checked)} required className="mt-1 h-4 w-4 shrink-0 accent-white"/>
-    <span>{english?"I have read the ":"Zapoznałem(-am) się z "}<Link href="/polityka-prywatnosci" className="font-medium text-white underline underline-offset-4">{english?"privacy policy":"polityką prywatności"}</Link>. {english?"My data will only be used to handle this enquiry.":"Dane zostaną wykorzystane do obsługi tego zapytania."}</span>
+    <span>{english?"I have read the ":"Zapoznałem(-am) się z "}<Link href={english?"/en/privacy":"/polityka-prywatnosci"} className="font-medium text-white underline underline-offset-4">{english?"privacy policy":"polityką prywatności"}</Link>. {english?"My data will only be used to handle this enquiry.":"Dane zostaną wykorzystane do obsługi tego zapytania."}</span>
    </label>
    <p className="text-xs leading-5 text-white/50">{english?"Please do not send passwords, API keys or sensitive information.":"Nie przesyłaj haseł, kluczy API ani wrażliwych informacji."}</p>
    {feedback&&<p role={status==="error"?"alert":"status"} className="rounded-lg border border-white/25 p-3 text-sm leading-6 text-white/85">{feedback}</p>}
