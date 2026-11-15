@@ -184,20 +184,20 @@ export function HomeStudio() {
       <h2 id="home-pricing-heading">{lang==="pl" ? "Ile kosztuje strona, reklama albo CRM?" : "Pricing and service packages"}</h2>
       <p className="mt-4 max-w-3xl text-sm leading-7 text-white/70">{lang==="pl" ? "Wszystkie ceny w jednym miejscu. Wybierz gotowy pakiet albo sprawdź ceny poszczególnych usług. Bez szukania po całej stronie." : "Choose a service package or check prices for individual services. Prices are listed in PLN."}</p>
       <div className="mt-8 grid gap-5 md:grid-cols-2">
-        <Link href="/pakiety" className="surface-card group flex flex-col rounded-2xl border border-white/25 bg-white/[0.035] p-7 transition hover:border-white/70 md:p-9">
+        <Link href={lang==="en"?"/en/packages":"/pakiety"} className="surface-card group flex flex-col rounded-2xl border border-white/25 bg-white/[0.035] p-7 transition hover:border-white/70 md:p-9">
           <span className="text-xs uppercase tracking-widest text-white/55">{lang==="pl" ? "Opcja 1" : "Option 1"}</span>
           <h3 className="mt-3 text-2xl font-semibold">{lang==="pl" ? "Pakiety" : "Service packages"}</h3>
           <p className="mt-4 leading-7 text-white/70">{lang==="pl" ? "Zestawy usług dla firm: strona + reklamy, uruchomienie kampanii, CRM i automatyzacja. Jasny zakres i ceny od." : "Bundled services: websites, ads, CRM and automation."}</p>
           <span className="mt-6 inline-flex items-center gap-2 font-semibold">{lang==="pl" ? "Porównaj pakiety" : "View packages"} <ArrowRight size={18}/></span>
         </Link>
-        <Link href="/cennik" className="surface-card group flex flex-col rounded-2xl border border-white/25 bg-white/[0.035] p-7 transition hover:border-white/70 md:p-9">
+        <Link href={lang==="en"?"/en/pricing":"/cennik"} className="surface-card group flex flex-col rounded-2xl border border-white/25 bg-white/[0.035] p-7 transition hover:border-white/70 md:p-9">
           <span className="text-xs uppercase tracking-widest text-white/55">{lang==="pl" ? "Opcja 2" : "Option 2"}</span>
           <h3 className="mt-3 text-2xl font-semibold">{lang==="pl" ? "Cennik pojedynczych usług" : "Individual service prices"}</h3>
           <p className="mt-4 leading-7 text-white/70">{lang==="pl" ? "Sprawdź oddzielne ceny stron internetowych, kampanii Google i Facebook, dedykowanego CRM, audytu i automatyzacji." : "Price ranges for websites, campaigns, CRM, audits and integrations."}</p>
           <span className="mt-6 inline-flex items-center gap-2 font-semibold">{lang==="pl" ? "Sprawdź ceny usług" : "View service prices"} <ArrowRight size={18}/></span>
         </Link>
       </div>
-      <p className="mt-6 text-sm text-white/55">{lang==="pl" ? "Ceny orientacyjne netto. Dokładną kwotę potwierdzam po ustaleniu zakresu." : "Indicative net prices. Final quotes depend on the scope."} <Link href="/kontakt" className="underline underline-offset-4">{lang==="pl" ? "Zapytaj o wycenę" : "Request a quote"}</Link></p>
+      <p className="mt-6 text-sm text-white/55">{lang==="pl" ? "Ceny orientacyjne netto. Dokładną kwotę potwierdzam po ustaleniu zakresu." : "Indicative net prices. Final quotes depend on the scope."} <Link href={lang==="en"?"/en/contact":"/kontakt"} className="underline underline-offset-4">{lang==="pl" ? "Zapytaj o wycenę" : "Request a quote"}</Link></p>
     </section>
     <section id="tools" className={styles.section}>
       <p className={styles.eyebrow}>{lang==="pl"?"Darmowe narzędzia":"Free toolbox"}</p>
