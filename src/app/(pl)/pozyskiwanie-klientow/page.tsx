@@ -5,7 +5,7 @@ import { LeadContactForm } from "@/components/LeadContactForm";
 export const metadata: Metadata = {
  title:"Jak zdobywać klientów dla firmy? Google Ads, Facebook i CRM",
  description:"Pomoc w pozyskiwaniu klientów: reklamy Google, Facebook, Instagram, TikTok, strony pod kampanie i CRM. Cennik, przykłady realizacji i bezpłatna wstępna rozmowa.",
- alternates:{canonical:"https://bernecki.dev/pozyskiwanie-klientow"}
+ alternates:{canonical:"https://bernecki.dev/pozyskiwanie-klientow",languages:{"pl-PL":"https://bernecki.dev/pozyskiwanie-klientow",en:"https://bernecki.dev/en/customer-acquisition"}}
 };
 const options=[
  {title:"Reklamy Google – gdy klient sam szuka usługi",description:"Kampanie na konkretne zapytania i miejscowości. Sprawdzamy, które słowa dają wartościowe telefony i formularze.",link:"/google-ads-dla-firm",label:"Google Ads dla firm"},
