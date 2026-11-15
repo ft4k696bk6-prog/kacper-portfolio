@@ -9,7 +9,7 @@ export function LanguageMetadataSync() {
   const pathname = usePathname();
   const { lang, t } = useLanguage();
   useEffect(() => {
-    document.documentElement.lang = pathname === "/" ? lang : pathname.startsWith("/en/") ? "en" : "pl";
+    document.documentElement.lang = pathname === "/" ? lang : (pathname.startsWith("/en/") || pathname === "/en") ? "en" : "pl";
     if (pathname !== "/") return;
     document.title = t.meta.homeTitle;
     const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
