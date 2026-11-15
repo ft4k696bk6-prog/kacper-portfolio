@@ -149,13 +149,13 @@ export function HomeStudio() {
           </div>
           <div className={styles.tileCaption}><strong>StarCars</strong><ArrowUpRight size={16}/></div>
         </Link>
-        <Link href="/realizacje/isto-kebab-strona" className={[styles.heroTile, styles.tileIsto].join(" ")} aria-label={lang === "pl" ? "Zobacz projekt Isto Kebab" : "View Isto Kebab project"}>
+        <Link href={lang==="en"?"/en/projects/isto-kebab-strona":"/realizacje/isto-kebab-strona"} className={[styles.heroTile, styles.tileIsto].join(" ")} aria-label={lang === "pl" ? "Zobacz projekt Isto Kebab" : "View Isto Kebab project"}>
           <div className={styles.tileVisual}>
             <Image src="/images/projects/isto-live-nov08.jpg" alt={lang === "pl" ? "Zrzut prawdziwej strony Isto Kebab" : "Screenshot of the actual Isto Kebab website"} width={640} height={400} sizes="(min-width:1024px) 260px, (min-width:768px) 22vw, 36vw" loading="eager" />
           </div>
           <div className={styles.tileCaption}><strong>Isto Kebab</strong><ArrowUpRight size={16}/></div>
         </Link>
-        <Link href="/case-studies/b-crm" className={[styles.heroTile, styles.tileCrm].join(" ")} aria-label={lang === "pl" ? "Zobacz projekt B-CRM" : "View B-CRM project"}>
+        <Link href={lang==="en"?"/en/case-studies":"/case-studies/b-crm"} className={[styles.heroTile, styles.tileCrm].join(" ")} aria-label={lang === "pl" ? "Zobacz projekt B-CRM" : "View B-CRM project"}>
           <div className={styles.tileVisual}>
             <Image src="/images/projects/bcrm-admin-dashboard.jpg" alt={lang === "pl" ? "Zrzut rzeczywistego panelu B-CRM" : "Screenshot of the real B-CRM dashboard"} width={640} height={400} sizes="(min-width:1024px) 450px, (min-width:768px) 36vw, 62vw" loading="eager" />
           </div>
@@ -173,8 +173,8 @@ export function HomeStudio() {
       <OfferCards offers={c.offer} english={lang === "en"}/>
       {lang === "pl" && <div className="mt-6 flex flex-wrap gap-4 text-sm"><Link href="#cennik" className="underline underline-offset-4">Zobacz pakiety i cennik</Link><Link href="/pozyskiwanie-klientow" className="underline underline-offset-4">Jak zdobywać klientów przez Google i Facebook?</Link><Link href="/reklamy-online" className="underline underline-offset-4">Reklamy Google, Facebook, Instagram i TikTok</Link><Link href="/crm-dla-firm-handlowych" className="underline underline-offset-4">CRM dla firmy</Link></div>}
       <div className="mt-8 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-3">
-        <Link href="/kontakt" className="brand-action inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-3 py-3 text-center text-[11px] font-semibold leading-5 text-black sm:px-6 sm:text-sm">{lang === "pl" ? "Zapytaj o współpracę" : "Discuss your project"} <ArrowUpRight size={17}/></Link>
-        <Link href="/#projects" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-white/20 px-3 py-3 text-center text-[11px] leading-5 text-white hover:border-white/50 sm:px-6 sm:text-sm">{lang === "pl" ? "Zobacz realizacje" : "View projects"} <ArrowRight size={16}/></Link>
+        <Link href={lang==="en"?"/en/contact":"/kontakt"} className="brand-action inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-3 py-3 text-center text-[11px] font-semibold leading-5 text-black sm:px-6 sm:text-sm">{lang === "pl" ? "Zapytaj o współpracę" : "Discuss your project"} <ArrowUpRight size={17}/></Link>
+        <Link href={lang==="en"?"/en#projects":"/#projects"} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-white/20 px-3 py-3 text-center text-[11px] leading-5 text-white hover:border-white/50 sm:px-6 sm:text-sm">{lang === "pl" ? "Zobacz realizacje" : "View projects"} <ArrowRight size={16}/></Link>
          <Link href={localizedToolboxPath(lang)} className="col-span-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-white/20 px-3 py-3 text-center text-[11px] leading-5 text-white hover:border-white/50 sm:col-span-1 sm:px-6 sm:text-sm">{lang==="pl"?"Darmowe narzędzia":"Free tools"} <ArrowRight size={16}/></Link>
       </div>
     </section>
