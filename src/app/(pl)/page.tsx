@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { StaticPortfolio } from "@/components/StaticPortfolio";
 
 export const metadata: Metadata = {
-  title: { absolute: "Kacper Bernecki — Strony WWW, CRM i automatyzacje AI" },
+  title: { absolute: "Strony internetowe, CRM i reklamy Google i Facebook – Bernecki" },
   description:
-    "Tworzę strony internetowe, systemy CRM i aplikacje oraz pomagam firmom pozyskiwać klientów przez Meta Ads. Realizacje StarCars, B-CRM i Re-Energy System.",
+    "Strony WWW, dedykowany CRM, prowadzenie reklam Google Ads i Facebook Ads oraz automatyzacja obsługi klientów. Przykłady prac, pakiety i cennik.",
 };
 
 const structuredData = {

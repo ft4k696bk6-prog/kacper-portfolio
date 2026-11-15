@@ -53,6 +53,7 @@ export default async function GuidesPage({ searchParams }: Props) {
       <p className="mt-5 text-sm text-white/70">Chcesz zobaczyć szerszy kontekst? <Link href="/blog" className="text-white underline underline-offset-4">Przeczytaj blog o marketingu, CRM i SEO</Link>.</p>
       <p className="mt-3 max-w-3xl text-sm leading-7 text-white/70">Potrzebujesz wykonawcy zamiast kolejnego poradnika? Sprawdź <Link href="/tworzenie-stron-internetowych" className="text-white underline underline-offset-4">tworzenie stron internetowych</Link>, <Link href="/crm-dla-firm-handlowych" className="text-white underline underline-offset-4">CRM dla zespołów handlowych</Link>, <Link href="/automatyzacja-leadow-i-sprzedazy" className="text-white underline underline-offset-4">automatyzację leadów</Link> lub <Link href="/marketing-i-reklamy" className="text-white underline underline-offset-4">marketing i reklamy</Link>.</p>
 
+      <p className="mt-6 text-sm leading-7 text-white/70">Chcesz powierzyć pozyskiwanie klientów wykonawcy? <Link href="/pozyskiwanie-klientow" className="underline underline-offset-4">Sprawdź, jak pomagam firmom zdobywać zapytania z Google i Facebooka</Link>.</p>
       <section aria-label="Najpopularniejsze decyzje przed zakupem" className="mt-8 rounded-2xl border border-white/25 bg-white/[0.035] p-6">
         <h2 className="text-2xl font-semibold">Co chcesz poprawić w swojej firmie?</h2>
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -62,7 +63,7 @@ export default async function GuidesPage({ searchParams }: Props) {
             ["Jak ustawić Google Ads?", "/poradniki/jak-ustawic-google-ads-dla-firmy-uslugowej"],
             ["Co warto zautomatyzować?", "/poradniki/automatyzacja-procesow-w-firmie-od-czego-zaczac"],
             ["Zlecić reklamy czy robić samemu?", "/poradniki/reklamy-samodzielnie-czy-agencja"],
-            ["Nieoczywiste grupy odbiorców Meta Ads", "/poradniki/targetowanie-posrednie-meta-ads-pomysly"],
+            ["Jaka grupa odbiorców na Facebooku?", "/poradniki/targetowanie-posrednie-meta-ads-pomysly"],
           ].map(([title,href])=><Link key={href} href={href} className="rounded-xl border border-white/15 px-4 py-3 text-sm leading-6 hover:border-white/50">{title}</Link>)}
         </div>
         <p className="mt-6 text-sm leading-7 text-white/70">Wolisz zlecić wykonanie? <Link href="/cennik" className="underline underline-offset-4">Zobacz orientacyjny cennik</Link> lub <Link href="/reklamy-online" className="underline underline-offset-4">porównaj platformy reklamowe</Link>.</p>

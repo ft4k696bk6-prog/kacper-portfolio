@@ -209,39 +209,39 @@ export const salesGuides = [
   },
   {
     "slug": "targetowanie-posrednie-meta-ads-pomysly",
-    "title": "Targetowanie pośrednie Meta Ads: jak szukać klientów poza oczywistą grupą?",
-    "description": "Jak testować nieoczywiste zainteresowania w Meta Ads, unikając błędnych założeń, naruszeń zasad i złej jakości leadów.",
+    "title": "Jaka grupa odbiorców reklam na Facebooku i Instagramie? Przykłady",
+    "description": "Komu pokazywać reklamy na Facebooku? Jak wybrać osoby zainteresowane ofertą i sprawdzić, czy lepsza jest szeroka grupa, czy konkretne zainteresowania.",
     "service": "/reklamy-meta-ads-dla-firm",
-    "serviceLabel": "Strategia Meta Ads",
+    "serviceLabel": "Pomoc w ustawieniu reklam na Facebooku i Instagramie",
     "category": "meta-ads",
-    "intro": "Konkurencja często zaczyna od tych samych zainteresowań związanych z usługą. Czasami lepszy pomysł to kontekst życia odbiorcy: co robi, z jakimi decyzjami się mierzy i jaką potrzebę może mieć. To metoda tworzenia hipotez, nie sposób na odgadnięcie czyjejś sytuacji z pewnością.",
+    "intro": "Grupa odbiorców to po prostu osoby, którym Facebook lub Instagram może pokazać Twoją reklamę. Jak je wybrać, żeby zapytania pochodziły od potencjalnych klientów? Nie trzeba zaczynać od skomplikowanych ustawień. Czasami warto sprawdzić również zainteresowania, które nie dotyczą wprost usługi – ale to pomysł do testowania, a nie gwarancja.",
     "sections": [
       {
-        "title": "Zacznij od problemu, a nie od panelu",
+        "title": "1. Komu chcesz wyświetlać reklamę? Zacznij od klienta",
         "paragraphs": [
           "Przy usługach dla właścicieli nieruchomości pomyśl o tematach takich jak utrzymanie ogrodu, ogrodzenia, remont, garaż czy sprzęt do pielęgnacji posesji. Te zainteresowania mogą współwystępować z posiadaniem domu, ale niczego nie dowodzą.",
           "Przykład kancelarii zajmującej się służebnością przesyłu: zamiast używać tylko oczywistych haseł prawnych, można badać szersze konteksty związane z działkami. Pamiętaj, że to eksperyment – kupujący kosiarkę nie musi być właścicielem posesji ani klientem kancelarii."
         ]
       },
       {
-        "title": "Zaprojektuj uczciwy eksperyment",
+        "title": "2. Porównaj trzy grupy osób",
         "paragraphs": [
           "Porównaj trzy podejścia: grupę szeroką, najbardziej bezpośrednią grupę kontekstową oraz jedną nieoczywistą hipotezę. Zadbaj o porównywalne oferty i kreatywny przekaz; unikaj wielu zmiennych jednocześnie.",
           "Jeżeli platforma automatycznie rozszerza odbiorców, analiza nie zawsze pozwoli przypisać wynik do wybranego zainteresowania. Ustawienia sprawdź w swoim typie kampanii."
         ]
       },
       {
-        "title": "Mierz jakość, nie tylko koszt zgłoszenia",
+        "title": "3. Która grupa naprawdę przynosi klientów?",
         "paragraphs": [
-          "Niszowy komunikat może mieć wyższy CPL, ale lepszy odsetek faktycznie zainteresowanych osób. W CRM oznacz źródło, jakość rozmowy i dalszą sprzedaż. Bez tego kreatywny pomysł jest tylko anegdotą.",
+          "Niektóre reklamy przynoszą dużo tanich formularzy, ale niewiele prawdziwych klientów. Zapisuj w CRM, ile osób odebrało telefon, ile otrzymało ofertę i ile kupiło. Dopiero wtedy wiesz, komu warto dalej pokazywać reklamę.",
           "Nie przypisuj odbiorcom ukrytych cech ani informacji wrażliwych, nie stosuj dyskryminujących wykluczeń. Sprawdź szczególne zasady reklamowe dla danej kategorii usług."
         ]
       },
       {
-        "title": "Zamień insight w kreację, nie w fałszywą obietnicę",
+        "title": "4. Co napisać w reklamie i jak nie przepalać budżetu?",
         "paragraphs": [
           "Dobra reklama mówi o sytuacji, którą odbiorca rozpoznaje, i proponuje sprawdzenie problemu. Nie powinna twierdzić, że użytkownik na pewno ma konkretną sprawę prawną, stan majątkowy lub potrzebę.",
-          "W ramach współpracy mogę przygotować mapę hipotez grup odbiorców, warianty kreacji i test pomiaru jakości kontaktów, zamiast zgadywania w Menedżerze reklam."
+          "Mogę dobrać grupy odbiorców, przygotować różne reklamy i sprawdzić, z których zgłoszeń są prawdziwi klienci. Cennik obsługi reklam jest dostępny na stronie."
         ]
       }
     ],

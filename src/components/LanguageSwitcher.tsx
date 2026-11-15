@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { CalendarDays, Cookie, Mail } from "lucide-react";
+import { CalendarDays, ChevronDown, Cookie, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { englishToolboxItems, englishToolPath, localizedToolboxPath } from "@/lib/toolbox-en";
 
 const navItems = [
   { href: "#services", pl: "Oferta", en: "Services" },
+  { href: "#cennik", pl: "Cennik", en: "Pricing" },
   { href: "#projects", pl: "Realizacje", en: "Projects" },
   { href: "#guides", pl: "Poradniki", en: "Guides" },
   { href: "/narzedzia", pl: "Darmowe narzędzia", en: "Free tools" },
@@ -98,7 +99,7 @@ export function LanguageSwitcher() {
     if (pathname.startsWith("/en/") && lang !== "en") setLang("en");
     if ((pathname.startsWith("/narzedzia") || pathname.startsWith("/poradniki") || pathname.startsWith("/blog") || pathname.startsWith("/realizacje/") ||
       ["/case-studies","/case-studies/re-energy-meta-ads","/reklamy-meta-ads-dla-firm",
-       "/tworzenie-stron-internetowych","/crm-i-aplikacje-webowe","/marketing-i-reklamy","/rozwoj-biznesu"].includes(pathname)) &&
+       "/tworzenie-stron-internetowych","/crm-i-aplikacje-webowe","/marketing-i-reklamy","/rozwoj-biznesu","/cennik","/pakiety","/reklamy-online"].includes(pathname)) &&
        lang !== "pl") setLang("pl");
   }, [pathname, lang, setLang]);
 
@@ -147,12 +148,18 @@ export function LanguageSwitcher() {
         </a>
 
         <nav className="hidden items-center gap-1 xl:flex">
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={anchorHref(item.href)}
-              className="ui-nav rounded-md px-4 py-2 text-sm"
-            >
+          {navItems.map((item) => item.href === "#cennik" ? (
+            <details key={item.href} className="group relative">
+              <summary className="ui-nav flex cursor-pointer list-none items-center gap-1 rounded-md px-4 py-2 text-sm">
+                {lang==="pl" ? "Cennik" : "Pricing"} <ChevronDown size={14} aria-hidden="true"/>
+              </summary>
+              <div className="absolute left-0 top-full z-50 mt-2 w-64 rounded-xl border border-white/20 bg-[#111] p-2 shadow-xl">
+                <a href="/pakiety" className="block rounded-lg px-4 py-3 text-sm text-white hover:bg-white/10">{lang==="pl" ? "Pakiety dla firm" : "Service packages"}</a>
+                <a href="/cennik" className="block rounded-lg px-4 py-3 text-sm text-white hover:bg-white/10">{lang==="pl" ? "Cennik pojedynczych usług" : "Individual service prices"}</a>
+              </div>
+            </details>
+          ) : (
+            <a key={item.href} href={anchorHref(item.href)} className="ui-nav rounded-md px-4 py-2 text-sm">
               {lang==="pl"?item.pl:item.en}
             </a>
           ))}
@@ -206,13 +213,18 @@ export function LanguageSwitcher() {
           transition={{ duration: 0.2 }}
         >
           <div className="mx-auto flex max-w-7xl flex-col gap-2">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={anchorHref(item.href)}
-                className="glass-action rounded-md px-3 py-3 text-base text-white hover:bg-[var(--brand-black)]"
-                onClick={() => setIsOpen(false)}
-              >
+            {navItems.map((item) => item.href === "#cennik" ? (
+              <details key={item.href} className="rounded-lg border border-white/15">
+                <summary className="flex cursor-pointer list-none items-center justify-between px-3 py-3 text-base text-white">
+                  {lang==="pl" ? "Cennik" : "Pricing"} <ChevronDown size={16} aria-hidden="true"/>
+                </summary>
+                <div className="flex flex-col gap-1 px-2 pb-2">
+                  <a href="/pakiety" className="rounded-md px-4 py-3 text-sm text-white/90 hover:bg-white/10" onClick={() => setIsOpen(false)}>{lang==="pl" ? "Pakiety dla firm" : "Service packages"}</a>
+                  <a href="/cennik" className="rounded-md px-4 py-3 text-sm text-white/90 hover:bg-white/10" onClick={() => setIsOpen(false)}>{lang==="pl" ? "Ceny pojedynczych usług" : "Individual service prices"}</a>
+                </div>
+              </details>
+            ) : (
+              <a key={item.href} href={anchorHref(item.href)} className="glass-action rounded-md px-3 py-3 text-base text-white hover:bg-[var(--brand-black)]" onClick={() => setIsOpen(false)}>
                 {lang==="pl"?item.pl:item.en}
               </a>
             ))}
