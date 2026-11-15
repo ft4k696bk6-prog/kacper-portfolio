@@ -123,11 +123,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       alternates:{languages:{"pl-PL":siteUrl+"/reklamy-meta-ads-dla-firm",en:siteUrl+"/en/meta-ads"}} },
     { url: siteUrl + "/en/meta-ads",changeFrequency:"monthly",priority:0.9,
       alternates:{languages:{"pl-PL":siteUrl+"/reklamy-meta-ads-dla-firm",en:siteUrl+"/en/meta-ads"}} },
-    {
-      url: siteUrl,
-      changeFrequency: "monthly",
-      priority: 1,
-    },
+    {url:siteUrl,changeFrequency:"monthly",priority:1,alternates:{languages:{"pl-PL":siteUrl+"/",en:siteUrl+"/en"}}},
+    {url:siteUrl+"/en",changeFrequency:"monthly",priority:1,alternates:{languages:{"pl-PL":siteUrl+"/",en:siteUrl+"/en"}}},
     {url:`${siteUrl}/case-studies`,changeFrequency:"monthly",priority:0.8,
       alternates:{languages:{"pl-PL":`${siteUrl}/case-studies`,en:`${siteUrl}/en/case-studies`}}},
     {url:`${siteUrl}/en/case-studies`,changeFrequency:"monthly",priority:0.8,
