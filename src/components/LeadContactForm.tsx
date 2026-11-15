@@ -6,6 +6,10 @@ import { CheckCircle2, Loader2, Send } from "lucide-react";
 
 const options=[
  ["","Wybierz temat"],
+ ["Pozyskiwanie klientów","Pozyskiwanie klientów"],
+ ["Pakiety usług","Pakiety usług"],
+ ["Reklamy Google Ads","Reklamy Google Ads"],
+ ["Reklamy Facebook i Instagram","Reklamy Facebook i Instagram"],
  ["Strona internetowa lub sklep","Strona internetowa lub sklep"],
  ["CRM i aplikacja","CRM i aplikacja"],
  ["AI i automatyzacja","AI i automatyzacja"],
