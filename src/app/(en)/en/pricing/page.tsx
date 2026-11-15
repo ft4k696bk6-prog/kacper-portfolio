@@ -41,10 +41,10 @@ export default function EnglishPricing(){
    <div className="mt-6 flex flex-wrap gap-6"><Link href="/en/advertising" className="underline underline-offset-4">Compare advertising channels</Link><Link href="/en/packages" className="underline underline-offset-4">Explore bundled packages</Link></div>
   </section>
   <section className="mt-20"><h2 className="text-3xl">How we work together</h2><div className="mt-8 grid gap-4 md:grid-cols-3">{[
-   ["01","Describe your goal","Tell me your industry, budget, current tools and what isn't working."],
+   ["01","Describe your goal","Tell me your industry, budget, current tools and what isn’t working."],
    ["02","Agree on scope","We decide whether an off-the-shelf option is sufficient and which integrations matter."],
    ["03","Get a quote","You receive a scope, price, delivery stages and ongoing cost assumptions."]
   ].map(([n,t,d])=><div key={n} className="rounded-xl border border-white/15 p-6"><p className="text-white/55">{n}</p><h3 className="mt-3 text-xl">{t}</h3><p className="mt-3 leading-7 text-white/70">{d}</p></div>)}</div></section>
-  <section className="mt-20 rounded-2xl border border-white/25 p-8"><h2 className="text-3xl">Not sure which service to start with?</h2><p className="mt-4 leading-8 text-white/75">Describe the problem and your budget. I'll help you compare a smaller ready-made solution against a custom build or a paid advertising test.</p><Link href="/en/contact" className="brand-action mt-7 inline-block rounded-xl px-6 py-3 font-semibold text-black">Tell me about your project</Link></section>
+  <section className="mt-20 rounded-2xl border border-white/25 p-8"><h2 className="text-3xl">Not sure which service to start with?</h2><p className="mt-4 leading-8 text-white/75">Describe the problem and your budget. I’ll help you compare a smaller ready-made solution against a custom build or a paid advertising test.</p><Link href="/en/contact" className="brand-action mt-7 inline-block rounded-xl px-6 py-3 font-semibold text-black">Tell me about your project</Link></section>
  </div></main>;
 }
