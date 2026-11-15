@@ -3,8 +3,8 @@ import { ServiceLandingPage } from "@/components/ServiceLandingPage";
 
 export const metadata = {
   ...serviceMetadata(
-  "Meta Ads i marketing dla firm — pozyskiwanie leadów",
-  "Pozyskiwanie leadów przez Meta Ads, kampanie Facebook i Instagram, strony ofertowe i CRM. Zobacz case study kampanii Re-Energy System i poznaj proces współpracy.",
+  "Marketing i reklamy dla firm: Google, Meta, TikTok, CRM",
+  "Kampanie Google Ads, Facebook, Instagram, TikTok i YouTube. Reklama, landing page, CRM i mierzenie jakości leadów. Sprawdź cennik i realizacje.",
   "marketing-i-reklamy",
 ),
   alternates: {canonical:"https://bernecki.dev/marketing-i-reklamy",languages:{"pl-PL":"https://bernecki.dev/marketing-i-reklamy",en:"https://bernecki.dev/en/services/marketing"}}

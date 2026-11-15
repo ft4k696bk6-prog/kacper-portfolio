@@ -8,8 +8,8 @@ type Props = { searchParams: Promise<{ q?: string; strona?: string }> };
 export async function generateMetadata({ searchParams }: Props) {
   const params = await searchParams;
   const metadata = serviceMetadata(
-    "Poradniki: błędy Vercel, CRM, Meta Ads, Supabase i stron",
-    "Praktyczne poradniki rozwiązywania błędów w programowaniu, reklamach, CRM, SEO i integracjach. Diagnostyka, rozwiązanie i test poprawności.",
+    "Poradniki dla firm: CRM, reklamy Google i Meta, automatyzacja",
+    "Jak wybrać CRM, ustawić reklamy Google, Meta, TikTok i YouTube, policzyć budżet oraz zautomatyzować sprzedaż. Poradniki z praktycznymi przykładami.",
     "poradniki"
   );
   const pageNumber = Number(params.strona ?? "1");
@@ -48,10 +48,25 @@ export default async function GuidesPage({ searchParams }: Props) {
     <nav className="text-sm text-white/65" aria-label="Ścieżka strony"><Link href="/" className="underline underline-offset-4">Kacper Bernecki</Link> / Poradniki</nav>
     <header className="mt-10">
       <p className="page-eyebrow">Baza rozwiązań • praktyczne problemy</p>
-      <h1 className="mt-5 max-w-5xl text-4xl leading-tight md:text-6xl">Nie działa? Znajdź przyczynę i napraw.</h1>
-      <p className="mt-6 max-w-3xl text-lg leading-8 text-white/75">Praktyczne rozwiązania problemów ze stronami internetowymi, CRM, reklamami Meta, SEO, WordPressem i integracjami. Wybierz temat, sprawdź możliwe przyczyny, wykonaj kolejne kroki i przetestuj rezultat.</p>
+      <h1 className="mt-5 max-w-5xl text-4xl leading-tight md:text-6xl">CRM, reklamy i automatyzacja. Wybierz rozwiązanie dla firmy.</h1>
+      <p className="mt-6 max-w-3xl text-lg leading-8 text-white/75">Poradniki o wyborze CRM, reklamach Google, Facebook, Instagram, TikTok i YouTube, budżetach i automatyzacji. Zachowałem też rozbudowaną bibliotekę techniczną dla tych, którzy chcą rozwiązać problem samodzielnie.</p>
       <p className="mt-5 text-sm text-white/70">Chcesz zobaczyć szerszy kontekst? <Link href="/blog" className="text-white underline underline-offset-4">Przeczytaj blog o marketingu, CRM i SEO</Link>.</p>
       <p className="mt-3 max-w-3xl text-sm leading-7 text-white/70">Potrzebujesz wykonawcy zamiast kolejnego poradnika? Sprawdź <Link href="/tworzenie-stron-internetowych" className="text-white underline underline-offset-4">tworzenie stron internetowych</Link>, <Link href="/crm-dla-firm-handlowych" className="text-white underline underline-offset-4">CRM dla zespołów handlowych</Link>, <Link href="/automatyzacja-leadow-i-sprzedazy" className="text-white underline underline-offset-4">automatyzację leadów</Link> lub <Link href="/marketing-i-reklamy" className="text-white underline underline-offset-4">marketing i reklamy</Link>.</p>
+
+      <section aria-label="Najpopularniejsze decyzje przed zakupem" className="mt-8 rounded-2xl border border-white/25 bg-white/[0.035] p-6">
+        <h2 className="text-2xl font-semibold">Co chcesz poprawić w swojej firmie?</h2>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          {[
+            ["Jaki CRM wybrać?", "/poradniki/jaki-crm-wybrac-dla-malej-firmy"],
+            ["Ile wydawać na reklamy Meta?", "/poradniki/ile-wydac-na-facebook-instagram-ads"],
+            ["Jak ustawić Google Ads?", "/poradniki/jak-ustawic-google-ads-dla-firmy-uslugowej"],
+            ["Co warto zautomatyzować?", "/poradniki/automatyzacja-procesow-w-firmie-od-czego-zaczac"],
+            ["Zlecić reklamy czy robić samemu?", "/poradniki/reklamy-samodzielnie-czy-agencja"],
+            ["Nieoczywiste grupy odbiorców Meta Ads", "/poradniki/targetowanie-posrednie-meta-ads-pomysly"],
+          ].map(([title,href])=><Link key={href} href={href} className="rounded-xl border border-white/15 px-4 py-3 text-sm leading-6 hover:border-white/50">{title}</Link>)}
+        </div>
+        <p className="mt-6 text-sm leading-7 text-white/70">Wolisz zlecić wykonanie? <Link href="/cennik" className="underline underline-offset-4">Zobacz orientacyjny cennik</Link> lub <Link href="/reklamy-online" className="underline underline-offset-4">porównaj platformy reklamowe</Link>.</p>
+      </section>
       <form role="search" action="/poradniki" method="get" className="mt-8 flex max-w-3xl flex-wrap gap-3">
         <label htmlFor="guide-search" className="sr-only">Szukaj rozwiązania lub komunikatu błędu</label>
         <input id="guide-search" name="q" type="search" maxLength={100} defaultValue={query} placeholder="Np. Vercel deployment, RLS, formularz..." className="min-w-0 flex-1 rounded-xl border border-white/25 bg-[var(--brand-black)] px-5 py-4 text-white placeholder:text-white/55" />
