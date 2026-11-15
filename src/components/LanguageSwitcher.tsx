@@ -47,6 +47,7 @@ export function LanguageSwitcher() {
     "/pozyskiwanie-klientow": "/en/customer-acquisition",
     "/reklamy-online": "/en/advertising",
     "/kontakt": "/en/contact",
+    "/polityka-prywatnosci": "/en/privacy",
     "/automatyzacja-leadow-i-sprzedazy": "/en/services/automation",
     "/wdrozenia-ai-dla-firm": "/en/services/automation",
     "/crm-dla-firm-handlowych": "/en/services/crm",
