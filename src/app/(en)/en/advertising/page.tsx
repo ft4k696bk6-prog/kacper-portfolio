@@ -27,7 +27,7 @@ export default function EnglishAdvertising(){
   <nav className="text-sm text-white/60"><Link href="/">Home</Link> / <Link href="/en/services/marketing">Marketing</Link> / Advertising</nav>
   <p className="mt-12 text-xs uppercase tracking-widest text-white/55">Strategy · Paid campaigns · CRM · Sales tracking</p>
   <h1 className="mt-4 max-w-5xl text-4xl leading-tight md:text-6xl">Google, Facebook, Instagram, TikTok and YouTube Ads – focus on customers, not clicks.</h1>
-  <p className="mt-7 max-w-4xl text-lg leading-8 text-white/75">I help businesses choose the right channel, build an offer, set up advertising and connect enquiries to their CRM. You don't need to advertise everywhere at once: start with a channel that matches your customers and budget.</p>
+  <p className="mt-7 max-w-4xl text-lg leading-8 text-white/75">I help businesses choose the right channel, build an offer, set up advertising and connect enquiries to their CRM. You don’t need to advertise everywhere at once: start with a channel that matches your customers and budget.</p>
   <div className="mt-8 flex flex-wrap gap-4"><Link href="/en/customer-acquisition" className="brand-action rounded-xl px-6 py-3 font-semibold text-black">Get more customer enquiries</Link><Link href="/en/pricing" className="rounded-xl border border-white/25 px-6 py-3">View prices</Link><Link href="/en/case-studies/re-energy-meta-ads" className="rounded-xl border border-white/25 px-6 py-3">Campaign example</Link></div>
   <section className="mt-20"><h2 className="text-3xl">Which advertising platform is right for your business?</h2><p className="mt-4 max-w-4xl leading-7 text-white/70">These are illustrative planning budgets, not verified market CPC figures, platform minimums or promises of results. Ad management fees and media spend are separate.</p>
    <div className="mt-8 grid gap-5 md:grid-cols-2">{channels.map(c=><article key={c.name} className="surface-card rounded-2xl border border-white/15 p-7">
@@ -37,17 +37,17 @@ export default function EnglishAdvertising(){
     <div className="mt-7 flex flex-wrap gap-4"><Link href={c.offer} className="underline underline-offset-4">Service</Link><Link href={"/en/guides/"+c.guide} className="underline underline-offset-4">How-to guide</Link></div>
    </article>)}</div>
   </section>
-  <section className="mt-20 rounded-2xl border border-white/20 p-7 md:p-10"><p className="text-xs uppercase tracking-widest text-white/55">Don't copy a competitor's audience settings</p><h2 className="mt-4 text-3xl">Who should see your Facebook ad?</h2>
+  <section className="mt-20 rounded-2xl border border-white/20 p-7 md:p-10"><p className="text-xs uppercase tracking-widest text-white/55">Don’t copy a competitor’s audience settings</p><h2 className="mt-4 text-3xl">Who should see your Facebook ad?</h2>
    <p className="mt-5 leading-8 text-white/75">For example, a law firm handling property-related matters might test messages that resonate with people interested in home improvement, gardens or maintaining a property. Interest in lawn mowers does not prove home ownership or a legal problem. It is a testable marketing assumption, not a fact about a person.</p>
    <p className="mt-4 leading-8 text-white/75">Compare broad and specific groups, check which targeting options are actually available and evaluate qualified calls and sales in your CRM. Follow platform rules, particularly for regulated or sensitive services.</p>
    <Link href="/en/guides/targetowanie-posrednie-meta-ads-pomysly" className="mt-6 inline-block underline underline-offset-4">How to choose Facebook ad audiences</Link>
   </section>
   <section className="mt-20"><h2 className="text-3xl">How campaign success is measured</h2><div className="mt-7 grid gap-4 md:grid-cols-3">{[
-   ["Click","Someone shows interest; it isn't yet a customer."],
+   ["Click","Someone shows interest; it isn’t yet a customer."],
    ["Qualified enquiry","A relevant contact reaches the team, with permission and enough information to follow up."],
    ["Sale","Your CRM shows which enquiries eventually result in a purchase or contract."]
   ].map(([t,d])=><div key={t} className="rounded-xl border border-white/15 p-6"><h3 className="text-xl">{t}</h3><p className="mt-3 leading-7 text-white/70">{d}</p></div>)}</div></section>
   <section className="mt-20"><h2 className="text-3xl">Practical guides before you start spending</h2><div className="mt-7 grid gap-3 md:grid-cols-2">{guides.map(([t,slug])=><Link key={slug} href={"/en/guides/"+slug} className="rounded-xl border border-white/20 p-5 hover:border-white/60">{t}</Link>)}</div></section>
-  <section className="mt-20 rounded-2xl border border-white/25 p-8"><h2 className="text-3xl">Let's decide where your advertising money should go.</h2><p className="mt-4 leading-8 text-white/70">Tell me your industry, service area, average customer value, monthly advertising budget and existing channels. We can plan the first experiment and the cost of managing it.</p><Link href="/en/contact" className="brand-action mt-7 inline-block rounded-xl px-6 py-3 font-semibold text-black">Discuss an advertising plan</Link></section>
+  <section className="mt-20 rounded-2xl border border-white/25 p-8"><h2 className="text-3xl">Let’s decide where your advertising money should go.</h2><p className="mt-4 leading-8 text-white/70">Tell me your industry, service area, average customer value, monthly advertising budget and existing channels. We can plan the first experiment and the cost of managing it.</p><Link href="/en/contact" className="brand-action mt-7 inline-block rounded-xl px-6 py-3 font-semibold text-black">Discuss an advertising plan</Link></section>
  </div></main>;
 }
