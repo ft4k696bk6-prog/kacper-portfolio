@@ -60,6 +60,7 @@ export function BusinessOfferPage({kind}:{kind:BusinessOfferKey}){
             <BusinessOfferCta offer={kind} label="Zobacz wdrożenie" placement="hero" href="#realizacja" secondary/>
           </div>
           <p className="mt-6 max-w-2xl text-sm leading-6 text-white/55">{offer.audience}</p>
+          <p className="mt-4 text-sm text-white/70">{kind==="crm" ? "Pierwszy moduł CRM: orientacyjnie od 12 000 zł netto. Zobacz zakres i koszty utrzymania." : "Audyt kampanii: orientacyjnie od 590 zł netto. Budżet reklamowy oddzielnie."} <Link href="/cennik" className="font-medium text-white underline underline-offset-4">Przejdź do cennika</Link></p>
         </div>
         <Link href={offer.proof.href} className="group block overflow-hidden rounded-2xl border border-white/15 bg-white/5 transition hover:border-white/40">
           <Image src={offer.proof.img} alt={offer.proof.alt} width={1000} height={640}
