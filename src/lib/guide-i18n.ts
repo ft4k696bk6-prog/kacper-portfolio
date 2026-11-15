@@ -1,5 +1,9 @@
 import { createHash } from "node:crypto";
 import englishCorpus from "../content/pseo/guide-translations.en.json";
+import salesEnA from "../content/sales-en-a.json";
+import salesEnB from "../content/sales-en-b.json";
+import salesEnC from "../content/sales-en-c.json";
+import salesEnD from "../content/sales-en-d.json";
 import { businessArticles } from "../content/businessGuides";
 import { allGuides, getGuide, guideCategories, guideCategory } from "./guide-directory";
 
@@ -24,8 +28,19 @@ export type EnglishGuide = {
   sources?: readonly {label:string;url:string}[];
   status:"machine"|"reviewed";
 };
+const manuallyTranslatedSalesGuides:Record<string, Omit<EnglishEdition,"sourceHash"|"status">> = {
+  ...salesEnA,...salesEnB,...salesEnC,...salesEnD
+};
 const english:Record<string,EnglishEdition> = {
   ...(englishCorpus as Record<string,EnglishEdition>),
+  ...Object.fromEntries(Object.entries(manuallyTranslatedSalesGuides).map(([slug,translation])=>{
+    const source=getGuide(slug);
+    return [slug,{
+      ...translation,
+      status:"reviewed" as const,
+      sourceHash:source?guideSourceHash(source):"",
+    }];
+  })),
   ...Object.fromEntries(businessArticles.map(article=>[article.slug,{
     status:"reviewed" as const,
     sourceHash:guideSourceHash({...article.pl,serviceLabel:"Rozwój biznesu"}),
