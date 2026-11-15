@@ -34,6 +34,7 @@ export function LanguageSwitcher() {
   const router = useRouter();
   // Every static business route has a real English counterpart, not just translated menu labels.
   const bilingualRoutes: Record<string,string> = {
+    "/": "/en",
     "/case-studies": "/en/case-studies",
     "/blog": "/en/blog",
     "/rozwoj-biznesu": "/en/business",
@@ -75,6 +76,7 @@ export function LanguageSwitcher() {
       const slug=pathname.slice("/en/projects/".length);
       return target==="pl" ? `/realizacje/${slug}` : pathname;
     }
+    if (pathname === "/en") return target === "pl" ? "/" : "/en";
     if (target==="en" && bilingualRoutes[pathname])return bilingualRoutes[pathname];
     if (target==="pl") {
       const source=Object.entries(bilingualRoutes).find(([,english])=>english===pathname);
@@ -111,7 +113,7 @@ export function LanguageSwitcher() {
     router.push(next === "en" ? "/en/guides" : "/poradniki");
   };
   useEffect(() => {
-    if (pathname.startsWith("/en/") && lang !== "en") setLang("en");
+    if ((pathname.startsWith("/en/") || pathname==="/en") && lang !== "en") setLang("en");
     if ((pathname.startsWith("/narzedzia") || pathname.startsWith("/poradniki") || pathname.startsWith("/blog") || pathname.startsWith("/realizacje/") ||
       ["/case-studies","/case-studies/re-energy-meta-ads","/reklamy-meta-ads-dla-firm",
        "/tworzenie-stron-internetowych","/crm-i-aplikacje-webowe","/marketing-i-reklamy","/rozwoj-biznesu","/cennik","/pakiety","/reklamy-online","/pozyskiwanie-klientow","/kontakt","/automatyzacja-leadow-i-sprzedazy"].includes(pathname)) &&
@@ -125,7 +127,7 @@ export function LanguageSwitcher() {
     return () => window.removeEventListener("scroll", update);
   }, [pathname]);
   const cookies = <button type="button" aria-label={t.consent.settings} onClick={() => window.dispatchEvent(new Event("portfolio-open-cookie-settings"))} className="brand-outline grid h-10 w-10 place-items-center rounded-md"><Cookie size={17}/></button>;
-  const anchorHref = (hash: string) => hash==="/narzedzia" ? localizedToolboxPath(lang) : hash.startsWith("/") ? hash : (pathname === "/" ? hash : `/${hash}`);
+  const anchorHref = (hash: string) => hash==="/narzedzia" ? localizedToolboxPath(lang) : hash.startsWith("/") ? hash : (pathname === "/" ? hash : lang==="en" ? `/en${hash}` : `/${hash}`);
 
   const languageButton = (value: "pl" | "en", label: string) => (
     <button
