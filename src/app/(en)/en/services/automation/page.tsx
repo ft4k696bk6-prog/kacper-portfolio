@@ -4,7 +4,7 @@ const site="https://bernecki.dev";
 export const metadata:Metadata={title:"Business Process Automation and CRM Integrations | bernecki.dev",description:"Automate lead forms, CRM assignments, follow-up reminders and sales workflows. Practical integrations, costs and deployment.",alternates:{canonical:site+"/en/services/automation",languages:{"pl-PL":site+"/automatyzacja-leadow-i-sprzedazy",en:site+"/en/services/automation"}}};
 const workflows=[
  ["Lead forms to CRM","Receive an enquiry from your website or advertising platform, check duplicates and assign it to the right person."],
- ["Follow-up reminders","Create tasks and alerts when a lead hasn't been contacted within the agreed time."],
+ ["Follow-up reminders","Create tasks and alerts when a lead hasn’t been contacted within the agreed time."],
  ["Documents and quotes","Help your team prepare consistent offers, handover documents and next steps without copying data manually."],
  ["AI where useful","Use AI for tasks such as categorising messages or summarising notes, with appropriate review and privacy safeguards."]
 ] as const;
