@@ -31,7 +31,7 @@ export default function EnglishPackages(){
   </nav>
   <section className="mt-12 grid gap-5 md:grid-cols-2" aria-label="Service packages">{packages.map(p=><article key={p.name} className="surface-card flex flex-col rounded-2xl border border-white/20 p-7 md:p-9">
    <h2 className="text-2xl font-semibold">{p.name}</h2><p className="mt-3 text-3xl font-semibold">from {p.price} <span className="text-sm font-normal text-white/60">net · {p.period}</span></p>
-   <p className="mt-5 leading-7 text-white/80">{p.forWhom}</p><h3 className="mt-7 text-sm font-semibold">What's included?</h3>
+   <p className="mt-5 leading-7 text-white/80">{p.forWhom}</p><h3 className="mt-7 text-sm font-semibold">What’s included?</h3>
    <ul className="mt-3 list-disc space-y-3 pl-5 leading-7 text-white/75">{p.items.map(i=><li key={i}>{i}</li>)}</ul>
    <p className="mt-7 text-sm leading-6 text-white/55">{p.extra}</p>
    <div className="mt-auto flex flex-wrap gap-4 pt-7"><Link href="/en/contact" className="brand-action rounded-lg px-5 py-3 font-semibold text-black">Ask about this package</Link><Link href={p.service} className="rounded-lg border border-white/25 px-5 py-3">Service details</Link></div>
@@ -43,7 +43,7 @@ export default function EnglishPackages(){
     <p className="mt-5 leading-7 text-white/70">{p.description}</p><div className="mt-auto pt-7"><Link href="/en/contact" className="brand-action block rounded-lg px-5 py-3 text-center font-semibold text-black">Discuss this package</Link><Link href="/en/business" className="mt-4 block text-center underline underline-offset-4">Full scope</Link></div>
    </article>)}</div>
   </section>
-  <section className="mt-16 rounded-2xl border border-white/20 p-7 md:p-10"><h2 className="text-3xl">What's charged separately?</h2>
+  <section className="mt-16 rounded-2xl border border-white/20 p-7 md:p-10"><h2 className="text-3xl">What’s charged separately?</h2>
    <p className="mt-5 leading-8 text-white/75">Starting prices exclude tax. Final quotes depend on the agreed scope. Advertising spend is paid to the platform separately, and domains, hosting, additional features, creative production or third-party tools can add costs.</p>
    <div className="mt-7 flex flex-wrap gap-6"><Link href="/en/pricing" className="underline underline-offset-4">Individual service prices</Link><Link href="/en/case-studies" className="underline underline-offset-4">View completed work</Link><Link href="/en/contact" className="underline underline-offset-4">Request a tailored quote</Link></div>
   </section>
