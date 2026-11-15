@@ -62,7 +62,7 @@ export default async function GuidesPage({ searchParams }: Props) {
             ["Jak ustawić Google Ads?", "/poradniki/jak-ustawic-google-ads-dla-firmy-uslugowej"],
             ["Co warto zautomatyzować?", "/poradniki/automatyzacja-procesow-w-firmie-od-czego-zaczac"],
             ["Zlecić reklamy czy robić samemu?", "/poradniki/reklamy-samodzielnie-czy-agencja"],
-            ["Nieoczywiste grupy odbiorców Meta Ads", "/poradniki/targetowanie-posrednie-meta-ads-pomysly"],
+            ["Jaka grupa odbiorców na Facebooku?", "/poradniki/targetowanie-posrednie-meta-ads-pomysly"],
           ].map(([title,href])=><Link key={href} href={href} className="rounded-xl border border-white/15 px-4 py-3 text-sm leading-6 hover:border-white/50">{title}</Link>)}
         </div>
         <p className="mt-6 text-sm leading-7 text-white/70">Wolisz zlecić wykonanie? <Link href="/cennik" className="underline underline-offset-4">Zobacz orientacyjny cennik</Link> lub <Link href="/reklamy-online" className="underline underline-offset-4">porównaj platformy reklamowe</Link>.</p>
