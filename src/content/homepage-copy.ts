@@ -1,12 +1,12 @@
 export const homepageCopy = {
   pl: {
-    signature: "Kacper Bernecki / biznes i technologia",
-    title: ["Od pomysłu do", "działającego biznesu."],
-    intro: "Pomagam rozwijać firmy — od strategii, produktów i dostawców po strony, CRM i marketing. Ustalamy kierunek i wdrażamy go krok po kroku.",
+    signature: "Strony WWW / CRM / reklamy / automatyzacja",
+    title: ["Strony, CRM i reklamy", "dla Twojej firmy."],
+    intro: "Tworzę strony internetowe i systemy CRM, ustawiam reklamy Google, Facebook, Instagram i TikTok oraz automatyzuję obsługę klientów. Zobacz realizacje, ceny i zapytaj o współpracę.",
     projects: "Zobacz realizacje",
-    call: "Umów rozmowę",
+    call: "Zapytaj o wycenę",
     portrait: "Portret Kacpra Berneckiego z założonymi rękami",
-    services: "Co mogę zrobić dla Twojej firmy?",
+    services: "Co mogę zrobić, żeby Twoja firma zdobywała klientów?",
     offer: [
       ["Start i rozwój biznesu", "Pomysł, koszty i plan działania. Praktyczne wnioski z prowadzenia i rozwijania własnych firm.", "/rozwoj-biznesu"],
       ["Produkty, dostawcy i import", "Sourcing, oferty producentów, próbki, kalkulacja dostawy i koordynacja wdrożenia.", "/rozwoj-biznesu"],
