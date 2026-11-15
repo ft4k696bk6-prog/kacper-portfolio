@@ -54,7 +54,16 @@ export function getEnglishGuide(slug:string):EnglishGuide | undefined {
   if(!t.title||!t.description||!t.intro)return undefined;
   return {
     slug, title:t.title,description:t.description,intro:t.intro,
-    sections:t.sections,service:original.service,serviceLabel:t.serviceLabel,
+    sections:t.sections,service:({
+      "/reklamy-online":"/en/advertising",
+      "/reklamy-meta-ads-dla-firm":"/en/meta-ads",
+      "/google-ads-dla-firm":"/en/advertising",
+      "/crm-dla-firm-handlowych":"/en/services/crm",
+      "/crm-i-aplikacje-webowe":"/en/services/crm",
+      "/automatyzacja-leadow-i-sprzedazy":"/en/services/automation",
+      "/tworzenie-stron-internetowych":"/en/services/websites",
+      "/pozyskiwanie-klientow":"/en/customer-acquisition"
+    } as Record<string,string>)[original.service] || "/en/customer-acquisition",serviceLabel:t.serviceLabel,
     sources:"sources" in original ? original.sources : undefined,status:t.status
   };
 }
@@ -62,6 +71,8 @@ export function getEnglishGuides():EnglishGuide[] {
   return allGuides.map(g=>getEnglishGuide(g.slug)).filter((g):g is EnglishGuide=>Boolean(g));
 }
 const categoryLabels:Record<string,readonly [string,string]>={
+  "rozwoj-firmy":["Business growth and customer acquisition","Business advertising, marketing budgets, sales, pricing and growth decisions."],
+  "google-ads":["Google Ads and search advertising","Keywords, budgets, lead tracking and campaign optimisation."],
   "meta-ads":["Meta Ads and advertising","Ads Manager, lead forms, Pixel, conversion measurement and account restrictions."],
   "vercel-hosting":["Vercel and hosting","Deployments, project settings, domains, SSL and runtime errors."],
   "supabase-bazy":["Supabase and databases","PostgreSQL, RLS, authentication, storage and database permissions."],
