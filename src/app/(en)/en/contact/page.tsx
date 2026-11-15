@@ -12,7 +12,7 @@ export default async function EnglishContact({searchParams}:{searchParams:Promis
  <nav className="text-sm text-white/65"><Link href="/">Home</Link> / Contact</nav>
  <p className="mt-12 text-xs uppercase tracking-widest text-white/55">Project enquiry</p>
  <h1 className="mt-4 max-w-4xl text-4xl font-semibold md:text-6xl">Tell me what you want to build or improve.</h1>
- <p className="mt-6 max-w-3xl text-lg leading-8 text-white/75">Websites, custom CRM, Google Ads, Facebook and Instagram campaigns or automation – a few sentences are enough to start. I'll review your requirements and discuss the next practical step.</p>
+ <p className="mt-6 max-w-3xl text-lg leading-8 text-white/75">Websites, custom CRM, Google Ads, Facebook and Instagram campaigns or automation – a few sentences are enough to start. I’ll review your requirements and discuss the next practical step.</p>
  <div className="mt-12 grid items-start gap-8 lg:grid-cols-[1.15fr_.85fr]">
    <LeadContactForm english initialService={params.service||""}/>
    <div className="space-y-7">
