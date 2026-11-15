@@ -54,8 +54,12 @@ export default async function GuidePage({params}: Props) {
     <p className="mt-5 text-sm text-white/65">Kategoria: <Link className="underline underline-offset-4" href={`/poradniki/tematy/${guideCategory(guide)}`}>{getCategory(guideCategory(guide))?.label}</Link></p>
     <article>
       <h1 className="mt-8 text-4xl leading-tight md:text-5xl">{guide.title.split(/([_/])/).map((part,i)=><Fragment key={i}>{part}{part==="_"||part==="/"?<wbr/>:null}</Fragment>)}</h1>
-      <p className="mt-5 text-sm text-white/70">{currentCategory === "biznes-podatki" ? "Poradnik dla przedsiębiorców" : currentCategory === "ai-w-firmie" ? "AI w praktyce" : currentCategory === "rozwoj-firmy" ? "Praktyczny poradnik biznesowy" : "Poradnik techniczny"} · <Link href="/#about" className="underline underline-offset-4">Kacper Bernecki</Link></p>
+      <p className="mt-5 text-sm text-white/70">{currentCategory === "biznes-podatki" ? "Poradnik dla przedsiębiorców" : currentCategory === "ai-w-firmie" ? "AI w praktyce" : currentCategory === "rozwoj-firmy" ? "Poradnik dla właściciela firmy" : currentCategory === "meta-ads" || currentCategory === "google-ads" ? "Reklamy i pozyskiwanie klientów" : currentCategory === "crm-leady" ? "CRM dla firm" : currentCategory === "automatyzacje" ? "Automatyzacja firmy" : "Poradnik techniczny"} · <Link href="/#about" className="underline underline-offset-4">Kacper Bernecki</Link></p>
       <p className="surface-card mt-8 rounded-2xl border border-white/25 bg-[var(--brand-black)] p-6 text-lg leading-8 text-white">{guide.intro}</p>
+      {["crm-leady","meta-ads","google-ads","automatyzacje","rozwoj-firmy"].includes(currentCategory) && <aside className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-white/15 bg-white/[0.035] p-5">
+        <p className="max-w-xl leading-7 text-white/75">Wolisz zlecić to wykonawcy? Zobacz zakres usług i ceny, zanim podejmiesz decyzję.</p>
+        <div className="flex flex-wrap gap-4"><Link href={guide.service} className="underline underline-offset-4">Zobacz usługę</Link><Link href="/#cennik" className="underline underline-offset-4">Pakiety i cennik</Link><Link href="/kontakt" className="underline underline-offset-4">Zapytaj o pomoc</Link></div>
+      </aside>}
       {slug === "zwrot-vat-8-23-przyklad-50000" ? <VatComparison lang="pl" /> : null}
       {screenshots.length > 0 && <section className="mt-10" aria-labelledby="real-screenshots-heading">
         <h2 id="real-screenshots-heading" className="text-2xl text-white">Przykład komunikatu błędu</h2>
