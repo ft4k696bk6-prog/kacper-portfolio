@@ -8,7 +8,7 @@ export const metadata:Metadata={
   title:offer.metaTitle,
   description:offer.metaDescription,
   keywords:[...offer.keywords],
-  alternates:{canonical},
+  alternates:{canonical,languages:{"pl-PL":"https://bernecki.dev/automatyzacja-leadow-i-sprzedazy",en:"https://bernecki.dev/en/services/automation"}},
   openGraph:{title:offer.metaTitle,description:offer.metaDescription,url:canonical,type:"website",locale:"pl_PL",images:[{url:offer.proof.img,alt:offer.proof.alt}]},
   twitter:{card:"summary_large_image",title:offer.metaTitle,description:offer.metaDescription,images:[offer.proof.img]},
 };
