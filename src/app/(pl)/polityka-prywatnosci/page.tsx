@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata:Metadata={
  title:"Polityka prywatności",
  description:"Informacje o przetwarzaniu danych osobowych w serwisie bernecki.dev.",
- alternates:{canonical:"https://bernecki.dev/polityka-prywatnosci"}
+ alternates:{canonical:"https://bernecki.dev/polityka-prywatnosci",languages:{"pl-PL":"https://bernecki.dev/polityka-prywatnosci",en:"https://bernecki.dev/en/privacy"}}
 };
 const sections=[
  {title:"1. Administrator danych",paragraphs:[
