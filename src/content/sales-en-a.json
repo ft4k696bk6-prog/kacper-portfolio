@@ -1,0 +1,290 @@
+{
+  "jaki-crm-wybrac-dla-malej-firmy": {
+    "title": "Which CRM should a small business choose? 7 key criteria",
+    "description": "Compare spreadsheets, ready-made CRM platforms and custom software, including costs, integrations, permissions and a practical test.",
+    "serviceLabel": "Custom CRM for sales teams",
+    "intro": "The best CRM is the one that fixes real sales problems. A standard subscription may suit a small team, while unusual processes, commissions and permissions can justify a custom application.",
+    "sections": [
+      {
+        "title": "Map the journey from enquiry to invoice",
+        "paragraphs": [
+          "Write down lead sources, who calls back, the sales stages and how work is handed over. Include five real cases and exceptions, not only the ideal process.",
+          "Decide which information representatives, managers and finance staff need. Record who may edit a lead and whether changes remain traceable."
+        ]
+      },
+      {
+        "title": "Compare seven criteria",
+        "paragraphs": [
+          "Check roles, form integrations, reminders, mobile use, exporting data, reporting and the total 36-month cost. Mark each function as required, optional or unnecessary.",
+          "In a demo, add a lead, assign a sales representative, change its status and export the history. Do not buy based solely on a sales presentation."
+        ]
+      },
+      {
+        "title": "Ready-made CRM versus custom software",
+        "paragraphs": [
+          "An off-the-shelf platform is often faster and cheaper for a standard process. Bespoke software makes more sense for unusual approvals, stages, permissions or deep integrations.",
+          "Try configuring a proven product first. Rebuilding a generic calendar and contact list can be an expensive mistake."
+        ]
+      },
+      {
+        "title": "Calculate the true cost",
+        "paragraphs": [
+          "For subscriptions include seats, onboarding, migrations, paid extras and manual effort. For a bespoke CRM include development, hosting, backups, updates and future features.",
+          "Share an anonymised example of your workflow. I can help compare products or outline a realistic first module and show the B-CRM demo."
+        ]
+      }
+    ]
+  },
+  "crm-dla-handlowcow-jak-wdrozyc": {
+    "title": "How to introduce a CRM that salespeople actually use",
+    "description": "A practical rollout plan for lead assignment, call reminders, roles, reporting and integrations with ad forms.",
+    "serviceLabel": "CRM for sales teams",
+    "intro": "A CRM fails when salespeople have to enter the same information twice or cannot see their next task. Begin with the actual daily workflow, not the longest possible feature list.",
+    "sections": [
+      {
+        "title": "Define essential sales steps",
+        "paragraphs": [
+          "Every enquiry needs a source, contact details, owner, stage and next action. Forms or imports should fill in basic information wherever possible.",
+          "Assign responsibility for each step. Staff should see what to do today while managers see stalled opportunities."
+        ]
+      },
+      {
+        "title": "Roles, calendars and lead assignment",
+        "paragraphs": [
+          "Representatives see their own leads; managers oversee their teams; administrators manage accounts and access. A manager editing a record should not automatically take ownership.",
+          "Connect tasks, calls, meetings, files and offers to the same customer record. Test usability on mobile devices."
+        ]
+      },
+      {
+        "title": "Connect forms and automate follow-up",
+        "paragraphs": [
+          "Website enquiries and Meta Lead Ads can feed a CRM with duplicate checks, delivery confirmation and clear error logs. Access rights and platform APIs must be verified first.",
+          "Start with one integration and test duplicate submissions, permission failures and temporary API outages. Measure time to first contact."
+        ]
+      },
+      {
+        "title": "Roll out in two manageable stages",
+        "paragraphs": [
+          "Launch leads, assignments, stages and reminders for a small team first. Add commissions, advanced reports and automation after employees use the basics.",
+          "B-CRM is an example of this approach. I can help scope a first working CRM module for your own sales process."
+        ]
+      }
+    ]
+  },
+  "crm-dla-branzy-uslugowej-co-powinien-miec": {
+    "title": "CRM for a service business: must-have features and unnecessary extras",
+    "description": "Plan customer enquiries, job schedules, documents, technicians and after-sales work without overspending.",
+    "serviceLabel": "Custom CRM solutions",
+    "intro": "Sales is only the start of a service job. Teams must also schedule work, manage documents, coordinate contractors and answer follow-up requests. A plain sales pipeline may not cover this.",
+    "sections": [
+      {
+        "title": "Separate sales, delivery and after-sales service",
+        "paragraphs": [
+          "Use connected but distinct views for new enquiries, work in progress and completed jobs. Agree when a customer is handed from sales to operations.",
+          "A delivery calendar, document checklist, photos from the job and customer reminders are often more useful than a large reporting dashboard."
+        ]
+      },
+      {
+        "title": "Keep the first version simple",
+        "paragraphs": [
+          "Start with a customer record, lead owner, status, next task, files and search. Add advanced reporting after the team records reliable data.",
+          "For staff visiting customers, a quick mobile interface and easy note-taking matter more than flashy charts."
+        ]
+      },
+      {
+        "title": "Check integration costs",
+        "paragraphs": [
+          "List invoicing software, calendars, email, advertising forms and spreadsheets. A connection to a platform without a stable API may be expensive.",
+          "Prepare a sample order, anonymise it and identify the systems involved before asking developers for a quote."
+        ]
+      },
+      {
+        "title": "Decide whether custom CRM is justified",
+        "paragraphs": [
+          "Unusual workflows and costly manual work may support a tailored system. Standard processes usually favour an established product.",
+          "I can compare both options and specify a sensible initial scope without selling features the team will never use."
+        ]
+      }
+    ]
+  },
+  "jak-ustawic-meta-ads-krok-po-kroku": {
+    "title": "How to set up Facebook and Instagram Ads for a service business",
+    "description": "A practical setup guide covering the campaign goal, audience, creative, form, tracking and lead follow-up.",
+    "serviceLabel": "Facebook and Instagram advertising",
+    "intro": "Campaign setup is only part of the work. Cheap forms are not a success if nobody calls the customer or the enquiries are irrelevant. Decide what a qualified lead means before spending.",
+    "sections": [
+      {
+        "title": "Choose the service and measurable action",
+        "paragraphs": [
+          "Define a single offer, service area and lead criteria. Select a campaign objective aligned with that result and verify your business account permissions.",
+          "Choose a Meta instant form or your website form. Keep questions necessary and show appropriate privacy information."
+        ]
+      },
+      {
+        "title": "Test different advertising messages",
+        "paragraphs": [
+          "Try one message demonstrating results and another explaining a customer problem. Use authentic photos or videos with the necessary rights.",
+          "Avoid decisions based on a tiny number of impressions. Review the quality of enquiries before changing budgets."
+        ]
+      },
+      {
+        "title": "Choose audiences based on hypotheses",
+        "paragraphs": [
+          "Compare broad targeting with relevant context-based interests and, where lawful, suitable audiences based on your own customer data. Available options can change.",
+          "Check restrictions for regulated services. An interest in lawn mowers does not prove someone owns a home or has a legal issue."
+        ]
+      },
+      {
+        "title": "Connect ads with follow-up",
+        "paragraphs": [
+          "Test form delivery, CRM assignment and notifications. Track response time, qualified conversations and closed sales separately.",
+          "Review the entire journey before scaling: the ad, form, sales response and offer. I can configure both the campaign and CRM connection."
+        ]
+      }
+    ]
+  },
+  "ile-wydac-na-facebook-instagram-ads": {
+    "title": "How much should you spend on Facebook and Instagram Ads?",
+    "description": "Budget planning for Meta advertising: customer margin, lead cost, management fees and an affordable first test.",
+    "serviceLabel": "Meta advertising for businesses",
+    "intro": "There is no universal amount that makes Meta Ads profitable. The budget depends on profit per customer, local competition, lead quality and your ability to respond.",
+    "sections": [
+      {
+        "title": "Calculate the maximum customer acquisition cost",
+        "paragraphs": [
+          "Start with gross profit per sale rather than total revenue. Decide how much can pay for advertising, creative production and sales work.",
+          "If only 10 of 100 qualified conversations close, the affordable cost of a lead is far below the full acquisition cost. Label estimates clearly."
+        ]
+      },
+      {
+        "title": "Plan a realistic test",
+        "paragraphs": [
+          "For a focused local service, PLN 1,000–3,000 of monthly media spend can be an illustrative starting plan, plus separate management costs.",
+          "Expensive auctions, narrow audiences and lengthy decisions may require much more data and spending."
+        ]
+      },
+      {
+        "title": "Avoid too many campaigns",
+        "paragraphs": [
+          "A small budget divided among ten campaigns creates weak evidence. Start with one goal and several genuinely different creatives.",
+          "Measure qualified leads, prompt follow-up and the eventual cost of customers. Fix the offer before scaling when necessary."
+        ]
+      },
+      {
+        "title": "Pause, improve or increase spending?",
+        "paragraphs": [
+          "Many irrelevant enquiries suggest the message or questions need work. Low interest may mean the creative misses the problem; poor sales despite good leads may mean a follow-up problem.",
+          "I can audit your existing campaigns or propose a measured first experiment."
+        ]
+      }
+    ]
+  },
+  "targetowanie-posrednie-meta-ads-pomysly": {
+    "title": "Who should see your Facebook and Instagram ads? Audience ideas",
+    "description": "Simple advice on choosing Facebook ad audiences and comparing broad targeting with relevant and less obvious interests.",
+    "serviceLabel": "Facebook and Instagram ad setup",
+    "intro": "The audience is simply the people who may see your advert. A less obvious interest can sometimes be useful, but it is a testable assumption – not proof of a person's circumstances.",
+    "sections": [
+      {
+        "title": "Start with the people you want to reach",
+        "paragraphs": [
+          "For property-related services, think about garden care, fences, garages or home repairs as possible contexts, but none of these interests proves home ownership.",
+          "A law firm dealing with property easements could test educational messages linked to land maintenance rather than only legal terms. Do not assume lawn-mower shoppers have legal claims."
+        ]
+      },
+      {
+        "title": "Compare three kinds of audience",
+        "paragraphs": [
+          "Test broad local reach, an obvious relevant interest and one less obvious hypothesis while keeping the offer comparable.",
+          "Meta may automatically expand an audience, so results cannot always be attributed to a single interest. Check actual account settings."
+        ]
+      },
+      {
+        "title": "Find out which group brings customers",
+        "paragraphs": [
+          "Cheap forms alone are misleading. Record answered calls, qualified enquiries, quotes and won customers in your CRM.",
+          "Avoid inferring sensitive traits or using discriminatory restrictions. Check platform rules for your industry."
+        ]
+      },
+      {
+        "title": "Write a helpful advertisement",
+        "paragraphs": [
+          "Describe a recognisable situation and offer a sensible next step. Never imply you know the viewer's legal or financial circumstances.",
+          "I can help design audiences, creative tests and a way to measure which campaign attracts customers who actually buy."
+        ]
+      }
+    ]
+  },
+  "reklamy-samodzielnie-czy-agencja": {
+    "title": "Should you manage ads yourself or hire an agency?",
+    "description": "Compare DIY Google and Meta Ads with agency, freelancer and in-house management before committing to monthly fees.",
+    "serviceLabel": "Advertising strategy and management",
+    "intro": "Running ads yourself can make sense when the offer is simple and you have time to analyse results. Outsourcing is worthwhile when errors, lost time or complexity cost more than professional help.",
+    "sections": [
+      {
+        "title": "When DIY advertising is reasonable",
+        "paragraphs": [
+          "If you have one product, a clear landing page and reliable conversion tracking, start with a controlled test.",
+          "You also need time to respond to customers. Many failures happen after the click, not inside the ad panel."
+        ]
+      },
+      {
+        "title": "When specialist help pays for itself",
+        "paragraphs": [
+          "Several services, locations, creatives and CRM integrations can justify external management. Ask for precise deliverables and reports.",
+          "Keep ownership of ad accounts, pixels, data and creative material. Do not accept a contract that blocks access."
+        ]
+      },
+      {
+        "title": "Agency versus freelancer versus employee",
+        "paragraphs": [
+          "Agencies can offer several skills but have higher overheads. Freelancers offer direct communication with limited capacity. Employees know the product but need hiring and management.",
+          "Compare total costs, reliability and process quality, not only the quoted monthly fee."
+        ]
+      },
+      {
+        "title": "Measure actual profitability",
+        "paragraphs": [
+          "Add media spend, videos, landing pages, management and sales time. Compare the total with profit from customers actually won.",
+          "I offer audits and ongoing campaign management, with media spend billed separately from the service."
+        ]
+      }
+    ]
+  },
+  "jak-ustawic-google-ads-dla-firmy-uslugowej": {
+    "title": "How to set up Google Ads for a local service business",
+    "description": "Your first Google Search campaign: keywords, negative terms, location settings, landing pages and real lead conversions.",
+    "serviceLabel": "Google Ads management",
+    "intro": "Google Ads can reach people actively searching for your service, but advertising alone does not close a sale. Connect a clear offer with appropriate search queries and a working enquiry form.",
+    "sections": [
+      {
+        "title": "Focus on one service and one goal",
+        "paragraphs": [
+          "Promote an offer you can fulfil profitably. Separate searches suggesting buying intent from general research terms.",
+          "Treat a successfully submitted enquiry, confirmed booking or properly tracked call as a conversion. Opening a contact page isn't enough."
+        ]
+      },
+      {
+        "title": "Choose search terms and exclusions",
+        "paragraphs": [
+          "Research service names, locations, prices and supplier-related searches. Review actual search terms regularly and exclude irrelevant ones.",
+          "Do not copy a competitor's keyword list blindly. A useful landing page matters more than a huge list of broad terms."
+        ]
+      },
+      {
+        "title": "Improve the landing page and location settings",
+        "paragraphs": [
+          "Show the exact service, proof of work, coverage area, contact options and practical details. Test mobile speed and forms.",
+          "If you operate locally, avoid paying for irrelevant nationwide reach. Create distinct pages only for genuinely different services."
+        ]
+      },
+      {
+        "title": "Review the first test before scaling",
+        "paragraphs": [
+          "Measure qualified enquiries, query relevance, budget limitations and response speed, not just click-through rate.",
+          "When leads arrive but are not handled, add CRM ownership and reminders. I can set up ads, tracking and a suitable landing page."
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,254 @@
+{
+  "crm-zamiast-excela-dla-firmy": {
+    "title": "CRM instead of Excel: when should a company make the switch?",
+    "description": "Excel versus a CRM for a small business: missed follow-ups, shared records, data migration and total costs.",
+    "serviceLabel": "CRM for your business",
+    "intro": "A spreadsheet can be good enough for a very small team. Problems begin when several people edit data, calls are forgotten and nobody knows who owns the next customer action.",
+    "sections": [
+      {
+        "title": "Signs your spreadsheet is no longer enough",
+        "paragraphs": [
+          "Several copies of one file, overwritten notes, missing callback dates and no edit history are warning signs. If they repeatedly cost you sales, consider a CRM.",
+          "Start with one real process, such as preparing a quote. List the necessary fields and actions before buying software."
+        ]
+      },
+      {
+        "title": "What should a basic CRM include?",
+        "paragraphs": [
+          "Customer records, lead sources, owners, stages, next tasks and call history. Teams also need appropriate permissions. Automated intake from advertising forms can help at scale.",
+          "Commissions, contract generation and complex reports can usually wait. The first version must make daily work easier."
+        ]
+      },
+      {
+        "title": "How to move data safely",
+        "paragraphs": [
+          "Remove duplicates, define columns, back up the original spreadsheet and trial-import a small set of records. Test searching and access controls.",
+          "Do not share actual customer data without appropriate safeguards. Use fictional or anonymised records for public demos."
+        ]
+      },
+      {
+        "title": "Ready-made software or custom development?",
+        "paragraphs": [
+          "A standard process often works better with an existing CRM. Unusual roles, integrations or workflows beyond sales can justify a custom application.",
+          "I can examine your process, compare the choices and demonstrate how B-CRM manages leads and follow-up."
+        ]
+      }
+    ]
+  },
+  "crm-dla-firmy-montazowej-ekip-serwisowych": {
+    "title": "CRM for installation and service companies: jobs, schedules and teams",
+    "description": "Choose a CRM for installation teams, field service and contractors, from first enquiry to signed-off work.",
+    "serviceLabel": "CRM and web applications",
+    "intro": "For installation companies, sales is only part of the work. Teams also schedule visits, order equipment, manage documents and handle after-sales requests. A simple list of contacts is not enough.",
+    "sections": [
+      {
+        "title": "Separate sales from job delivery",
+        "paragraphs": [
+          "Record the lead, owner, quote and follow-up date. Once the customer signs, move the project into delivery with documents, equipment, installation dates and an assigned team.",
+          "Without clear stages, managers cannot tell whether a delay happened in sales, logistics or on site."
+        ]
+      },
+      {
+        "title": "Prioritise features that work in the field",
+        "paragraphs": [
+          "Mobile access, schedules, reminders, files and quick visit notes matter most. Managers need filters by team and an overview of delayed tasks.",
+          "Do not build a complicated interface that forces installers through dozens of clicks for routine updates."
+        ]
+      },
+      {
+        "title": "Connect ads, jobs and service",
+        "paragraphs": [
+          "Capture the original advertising source and sales representative, then track the order through delivery. This helps identify which campaigns produce real contracts.",
+          "Check API permissions before promising invoice, stock or calendar integrations."
+        ]
+      },
+      {
+        "title": "How to start the rollout",
+        "paragraphs": [
+          "Run one fictional job all the way through: enquiry, call, quote, contract, visit and completion. Add advanced features only after testing.",
+          "I can build the first practical CRM module for an installation business instead of an oversized system."
+        ]
+      }
+    ]
+  },
+  "kiedy-firma-potrzebuje-crm": {
+    "title": "When does a small business need a CRM? Eight warning signs",
+    "description": "Find out whether missed calls, lost quotations and manual reporting justify a customer management system.",
+    "serviceLabel": "CRM development",
+    "intro": "There is no magic headcount at which a company must buy a CRM. Recurring errors and wasted time are better signals than team size. If existing tools work well, they may be enough for now.",
+    "sections": [
+      {
+        "title": "Look for eight recurring problems",
+        "paragraphs": [
+          "Watch for unanswered enquiries, missing follow-up dates, duplicated spreadsheets, unclear ownership, lost quotes, missing call history, stale stages and reports copied manually.",
+          "Write down which problems occurred last month and what they cost. Understanding the pain is more valuable than another software licence."
+        ]
+      },
+      {
+        "title": "What a simple CRM should improve",
+        "paragraphs": [
+          "You can see each lead's source, responsible person and next action. A manager can identify overdue work without calling everyone.",
+          "A useful product should simplify daily work and let you export your data when you change supplier."
+        ]
+      },
+      {
+        "title": "Is a ready-made CRM enough?",
+        "paragraphs": [
+          "Often yes. Test typical lead flows, staff permissions and data export with fictional records. Consider custom software only when important workflows require too many workarounds.",
+          "Compare user seats, onboarding, integrations and training time rather than monthly licence price alone."
+        ]
+      },
+      {
+        "title": "Trial it with one team",
+        "paragraphs": [
+          "Define a few stages and run a week of test cases. Ask staff which actions feel slow and what information they need.",
+          "Explore the B-CRM demo and share your process so we can decide whether a custom module makes sense."
+        ]
+      }
+    ]
+  },
+  "google-ads-czy-pozycjonowanie-strony-seo": {
+    "title": "Google Ads or SEO: which gets customers faster?",
+    "description": "Compare paid search and organic SEO by cost, timescale, reliability and enquiry quality for a service business.",
+    "serviceLabel": "Google Ads for businesses",
+    "intro": "Google Ads can buy immediate advertising exposure, while organic SEO builds discoverability over time. Neither guarantees customers; a clear offer and working conversion process are required in both cases.",
+    "sections": [
+      {
+        "title": "When Google Ads is a useful choice",
+        "paragraphs": [
+          "It can test demand for one specific service using relevant purchase-intent searches, regional targeting and clear conversion goals.",
+          "Do not send paid traffic to a page without a clear offer or functioning enquiry form. Fix that first."
+        ]
+      },
+      {
+        "title": "When SEO can be a better long-term investment",
+        "paragraphs": [
+          "Useful content related to your services may build organic visibility, but it requires ongoing technical work and quality control.",
+          "Thousands of unrelated technical posts do not guarantee leads. Focus on the questions potential buyers actually ask."
+        ]
+      },
+      {
+        "title": "Compare the full costs fairly",
+        "paragraphs": [
+          "For advertising count media spend, management and landing-page development. For SEO count technical changes, content creation and ongoing maintenance.",
+          "Measure qualified enquiries and won contracts. Search position and impressions alone are not business outcomes."
+        ]
+      },
+      {
+        "title": "A sensible plan for a new business",
+        "paragraphs": [
+          "Build a focused service page, verify indexing and local visibility, then test a limited search campaign if the budget allows.",
+          "I can help with the website, tracking, Google Ads and selecting commercially relevant content."
+        ]
+      }
+    ]
+  },
+  "ile-kosztuje-prowadzenie-reklam-facebook-google": {
+    "title": "How much does Facebook and Google Ads management cost?",
+    "description": "Understand campaign setup fees, monthly management, ad spend, landing-page work and what an agency quote includes.",
+    "serviceLabel": "Facebook and Google advertising",
+    "intro": "The fee for running campaigns is separate from the money paid to Google or Meta. One quote may cover only account setup, while another includes ongoing analysis, creative work and reporting.",
+    "sections": [
+      {
+        "title": "What is included in campaign setup?",
+        "paragraphs": [
+          "Usually an objectives review, account configuration, audience or keyword selection, basic ads and lead tracking. Check whether graphics, video and a landing page are included.",
+          "Keep ownership and access to the advertising account. The contract should explain which assets are handed over at the end."
+        ]
+      },
+      {
+        "title": "What does monthly management cover?",
+        "paragraphs": [
+          "Regular performance reviews, updates to ads, creative testing, cost control and reporting. Complex campaigns across several markets need more work.",
+          "Filming, web development and sales-team labour may be separate. Ask about these costs before signing."
+        ]
+      },
+      {
+        "title": "A simple example of the total cost",
+        "paragraphs": [
+          "On bernecki.dev, indicative setup starts at PLN 990 net per channel and ongoing management at PLN 1,190 net per month. Your media spend is extra.",
+          "For example, PLN 2,000 in advertising plus PLN 1,190 management totals PLN 3,190 net before any other fees. This is maths, not a promise of results."
+        ]
+      },
+      {
+        "title": "How to choose a provider",
+        "paragraphs": [
+          "Ask how real form submissions are tracked, who makes changes, what reports include and how leads reach your staff.",
+          "A guaranteed number of customers without checking the offer and industry should raise questions. I offer audits, setup and ongoing management."
+        ]
+      }
+    ]
+  },
+  "ile-kosztuje-automatyzacja-obslugi-klienta": {
+    "title": "How much does customer-service automation cost?",
+    "description": "Prices for form processing, CRM handovers, notifications and chatbots, including the factors that affect implementation.",
+    "serviceLabel": "Customer-service automation",
+    "intro": "Automation does not have to mean an expensive AI system. Connecting a form to a task list and a callback reminder can be enough. Complexity, access rights and error handling determine the price.",
+    "sections": [
+      {
+        "title": "Begin with a simple repeatable task",
+        "paragraphs": [
+          "A new form can create a CRM record, notify the right person and schedule a callback. This is often possible without any AI chatbot.",
+          "If a business gets only a handful of enquiries per week, a paid integration may not be worth the maintenance cost."
+        ]
+      },
+      {
+        "title": "What makes automation expensive?",
+        "paragraphs": [
+          "Unstable or unofficial APIs, complicated permissions, sensitive data, failure recovery and third-party fees can increase costs.",
+          "Separate initial implementation from ongoing support. External platform changes may require later updates."
+        ]
+      },
+      {
+        "title": "Indicative pricing for a small business",
+        "paragraphs": [
+          "A simple single-process automation starts at PLN 1,500 net in my price list. A package covering process review, form handover and alerts starts at PLN 2,500 net.",
+          "These starting prices do not include every external subscription or integration. Available APIs need to be checked before quoting."
+        ]
+      },
+      {
+        "title": "Which process should you automate first?",
+        "paragraphs": [
+          "Start where missing a customer or copying data takes the most time: forms, reminders, standard replies or documents. Test exceptional cases as well as the happy path.",
+          "I can implement one useful workflow and only extend it when there is a clear benefit."
+        ]
+      }
+    ]
+  },
+  "reklamy-dla-firmy-lokalnej-co-wybrac": {
+    "title": "Best advertising for a local business: Google, Facebook or Instagram?",
+    "description": "Find out which advertising channel suits a business serving one city or region, including budgets, targeting and lead forms.",
+    "serviceLabel": "Local business advertising",
+    "intro": "A local electrician, cleaner, barber or installer does not need every platform at once. Start with how people look for your service and what action you want after the click.",
+    "sections": [
+      {
+        "title": "Match the channel to customer behaviour",
+        "paragraphs": [
+          "When customers type a service and city into Google, Search ads may be worth testing. When seeing the finished result matters, Facebook or Instagram creative can help.",
+          "A clear offer with coverage area, availability and pricing conditions is easier to advertise than general claims about professional service."
+        ]
+      },
+      {
+        "title": "Control the service area and budget",
+        "paragraphs": [
+          "Target only places your business actually serves. Separate services that have different margins and audiences. Do not spread a small budget across many platforms.",
+          "Review excluded locations and search terms in Google. Meta may broaden audience suggestions automatically."
+        ]
+      },
+      {
+        "title": "Give visitors the answers they need",
+        "paragraphs": [
+          "Show the area, opening or appointment details, what is included, real project examples and easy mobile contact.",
+          "A campaign can fail when calls go unanswered. A simple CRM may help manage growing numbers of enquiries."
+        ]
+      },
+      {
+        "title": "Begin with one measurable campaign",
+        "paragraphs": [
+          "Choose one service, define the monthly media budget and assign someone to respond. Measure qualified conversations rather than impressions after the test.",
+          "I can help compare platforms for your business and run a focused first campaign."
+        ]
+      }
+    ]
+  }
+}

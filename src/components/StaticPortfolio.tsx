@@ -108,7 +108,9 @@ export function StaticPortfolio() {
   const { lang } = useLanguage();
   const faqJsonLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: homepageCopy[lang].faq.map(([question, answer]) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) };
   return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}/>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(lang==="en"?
+      {"@context":"https://schema.org","@type":"WebPage","@id":"https://bernecki.dev/en#webpage",url:"https://bernecki.dev/en",name:"Websites, CRM and advertising for businesses",inLanguage:"en",isPartOf:{"@id":"https://bernecki.dev/#website"},about:{"@id":"https://bernecki.dev/#person"}}
+      :jsonLd).replace(/</g,"\\u003c") }}/>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}/>
     <HomeStudio/>
   </>;

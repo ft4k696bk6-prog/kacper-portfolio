@@ -9,8 +9,8 @@ const parsePage=(v?:string)=>{const n=Number(v??1);return Number.isSafeInteger(n
 export async function generateMetadata({searchParams}:Props):Promise<Metadata>{
  const params=await searchParams;const {page}=listEnglishGuides({query:params.q,page:parsePage(params.page)});
  const url=root+(page>1&& !params.q?`?page=${page}`:"");
- return {title:{absolute:seoTitle("Troubleshooting guides: Next.js, Supabase, SEO and CRM")},
- description:"English technical guides with exact symptoms, diagnostic steps, solutions, verification and source documentation.",
+ return {title:{absolute:seoTitle("Guides for businesses: CRM, online ads, websites and automation")},
+ description:"Practical guides on choosing a CRM, Google and Meta Ads, advertising budgets, business automation and website problems.",
  openGraph:{url,type:"website",locale:"en_US",title:"Practical technical guides"},
  alternates:{canonical:url,...(page===1&&!params.q?{languages:{en:url,"pl-PL":"https://bernecki.dev/poradniki"}}:{})},robots:params.q?{index:false,follow:true}:{index:true,follow:true}};
 }
@@ -24,9 +24,9 @@ export default async function EnglishGuideCatalog({searchParams}:Props){
  return <main lang="en" className="site-page editorial-page mx-auto max-w-6xl px-5 pb-24 pt-36 md:px-8">
   <nav className="text-sm text-white/65" aria-label="Breadcrumb"><Link href="/" className="underline underline-offset-4">Kacper Bernecki</Link> / Guides</nav>
   <header className="mt-10">
-   <p className="page-eyebrow">Technical knowledge base · practical solutions</p>
-   <h1 className="mt-5 max-w-5xl text-4xl leading-tight md:text-6xl">Not working? Find the cause and fix it.</h1>
-   <p className="mt-6 max-w-3xl text-lg leading-8 text-white/75">Explore practical troubleshooting guides for Next.js, React, TypeScript, Supabase, PostgreSQL, WordPress, Meta Ads, CRM systems and APIs. Each guide covers a specific issue, diagnostic steps, a practical fix and a way to verify the result.</p>
+   <p className="page-eyebrow">CRM · Advertising · Websites · Automation</p>
+   <h1 className="mt-5 max-w-5xl text-4xl leading-tight md:text-6xl">CRM, advertising and automation guides for businesses.</h1>
+   <p className="mt-6 max-w-3xl text-lg leading-8 text-white/75">Learn how to choose a CRM, decide between Google and Facebook ads, calculate campaign budgets, improve lead quality and automate follow-up. The technical troubleshooting library is still available.</p>
    <p className="mt-5 text-sm text-white/70">Looking for the broader strategy? <Link href="/en/blog" className="text-white underline underline-offset-4">Explore the marketing, CRM and SEO blog</Link>.</p>
    <form role="search" action="/en/guides" method="get" className="mt-8 flex max-w-3xl flex-wrap gap-3">
     <label htmlFor="english-guide-search" className="sr-only">Search technical guides</label>
@@ -47,7 +47,7 @@ export default async function EnglishGuideCatalog({searchParams}:Props){
    </div>
   </section>
   <section className="mt-14" aria-labelledby="english-all-guides">
-   <h2 id="english-all-guides" className="text-2xl md:text-3xl">{query?`Results for “${query}”`:"All English troubleshooting guides"}</h2>
+   <h2 id="english-all-guides" className="text-2xl md:text-3xl">{query?`Results for “${query}”`:"All English business and technical guides"}</h2>
    {items.length===0?<p className="mt-6 text-white/70">No guides match your search. Try another technical term or choose a topic above.</p>:
    <div className="mt-7 grid gap-4 md:grid-cols-2">
     {items.map(g=><Link key={g.slug} href={`/en/guides/${g.slug}`} className="surface-card block rounded-2xl border border-white/15 bg-[var(--brand-black)] p-6 transition-colors hover:border-white/50">

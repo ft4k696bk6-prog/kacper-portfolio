@@ -9,7 +9,7 @@ import { pl } from "@/i18n/pl";
 export const metadata:Metadata={
  title:"Kontakt i wycena projektu",
  description:"Opisz projekt strony, sklepu, CRM, wdrożenia AI, marketingu lub rozwoju biznesu. Wyślij zapytanie lub umów rozmowę.",
- alternates:{canonical:"https://bernecki.dev/kontakt"},
+ alternates:{canonical:"https://bernecki.dev/kontakt",languages:{"pl-PL":"https://bernecki.dev/kontakt",en:"https://bernecki.dev/en/contact"}},
 };
 const partnershipPackages:Record<string,string>={
  audyt:"Audyt i plan działania (od 3 900 zł netto jednorazowo)",

@@ -143,19 +143,19 @@ export function HomeStudio() {
         <div className={styles.portrait}>
           <Image src="/images/profile-3-cutout.png" alt={c.portrait} width={1000} height={1280} priority sizes="(min-width:1024px) 560px, (min-width:768px) 44vw, 75vw"/>
         </div>
-        <Link href="/case-studies/starcars" className={[styles.heroTile, styles.tileStarCars].join(" ")} aria-label={lang === "pl" ? "Zobacz projekt StarCars" : "View StarCars project"}>
+        <Link href={lang==="en"?"/en/case-studies":"/case-studies/starcars"} className={[styles.heroTile, styles.tileStarCars].join(" ")} aria-label={lang === "pl" ? "Zobacz projekt StarCars" : "View StarCars project"}>
           <div className={styles.tileVisual}>
             <Image src="/images/projects/starcars-live-current.jpg" alt={lang === "pl" ? "Zrzut prawdziwej strony StarCars" : "Screenshot of the actual StarCars website"} width={640} height={400} sizes="(min-width:1024px) 330px, (min-width:768px) 23vw, 46vw" loading="eager" />
           </div>
           <div className={styles.tileCaption}><strong>StarCars</strong><ArrowUpRight size={16}/></div>
         </Link>
-        <Link href="/realizacje/isto-kebab-strona" className={[styles.heroTile, styles.tileIsto].join(" ")} aria-label={lang === "pl" ? "Zobacz projekt Isto Kebab" : "View Isto Kebab project"}>
+        <Link href={lang==="en"?"/en/projects/isto-kebab-strona":"/realizacje/isto-kebab-strona"} className={[styles.heroTile, styles.tileIsto].join(" ")} aria-label={lang === "pl" ? "Zobacz projekt Isto Kebab" : "View Isto Kebab project"}>
           <div className={styles.tileVisual}>
             <Image src="/images/projects/isto-live-nov08.jpg" alt={lang === "pl" ? "Zrzut prawdziwej strony Isto Kebab" : "Screenshot of the actual Isto Kebab website"} width={640} height={400} sizes="(min-width:1024px) 260px, (min-width:768px) 22vw, 36vw" loading="eager" />
           </div>
           <div className={styles.tileCaption}><strong>Isto Kebab</strong><ArrowUpRight size={16}/></div>
         </Link>
-        <Link href="/case-studies/b-crm" className={[styles.heroTile, styles.tileCrm].join(" ")} aria-label={lang === "pl" ? "Zobacz projekt B-CRM" : "View B-CRM project"}>
+        <Link href={lang==="en"?"/en/case-studies":"/case-studies/b-crm"} className={[styles.heroTile, styles.tileCrm].join(" ")} aria-label={lang === "pl" ? "Zobacz projekt B-CRM" : "View B-CRM project"}>
           <div className={styles.tileVisual}>
             <Image src="/images/projects/bcrm-admin-dashboard.jpg" alt={lang === "pl" ? "Zrzut rzeczywistego panelu B-CRM" : "Screenshot of the real B-CRM dashboard"} width={640} height={400} sizes="(min-width:1024px) 450px, (min-width:768px) 36vw, 62vw" loading="eager" />
           </div>
@@ -173,8 +173,8 @@ export function HomeStudio() {
       <OfferCards offers={c.offer} english={lang === "en"}/>
       {lang === "pl" && <div className="mt-6 flex flex-wrap gap-4 text-sm"><Link href="#cennik" className="underline underline-offset-4">Zobacz pakiety i cennik</Link><Link href="/pozyskiwanie-klientow" className="underline underline-offset-4">Jak zdobywać klientów przez Google i Facebook?</Link><Link href="/reklamy-online" className="underline underline-offset-4">Reklamy Google, Facebook, Instagram i TikTok</Link><Link href="/crm-dla-firm-handlowych" className="underline underline-offset-4">CRM dla firmy</Link></div>}
       <div className="mt-8 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-3">
-        <Link href="/kontakt" className="brand-action inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-3 py-3 text-center text-[11px] font-semibold leading-5 text-black sm:px-6 sm:text-sm">{lang === "pl" ? "Zapytaj o współpracę" : "Discuss your project"} <ArrowUpRight size={17}/></Link>
-        <Link href="/#projects" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-white/20 px-3 py-3 text-center text-[11px] leading-5 text-white hover:border-white/50 sm:px-6 sm:text-sm">{lang === "pl" ? "Zobacz realizacje" : "View projects"} <ArrowRight size={16}/></Link>
+        <Link href={lang==="en"?"/en/contact":"/kontakt"} className="brand-action inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-3 py-3 text-center text-[11px] font-semibold leading-5 text-black sm:px-6 sm:text-sm">{lang === "pl" ? "Zapytaj o współpracę" : "Discuss your project"} <ArrowUpRight size={17}/></Link>
+        <Link href={lang==="en"?"/en#projects":"/#projects"} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-white/20 px-3 py-3 text-center text-[11px] leading-5 text-white hover:border-white/50 sm:px-6 sm:text-sm">{lang === "pl" ? "Zobacz realizacje" : "View projects"} <ArrowRight size={16}/></Link>
          <Link href={localizedToolboxPath(lang)} className="col-span-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-white/20 px-3 py-3 text-center text-[11px] leading-5 text-white hover:border-white/50 sm:col-span-1 sm:px-6 sm:text-sm">{lang==="pl"?"Darmowe narzędzia":"Free tools"} <ArrowRight size={16}/></Link>
       </div>
     </section>
@@ -184,20 +184,20 @@ export function HomeStudio() {
       <h2 id="home-pricing-heading">{lang==="pl" ? "Ile kosztuje strona, reklama albo CRM?" : "Pricing and service packages"}</h2>
       <p className="mt-4 max-w-3xl text-sm leading-7 text-white/70">{lang==="pl" ? "Wszystkie ceny w jednym miejscu. Wybierz gotowy pakiet albo sprawdź ceny poszczególnych usług. Bez szukania po całej stronie." : "Choose a service package or check prices for individual services. Prices are listed in PLN."}</p>
       <div className="mt-8 grid gap-5 md:grid-cols-2">
-        <Link href="/pakiety" className="surface-card group flex flex-col rounded-2xl border border-white/25 bg-white/[0.035] p-7 transition hover:border-white/70 md:p-9">
+        <Link href={lang==="en"?"/en/packages":"/pakiety"} className="surface-card group flex flex-col rounded-2xl border border-white/25 bg-white/[0.035] p-7 transition hover:border-white/70 md:p-9">
           <span className="text-xs uppercase tracking-widest text-white/55">{lang==="pl" ? "Opcja 1" : "Option 1"}</span>
           <h3 className="mt-3 text-2xl font-semibold">{lang==="pl" ? "Pakiety" : "Service packages"}</h3>
           <p className="mt-4 leading-7 text-white/70">{lang==="pl" ? "Zestawy usług dla firm: strona + reklamy, uruchomienie kampanii, CRM i automatyzacja. Jasny zakres i ceny od." : "Bundled services: websites, ads, CRM and automation."}</p>
           <span className="mt-6 inline-flex items-center gap-2 font-semibold">{lang==="pl" ? "Porównaj pakiety" : "View packages"} <ArrowRight size={18}/></span>
         </Link>
-        <Link href="/cennik" className="surface-card group flex flex-col rounded-2xl border border-white/25 bg-white/[0.035] p-7 transition hover:border-white/70 md:p-9">
+        <Link href={lang==="en"?"/en/pricing":"/cennik"} className="surface-card group flex flex-col rounded-2xl border border-white/25 bg-white/[0.035] p-7 transition hover:border-white/70 md:p-9">
           <span className="text-xs uppercase tracking-widest text-white/55">{lang==="pl" ? "Opcja 2" : "Option 2"}</span>
           <h3 className="mt-3 text-2xl font-semibold">{lang==="pl" ? "Cennik pojedynczych usług" : "Individual service prices"}</h3>
           <p className="mt-4 leading-7 text-white/70">{lang==="pl" ? "Sprawdź oddzielne ceny stron internetowych, kampanii Google i Facebook, dedykowanego CRM, audytu i automatyzacji." : "Price ranges for websites, campaigns, CRM, audits and integrations."}</p>
           <span className="mt-6 inline-flex items-center gap-2 font-semibold">{lang==="pl" ? "Sprawdź ceny usług" : "View service prices"} <ArrowRight size={18}/></span>
         </Link>
       </div>
-      <p className="mt-6 text-sm text-white/55">{lang==="pl" ? "Ceny orientacyjne netto. Dokładną kwotę potwierdzam po ustaleniu zakresu." : "Indicative net prices. Final quotes depend on the scope."} <Link href="/kontakt" className="underline underline-offset-4">{lang==="pl" ? "Zapytaj o wycenę" : "Request a quote"}</Link></p>
+      <p className="mt-6 text-sm text-white/55">{lang==="pl" ? "Ceny orientacyjne netto. Dokładną kwotę potwierdzam po ustaleniu zakresu." : "Indicative net prices. Final quotes depend on the scope."} <Link href={lang==="en"?"/en/contact":"/kontakt"} className="underline underline-offset-4">{lang==="pl" ? "Zapytaj o wycenę" : "Request a quote"}</Link></p>
     </section>
     <section id="tools" className={styles.section}>
       <p className={styles.eyebrow}>{lang==="pl"?"Darmowe narzędzia":"Free toolbox"}</p>
@@ -219,17 +219,17 @@ export function HomeStudio() {
       <div className="flex flex-wrap items-end justify-between gap-5">
        <div><h2>{lang === "pl" ? "Chcesz zrobić coś samodzielnie?" : "Prefer to learn first?"}</h2>
        <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65">{lang === "pl" ? "Poradniki są osobno od oferty. Jeśli potrzebujesz wykonawcy — przejdź do kontaktu. Jeśli rozwiązujesz problem sam — znajdziesz instrukcje poniżej." : "Guides are separate from the service offer. Read practical instructions or contact me to discuss a project."}</p></div>
-       <Link href="/poradniki" className="inline-flex items-center gap-2 text-sm font-medium underline underline-offset-4">{lang === "pl" ? "Wszystkie poradniki" : "All guides"} <ArrowRight size={16}/></Link>
+       <Link href={lang==="en"?"/en/guides":"/poradniki"} className="inline-flex items-center gap-2 text-sm font-medium underline underline-offset-4">{lang === "pl" ? "Wszystkie poradniki" : "All guides"} <ArrowRight size={16}/></Link>
       </div>
       <div className="mt-8 grid gap-3 md:grid-cols-3">
-       <Link href="/poradniki/tematy/ai-w-firmie" className="group rounded-xl border border-white/15 p-6 transition hover:border-white/50"><BrainCircuit size={24} strokeWidth={1.5} aria-hidden="true"/><h3 className="mt-5 text-xl">{lang === "pl" ? "AI w praktyce" : "AI in practice"}</h3><p className="mt-3 text-sm leading-7 text-white/65">{lang === "pl" ? "Prompty, API, klucze, automatyzacje i błędy." : "Prompts, APIs, secrets and automation."}</p><span className="mt-5 inline-flex items-center gap-2 text-sm text-white/85">{lang === "pl" ? "Czytaj" : "Explore"} <ArrowRight size={16}/></span></Link>
-       <Link href="/poradniki" className="group rounded-xl border border-white/15 p-6 transition hover:border-white/50"><BookOpen size={24} strokeWidth={1.5} aria-hidden="true"/><h3 className="mt-5 text-xl">{lang === "pl" ? "Poradniki" : "Guides"}</h3><p className="mt-3 text-sm leading-7 text-white/65">{lang === "pl" ? "Strony, CRM, biznes, koszty i podatki w praktyce." : "Websites, CRM, operations and business costs."}</p><span className="mt-5 inline-flex items-center gap-2 text-sm text-white/85">{lang === "pl" ? "Przeglądaj" : "Browse"} <ArrowRight size={16}/></span></Link>
-       <Link href="/blog" className="group rounded-xl border border-white/15 p-6 transition hover:border-white/50"><Newspaper size={24} strokeWidth={1.5} aria-hidden="true"/><h3 className="mt-5 text-xl">Blog</h3><p className="mt-3 text-sm leading-7 text-white/65">{lang === "pl" ? "Doświadczenia, projekty i obserwacje z pracy." : "Projects, lessons and observations."}</p><span className="mt-5 inline-flex items-center gap-2 text-sm text-white/85">{lang === "pl" ? "Czytaj wpisy" : "Read posts"} <ArrowRight size={16}/></span></Link>
+       <Link href={lang==="en"?"/en/guides/topics/ai-w-firmie":"/poradniki/tematy/ai-w-firmie"} className="group rounded-xl border border-white/15 p-6 transition hover:border-white/50"><BrainCircuit size={24} strokeWidth={1.5} aria-hidden="true"/><h3 className="mt-5 text-xl">{lang === "pl" ? "AI w praktyce" : "AI in practice"}</h3><p className="mt-3 text-sm leading-7 text-white/65">{lang === "pl" ? "Prompty, API, klucze, automatyzacje i błędy." : "Prompts, APIs, secrets and automation."}</p><span className="mt-5 inline-flex items-center gap-2 text-sm text-white/85">{lang === "pl" ? "Czytaj" : "Explore"} <ArrowRight size={16}/></span></Link>
+       <Link href={lang==="en"?"/en/guides":"/poradniki"} className="group rounded-xl border border-white/15 p-6 transition hover:border-white/50"><BookOpen size={24} strokeWidth={1.5} aria-hidden="true"/><h3 className="mt-5 text-xl">{lang === "pl" ? "Poradniki" : "Guides"}</h3><p className="mt-3 text-sm leading-7 text-white/65">{lang === "pl" ? "Strony, CRM, biznes, koszty i podatki w praktyce." : "Websites, CRM, operations and business costs."}</p><span className="mt-5 inline-flex items-center gap-2 text-sm text-white/85">{lang === "pl" ? "Przeglądaj" : "Browse"} <ArrowRight size={16}/></span></Link>
+       <Link href={lang==="en"?"/en/blog":"/blog"} className="group rounded-xl border border-white/15 p-6 transition hover:border-white/50"><Newspaper size={24} strokeWidth={1.5} aria-hidden="true"/><h3 className="mt-5 text-xl">Blog</h3><p className="mt-3 text-sm leading-7 text-white/65">{lang === "pl" ? "Doświadczenia, projekty i obserwacje z pracy." : "Projects, lessons and observations."}</p><span className="mt-5 inline-flex items-center gap-2 text-sm text-white/85">{lang === "pl" ? "Czytaj wpisy" : "Read posts"} <ArrowRight size={16}/></span></Link>
       </div>
-      <Link href="/kontakt" className="mt-7 inline-flex items-center gap-2 text-sm text-white underline underline-offset-4">{lang === "pl" ? "Wolisz zlecić wykonanie? Napisz do mnie" : "Need an implementation? Contact me"} <ArrowRight size={16}/></Link>
+      <Link href={lang==="en"?"/en/contact":"/kontakt"} className="mt-7 inline-flex items-center gap-2 text-sm text-white underline underline-offset-4">{lang === "pl" ? "Wolisz zlecić wykonanie? Napisz do mnie" : "Need an implementation? Contact me"} <ArrowRight size={16}/></Link>
     </section>
     <section id="about" className={`${styles.section} ${styles.about}`}>
-      <div><p className={styles.eyebrow}>{lang === "pl" ? "O mnie" : "About me"}</p><h2>{c.about}</h2><p className={styles.bio}>{c.bio}</p><div className={styles.textLinks}><Link href="/case-studies/b-crm">{c.technical}<ArrowUpRight size={15}/></Link><a href={t.contact.github} target="_blank" rel="noopener noreferrer">GitHub<ArrowUpRight size={15}/></a></div></div>
+      <div><p className={styles.eyebrow}>{lang === "pl" ? "O mnie" : "About me"}</p><h2>{c.about}</h2><p className={styles.bio}>{c.bio}</p><div className={styles.textLinks}><Link href={lang==="en"?"/en/case-studies":"/case-studies/b-crm"}>{c.technical}<ArrowUpRight size={15}/></Link><a href={t.contact.github} target="_blank" rel="noopener noreferrer">GitHub<ArrowUpRight size={15}/></a></div></div>
       <ol className={styles.steps}>{c.steps.map(([title, description], i) => <li key={title}><span>0{i+1}</span><div><h3>{title}</h3><p>{description}</p></div></li>)}</ol>
     </section>
     <section id="faq" className={`${styles.section} ${styles.faq}`}>
@@ -237,11 +237,11 @@ export function HomeStudio() {
     </section>
     <section id="contact" className={`${styles.section} ${styles.contact}`}>
       <div className={styles.contactCopy}><p className={styles.eyebrow}>{t.nav.contact}</p><h2>{c.contact}</h2><p className={styles.bio}>{c.contactIntro}</p>
-        <Link href="/kontakt" className="mt-7 inline-flex items-center gap-2 text-sm text-white/85 underline underline-offset-4">{lang === "pl" ? "Formularz, kalendarz i bezpośredni kontakt" : "Contact form, calendar and direct contact"} <ArrowRight size={16}/></Link>
+        <Link href={lang==="en"?"/en/contact":"/kontakt"} className="mt-7 inline-flex items-center gap-2 text-sm text-white/85 underline underline-offset-4">{lang === "pl" ? "Formularz, kalendarz i bezpośredni kontakt" : "Contact form, calendar and direct contact"} <ArrowRight size={16}/></Link>
         <ContactReveal plain copy={{...t.contact.reveal,phoneButton:c.phone,emailButton:c.email}}/>
         <p className={styles.location}>{c.location}</p><div className={styles.textLinks}><a href={t.contact.github} target="_blank" rel="noopener noreferrer"><Github size={15}/>GitHub</a><a href={t.contact.linkedin} target="_blank" rel="noopener noreferrer"><Linkedin size={15}/>LinkedIn</a></div>
       </div>
-      <div className={styles.calendar}><LeadContactForm english={lang === "en"}/><Link href="/kontakt" className="mt-5 inline-flex items-center gap-2 text-sm text-white/85 underline underline-offset-4">{lang === "pl" ? "Wolisz umówić rozmowę w kalendarzu?" : "Prefer to book a call?"} <ArrowRight size={16}/></Link></div>
+      <div className={styles.calendar}><LeadContactForm english={lang === "en"}/><Link href={lang==="en"?"/en/contact":"/kontakt"} className="mt-5 inline-flex items-center gap-2 text-sm text-white/85 underline underline-offset-4">{lang === "pl" ? "Wolisz umówić rozmowę w kalendarzu?" : "Prefer to book a call?"} <ArrowRight size={16}/></Link></div>
     </section>
   </main>;
 }

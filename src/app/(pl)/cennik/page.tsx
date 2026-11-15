@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Cennik stron WWW, CRM, reklam i automatyzacji | bernecki.dev",
   description: "Orientacyjne ceny netto: strony internetowe, dedykowany CRM, automatyzacja procesów, Google Ads, Meta Ads i TikTok Ads. Sprawdź zakres i wyślij brief.",
-  alternates: { canonical: "https://bernecki.dev/cennik" },
+  alternates: { canonical: "https://bernecki.dev/cennik",languages:{"pl-PL":"https://bernecki.dev/cennik",en:"https://bernecki.dev/en/pricing"} },
 };
 
 const offers = [
