@@ -10,7 +10,7 @@ export function SiteFooter() {
   return <footer className="site-footer relative z-10 border-t border-white/10 bg-[var(--brand-black)] px-5 py-14 md:px-8">
     <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-3">
       <div>
-        <Link href="/" className="text-xl text-white">Kacper Bernecki</Link>
+        <Link href={english?"/en":"/"} className="text-xl text-white">Kacper Bernecki</Link>
         <p className="mt-4 max-w-sm leading-7 text-white/70">{english
           ? "Business development, product sourcing, websites, CRM, advertising and sales. Direct collaboration with businesses across Poland."
           : "Rozwój biznesu, sourcing produktów, strony, CRM, reklamy i sprzedaż. Bezpośrednia współpraca w całej Polsce."}</p>
