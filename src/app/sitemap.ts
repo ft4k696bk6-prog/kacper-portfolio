@@ -26,6 +26,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {url:siteUrl+"/minigry",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/minigry",en:siteUrl+"/en/games"}}},
     {url:siteUrl+"/en/games",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/minigry",en:siteUrl+"/en/games"}}},
+    // Every commercial translation is indexed as its own canonical URL, with reciprocal hreflang.
+    ...([["/cennik","/en/pricing",0.95],["/pakiety","/en/packages",0.95],["/pozyskiwanie-klientow","/en/customer-acquisition",0.96],["/reklamy-online","/en/advertising",0.95],["/kontakt","/en/contact",0.85],["/polityka-prywatnosci","/en/privacy",0.2],["/automatyzacja-leadow-i-sprzedazy","/en/services/automation",0.9]] as const).flatMap(([pl,en,priority])=>{
+      const languages={"pl-PL":siteUrl+pl,en:siteUrl+en};
+      return [
+        {url:siteUrl+pl,changeFrequency:"monthly" as const,priority,alternates:{languages}},
+        {url:siteUrl+en,changeFrequency:"monthly" as const,priority,alternates:{languages}}
+      ];
+    }),
     {url:siteUrl+"/narzedzia/test-mobilnosci-strony",changeFrequency:"monthly",priority:0.82},
     {url:siteUrl+"/narzedzia",changeFrequency:"monthly",priority:0.9,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia",en:siteUrl+"/en/tools"}}},
     {url:siteUrl+"/en/tools",changeFrequency:"monthly",priority:0.9,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia",en:siteUrl+"/en/tools"}}},
@@ -35,14 +43,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {url:siteUrl+"/en/tools/ai-image-check",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/sprawdz-czy-zdjecie-ai",en:siteUrl+"/en/tools/ai-image-check"}}},
     ...toolboxItems.map(tool=>({url:siteUrl+"/narzedzia/"+tool.slug,changeFrequency:"monthly" as const,priority:0.75,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/"+tool.slug,en:siteUrl+englishToolPath(tool.slug)}}})),
     ...englishToolboxItems.map(tool=>({url:siteUrl+"/en/tools/"+tool.englishSlug,changeFrequency:"monthly" as const,priority:0.75,alternates:{languages:{"pl-PL":siteUrl+"/narzedzia/"+tool.slug,en:siteUrl+"/en/tools/"+tool.englishSlug}}})),
-    { url: siteUrl + "/cennik", changeFrequency: "monthly", priority: 0.95 },
-    { url: siteUrl + "/pakiety", changeFrequency: "monthly", priority: 0.95 },
-    { url: siteUrl + "/pozyskiwanie-klientow", changeFrequency: "weekly", priority: 0.96 },
-    { url: siteUrl + "/reklamy-online", changeFrequency: "monthly", priority: 0.95 },
+
+
+
+
     { url: siteUrl + "/wykonawca-stron-i-crm", changeFrequency: "monthly", priority: 0.95 },
     { url: siteUrl + "/dla-agencji", changeFrequency: "monthly", priority: 0.85 },
     { url: siteUrl + "/partner-w-rozwoju-biznesu", changeFrequency: "monthly", priority: 0.95 },
-    { url: siteUrl + "/kontakt", changeFrequency: "monthly", priority: 0.85 },
+
     { url: siteUrl + "/materialy/brief-strony", changeFrequency: "monthly", priority: 0.8 },
     { url: siteUrl + "/materialy/brief-crm", changeFrequency: "monthly", priority: 0.8 },
     { url: siteUrl + "/case-studies/isto-kebab", changeFrequency: "monthly", priority: 0.9 },
@@ -57,12 +65,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       }))
     ),
 
-    { url: siteUrl + "/polityka-prywatnosci", changeFrequency: "yearly", priority: 0.2 },
+
     { url: siteUrl + "/google-ads-dla-firm", changeFrequency: "monthly", priority: 0.95 },
     { url: siteUrl + "/narzedzia/kalkulator-budzetu-google-ads", changeFrequency: "monthly", priority: 0.85 },
     { url: siteUrl + "/wdrozenia-ai-dla-firm", changeFrequency: "monthly", priority: 0.9 },
     { url: siteUrl + "/crm-dla-firm-handlowych", changeFrequency: "monthly", priority: 0.9 },
-    { url: siteUrl + "/automatyzacja-leadow-i-sprzedazy", changeFrequency: "monthly", priority: 0.9 },
+
     {url:siteUrl+"/blog",lastModified:new Date(BLOG_PUBLISHED_DATE),alternates:{languages:{"pl-PL":siteUrl+"/blog",en:siteUrl+"/en/blog"}}},
     {url:siteUrl+"/en/blog",lastModified:new Date(BLOG_PUBLISHED_DATE),alternates:{languages:{"pl-PL":siteUrl+"/blog",en:siteUrl+"/en/blog"}}},
     ...blogPosts.flatMap(post=>{
