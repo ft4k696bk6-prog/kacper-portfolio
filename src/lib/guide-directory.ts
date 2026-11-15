@@ -1,4 +1,5 @@
 import { guides as existingGuides } from "../content/guides";
+import { salesGuides } from "../content/salesGuides";
 import { pseoGuides } from "../content/pseo/guides";
 import { offlineGuides } from "../content/pseo/offline-guides";
 import { offlineBatchTwoGuides } from "../content/pseo/offline-batch2-guides";
@@ -14,7 +15,7 @@ import { googleAdsAndDigitalGuides } from "../content/googleAdsAndDigitalGuides"
 import { evergreenLinkGuides } from "../content/evergreenLinkGuides";
 
 /** Jeden katalog: zachowuje wszystkie poradniki tworzone równolegle w guides.ts. */
-export const allGuides = [...existingGuides, ...pseoGuides, ...offlineGuides, ...offlineBatchTwoGuides, ...businessGuides, ...aiGuides, ...businessGrowthGuidesOne, ...businessGrowthGuidesTwo, ...businessGrowthGuidesThree, ...businessGrowthGuidesFour, ...metaAdsTroubleshootingGuides, ...seoCommercialGuides, ...googleAdsAndDigitalGuides, ...evergreenLinkGuides];
+export const allGuides = [...salesGuides, ...existingGuides, ...pseoGuides, ...offlineGuides, ...offlineBatchTwoGuides, ...businessGuides, ...aiGuides, ...businessGrowthGuidesOne, ...businessGrowthGuidesTwo, ...businessGrowthGuidesThree, ...businessGrowthGuidesFour, ...metaAdsTroubleshootingGuides, ...seoCommercialGuides, ...googleAdsAndDigitalGuides, ...evergreenLinkGuides];
 export type Guide = (typeof allGuides)[number];
 
 export const guideCategories = [
