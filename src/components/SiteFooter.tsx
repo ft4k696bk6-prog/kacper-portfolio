@@ -23,6 +23,7 @@ export function SiteFooter() {
         <Link className="block" href={english?"/en/services/websites":"/tworzenie-stron-internetowych"}>{english?"Website development":"Tworzenie stron internetowych"}</Link>
         <Link className="block" href={english?"/en/services/crm":"/crm-i-aplikacje-webowe"}>{english?"CRM and web applications":"CRM i aplikacje webowe"}</Link>
         {!english && <Link className="block" href="/reklamy-online">Reklamy Google, Meta, TikTok i YouTube</Link>}
+        {!english && <Link className="block" href="/pozyskiwanie-klientow">Jak pomagam zdobywać klientów</Link>}
 
         {!english && <Link className="block" href="/crm-dla-firm-handlowych">CRM dla firm handlowych</Link>}
         {!english && <Link className="block" href="/automatyzacja-leadow-i-sprzedazy">Automatyzacja leadów i sprzedaży</Link>}
