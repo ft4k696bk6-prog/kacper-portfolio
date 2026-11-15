@@ -23,7 +23,7 @@ export function SiteFooter() {
         <Link className="block" href={english?"/en/services/websites":"/tworzenie-stron-internetowych"}>{english?"Website development":"Tworzenie stron internetowych"}</Link>
         <Link className="block" href={english?"/en/services/crm":"/crm-i-aplikacje-webowe"}>{english?"CRM and web applications":"CRM i aplikacje webowe"}</Link>
         {!english && <Link className="block" href="/reklamy-online">Reklamy Google, Meta, TikTok i YouTube</Link>}
-        {!english && <Link className="block" href="/cennik">Cennik stron, CRM i reklam</Link>}
+
         {!english && <Link className="block" href="/crm-dla-firm-handlowych">CRM dla firm handlowych</Link>}
         {!english && <Link className="block" href="/automatyzacja-leadow-i-sprzedazy">Automatyzacja leadów i sprzedaży</Link>}
         <Link className="block" href={english?"/en/services/marketing":"/marketing-i-reklamy"}>{english?"Marketing, advertising and social media":"Marketing, reklamy i social media"}</Link>
@@ -34,6 +34,7 @@ export function SiteFooter() {
         <p className="text-xs uppercase tracking-widest text-white/70">{english?"Before we talk":"Przed rozmową"}</p>
         <Link className="block" href={english?"/en/case-studies":"/case-studies"}>{english?"Case studies and live projects":"Realizacje i działające projekty"}</Link>
         {!english && <Link className="block" href="/realizacje">Pozostałe realizacje</Link>}
+        {!english && <div className="mt-7 space-y-3 border-t border-white/15 pt-5"><p className="text-xs font-semibold uppercase tracking-widest text-white/60">Cennik</p><Link className="block" href="/pakiety">Pakiety dla firm</Link><Link className="block" href="/cennik">Ceny pojedynczych usług</Link></div>}
         <Link className="block" href="/#collaborations">{english?"Client collaborations":"Współprace z firmami"}</Link>
         <Link className="block" href={english?"/en/guides":"/poradniki"}>{english?"Practical troubleshooting guides":"Poradniki dla przedsiębiorców"}</Link>
         <Link className="block" href={english?"/en/blog":"/blog"}>{english?"Articles and insights":"Blog i artykuły"}</Link>
