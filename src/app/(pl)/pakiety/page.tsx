@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Pakiety: strony, reklamy, CRM i rozwój firmy – cennik",
   description: "Porównaj pakiety: strona firmowa, reklamy Facebook i Google, strona z reklamami, CRM i automatyzacja. Ceny netto od i jasny zakres.",
-  alternates: {canonical:"https://bernecki.dev/pakiety"}
+  alternates: {canonical:"https://bernecki.dev/pakiety",languages:{"pl-PL":"https://bernecki.dev/pakiety",en:"https://bernecki.dev/en/packages"}}
 };
 const packages = [
   {name:"Strona na start",price:"od 3 900 zł",period:"jednorazowo",who:"Firma potrzebuje profesjonalnej strony i możliwości pozyskania zapytań.",items:["Strona firmowa z ofertą i kontaktem","Wygląd dopasowany do telefonu","Formularz kontaktowy i podstawy SEO","Test wysyłki zapytań"],extra:"Domena, hosting, dodatkowe treści i integracje osobno.",href:"/tworzenie-stron-internetowych"},
