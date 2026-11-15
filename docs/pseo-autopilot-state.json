@@ -27,8 +27,8 @@
   ],
   "rejectedTopics": [],
   "seenIssueUrls": [],
-  "lastRun": "2026-11-14T09:52:47.709Z",
-  "runCount": 6,
+  "lastRun": "2026-11-15T10:24:10.133Z",
+  "runCount": 7,
   "lastSummary": {
     "attempts": 60,
     "approved": 0,
@@ -37,189 +37,189 @@
   },
   "failureHistory": {
     "Meta Ads: reklama zatwierdzona, ale nie ma wyświetleń": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:12:30.584Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:38:05.110Z",
+      "reason": "provider error"
     },
     "Meta Ads: odrzucenie płatności mimo środków na karcie": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:12:52.523Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:38:51.978Z",
+      "reason": "provider error"
     },
     "Facebook: osoba nie widzi strony w tożsamości reklamy": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:13:15.414Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:39:38.758Z",
+      "reason": "provider error"
     },
     "Meta Business Suite: brak dostępu do leadów po zmianie administratora": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:13:36.868Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:40:25.437Z",
+      "reason": "provider error"
     },
     "Lead Ads: formularz nie pozwala pobrać CSV": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:14:00.409Z",
-      "reason": "link broken"
+      "count": 4,
+      "lastAt": "2026-11-15T09:41:12.341Z",
+      "reason": "provider error"
     },
     "Lead Ads: webhook odbiera tylko część zgłoszeń": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:14:18.893Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:41:58.876Z",
+      "reason": "provider error"
     },
     "Meta: testowe leady działają, prawdziwe nie docierają": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:14:39.860Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:42:45.768Z",
+      "reason": "provider error"
     },
     "Meta: zmiana właściciela strony blokuje reklamowanie": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:15:01.654Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:43:32.603Z",
+      "reason": "provider error"
     },
     "Meta Ads: kampania zablokowana przez limit wydatków": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:15:27.575Z",
-      "reason": "source"
+      "count": 4,
+      "lastAt": "2026-11-15T09:44:19.706Z",
+      "reason": "provider error"
     },
     "Meta: reklama ma wysoki CTR i zero kontaktów": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:15:49.517Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:45:06.469Z",
+      "reason": "provider error"
     },
     "Vercel: podgląd działa, ale produkcja wyświetla stary commit": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:16:12.485Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:45:53.160Z",
+      "reason": "provider error"
     },
     "Vercel: Deployment Protection blokuje dostęp klientowi": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:16:39.799Z",
-      "reason": "independent QA"
+      "count": 4,
+      "lastAt": "2026-11-15T09:46:39.793Z",
+      "reason": "provider error"
     },
     "Vercel: wyświetla się 404 na własnej domenie": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:17:02.985Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:47:26.838Z",
+      "reason": "provider error"
     },
     "Vercel: domena przypisana do innego projektu": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:17:23.720Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:48:13.579Z",
+      "reason": "provider error"
     },
     "Vercel: Function Invocation Timeout w formularzu": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:17:43.613Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:49:00.390Z",
+      "reason": "provider error"
     },
     "Vercel: Edge Function zwraca 500 tylko na produkcji": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:18:03.410Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:49:47.114Z",
+      "reason": "provider error"
     },
     "Vercel: webhook deploymentu nie uruchamia się po push": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:18:20.921Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:50:33.840Z",
+      "reason": "provider error"
     },
     "Vercel: build zatrzymuje brakujący import zależności": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:18:40.666Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:51:20.876Z",
+      "reason": "provider error"
     },
     "Vercel: przekroczono limit zasobów i projekt jest wstrzymany": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:19:20.515Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:52:09.450Z",
+      "reason": "provider error"
     },
     "Supabase: insert narusza WITH CHECK": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:19:46.798Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:52:56.324Z",
+      "reason": "provider error"
     },
     "Supabase: query count różni się od liczby widocznych wierszy": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:21:20.797Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:53:43.178Z",
+      "reason": "provider error"
     },
     "Supabase: realtime nie aktualizuje listy leadów": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:21:40.878Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:54:29.779Z",
+      "reason": "provider error"
     },
     "Supabase: migracja bazy rozjeżdża schemat produkcyjny": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:22:07.253Z",
-      "reason": "independent QA"
+      "count": 4,
+      "lastAt": "2026-11-15T09:55:16.584Z",
+      "reason": "provider error"
     },
     "Next.js: useSearchParams wymaga Suspense": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:22:57.205Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:56:03.565Z",
+      "reason": "provider error"
     },
     "Next.js: metadata canonical wskazuje na stronę główną": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:23:15.540Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:56:52.758Z",
+      "reason": "provider error"
     },
     "Next.js: obraz w Image ucina twarz na mobile": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:23:36.043Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:57:39.549Z",
+      "reason": "provider error"
     },
     "React: useEffect wywołuje zapytanie dwa razy": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:24:19.341Z",
-      "reason": "source"
+      "count": 4,
+      "lastAt": "2026-11-15T09:58:26.252Z",
+      "reason": "provider error"
     },
     "React: lista z nieprawidłowym key miesza rekordy": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:24:36.604Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:59:13.206Z",
+      "reason": "provider error"
     },
     "TypeScript: Property does not exist on type never": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:24:53.633Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T09:59:59.929Z",
+      "reason": "provider error"
     },
     "React: formularz traci dane po przejściu między krokami": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:25:43.225Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T10:00:46.836Z",
+      "reason": "provider error"
     },
     "CRM: licznik przypisanych leadów różni się od listy": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:26:11.080Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T10:01:33.526Z",
+      "reason": "provider error"
     },
     "CRM: powiadomienia PWA nie działają na iPhonie": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:26:52.442Z",
-      "reason": "source"
+      "count": 4,
+      "lastAt": "2026-11-15T10:02:20.413Z",
+      "reason": "provider error"
     },
     "CRM: callbacki znikają po zmianie strefy czasowej": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:27:07.675Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T10:03:07.028Z",
+      "reason": "provider error"
     },
     "CRM: dashboard liczy anulowane umowy do wyniku": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:27:32.596Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T10:03:53.944Z",
+      "reason": "provider error"
     },
     "CRM: import CSV powoduje duplikaty telefonów": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:28:20.910Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T10:04:40.710Z",
+      "reason": "provider error"
     },
     "CRM: archiwalne leady nie powinny trafiać do kolejki": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:28:40.118Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T10:05:27.544Z",
+      "reason": "provider error"
     },
     "CRM: status leadu nie synchronizuje się między zakładkami": {
-      "count": 3,
-      "lastAt": "2026-11-08T09:29:30.268Z",
-      "reason": "editorial length"
+      "count": 4,
+      "lastAt": "2026-11-15T10:06:14.184Z",
+      "reason": "provider error"
     },
     "Vercel: certyfikat SSL nie jest wydawany dla domeny": {
       "count": 3,
@@ -517,78 +517,118 @@
       "reason": "provider error"
     },
     "WWW: formularz niewygodny na ekranie 320 px": {
-      "count": 2,
-      "lastAt": "2026-11-14T09:41:54.735Z",
+      "count": 3,
+      "lastAt": "2026-11-15T10:07:00.884Z",
       "reason": "provider error"
     },
     "Cron: zadanie na Vercel nie wykonuje się w oczekiwanej godzinie": {
-      "count": 2,
-      "lastAt": "2026-11-14T09:42:41.503Z",
+      "count": 3,
+      "lastAt": "2026-11-15T10:07:47.721Z",
       "reason": "provider error"
     },
     "Cron: webhook odpala się dwa razy i tworzy duplikaty": {
-      "count": 2,
-      "lastAt": "2026-11-14T09:43:28.132Z",
+      "count": 3,
+      "lastAt": "2026-11-15T10:08:34.659Z",
       "reason": "provider error"
     },
     "GitHub Actions: workflow nie uruchamia się po merge": {
-      "count": 2,
-      "lastAt": "2026-11-14T09:44:14.841Z",
+      "count": 3,
+      "lastAt": "2026-11-15T10:09:21.380Z",
       "reason": "provider error"
     },
     "GitHub Actions: brak sekretu w deployu z pull requesta": {
-      "count": 2,
-      "lastAt": "2026-11-14T09:45:01.410Z",
+      "count": 3,
+      "lastAt": "2026-11-15T10:10:08.114Z",
       "reason": "provider error"
     },
     "Automatyzacja: utracony token Google Drive zatrzymuje synchronizację": {
-      "count": 2,
-      "lastAt": "2026-11-14T09:45:47.890Z",
+      "count": 3,
+      "lastAt": "2026-11-15T10:10:54.777Z",
       "reason": "provider error"
     },
     "Automatyzacja: powiadomienia wysyłane na zły adres": {
-      "count": 2,
-      "lastAt": "2026-11-14T09:46:34.390Z",
+      "count": 3,
+      "lastAt": "2026-11-15T10:11:41.747Z",
       "reason": "provider error"
     },
     "Automatyzacja: brak retry po błędzie API 503": {
-      "count": 2,
-      "lastAt": "2026-11-14T09:47:21.083Z",
+      "count": 3,
+      "lastAt": "2026-11-15T10:12:28.501Z",
       "reason": "provider error"
     },
     "Automatyzacja: logi nie pozwalają powiązać zdarzenia z leadem": {
-      "count": 2,
-      "lastAt": "2026-11-14T09:48:07.597Z",
+      "count": 3,
+      "lastAt": "2026-11-15T10:13:15.365Z",
       "reason": "provider error"
     },
     "Automatyzacja: przypomnienia CRM wysyłają się po terminie": {
-      "count": 2,
-      "lastAt": "2026-11-14T09:48:54.189Z",
+      "count": 3,
+      "lastAt": "2026-11-15T10:14:02.265Z",
       "reason": "provider error"
     },
     "Automatyzacja: kolejka zadań nie odbiera nowej wiadomości": {
-      "count": 1,
-      "lastAt": "2026-11-14T09:49:40.824Z",
+      "count": 2,
+      "lastAt": "2026-11-15T10:14:49.009Z",
       "reason": "provider error"
     },
     "Automatyzacja: synchronizacja nadpisuje ręczne zmiany": {
-      "count": 1,
-      "lastAt": "2026-11-14T09:50:27.526Z",
+      "count": 2,
+      "lastAt": "2026-11-15T10:15:35.763Z",
       "reason": "provider error"
     },
     "Automatyzacja: raport dzienny pomija błędy w weekend": {
-      "count": 1,
-      "lastAt": "2026-11-14T09:51:14.142Z",
+      "count": 2,
+      "lastAt": "2026-11-15T10:16:22.495Z",
       "reason": "provider error"
     },
     "Git: odrzucony push non-fast-forward": {
-      "count": 1,
-      "lastAt": "2026-11-14T09:52:00.696Z",
+      "count": 2,
+      "lastAt": "2026-11-15T10:17:09.273Z",
       "reason": "provider error"
     },
     "Git: przypadkowo dodany plik .env do commita": {
+      "count": 2,
+      "lastAt": "2026-11-15T10:17:56.179Z",
+      "reason": "provider error"
+    },
+    "Git: konflikt merge przy równoległej pracy na stronie": {
       "count": 1,
-      "lastAt": "2026-11-14T09:52:47.709Z",
+      "lastAt": "2026-11-15T10:18:42.969Z",
+      "reason": "provider error"
+    },
+    "GitHub: repozytorium prywatne niewidoczne w integracji": {
+      "count": 1,
+      "lastAt": "2026-11-15T10:19:29.571Z",
+      "reason": "provider error"
+    },
+    "GitHub: pobrany projekt nie ma node_modules": {
+      "count": 1,
+      "lastAt": "2026-11-15T10:20:16.339Z",
+      "reason": "provider error"
+    },
+    "Node.js: npm ci nie działa przez brak package-lock": {
+      "count": 1,
+      "lastAt": "2026-11-15T10:21:03.214Z",
+      "reason": "provider error"
+    },
+    "Node.js: lokalna wersja różni się od tej na serwerze": {
+      "count": 1,
+      "lastAt": "2026-11-15T10:21:50.021Z",
+      "reason": "provider error"
+    },
+    "OAuth: callback URL nie pasuje do konfiguracji": {
+      "count": 1,
+      "lastAt": "2026-11-15T10:22:36.731Z",
+      "reason": "provider error"
+    },
+    "Google Drive: utrata uprawnień aplikacji po wycofaniu tokena": {
+      "count": 1,
+      "lastAt": "2026-11-15T10:23:23.425Z",
+      "reason": "provider error"
+    },
+    "GitHub: klonowanie repo pyta o hasło zamiast tokena": {
+      "count": 1,
+      "lastAt": "2026-11-15T10:24:10.133Z",
       "reason": "provider error"
     }
   },
