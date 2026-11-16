@@ -13,6 +13,8 @@ const offers = [
   ["Współpraca dla agencji i software house’ów", "/dla-agencji"],
   ["Strony internetowe", "/tworzenie-stron-internetowych"],
   ["CRM i aplikacje webowe", "/crm-i-aplikacje-webowe"],
+  ["CRM dla zespołu handlowego", "/crm-dla-firm-handlowych"],
+  ["Automatyzacja obsługi leadów i sprzedaży", "/automatyzacja-leadow-i-sprzedazy"],
   ["Marketing i reklamy", "/marketing-i-reklamy"],
   ["Google Ads – reklamy w Google", "/google-ads-dla-firm"],
   ["AI i automatyzacje", "/wdrozenia-ai-dla-firm"],
@@ -82,6 +84,22 @@ export default function ServicesIndex() {
               <h3 className="text-xl font-semibold">Strony i produkty cyfrowe</h3>
               <p className="mt-3 leading-7 text-white/65">Przykłady stron internetowych i aplikacji: od prezentacji oferty przez formularze po narzędzia użytkowe.</p>
               <Link href="/case-studies" className="mt-5 inline-block underline underline-offset-4">Przegląd realizacji</Link>
+            </article>
+          </div>
+        </section>
+        <section className="mt-16 border-t border-white/10 pt-12" aria-labelledby="before-project-heading">
+          <h2 id="before-project-heading" className="text-2xl font-semibold">Sprawdź zakres prac przed zamówieniem wdrożenia</h2>
+          <p className="mt-3 max-w-3xl leading-7 text-white/65">Strony firmowe, aplikacje CRM i automatyzacje różnią się zakresem. Zobacz szczegóły dwóch najczęstszych wdrożeń i przygotuj wymagania. Materiały są dostępne bez zakładania konta.</p>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <article className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+              <h3 className="text-lg font-semibold"><Link href="/tworzenie-stron-internetowych" className="underline underline-offset-4">Strona internetowa dla firmy</Link></h3>
+              <p className="mt-3 leading-7 text-white/65">Od ustalenia odbiorców i oferty po układ strony, treści, kontakt i uruchomienie. Zobacz także realizację <Link href="/case-studies/isto-kebab" className="text-white underline underline-offset-4">Isto Kebab</Link>.</p>
+              <Link href="/materialy/brief-strony" className="mt-5 inline-block font-medium underline underline-offset-4">Bezpłatny brief strony</Link>
+            </article>
+            <article className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+              <h3 className="text-lg font-semibold"><Link href="/crm-dla-firm-handlowych" className="underline underline-offset-4">CRM i obsługa zespołu sprzedaży</Link></h3>
+              <p className="mt-3 leading-7 text-white/65">Leady, role, zadania, terminy i raportowanie. Możesz zacząć od <Link href="/automatyzacja-leadow-i-sprzedazy" className="text-white underline underline-offset-4">integracji formularzy, reklam i CRM</Link> bez wymiany całego systemu.</p>
+              <Link href="/materialy/brief-crm" className="mt-5 inline-block font-medium underline underline-offset-4">Bezpłatny brief CRM</Link>
             </article>
           </div>
         </section>
