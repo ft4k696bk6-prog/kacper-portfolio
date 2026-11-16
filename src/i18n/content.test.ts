@@ -115,7 +115,7 @@ describe("portfolio content", () => {
   });
 
   it("keeps English copy available alongside the Polish offer", () => {
-    expect(en.meta.homeTitle).toContain("Frontend / Web App Developer");
+    expect(en.meta.homeTitle).toContain("Websites, CRM & AI Automation");
     expect(en.nav.interactive).toBe("Interactive portfolio");
   });
 
