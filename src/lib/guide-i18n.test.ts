@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
 import englishRecords from "../content/pseo/guide-translations.en.json";
+import salesEnA from "../content/sales-en-a.json";
+import salesEnB from "../content/sales-en-b.json";
+import salesEnC from "../content/sales-en-c.json";
+import salesEnD from "../content/sales-en-d.json";
 import { businessArticles } from "../content/businessGuides";
 import { allGuides, getGuide } from "./guide-directory";
 import { getEnglishGuide, getEnglishGuides, guideSourceHash, englishCategoryCounts, listEnglishGuides } from "./guide-i18n";
@@ -8,7 +12,15 @@ describe("published PL/EN guide pairs", () => {
   it("publishes English alternate URLs only for complete, source-matched translations", () => {
     const editions = getEnglishGuides();
     expect(editions.length).toBeGreaterThan(350);
-    expect(editions.length).toBeLessThanOrEqual(Object.keys(englishRecords).length + businessArticles.length);
+    const sourceTranslationCount = new Set([
+      ...Object.keys(englishRecords),
+      ...Object.keys(salesEnA),
+      ...Object.keys(salesEnB),
+      ...Object.keys(salesEnC),
+      ...Object.keys(salesEnD),
+      ...businessArticles.map((article) => article.slug),
+    ]).size;
+    expect(editions.length).toBeLessThanOrEqual(sourceTranslationCount);
     expect(editions.length).toBeLessThanOrEqual(allGuides.length);
     const slugs = new Set<string>();
     for (const english of editions) {

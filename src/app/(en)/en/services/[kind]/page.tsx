@@ -37,6 +37,17 @@ export default async function EnglishServicesPage({params}:Props){
     <h3 className="text-xl">{point.title}</h3><p className="mt-4 leading-7 text-white/70">{point.body}</p>
    </article>)}</div>
   </section>
+  {kind!=="marketing"&&<section className="mt-16 rounded-2xl border border-white/20 bg-white/[0.035] p-7 md:p-10">
+   <h2 className="text-2xl font-semibold">{kind==="websites"?"Website projects and pricing":"Custom CRM implementation and pricing"}</h2>
+   {kind==="websites"?<>
+    <p className="mt-4 leading-8 text-white/75">I map the business goal first: service enquiries, product presentation or a campaign landing page. Scope may include responsive layouts, forms, technical SEO foundations, integrations and pre-launch checks. StarCars and Motomizer are examples of real work.</p>
+    <p className="mt-4 leading-8 text-white/75">A landing page starts at PLN 1,900 net and a company website at PLN 3,900 net. Hosting, domains, paid tools and ongoing support are separate.</p>
+   </>:<>
+    <p className="mt-4 leading-8 text-white/75">A standard CRM is often enough for a simple sales process. Custom software is useful when lead assignments, staff roles, document workflows and integrations need to follow your own rules. B-CRM is an example featuring leads, tasks and role-based permissions.</p>
+    <p className="mt-4 leading-8 text-white/75">A first CRM module starts at PLN 12,000 net and a multi-module system at PLN 25,000 net. Migration, integrations and support are priced by scope.</p>
+   </>}
+   <nav aria-label="Project details" className="mt-6 flex flex-wrap gap-5 text-sm"><Link href="/en/pricing" className="underline underline-offset-4">Service pricing</Link><Link href="/en/case-studies" className="underline underline-offset-4">Real projects</Link><Link href="/en/contact" className="underline underline-offset-4">Request a quote</Link></nav>
+  </section>}
   <section className="mt-16 border-t border-white/15 pt-12">
    <h2 className="text-2xl">Project scope</h2><p className="mt-4 max-w-3xl leading-8 text-white/75">{service.scope}</p>
    {kind==="marketing"&&<p className="mt-5 leading-7 text-white/75">See the <Link className="underline underline-offset-4" href="/en/case-studies/re-energy-meta-ads">Re-Energy System Meta Ads case study</Link> for campaign results.</p>}

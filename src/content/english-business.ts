@@ -4,7 +4,7 @@ export const englishServices = {
     label:"Website development",
     title:"Website Development for Businesses | Kacper Bernecki",
     eyebrow:"Websites · Landing pages · Product websites",
-    heading:"A website that explains your offer and turns interest into enquiries.",
+    heading:"Website development for businesses — design and launch",
     intro:"I design and build fast, responsive websites for businesses, services and product brands. You work directly with the person responsible for design, development and launch — without unnecessary layers of communication.",
     points:[
       {title:"A clear offer",body:"A structure that helps visitors understand what you do, who it is for and how to contact you."},
@@ -20,7 +20,7 @@ export const englishServices = {
     label:"CRM and web applications",
     title:"Custom CRM and Web Applications | Kacper Bernecki",
     eyebrow:"CRM · Dashboards · Business applications",
-    heading:"Software designed around your workflow, not the other way around.",
+    heading:"Custom CRM and web applications for businesses",
     intro:"I create web applications that organize customer enquiries, sales teams, responsibilities and business processes. A custom CRM can combine lead management, role-based views, reminders and integrations in one place.",
     points:[
       {title:"Lead management",body:"Assignments, stages, notes, follow-ups and clear ownership of each customer enquiry."},
