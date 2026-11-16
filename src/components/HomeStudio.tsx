@@ -171,6 +171,11 @@ export function HomeStudio() {
       <p className={styles.eyebrow}>{lang === "pl" ? "Oferta" : "Services"}</p><h2>{c.services}</h2>
       <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65">{lang === "pl" ? "Wybierz temat, rozwiń szczegóły i sprawdź, w czym mogę pomóc. Jeśli nie wiesz, czego potrzebujesz, napisz — ustalimy to wspólnie." : "Choose a topic, expand details and explore how I can help. Not sure yet? Describe your project."}</p>
       <OfferCards offers={c.offer} english={lang === "en"}/>
+      <nav aria-label={lang === "pl" ? "Najważniejsze usługi" : "Core services"} className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-sm leading-7">
+        <Link href={lang === "en" ? "/en/services/websites" : "/tworzenie-stron-internetowych"} className="font-semibold text-white underline underline-offset-4">{lang === "pl" ? "Tworzenie stron internetowych dla firm" : "Website development for businesses"}</Link>
+        <Link href={lang === "en" ? "/en/services/crm" : "/crm-i-aplikacje-webowe"} className="font-semibold text-white underline underline-offset-4">{lang === "pl" ? "Dedykowany CRM i aplikacje webowe" : "Custom CRM and web applications"}</Link>
+        <Link href={lang === "en" ? "/en/pricing" : "/cennik"} className="font-semibold text-white underline underline-offset-4">{lang === "pl" ? "Cennik usług" : "Website and CRM pricing"}</Link>
+      </nav>
       {lang === "pl" && <div className="mt-6 flex flex-wrap gap-4 text-sm"><Link href="#cennik" className="underline underline-offset-4">Zobacz pakiety i cennik</Link><Link href="/pozyskiwanie-klientow" className="underline underline-offset-4">Jak zdobywać klientów przez Google i Facebook?</Link><Link href="/reklamy-online" className="underline underline-offset-4">Reklamy Google, Facebook, Instagram i TikTok</Link><Link href="/crm-dla-firm-handlowych" className="underline underline-offset-4">CRM dla firmy</Link></div>}
       <div className="mt-8 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-3">
         <Link href={lang==="en"?"/en/contact":"/kontakt"} className="brand-action inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-3 py-3 text-center text-[11px] font-semibold leading-5 text-black sm:px-6 sm:text-sm">{lang === "pl" ? "Zapytaj o współpracę" : "Discuss your project"} <ArrowUpRight size={17}/></Link>
