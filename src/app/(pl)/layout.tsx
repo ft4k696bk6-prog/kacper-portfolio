@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     images: ["/opengraph-image?hero=20261108-01"],
   },
   alternates: {
-    canonical: siteUrl,
+    canonical: siteUrl + "/",
   },
   manifest: "/site.webmanifest",
   icons: {
