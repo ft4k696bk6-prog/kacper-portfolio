@@ -17,7 +17,7 @@ const content = {
   websites: {
     title: "Strony internetowe dla małych firm — Kacper Bernecki",
     eyebrow: "Strony, landing page i strony usługowe",
-    heading: "Dobra strona internetowa bez korporacyjnego narzutu.",
+    heading: "Tworzenie stron internetowych dla firm — projekt i wdrożenie",
     intro:
       "Pomagam małym firmom i osobom z konkretnym pomysłem uruchomić szybką, estetyczną i skuteczną stronę internetową. Pracuję bez zbędnych warstw pośrednich: rozmawiasz bezpośrednio z osobą, która projektuje i buduje stronę.",
     bullets: [
@@ -36,7 +36,7 @@ const content = {
   apps: {
     title: "CRM i aplikacje webowe dla firm — Kacper Bernecki",
     eyebrow: "CRM, dashboardy i narzędzia wewnętrzne",
-    heading: "Aplikacja webowa dopasowana do Twojego procesu, nie odwrotnie.",
+    heading: "Dedykowany CRM i aplikacje webowe dla firm",
     intro:
       "Buduję praktyczne web appy dla firm, które wyrosły już z arkuszy, ręcznego przekazywania leadów albo kilku niespójnych narzędzi. Od CRM-u i panelu administracyjnego po formularze, role użytkowników i integracje API.",
     bullets: [
@@ -208,6 +208,26 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
               <Link href="/case-studies/re-energy-meta-ads" className="inline-flex items-center gap-2 rounded-lg brand-outline px-5 py-3 text-white">Zobacz pełne case study <ArrowRight className="h-4 w-4" /></Link>
               <Link href="/reklamy-meta-ads-dla-firm" className="inline-flex items-center gap-2 px-5 py-3 text-white/80">Jak prowadzę kampanie Meta Ads <ArrowRight className="h-4 w-4" /></Link>
             </div>
+          </div>
+        </section>
+      )}
+      {kind === "websites" && (
+        <section className="mx-auto max-w-6xl px-5 py-12 md:px-8" aria-labelledby="websites-pricing">
+          <div className="rounded-2xl border border-white/25 bg-white/[0.035] p-7 md:p-10">
+            <p className="page-eyebrow">Oferta stron WWW dla firm</p>
+            <h2 id="websites-pricing" className="mt-4 text-3xl font-semibold">Strona firmowa czy landing page — jaki zakres wybrać?</h2>
+            <p className="mt-5 max-w-4xl leading-8 text-white/75">Projekt zaczynam od celu biznesowego: przedstawienie usług, zbieranie zapytań, obsługa zamówień lub promocja konkretnej oferty. Wdrożenie może obejmować architekturę treści, widok mobilny, formularz kontaktowy, testy, techniczne SEO i integracje. Przykłady działających projektów to StarCars i Motomizer.</p>
+            <div className="mt-7 grid gap-4 md:grid-cols-2">
+              <div className="rounded-xl border border-white/15 p-6"><h3 className="text-xl">Landing page — od 1 900 zł netto</h3><p className="mt-3 leading-7 text-white/70">Jedna oferta, responsywny projekt i formularz — na start konkretnej kampanii lub usługi.</p></div>
+              <div className="rounded-xl border border-white/15 p-6"><h3 className="text-xl">Strona firmowa — od 3 900 zł netto</h3><p className="mt-3 leading-7 text-white/70">Podstrony usług, realizacje i kontakt. Końcowy zakres zależy od treści i wymaganych integracji.</p></div>
+            </div>
+            <p className="mt-5 text-sm leading-7 text-white/60">Ceny orientacyjne netto. Domena, hosting, płatne narzędzia i dalsze utrzymanie osobno.</p>
+            <nav aria-label="Szczegóły tworzenia stron" className="mt-6 flex flex-wrap gap-5 text-sm">
+              <Link href="/cennik" className="underline underline-offset-4">Cennik stron internetowych</Link>
+              <Link href="/case-studies/starcars" className="underline underline-offset-4">Projekt StarCars</Link>
+              <Link href="/case-studies/motomizer" className="underline underline-offset-4">Projekt Motomizer</Link>
+              <Link href="/kontakt" className="underline underline-offset-4">Zapytaj o stronę WWW</Link>
+            </nav>
           </div>
         </section>
       )}
