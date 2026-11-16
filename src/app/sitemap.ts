@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { ukSalesPages, ukAlternates, ukPath } from "../content/uk-sales";
 import { toolboxItems } from "../lib/toolbox";
 import { englishToolboxItems, englishToolPath } from "../lib/toolbox-en";
 import { allGuides, getGuideCounts } from "../lib/guide-directory";
@@ -23,7 +24,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "kalkulator-leasingu",
   ];
 
-  return [
+  const entries: MetadataRoute.Sitemap = [
+    ...ukSalesPages.map(page=>({url:siteUrl+ukPath(page),changeFrequency:"monthly" as const,priority:page.slug?0.82:0.93,alternates:{languages:ukAlternates(page)}})),
     {url:siteUrl+"/minigry",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/minigry",en:siteUrl+"/en/games"}}},
     {url:siteUrl+"/en/games",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/minigry",en:siteUrl+"/en/games"}}},
     // Every commercial translation is indexed as its own canonical URL, with reciprocal hreflang.
@@ -143,4 +145,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     }) satisfies MetadataRoute.Sitemap[number]),
   ];
+  // Add reciprocal Ukrainian alternates to existing matching Polish/English pages.
+  return entries.map(entry=>{
+    const match=ukSalesPages.find(page=>entry.url===siteUrl+page.pl||entry.url===siteUrl+page.en);
+    if(!match)return entry;
+    return {...entry,alternates:{languages:{...(entry.alternates?.languages||{}),...ukAlternates(match)}}};
+  });
 }

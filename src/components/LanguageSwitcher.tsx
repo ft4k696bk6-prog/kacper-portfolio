@@ -32,6 +32,8 @@ export function LanguageSwitcher() {
   }, [isOpen]);
   const pathname = usePathname();
   const router = useRouter();
+  const ukEquivalent:Record<string,string>={"/":"/uk","/en":"/uk","/tworzenie-stron-internetowych":"/uk/stvorennia-saitiv","/en/services/websites":"/uk/stvorennia-saitiv","/crm-i-aplikacje-webowe":"/uk/crm-dlia-biznesu","/en/services/crm":"/uk/crm-dlia-biznesu","/automatyzacja-leadow-i-sprzedazy":"/uk/avtomatyzatsiia-biznesu","/en/services/automation":"/uk/avtomatyzatsiia-biznesu","/reklamy-online":"/uk/reklama-google-meta","/en/advertising":"/uk/reklama-google-meta","/cennik":"/uk/tsiny","/en/pricing":"/uk/tsiny","/kontakt":"/uk/kontakty","/en/contact":"/uk/kontakty"};
+  const ukHref=ukEquivalent[pathname]||"/uk";
   // Every static business route has a real English counterpart, not just translated menu labels.
   const bilingualRoutes: Record<string,string> = {
     "/": "/en",
@@ -186,6 +188,7 @@ export function LanguageSwitcher() {
           <div className="nav-language flex rounded-md border border-white/10 bg-[var(--brand-black)] p-1">
             {languageButton("pl", "PL")}
             {languageButton("en", "ENG")}
+            <a href={ukHref} lang="uk" hrefLang="uk-UA" className="rounded-md px-3 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white" aria-label="Українська версія">УКР</a>
           </div>
           <a
             href={lang==="en"?"/en/contact":"/kontakt"}
@@ -207,6 +210,7 @@ export function LanguageSwitcher() {
           <div className="nav-language flex rounded-md border border-white/35 bg-[var(--brand-black)] p-1">
             {languageButton("pl", "PL")}
             {languageButton("en", "ENG")}
+            <a href={ukHref} lang="uk" hrefLang="uk-UA" className="rounded-md px-3 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white" aria-label="Українська версія">УКР</a>
           </div>
           <button
             ref={menuButton}
