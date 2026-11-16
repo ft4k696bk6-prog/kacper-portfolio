@@ -27,8 +27,8 @@
   ],
   "rejectedTopics": [],
   "seenIssueUrls": [],
-  "lastRun": "2026-11-15T10:24:10.133Z",
-  "runCount": 7,
+  "lastRun": "2026-11-16T10:41:42.096Z",
+  "runCount": 8,
   "lastSummary": {
     "attempts": 60,
     "approved": 0,
@@ -567,68 +567,303 @@
       "reason": "provider error"
     },
     "Automatyzacja: kolejka zadań nie odbiera nowej wiadomości": {
-      "count": 2,
-      "lastAt": "2026-11-15T10:14:49.009Z",
+      "count": 3,
+      "lastAt": "2026-11-16T09:56:24.166Z",
       "reason": "provider error"
     },
     "Automatyzacja: synchronizacja nadpisuje ręczne zmiany": {
-      "count": 2,
-      "lastAt": "2026-11-15T10:15:35.763Z",
+      "count": 3,
+      "lastAt": "2026-11-16T09:57:10.245Z",
       "reason": "provider error"
     },
     "Automatyzacja: raport dzienny pomija błędy w weekend": {
-      "count": 2,
-      "lastAt": "2026-11-15T10:16:22.495Z",
+      "count": 3,
+      "lastAt": "2026-11-16T09:57:56.273Z",
       "reason": "provider error"
     },
     "Git: odrzucony push non-fast-forward": {
-      "count": 2,
-      "lastAt": "2026-11-15T10:17:09.273Z",
+      "count": 3,
+      "lastAt": "2026-11-16T09:58:42.643Z",
       "reason": "provider error"
     },
     "Git: przypadkowo dodany plik .env do commita": {
-      "count": 2,
-      "lastAt": "2026-11-15T10:17:56.179Z",
+      "count": 3,
+      "lastAt": "2026-11-16T09:59:28.756Z",
       "reason": "provider error"
     },
     "Git: konflikt merge przy równoległej pracy na stronie": {
-      "count": 1,
-      "lastAt": "2026-11-15T10:18:42.969Z",
+      "count": 2,
+      "lastAt": "2026-11-16T10:00:15.041Z",
       "reason": "provider error"
     },
     "GitHub: repozytorium prywatne niewidoczne w integracji": {
-      "count": 1,
-      "lastAt": "2026-11-15T10:19:29.571Z",
+      "count": 2,
+      "lastAt": "2026-11-16T10:01:01.147Z",
       "reason": "provider error"
     },
     "GitHub: pobrany projekt nie ma node_modules": {
-      "count": 1,
-      "lastAt": "2026-11-15T10:20:16.339Z",
+      "count": 2,
+      "lastAt": "2026-11-16T10:01:47.211Z",
       "reason": "provider error"
     },
     "Node.js: npm ci nie działa przez brak package-lock": {
-      "count": 1,
-      "lastAt": "2026-11-15T10:21:03.214Z",
+      "count": 2,
+      "lastAt": "2026-11-16T10:02:33.574Z",
       "reason": "provider error"
     },
     "Node.js: lokalna wersja różni się od tej na serwerze": {
-      "count": 1,
-      "lastAt": "2026-11-15T10:21:50.021Z",
+      "count": 2,
+      "lastAt": "2026-11-16T10:03:19.769Z",
       "reason": "provider error"
     },
     "OAuth: callback URL nie pasuje do konfiguracji": {
-      "count": 1,
-      "lastAt": "2026-11-15T10:22:36.731Z",
+      "count": 2,
+      "lastAt": "2026-11-16T10:04:05.700Z",
       "reason": "provider error"
     },
     "Google Drive: utrata uprawnień aplikacji po wycofaniu tokena": {
-      "count": 1,
-      "lastAt": "2026-11-15T10:23:23.425Z",
+      "count": 2,
+      "lastAt": "2026-11-16T10:04:51.714Z",
       "reason": "provider error"
     },
     "GitHub: klonowanie repo pyta o hasło zamiast tokena": {
+      "count": 2,
+      "lastAt": "2026-11-16T10:05:37.770Z",
+      "reason": "provider error"
+    },
+    "Security: klucz API trafił do publicznego bundla": {
       "count": 1,
-      "lastAt": "2026-11-15T10:24:10.133Z",
+      "lastAt": "2026-11-16T10:06:23.836Z",
+      "reason": "provider error"
+    },
+    "Security: podejrzane logowania pojawiają się w różnych regionach": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:07:09.862Z",
+      "reason": "provider error"
+    },
+    "New page is called when intercepting routes are terminated before the server action is completed": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:07:57.242Z",
+      "reason": "provider error"
+    },
+    "`--debug-prerender` intermittently classifies an `ImageResponse` metadata route as dynamic (ƒ/○ flip on identical builds)": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:08:43.368Z",
+      "reason": "provider error"
+    },
+    "404 page is shown when using on-demand revalidation with `dynamicParams=false` and `generateStaticParams` in production": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:09:29.321Z",
+      "reason": "provider error"
+    },
+    "Module '\"next\" has no exported member \"X\" (eg, 'Image', 'NextConfig').": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:10:15.298Z",
+      "reason": "provider error"
+    },
+    "window.history.pushState does not work with transitions": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:11:01.562Z",
+      "reason": "provider error"
+    },
+    "Next.js 13 app dir: Fast Refresh (hot reloading) causes database connection exhaustion": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:11:47.555Z",
+      "reason": "provider error"
+    },
+    "next/dynamic from external package causes hydration errors for combination of pages and app routers": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:12:33.554Z",
+      "reason": "provider error"
+    },
+    "Middleware config does not work with grouped export statement": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:13:19.448Z",
+      "reason": "provider error"
+    },
+    "Web workers do not work when runtime is edge": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:14:05.683Z",
+      "reason": "provider error"
+    },
+    "CJS module package code that contains \"typeof window === 'undefined'\" checks are not excluded from app router client builds": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:14:51.871Z",
+      "reason": "provider error"
+    },
+    "Redirects not working correctly together with middleware": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:15:37.785Z",
+      "reason": "provider error"
+    },
+    "`@next/codemod agents-md`: docs `root` is relative to the cwd, not to the `--output` file (breaks monorepos)": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:16:23.774Z",
+      "reason": "provider error"
+    },
+    "revalidatePath with nextConfig.trailingSlash [true], not working correctly on Vercel deployment": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:17:09.828Z",
+      "reason": "provider error"
+    },
+    "Custom error.tsx page is not rendered for dynamic routes using generateStaticParams / ISR in app router. Pages router 500.tsx is rendered instead": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:17:55.733Z",
+      "reason": "provider error"
+    },
+    "useSearchParams context is missing search params from rewritten url": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:18:41.699Z",
+      "reason": "provider error"
+    },
+    "Selectively overriding dynamic segments with static ones within parallel routes not ideal / slightly broken": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:19:27.734Z",
+      "reason": "provider error"
+    },
+    "Inconsistent behavior of `usePathname` with static rendering during build": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:20:13.673Z",
+      "reason": "provider error"
+    },
+    "`useSearchParams` and `usePathname` do not retain original values when an intercepting route is open": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:20:59.570Z",
+      "reason": "provider error"
+    },
+    "Fetch failed loading: GET \"http://localhost:3000/dashboard/blog?_rsc=1538b\".": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:21:45.555Z",
+      "reason": "provider error"
+    },
+    "revalidatePath doesn't work with debouncing and page navigation": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:22:31.551Z",
+      "reason": "provider error"
+    },
+    "Headers are not set in Edge Runtime (Vercel) but does so locally": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:23:17.595Z",
+      "reason": "provider error"
+    },
+    "CORS error is thrown when preload the page with fonts stylesheet using fontLocal": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:24:03.561Z",
+      "reason": "provider error"
+    },
+    "SWC plugins not working when using Next.js' `transpilePackages`": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:24:49.527Z",
+      "reason": "provider error"
+    },
+    "searchParams object is empty in production build on Vercel ": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:25:35.487Z",
+      "reason": "provider error"
+    },
+    "Link prefetch requests are throwing 404 errors, but only in production.": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:26:21.592Z",
+      "reason": "provider error"
+    },
+    "Loading.tsx and Suspense do not work on second page load and on": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:27:07.670Z",
+      "reason": "provider error"
+    },
+    "Link prefetch doesn't work for the initial page user lands": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:27:53.700Z",
+      "reason": "provider error"
+    },
+    "Problem loading WASM dependency with App Router": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:28:39.700Z",
+      "reason": "provider error"
+    },
+    "Custom Server Not Bundled Correctly with Standalone Build, ESBuild, or Bun": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:29:25.725Z",
+      "reason": "provider error"
+    },
+    "revalidatePath with middleware doesn't work on multi-tenant project": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:30:11.748Z",
+      "reason": "provider error"
+    },
+    "[@next/third-parties] GSC Verification Failed - GTM/GA Scripts in <body>, not <head>": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:30:57.719Z",
+      "reason": "provider error"
+    },
+    "Event Propagation Inconsistency: `stopPropagation` Fails in App Router (but not Pages router)": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:31:43.758Z",
+      "reason": "provider error"
+    },
+    "Confusing error when calling a server function from use cache scope": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:32:29.803Z",
+      "reason": "provider error"
+    },
+    "Error Generating Sitemap with \"output: export\" config": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:33:15.795Z",
+      "reason": "provider error"
+    },
+    "in Page Router, If throw errors in suspended component at server on purpose, Error Popup shows": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:34:01.690Z",
+      "reason": "provider error"
+    },
+    "\"RangeError: WebAssembly.instantiate(): Out of memory: wasm memory\" when using environment with limited virtual memory": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:34:47.706Z",
+      "reason": "provider error"
+    },
+    "Intercepting Routes is not working with a combination of URL query parameters, soft navigation, and hard navigation.": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:35:33.782Z",
+      "reason": "provider error"
+    },
+    "server actions block navigation": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:36:19.850Z",
+      "reason": "provider error"
+    },
+    "Next.js Image Component Resizing Issue in Production": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:37:05.739Z",
+      "reason": "provider error"
+    },
+    "Next.js does not understand TypeScript project references": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:37:51.652Z",
+      "reason": "provider error"
+    },
+    "Client components make bundle size huge": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:38:37.722Z",
+      "reason": "provider error"
+    },
+    "`maxDuration` not honored for pages defining parallel routes": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:39:23.726Z",
+      "reason": "provider error"
+    },
+    "pages folder in src not ignored when app folder exists in root": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:40:09.829Z",
+      "reason": "provider error"
+    },
+    "[arm64][appDir] generateBuildId does't work properly; nextjs build doesn't generate same chunk hash for main-app-[hash].js": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:40:55.744Z",
+      "reason": "provider error"
+    },
+    "Clicking on a <Link> to the current page focuses the first page.tsx element, not the first layout.tsx element": {
+      "count": 1,
+      "lastAt": "2026-11-16T10:41:42.096Z",
       "reason": "provider error"
     }
   },
