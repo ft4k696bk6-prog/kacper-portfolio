@@ -10,7 +10,6 @@ export function UkrainianLanding({page}:{page:UkrainianSalesPage}){
    <div className="mx-auto flex min-h-20 max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3">
     <Link href="/uk" className="flex items-center gap-3 text-sm font-semibold tracking-widest"><span className="rounded-lg border border-white/40 px-3 py-2">KB</span> BERNECKI.DEV</Link>
     <nav aria-label="Навігація" className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-white/75">{nav.map(([href,label])=><Link key={href} href={href} className="hover:text-white">{label}</Link>)}<Link href="/uk/kontakty" className="font-semibold text-white">Контакт</Link></nav>
-    <div className="flex gap-2 text-sm"><Link href={page.pl} lang="pl" className="rounded border border-white/20 px-2 py-1">PL</Link><Link href={page.en} lang="en" className="rounded border border-white/20 px-2 py-1">EN</Link><span aria-current="page" className="rounded bg-white px-2 py-1 text-black">УКР</span></div>
    </div>
   </header>
   <main>
