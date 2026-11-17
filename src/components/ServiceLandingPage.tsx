@@ -248,6 +248,36 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           </div>
         </section>
       )}
+      {kind === "websites" && (
+        <section className="mx-auto max-w-6xl px-5 py-12 md:px-8" aria-labelledby="website-delivery">
+          <div className="rounded-2xl border border-white/15 p-7 md:p-10">
+            <p className="page-eyebrow">Od briefu do działającej strony</p>
+            <h2 id="website-delivery" className="mt-4 text-3xl">Co dokładnie obejmuje wdrożenie strony firmowej?</h2>
+            <p className="mt-5 max-w-4xl leading-8 text-white/75">Zaczynam od określenia, kto ma trafić na stronę i jaki następny krok powinien wykonać: zadzwonić, poprosić o ofertę lub zostawić dane. Dopiero do tego dobieram układ treści, architekturę podstron i technologię. Nie każdej firmie potrzebny jest rozbudowany serwis.</p>
+            <div className="mt-7 grid gap-5 md:grid-cols-3">
+              <article><h3 className="text-xl">1. Projekt i treść</h3><p className="mt-3 leading-7 text-white/70">Struktura oferty, czytelne nagłówki usług, nawigacja, wersja mobilna i wyraźne przyciski kontaktu. Materiały od klienta są porządkowane pod potrzeby odbiorcy.</p></article>
+              <article><h3 className="text-xl">2. Budowa i integracje</h3><p className="mt-3 leading-7 text-white/70">Formularz, przekazywanie zapytań, techniczne SEO, szybkość ładowania i pomiar działań po uzyskaniu odpowiedniej zgody. Zakres integracji ustalamy przed wyceną.</p></article>
+              <article><h3 className="text-xl">3. Uruchomienie i kontrola</h3><p className="mt-3 leading-7 text-white/70">Testy na telefonie i komputerze, kontrola adresów, przekierowań, sitemap i działania formularza. Dalsze zmiany i utrzymanie rozliczamy zgodnie z umówionym zakresem.</p></article>
+            </div>
+            <p className="mt-6 leading-7 text-white/75">Przykłady moich projektów to <Link href="/case-studies/starcars" className="underline underline-offset-4">StarCars</Link>, <Link href="/case-studies/motomizer" className="underline underline-offset-4">Motomizer</Link> oraz <Link href="/case-studies/isto-kebab" className="underline underline-offset-4">Isto Kebab</Link>. Porównaj je z <Link href="/pakiety" className="underline underline-offset-4">pakietami</Link> i <Link href="/cennik" className="underline underline-offset-4">cennikiem usług</Link>, a następnie <Link href={contactHref} className="underline underline-offset-4">wyślij brief</Link>.</p>
+          </div>
+        </section>
+      )}
+      {kind === "apps" && (
+        <section className="mx-auto max-w-6xl px-5 py-12 md:px-8" aria-labelledby="crm-delivery">
+          <div className="rounded-2xl border border-white/15 p-7 md:p-10">
+            <p className="page-eyebrow">Jak powstaje CRM na zamówienie</p>
+            <h2 id="crm-delivery" className="mt-4 text-3xl">Przykład funkcjonalności: B-CRM i proces obsługi leadów</h2>
+            <p className="mt-5 max-w-4xl leading-8 text-white/75">W B-CRM proces zaczyna się od zebrania kontaktu, który trafia do przypisanego pracownika. Handlowcy pracują na statusach, zadaniach i kalendarzu, a uprawnienia pozwalają odróżnić dostęp sprzedawcy od dostępu menedżera. To przykład wdrożonego podejścia, a nie gotowa lista funkcji dla każdej firmy.</p>
+            <div className="mt-7 grid gap-5 md:grid-cols-3">
+              <article><h3 className="text-xl">Proces przed ekranami</h3><p className="mt-3 leading-7 text-white/70">Mapuję źródła leadów, reguły przydzielania, etapy sprzedaży i raporty. Jeśli wystarczy gotowy CRM, nie rekomenduję budowy własnego systemu.</p></article>
+              <article><h3 className="text-xl">Integracje i automatyzacja</h3><p className="mt-3 leading-7 text-white/70">W zależności od zakresu łączę formularze, Meta Lead Ads, dane z usług Google i API z bazą kontaktów. Sprawdzamy też, gdzie automatyczne przekazanie statusu zmniejsza ręczną pracę.</p></article>
+              <article><h3 className="text-xl">Bezpieczeństwo i rozwój</h3><p className="mt-3 leading-7 text-white/70">Role użytkowników, kontrola widoczności danych, testy procesów, dokumentacja i wdrożenie etapami. Integracje i utrzymanie wyceniam dopiero po ustaleniu wymagań.</p></article>
+            </div>
+            <p className="mt-6 leading-7 text-white/75">Zobacz <Link href="/case-studies/b-crm" className="underline underline-offset-4">case study B-CRM</Link> oraz <Link href="/crm-dla-firm-handlowych" className="underline underline-offset-4">CRM dla działu handlowego</Link>. Sprawdź <Link href="/cennik" className="underline underline-offset-4">orientacyjne ceny</Link> lub <Link href={contactHref} className="underline underline-offset-4">opisz swój proces</Link>.</p>
+          </div>
+        </section>
+      )}
       <section className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-[0.8fr_1.2fr] md:px-8 md:py-24">
         <div>
           <p className="text-sm uppercase tracking-[0.18em] text-white">
