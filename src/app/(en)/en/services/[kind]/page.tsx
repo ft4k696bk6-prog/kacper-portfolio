@@ -27,7 +27,7 @@ export default async function EnglishServicesPage({params}:Props){
    <h1 className="mt-5 text-4xl leading-tight text-white md:text-6xl">{service.heading}</h1>
    <p className="mt-7 text-lg leading-8 text-white/75">{service.intro}</p>
    <div className="mt-8 flex flex-wrap gap-4">
-    <Link href="/#contact" className="brand-action rounded-lg px-6 py-3 text-black">Discuss your project</Link>
+    <Link href="/en/contact" className="brand-action rounded-lg px-6 py-3 text-black">Discuss your project</Link>
     <Link href="/en/case-studies" className="brand-outline rounded-lg px-6 py-3 text-white">Explore case studies</Link>
    </div>
   </header>
@@ -48,13 +48,33 @@ export default async function EnglishServicesPage({params}:Props){
    </>}
    <nav aria-label="Project details" className="mt-6 flex flex-wrap gap-5 text-sm"><Link href="/en/pricing" className="underline underline-offset-4">Service pricing</Link><Link href="/en/case-studies" className="underline underline-offset-4">Real projects</Link><Link href="/en/contact" className="underline underline-offset-4">Request a quote</Link></nav>
   </section>}
+  {kind==="websites"&&<section className="mt-16 rounded-2xl border border-white/15 p-7 md:p-10">
+   <h2 className="text-2xl">What is included in a business website?</h2>
+   <p className="mt-5 leading-8 text-white/75">The starting point is the desired customer action: request a quote, call the business or book a service. I then map pages, content hierarchy, responsive layouts and the technical implementation to that goal rather than recommending a large website by default.</p>
+   <div className="mt-6 grid gap-5 md:grid-cols-3">
+    <article><h3 className="text-xl">Content and layout</h3><p className="mt-3 leading-7 text-white/70">Clear service explanations, navigation, mobile-first layouts and prominent enquiry routes.</p></article>
+    <article><h3 className="text-xl">Implementation</h3><p className="mt-3 leading-7 text-white/70">Contact forms, lead delivery, technical SEO and optional integrations selected for the agreed scope.</p></article>
+    <article><h3 className="text-xl">Launch checks</h3><p className="mt-3 leading-7 text-white/70">Responsive testing, redirects, crawlable pages, sitemap and functioning enquiry forms. Ongoing maintenance is scoped separately.</p></article>
+   </div>
+   <p className="mt-6 leading-7 text-white/75">Review <Link className="underline underline-offset-4" href="/en/projects/starcars">StarCars</Link> and <Link className="underline underline-offset-4" href="/en/projects/motomizer">Motomizer</Link>, compare <Link className="underline underline-offset-4" href="/en/packages">packages</Link> and <Link className="underline underline-offset-4" href="/en/pricing">individual prices</Link>, or <Link className="underline underline-offset-4" href="/en/contact">request a quote</Link>.</p>
+  </section>}
+  {kind==="crm"&&<section className="mt-16 rounded-2xl border border-white/15 p-7 md:p-10">
+   <h2 className="text-2xl">B-CRM: an example of a tailored sales workflow</h2>
+   <p className="mt-5 leading-8 text-white/75">B-CRM brings incoming leads, assigned salespeople, follow-up tasks and status updates into one process. Managers have different visibility and editing permissions from sales representatives. These are examples of implemented functionality, not a fixed feature bundle promised for every project.</p>
+   <div className="mt-6 grid gap-5 md:grid-cols-3">
+    <article><h3 className="text-xl">Map the process</h3><p className="mt-3 leading-7 text-white/70">Document lead sources, ownership rules, sales stages and reporting before designing the interface. Sometimes an off-the-shelf CRM is the better fit.</p></article>
+    <article><h3 className="text-xl">Integrate the tools</h3><p className="mt-3 leading-7 text-white/70">Connect website forms, Meta Lead Ads, Google services and other APIs where they actually reduce manual work.</p></article>
+    <article><h3 className="text-xl">Build safely</h3><p className="mt-3 leading-7 text-white/70">Role-based access, workflow tests, incremental rollout and clear scoping of integrations and ongoing support.</p></article>
+   </div>
+   <p className="mt-6 leading-7 text-white/75">Explore the <Link className="underline underline-offset-4" href="/case-studies/b-crm">B-CRM case study</Link>, check <Link className="underline underline-offset-4" href="/en/pricing">indicative pricing</Link> and <Link className="underline underline-offset-4" href="/en/contact">describe your process</Link>.</p>
+  </section>}
   <section className="mt-16 border-t border-white/15 pt-12">
    <h2 className="text-2xl">Project scope</h2><p className="mt-4 max-w-3xl leading-8 text-white/75">{service.scope}</p>
    {kind==="marketing"&&<p className="mt-5 leading-7 text-white/75">See the <Link className="underline underline-offset-4" href="/en/case-studies/re-energy-meta-ads">Re-Energy System Meta Ads case study</Link> for campaign results.</p>}
    {kind==="crm"&&<p className="mt-5 leading-7 text-white/75">Explore the <Link href="/case-studies/b-crm" className="underline underline-offset-4">B-CRM demonstration</Link> and its lead management features.</p>}
   </section>
   <div className="mt-16 flex flex-wrap items-center gap-5">
-   <Link href="/#contact" className="brand-action rounded-lg px-6 py-4 text-black">Book a conversation</Link>
+   <Link href="/en/contact" className="brand-action rounded-lg px-6 py-4 text-black">Book a conversation</Link>
    <Link href={service.original} className="text-sm text-white/75 underline underline-offset-4">Read in Polish</Link>
   </div>
  </main>;
