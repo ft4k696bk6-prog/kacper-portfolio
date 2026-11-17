@@ -3,7 +3,7 @@ export const toolboxItems: ToolboxItem[] =  [
   {
     "slug": "audyt-strony",
     "title": "Darmowy kompleksowy audyt strony internetowej",
-    "description": "Wpisz jeden adres i sprawdź do 7 publicznych podstron: SEO, indeksowanie, meta tagi, obrazy, TLS, DNS, analitykę i nagłówki bezpieczeństwa. Jeden zbiorczy raport.",
+    "description": "Wpisz adres i sprawdź do 7 podstron: SEO, indeksowanie, meta tagi, obrazy, TLS, DNS, analitykę i nagłówki bezpieczeństwa. Jeden zbiorczy raport.",
     "category": "WWW i SEO",
     "mode": "site",
     "hint": "Zbiorczy raport analizuje do 7 podstron tej samej domeny oraz publiczne ustawienia robots.txt, sitemap.xml, SSL i poczty. Podpowiada konkretne poprawki, bez przełączania się pomiędzy osobnymi testerami.",

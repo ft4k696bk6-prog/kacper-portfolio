@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const root="https://bernecki.dev";
 export const metadata:Metadata={
- title:"Business Packages: Websites, Ads, CRM and Growth | bernecki.dev",
+ title:"Business Website, CRM & Ads Packages | bernecki.dev",
  description:"Compare website, Google and Meta Ads, CRM, automation and business growth packages. Clear deliverables, starting prices and separate advertising budgets.",
  alternates:{canonical:root+"/en/packages",languages:{"pl-PL":root+"/pakiety",en:root+"/en/packages"}},
 };

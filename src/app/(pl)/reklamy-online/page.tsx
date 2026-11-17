@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Reklamy Google, Meta, TikTok, YouTube i LinkedIn | bernecki.dev",
+  title: "Reklamy Google, Meta i LinkedIn dla firm | bernecki.dev",
   description: "Kampanie Google Ads, Facebook/Instagram, TikTok, YouTube i LinkedIn: dobór kanału, budżety testowe, grupy docelowe, analityka i CRM. Wycena obsługi.",
   alternates: { canonical: "https://bernecki.dev/reklamy-online",languages:{"pl-PL":"https://bernecki.dev/reklamy-online",en:"https://bernecki.dev/en/advertising"} },
 };

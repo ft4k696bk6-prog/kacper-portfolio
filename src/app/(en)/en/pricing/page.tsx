@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const base="https://bernecki.dev";
 export const metadata:Metadata={
- title:"Website, CRM, Advertising & Automation Pricing | bernecki.dev",
+ title:"Website, CRM and Ads Pricing | bernecki.dev",
  description:"Transparent starting prices for business websites, custom CRM, Google and Meta Ads, automation and ad audits. See individual services and bundled packages.",
  alternates:{canonical:base+"/en/pricing",languages:{"pl-PL":base+"/cennik",en:base+"/en/pricing"}},
  openGraph:{url:base+"/en/pricing",locale:"en_US",title:"Service pricing | bernecki.dev"},

@@ -4,7 +4,7 @@ import Link from "next/link";
 const base="https://bernecki.dev";
 export const metadata:Metadata={
  title:"Google, Meta, TikTok, YouTube and LinkedIn Advertising",
- description:"Compare ad platforms, example test budgets, audience strategies and lead tracking. Google Ads, Facebook and Instagram campaigns, CRM integration and clear pricing.",
+ description:"Compare Google, Meta, TikTok, YouTube and LinkedIn ads, test budgets, lead tracking and CRM integrations. See campaign services and pricing.",
  alternates:{canonical:base+"/en/advertising",languages:{"pl-PL":base+"/reklamy-online",en:base+"/en/advertising"}},
 };
 const channels=[
