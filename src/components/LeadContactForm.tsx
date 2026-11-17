@@ -90,7 +90,7 @@ export function LeadContactForm({initialService="",initialMessage="",english=fal
  return <div className="rounded-2xl border border-white/15 bg-white/[0.025] p-5 sm:p-7">
   <div className="mb-6">
    <p className="text-xs uppercase tracking-[0.16em] text-white/55">{english?"Project enquiry":"Zapytanie ofertowe"}</p>
-   <h3 className="mt-2 text-2xl font-semibold text-white">{english?"Tell me what you need":"Napisz, co chcesz zrobić"}</h3>
+   <h2 className="mt-2 text-2xl font-semibold text-white">{english?"Tell me what you need":"Napisz, co chcesz zrobić"}</h2>
    <p className="mt-2 text-sm leading-6 text-white/65">{english?"A short description is enough. No technical brief needed.":"Wystarczy kilka zdań. Nie musisz znać technicznych szczegółów."}</p>
   </div>
   <form onSubmit={submit} className="grid gap-4">
