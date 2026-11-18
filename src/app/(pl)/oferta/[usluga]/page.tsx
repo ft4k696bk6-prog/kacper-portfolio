@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? withBrand
     : service.title.length <= 60
       ? service.title
-      : service.title.slice(0, 60).replace(/\\s+\\S*$/, "").replace(/[\\s–—-]+$/, "");
+      : service.title.slice(0, 60).split(" ").slice(0, -1).join(" ").replace(/[–—-]+$/, "").trim();
   return {
     title: { absolute: seoTitle },
     description: `${offer.intro} ${service.decision}`.slice(0, 158),
