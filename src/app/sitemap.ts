@@ -154,8 +154,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     }) satisfies MetadataRoute.Sitemap[number]),
   ];
-  // Add reciprocal Ukrainian alternates to existing matching Polish/English pages.
-  return entries.map(entry=>{
+  // One canonical <loc> per page. Several sources (translated services, realizations,
+  // guides and standalone offers) can expose the same URL as the site grows.
+  // Merge reciprocal language links rather than publishing duplicate sitemap entries.
+  const unique = new Map<string, MetadataRoute.Sitemap[number]>();
+  for (const entry of entries) {
+    const previous = unique.get(entry.url);
+    if (!previous) {
+      unique.set(entry.url, entry);
+      continue;
+    }
+    unique.set(entry.url, {
+      ...previous,
+      alternates: previous.alternates || entry.alternates
+        ? { languages: { ...previous.alternates?.languages, ...entry.alternates?.languages } }
+        : undefined,
+      lastModified: previous.lastModified ?? entry.lastModified,
+    });
+  }
+  // Add reciprocal Ukrainian alternates to matching Polish/English pages.
+  return [...unique.values()].map(entry=>{
     const match=ukSalesPages.find(page=>entry.url===siteUrl+page.pl||entry.url===siteUrl+page.en);
     if(!match)return entry;
     return {...entry,alternates:{languages:{...(entry.alternates?.languages||{}),...ukAlternates(match)}}};
