@@ -9,6 +9,7 @@ import { englishServices, englishRealizations } from "../content/english-busines
 import {blogPosts, BLOG_PUBLISHED_DATE} from "../content/blog";
 import { serviceCities } from "../lib/service-cities";
 import { localOffers } from "../lib/local-offers";
+import { commercialServiceSlugs } from "../content/commercial-services";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = "https://bernecki.dev";
@@ -67,6 +68,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       }))
     ),
 
+
+    // National, substantial commercial landing pages - prioritized over city variants.
+    ...commercialServiceSlugs.map(slug => ({
+      url: siteUrl + "/oferta/" + slug,
+      lastModified: new Date("2026-11-18"),
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })),
 
     { url: siteUrl + "/google-ads-dla-firm", changeFrequency: "monthly", priority: 0.95 },
     { url: siteUrl + "/narzedzia/kalkulator-budzetu-google-ads", changeFrequency: "monthly", priority: 0.85 },
