@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { serviceCities } from "@/lib/service-cities";
+import { commercialServiceDetails, commercialServiceSlugs } from "@/content/commercial-services";
 
 export const metadata: Metadata = {
   title: "Strony internetowe, CRM, marketing i AI — obsługa firm w całej Polsce",
@@ -66,6 +67,23 @@ export default function ServicesIndex() {
         <div className="mt-6 flex flex-wrap gap-3">
           {offers.map(([name, href]) => <Link key={href} className="rounded-full border border-white/25 px-5 py-3 hover:bg-white/10" href={href}>{name}</Link>)}
         </div>
+        <section className="mt-16 border-t border-white/10 pt-12" aria-labelledby="specializacje-heading">
+          <p className="text-xs font-semibold uppercase tracking-[.16em] text-white/50">Szczegółowe specjalizacje · Cała Polska</p>
+          <h2 id="specializacje-heading" className="mt-4 text-3xl font-semibold">Znajdź konkretną usługę – od SEO i reklam po SaaS i AI</h2>
+          <p className="mt-4 max-w-4xl leading-8 text-white/70">Nie musisz szukać osobnego wykonawcy do strony, CRM, aplikacji, chatbota czy integracji. Wybierz problem, który chcesz rozwiązać. Każda oferta wyjaśnia, dla kogo jest, co obejmuje i czego trzeba do wyceny. Opisy dotyczą ogólnopolskiej współpracy, nie fikcyjnych lokalnych oddziałów.</p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {commercialServiceSlugs.map(slug => {
+              const service = commercialServiceDetails[slug];
+              return <Link href={"/oferta/" + slug} key={slug} className="group rounded-2xl border border-white/15 bg-white/[.035] p-6 transition hover:border-white/50">
+                <span className="text-xs uppercase tracking-[.14em] text-white/45">{service.category}</span>
+                <h3 className="mt-3 text-lg font-semibold group-hover:underline">{service.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-white/65">{service.problem}</p>
+                <span className="mt-5 inline-block text-sm font-medium text-white/90">Zakres i wycena</span>
+              </Link>;
+            })}
+          </div>
+        </section>
+
         <section className="mt-16 border-t border-white/10 pt-12" aria-labelledby="cases-heading">
           <h2 id="cases-heading" className="text-2xl font-semibold">Zobacz, jak wyglądają rzeczywiste wdrożenia</h2>
           <p className="mt-3 max-w-3xl leading-7 text-white/65">Przykłady działających produktów i kampanii pomagają ocenić doświadczenie lepiej niż sama lista oferowanych technologii.</p>

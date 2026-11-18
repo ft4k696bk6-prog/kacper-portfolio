@@ -15,6 +15,7 @@ import { Projects } from "./Projects";
 import { ContactReveal } from "./ContactReveal";
 import { LeadContactForm } from "./LeadContactForm";
 import { OfferCards } from "./OfferCards";
+import { commercialServiceDetails } from "@/content/commercial-services";
 import styles from "./HomeStudio.module.css";
 
 export function HomeStudio() {
@@ -233,6 +234,30 @@ export function HomeStudio() {
       </div>
       <Link href={lang==="en"?"/en/contact":"/kontakt"} className="mt-7 inline-flex items-center gap-2 text-sm text-white underline underline-offset-4">{lang === "pl" ? "Wolisz zlecić wykonanie? Napisz do mnie" : "Need an implementation? Contact me"} <ArrowRight size={16}/></Link>
     </section>
+    {lang === "pl" && (
+      <section className={styles.section} aria-labelledby="home-services-heading">
+        <div>
+          <p className={styles.eyebrow}>Usługi dla firm · Cała Polska</p>
+          <h2 id="home-services-heading">Strony, reklamy, CRM, AI i aplikacje – wybierz konkretną usługę</h2>
+          <p className="mt-4 max-w-3xl leading-7 text-white/65">Możesz zamówić pojedyncze wdrożenie albo połączyć stronę, reklamę, obsługę kontaktów i system firmowy. Najważniejsze są zakres, działające przykłady i sposób zdobywania klientów.</p>
+        </div>
+        <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {([
+            ["Tworzenie stron WWW", "/tworzenie-stron-internetowych"],
+            ["CRM na zamówienie", "/crm-i-aplikacje-webowe"],
+            ["Reklamy Meta Ads", "/reklamy-meta-ads-dla-firm"],
+            ["Google Ads", "/google-ads-dla-firm"],
+            ["Wdrożenia AI", "/wdrozenia-ai-dla-firm"],
+            ["Automatyzacja sprzedaży", "/automatyzacja-leadow-i-sprzedazy"],
+            ...(["chatbot-ai-dla-firm","audyt-seo","integracje-api","mvp-dla-startupow","aplikacje-webowe-na-zamowienie","aplikacje-saas"] as const)
+              .map(slug => [commercialServiceDetails[slug].title, "/oferta/" + slug]),
+          ] as string[][]).map(([title, href]) => <Link key={href} href={href} className="rounded-xl border border-white/15 bg-white/[.025] p-4 text-sm font-medium text-white hover:border-white/50 hover:bg-white/[.06]">{title} <ArrowRight className="ml-1 inline h-4 w-4"/></Link>)}
+        </div>
+        <Link href="/uslugi" className="mt-6 inline-flex items-center gap-2 underline underline-offset-4">
+          Pełny katalog usług i specjalizacji <ArrowRight size={17}/>
+        </Link>
+      </section>
+    )}
     <section id="about" className={`${styles.section} ${styles.about}`}>
       <div><p className={styles.eyebrow}>{lang === "pl" ? "O mnie" : "About me"}</p><h2>{c.about}</h2><p className={styles.bio}>{c.bio}</p><div className={styles.textLinks}><Link href={lang==="en"?"/en/case-studies":"/case-studies/b-crm"}>{c.technical}<ArrowUpRight size={15}/></Link><a href={t.contact.github} target="_blank" rel="noopener noreferrer">GitHub<ArrowUpRight size={15}/></a></div></div>
       <ol className={styles.steps}>{c.steps.map(([title, description], i) => <li key={title}><span>0{i+1}</span><div><h3>{title}</h3><p>{description}</p></div></li>)}</ol>
