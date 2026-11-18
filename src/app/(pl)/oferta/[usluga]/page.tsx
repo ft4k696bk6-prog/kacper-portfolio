@@ -60,8 +60,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const offer = getOffer(usluga);
   if (!service || !offer) return {};
   const url = `${base}/oferta/${usluga}`;
+  const withBrand = service.title + " | Bernecki.dev";
+  const seoTitle = withBrand.length <= 60
+    ? withBrand
+    : service.title.length <= 60
+      ? service.title
+      : service.title.slice(0, 60).replace(/\\s+\\S*$/, "").replace(/[\\s–—-]+$/, "");
   return {
-    title: { absolute: `${service.title} | Bernecki.dev` },
+    title: { absolute: seoTitle },
     description: `${offer.intro} ${service.decision}`.slice(0, 158),
     alternates: { canonical: url },
     robots: { index: true, follow: true },
