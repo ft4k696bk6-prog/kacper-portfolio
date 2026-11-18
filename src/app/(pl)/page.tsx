@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { StaticPortfolio } from "@/components/StaticPortfolio";
 
 export const metadata: Metadata = {
-  title: { absolute: "Strony internetowe, CRM i reklamy Google i Facebook – Bernecki" },
+  title: { absolute: "Strony WWW, CRM, reklamy i AI – Bernecki" },
   description:
     "Strony WWW, dedykowany CRM, prowadzenie reklam Google Ads i Facebook Ads oraz automatyzacja obsługi klientów. Przykłady prac, pakiety i cennik.",
   alternates:{canonical:"https://bernecki.dev/",languages:{"pl-PL":"https://bernecki.dev/",en:"https://bernecki.dev/en"}},
