@@ -3,8 +3,8 @@ import { ServiceLandingPage } from "@/components/ServiceLandingPage";
 
 export const metadata = {
   ...serviceMetadata(
-  "Wykonawca stron internetowych dla firm | bernecki.dev",
-  "Szukasz firmy do zrobienia strony internetowej? Kacper Bernecki projektuje i wdraża strony usługowe, firmowe i landing page. Zobacz realizacje i zapytaj o wycenę.",
+  "Tworzenie stron internetowych dla firm – cena i realizacje",
+  "Tworzenie stron internetowych dla firm: landing page od 1900 zł netto, strony firmowe od 3900 zł netto. Zobacz StarCars, Isto Kebab i Motomizer oraz zapytaj o wycenę.",
   "tworzenie-stron-internetowych",
 ),
   alternates: {canonical:"https://bernecki.dev/tworzenie-stron-internetowych",languages:{"pl-PL":"https://bernecki.dev/tworzenie-stron-internetowych",en:"https://bernecki.dev/en/services/websites"}}
