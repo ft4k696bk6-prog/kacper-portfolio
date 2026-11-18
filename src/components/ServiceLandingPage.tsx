@@ -102,27 +102,20 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           { name: "Motomizer", slug: "motomizer", image: "motomizer-live.jpg" },
           { name: "StarCars", slug: "starcars", image: "starcars-live.jpg" },
         ];
-  const faq = [
-    {
-      question: "Czy pracuję bezpośrednio z klientem?",
-      answer:
-        "Tak. Nie jestem dużą agencją — kontaktujesz się bezpośrednio z osobą, która analizuje problem, buduje rozwiązanie i odpowiada za jakość wykonania.",
-    },
-    {
-      question: "Czy można zacząć od małego zakresu?",
-      answer:
-        "Tak. Możemy zacząć od landing page, pierwszej wersji CRM-u albo konkretnego fragmentu procesu i rozwijać rozwiązanie etapami.",
-    },
-    {
-      question: "Czy dostanę uczciwą wycenę?",
-      answer:
-        "Tak. Najpierw ustalamy cel, zakres i ryzyka, a potem dostajesz konkretną wycenę. Nie sprzedaję pakietu korporacyjnych dodatków, których nie potrzebujesz.",
-    },
-    {
-      question: "Czy pracuję z klientami z całej Polski?",
-      answer:
-        "Tak. Pracuję zdalnie, a rozmowę i ustalenia możemy prowadzić online.",
-    },
+  const faq = kind === "websites" ? [
+    { question: "Ile kosztuje landing page lub strona firmowa?", answer: "Landing page z jedną ofertą i formularzem kosztuje od 1 900 zł netto, a strona firmowa z podstronami od 3 900 zł netto. Ostateczna cena zależy od liczby widoków, treści i integracji." },
+    { question: "Czy mogę zobaczyć działające strony przed wyceną?", answer: "Tak. W realizacjach znajdziesz StarCars z kalkulatorem kosztów importu, Isto Kebab z menu i procesem zamawiania oraz prezentację produktu Motomizer. Możesz sprawdzić zakres projektów przed kontaktem." },
+    { question: "Czy strona będzie gotowa pod reklamy i wyszukiwarki?", answer: "W ustalonym zakresie przygotowuję responsywny widok, formularz, czytelną strukturę treści i podstawy technicznego SEO. Pomiar zdarzeń i integracje reklamowe ustalamy indywidualnie." },
+    { question: "Jak rozpocząć współpracę nad stroną WWW?", answer: "Wystarczy podać branżę, cel strony, przykładowe witryny i budżet. Na tej podstawie ustalimy, czy potrzebujesz landing page, strony firmowej czy rozbudowanej aplikacji." },
+  ] : kind === "apps" ? [
+    { question: "Czy dedykowany CRM sprawdzi się w firmie handlowej?", answer: "Tak, jeśli firma potrzebuje własnego procesu: przypisywania leadów, zadań, komentarzy, ról użytkowników i statusów sprzedaży. B-CRM pokazuje takie wdrożenie w praktyce." },
+    { question: "Czy mogę obejrzeć B-CRM przed zamówieniem systemu?", answer: "Tak. Dostępne jest case study B-CRM oraz prezentacja możliwości. Na jego podstawie możemy omówić, które moduły mają sens w Twojej firmie." },
+    { question: "Czy CRM można połączyć z reklamami, formularzami i plikami?", answer: "Tak. W B-CRM wykorzystywane są połączenia z Meta Lead Ads oraz Google Drive. W nowym projekcie zakres integracji, uprawnienia i przepływ danych ustalamy przed wyceną." },
+    { question: "Od czego zależy cena CRM na zamówienie?", answer: "Przede wszystkim od liczby modułów, ról, integracji, migracji danych i testów bezpieczeństwa. Możemy najpierw wdrożyć mniejszy zakres, a następnie rozbudować system." },
+  ] : [
+    { question: "Czy prowadzę reklamy oraz obsługę leadów?", answer: "Tak. Mogę połączyć ofertę, kampanię, formularz i dalszy kontakt handlowca, a nie tylko przygotować samą kreację reklamową." },
+    { question: "Czy można zacząć od audytu istniejącej kampanii?", answer: "Tak. Najpierw analizuję ofertę, formularz, koszt i jakość kontaktów. Następnie ustalamy, czy potrzebna jest zmiana reklamy, strony lub procesu sprzedaży." },
+    { question: "Czy mogę połączyć reklamy z CRM?", answer: "Tak. Zakres integracji i pomiaru konwersji zależy od używanych narzędzi, dostępu do danych i zgód użytkowników." },
   ];
 
   const jsonLd = {
