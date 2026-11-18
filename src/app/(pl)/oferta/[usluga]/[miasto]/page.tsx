@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cityExamples, getLocalOffer, getServiceCity, localOffers, serviceCities } from "@/lib/local-offers";
+import { commercialServiceDetails } from "@/content/commercial-services";
 import { getGoogleAdsCityPlan } from "@/lib/google-ads-local";
 
 type Props = { params: Promise<{ usluga: string; miasto: string }> };
@@ -118,6 +119,11 @@ export default async function LocalOfferPage({ params }: Props) {
           <Link href="/kontakt" className="rounded-full bg-white px-7 py-4 font-semibold text-black transition hover:bg-white/85">
             Porozmawiaj o projekcie
           </Link>
+          {commercialServiceDetails[offer.slug] && (
+            <Link href={"/oferta/" + offer.slug} className="rounded-full border border-white/25 px-7 py-4 font-medium transition hover:border-white/60">
+              Pełen zakres usługi w Polsce
+            </Link>
+          )}
           <Link href={offer.caseHref} className="rounded-full border border-white/25 px-7 py-4 font-medium transition hover:border-white/60">
             {offer.caseLabel}
           </Link>
