@@ -52,7 +52,11 @@ async function getBotProof():Promise<Proof>{
 
 export function LeadContactForm({initialService="",initialMessage="",english=false}:{initialService?:string;initialMessage?:string;english?:boolean}){
  const [name,setName]=useState(""),[email,setEmail]=useState(""),[company,setCompany]=useState("");
- const [service,setService]=useState(options.some(([v])=>v===initialService)?initialService:"");
+ const normalizedInitialService=initialService.trim();
+ // Preserve the precise service selected from a commercial landing page, not only predefined categories.
+ const customService=normalizedInitialService && !options.some(([value])=>value===normalizedInitialService)
+  ? normalizedInitialService : "";
+ const [service,setService]=useState(normalizedInitialService);
  const [message,setMessage]=useState(initialMessage),[website,setWebsite]=useState("");
  const [readPolicy,setReadPolicy]=useState(false);
  const [status,setStatus]=useState<Status>("idle"),[feedback,setFeedback]=useState("");
@@ -108,6 +112,7 @@ export function LeadContactForm({initialService="",initialMessage="",english=fal
     </label>
     <label className="grid gap-2 text-sm text-white/85">{english?"Project type":"Czego potrzebujesz?"}
      <select className={field} name="service" value={service} onChange={e=>setService(e.target.value)}>
+      {customService && <option value={customService}>{customService}</option>}
       {options.map(([value,label])=><option key={value} value={value}>{english?englishOptions[value]||label:label}</option>)}
      </select>
     </label>
