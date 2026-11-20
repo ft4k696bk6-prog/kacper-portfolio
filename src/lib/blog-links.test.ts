@@ -48,7 +48,7 @@ describe("bilingual blog and contextual internal SEO links",()=>{
   }
   expect(blogPostsForGuideCategory("domeny-poczta")).toEqual([]);
  });
- it("publishes all blog and guide URLs with reciprocal hreflang in sitemap",()=>{
+ it("publishes blog URLs with reciprocal hreflang and excludes the bulk guide archive from sitemap",()=>{
   const byUrl=new Map(sitemap().map(item=>[item.url,item]));
   const base="https://bernecki.dev";
   for(const slug of ["",...blogPosts.map(post=>"/"+post.slug)]){
@@ -60,6 +60,7 @@ describe("bilingual blog and contextual internal SEO links",()=>{
    expect(enItem?.alternates?.languages?.["pl-PL"]).toBe(pl);
    expect(enItem?.alternates?.languages?.en).toBe(en);
   }
-  for(const guide of allGuides)expect(byUrl.has(base+"/poradniki/"+guide.slug)).toBe(true);
+  expect(urls.some(item=>item.url.startsWith(base+"/poradniki/"))).toBe(false);
+  expect(urls.some(item=>item.url.startsWith(base+"/en/guides/"))).toBe(false);
  });
 });

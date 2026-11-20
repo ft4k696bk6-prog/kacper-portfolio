@@ -370,7 +370,11 @@ export const blogPosts: BlogPost[] = [
     slug: "targetowanie-meta-ads-kosiarki-zainteresowania-a-zakup",
     topic: "marketing",
     guideCategories: ["meta-ads"],
-    guideSlugs: [],
+    guideSlugs: [
+      "meta-leady-tanie-ale-nie-jakosciowe",
+      "ile-kosztuje-lead-z-facebook-ads",
+      "meta-lead-ads-formularz-jest-crm-pusty",
+    ],
     service: { pl: "/reklamy-meta-ads-dla-firm", en: "/en/meta-ads" },
     pl: {
       title: "Dlaczego reklama kosiarek trafia do osób, które nie chcą kupić kosiarki?",
@@ -412,7 +416,7 @@ export const blogPosts: BlogPost[] = [
           "An ad can earn inexpensive clicks from curious visitors who will never purchase. Compare qualified enquiries, purchases and sales rather than relying only on CTR and CPC.",
           "For phone-based sales, connect appropriately collected downstream conversion signals to campaign measurement."
         ] },
-        { heading: "A practical test", paragraphs: [
+        { heading: "A practical test without wasted spend", paragraphs: [
           "Start with one offer and a few meaningfully different creatives. If budget permits, compare broad delivery with a carefully chosen interest-based audience. Avoid changing every variable every day.",
           "Review the full path from impression to landing page and purchase. Weak results may reflect the offer, pricing or website rather than targeting alone."
         ] }

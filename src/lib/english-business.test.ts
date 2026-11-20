@@ -24,7 +24,7 @@ describe("genuine English editions of public business pages",()=>{
    expect(service.points).toHaveLength(4);
   }
  });
- it("adds reciprocal PL-EN alternate links for business pages and all 418 guides",()=>{
+ it("adds reciprocal PL-EN alternate links for business pages and excludes the bulk guide archive",()=>{
   const urls=sitemap();
   const byUrl=new Map(urls.map(entry=>[entry.url,entry]));
   const pagePairs=[
@@ -43,7 +43,7 @@ describe("genuine English editions of public business pages",()=>{
    expect(b?.alternates?.languages?.["pl-PL"]).toBe(base+polish);
    expect(b?.alternates?.languages?.en).toBe(base+english);
   }
-  expect(urls.filter(entry=>entry.url.includes("/en/guides/")&&!entry.url.includes("/topics/")).length).toBeGreaterThanOrEqual(418);
+  expect(urls.some(entry=>entry.url.includes("/en/guides/"))).toBe(false);
  });
  it("uses customer-facing English rather than internal source or audit notes",()=>{
   const raw=JSON.stringify([englishServices,englishRealizations]);
