@@ -5,7 +5,7 @@ import metaAdsDeepDiveJson from "@/content/metaAdsDeepDives.json";
 const metaAdsDeepDives = metaAdsDeepDiveJson as Record<string,{heading:string;points:string[];outcome:string}>;
 import { Fragment } from "react";
 import { notFound } from "next/navigation";
-import { allGuides, getGuide, guideCategory, getCategory, getRelatedGuides, getGuideCounts } from "@/lib/guide-directory";
+import { allGuides, getGuide, guideCategory, getCategory, getRelatedGuides, getGuideCounts, isLowValueTechnicalGuide } from "@/lib/guide-directory";
 import { aiGuides } from "@/content/aiGuides";
 import { serviceMetadata } from "@/lib/seo";
 import { getEnglishGuide } from "@/lib/guide-i18n";
@@ -26,6 +26,7 @@ export async function generateMetadata({params}: Props) {
   const polishUrl = `https://bernecki.dev/poradniki/${slug}`;
   return {
     ...metadata,
+    robots: { index: !isLowValueTechnicalGuide(guide), follow: true },
     alternates: {
       canonical: polishUrl,
       ...(englishEdition ? { languages: { "pl-PL":polishUrl, en:`https://bernecki.dev/en/guides/${slug}` } } : {})

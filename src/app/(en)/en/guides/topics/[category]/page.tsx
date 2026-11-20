@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { guideCategories } from "@/lib/guide-directory";
+import { guideCategories, shouldNoindexGuideCategory } from "@/lib/guide-directory";
 import { seoTitle, seoDescription } from "@/lib/seo";
 import { englishCategory, englishCategoryCounts, listEnglishGuides } from "@/lib/guide-i18n";
 type Props={params:Promise<{category:string}>;searchParams:Promise<{page?:string}>};
@@ -19,7 +19,7 @@ export async function generateMetadata({params,searchParams}:Props):Promise<Meta
  return {title:{absolute:seoTitle(`${entry.label} — troubleshooting and solutions`)},description:seoDescription(entry.description, `Find practical troubleshooting steps, checks, and ways to verify a fix for ${entry.label.toLowerCase()}.`),
   alternates:{canonical:url,...(page===1?{languages:{en:url,"pl-PL":`https://bernecki.dev/poradniki/tematy/${category}`}}:{})},
   openGraph:{url,title:entry.label,description:entry.description,type:"website",locale:"en_US"},
-  robots:{index:true,follow:true}};
+  robots:{index:!shouldNoindexGuideCategory(category),follow:true}};
 }
 export default async function EnglishCategoryPage({params,searchParams}:Props){
  const [{category},query]=await Promise.all([params,searchParams]);
