@@ -6,9 +6,8 @@ on:
     paths:
       - '.github/workflows/pseo-autopilot.yml'
       - 'src/app/api/pseo-bridge/route.ts'
-  schedule:
-    - cron: '23 3 * * *'
-      timezone: 'Europe/Warsaw'
+  # Scheduled mass publishing paused while commercial SEO is audited.
+  # Manual workflow_dispatch remains available for individually reviewed content.
   workflow_dispatch:
     inputs:
       batch:
