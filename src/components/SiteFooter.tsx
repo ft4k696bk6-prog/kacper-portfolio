@@ -47,7 +47,7 @@ export function SiteFooter() {
     </div>
     <div className="mx-auto mt-12 max-w-7xl border-t border-white/10 pt-6">
       <div className="flex flex-row flex-wrap items-center justify-between gap-x-5 gap-y-3">
-        <p className="text-[10px] uppercase tracking-[0.16em] text-white/40 sm:text-xs">
+        <p className="text-[10px] uppercase tracking-[0.16em] text-white/60 sm:text-xs">
           {english ? "Industry profiles" : "Profile branżowe"}
         </p>
         <a
