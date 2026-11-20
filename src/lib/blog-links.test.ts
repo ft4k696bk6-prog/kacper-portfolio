@@ -49,7 +49,8 @@ describe("bilingual blog and contextual internal SEO links",()=>{
   expect(blogPostsForGuideCategory("domeny-poczta")).toEqual([]);
  });
  it("publishes blog URLs with reciprocal hreflang and excludes the bulk guide archive from sitemap",()=>{
-  const byUrl=new Map(sitemap().map(item=>[item.url,item]));
+  const urls=sitemap();
+  const byUrl=new Map(urls.map(item=>[item.url,item]));
   const base="https://bernecki.dev";
   for(const slug of ["",...blogPosts.map(post=>"/"+post.slug)]){
    const pl=base+"/blog"+slug,en=base+"/en/blog"+slug;
