@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, Bot, BriefcaseBusiness, ChevronDown, Globe2, Megaphone, PackageSearch } from "lucide-react";
 
-const icons=[BriefcaseBusiness,PackageSearch,Globe2,Bot,Megaphone] as const;
+const icons=[Globe2,BriefcaseBusiness,Bot,Megaphone,BriefcaseBusiness,PackageSearch] as const;
 type Offer = readonly [title:string,description:string,href:string];
 
 export function OfferCards({offers,english}:{offers:readonly Offer[];english:boolean}) {

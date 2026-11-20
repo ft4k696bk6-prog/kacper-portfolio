@@ -10,7 +10,9 @@ import {
   getRelatedGuides,
   guideCategory,
   listGuides,
-  normalizeGuideText
+  normalizeGuideText,
+  isLowValueTechnicalGuide,
+  shouldNoindexGuideCategory
 } from "./guide-directory";
 
 describe("programmatic SEO catalog", () => {
@@ -122,6 +124,25 @@ describe("programmatic SEO catalog", () => {
       expect(guide?.sections.length).toBeGreaterThanOrEqual(4);
     }
     expect(new Set(allGuides.map(x => x.slug)).size).toBe(allGuides.length);
+  });
+
+
+  it("noindexes generated technical guides while preserving business and marketing guides", () => {
+    const typescript = getGuide("typescript-no-inputs-found-ts18003");
+    expect(typescript).toBeDefined();
+    expect(isLowValueTechnicalGuide(typescript!)).toBe(true);
+
+    const github = getGuide("github-actions-artifact-expired");
+    expect(github).toBeDefined();
+    expect(isLowValueTechnicalGuide(github!)).toBe(true);
+
+    const marketing = allGuides.find((guide) => guideCategory(guide) === "meta-ads");
+    expect(marketing).toBeDefined();
+    expect(isLowValueTechnicalGuide(marketing!)).toBe(false);
+
+    expect(shouldNoindexGuideCategory("nextjs-react")).toBe(true);
+    expect(shouldNoindexGuideCategory("meta-ads")).toBe(false);
+    expect(shouldNoindexGuideCategory("inne")).toBe(false);
   });
 
 });

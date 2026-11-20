@@ -136,7 +136,7 @@ export function HomeStudio() {
         <div className={styles.actions}>
           <a className={styles.primary} href="#contact">{c.call}<ArrowUpRight size={18}/></a>
           <a className={styles.secondary} href="#projects">{c.projects}<ArrowUpRight size={18}/></a>
-          <Link className={styles.secondary} href={localizedToolboxPath(lang)}>{lang==="pl"?"Darmowe narzędzia":"Free tools"}<ArrowUpRight size={18}/></Link>
+          <Link className={styles.secondary} href={lang==="en"?"/en/services/websites":"/tworzenie-stron-internetowych"}>{lang==="pl"?"Strony i landing page":"Websites and landing pages"}<ArrowUpRight size={18}/></Link>
         </div>
       </div>
       <div className={styles.heroScene}>

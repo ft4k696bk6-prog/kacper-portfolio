@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { guideScreenshots } from "@/content/guideScreenshots";
-import { getRelatedGuides } from "@/lib/guide-directory";
+import { getGuide, getRelatedGuides, isLowValueTechnicalGuide } from "@/lib/guide-directory";
 import { getEnglishGuide, getEnglishGuides, englishGuideCategory, englishCategory, englishCategoryCounts } from "@/lib/guide-i18n";
 import { VatComparison } from "@/components/VatComparison";
 import { seoTitle, seoDescription } from "@/lib/seo";
@@ -17,12 +17,14 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
  const {slug}=await params;
  const guide=getEnglishGuide(slug);
  if(!guide)notFound();
+ const sourceGuide=getGuide(slug);
+ if(!sourceGuide)notFound();
  const url=`https://bernecki.dev/en/guides/${slug}`;
  return {
   title:{absolute:seoTitle(guide.title)},description:seoDescription(guide.description,[guide.intro,guide.sections[0]?.paragraphs?.[0]].filter(Boolean).join(" ")),
   alternates:{canonical:url,languages:{"pl-PL":`https://bernecki.dev/poradniki/${slug}`,"en":url}},
   openGraph:{title:guide.title,description:guide.description,url,type:"article",locale:"en_US",alternateLocale:["pl_PL"],siteName:"Kacper Bernecki",images:[{url:"/opengraph-image",width:1200,height:630}]},
-  robots:{index:true,follow:true}
+  robots:{index:!isLowValueTechnicalGuide(sourceGuide),follow:true}
  };
 }
 export default async function EnglishGuidePage({params}:Props){

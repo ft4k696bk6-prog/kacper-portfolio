@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCategory, getGuideCounts, guideCategories, listGuides } from "@/lib/guide-directory";
+import { getCategory, getGuideCounts, guideCategories, listGuides, shouldNoindexGuideCategory } from "@/lib/guide-directory";
 import { serviceMetadata, seoDescription } from "@/lib/seo";
 import { englishCategoryCounts } from "@/lib/guide-i18n";
 
@@ -36,7 +36,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
       ...(page===1&&englishCategoryCounts().some(c=>c.slug===kategoria&&c.count>0)?{languages:{"pl-PL":`https://bernecki.dev/poradniki/tematy/${kategoria}`,en:`https://bernecki.dev/en/guides/topics/${kategoria}`}}:{})
     },
     openGraph:{...metadata.openGraph,url:`https://bernecki.dev/poradniki/tematy/${kategoria}${page>1?`?strona=${page}`:""}`},
-    robots: { index: true, follow: true }
+    robots: { index: !shouldNoindexGuideCategory(kategoria), follow: true }
   };
 }
 

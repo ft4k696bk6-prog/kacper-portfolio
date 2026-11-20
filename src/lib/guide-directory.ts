@@ -41,6 +41,29 @@ export const guideCategories = [
 ] as const;
 
 export type GuideCategorySlug = (typeof guideCategories)[number]["slug"];
+
+const lowValueTechnicalGuideCategories: ReadonlySet<GuideCategorySlug> = new Set([
+  "vercel-hosting",
+  "supabase-bazy",
+  "nextjs-react",
+  "domeny-poczta",
+  "formularze-api",
+  "wordpress",
+]);
+
+const technicalPlatformPattern = /(?:typescript|nextjs|next\.js|react|github|gitlab|npm|nodejs|node\.js|javascript|vercel|supabase|wordpress|tailwind|vite|firebase|prisma|docker|oauth|graphql)/i;
+
+/** Keep technical platform troubleshooting pages accessible while excluding them from search. */
+export function isLowValueTechnicalGuide(guide: Guide): boolean {
+  const category = guideCategory(guide);
+  return lowValueTechnicalGuideCategories.has(category)
+    || technicalPlatformPattern.test(`${guide.slug} ${guide.title}`);
+}
+
+/** Technical troubleshooting archives are not useful search landing pages. */
+export function shouldNoindexGuideCategory(category: string): boolean {
+  return lowValueTechnicalGuideCategories.has(category as GuideCategorySlug);
+}
 export const GUIDE_PAGE_SIZE = 24;
 
 const categoryRules: readonly [GuideCategorySlug, RegExp][] = [
