@@ -365,6 +365,59 @@ export const blogPosts: BlogPost[] = [
         }
       ]
     }
+  },
+  {
+    slug: "targetowanie-meta-ads-kosiarki-zainteresowania-a-zakup",
+    topic: "marketing",
+    guideCategories: ["meta-ads"],
+    guideSlugs: [],
+    service: { pl: "/reklamy-meta-ads-dla-firm", en: "/en/meta-ads" },
+    pl: {
+      title: "Dlaczego reklama kosiarek trafia do osób, które nie chcą kupić kosiarki?",
+      excerpt: "Targetowanie Meta Ads na zainteresowania nie oznacza zamiaru zakupu. Przykład kosiarek pokazuje, dlaczego liczy się oferta, kreacja i pomiar sprzedaży.",
+      lead: "Wyobraź sobie reklamę kosiarki. Ktoś ogląda poradniki ogrodnicze, ktoś inny właśnie kupił kosiarkę, a trzecia osoba szuka nowej. Wszyscy mogą wykazywać podobne zainteresowania, ale tylko część jest gotowa kupić. To podstawowy problem targetowania reklam na Facebooku i Instagramie.",
+      sections: [
+        { heading: "Zainteresowanie nie jest intencją zakupu", paragraphs: [
+          "Wybór zainteresowania „ogrodnictwo” nie tworzy listy osób, które dziś potrzebują kosiarki. Może obejmować miłośników roślin, właścicieli działek i osoby oglądające filmy o pielęgnacji trawnika. Z drugiej strony potencjalny kupujący nie musi mieć przypisanego takiego zainteresowania.",
+          "Dlatego nie należy oceniać kampanii wyłącznie po zgodności grupy zainteresowań z produktem. Ważniejsze jest, czy reklama trafia do osób, które podejmują wartościowe działania."
+        ] },
+        { heading: "Kreacja może kwalifikować odbiorcę lepiej niż długa lista zainteresowań", paragraphs: [
+          "Zamiast ogólnego „najlepsze kosiarki” pokaż konkretny problem: mały ogród, nierówny teren, hałas albo czas potrzebny na koszenie. Cena, warunki dostawy i przeznaczenie produktu pomagają odbiorcy samemu ocenić, czy oferta jest dla niego.",
+          "Testuj osobne komunikaty dla różnych potrzeb, ale nie zakładaj, że algorytm zawsze sam znajdzie kupujących. Wynik zależy też od danych, budżetu, konkurencji i jakości strony docelowej."
+        ] },
+        { heading: "Nie myl taniego kliknięcia z klientem", paragraphs: [
+          "Reklama może zbierać tanie kliknięcia od osób ciekawych produktu, które nigdy go nie kupią. Porównuj koszt wartościowych zapytań, dodania do koszyka, zakupu lub umowy, a nie tylko CTR i CPC.",
+          "Jeżeli sprzedaż odbywa się telefonicznie lub przez handlowca, warto przekazywać do systemu reklamowego poprawnie zebrane zdarzenia jakościowe, zgodnie z wymaganiami prywatności i konfiguracją pomiaru."
+        ] },
+        { heading: "Jak przetestować targetowanie bez przepalania budżetu", paragraphs: [
+          "Zacznij od jednej oferty i kilku wyraźnie różnych kreacji. Porównaj szerszą grupę odbiorców z sensownie dobranym wariantem zainteresowań, jeśli budżet pozwala na wiarygodny test. Nie zmieniaj codziennie wszystkiego naraz.",
+          "Sprawdź całą ścieżkę: wyświetlenie, kliknięcie, stronę produktu, formularz lub koszyk i ostateczny wynik. Gdy nie ma konwersji, przyczyną może być równie dobrze oferta, cena albo strona, a nie samo targetowanie."
+        ] }
+      ]
+    },
+    en: {
+      title: "Why Lawn Mower Ads Reach People Who Do Not Want to Buy One",
+      excerpt: "Interest targeting is not purchase intent. A lawn mower example explains why creative, offer and sales measurement matter in Meta Ads.",
+      lead: "Imagine advertising a lawn mower. One person watches gardening videos, another has just bought a mower and a third is actively shopping. Their interests may overlap, but their purchase intent does not.",
+      sections: [
+        { heading: "An interest is not a buying signal", paragraphs: [
+          "Targeting gardening interests does not produce a list of people who need a mower today. It may reach plant enthusiasts, homeowners and people watching lawn-care content. An actual buyer may not match that interest at all.",
+          "Judge targeting by valuable outcomes rather than by how closely the interest label resembles your product."
+        ] },
+        { heading: "Creative helps people qualify themselves", paragraphs: [
+          "Show a concrete problem: a small garden, uneven terrain, noise or the time needed to mow. Clear pricing, delivery terms and product fit help viewers decide whether the offer is relevant.",
+          "Test distinct messages rather than assuming an algorithm will always find buyers automatically."
+        ] },
+        { heading: "Cheap clicks are not customers", paragraphs: [
+          "An ad can earn inexpensive clicks from curious visitors who will never purchase. Compare qualified enquiries, purchases and sales rather than relying only on CTR and CPC.",
+          "For phone-based sales, connect appropriately collected downstream conversion signals to campaign measurement."
+        ] },
+        { heading: "A practical test", paragraphs: [
+          "Start with one offer and a few meaningfully different creatives. If budget permits, compare broad delivery with a carefully chosen interest-based audience. Avoid changing every variable every day.",
+          "Review the full path from impression to landing page and purchase. Weak results may reflect the offer, pricing or website rather than targeting alone."
+        ] }
+      ]
+    }
   }
 ];
 export const blogTopicLabels:Record<BlogLanguage,Record<BlogTopic,string>>={

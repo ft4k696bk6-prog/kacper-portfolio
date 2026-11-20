@@ -2,8 +2,6 @@ import type { MetadataRoute } from "next";
 import { ukSalesPages, ukAlternates, ukPath } from "../content/uk-sales";
 import { toolboxItems } from "../lib/toolbox";
 import { englishToolboxItems, englishToolPath } from "../lib/toolbox-en";
-import { allGuides, getGuideCounts } from "../lib/guide-directory";
-import { getEnglishGuide, getEnglishGuides, englishCategoryCounts } from "../lib/guide-i18n";
 import { realizations } from "../content/realizations";
 import { englishServices, englishRealizations } from "../content/english-business";
 import {blogPosts, BLOG_PUBLISHED_DATE} from "../content/blog";
@@ -101,27 +99,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteUrl}/en/projects/${slug}`,
       alternates:{languages:{"pl-PL":`${siteUrl}/realizacje/${slug}`,en:`${siteUrl}/en/projects/${slug}`}}
     })),
-    {url: `${siteUrl}/poradniki`, alternates:{languages:{"pl-PL":`${siteUrl}/poradniki`,en:`${siteUrl}/en/guides`}}},
-    {url: `${siteUrl}/en/guides`, alternates:{languages:{"pl-PL":`${siteUrl}/poradniki`,en:`${siteUrl}/en/guides`}}},
-    ...getGuideCounts().filter(category=>category.count>0).map(category=>{
-      const pl=`${siteUrl}/poradniki/tematy/${category.slug}`;
-      const en=`${siteUrl}/en/guides/topics/${category.slug}`;
-      const available=englishCategoryCounts().some(item=>item.slug===category.slug&&item.count>0);
-      return available?{url:pl,alternates:{languages:{"pl-PL":pl,en}}}:{url:pl};
-    }),
-    ...englishCategoryCounts().filter(category=>category.count>0).map(category=>({
-      url:`${siteUrl}/en/guides/topics/${category.slug}`,
-      alternates:{languages:{"pl-PL":`${siteUrl}/poradniki/tematy/${category.slug}`,en:`${siteUrl}/en/guides/topics/${category.slug}`}}
-    })),
-    ...allGuides.map((guide)=>{
-      const pl=`${siteUrl}/poradniki/${guide.slug}`;
-      const en=`${siteUrl}/en/guides/${guide.slug}`;
-      return getEnglishGuide(guide.slug)?{url:pl,alternates:{languages:{"pl-PL":pl,en}}}:{url:pl};
-    }),
-    ...getEnglishGuides().map(guide=>({
-      url:`${siteUrl}/en/guides/${guide.slug}`,
-      alternates:{languages:{"pl-PL":`${siteUrl}/poradniki/${guide.slug}`,en:`${siteUrl}/en/guides/${guide.slug}`}}
-    })),
+    // Editorial guide archive intentionally excluded from sitemap.
+    // Commercial pages, real case studies, tools and curated blog posts stay listed.
+    // Removing URLs from a sitemap alone does NOT deindex them; follow up with
+    // page-level noindex for low-value technical guides after route verification.
     { url: siteUrl + "/case-studies/re-energy-meta-ads",changeFrequency:"monthly",priority:0.9,
       alternates:{languages:{"pl-PL":siteUrl+"/case-studies/re-energy-meta-ads",en:siteUrl+"/en/case-studies/re-energy-meta-ads"}} },
     { url: siteUrl + "/en/case-studies/re-energy-meta-ads",changeFrequency:"monthly",priority:0.9,
