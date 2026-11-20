@@ -57,7 +57,7 @@ const technicalPlatformPattern = /(?:typescript|nextjs|next\.js|react|github|git
 export function isLowValueTechnicalGuide(guide: Guide): boolean {
   const category = guideCategory(guide);
   return lowValueTechnicalGuideCategories.has(category)
-    || (category === "inne" && technicalPlatformPattern.test(`${guide.slug} ${guide.title}`));
+    || technicalPlatformPattern.test(`${guide.slug} ${guide.title}`);
 }
 
 /** Technical troubleshooting archives are not useful search landing pages. */
