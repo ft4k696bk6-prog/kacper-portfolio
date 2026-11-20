@@ -27,12 +27,12 @@
   ],
   "rejectedTopics": [],
   "seenIssueUrls": [],
-  "lastRun": "2026-11-19T11:16:41.112Z",
-  "runCount": 11,
+  "lastRun": "2026-11-20T10:58:00.990Z",
+  "runCount": 12,
   "lastSummary": {
     "attempts": 60,
     "approved": 0,
-    "rejected": 101,
+    "rejected": 106,
     "cost": 0
   },
   "failureHistory": {
@@ -867,253 +867,303 @@
       "reason": "provider error"
     },
     "Stacktrace using typescript aren't using sourcemaps ? (client-side: in the browser)": {
-      "count": 2,
-      "lastAt": "2026-11-19T10:38:17.860Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:12:27.792Z",
       "reason": "provider error"
     },
     "revalidatePath or revalidateTag does not execute internal revalidation logic if called inside a setTimeout nor does it throw an exception": {
-      "count": 2,
-      "lastAt": "2026-11-19T10:39:03.835Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:13:13.988Z",
       "reason": "provider error"
     },
     "Testing frameworks (Vitest) cannot correctly resolve React to the internally used version, causing tests to fail": {
-      "count": 2,
-      "lastAt": "2026-11-19T10:39:50.113Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:14:00.211Z",
       "reason": "provider error"
     },
     "`cloneElement` in client component with async server component as children not working": {
-      "count": 2,
-      "lastAt": "2026-11-19T10:40:36.002Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:14:46.937Z",
       "reason": "provider error"
     },
     "app.prepare() failure crash the program but error message hidden": {
-      "count": 2,
-      "lastAt": "2026-11-19T10:41:21.936Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:15:33.938Z",
       "reason": "provider error"
     },
     "Ensure Next.js is correctly respecting `NODE_ENV`": {
-      "count": 2,
-      "lastAt": "2026-11-19T10:42:07.856Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:16:20.208Z",
       "reason": "provider error"
     },
     "Nonce is not applied to the <style /> tag while using CSS Modules. ": {
-      "count": 2,
-      "lastAt": "2026-11-19T10:42:53.922Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:17:06.392Z",
       "reason": "provider error"
     },
     "Dependencies missing in standalone build": {
-      "count": 2,
-      "lastAt": "2026-11-19T10:43:40.014Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:17:52.616Z",
       "reason": "provider error"
     },
     "Page is remounted when params change in (optional) catch all routes": {
-      "count": 2,
-      "lastAt": "2026-11-19T10:44:25.871Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:18:38.961Z",
       "reason": "provider error"
     },
     "root not-found page not displayed when inside a route group": {
-      "count": 2,
-      "lastAt": "2026-11-19T10:45:11.943Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:19:25.214Z",
       "reason": "provider error"
     },
     "generateStaticParams validation makes react-router migrations difficult ": {
-      "count": 2,
-      "lastAt": "2026-11-19T10:45:58.560Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:20:11.500Z",
       "reason": "provider error"
     },
     "Link navigation with Suspense is not instant": {
-      "count": 2,
-      "lastAt": "2026-11-19T10:46:44.558Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:20:57.819Z",
       "reason": "provider error"
     },
     "`Error: Route did not complete loading` causes page reload": {
-      "count": 2,
-      "lastAt": "2026-11-19T10:47:30.574Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:21:44.140Z",
       "reason": "provider error"
     },
     "Hydration failed with FontAwesome and pages/ router": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:48:16.623Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:22:30.383Z",
       "reason": "provider error"
     },
     "Docs: auth.email.secure_password_change described as \"require current password\", but it maps to reauthentication; no config.toml key for the real setting": {
-      "count": 2,
-      "lastAt": "2026-11-19T11:13:37.525Z",
+      "count": 3,
+      "lastAt": "2026-11-20T10:23:17.941Z",
       "reason": "provider error"
     },
     "Studio: Cannot scroll sidebar vertically in collapsed mode on smaller viewports": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:49:49.968Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:24:04.385Z",
       "reason": "provider error"
     },
     "BUG:(design-system-ui): ComponentPreview layout clips and breaks responsiveness on mobile viewports": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:50:35.856Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:24:50.623Z",
       "reason": "provider error"
     },
     "OAuth callback returns HTTP 504": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:51:21.825Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:25:36.767Z",
       "reason": "provider error"
     },
     "Abrir PDF integral — Adendo 03": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:52:07.733Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:26:22.912Z",
       "reason": "provider error"
     },
     "PostgREST rejecting all JWTs with “JWT issued at future” — fixed by restart, but recurring for 2 months": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:52:53.683Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:27:09.390Z",
       "reason": "provider error"
     },
     "Update Flask Framework SUPABASE_KEY to SUPABASE_PUBLISHABLE_KEY": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:53:39.807Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:27:55.630Z",
       "reason": "provider error"
     },
     "supabase cli 2.116.0 bind mounts algorithm breakage": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:54:25.668Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:28:41.854Z",
       "reason": "provider error"
     },
     "MFA verify endpoint returns \"Invalid TOTP code entered\" if more than 3 seconds since the code changed": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:55:11.667Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:29:28.058Z",
       "reason": "provider error"
     },
     "Studio version helpers return NaN for architecture-prefixed Postgres versions": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:55:57.652Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:30:14.280Z",
       "reason": "provider error"
     },
     "Urgent: SIHSS Free Project Unhealthy — Database Recovery Required": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:56:43.579Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:31:00.559Z",
       "reason": "provider error"
     },
     "Bug: Pricing page shows client-side exception": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:57:29.748Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:31:46.994Z",
       "reason": "provider error"
     },
     "Hosted PostgREST 14.5 returns 401/PGRST303 after successful Supabase Auth sign-in": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:58:16.025Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:32:33.238Z",
       "reason": "provider error"
     },
     "While configuring the organisation settings under General → Data Privacy, I encountered an issue with the Supabase Assistant Opt-in Level.": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:59:02.008Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:33:19.664Z",
       "reason": "provider error"
     },
     "PostgREST keeps retrying and logging errors when the Data API is disabled": {
-      "count": 1,
-      "lastAt": "2026-11-19T10:59:47.857Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:34:05.817Z",
       "reason": "provider error"
     },
     "Supabase UI Library is not respecting the file structure": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:00:33.805Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:34:52.146Z",
       "reason": "provider error"
     },
     "Bug: Footer social links open in same tab instead of new tab": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:01:20.112Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:35:38.457Z",
       "reason": "provider error"
     },
     "Production Postgres intermittently unresponsive — Free tier, ap-southeast-1, no restart, no incident declared": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:02:06.053Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:36:24.860Z",
       "reason": "provider error"
     },
     "Supabase Dashboard signup email does not arrive for Purelymail addresses": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:02:52.053Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:37:11.058Z",
       "reason": "provider error"
     },
     "Bump self-hosted images to patch Node.js Brotli vulnerability (CVE-2026-111497)": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:03:37.993Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:37:57.294Z",
       "reason": "provider error"
     },
     "Studio: deleting a user's MFA factors returns 200 before the deletes finish": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:04:27.036Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:38:43.505Z",
       "reason": "provider error"
     },
     "cro jobs cannot dlte after upgrade": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:05:13.024Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:39:29.875Z",
       "reason": "provider error"
     },
     "Studio Storage: hidden folder placeholders cause duplicate files during pagination": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:05:58.779Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:40:16.121Z",
       "reason": "provider error"
     },
     "Small bug in loading cron jobs": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:06:44.650Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:41:02.293Z",
       "reason": "provider error"
     },
     "Studio Storage: renaming folders containing dots selects only part of the name": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:07:30.554Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:41:48.526Z",
       "reason": "provider error"
     },
     "RLS INSERT policy rejects writes with provably-matching auth.uid(), unaffected by WITH CHECK (true) or a schema-cache reload — only resolved by disabling RLS": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:08:16.376Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:42:34.868Z",
       "reason": "provider error"
     },
     "Unexpected PostgreSQL Database Creation in Supabase Project (ALPHA SOLUTION)": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:09:02.267Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:43:21.207Z",
       "reason": "provider error"
     },
     "iOS: the first API request after a 2-3 minute pause fails with -1005 (HTTP/3 idle timeout 180 s on the edge, no NAT rebinding)": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:09:48.090Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:44:07.418Z",
       "reason": "provider error"
     },
     "Supavisor custom PostgreSQL role authentication failing — 28P01": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:10:34.038Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:44:53.722Z",
       "reason": "provider error"
     },
     "equest to investigate an unexpected PostgreSQL database creation": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:11:19.831Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:45:40.150Z",
       "reason": "provider error"
     },
     "CLI docs reference inbucket instead of local_smtp and mailpit": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:12:05.649Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:46:26.295Z",
       "reason": "provider error"
     },
     "UI/UX: Keep bottom action buttons visible when selecting storage policy operations": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:12:51.575Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:47:12.450Z",
       "reason": "provider error"
     },
     "Dropdown clipped by viewport in Edge Function Logs & foreign key modal (no scroll to reach content)": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:14:23.402Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:47:58.706Z",
       "reason": "provider error"
     },
     "Bug: Navigation race condition in SignInPartner causing unintended redirects on unmount": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:15:09.351Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:48:45.195Z",
       "reason": "provider error"
     },
     "Secret API keys return 401 Invalid API key": {
-      "count": 1,
-      "lastAt": "2026-11-19T11:15:55.200Z",
+      "count": 2,
+      "lastAt": "2026-11-20T10:49:31.387Z",
       "reason": "provider error"
     },
     "Log bloat with \"has a collation version mismatch\" warnings on template1 following DB upgrade": {
+      "count": 2,
+      "lastAt": "2026-11-20T10:50:17.616Z",
+      "reason": "provider error"
+    },
+    "Extension description text overflows and overlaps the enabled toggle on Database > Extensions page": {
       "count": 1,
-      "lastAt": "2026-11-19T11:16:41.112Z",
+      "lastAt": "2026-11-20T10:51:03.849Z",
+      "reason": "provider error"
+    },
+    "Dashboard: creating a partitioned queue fails with \"function pgmq.create_partitioned(unknown, integer, integer) does not exist\"": {
+      "count": 1,
+      "lastAt": "2026-11-20T10:51:50.193Z",
+      "reason": "provider error"
+    },
+    "[Studio] Pressing Backspace or typing in Command Menu context search pages (Edge Functions / RLS Policies / Storage / Tables)": {
+      "count": 1,
+      "lastAt": "2026-11-20T10:52:36.304Z",
+      "reason": "provider error"
+    },
+    "passqword recovery failure": {
+      "count": 1,
+      "lastAt": "2026-11-20T10:53:23.381Z",
+      "reason": "provider error"
+    },
+    "Account still inaccessible after escalation — “User’s profile not found” [SU-416784, follow-up to #47859]": {
+      "count": 1,
+      "lastAt": "2026-11-20T10:54:09.560Z",
+      "reason": "provider error"
+    },
+    "[URGENT] Pro organisation: \"User's profile not found\" lockout after GitHub email change (SU-505630, SU-504485)": {
+      "count": 1,
+      "lastAt": "2026-11-20T10:54:55.850Z",
+      "reason": "provider error"
+    },
+    "Discord OAuth consistently 5+ seconds - GoTrue auth worker issue (project sxvfmmqrgqlinxzuvjgv)": {
+      "count": 1,
+      "lastAt": "2026-11-20T10:55:42.151Z",
+      "reason": "provider error"
+    },
+    "Database is still restarting after 1 day": {
+      "count": 1,
+      "lastAt": "2026-11-20T10:56:28.419Z",
+      "reason": "provider error"
+    },
+    "Sigin using password options fail": {
+      "count": 1,
+      "lastAt": "2026-11-20T10:57:14.719Z",
+      "reason": "provider error"
+    },
+    "pg_net extension-owned table permissions blocking hosted deployment": {
+      "count": 1,
+      "lastAt": "2026-11-20T10:58:00.990Z",
       "reason": "provider error"
     }
   },
