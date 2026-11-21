@@ -6,7 +6,6 @@ import { realizations } from "../content/realizations";
 import { englishServices, englishRealizations } from "../content/english-business";
 import {blogPosts, BLOG_PUBLISHED_DATE} from "../content/blog";
 import { serviceCities } from "../lib/service-cities";
-import { localOffers } from "../lib/local-offers";
 import { commercialServiceSlugs } from "../content/commercial-services";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -58,16 +57,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: siteUrl + "/realizacje", changeFrequency: "monthly", priority: 0.85 },
     { url: siteUrl + "/uslugi", lastModified: new Date("2026-11-16"), changeFrequency: "monthly", priority: 0.75 },
     ...serviceCities.map(city => ({ url: `${siteUrl}/uslugi/${city.slug}`, changeFrequency: "monthly" as const, priority: 0.7 })),
-    ...localOffers.flatMap(offer =>
-      serviceCities.map(city => ({
-        url: siteUrl + "/oferta/" + offer.slug + "/" + city.slug,
-        changeFrequency: "monthly" as const,
-        priority: 0.78,
-      }))
-    ),
-
-
-    // National, substantial commercial landing pages - prioritized over city variants.
+    // Keep the focused city hubs indexable; city-by-service variants remain available but are noindex.
+    // National, substantial commercial landing pages stay in the sitemap.
     ...commercialServiceSlugs.map(slug => ({
       url: siteUrl + "/oferta/" + slug,
       lastModified: new Date("2026-11-18"),
