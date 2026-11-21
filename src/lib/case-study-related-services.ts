@@ -1,4 +1,4 @@
-import { commercialServiceDetails } from "@/content/commercial-services";
+import { commercialServiceDetails } from "../content/commercial-services";
 
 export type CaseStudyRelatedService = {
   href: string;
