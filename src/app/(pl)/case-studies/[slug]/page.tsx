@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { CaseStudyPage } from "@/components/CaseStudyPage";
 import { pl } from "@/i18n/pl";
 import { seoTitle, seoDescription } from "@/lib/seo";
+import { getCaseStudyRelatedServices } from "@/lib/case-study-related-services";
 
 type CaseStudyRouteProps = {
   params: Promise<{
@@ -88,6 +89,6 @@ export default async function Page({ params }: CaseStudyRouteProps) {
         { "@type": "ListItem", position: 3, name: study.title, item: `${siteUrl}/case-studies/${slug}` },
       ],
     }).replace(/</g, "\\u003c") }} />
-    <CaseStudyPage slug={slug} />
+    <CaseStudyPage slug={slug} relatedServices={getCaseStudyRelatedServices(slug)} />
   </>;
 }

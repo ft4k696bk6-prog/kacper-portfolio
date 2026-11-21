@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import type { CaseStudyRelatedService } from "@/lib/case-study-related-services";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -8,10 +10,18 @@ import type { CaseStudyItem } from "@/i18n/case-studies";
 
 type CaseStudyPageProps = {
   slug: string;
+  relatedServices: CaseStudyRelatedService[];
 };
 
-export function CaseStudyPage({ slug }: CaseStudyPageProps) {
-  const { t } = useLanguage();
+export function CaseStudyPage({ slug, relatedServices }: CaseStudyPageProps) {
+  const { lang, t } = useLanguage();
+  const localizedServices = relatedServices.map((service) => ({
+    href: lang === "en" ? service.englishHref : service.href,
+    title: lang === "en" ? service.englishTitle : service.title,
+  }));
+  const visibleServices = localizedServices.filter((service, index, all) =>
+    all.findIndex((candidate) => candidate.href === service.href) === index
+  );
   const study = useMemo(
     () => t.caseStudies.items.find((item) => item.slug === slug),
     [slug, t.caseStudies.items],
@@ -162,6 +172,30 @@ export function CaseStudyPage({ slug }: CaseStudyPageProps) {
           <h2 className="text-2xl text-white">{t.caseStudies.sections.limitations}</h2>
           <p className="mt-4 text-sm leading-7 text-white">{study.limitations}</p>
         </section>
+
+        {visibleServices.length > 0 && (
+          <section className="surface-card mt-8 rounded-md border border-white/20 bg-[var(--brand-black)] p-5 md:p-6">
+            <h2 className="text-2xl text-white">
+              {lang === "en" ? "Related services" : "Usługi powiązane z realizacją"}
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-white/75">
+              {lang === "en"
+                ? "Explore the services represented in this project."
+                : "Zobacz usługi, których zakres pokazuje ten projekt."}
+            </p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              {visibleServices.map((service) => (
+                <Link
+                  key={service.href}
+                  href={service.href}
+                  className="brand-outline rounded-md px-4 py-3 text-sm text-white transition hover:border-[var(--brand-accent)]"
+                >
+                  {service.title} →
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         <div className="mt-8">
           <BackLink label={t.caseStudies.projectsBackLabel} />

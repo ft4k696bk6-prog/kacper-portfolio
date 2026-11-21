@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: { absolute: title },
     description: description.slice(0, 260),
     alternates: { canonical: url },
-    robots: { index: true, follow: true },
+    robots: { index: false, follow: true },
     openGraph: { title, description, url, locale: "pl_PL", type: "website" },
   };
 }
