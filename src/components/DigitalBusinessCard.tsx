@@ -9,49 +9,15 @@ import {
 
 type Lang = "pl" | "en";
 
-const qrRows = [
-"000000000000000000000000000000000",
-"000000000000000000000000000000000",
-"000000000000000000000000000000000",
-"000000000000000000000000000000000",
-"000011111110100111100011111110000",
-"000010000010111011000010000010000",
-"000010111010101001000010111010000",
-"000010111010010111011010111010000",
-"000010111010111100100010111010000",
-"000010000010001000100010000010000",
-"000011111110101010101011111110000",
-"000000000000000101000000000000000",
-"000010011111111110101100101110000",
-"000001010101000010010001111100000",
-"000011000111001111011010010010000",
-"000000111000101010011010011110000",
-"000000111111010110101011000010000",
-"000010111101101000111100100100000",
-"000011010111001110110010111110000",
-"000010011000010100011001011010000",
-"000010100011000011011111101100000",
-"000000000000101110001000101100000",
-"000011111110111110101010100010000",
-"000010000010110001011000100110000",
-"000010111010111010111111100000000",
-"000010111010101100111110000110000",
-"000010111010001110100100111110000",
-"000010000010001010100001101110000",
-"000011111110110100001100010010000",
-"000000000000000000000000000000000",
-"000000000000000000000000000000000",
-"000000000000000000000000000000000",
-"000000000000000000000000000000000",
-];
+const qrRows = ["00000000000000000000000000000000000000000","00000000000000000000000000000000000000000","00000000000000000000000000000000000000000","00000000000000000000000000000000000000000","00001111111010010011000110101011111110000","00001000001001001101111001001010000010000","00001011101011001101111001111010111010000","00001011101000101100110111011010111010000","00001011101011100110111001000010111010000","00001000001000110010010001011010000010000","00001111111010101010101010101011111110000","00000000000010100110010110010000000000000","00000000011001110100010000110010101010000","00001010110011010010110100110101111000000","00000011001010110011101111000111001100000","00000110010111001001101110101011011010000","00001110011011010110101111111010110110000","00001111000101111001010101110010001010000","00000010001010101001101100100110011100000","00001111000111011010011000011100101110000","00001011101110000101101100000101111010000","00001110110010111111010111011010000000000","00000010011000111001001111110001011000000","00000111100110001101100100111011011010000","00000100001000000011011000000111110110000","00001000010100011101110000101011111000000","00001000111000101100101011100001111100000","00001011010011000111011110001000011010000","00001101001101010001110101111111100000000","00000000000010010011100111001000111010000","00001111111000010111101000111010111100000","00001000001010010111100101111000111100000","00001011101001111110100101101111110110000","00001011101001010001110101010101110100000","00001011101001110100100111011000110110000","00001000001001011111100100000100010000000","00001111111000111001011011011100001100000","00000000000000000000000000000000000000000","00000000000000000000000000000000000000000","00000000000000000000000000000000000000000","00000000000000000000000000000000000000000"];
 
 function ContactQR() {
   const modules = qrRows.flatMap((line, y) =>
     Array.from(line).flatMap((pixel, x) => pixel === "1" ? [<rect key={y + "-" + x} x={x} y={y} width="1" height="1" />] : [])
   );
   return (
-    <svg id="bernecki-card-qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" role="img" aria-label="QR: https://bernecki.dev/card" shapeRendering="crispEdges">
-      <rect width="33" height="33" fill="#fff" />
+    <svg id="bernecki-card-qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41" role="img" aria-label="QR: https://bernecki.dev/card" shapeRendering="crispEdges">
+      <rect width="41" height="41" fill="#fff" />
       <g fill="#111214">{modules}</g>
     </svg>
   );
@@ -70,7 +36,7 @@ const copy = {
     qrDownload: "Pobierz kod QR", scan: "Zeskanuj i zapisz kontakt", steps: "Jak dodać do Apple Wallet?",
     instructions: ["Zapisz kod QR na iPhonie (lub zrób zrzut ekranu).", "Otwórz aplikację Portfel (Wallet), stuknij + i wybierz „Utwórz kartę” / „Create a Pass”.", "Wybierz zapisany obraz z kodem, sprawdź dane i zapisz kartę."],
     walletNote: "Funkcja tworzenia własnych kart jest dostępna na zgodnych iPhone'ach z iOS 27. To karta z kodem QR, nie oficjalny podpisany pass od wystawcy.",
-    copyright: "Wizytówka cyfrowa • Bernecki.dev", showQR: "Kod QR",
+    copyright: "Wizytówka cyfrowa • Bernecki.dev", showQR: "Pokaż QR", closeQR: "Zamknij",
   },
   en: {
     subtitle: "Personal business card",
@@ -84,13 +50,14 @@ const copy = {
     qrDownload: "Download QR code", scan: "Scan and save my details", steps: "How to add to Apple Wallet",
     instructions: ["Save the QR code on your iPhone (or take a screenshot).", "Open Wallet, tap + and choose Create a Pass.", "Select the saved QR image, review the details, and save your pass."],
     walletNote: "Custom pass creation requires a compatible iPhone with iOS 27. This is a QR-based custom pass, not an issuer-signed pass.",
-    copyright: "Digital business card • Bernecki.dev", showQR: "QR code",
+    copyright: "Digital business card • Bernecki.dev", showQR: "Show QR", closeQR: "Close",
   },
 } as const;
 
 export function DigitalBusinessCard({ lang }: { lang: Lang }) {
   const t = copy[lang];
   const [shared, setShared] = useState(false);
+  const [qrOpen, setQrOpen] = useState(false);
 
   async function share() {
     const url = "https://bernecki.dev/card";
@@ -163,6 +130,11 @@ export function DigitalBusinessCard({ lang }: { lang: Lang }) {
               <a className="db-button db-button-primary" href="/api/card.vcf"><ContactRound size={18} />{t.save}</a>
               <button type="button" className="db-button db-button-ghost" onClick={share}>{shared ? <Check size={18} /> : <Share2 size={18} />}{shared ? t.copied : t.share}</button>
             </div>
+            <div className="db-mobile-actions">
+              <a href="https://bernecki.dev/" aria-label="Bernecki.dev IT"><Code2 size={18}/><span>IT</span><ArrowUpRight size={16}/></a>
+              <a href="https://star-cars.us/" target="_blank" rel="noopener noreferrer"><CarFront size={18}/><span>{t.auto}</span><ArrowUpRight size={16}/></a>
+              <button type="button" onClick={() => setQrOpen(true)}><QrCode size={18}/><span>{t.showQR}</span></button>
+            </div>
           </div>
           <div className="db-hero-bottom"><span>BERNECKI.DEV</span><span>EST. 2026 <span aria-hidden="true">✦</span> PERSONAL CARD</span></div>
         </section>
@@ -212,6 +184,10 @@ export function DigitalBusinessCard({ lang }: { lang: Lang }) {
           </div>
         </section>
 
+        {qrOpen && <div className="db-qr-modal" role="dialog" aria-modal="true" aria-label={t.scan}>
+          <button type="button" className="db-qr-close" onClick={() => setQrOpen(false)} aria-label={t.closeQR}>×</button>
+          <div className="db-qr-modal-inner"><div><ContactQR /></div><strong>bernecki.dev/card</strong><p>{t.scan}</p></div>
+        </div>}
         <footer className="db-footer">
           <span>{t.copyright}</span>
           <a href="https://bernecki.dev">bernecki.dev <ArrowUpRight size={14}/></a>
