@@ -106,7 +106,7 @@ export function DigitalBusinessCard({ lang }: { lang: Lang }) {
       <div className="db-wrap">
         <header className="db-topbar">
           <a className="db-wordmark" href="https://bernecki.dev" aria-label="Bernecki.dev — home">
-            <span className="db-monogram">B</span>
+            <NextImage src="/favicon-silver.svg" alt="Oryginalne logo Bernecki.dev" width={45} height={45} className="db-brand-logo" />
             <span className="db-wordmark-text">BERNECKI<span>.DEV</span></span>
           </a>
           <nav aria-label="Languages" className="db-languages">
@@ -177,7 +177,7 @@ export function DigitalBusinessCard({ lang }: { lang: Lang }) {
             </details>
           </div>
           <div className="db-qr-card">
-            <div className="db-qr-mark"><span>B</span><span>BERNECKI.DEV</span></div>
+            <div className="db-qr-mark"><NextImage src="/favicon-silver.svg" alt="Logo Bernecki.dev" width={28} height={28} /><span>BERNECKI.DEV</span></div>
             <div className="db-qr-holder"><ContactQR /></div>
             <strong>Kacper Bernecki</strong>
             <small><QrCode size={15}/>{t.scan}</small>
