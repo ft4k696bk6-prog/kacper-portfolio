@@ -2,6 +2,7 @@ import * as T from "three";
 import { mergeGeometries, mergeVertices } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { projectIndex, type ProjectId, type Zone } from "./content";
+import { globeRadius, makeSurfaceSites, type SurfaceStop } from "./globe";
 
 const tau = Math.PI * 2;
 
@@ -98,7 +99,17 @@ function bakeSurface(geometry: T.BufferGeometry, material: T.MeshLambertMaterial
 
 export function buildModel(low: boolean, bakeLighting = false) {
   const group = new T.Group();
-  const batches = new Map<T.Material, { cast: T.BufferGeometry[]; plain: T.BufferGeometry[] }>();
+  const sites = makeSurfaceSites();
+  let active: SurfaceStop = "reenergy";
+  type Batches = Map<T.Material, { cast: T.BufferGeometry[]; plain: T.BufferGeometry[] }>;
+  const batches: Batches = new Map();
+  const carBatches: Batches = new Map();
+  const carFallback = new T.Group();
+  const carModels = new T.Group();
+  const carPlacements: Array<{ x: number; z: number; angle: number }> = [];
+  let currentBatch = batches;
+  let carsRequested = false;
+  let disposed = false;
   const textures = new Set<T.Texture>();
   const materials = new Set<T.Material>();
   const hits: T.Mesh<T.BufferGeometry, T.Material>[] = [];
@@ -115,7 +126,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   const stone = standard(0xc0aa91, 0.95, 0, noise);
   const sandstone = standard(0xddc5a4, 0.91, 0, noise);
   const pale = standard(0xe9dbc4, 0.8, 0.06);
-  const asphalt = standard(0x363b43, 0.97, 0, noise);
+  const asphalt = standard(0x363b43, 0.97);
   const curb = standard(0x9c8e7d, 0.88, 0, noise);
   const slate = standard(0x30373e, 0.88, 0, noise);
   const graphite = standard(0x292e36, 0.64, 0.24);
@@ -124,9 +135,10 @@ export function buildModel(low: boolean, bakeLighting = false) {
   const bronze = standard(0x997155, 0.44, 0.42);
   const wood = standard(0x62453a, 0.95);
   const soil = standard(0x4b563a, 1, 0, noise);
-  const grass = standard(0x6f794e, 0.99, 0, noise);
-  grass.vertexColors = true;
-  const gardens = [0x576b43, 0x60714b, 0x798558, 0x7c8056].map(color => standard(color, 1));
+  const terrains = {
+    reenergy: 0x4a5541, "b-crm": 0x7a6e55, "isto-kebab": 0x9a7d53, starcars: 0x535941,
+    lab: 0x796145, motomizer: 0x605b43, beatmarket: 0x535b44, studio: 0x4f5a46, hq: 0x424e39,
+  } satisfies Record<SurfaceStop, number>;
   const leaves = [0x3d5137, 0x4f6542, 0x667b4b, 0x7d8e55, 0xa2a66b].map(color => standard(color, 0.98));
   const glass = low
     ? new T.MeshPhongMaterial({ color: 0x354a56, shininess: 72, specular: 0x737c8e })
@@ -140,14 +152,13 @@ export function buildModel(low: boolean, bakeLighting = false) {
   const cyan = lit(0x61eadb, 0.82);
   const paintLine = standard(0xe8d9ba, 0.88);
   const shadow = new T.MeshBasicMaterial({ map: ao, transparent: true, depthWrite: false, opacity: 0.84, polygonOffset: true, polygonOffsetFactor: -2 });
-  const reflection = new T.MeshBasicMaterial({ map: ao, color: 0x000000, transparent: true, depthWrite: false, opacity: 0.92 });
 
   function add(geometry: T.BufferGeometry, material: T.Material, x: number, y: number, z: number, cast = true, rx = 0, ry = 0, rz = 0) {
-    geometry.rotateX(rx).rotateY(ry).rotateZ(rz).translate(x, y, z);
-    let batch = batches.get(material);
+    geometry.rotateX(rx).rotateY(ry).rotateZ(rz).translate(x, y, z).applyMatrix4(sites[active].matrix);
+    let batch = currentBatch.get(material);
     if (!batch) {
       batch = { cast: [], plain: [] };
-      batches.set(material, batch);
+      currentBatch.set(material, batch);
     }
     (cast ? batch.cast : batch.plain).push(geometry);
     materials.add(material);
@@ -212,9 +223,9 @@ export function buildModel(low: boolean, bakeLighting = false) {
     }
   }
 
-  const signs: Array<{ text: string; x: number; y: number; z: number; width: number; height: number; color: string }> = [];
+  const signs: Array<{ text: string; x: number; y: number; z: number; width: number; height: number; color: string; site: SurfaceStop }> = [];
   function sign(text: string, x: number, y: number, z: number, width: number, height: number, color = "#ebf1db") {
-    signs.push({ text, x, y, z, width, height, color });
+    signs.push({ text, x, y, z, width, height, color, site: active });
   }
 
   function addSigns() {
@@ -230,7 +241,8 @@ export function buildModel(low: boolean, bakeLighting = false) {
     texture.colorSpace = T.SRGBColorSpace;
     textures.add(texture);
     const material = new T.MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false });
-    signs.forEach(({ text, x, y, z, width, height, color }, i) => {
+    signs.forEach(({ text, x, y, z, width, height, color, site }, i) => {
+      active = site;
       ctx.fillStyle = color;
       ctx.fillText(text, canvas.width / 2, row * (i + 0.53), canvas.width - 26);
       const geometry = new T.PlaneGeometry(width, height);
@@ -246,7 +258,8 @@ export function buildModel(low: boolean, bakeLighting = false) {
     const material = new T.MeshBasicMaterial({ visible: false });
     materials.add(material);
     const object = new T.Mesh(new T.BoxGeometry(w, h, d), material);
-    object.position.set(x, y, z);
+    object.position.set(x, y, z).applyMatrix4(sites[active].matrix);
+    object.quaternion.setFromRotationMatrix(sites[active].matrix);
     object.userData.hit = hit;
     group.add(object);
     hits.push(object);
@@ -254,10 +267,6 @@ export function buildModel(low: boolean, bakeLighting = false) {
 
   function projectHit(id: ProjectId, x: number, y: number, z: number, w: number, h: number, d: number) {
     proxy(x, y, z, w, h, d, { zone: "gallery", project: projectIndex(id) });
-  }
-
-  function band(inner: number, outer: number, y: number, material: T.Material) {
-    add(new T.RingGeometry(inner, outer, low ? 84 : 136), material, 0, y, 0, false, -Math.PI / 2);
   }
 
   function ball(x: number, y: number, z: number, w: number, h: number, d: number, material: T.Material, rx = 0, ry = 0, rz = 0) {
@@ -288,95 +297,72 @@ export function buildModel(low: boolean, bakeLighting = false) {
     for (const t of [-0.13, 0, 0.13]) box(x + Math.sin(angle) * t, 0.47, z + Math.cos(angle) * t, 1.32, 0.065, 0.095, bronze, true, angle);
   }
 
-  // A machined circular plinth, exposed terrain layers and a road shared by every address.
-  const disk = low ? 84 : 144;
-  groundShade(0.75, 1.15, bakeLighting ? 36 : 41, bakeLighting ? 35 : 40, -3.05, reflection);
-  cylinder(0, -2.17, 0, 16.54, 15.15, 0.57, black, disk);
-  cylinder(0, -1.82, 0, 16.69, 16.54, 0.17, bronze, disk);
-  cylinder(0, -1.56, 0, 16.62, 16.69, 0.35, graphite, disk);
-  cylinder(0, -0.85, 0, 16.21, 16.61, 1.07, slate, disk);
-  cylinder(0, -0.22, 0, 16.26, 16.17, 0.23, stone, disk);
-  cylinder(0, -0.015, 0, 16.08, 16.14, 0.19, asphalt, disk);
-  cylinder(0, 0.065, 0, 13.45, 13.52, 0.13, curb, disk);
-  add(terrainSurface(), grass, 0, 0.151, 0, false);
-  band(13.59, 13.63, 0.084, paintLine);
-  band(15.8, 15.84, 0.084, paintLine);
-  ring(0, -0.26, 0, 16.22, 0.028, bronze, 144);
-  function terrainSurface() {
-    const strips = 13;
-    const slices = low ? 88 : 144;
-    const radius = 13.24;
-    const points: number[] = [];
-    const tints: number[] = [];
+  // The edges of each local terrain descend to the planet's curved surface.
+  function terrain(width: number, depth: number) {
+    const segments = 42;
+    const rings = 8;
+    const vertices: number[] = [];
+    const colors: number[] = [];
     const uv: number[] = [];
     const indices: number[] = [];
-    for (let strip = 0; strip <= strips; strip++) {
-      for (let slice = 0; slice <= slices; slice++) {
-        const angle = slice / slices * tau;
-        const r = radius * strip / strips;
-        const x = r * Math.cos(angle), z = r * Math.sin(angle);
-        const patch = 0.97 + Math.sin(x * 0.53 + Math.sin(z * 1.3)) * 0.083 + Math.cos(z * 0.76 - x * 0.74) * 0.052;
-        points.push(x, 0, z);
-        tints.push(patch, patch, patch * 0.98);
-        uv.push(x * 0.40, z * 0.40);
-        if (strip > 0 && slice > 0) {
-          const a = strip * (slices + 1) + slice;
-          const b = a - slices - 1;
+    for (let ring = 0; ring <= rings; ring++) {
+      const distance = ring / rings;
+      const slope = T.MathUtils.smoothstep(distance, 0.67, 1);
+      for (let i = 0; i <= segments; i++) {
+        const angle = i * tau / segments;
+        const outline = 1 + Math.sin(angle * 3 + width) * 0.09 + Math.cos(angle * 7 + depth) * 0.045;
+        const x = Math.cos(angle) * (width + 2.0) * 0.59 * distance * outline;
+        const z = Math.sin(angle) * (depth + 1.9) * 0.62 * distance * outline;
+        const sphere = Math.sqrt(globeRadius ** 2 - x ** 2 - z ** 2) - globeRadius;
+        const micro = (Math.sin(x * 2.1 + z) * 0.14 + Math.cos(z * 3.1 - x) * 0.08) * distance;
+        const height = T.MathUtils.lerp(0.135 + micro, sphere + 0.011, slope);
+        const shade = 0.81 + random() * 0.28 + Math.sin(x + z * 2) * 0.07;
+        vertices.push(x, height, z);
+        colors.push(shade, shade, shade);
+        uv.push(x * 0.43, z * 0.43);
+        if (ring && i) {
+          const a = ring * (segments + 1) + i;
+          const b = a - segments - 1;
           indices.push(a, b - 1, b, a, a - 1, b - 1);
         }
       }
     }
     const geometry = new T.BufferGeometry();
-    geometry.setAttribute("position", new T.Float32BufferAttribute(points, 3));
-    geometry.setAttribute("color", new T.Float32BufferAttribute(tints, 3));
+    geometry.setAttribute("position", new T.Float32BufferAttribute(vertices, 3));
+    geometry.setAttribute("color", new T.Float32BufferAttribute(colors, 3));
     geometry.setAttribute("uv", new T.Float32BufferAttribute(uv, 2));
     geometry.setIndex(indices);
     geometry.computeVertexNormals();
     return geometry;
   }
-  for (let i = 0; i < 92; i++) {
-    const a = i * tau / 92;
-    const x = Math.sin(a);
-    const z = Math.cos(a);
-    box(x * 14.78, 0.086, z * 14.78, 0.45, 0.012, 0.043, paintLine, false, a);
-    box(x * 16.43, -1.11, z * 16.43, 0.03, 0.45, 0.038, black, false, a);
-    if (i % 5 === 0) post(x * 13.42, z * 13.42, 0.84, 0.12);
-    if (i % 6 === 0) box(x * 16.51, -1.69, z * 16.51, 0.38, 0.033, 0.04, lamp, false, a);
-  }
-  for (let i = 0; i < 40; i++) {
-    const a = i * tau / 40 + 0.08;
-    const x = Math.sin(a);
-    const z = Math.cos(a);
-    const g = new T.IcosahedronGeometry(1, 0).scale(0.75 + random() * 1.55, 0.26 + random() * 0.48, 0.18 + random() * 0.34);
-    add(g, i % 6 === 0 ? wood : slate, x * (16.08 + random() * 0.13), -0.83 + random() * 0.20, z * (16.08 + random() * 0.13), false, 0, a, (random() - 0.5) * 0.16);
-  }
-  for (let i = 0; i < 6; i++) {
-    const a = i * tau / 6 + 0.37;
-    const dirX = Math.sin(a), dirZ = Math.cos(a);
-    box(dirX * 8.2, 0.162, dirZ * 8.2, 1.26, 0.028, 10.0, stone, false, a);
-    for (let j = -2; j <= 2; j++) {
-      box(dirX * 14.58 + Math.cos(a) * j * 0.24, 0.089, dirZ * 14.58 - Math.sin(a) * j * 0.24, 0.1, 0.014, 1.13, paintLine, false, a);
+
+  for (const id of Object.keys(sites) as SurfaceStop[]) {
+    active = id;
+    const { x, z, width, depth } = sites[id];
+    const ground = standard(terrains[id], 1, 0, noise);
+    ground.vertexColors = true;
+    add(terrain(width, depth), ground, x, 0, z, false);
+    slab(width, depth, 1.10, 0.6, -0.88, curb, x, z);
+    slab(width - 0.12, depth - 0.12, 0.035, 0.53, 0.22, stone, x, z);
+    if (id !== "starcars" && id !== "hq") {
+      for (let i = 1; i * 0.67 < width - 0.85; i++) {
+        box(x - width / 2 + 0.34 + i * 0.67, 0.257, z, 0.014, 0.004, depth - 0.37, curb, false);
+      }
+      for (let i = 1; i * 0.67 < depth - 0.85; i++) {
+        box(x, 0.257, z - depth / 2 + 0.34 + i * 0.67, width - 0.43, 0.004, 0.014, curb, false);
+      }
     }
-  }
-  for (const [x, z, w, d] of [[-7.4,-7.2,8.7,6.1],[-9.6,-0.10,6.75,6.0],[-5.55,7.65,6.7,5.4],[6.55,5.65,9.6,6.0],[5.3,-7.8,7.2,6.3],[10.5,-0.45,4.65,3.8],[1.2,-2.55,4.25,2.3],[-2.65,-4.45,2.9,2.55]]) {
-    slab(w, d, 0.075, 0.58, 0.15, curb, x, z);
-    slab(w - 0.14, d - 0.14, 0.035, 0.54, 0.22, stone, x, z);
-    for (let i = 1; i * 0.65 < w - 0.85; i++) {
-      box(x - w / 2 + 0.36 + i * 0.65, 0.257, z, 0.014, 0.004, d - 0.37, curb, false);
+    for (const side of [-1, 1]) {
+      const tx = x + side * (width / 2 + 0.26);
+      const tz = z + side * (depth / 2 - 0.6);
+      tree(tx, tz, 1.18 + random() * 0.35, -0.12);
+      grasses(tx, tz, 10, 0.42, -0.11);
+      post(x + side * (width / 2 - 0.33), z + depth / 2 - 0.40, 0.78, 0.255);
     }
-    for (let i = 1; i * 0.65 < d - 0.85; i++) {
-      box(x, 0.257, z - d / 2 + 0.36 + i * 0.65, w - 0.43, 0.004, 0.014, curb, false);
-    }
-  }
-  for (const [x, z, size] of [[-10.6,-6.8,1.6],[-11.9,-3.8,1.4],[-12.4,2.9,1.55],[-10.35,5.12,1.42],[-8.7,8.1,1.6],[-5.55,10.8,1.36],[-1.15,11.7,1.52],[1.65,10.9,1.44],[9.2,8.8,1.24],[12.1,3.4,1.45],[12.6,-3.5,1.46],[9.3,-8.1,1.38],[4.4,-11.35,1.32],[0.5,-11.65,1.45],[-3.1,-10.4,1.57],[-3.6,2.22,1.35],[2.71,2.2,1.24],[3.6,-4.55,1.24],[-5.65,-3.63,1.2]]) {
-    cylinder(x, 0.158, z, 0.52, 0.55, 0.025, gardens[Math.floor(random() * gardens.length)], 15, false);
-    tree(x, z, size, 0.151);
-  }
-  for (const [x,z] of [[-10.7,3.7],[-7.7,4.6],[-3.15,9.5],[2.8,8.8],[11.6,2.0],[7.9,-4.5],[-1.0,-8.0],[-10.25,-4.0],[-3.95,-2.0],[3.4,3.0]]) {
-    grasses(x, z, low ? 11 : 23, 0.53, 0.15);
   }
 
   // ReEnergy. Terracotta structure, glass showroom and two tracked arrays of solar cells.
+  active = "reenergy";
   const terracotta = standard(0xb58362, 0.81, 0, noise);
   const solarFrame = standard(0x93a7b6, 0.44, 0.37);
   const solarCell = [0x2c4968, 0x325373, 0x466b86].map(color => standard(color, 0.28, 0.42));
@@ -416,6 +402,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   }
 
   // A civic building as a visual metaphor for B-CRM. The project description is independent of the fiction.
+  active = "b-crm";
   const civicX = -9.55, civicZ = -0.28;
   const civicRoof = standard(0x73777a, 0.68, 0.38);
   const civicTrim = standard(0xae9c81, 0.76, 0.06);
@@ -464,6 +451,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   }
 
   // Isto Kebab. Ribbed counter, striped canopy, scaled menu and a roof-mounted kebab.
+  active = "isto-kebab";
   const kioskX = -5.35, kioskZ = 7.18;
   const orange = standard(0xc95f31, 0.63, 0.04);
   const awning = standard(0xde7750, 0.89);
@@ -507,6 +495,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   projectHit("isto-kebab", kioskX, 1.65, kioskZ + 0.25, 4.6, 2.94, 3.95);
 
   // StarCars. A striped display lot with three individually shaped sports cars.
+  active = "starcars";
   const carsX = 6.69, carsZ = 5.7;
   const red = standard(0xc03c32, 0.26, 0.34);
   const blue = standard(0x77a8b1, 0.29, 0.38);
@@ -522,7 +511,11 @@ export function buildModel(low: boolean, bakeLighting = false) {
     const x = carsX + (i - 1) * 2.50;
     const z = carsZ + (i === 1 ? 0.55 : 0.17);
     const r = i === 0 ? -0.20 : i === 1 ? -0.33 : -0.36;
+    groundShade(x, z, 2.16, 3.55, 0.279);
+    carPlacements.push({ x, z, angle: r });
+    currentBatch = carBatches;
     car(x, z, r, [red, silver, blue][i], i);
+    currentBatch = batches;
     projectHit("starcars", x, 0.70, z, 1.92, 0.93, 3.13);
   }
   const canopyZ = carsZ - 2.03;
@@ -546,8 +539,6 @@ export function buildModel(low: boolean, bakeLighting = false) {
     hull([[-0.73,0.52,0.71,0.75],[-0.29,0.46,0.72,height+0.17],[0.48,0.42,0.69,height+0.15],[0.95,0.51,0.68,0.73]], deepGlass);
     const [roofX,roofY,roofZ] = local(0,height+0.145,0.12);
     rounded(roofX, roofY, roofZ, 0.80, 0.06, 0.62, variant === 0 ? black : paint, 0.027, angle);
-    const [sx, , sz] = local(0, 0.45, 0);
-    groundShade(sx, sz, 2.16, 3.55, 0.279);
     for (const side of [-1, 1]) {
       for (const dz of [-0.97, 0.96]) {
         const wheel = local(side * 0.67, 0.50, dz);
@@ -599,6 +590,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   }
 
   // AI lab. A dark observatory with segmented glazing, a luminous chamber and roof antenna.
+  active = "lab";
   const labX = 5.25, labZ = -7.77;
   const ceramic = standard(0x3a4d54, 0.53, 0.43);
   const chamber = standard(0x717c7d, 0.65, 0.40);
@@ -644,6 +636,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   proxy(labX, 2.48, labZ + 0.35, 6.32, 4.55, 6.67, { zone: "lab" });
 
   // Motomizer's tuning garage and BeatMarket's open-air sound stage.
+  active = "motomizer";
   const garageX = 10.52, garageZ = -0.38;
   const amber = lit(0xffac55, 0.68);
   const yellow = standard(0xcca85a, 0.76);
@@ -657,6 +650,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   for (let i = 0; i < 4; i++) cylinder(garageX + 1.69, 0.29 + i * 0.13, garageZ + 1.70, 0.20, 0.20, 0.12, tire, 16);
   projectHit("motomizer", garageX, 1.36, garageZ, 4.01, 2.20, 3.33);
 
+  active = "beatmarket";
   const stageX = 1.23, stageZ = -2.68;
   const aubergine = standard(0x684b63, 0.72);
   const pink = lit(0xdc8295, 0.51);
@@ -674,6 +668,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   sign("BEATMARKET", stageX, 2.406, stageZ + 0.51, 3.12, 0.23);
   projectHit("beatmarket", stageX, 1.4, stageZ, 4.04, 2.35, 2.17);
 
+  active = "studio";
   const studioX = -2.68, studioZ = -4.45;
   rounded(studioX, 0.96, studioZ, 2.55, 1.44, 2.0, sandstone, 0.08);
   box(studioX, 1.01, studioZ + 1.025, 2.13, 0.86, 0.07, glass);
@@ -683,6 +678,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   proxy(studioX, 1.05, studioZ, 2.75, 1.63, 2.28, { zone: "studio" });
 
   // The mascot's central walking plaza and a small fountain at the centre of the map.
+  active = "hq";
   cylinder(0.10, 0.193, 3.43, 3.03, 3.17, 0.096, stone, 60);
   ring(0.10, 0.247, 3.43, 2.88, 0.019, bronze, 70);
   ring(0.10, 0.247, 3.43, 2.30, 0.011, curb, 60);
@@ -701,14 +697,16 @@ export function buildModel(low: boolean, bakeLighting = false) {
   materials.add(beaconMaterial);
   const beacon = new T.Mesh(new T.TorusGeometry(2.79, 0.022, 5, 64), beaconMaterial);
   beacon.rotation.x = -Math.PI / 2;
-  beacon.position.set(labX, 2.74, labZ);
+  beacon.position.set(labX, 2.74, labZ).applyMatrix4(sites.lab.matrix);
+  beacon.quaternion.premultiply(new T.Quaternion().setFromRotationMatrix(sites.lab.matrix));
   group.add(beacon);
 
   const avatar = new T.Group();
-  const fabric = standard(0xb68a62, 0.97, 0, noise);
-  const plushCream = standard(0xefd3aa, 0.93);
-  const sweater = standard(0x68754b, 0.97, 0, noise);
-  const stitch = standard(0xa0aa73, 0.97);
+  const fabric = standard(0xa87955, 0.97, 0, noise);
+  const plushCream = standard(0xe4bc97, 0.93);
+  const blazer = standard(0x202733, 0.93, 0, noise);
+  const lapel = standard(0x303948, 0.92, 0, noise);
+  const hair = standard(0x251b19, 0.92, 0, noise);
   const eye = standard(0x1b2024, 0.55);
   const plushParts = new Map<T.MeshLambertMaterial | T.MeshStandardMaterial, T.BufferGeometry[]>();
   function plushGeometry(w: number, h: number, d: number) {
@@ -723,21 +721,34 @@ export function buildModel(low: boolean, bakeLighting = false) {
   function plush(material: T.MeshLambertMaterial | T.MeshStandardMaterial, x: number, y: number, z: number, w: number, h: number, d: number, rotationZ = 0) {
     plushPart(material, plushGeometry(w, h, d).rotateZ(rotationZ).translate(x, y, z));
   }
-  plush(sweater, 0, 0.68, 0, 0.40, 0.40, 0.30);
-  plush(stitch, 0, 0.63, 0.285, 0.136, 0.142, 0.028);
-  plushPart(fabric, new T.TorusGeometry(0.078, 0.009, 5, 20).translate(0, 0.63, 0.315));
-  for (let i = -3; i <= 3; i++) plush(stitch, i * 0.057, 0.43, 0.236 - Math.abs(i) * 0.012, 0.012, 0.043, 0.029);
-  plush(fabric, 0, 1.22, 0.026, 0.41, 0.37, 0.33);
-  for (const side of [-1,1]) {
-    plush(fabric, side * 0.325, 1.51, 0.025, 0.163, 0.154, 0.102, side * -0.29);
-    plush(plushCream, side * 0.327, 1.509, 0.108, 0.113, 0.105, 0.037, side * -0.29);
-    plush(fabric, side * 0.405, 0.71, 0.05, 0.124, 0.24, 0.13, side * -0.42);
-    plush(eye, side * 0.142, 1.275, 0.325, 0.055, 0.064, 0.047);
-    plush(plushCream, side * 0.151, 1.299, 0.367, 0.016, 0.018, 0.011);
+  // Based on the owner's portrait: swept-back dark hair, angular beard and a navy blazer.
+  plush(blazer, 0, 0.68, 0, 0.42, 0.40, 0.31);
+  plush(black, 0, 0.81, 0.263, 0.17, 0.23, 0.08);
+  for (const side of [-1, 1]) {
+    plush(lapel, side * 0.14, 0.81, 0.30, 0.065, 0.21, 0.036, -side * 0.36);
+    plush(blazer, side * 0.36, 0.70, 0.13, 0.13, 0.24, 0.14, -side * 0.46);
+    plush(blazer, side * 0.19, 0.64, 0.30, 0.24, 0.093, 0.113, side * 0.17);
+    plush(fabric, side * 0.038, 0.66, 0.375, 0.09, 0.079, 0.065);
   }
-  plush(plushCream, 0, 1.11, 0.307, 0.168, 0.107, 0.076);
-  plush(eye, 0, 1.155, 0.376, 0.058, 0.042, 0.032);
-  plush(eye, 0, 1.096, 0.378, 0.034, 0.013, 0.016);
+  plushPart(bronze, new T.TorusGeometry(0.043, 0.006, 5, 16).translate(-0.275, 0.83, 0.293));
+  plush(fabric, 0, 1.22, 0.026, 0.41, 0.37, 0.33);
+  plush(hair, -0.025, 1.474, -0.032, 0.393, 0.143, 0.293, 0.06);
+  for (let i = 0; i < 8; i++) {
+    plush(i % 3 === 0 ? wood : hair, -0.282 + i * 0.076, 1.505 + Math.sin(i * 0.4) * 0.067,
+      0.077 - i * 0.019, 0.054, 0.082, 0.241, -0.105);
+  }
+  for (const side of [-1, 1]) {
+    plush(fabric, side * 0.325, 1.48, 0.011, 0.152, 0.143, 0.102, side * -0.29);
+    plush(plushCream, side * 0.327, 1.481, 0.093, 0.102, 0.096, 0.036, side * -0.29);
+    plush(eye, side * 0.142, 1.272, 0.325, 0.052, 0.056, 0.045);
+    plush(plushCream, side * 0.150, 1.296, 0.365, 0.015, 0.016, 0.010);
+    plush(hair, side * 0.144, 1.352, 0.319, 0.084, 0.026, 0.026, -side * 0.18);
+    plush(hair, side * 0.204, 1.095, 0.257, 0.095, 0.144, 0.065, side * 0.40);
+  }
+  plush(hair, 0, 0.996, 0.288, 0.175, 0.083, 0.071);
+  plush(plushCream, 0, 1.115, 0.307, 0.168, 0.092, 0.078);
+  plush(eye, 0, 1.153, 0.376, 0.058, 0.039, 0.031);
+  plush(hair, 0, 1.085, 0.379, 0.069, 0.017, 0.016, -0.1);
   const costume = [...plushParts].flatMap(([material, geometries]) => {
     if (bakeLighting && material instanceof T.MeshLambertMaterial) return geometries.map(geometry => bakeSurface(geometry, material));
     const mesh = new T.Mesh(mergeGeometries(geometries)!, material);
@@ -753,7 +764,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
     costume.forEach(geometry => geometry.dispose());
   }
   const legs = [-0.175, 0.175].map(x => {
-    const leg = new T.Mesh(plushGeometry(0.151, 0.21, 0.194), fabric);
+    const leg = new T.Mesh(plushGeometry(0.151, 0.21, 0.194), blazer);
     leg.position.set(x, 0.23, 0.063);
     leg.castShadow = true;
     avatar.add(leg);
@@ -771,48 +782,138 @@ export function buildModel(low: boolean, bakeLighting = false) {
   avatarHit.userData.hit = { zone: "hq" } satisfies Hit;
   avatar.add(avatarHit);
   hits.push(avatarHit);
-  group.add(avatar);
+  const plaza = new T.Group();
+  plaza.applyMatrix4(sites.hq.matrix);
+  plaza.add(avatar);
+  group.add(plaza);
 
   addSigns();
 
   // Static opaque surfaces share one unlit draw call in the software profile.
-  const bakedSurfaces: T.BufferGeometry[] = [];
-  for (const [material, { cast, plain }] of batches) {
-    for (const [geometries, castsShadow] of [[cast, true], [plain, false]] as const) {
-      if (!geometries.length) continue;
-      const compatible = geometries.map(geometry => {
-        if (geometry.index) return geometry;
-        const indexed = mergeVertices(geometry);
-        geometry.dispose();
-        return indexed;
-      });
-      if (bakeLighting && (material instanceof T.MeshLambertMaterial || material instanceof T.MeshPhongMaterial)) {
-        for (const geometry of compatible) bakedSurfaces.push(bakeSurface(geometry, material));
-        continue;
+  function flush(source: Batches, destination: T.Group) {
+    const bakedSurfaces: T.BufferGeometry[] = [];
+    for (const [material, { cast, plain }] of source) {
+      for (const [geometries, castsShadow] of [[cast, true], [plain, false]] as const) {
+        if (!geometries.length) continue;
+        const compatible = geometries.map(geometry => {
+          if (geometry.index) return geometry;
+          const indexed = mergeVertices(geometry);
+          geometry.dispose();
+          return indexed;
+        });
+        if (bakeLighting && material !== asphalt && (material instanceof T.MeshLambertMaterial || material instanceof T.MeshPhongMaterial)) {
+          for (const geometry of compatible) bakedSurfaces.push(bakeSurface(geometry, material));
+          continue;
+        }
+        const merged = mergeGeometries(compatible)!;
+        compatible.forEach(geometry => geometry.dispose());
+        const mesh = new T.Mesh(merged, material);
+        mesh.castShadow = castsShadow && !material.transparent;
+        mesh.receiveShadow = !material.transparent;
+        destination.add(mesh);
       }
-      const merged = mergeGeometries(compatible)!;
-      compatible.forEach(geometry => geometry.dispose());
-      const mesh = new T.Mesh(merged, material);
-      mesh.castShadow = castsShadow && !material.transparent;
-      mesh.receiveShadow = !material.transparent;
-      group.add(mesh);
+    }
+    if (bakedSurfaces.length) {
+      const surfaceMaterial = new T.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
+      materials.add(surfaceMaterial);
+      destination.add(new T.Mesh(mergeGeometries(bakedSurfaces)!, surfaceMaterial));
+      bakedSurfaces.forEach(geometry => geometry.dispose());
     }
   }
-  if (bakedSurfaces.length) {
-    const surfaceMaterial = new T.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
-    materials.add(surfaceMaterial);
-    group.add(new T.Mesh(mergeGeometries(bakedSurfaces)!, surfaceMaterial));
-    bakedSurfaces.forEach(geometry => geometry.dispose());
+
+  flush(batches, group);
+  flush(carBatches, carFallback);
+  carModels.visible = false;
+  group.add(carFallback, carModels);
+
+  async function loadCars(render: () => void) {
+    if (carsRequested || disposed) return;
+    carsRequested = true;
+    try {
+      const [{ GLTFLoader }, { MeshoptDecoder }] = await Promise.all([
+        import("three/addons/loaders/GLTFLoader.js"), import("three/addons/libs/meshopt_decoder.module.js"),
+      ]);
+      const { scene: asset } = await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync("/images/world/starcars-supercar.glb");
+      const colors = [0xbd2527, 0xc8a171, 0x4385a0];
+      const variants = new Map<T.Material, T.Material[]>();
+      const localGeometries = new Set<T.BufferGeometry>();
+      const localMaterials = new Set<T.Material>();
+      asset.traverse(node => {
+        if (!(node instanceof T.Mesh)) return;
+        localGeometries.add(node.geometry);
+        for (const material of [node.material].flat()) localMaterials.add(material);
+      });
+      if (disposed) {
+        localGeometries.forEach(geometry => geometry.dispose());
+        localMaterials.forEach(material => material.dispose());
+        return;
+      }
+      localMaterials.forEach(material => materials.add(material));
+      const bounds = new T.Box3().setFromObject(asset);
+      const center = bounds.getCenter(new T.Vector3());
+      const scale = 3.24 / (bounds.max.z - bounds.min.z);
+      const lot = new T.Group();
+      lot.applyMatrix4(sites.starcars.matrix);
+      carPlacements.forEach(({ x, z, angle }, index) => {
+        const car = asset.clone(true);
+        car.position.set(-center.x * scale, -bounds.min.y * scale, -center.z * scale);
+        car.scale.setScalar(scale);
+        car.traverse(node => {
+          if (!(node instanceof T.Mesh)) return;
+          node.castShadow = true;
+          node.receiveShadow = true;
+          const colorPaint = (material: T.Material) => {
+            if (!(material instanceof T.MeshStandardMaterial) || material.name !== "paint") return material;
+            if (!variants.has(material)) variants.set(material, colors.map(color => {
+              const painted = material.clone();
+              painted.color.setHex(color);
+              materials.add(painted);
+              return painted;
+            }));
+            return variants.get(material)![index];
+          };
+          node.material = Array.isArray(node.material) ? node.material.map(colorPaint) : colorPaint(node.material);
+        });
+        const position = new T.Group();
+        position.position.set(x, 0.28, z);
+        position.rotation.y = angle + Math.PI;
+        position.add(car);
+        lot.add(position);
+      });
+      carModels.add(lot);
+      render();
+      new T.TextureLoader().load("/images/world/starcars-asphalt.webp", (texture) => {
+        if (disposed) { texture.dispose(); return; }
+        texture.colorSpace = T.SRGBColorSpace;
+        texture.wrapS = texture.wrapT = T.RepeatWrapping;
+        texture.repeat.set(0.45, 0.45);
+        textures.add(texture);
+        asphalt.map = texture;
+        asphalt.color.setHex(0xa5a6a8);
+        asphalt.needsUpdate = true;
+        render();
+      });
+    } catch {
+      carsRequested = false;
+    }
+  }
+
+  function showDetailedCars(visible: boolean) {
+    carModels.visible = visible && carModels.children.length > 0;
+    carFallback.visible = !carModels.visible;
   }
 
   function dispose() {
+    disposed = true;
+    const geometries = new Set<T.BufferGeometry>();
     group.traverse(object => {
-      if (object instanceof T.Mesh) object.geometry.dispose();
+      if (object instanceof T.Mesh) geometries.add(object.geometry);
     });
+    geometries.forEach(geometry => geometry.dispose());
     materials.forEach(material => material.dispose());
     textures.forEach(texture => texture.dispose());
     textures.clear();
   }
 
-  return { group, hits, avatar, legs, beacon, dispose };
+  return { group, sites, hits, avatar, legs, beacon, loadCars, showDetailedCars, dispose };
 }

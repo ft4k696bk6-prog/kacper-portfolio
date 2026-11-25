@@ -4,7 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type Keyboar
 import Image from "next/image";
 import {
   ArrowDownRight, ArrowUpRight, AudioLines, Box, Building2, CarFront, ChevronLeft, ChevronRight, CircleHelp, Code2,
-  Compass, Cpu, Globe2, Images, Mail, Minus, Mouse, Move, Plus, RotateCcw, ScanLine, SunMedium, UserRound, Utensils, Wrench, X,
+  Compass, Cpu, Globe2, Images, Mail, Move, RotateCcw, ScanLine, SunMedium, UserRound, Utensils, Wrench, X,
 } from "lucide-react";
 import { gsap } from "gsap";
 import { classicPaths, contactPaths, copy, mapStops, projectIndex, projects, projectStops, sceneStops, worldPaths, zones, type ProjectId, type StopId, type WorldLocale, type Zone } from "./content";
@@ -242,9 +242,8 @@ export function World({ locale }: { locale: WorldLocale }) {
     const slot = Number(event.key) - 1;
     if (event.key.length === 1 && slot >= 0 && slot < 8) { event.preventDefault(); selectStop(mapStops[slot]); return; }
     if (event.key === "0") { event.preventDefault(); go(overview); return; }
-    const steps: Record<string, [number, number, number]> = {
-      ArrowLeft: [-0.16, 0, 1], ArrowRight: [0.16, 0, 1], ArrowUp: [0, -0.12, 1], ArrowDown: [0, 0.12, 1],
-      "+": [0, 0, 1.2], "=": [0, 0, 1.2], "-": [0, 0, 1 / 1.2],
+    const steps: Record<string, [number, number]> = {
+      ArrowLeft: [-0.18, 0], ArrowRight: [0.18, 0], ArrowUp: [0, -0.14], ArrowDown: [0, 0.14],
     };
     if (event.key in steps) {
       event.preventDefault();
@@ -341,7 +340,7 @@ export function World({ locale }: { locale: WorldLocale }) {
           <p className={styles.kicker} data-world-reveal=""><span />{t.explore}</p>
           <h1 className={styles.title} aria-label="Bernecki World"><span><span data-world-line="">Bernecki</span></span><span><span data-world-line="">World<span>.</span></span></span></h1>
           <p className={styles.description} data-world-reveal="">{t.description}</p>
-          <button type="button" className={styles.primary} hidden={!isOverview} onClick={() => selectStop("reenergy")} data-world-reveal="">{t.enter}<ArrowDownRight size={19} strokeWidth={1.7} /></button>
+          <button type="button" className={styles.primary} hidden={!isOverview} onClick={() => selectZone("gallery")} data-world-reveal="">{t.enter}<ArrowDownRight size={19} strokeWidth={1.7} /></button>
         </div>
 
         {activePlace && <div className={styles.place} data-testid="world-place">
@@ -381,7 +380,7 @@ export function World({ locale }: { locale: WorldLocale }) {
           </>}
           {!gallery && <>
             {selection.zone === "hq" && <div className={styles.portrait} data-place-reveal="">
-              <Image src="/images/profile-3-cutout.png" alt={t.portrait} width={78} height={85} sizes="78px" />
+              <Image src="/images/world/kacper-plush.webp" alt={t.portrait} width={118} height={147} sizes="92px" />
               <div><strong>Kacper Bernecki</strong><span>bernecki.dev</span></div>
             </div>}
             <p className={styles.placeText} data-place-reveal="">{activePlace.text}</p>
@@ -405,14 +404,13 @@ export function World({ locale }: { locale: WorldLocale }) {
           <span className={styles.visuallyHidden}>{t.keyboard}</span>
           {status === "ready" ? <>
             <span className={styles.mouseHint}><Move size={14} strokeWidth={1.4} />{t.rotate}</span>
-            <span className={styles.mouseHint}><Mouse size={14} strokeWidth={1.4} />{t.zoom}</span>
             <span className={styles.touchHint}><Move size={14} strokeWidth={1.4} />{t.touch}</span>
           </> : <span role="status">{status === "loading" ? t.loading : t.fallback}</span>}
         </div>
         <div className={styles.tools}>
-          {status === "ready" && <>
-            <button type="button" className={styles.square} aria-label={t.zoomIn} title={t.zoomIn} onClick={() => scene.current?.nudge(0, 0, 1.2)}><Plus size={17} strokeWidth={1.5} /></button>
-            <button type="button" className={styles.square} aria-label={t.zoomOut} title={t.zoomOut} onClick={() => scene.current?.nudge(0, 0, 1 / 1.2)}><Minus size={17} strokeWidth={1.5} /></button>
+          {status === "ready" && isOverview && <>
+            <button type="button" className={styles.square} aria-label={t.rotateLeft} title={t.rotateLeft} onClick={() => scene.current?.nudge(-0.25, 0)}><ChevronLeft size={19} strokeWidth={1.5} /></button>
+            <button type="button" className={styles.square} aria-label={t.rotateRight} title={t.rotateRight} onClick={() => scene.current?.nudge(0.25, 0)}><ChevronRight size={19} strokeWidth={1.5} /></button>
           </>}
           <button type="button" className={styles.square} aria-label={t.reset} title={t.reset} onClick={() => go(overview)}><RotateCcw size={16} strokeWidth={1.5} /></button>
           <button type="button" ref={helpButton} className={styles.square} aria-expanded={help} aria-controls="world-help" aria-label={t.help} title={t.help} onClick={() => setHelp(value => !value)}><CircleHelp size={16} strokeWidth={1.5} /></button>
@@ -444,7 +442,15 @@ export function World({ locale }: { locale: WorldLocale }) {
       </nav>
       <div className={styles.footerEnd}>
         <a href={classicPaths[locale]} onClick={() => rememberExperience("classic")}>{t.classic}<ArrowUpRight size={13} strokeWidth={1.55} /></a>
-        <span>BERNECKI.DEV</span>
+        <details className={styles.credits}>
+          <summary>{t.credits}</summary>
+          <div>
+            <a href="https://www.solarsystemscope.com/textures/">Solar System Scope / NASA</a>
+            <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+            <a href="https://tevy.dev/models/supercar">tevy · CC0</a>
+            <a href="https://ambientcg.com/view?id=Asphalt012">ambientCG · CC0</a>
+          </div>
+        </details>
       </div>
     </footer>
     <ExperienceDialog locale={locale} current="world" open={modeDialog} onClose={() => { setModeDialog(false); modeButton.current?.focus(); }} />

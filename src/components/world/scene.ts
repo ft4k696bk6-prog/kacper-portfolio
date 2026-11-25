@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { projects, projectStops, sceneStops, zones, type StopId, type Zone } from "./content";
 import { buildModel, type Hit } from "./model";
 import { loadLighting } from "./lighting";
+import { globeDirection, globeRadius, loadPlanet, type SurfaceStop } from "./globe";
 
 type View = { zone: Zone | null; project: number | null };
 type Callbacks = {
@@ -15,8 +16,12 @@ type Callbacks = {
   rendered: () => void;
 };
 
-const initial = { theta: 0.53, phi: 0.88, zoom: 1 };
-const overview = new T.Vector3(0, 0.5, 0);
+const initial = globeDirection(23, 6);
+const overview = new T.Vector3();
+const planetSphere = new T.Sphere(overview, globeRadius - 0.05);
+const fov = 35;
+const fovTangent = Math.tan(T.MathUtils.degToRad(fov / 2));
+type Pose = { target: T.Vector3; direction: T.Vector3; distance: number };
 const travelKeys = new Set(["w", "a", "s", "d"]);
 
 function makeContext(antialias: boolean) {
@@ -41,9 +46,10 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   const { canvas, context, options } = graphics;
   const low = compact || software;
   let environment: T.Texture | null = null;
+  let planet: Awaited<ReturnType<typeof loadPlanet>>;
   try {
     if (!low) environment = await loadLighting(signal);
-    signal.throwIfAborted();
+    planet = await loadPlanet(software, low, signal);
   } catch (error) {
     environment?.dispose();
     context.getExtension("WEBGL_lose_context")?.loseContext();
@@ -69,47 +75,46 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   host.append(renderer.domElement);
 
   const scene = new T.Scene();
-  const camera = new T.OrthographicCamera(-19, 19, 13, -13, 0.1, 120);
-  const spherical = new T.Spherical(46, initial.phi, initial.theta);
+  const camera = new T.PerspectiveCamera(fov, 1, 0.15, 260);
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = !motion.matches;
   controls.dampingFactor = software ? 0.17 : 0.074;
   controls.enablePan = false;
-  controls.rotateSpeed = 0.6;
-  controls.zoomSpeed = 0.88;
-  controls.minPolarAngle = 0.47;
-  controls.maxPolarAngle = 1.36;
-  controls.minZoom = 0.72;
-  controls.maxZoom = 3.75;
-  controls.mouseButtons = { LEFT: T.MOUSE.ROTATE, MIDDLE: T.MOUSE.DOLLY, RIGHT: T.MOUSE.ROTATE };
-  controls.touches = { ONE: T.TOUCH.ROTATE, TWO: T.TOUCH.DOLLY_PAN };
+  controls.rotateSpeed = 0.59;
+  controls.enableZoom = false;
+  controls.minPolarAngle = 0.12;
+  controls.maxPolarAngle = Math.PI - 0.12;
+  controls.mouseButtons = { LEFT: T.MOUSE.ROTATE, RIGHT: T.MOUSE.ROTATE };
+  controls.touches = { ONE: T.TOUCH.ROTATE };
   controls.target.copy(overview);
-  camera.position.setFromSpherical(spherical).add(controls.target);
+  camera.position.copy(initial).multiplyScalar(overviewDistance());
   controls.update();
+  scene.add(planet.group);
 
   scene.environment = environment;
-  scene.environmentIntensity = 0.58;
+  scene.environmentIntensity = 0.86;
 
-  scene.add(new T.HemisphereLight(0xe2edf6, 0x565d50, low ? 1.10 : 1.42));
-  const sun = new T.DirectionalLight(0xffefda, low ? 2.10 : 2.55);
-  sun.position.set(-18, 24, 11);
+  scene.add(new T.HemisphereLight(0xe3eeff, 0x46536b, low ? 1.21 : 1.38));
+  const sun = new T.DirectionalLight(0xffefdd, low ? 1.62 : 2.30);
+  sun.position.set(33, 56, 37);
   sun.castShadow = true;
   const shadowSize = software ? 512 : compact ? 1024 : 2048;
   sun.shadow.mapSize.set(shadowSize, shadowSize);
-  sun.shadow.camera.left = -23;
-  sun.shadow.camera.right = 23;
-  sun.shadow.camera.top = 20;
-  sun.shadow.camera.bottom = -20;
+  sun.shadow.camera.left = -31;
+  sun.shadow.camera.right = 31;
+  sun.shadow.camera.top = 31;
+  sun.shadow.camera.bottom = -31;
   sun.shadow.camera.near = 0.5;
-  sun.shadow.camera.far = 75;
+  sun.shadow.camera.far = 125;
   sun.shadow.bias = -0.0002;
   sun.shadow.normalBias = 0.065;
   sun.shadow.intensity = 0.86;
   scene.add(sun);
-  const fill = new T.DirectionalLight(0xcbd9f3, low ? 0.70 : 0.97);
+  const fill = new T.DirectionalLight(0xb8d7ff, low ? 0.54 : 0.66);
   fill.position.set(12, 8, -15);
   scene.add(fill);
   const model = buildModel(low, software);
+  const starCarsSite = model.sites.starcars.normal.clone().multiplyScalar(globeRadius);
   scene.add(model.group);
   renderer.shadowMap.needsUpdate = true;
 
@@ -119,7 +124,12 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   const pointer = new T.Vector2();
   const projected = new T.Vector3();
   const walkingPlane = new T.Plane(new T.Vector3(0, 1, 0), -0.25);
-  const walkRay = new T.Vector3();
+  const walkRay = new T.Ray();
+  const walkHit = new T.Vector3();
+  const planetHit = new T.Vector3();
+  const avatarCamera = new T.Vector3();
+  const markerNormal = new T.Vector3();
+  const markerToEye = new T.Vector3();
   const avatarCenter = new T.Vector2(0.10, 3.43);
   const keys = new Set<string>();
   let waypoint: T.Vector2 | null = null;
@@ -144,13 +154,26 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   let slowWindows = 0;
   let hover: StopId | null = null;
 
-  function writeCamera(theta: number, phi: number, radius: number, x: number, y: number, z: number, zoom: number) {
-    controls.target.set(x, y, z);
-    camera.position.setFromSpherical(spherical.set(radius, phi, theta)).add(controls.target);
-    camera.zoom = T.MathUtils.clamp(zoom, controls.minZoom, controls.maxZoom);
-    camera.updateProjectionMatrix();
+  function overviewDistance() {
+    const fraction = Math.min(1, camera.aspect) * (compact ? 0.83 : 0.78);
+    return (globeRadius * 1.06) / Math.sin(Math.atan(fovTangent * fraction));
+  }
+
+  function isOverview(view: View) {
+    return view.project === null && (view.zone === null || view.zone === "gallery" || view.zone === "contact");
+  }
+
+  function writeCamera(pose: Pose) {
+    controls.target.copy(pose.target);
+    camera.position.copy(pose.target).addScaledVector(pose.direction, pose.distance);
     controls.update();
     requestRender();
+  }
+
+  function currentPose(): Pose {
+    const target = controls.target.clone();
+    const offset = camera.position.clone().sub(target);
+    return { target, distance: offset.length(), direction: offset.normalize() };
   }
 
   function requestRender() {
@@ -161,14 +184,12 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     if (disposed || lost) return;
     const width = Math.max(host.clientWidth, 1);
     const height = Math.max(host.clientHeight, 1);
-    const aspect = width / height;
-    const frustum = Math.max(25.8, (compact ? 39.25 : 38.6) / aspect);
-    camera.left = -frustum * aspect / 2;
-    camera.right = frustum * aspect / 2;
-    camera.top = frustum / 2;
-    camera.bottom = -frustum / 2;
+    const pose = currentPose();
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
     size.set(width, height);
+    if (isOverview(current) && !transition) writeCamera({ ...pose, distance: overviewDistance() });
+    else if (!transition) writeCamera(resolveView(current));
     requestRender();
   }
 
@@ -192,7 +213,8 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     const amount = Math.min(seconds, 0.08) * 2.7;
     const dx = Number(keys.has("d")) - Number(keys.has("a"));
     const dz = Number(keys.has("s")) - Number(keys.has("w"));
-    const angle = controls.getAzimuthalAngle();
+    avatarCamera.copy(camera.position).applyMatrix4(model.sites.hq.inverse);
+    const angle = Math.atan2(avatarCamera.x - position.x, avatarCamera.z - position.z);
     const direction = new T.Vector2(dx * Math.cos(angle) + dz * Math.sin(angle), dz * Math.cos(angle) - dx * Math.sin(angle));
     if (keys.size) waypoint = null;
 
@@ -232,6 +254,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       transition.tween.progress(Math.max(progress, 0));
       if (progress === 1) {
         cancelTransition();
+        controls.enabled = isOverview(current);
       }
     }
     moveAvatar(dt / 1000);
@@ -239,14 +262,21 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     const orbitMoved = controls.update();
     const moving = Boolean(transition || interacting || orbitMoved || keys.size || waypoint);
     updateDrawingBuffer(moving);
+    model.showDetailedCars(camera.position.distanceToSquared(starCarsSite) < 36 * 36);
+    fill.position.copy(camera.position).normalize().multiplyScalar(45);
     renderer.render(scene, camera);
     for (const zone of sceneStops) {
       const [x, y, z] = zone.marker;
       projected.set(x, y, z);
       if (zone.id === "hq") projected.add(model.avatar.position);
+      const site = model.sites[zone.id as SurfaceStop];
+      projected.applyMatrix4(site.matrix);
+      markerNormal.copy(projected).normalize();
+      markerToEye.copy(camera.position).sub(projected).normalize();
+      const front = markerNormal.dot(markerToEye) > 0.13;
       projected.project(camera);
       callbacks.marker(zone.id, (projected.x * 0.5 + 0.5) * size.x, (0.5 - projected.y * 0.5) * size.y,
-        projected.z > -1 && projected.z < 1 && Math.abs(projected.x) < 0.92 && Math.abs(projected.y) < 0.90);
+        front && projected.z > -1 && projected.z < 1 && Math.abs(projected.x) < 0.92 && Math.abs(projected.y) < 0.90);
     }
     callbacks.rotate(controls.getAzimuthalAngle());
     if (!called) {
@@ -280,15 +310,21 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     if (transition || keys.size || waypoint) requestRender();
   }
 
-  function resolveView(view: View) {
-    const match = view.project === null
-      ? zones.find(place => place.id === view.zone)
-      : projectStops[projects[view.project].id];
-    const [x, y, z] = match?.target ?? overview.toArray();
-    const [theta, phi, radius] = match?.angle ?? [initial.theta, initial.phi, 46];
-    const zoom = match?.zoom ?? 1;
-    const avatar = view.zone === "hq" || view.zone === "contact" ? model.avatar.position : null;
-    return { theta, phi, radius, x: x + (avatar?.x ?? 0), y: y + (avatar?.y ?? 0), z: z + (avatar?.z ?? 0), zoom: compact && zoom > 1 ? zoom * 0.92 : zoom };
+  function resolveView(view: View): Pose {
+    if (isOverview(view)) return { target: overview, direction: initial, distance: overviewDistance() };
+    const project = view.project === null ? null : projects[view.project];
+    const stop = project ? projectStops[project.id] : zones.find(place => place.id === view.zone)!;
+    const id = (project?.id ?? view.zone) as SurfaceStop;
+    const site = model.sites[id];
+    const target = new T.Vector3(...stop.target);
+    if (id === "hq") target.add(model.avatar.position);
+    target.applyMatrix4(site.matrix);
+    const tangent = new T.Vector3().setFromMatrixColumn(site.matrix, 0);
+    const tilt = id === "hq" ? 1.85 : id === "starcars" ? 1.28 : 1.02;
+    const direction = site.normal.clone().addScaledVector(site.south, tilt).addScaledVector(tangent, 0.23).normalize();
+    const span = id === "hq" ? 4.0 : Math.max(site.width, site.depth) + 1.8;
+    const aspect = Math.min(1.36, camera.aspect);
+    return { target, direction, distance: span / (2 * fovTangent * aspect * 0.81) };
   }
 
   function cancelTransition() {
@@ -309,51 +345,71 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   }
 
   function moveView(view: View, instant = false, opening = false) {
-    current = view;
-    if (view.zone === "hq" || view.zone === "contact") {
-      keys.clear();
-      waypoint = null;
+    if (view.project !== null && projects[view.project].id === "starcars") {
+      void model.loadCars(() => { renderer.shadowMap.needsUpdate = true; requestRender(); });
     }
+    const preserveBearing = (view.zone === "gallery" || view.zone === "contact") && isOverview(current);
+    current = view;
+    if (!isOverview(view)) { keys.clear(); waypoint = null; }
     cancelTransition();
     freezeOrbit();
-    const start = {
-      theta: controls.getAzimuthalAngle(), phi: controls.getPolarAngle(),
-      radius: camera.position.distanceTo(controls.target),
-      x: controls.target.x, y: controls.target.y, z: controls.target.z, zoom: camera.zoom,
-    };
+    controls.enabled = false;
+    const start = currentPose();
     const destination = resolveView(view);
-    if (opening && !motion.matches && !view.zone) {
-      start.theta -= 0.26;
-      start.phi -= 0.097;
-      start.zoom *= 0.91;
-      writeCamera(start.theta, start.phi, start.radius, start.x, start.y, start.z, start.zoom);
-    }
-    const turn = destination.theta - start.theta;
-    destination.theta = start.theta + Math.atan2(Math.sin(turn), Math.cos(turn));
-    if (instant || motion.matches) {
-      writeCamera(destination.theta, destination.phi, destination.radius, destination.x, destination.y, destination.z, destination.zoom);
-      cancelTransition();
+    if (preserveBearing) destination.direction = start.direction;
+    if (instant || motion.matches || opening) {
+      writeCamera(destination);
+      controls.enabled = isOverview(view);
+      controls.enableDamping = !motion.matches;
       return;
     }
-    captureFrames = 49;
+
+    // Pull back before crossing the globe, orbit at a fixed radius, then approach from outside.
+    const outbound = start.target.lengthSq() > 1;
+    const inbound = destination.target.lengthSq() > 1;
+    const exitAt = outbound ? (inbound ? 0.30 : 0.56) : 0;
+    const approachAt = inbound ? (outbound ? 0.64 : 0.51) : 1;
+    const orbitDistance = overviewDistance();
+    const turn = new T.Quaternion().setFromUnitVectors(start.direction, destination.direction);
+    const rotation = new T.Quaternion();
+    const direction = new T.Vector3();
+    const target = new T.Vector3();
+    const progress = { value: 0 };
+    const ease = gsap.parseEase("power2.inOut");
+    captureFrames = 64;
     previous = 0;
-    const duration = opening ? 1280 : view.project !== null ? 910 : 1100;
-    // The scene clock advances the tween and draws the resulting pose in the same frame.
-    const tween = gsap.to(start, {
-      ...destination, paused: true, lazy: false, duration: duration / 1000, ease: "power3.inOut",
-      onUpdate: () => writeCamera(start.theta, start.phi, start.radius, start.x, start.y, start.z, start.zoom),
+    const duration = outbound && inbound ? 1660 : 1350;
+    const tween = gsap.to(progress, {
+      value: 1, paused: true, lazy: false, duration: duration / 1000, ease: "none",
+      onUpdate() {
+        const t = progress.value;
+        if (exitAt && t < exitAt) {
+          const step = ease(t / exitAt);
+          writeCamera({ direction: start.direction, target: target.copy(start.target).lerp(overview, step), distance: T.MathUtils.lerp(start.distance, orbitDistance, step) });
+        } else if (t < approachAt) {
+          const step = ease((t - exitAt) / (approachAt - exitAt));
+          rotation.identity().slerp(turn, step);
+          writeCamera({ direction: direction.copy(start.direction).applyQuaternion(rotation), target: overview, distance: orbitDistance });
+        } else {
+          const step = inbound ? ease((t - approachAt) / (1 - approachAt)) : 1;
+          writeCamera({ direction: destination.direction, target: target.copy(overview).lerp(destination.target, step), distance: T.MathUtils.lerp(orbitDistance, destination.distance, step) });
+        }
+      },
     });
     transition = { tween, start: performance.now(), duration };
     requestRender();
   }
 
-  function nudge(theta = 0, phi = 0, zoom = 1) {
+  function nudge(theta = 0, phi = 0) {
+    if (!isOverview(current)) return;
     cancelTransition();
     freezeOrbit();
-    writeCamera(controls.getAzimuthalAngle() + theta,
-      T.MathUtils.clamp(controls.getPolarAngle() + phi, controls.minPolarAngle, controls.maxPolarAngle),
-      camera.position.distanceTo(controls.target), controls.target.x, controls.target.y, controls.target.z, camera.zoom * zoom);
-    cancelTransition();
+    const spherical = new T.Spherical().setFromVector3(camera.position);
+    spherical.theta += theta;
+    spherical.phi = T.MathUtils.clamp(spherical.phi + phi, controls.minPolarAngle, controls.maxPolarAngle);
+    writeCamera({ target: overview, direction: new T.Vector3().setFromSpherical(spherical).normalize(), distance: overviewDistance() });
+    controls.enabled = true;
+    controls.enableDamping = !motion.matches;
   }
 
   function updatePointer(event: PointerEvent) {
@@ -362,7 +418,9 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       (event.clientX - rect.left) / rect.width * 2 - 1,
       1 - (event.clientY - rect.top) / rect.height * 2,
     ), camera);
-    return raycaster.intersectObjects(model.hits, false)[0];
+    const hit = raycaster.intersectObjects(model.hits, false)[0];
+    const surface = raycaster.ray.intersectSphere(planetSphere, planetHit);
+    return hit && (!surface || hit.distance <= raycaster.ray.origin.distanceTo(surface) + 0.04) ? hit : undefined;
   }
 
   function down(event: PointerEvent) {
@@ -388,13 +446,14 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   function up(event: PointerEvent) {
     const start = pointerStart;
     pointerStart = null;
-    if (!start || event.pointerId !== start.id || event.timeStamp - start.time > 850 || Math.hypot(event.clientX - start.x, event.clientY - start.y) > 7) return;
+    if (transition || !start || event.pointerId !== start.id || event.timeStamp - start.time > 850 || Math.hypot(event.clientX - start.x, event.clientY - start.y) > 7) return;
     const hit = updatePointer(event);
     if (hit) {
       callbacks.select(hit.object.userData.hit as Hit);
       return;
     }
-    const location = raycaster.ray.intersectPlane(walkingPlane, walkRay);
+    if (transition || model.sites.hq.normal.dot(camera.position) < globeRadius) return;
+    const location = walkRay.copy(raycaster.ray).applyMatrix4(model.sites.hq.inverse).intersectPlane(walkingPlane, walkHit);
     if (!location) return;
     const step = new T.Vector2(location.x, location.z).sub(avatarCenter);
     if (step.length() < 1.36 || step.length() > 2.92) return;
@@ -494,6 +553,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       document.removeEventListener("visibilitychange", visibility);
       motion.removeEventListener("change", motionChange);
       model.dispose();
+      planet.dispose();
       sun.shadow.dispose();
       environment?.dispose();
       renderer.dispose();

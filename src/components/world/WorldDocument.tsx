@@ -30,7 +30,7 @@ export function worldMetadata(locale: WorldLocale): Metadata {
 
 export function WorldDocument({ locale, children }: { locale: WorldLocale; children: ReactNode }) {
   return <html lang={locale} className={geist.variable}>
-    <body style={{ margin: 0, background: "#15171b" }}>
+    <body style={{ margin: 0, background: "#0b101b" }}>
       {children}
     </body>
   </html>;
