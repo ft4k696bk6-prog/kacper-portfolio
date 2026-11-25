@@ -33,7 +33,7 @@ Dodatkowe ciała niebieskie pojawiają się na mapie po odkryciu.
 ## Kadry z buildu produkcyjnego
 
 - [Start](screenshots/universe-home.webp) · [Mapa](screenshots/universe-system.webp) · [Menu](screenshots/universe-menu.webp)
-- [Telefon](screenshots/universe-mobile-home.webp) · [Mapa na telefonie](screenshots/universe-mobile-system.webp) · [BeatMarket na telefonie](screenshots/universe-mobile-beatmarket.webp)
+- [Telefon](screenshots/universe-mobile-home.webp) · [Mapa na telefonie](screenshots/universe-mobile-system.webp) · [Krótki ekran w WebKit](screenshots/universe-mobile-short.webp) · [BeatMarket na telefonie](screenshots/universe-mobile-beatmarket.webp)
 - [StarCars](screenshots/universe-starcars.webp) · [ReEnergy](screenshots/universe-reenergy.webp) · [B-CRM](screenshots/universe-b-crm.webp) · [AI World](screenshots/universe-ai.webp)
 - [Motomizer](screenshots/universe-motomizer.webp) · [BeatMarket](screenshots/universe-beatmarket.webp) · [Isto](screenshots/universe-isto-kebab.webp) · [Jalapeno](screenshots/universe-jalapeno.webp)
 - [K-01](screenshots/universe-moon.webp) · [G-02](screenshots/universe-garage.webp) · [The Unknown](screenshots/universe-unknown.webp)

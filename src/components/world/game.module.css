@@ -91,3 +91,7 @@
   .hud button { min-width: 35px; min-height: 42px; padding-inline: 7px; white-space: nowrap; }
 }
 .location { pointer-events: none; }
+
+@media (max-width: 600px) and (max-height: 730px) {
+  main[data-body="home"][data-view="overview"] .location { display: none; }
+}

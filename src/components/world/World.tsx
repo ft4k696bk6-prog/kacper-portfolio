@@ -75,6 +75,7 @@ export function World({ locale }: { locale: WorldLocale }) {
   const title = useRef<HTMLHeadingElement>(null);
   const gallery = selection.project !== null ? projects[selection.project] : null;
   const isOverview = selection.zone === null;
+  const showOpening = isOverview && game.body === "home" && game.mode !== "photo" && !game.transit;
   const focusOnChange = useRef(false);
 
   const go = useCallback((next: Selection, focus = true) => {
@@ -361,7 +362,7 @@ export function World({ locale }: { locale: WorldLocale }) {
       </div>
 
       <section ref={copyArea} className={styles.story} aria-label={activePlace?.title ?? "Bernecki World"}>
-        <div className={isOverview ? styles.intro : styles.visuallyHidden}>
+        <div className={showOpening ? styles.intro : styles.visuallyHidden}>
           <h1 className={styles.title} aria-label="Bernecki Universe"><span data-world-line="">Bernecki <em>Universe.</em></span></h1>
         </div>
 
@@ -425,15 +426,15 @@ export function World({ locale }: { locale: WorldLocale }) {
         </div>}
       </section>
 
-      <div className={styles.controls}>
-        <div className={styles.guide} id="world-control-instructions" data-world-reveal="">
-          <span className={styles.visuallyHidden}>{gt.controlsOrbit}</span>
+      <span id="world-control-instructions" className={styles.visuallyHidden}>{gt.controlsOrbit}</span>
+      {showOpening && <div className={styles.controls}>
+        <div className={styles.guide} data-world-reveal="">
           {status === "ready" ? <>
             <span className={styles.mouseHint}><Move size={14} strokeWidth={1.4} />{t.rotate}</span>
             <span className={styles.touchHint}><Move size={14} strokeWidth={1.4} />{t.touch}</span>
           </> : <span role="status">{status === "loading" ? t.loading : t.fallback}</span>}
         </div>
-      </div>
+      </div>}
       {status === "ready" && <div className={gameStyles.layer}><GameHud game={game} copy={gt} scene={scene} change={changeMode} openLog={showLog} /></div>}
     </div>
 
