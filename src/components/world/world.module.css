@@ -245,6 +245,9 @@
   .story { width: min(37%, 370px); padding-right: 5px; }
   .map button { gap: 6px; padding-inline: 8px; }
 }
+@media (min-width: 831px) and (max-width: 1110px) {
+  .description { max-width: 225px; }
+}
 @media (max-width: 960px) {
   .world { --pad: 25px; }
   .title { font-size: clamp(62px, 8.4vw, 87px); }
@@ -341,7 +344,7 @@
   .kicker { margin-bottom: 8px; }
   .description { margin-bottom: 9px; }
   .primary { min-height: 39px; }
-  .stage { height: clamp(189px, 59vw, 233px); }
+  .stage { height: clamp(189px, 59vw, 233px); margin-top: 8px; }
   .stage::after { inset: 6px 11px; }
   .footer { padding-top: 10px; }
 }

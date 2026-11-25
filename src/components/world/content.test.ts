@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import sitemap from "@/app/sitemap";
+import sitemap from "../../app/sitemap";
 import { classicPaths, contactPaths, copy, projects, worldPaths, zones } from "./content";
 
 const locales = ["pl", "en", "uk"] as const;
