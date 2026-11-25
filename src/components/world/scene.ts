@@ -1,9 +1,9 @@
 import * as T from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { gsap } from "gsap";
 import { zones, type Zone } from "./content";
 import { buildModel, screenPositions, type Hit } from "./model";
+import { loadLighting } from "./lighting";
 
 type View = { zone: Zone | null; project: number | null };
 type Callbacks = {
@@ -20,13 +20,21 @@ const overview = new T.Vector3(0, 0.9, 0);
 const travelKeys = new Set(["w", "a", "s", "d"]);
 
 
-export function createWorld(host: HTMLElement, callbacks: Callbacks) {
+export async function createWorld(host: HTMLElement, callbacks: Callbacks, signal: AbortSignal) {
   const low = window.matchMedia("(pointer: coarse)").matches || host.clientWidth < 595;
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const environment = await loadLighting(signal);
+  if (signal.aborted) {
+    environment.dispose();
+    signal.throwIfAborted();
+  }
   const canvas = document.createElement("canvas");
   const options: WebGLContextAttributes = { alpha: true, antialias: !low, powerPreference: "high-performance" };
   const context = canvas.getContext("webgl2", options);
-  if (!(context instanceof WebGL2RenderingContext)) throw new Error("WebGL 2 is unavailable");
+  if (!(context instanceof WebGL2RenderingContext)) {
+    environment.dispose();
+    throw new Error("WebGL 2 is unavailable");
+  }
   const renderer = new T.WebGLRenderer({ ...options, canvas, context });
   renderer.setClearColor(0x101210, 0);
   renderer.outputColorSpace = T.SRGBColorSpace;
@@ -35,7 +43,7 @@ export function createWorld(host: HTMLElement, callbacks: Callbacks) {
   let dpr = Math.min(window.devicePixelRatio || 1, low ? 1.15 : 1.55);
   renderer.setPixelRatio(dpr);
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = T.PCFShadowMap;
+  renderer.shadowMap.type = low ? T.BasicShadowMap : T.PCFShadowMap;
   renderer.shadowMap.autoUpdate = false;
   renderer.domElement.setAttribute("aria-hidden", "true");
   host.append(renderer.domElement);
@@ -59,12 +67,7 @@ export function createWorld(host: HTMLElement, callbacks: Callbacks) {
   camera.position.setFromSpherical(spherical).add(controls.target);
   controls.update();
 
-  const room = new RoomEnvironment();
-  const pmrem = new T.PMREMGenerator(renderer);
-  const environment = pmrem.fromScene(room, 0.025, 0.1, 80, { size: low ? 64 : 128 });
-  room.dispose();
-  pmrem.dispose();
-  scene.environment = environment.texture;
+  scene.environment = environment;
   scene.environmentIntensity = 0.58;
 
   scene.add(new T.HemisphereLight(0xe2edf6, 0x565d50, 1.42));
@@ -447,4 +450,4 @@ export function createWorld(host: HTMLElement, callbacks: Callbacks) {
   };
 }
 
-export type WorldController = ReturnType<typeof createWorld>;
+export type WorldController = Awaited<ReturnType<typeof createWorld>>;

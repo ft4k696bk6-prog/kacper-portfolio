@@ -98,6 +98,7 @@ export function World({ locale }: { locale: WorldLocale }) {
     const node = host.current;
     if (!node || staticOnly) return;
     let stopped = false;
+    const abort = new AbortController();
     let controller: WorldController | undefined;
     const fallback = () => {
       if (stopped) return;
@@ -113,11 +114,11 @@ export function World({ locale }: { locale: WorldLocale }) {
     };
     // The route and static model paint before Three.js is requested.
     const paint = requestAnimationFrame(() => {
-      import("./scene").then(({ createWorld }) => {
+      import("./scene").then(async ({ createWorld }) => {
         if (stopped) return;
         if (!window.WebGL2RenderingContext) { fallback(); return; }
         try {
-          controller = createWorld(node, {
+          const created = await createWorld(node, {
             marker(id, x, y, visible) {
               const marker = markers.current[id];
               if (!marker) return;
@@ -138,7 +139,12 @@ export function World({ locale }: { locale: WorldLocale }) {
             },
             lost: fallback,
             rendered() { if (!stopped) setStatus("ready"); },
-          });
+          }, abort.signal);
+          if (stopped) {
+            created.dispose();
+            return;
+          }
+          controller = created;
           scene.current = controller;
           controller.moveView(current.current, current.current.zone !== null, true);
         } catch {
@@ -148,6 +154,7 @@ export function World({ locale }: { locale: WorldLocale }) {
     });
     return () => {
       stopped = true;
+      abort.abort();
       cancelAnimationFrame(paint);
       controller?.dispose();
       if (scene.current === controller) scene.current = null;
@@ -386,10 +393,10 @@ export function World({ locale }: { locale: WorldLocale }) {
           </>}
           <button type="button" className={styles.square} aria-label={t.reset} title={t.reset} onClick={() => go(overview)}><RotateCcw size={16} strokeWidth={1.5} /></button>
           <button type="button" ref={helpButton} className={styles.square} aria-expanded={help} aria-controls="world-help" aria-label={t.help} title={t.help} onClick={() => setHelp(value => !value)}><CircleHelp size={16} strokeWidth={1.5} /></button>
-          {help && <div className={styles.help} id="world-help">
+          <div className={styles.help} id="world-help" hidden={!help}>
             <strong>{t.help}</strong><p>{status === "ready" ? t.keyboard : t.fallback}</p>
             <button type="button" onClick={toggleStatic} disabled={status === "loading"}>{status === "ready" ? t.staticView : t.world3d}</button>
-          </div>}
+          </div>
         </div>
       </div>
     </div>
