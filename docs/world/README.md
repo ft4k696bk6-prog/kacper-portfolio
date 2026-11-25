@@ -1,8 +1,8 @@
 # Bernecki World
 
-Świat jest dostępny pod adresami `/world`, `/en/world` i `/uk/world`. W klasycznej stronie przycisk „Świat 3D” otwiera wybór trybu z dwoma podglądami. Wejście prosto na stronę klasyczną pozostaje dostępne w każdym języku.
+Świat jest dostępny pod adresami `/world`, `/en/world` i `/uk/world`. Przeciągnięcie myszą lub palcem obraca planetę przy stałym środku i skali. Katalog projektów pokazuje nadal cały glob. Wybranie miejsca z modelu, mapy lub klawiatury uruchamia przelot i zbliżenie. W klasycznej stronie przycisk „Świat 3D” otwiera wybór trybu z dwoma podglądami.
 
-## Miejsca na wyspie
+## Miejsca na planecie
 
 | Miejsce | Co otwiera |
 | --- | --- |
@@ -15,7 +15,7 @@
 | Scena BeatMarket | Platforma producentów i odsłuch beatów |
 | Pluszowy przewodnik Kacper | Informacje o autorze i ścieżka współpracy |
 
-Przyciski na mapie, kliknięcia obiektów i linki `#project-*` prowadzą do tych samych kart i zbliżeń. Etykieta Kacpra śledzi postać podczas poruszania klawiszami W, A, S, D lub kliknięciem alejki na placu.
+Przyciski na mapie, kliknięcia obiektów i linki `#project-*` prowadzą do tych samych kart i zbliżeń. Miejsca rozmieszczono dla kompozycji globu i odkrywania jego drugiej strony. Etykieta Kacpra śledzi postać podczas poruszania klawiszami W, A, S, D lub kliknięciem alejki na placu.
 
 ## Kadry z buildu produkcyjnego
 
@@ -26,12 +26,14 @@ Przyciski na mapie, kliknięcia obiektów i linki `#project-*` prowadzą do tych
 | 1024 × 768 | [Przegląd](screenshots/1024x768.webp) |
 | 768 × 1024 | [Przegląd](screenshots/768x1024.webp) |
 | 390 × 844 | [Przegląd](screenshots/390x844.webp) |
+| 390 × 664 | [Przegląd](screenshots/390x664.webp) |
 | 320 × 568 | [Przegląd](screenshots/320x568.webp) |
 
 - [Pełny profil renderowania, 1440 × 900](screenshots/full-quality-1440.webp)
 - [Panele słoneczne i karta ReEnergy](screenshots/reenergy.webp)
 - [Zbliżenie i karta StarCars na komputerze](screenshots/project-1440.webp)
-- [Karta StarCars na telefonie](screenshots/project-390.webp)
+- [Plac StarCars na telefonie](screenshots/starcars-mobile.webp)
+- [Karta Isto Kebab w widoku dotykowym](screenshots/project-390.webp)
 - [Budka Isto Kebab](screenshots/isto-kebab.webp)
 - [Budynek B-CRM](screenshots/b-crm.webp)
 - [Kopuła Laboratorium AI](screenshots/lab.webp)
@@ -51,6 +53,13 @@ npm ci
 npm run dev
 ```
 
-Scena wczytuje się dynamicznie na trasach World. Okrągła makieta powstaje z modelu proceduralnego Three.js. Wszystkie szyldy korzystają z jednej tekstury, a w profilu programowym statyczne oświetlenie powierzchni jest zapisane w geometrii. Na wolnym sprzęcie rozdzielczość bufora zmniejsza się tylko na czas ruchu kamery. Karty wykorzystują zrzuty i potwierdzony zakres istniejących realizacji. Atlas HDR powstał z `RoomEnvironment` Three.js przy rozmiarze ściany 128 px i rozmyciu 0,025 rad. Atlas CubeUV zapisano w WebP z mantysami w RGB i wspólnym wykładnikiem w kanale alfa.
+Scena wczytuje się dynamicznie na trasach World. Kula Three.js ma teksturę satelitarną i atmosferę. Każda lokalizacja ma własny układ współrzędnych styczny do kuli. Kamera najpierw odsuwa się od aktywnego miejsca, przemieszcza po zewnętrznym łuku i zbliża do celu od strony powierzchni. Na wolnym sprzęcie rozdzielczość bufora zmniejsza się podczas ruchu. Karty wykorzystują zrzuty i potwierdzony zakres istniejących realizacji.
+
+## Źródła modeli i tekstur
+
+- **Ziemia i chmury.** `planet-earth.webp` łączy mapę dzienną i mapę chmur Solar System Scope opartą na danych NASA, w tym Blue Marble. Zmieniono kolor i krycie chmur oraz zapisano wynik w WebP. [Solar System Scope](https://www.solarsystemscope.com/textures/) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+- **Samochody.** `starcars-supercar.glb` to zoptymalizowany wariant LOD1 modelu Mid-Engine Supercar v2. Scena używa trzech wariantów lakieru i pobiera model przy wejściu do StarCars. [tevy](https://tevy.dev/models/supercar) · [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
+- **Asfalt.** `starcars-asphalt.webp` wykorzystuje mapę koloru Asphalt 012 z ambientCG. [ambientCG](https://ambientcg.com/view?id=Asphalt012) · [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
+- **Kacper.** Pluszowy portret powstał w ImageGen na podstawie portretu właściciela z portfolio. Model 3D odtwarza zaczesane włosy, zarost, marynarkę i skrzyżowane ręce.
 
 Sterowanie i ustawienie widoku statycznego są dostępne pod przyciskiem pomocy w scenie. Pełny raport sprawdzeń znajduje się w [QUALITY_GATE.md](../../QUALITY_GATE.md), a aktualny stan wydania w [HEARTBEAT.md](../../HEARTBEAT.md).

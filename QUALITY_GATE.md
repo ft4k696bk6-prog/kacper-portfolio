@@ -1,41 +1,36 @@
 # Bernecki World — bramka jakości
 
-**92/100.** Ocena obejmuje przebudowaną, okrągłą wyspę. W galerii zrzutów są kadry ze wszystkich sześciu rozdzielczości oraz zbliżenia miejsc. [Kadry z buildu produkcyjnego](docs/world/README.md#kadry-z-buildu-produkcyjnego)
+**92/100.** Ocena dotyczy wydania z globem 3D, obrotem wokół jego środka i zbliżeniem po wybraniu miejsca. [Kadry produkcyjne](docs/world/README.md#kadry-z-buildu-produkcyjnego)
 
 | Obszar | Ocena | Podstawa |
 | --- | ---: | --- |
-| Kierunek artystyczny | 14/15 | Okrągła podstawa, kamień, asfalt, metal i ciepłe oznaczenia tworzą spójną makietę. Rozkład miejsc sprawdzono na sześciu rozdzielczościach. |
-| Efekt pierwszego wejścia | 14/15 | Pierwszy kadr pokazuje całą wyspę. Panele słoneczne, auta, budka i kopuła są czytelne już z góry. |
-| Świat 3D | 15/15 | Sześć projektów ma osobne modele i kadry. Laboratorium i poruszający się pluszak mają własne miejsca. Każdą główną lokalizację można otworzyć bezpośrednio z modelu. |
-| Animacja i kamera | 13/15 | Osobne ujęcia projektów, reset do widoku wyspy i śledzenie pozycji pluszaka sprawdzono w przeglądarce. Ruch na desktopie bez GPU jest skokowy. |
-| Interakcje i UX | 10/10 | Kliknięcia modeli, etykiety, mapa, skróty klawiaturowe, karty i wybór sposobu przeglądania działają w testach. |
-| Mobile | 9/10 | Obrót dotykiem, pinch, otwieranie kart i widok statyczny sprawdzono. Przy szerokości 320 px dalsza część mapy wymaga przewinięcia. |
-| Wydajność i stabilność | 7/10 | Jedna tekstura szyldów, scalone powierzchnie, niższa rozdzielczość podczas ruchu na wolnym sprzęcie i pełny widok statyczny. Profil Pixel 7 osiągnął około 25 FPS, a profil iPhone 13 około 54 FPS. |
-| Oryginalność i marka | 5/5 | Autorska makieta z rozpoznawalnymi miejscami dla projektów i pluszową postacią autora. |
-| Funkcjonalność biznesowa | 5/5 | Sześć rzeczywistych projektów, potwierdzone opisy, materiały i linki. ReEnergy ma osobne ścieżki do strony, kampanii i CRM. |
-
-Niezależny przegląd porównał makietę, kadry poszczególnych miejsc i telefon. Po przeglądzie skorygowano prowadzenie kamery za pluszakiem i położenie etykiet mobilnych oraz sprawdzono nową grafikę statyczną.
+| Kierunek artystyczny | 14/15 | Ciemne tło, satelitarna mapa z chmurami i atmosfera kuli. Siedem kadrów sprawdzono w rzeczywistej przeglądarce. |
+| Efekt pierwszego wejścia | 14/15 | Cała planeta w środku kadru, z rozpoznawalnymi miejscami i zaproszeniem do obrotu. |
+| Świat 3D | 14/15 | Miejsca mają geometrię na całej powierzchni kuli. Auta wykorzystują szczegółowe siatki, a zabudowa i ruchomy miś mają formę stylizowanych miniatur. |
+| Animacja i kamera | 14/15 | Obrót zachowuje środek i skalę. Animowany przelot do miejsca po drugiej stronie globu oraz powrót do centrum przeszły testy. |
+| Interakcje i UX | 10/10 | Mysz, dotyk, klawiatura, kliknięcie modelu, karty, obrót, przełącznik trybów i dostęp do projektów bez WebGL działają. |
+| Mobile | 9/10 | Glob zachowuje środek w testowanych rozmiarach, a wybór miejsca działa dotykiem. Na najmniejszym ekranie do dalszych pozycji mapy dociera się przewijaniem. |
+| Wydajność i stabilność | 7/10 | Szczegółowe auta są ładowane przy wyborze StarCars i pojawiają się po przelocie. Oświetlenie globu jest uproszczone w rendererze programowym. Płynność zależy od profilu przeglądarki. |
+| Oryginalność i marka | 5/5 | Autorskie miejsca, portret pluszaka oparty na zdjęciu właściciela, geometryczne detale misia i ruch na placu. |
+| Funkcjonalność biznesowa | 5/5 | Sześć rzeczywistych realizacji, materiały z portfolio, linki do usług i kontakt. |
 
 ## Weryfikacja
 
 - Build produkcyjny, TypeScript, 355 testów Vitest i weryfikacja PL/EN przeszły. ESLint zgłosił 0 błędów i 15 istniejących ostrzeżeń poza zmianą.
-- Playwright w Chromium sprawdził kliknięcie modeli ośmiu miejsc, mysz, zoom, reset, klawiaturę, położenie i zbliżenie pluszaka po ruchu, galerię i sześć kart, wybór trybu, kontakt, języki PL/EN/UK, dotyk i pinch. Sprawdzono też ponowne uruchomienie oraz przejście do widoku statycznego po utracie WebGL.
-- W profilu iPhone 13 silnik WebKit WPE uruchomił scenę i pozwolił otworzyć projekt dotykiem. Sprawdzono szerokości od 320 do 1920 px i pełny profil renderowania w Chromium. Profil z ograniczoną rozdzielczością wraca do ostrego obrazu po zakończeniu ruchu.
-- Axe sprawdził WCAG 2.1 A i AA w przeglądzie każdego języka i nie wykrył naruszeń. Sprawdzono 41 tras, w tym metadane, adresy kanoniczne, hreflang, sitemap i robots.txt. Sześć zewnętrznych adresów projektów zwróciło HTTP 200.
+- Playwright sprawdził środek i skalę globu po obrocie, brak zoomu kółkiem, katalog przy stałym kadrze, kliknięcie modelu ReEnergy, animowany przelot do BeatMarket oraz powrót. Sprawdzono osiem głównych lokacji, ruch pluszaka, wczytanie GLB samochodów i tekstury asfaltu, tryb dotykowy, siedem rozmiarów i widok bez WebGL.
+- W profilu iPhone 13 w WebKit WPE uruchomiono widok angielski i otwarto projekt dotykiem. Tryby Classic i Interactive oraz 41 tras, metadane, sitemap i adresy kanoniczne przeszły testy. Axe zwrócił 0 naruszeń w przeglądzie sceny dla PL, EN i UK.
 
 ## Pomiary
 
-Lokalny build produkcyjny z kodu `27e0ee5`, Linux bez udostępnionego GPU, Chromium 156 ze SwiftShader i WebKit WPE 27.2. FPS to mediana aktualizacji położenia znacznika w sześciu przejściach do Laboratorium AI, ReEnergy, StarCars i z powrotem. Czas pierwszej klatki liczono od nawigacji do pierwszej oznaczonej klatki WebGL.
+Lokalny build produkcyjny z kodu `c8a86fc`. Linux bez udostępnionego GPU, Chromium 156 ze SwiftShader i WebKit WPE 27.2. FPS to mediana z sześciu przejść między przeglądem a zbliżeniami. Czas pierwszej klatki liczono od nawigacji do pierwszej oznaczonej klatki WebGL.
 
 | Profil | Pierwsza klatka 3D | Mediana podczas ruchu |
 | --- | ---: | ---: |
-| Chromium, 1440 × 900 | 3,30 s | 6,3 FPS |
-| Chromium, Pixel 7 | 2,10 s | 24,7 FPS |
-| WebKit, 1440 × 900 | 2,61 s | 8,7 FPS |
-| WebKit, iPhone 13 | 1,02 s | 54,4 FPS |
+| Chromium, 1440 × 900 | 4,02 s | 8,2 FPS |
+| Chromium, Pixel 7 | 2,30 s | 19,0 FPS |
+| WebKit, 1440 × 900 | 2,63 s | 13,4 FPS |
+| WebKit, iPhone 13 | 1,69 s | 52,9 FPS |
 
-Po ograniczeniu rozdzielczości kamery na wolnych rendererach mediana desktopowego WebKit wzrosła z około 1,6 do 8,7 FPS w tym samym scenariuszu. W Chromium łącznie pobrano około 323 kB skompresowanego JavaScriptu i 190 kB obrazów sceny.
+Chromium pobrał około 332 kB skompresowanego JavaScriptu i 516 kB obrazów przed wejściem do StarCars. Model samochodu ma 549 kB i jest pobierany na żądanie. Płynność na fizycznych telefonach i komputerze z GPU pozostaje do zmierzenia.
 
-Lighthouse 13.6 w symulacji mobilnej dał **60 Performance, 100 Accessibility, 100 Best Practices i 100 SEO**. FCP 0,92 s, LCP 3,62 s, TBT 2,27 s i CLS 0,003.
-
-Wyniki dotyczą profili przeglądarek bez fizycznego GPU. Płynność na komputerze z GPU oraz na fizycznym iPhonie i telefonie z Androidem pozostaje niezweryfikowana. Widok statyczny zachowuje projekty, usługi, kontakt i wybór trybu.
+Lighthouse 13.6.0 w profilu mobilnym dał **61 Performance, 100 Accessibility, 100 Best Practices i 100 SEO**. FCP 0,92 s, LCP 3,32 s, TBT 5,61 s i CLS 0,003.
