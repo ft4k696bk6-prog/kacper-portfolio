@@ -29,6 +29,6 @@ npm ci
 npm run dev
 ```
 
-Scena wczytuje się dynamicznie na trasach World. Makietę wyrenderowano z modelu proceduralnego. Galeria wykorzystuje oryginalne zrzuty z portfolio i stos technologiczny z istniejących studiów przypadku. Atlas HDR powstał z `RoomEnvironment` Three.js przy rozmiarze ściany 128 px i rozmyciu 0,025 rad. Atlas CubeUV zapisano w WebP z mantysami w RGB i wspólnym wykładnikiem w kanale alfa.
+Scena wczytuje się dynamicznie na trasach World. Makietę wyrenderowano z modelu proceduralnego. W profilu programowym oświetlenie powierzchni jest zapisane w geometrii, a rozdzielczość bufora zmniejsza się na czas ruchu kamery. Galeria wykorzystuje oryginalne zrzuty z portfolio i stos technologiczny z istniejących studiów przypadku. Atlas HDR powstał z `RoomEnvironment` Three.js przy rozmiarze ściany 128 px i rozmyciu 0,025 rad. Atlas CubeUV zapisano w WebP z mantysami w RGB i wspólnym wykładnikiem w kanale alfa.
 
 Sterowanie i ustawienie widoku statycznego są dostępne pod przyciskiem pomocy w scenie. Pełny raport sprawdzeń znajduje się w [QUALITY_GATE.md](../../QUALITY_GATE.md), a aktualny stan wydania w [HEARTBEAT.md](../../HEARTBEAT.md).
