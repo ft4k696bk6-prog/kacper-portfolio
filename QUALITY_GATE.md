@@ -1,36 +1,35 @@
-# Bernecki World — bramka jakości
+# Bernecki World — etap premium
 
-**92/100.** Ocena dotyczy wydania z globem 3D, obrotem wokół jego środka i zbliżeniem po wybraniu miejsca. [Kadry produkcyjne](docs/world/README.md#kadry-z-buildu-produkcyjnego)
+**8,8/10.** Ocena po porównaniu kadrów produkcyjnych i sprawdzeniu interakcji. Największe rezerwy pozostały w realizmie modeli i płynności na słabszym rendererze. [Kadry desktop i mobile](docs/world/README.md#kadry-z-buildu-produkcyjnego)
 
-| Obszar | Ocena | Podstawa |
+| Obszar | Ocena | Co sprawdzono |
 | --- | ---: | --- |
-| Kierunek artystyczny | 14/15 | Ciemne tło, satelitarna mapa z chmurami i atmosfera kuli. Siedem kadrów sprawdzono w rzeczywistej przeglądarce. |
-| Efekt pierwszego wejścia | 14/15 | Cała planeta w środku kadru, z rozpoznawalnymi miejscami i zaproszeniem do obrotu. |
-| Świat 3D | 14/15 | Miejsca mają geometrię na całej powierzchni kuli. Auta wykorzystują szczegółowe siatki, a zabudowa i ruchomy miś mają formę stylizowanych miniatur. |
-| Animacja i kamera | 14/15 | Obrót zachowuje środek i skalę. Animowany przelot do miejsca po drugiej stronie globu oraz powrót do centrum przeszły testy. |
-| Interakcje i UX | 10/10 | Mysz, dotyk, klawiatura, kliknięcie modelu, karty, obrót, przełącznik trybów i dostęp do projektów bez WebGL działają. |
-| Mobile | 9/10 | Glob zachowuje środek w testowanych rozmiarach, a wybór miejsca działa dotykiem. Na najmniejszym ekranie do dalszych pozycji mapy dociera się przewijaniem. |
-| Wydajność i stabilność | 7/10 | Szczegółowe auta są ładowane przy wyborze StarCars i pojawiają się po przelocie. Oświetlenie globu jest uproszczone w rendererze programowym. Płynność zależy od profilu przeglądarki. |
-| Oryginalność i marka | 5/5 | Autorskie miejsca, portret pluszaka oparty na zdjęciu właściciela, geometryczne detale misia i ruch na placu. |
-| Funkcjonalność biznesowa | 5/5 | Sześć rzeczywistych realizacji, materiały z portfolio, linki do usług i kontakt. |
+| Realizm 3D | 8,1 | HDRI, mapy PBR, kontaktowe przyciemnienie, odbicia i detale elewacji są widoczne w zbliżeniach. Niektóre budynki, rośliny i postać zachowują styl miniatury. |
+| Estetyka premium | 9,2 | Spójna paleta, spokojna typografia, czytelne karty i miękkie oddzielenie zbliżenia od tła. |
+| Pierwsze wrażenie | 9,0 | Ujęcie całej kuli przechodzi po wyborze w przelot do miejsca osadzonego na jej powierzchni. |
+| Minimalizm | 9,5 | Na wejściu widać glob, logo, tytuł, menu i krótką wskazówkę. Etykiety i treści pojawiają się przy interakcji. |
+| Animacja | 9,0 | Sprawdzono obrót, lot na drugą stronę kuli, zmianę projektu, powrót i ograniczenie ruchu. |
+| UX | 9,3 | Obiekty, menu, klawiatura, dotyk, link do projektu i widok klasyczny mają działające ścieżki. |
+| Wydajność | 7,6 | Materiały i pojazdy są pobierane przy zbliżeniu, bez obciążania pierwszego widoku. Na rendererze programowym płynność lotu silnie zależy od profilu. |
+| Mobile | 8,8 | Menu i karta mają własny układ, a środek kuli pozostaje stabilny. Dotyk sprawdzono w profilach Chromium i WebKit. |
 
 ## Weryfikacja
 
-- Build produkcyjny, TypeScript, 355 testów Vitest i weryfikacja PL/EN przeszły. ESLint zgłosił 0 błędów i 15 istniejących ostrzeżeń poza zmianą.
-- Playwright sprawdził środek i skalę globu po obrocie, brak zoomu kółkiem, katalog przy stałym kadrze, kliknięcie modelu ReEnergy, animowany przelot do BeatMarket oraz powrót. Sprawdzono osiem głównych lokacji, ruch pluszaka, wczytanie GLB samochodów i tekstury asfaltu, tryb dotykowy, siedem rozmiarów i widok bez WebGL.
-- W profilu iPhone 13 w WebKit WPE uruchomiono widok angielski i otwarto projekt dotykiem. Tryby Classic i Interactive oraz 41 tras, metadane, sitemap i adresy kanoniczne przeszły testy. Axe zwrócił 0 naruszeń w przeglądzie sceny dla PL, EN i UK.
+- Produkcyjny build, TypeScript, weryfikacja PL/EN i 355 testów Vitest przeszły. ESLint zwrócił 0 błędów i 15 istniejących ostrzeżeń.
+- Playwright sprawdził siedem rozmiarów ekranu, stały środek i skalę globu, ukryte menu, klawiaturę i powrót fokusu, kliknięcie modelu, dotyk, przelot i powrót, szyld B-CRM, wczytywanie pojazdów i materiałów, ruch maskotki, widok bez WebGL oraz Classic. Axe zwrócił 0 naruszeń z otwartym i zamkniętym menu w PL, EN i UK.
+- 41 tras zwróciło HTTP 200. Zweryfikowano adresy kanoniczne, hreflang, sitemap, robots.txt i Open Graph.
 
 ## Pomiary
 
-Lokalny build produkcyjny z kodu `c8a86fc`. Linux bez udostępnionego GPU, Chromium 156 ze SwiftShader i WebKit WPE 27.2. FPS to mediana z sześciu przejść między przeglądem a zbliżeniami. Czas pierwszej klatki liczono od nawigacji do pierwszej oznaczonej klatki WebGL.
+Build produkcyjny uruchomiony w Linuksie bez sprzętowego GPU. Pierwsza klatka jest liczona od nawigacji do gotowości sceny WebGL. FPS jest medianą tempa aktualizacji projekcji w zarejestrowanych fragmentach przelotów.
 
-| Profil | Pierwsza klatka 3D | Mediana podczas ruchu |
+| Profil przeglądarki | Pierwsza klatka | Mediana aktualizacji |
 | --- | ---: | ---: |
-| Chromium, 1440 × 900 | 4,02 s | 8,2 FPS |
-| Chromium, Pixel 7 | 2,30 s | 19,0 FPS |
-| WebKit, 1440 × 900 | 2,63 s | 13,4 FPS |
-| WebKit, iPhone 13 | 1,69 s | 52,9 FPS |
+| Chromium SwiftShader, 1440 × 900 | 2,83 s | 18,2 FPS (4 próbki) |
+| Chromium SwiftShader, Pixel 7 | 2,00 s | 20,9 FPS (6 próbek) |
+| WebKit WPE, 1440 × 900 | 2,94 s | 12,4 FPS (6 próbek) |
+| WebKit WPE, iPhone 13 | 1,51 s | 51,8 FPS (6 próbek) |
 
-Chromium pobrał około 332 kB skompresowanego JavaScriptu i 516 kB obrazów przed wejściem do StarCars. Model samochodu ma 549 kB i jest pobierany na żądanie. Płynność na fizycznych telefonach i komputerze z GPU pozostaje do zmierzenia.
+Scena w uproszczonym profilu pobrała ok. 331 kB skompresowanego JavaScriptu i 531 kB obrazów przed wyborem projektu. Pełny profil pobiera też atlas HDRI. Płynność na fizycznych telefonach i komputerze ze sprzętowym GPU wymaga odrębnego pomiaru.
 
-Lighthouse 13.6.0 w profilu mobilnym dał **61 Performance, 100 Accessibility, 100 Best Practices i 100 SEO**. FCP 0,92 s, LCP 3,32 s, TBT 5,61 s i CLS 0,003.
+Mobilny profil Lighthouse 13.6 w tym środowisku uzyskał 61/100 Performance oraz po 100/100 za Accessibility, Best Practices i SEO. FCP 0,9 s, LCP 3,3 s, TBT 4,21 s i CLS 0,001.

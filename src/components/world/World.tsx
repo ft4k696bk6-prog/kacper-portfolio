@@ -283,7 +283,7 @@ export function World({ locale }: { locale: WorldLocale }) {
           <Image ref={poster} src="/images/world/model.webp" alt="" fill unoptimized priority fetchPriority="high" />
         </div>
         <div className={styles.canvas} ref={host} />
-        <div className={styles.hotspots} aria-label={t.places}>
+        <div className={styles.hotspots} role="group" aria-label={t.places}>
           {sceneStops.map(place => (
             <button type="button" key={place.id} className={styles.hotspot}
               data-zone={place.id} data-side={place.labelSide} aria-label={stopLabel(place.id)}
@@ -317,7 +317,7 @@ export function World({ locale }: { locale: WorldLocale }) {
             </div>
             <div className={styles.projectPhoto} data-place-reveal="">
               <a href={`/images/projects/${gallery.images[photo]}`} target="_blank" rel="noopener noreferrer" aria-label={`${t.photo} — ${gallery.name}`}>
-                <Image key={gallery.images[photo]} src={`/images/projects/${gallery.images[photo]}`} alt={`${t.projectImage} — ${gallery.name}`} fill sizes="(max-width: 830px) 87vw, 360px" />
+                <Image key={gallery.images[photo]} src={`/images/projects/${gallery.images[photo]}`} alt={`${t.projectImage} — ${gallery.name}`} fill loading="eager" sizes="(max-width: 830px) 87vw, 360px" />
               </a>
               {gallery.images.length > 1 && <div className={styles.photoNav}>
                 <button type="button" aria-label={t.prevPhoto} onClick={() => setPhoto(value => (value - 1 + gallery.images.length) % gallery.images.length)}><ChevronLeft size={16} /></button>
