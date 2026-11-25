@@ -46,10 +46,22 @@ export async function loadPlanet(software: boolean, low: boolean, signal: AbortS
   try { signal.throwIfAborted(); } catch (error) { surfaceMap.dispose(); throw error; }
   surfaceMap.colorSpace = T.SRGBColorSpace;
   surfaceMap.anisotropy = low ? 2 : 8;
-  const globe = new T.Mesh(
-    new T.SphereGeometry(globeRadius, low ? 64 : 112, low ? 36 : 72),
-    new T.MeshPhongMaterial({ map: surfaceMap, shininess: 23, specular: 0x101d30, emissive: 0x8ca6c5, emissiveIntensity: 0.28, emissiveMap: surfaceMap }),
-  );
+  const sphere = new T.SphereGeometry(globeRadius, low ? 64 : 112, low ? 36 : 72);
+  const material = software
+    ? new T.MeshBasicMaterial({ map: surfaceMap, vertexColors: true, toneMapped: false })
+    : new T.MeshPhongMaterial({ map: surfaceMap, shininess: 23, specular: 0x101d30, emissive: 0x8ca6c5, emissiveIntensity: 0.28, emissiveMap: surfaceMap });
+  if (software) {
+    const sun = new T.Vector3(33, 56, 37).normalize();
+    const normal = sphere.getAttribute("normal");
+    const color = new Float32Array(normal.count * 3);
+    for (let i = 0; i < normal.count; i++) {
+      const direct = Math.max(0, sun.x * normal.getX(i) + sun.y * normal.getY(i) + sun.z * normal.getZ(i));
+      const light = 0.36 + 0.64 * Math.pow(direct, 0.7);
+      color.set([light, light, light + 0.045 * (1 - light)], i * 3);
+    }
+    sphere.setAttribute("color", new T.BufferAttribute(color, 3));
+  }
+  const globe = new T.Mesh(sphere, material);
   const group = new T.Group().add(globe);
   const atmosphere = new T.Mesh(new T.SphereGeometry(globeRadius * 1.060, low ? 48 : 80, low ? 24 : 48), new T.ShaderMaterial({
     transparent: true, depthWrite: false, side: T.BackSide, blending: T.AdditiveBlending,

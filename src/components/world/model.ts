@@ -899,8 +899,11 @@ export function buildModel(low: boolean, bakeLighting = false) {
   }
 
   function showDetailedCars(visible: boolean) {
-    carModels.visible = visible && carModels.children.length > 0;
-    carFallback.visible = !carModels.visible;
+    const show = visible && carModels.children.length > 0;
+    if (show === carModels.visible) return false;
+    carModels.visible = show;
+    carFallback.visible = !show;
+    return true;
   }
 
   function dispose() {

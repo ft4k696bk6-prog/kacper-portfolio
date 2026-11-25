@@ -195,7 +195,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
 
   function updateDrawingBuffer(moving: boolean) {
     // The camera uses CSS-pixel dimensions even when the render buffer is smaller.
-    const budget = reduceMotionPixels && moving ? Math.min(motionBudget, size.x * size.y * 0.31) * motionScale : pixelBudget;
+    const budget = reduceMotionPixels && moving ? Math.min(motionBudget, size.x * size.y * (compact ? 0.24 : 0.31)) * motionScale : pixelBudget;
     const ratio = Math.min(dpr, Math.sqrt(budget / (size.x * size.y)));
     if (size.x === bufferWidth && size.y === bufferHeight && ratio === bufferDpr) return;
     bufferWidth = size.x;
@@ -262,7 +262,9 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     const orbitMoved = controls.update();
     const moving = Boolean(transition || interacting || orbitMoved || keys.size || waypoint);
     updateDrawingBuffer(moving);
-    model.showDetailedCars(camera.position.distanceToSquared(starCarsSite) < 36 * 36);
+    if (model.showDetailedCars(!transition && camera.position.distanceToSquared(starCarsSite) < 36 * 36)) {
+      renderer.shadowMap.needsUpdate = true;
+    }
     fill.position.copy(camera.position).normalize().multiplyScalar(45);
     renderer.render(scene, camera);
     for (const zone of sceneStops) {
