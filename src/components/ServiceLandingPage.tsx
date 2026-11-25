@@ -482,6 +482,22 @@ export function ServiceLandingPage({ kind }: ServiceLandingPageProps) {
           </div>
         </section>
       )}
+      {kind !== "marketing" && <section className="mx-auto max-w-6xl px-5 py-14 md:px-8" aria-labelledby="service-fit-heading">
+        <h2 id="service-fit-heading" className="text-2xl font-semibold">{kind === "websites" ? "Jak dobrać stronę do sposobu pozyskiwania klientów?" : "Jak wygląda wdrożenie CRM w działającej firmie?"}</h2>
+        <div className="mt-6 grid gap-5 md:grid-cols-2">
+          {(kind === "websites" ? [
+            {title:"StarCars: katalog i kalkulator importu",body:"Strona łączy ofertę importera z wyszukiwaniem samochodów i kalkulacją kosztów. To przykład projektu, w którym odwiedzający może samodzielnie przejść od znalezienia auta do zapytania o wycenę.",href:"/case-studies/starcars",label:"Zobacz projekt StarCars"},
+            {title:"Isto Kebab: strona z procesem zamawiania",body:"Menu i ścieżka zamówienia odpowiadają na inną potrzebę niż zwykła strona wizytówkowa. Przed wyceną ustalamy, czy klient ma dzwonić, wysyłać formularz, rezerwować termin czy składać zamówienie.",href:"/case-studies/isto-kebab",label:"Zobacz projekt Isto Kebab"},
+            {title:"Jedna oferta i jedna konwersja",body:"Jeżeli ruch pochodzi z reklamy konkretnej usługi, rozbudowane menu nie zawsze pomaga. Landing page powinien zawierać zakres, dowody wykonania, odpowiedzi na obiekcje i wyraźny kontakt.",href:"/oferta/landing-page",label:"Projektowanie landing page"},
+            {title:"Strona połączona z reklamami i CRM",body:"Ustalamy, jakie dane mają trafić z formularza do procesu sprzedażowego, kto odbiera zgłoszenie i jak mierzyć rzeczywiste zapytania, a nie tylko wizyty.",href:"/crm-i-aplikacje-webowe",label:"CRM i integracje"}
+          ] : [
+            {title:"B-CRM: rzeczywisty proces sprzedaży",body:"B-CRM porządkuje leady, przypisania, komentarze, terminy oraz role zespołu. Integracje z Meta Lead Ads i Google Drive ograniczają ręczne przekazywanie informacji.",href:"/case-studies/b-crm",label:"Zobacz case study B-CRM"},
+            {title:"CRM dla zespołu handlowego",body:"W pierwszej kolejności ustalamy etapy sprzedaży, odpowiedzialność za kontakt i zakres widoczności danych. Dopiero później wybieramy dodatkowe moduły oraz automatyzacje.",href:"/crm-dla-firm-handlowych",label:"CRM dla firm handlowych"},
+            {title:"Automatyzacja obsługi leadów",body:"Formularz lub reklama może tworzyć kontakt, przypisywać opiekuna i uruchamiać przypomnienie. Przed uruchomieniem sprawdzamy duplikaty, nieudane operacje oraz możliwość ponowienia.",href:"/automatyzacja-leadow-i-sprzedazy",label:"Automatyzacja leadów i sprzedaży"},
+            {title:"AI w obsłudze klienta",body:"Jeżeli firma ma aktualną bazę wiedzy, chatbot może zbierać zgłoszenia i przekazywać trudniejsze sprawy pracownikowi. Weryfikacja odpowiedzi i uprawnienia pozostają częścią wdrożenia.",href:"/oferta/chatbot-ai-dla-firm",label:"Chatbot AI dla firm"}
+          ]).map(item=><article key={item.href} className="rounded-xl border border-white/15 p-6"><h3 className="text-xl font-semibold">{item.title}</h3><p className="mt-3 leading-7 text-white/70">{item.body}</p><Link href={item.href} className="mt-5 inline-flex items-center gap-2 underline underline-offset-4">{item.label}<ArrowRight size={15}/></Link></article>)}
+        </div>
+      </section>}
       <section className="mx-auto max-w-6xl px-5 pb-20 pt-6 md:px-8">
         <div className="rounded-xl border border-white/15 bg-white/[0.025] p-6">
           <p className="text-xs uppercase tracking-[.16em] text-white/55">Dodatkowe materiały</p>
