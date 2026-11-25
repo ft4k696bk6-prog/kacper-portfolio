@@ -1,42 +1,41 @@
 # Bernecki World — bramka jakości
 
-**90/100. Wewnętrzny próg jakości został osiągnięty.** Ocena obejmuje build produkcyjny, testy funkcjonalne, pomiary w przeglądarkach i niezależny przegląd końcowych kadrów.
+**92/100.** Ocena obejmuje przebudowaną, okrągłą wyspę. W galerii zrzutów są kadry ze wszystkich sześciu rozdzielczości oraz zbliżenia miejsc. [Kadry z buildu produkcyjnego](docs/world/README.md#kadry-z-buildu-produkcyjnego)
 
 | Obszar | Ocena | Podstawa |
 | --- | ---: | --- |
-| Kierunek artystyczny | 14/15 | Spójne kadry we wszystkich sześciu rozdzielczościach, znak KB, grafit, srebro i światło. |
-| Efekt pierwszego wejścia | 13/15 | Duża makieta i typografia, odsłonięcie znaku i wejściowy ruch kamery. W profilu programowym część detali jest uproszczona. |
-| Świat 3D | 13/15 | Pięć różnych budynków, dziedziniec, oświetlenie, samochód, postać i pięć ekranów z prawdziwymi realizacjami. |
-| Animacja i kamera | 13/15 | Kamera wraca do tego samego kadru po obrocie. Zbliżenia pokazują budynki i monitory. Ruch w środowisku programowym ma widoczne skoki. |
-| Interakcje i UX | 10/10 | Interakcje myszy, dotyku i klawiatury, przewidywalny fokus, mapa, wybór trybu i ścieżka kontaktu przeszły testy. |
-| Mobile | 9/10 | Obrót dotykiem, pinch, projekty, kontakt i widok statyczny. Przy 320 px pełna mapa wymaga przewinięcia. |
-| Wydajność i stabilność | 8/10 | Rozdzielone ładowanie, wstępnie obliczone oświetlenie i adaptacyjna rozdzielczość. W Chromium mediana wzrosła z 4,0 do 12,5 FPS na desktopie bez GPU i z 16,0 do 28,0 FPS w profilu Pixel 7. Sprawdzono przejście do widoku statycznego po utracie WebGL. |
-| Oryginalność i marka | 5/5 | Oryginalna proceduralna makieta z istniejącym znakiem KB oraz materiałami właściciela. |
-| Funkcjonalność biznesowa | 5/5 | Pięć rzeczywistych projektów, potwierdzony stos technologiczny, linki do ofert, projektów i kontaktu. |
+| Kierunek artystyczny | 14/15 | Okrągła podstawa, kamień, asfalt, metal i ciepłe oznaczenia tworzą spójną makietę. Rozkład miejsc sprawdzono na sześciu rozdzielczościach. |
+| Efekt pierwszego wejścia | 14/15 | Pierwszy kadr pokazuje całą wyspę. Panele słoneczne, auta, budka i kopuła są czytelne już z góry. |
+| Świat 3D | 15/15 | Sześć projektów ma osobne modele i kadry. Laboratorium i poruszający się pluszak mają własne miejsca. Każdą główną lokalizację można otworzyć bezpośrednio z modelu. |
+| Animacja i kamera | 13/15 | Osobne ujęcia projektów, reset do widoku wyspy i śledzenie pozycji pluszaka sprawdzono w przeglądarce. Ruch na desktopie bez GPU jest skokowy. |
+| Interakcje i UX | 10/10 | Kliknięcia modeli, etykiety, mapa, skróty klawiaturowe, karty i wybór sposobu przeglądania działają w testach. |
+| Mobile | 9/10 | Obrót dotykiem, pinch, otwieranie kart i widok statyczny sprawdzono. Przy szerokości 320 px dalsza część mapy wymaga przewinięcia. |
+| Wydajność i stabilność | 7/10 | Jedna tekstura szyldów, scalone powierzchnie, niższa rozdzielczość podczas ruchu na wolnym sprzęcie i pełny widok statyczny. Profil Pixel 7 osiągnął około 25 FPS, a profil iPhone 13 około 54 FPS. |
+| Oryginalność i marka | 5/5 | Autorska makieta z rozpoznawalnymi miejscami dla projektów i pluszową postacią autora. |
+| Funkcjonalność biznesowa | 5/5 | Sześć rzeczywistych projektów, potwierdzone opisy, materiały i linki. ReEnergy ma osobne ścieżki do strony, kampanii i CRM. |
 
-Niezależny przegląd trzeciej iteracji przyznał 81/90 punktów w obszarach innych niż wydajność. Po nim skorygowano pozycję opisu na 1024 px, odstęp pierwszej etykiety na 320 px i dostępne nazwy przycisków w trzech wersjach językowych. Po optymalizacji niezależny przegląd potwierdził zachowanie kompozycji, czytelności ekranów i położenia etykiet. Profil programowy ma jaśniejsze powierzchnie oraz łagodniejsze cienie. [Kadry z buildu produkcyjnego](docs/world/README.md#kadry-z-buildu-produkcyjnego)
+Niezależny przegląd porównał makietę, kadry poszczególnych miejsc i telefon. Po przeglądzie skorygowano prowadzenie kamery za pluszakiem i położenie etykiet mobilnych oraz sprawdzono nową grafikę statyczną.
 
 ## Weryfikacja
 
-- Build produkcyjny, TypeScript, 354 testy Vitest oraz kontrola PL/EN przeszły. ESLint zgłosił 0 błędów i 15 wcześniejszych ostrzeżeń poza zmianą.
-- Playwright w Chromium potwierdził mysz, powiększanie, reset, kliknięcie budynku i monitora B-CRM, ruch postaci klawiaturą, pięć kart projektów, ich zdjęcia i linki, fokus po zamykaniu panelu, zmianę PL/EN/UK i zapis preferencji Classic / Interactive.
-- W profilu dotykowym Chromium przeszły obrót i gest pinch. W profilu iPhone 13 silnik WebKit uruchomił scenę i otworzył kartę przez dotyk. Redukcja ruchu, ręczne przełączanie, wyłączony WebGL i wymuszona utrata kontekstu przeszły testy.
-- Test rozdzielczości potwierdził, że profil programowy ogranicza liczbę renderowanych pikseli podczas ruchu, po zatrzymaniu przywraca ostrość, zachowuje obszar klikania i pokazuje ostry obraz przy włączonej redukcji ruchu.
-- Axe 4 sprawdził zasady WCAG 2.1 A i AA w przeglądzie każdej wersji językowej i zwrócił 0 naruszeń. Pełny przebieg desktopowy zakończył się bez błędów konsoli ani nieudanych żądań zasobów.
-- 41 sprawdzonych tras zwróciło HTTP 200, w tym istniejąca strona, oferty, realizacje, kontakt, sitemap, robots i Open Graph. Sprawdzono adresy kanoniczne i wzajemne hreflang. Pięć zewnętrznych adresów realizacji zwróciło HTTP 200.
-- Ścieżka kontaktu linkuje do istniejących formularzy i poczty. Test objął dotarcie do formularza.
+- Build produkcyjny, TypeScript, 355 testów Vitest i weryfikacja PL/EN przeszły. ESLint zgłosił 0 błędów i 15 istniejących ostrzeżeń poza zmianą.
+- Playwright w Chromium sprawdził kliknięcie modeli ośmiu miejsc, mysz, zoom, reset, klawiaturę, położenie i zbliżenie pluszaka po ruchu, galerię i sześć kart, wybór trybu, kontakt, języki PL/EN/UK, dotyk i pinch. Sprawdzono też ponowne uruchomienie oraz przejście do widoku statycznego po utracie WebGL.
+- W profilu iPhone 13 silnik WebKit WPE uruchomił scenę i pozwolił otworzyć projekt dotykiem. Sprawdzono szerokości od 320 do 1920 px i pełny profil renderowania w Chromium. Profil z ograniczoną rozdzielczością wraca do ostrego obrazu po zakończeniu ruchu.
+- Axe sprawdził WCAG 2.1 A i AA w przeglądzie każdego języka i nie wykrył naruszeń. Sprawdzono 41 tras, w tym metadane, adresy kanoniczne, hreflang, sitemap i robots.txt. Sześć zewnętrznych adresów projektów zwróciło HTTP 200.
 
 ## Pomiary
 
-Lokalny build produkcyjny z kodu `f3856b2`, Linux bez udostępnionego GPU, Chromium 156 ze SwiftShader i WebKit WPE 27.2. FPS to mediana sześciu zbliżeń i powrotów, liczona z kolejnych aktualizacji położenia punktu w scenie. Czas pierwszej klatki liczono od nawigacji do pierwszej oznaczonej klatki WebGL. Pomiar porównawczy Chromium wykonano w tej samej sesji na buildzie `52c3ddd`.
+Lokalny build produkcyjny z kodu `27e0ee5`, Linux bez udostępnionego GPU, Chromium 156 ze SwiftShader i WebKit WPE 27.2. FPS to mediana aktualizacji położenia znacznika w sześciu przejściach do Laboratorium AI, ReEnergy, StarCars i z powrotem. Czas pierwszej klatki liczono od nawigacji do pierwszej oznaczonej klatki WebGL.
 
 | Profil | Pierwsza klatka 3D | Mediana podczas ruchu |
 | --- | ---: | ---: |
-| Chromium, 1440 × 900 | 2,82 s | 12,5 FPS |
-| Chromium, Pixel 7 | 1,97 s | 28,0 FPS |
-| WebKit, 1440 × 900 | 3,44 s | 2,7 FPS |
-| WebKit, iPhone 13 | 0,94 s | 56,1 FPS |
+| Chromium, 1440 × 900 | 3,30 s | 6,3 FPS |
+| Chromium, Pixel 7 | 2,10 s | 24,7 FPS |
+| WebKit, 1440 × 900 | 2,61 s | 8,7 FPS |
+| WebKit, iPhone 13 | 1,02 s | 54,4 FPS |
 
-Lighthouse 13.6, symulacja mobilna w Chromium. **Performance 62, Accessibility 100, Best Practices 100, SEO 100.** FCP 0,92 s, LCP 3,28 s, TBT 3,37 s i CLS 0,003. Chromium zarejestrował około 319 kB skompresowanego JavaScriptu i 169 kB obrazów sceny.
+Po ograniczeniu rozdzielczości kamery na wolnych rendererach mediana desktopowego WebKit wzrosła z około 1,6 do 8,7 FPS w tym samym scenariuszu. W Chromium łącznie pobrano około 323 kB skompresowanego JavaScriptu i 190 kB obrazów sceny.
 
-Wyniki dotyczą profili przeglądarek. Płynność na desktopie z fizycznym GPU oraz na fizycznym iPhonie i telefonie z Androidem pozostaje niezweryfikowana. Desktopowy WebKit WPE w tym środowisku osiągnął 2,7 FPS. Widok statyczny zachowuje dostęp do galerii, usług, kontaktu i wyboru trybu.
+Lighthouse 13.6 w symulacji mobilnej dał **60 Performance, 100 Accessibility, 100 Best Practices i 100 SEO**. FCP 0,92 s, LCP 3,62 s, TBT 2,27 s i CLS 0,003.
+
+Wyniki dotyczą profili przeglądarek bez fizycznego GPU. Płynność na komputerze z GPU oraz na fizycznym iPhonie i telefonie z Androidem pozostaje niezweryfikowana. Widok statyczny zachowuje projekty, usługi, kontakt i wybór trybu.
