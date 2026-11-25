@@ -75,7 +75,7 @@
     linear-gradient(0deg, transparent, #000 9%, #000 93%, transparent);
   mask-composite: intersect;
 }
-.world:not([data-view="overview"]):not([data-view="gallery-list"]) .canvas:has(canvas[data-renderer="software"]) {
+.world:not([data-view="overview"]):not([data-view="gallery-list"]) .canvas:has(canvas:is([data-renderer="software"], [data-renderer="adaptive"])) {
   mask-image: radial-gradient(ellipse 68% 66% at 51% 50%, #000 72%, transparent 100%);
 }
 .world[data-render="ready"] .fallback { opacity: 0; }

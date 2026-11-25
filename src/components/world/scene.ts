@@ -55,8 +55,10 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   renderer.toneMapping = T.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
   const pixelBudget = software ? 560_000 : 1_550_000;
+  const motionBudget = compact ? 56_000 : 46_000;
   const minimumDpr = 0.75;
   let motionScale = 1;
+  let reduceMotionPixels = software;
   let dpr = Math.min(window.devicePixelRatio || 1, software ? 1 : compact ? 1.15 : 1.55);
   renderer.setPixelRatio(dpr);
   renderer.shadowMap.enabled = !software;
@@ -172,7 +174,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
 
   function updateDrawingBuffer(moving: boolean) {
     // The camera uses CSS-pixel dimensions even when the render buffer is smaller.
-    const budget = software && moving ? Math.min(66_000, size.x * size.y * 0.34) * motionScale : pixelBudget;
+    const budget = reduceMotionPixels && moving ? Math.min(motionBudget, size.x * size.y * 0.31) * motionScale : pixelBudget;
     const ratio = Math.min(dpr, Math.sqrt(budget / (size.x * size.y)));
     if (size.x === bufferWidth && size.y === bufferHeight && ratio === bufferDpr) return;
     bufferWidth = size.x;
@@ -255,13 +257,18 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     if (captureFrames && dt > 0) {
       samples++;
       elapsed += Math.min(dt, 300);
+      // Some browsers mask their renderer name. React to sustained slow frames there as well.
+      if (!reduceMotionPixels && samples >= 4 && elapsed / samples > 95) {
+        reduceMotionPixels = true;
+        canvas.dataset.renderer = "adaptive";
+      }
       if (samples === 12) {
         const average = elapsed / samples;
         if (average > (low ? 37 : 26)) {
-          if (software && motionScale > 0.63) motionScale = Math.max(0.62, motionScale * 0.86);
-          else if (!software && dpr > minimumDpr + 0.01) dpr = Math.max(minimumDpr, dpr * 0.82);
+          if (reduceMotionPixels && motionScale > 0.63) motionScale = Math.max(0.62, motionScale * 0.86);
+          else if (!reduceMotionPixels && dpr > minimumDpr + 0.01) dpr = Math.max(minimumDpr, dpr * 0.82);
         }
-        const minimumQuality = software ? motionScale <= 0.63 : dpr <= minimumDpr + 0.01;
+        const minimumQuality = reduceMotionPixels ? motionScale <= 0.63 : dpr <= minimumDpr + 0.01;
         slowWindows = average > 170 && minimumQuality ? slowWindows + 1 : 0;
         samples = elapsed = 0;
         if (slowWindows >= 3) {
