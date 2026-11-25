@@ -9,7 +9,7 @@
 | Centrum fotowoltaiki ReEnergy | Strona firmowa, kampanie Meta Ads i obsługa leadów w CRM |
 | Plac StarCars | Strona importera, kalkulator kosztów i formularze zapytań |
 | Budka Isto Kebab | Strona restauracji, menu i zamówienia |
-| Skarbówka B-CRM | Demo CRM z rolami, leadami i przekazywaniem spraw do realizacji |
+| Budynek B-CRM | Demo CRM z rolami, leadami i przekazywaniem spraw do realizacji |
 | Laboratorium AI | Wdrożenia AI, automatyzacje i integracje |
 | Warsztat Motomizer | Prezentacja produktu i wariantów |
 | Scena BeatMarket | Platforma producentów i odsłuch beatów |

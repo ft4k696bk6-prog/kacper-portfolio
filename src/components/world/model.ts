@@ -401,7 +401,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
     }
   }
 
-  // A civic building as a visual metaphor for B-CRM. The project description is independent of the fiction.
+  // B-CRM headquarters with a columned façade.
   active = "b-crm";
   const civicX = -9.55, civicZ = -0.28;
   const civicRoof = standard(0x73777a, 0.68, 0.38);
@@ -433,7 +433,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   }
   for (let i = 0; i < 4; i++) box(civicX, 0.27 + i * 0.074, civicZ + 2.65 - i * 0.123, 3.25, 0.10, 0.79 - i * 0.06, civicTrim);
   box(civicX, 2.78, civicZ + 1.83, 3.24, 0.27, 0.98, pale);
-  sign("URZĄD SKARBOWY", civicX, 2.78, civicZ + 2.329, 2.96, 0.19, "#322b25");
+  sign("B-CRM", civicX, 2.78, civicZ + 2.329, 1.55, 0.22, "#322b25");
   box(civicX, 3.07, civicZ - 0.07, 5.81, 0.15, 4.28, pale);
   box(civicX, 3.17, civicZ - 0.1, 5.5, 0.09, 3.98, civicTrim);
   const roof = new T.CylinderGeometry(1, 1.62, 0.62, 4, 1).rotateY(Math.PI / 4).scale(2.44, 1, 1.66);
