@@ -23,16 +23,16 @@ const travelKeys = new Set(["w", "a", "s", "d"]);
 export async function createWorld(host: HTMLElement, callbacks: Callbacks, signal: AbortSignal) {
   const low = window.matchMedia("(pointer: coarse)").matches || host.clientWidth < 595;
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const environment = await loadLighting(signal);
+  const environment = low ? null : await loadLighting(signal);
   if (signal.aborted) {
-    environment.dispose();
+    environment?.dispose();
     signal.throwIfAborted();
   }
   const canvas = document.createElement("canvas");
   const options: WebGLContextAttributes = { alpha: true, antialias: !low, powerPreference: "high-performance" };
   const context = canvas.getContext("webgl2", options);
   if (!(context instanceof WebGL2RenderingContext)) {
-    environment.dispose();
+    environment?.dispose();
     throw new Error("WebGL 2 is unavailable");
   }
   const renderer = new T.WebGLRenderer({ ...options, canvas, context });
@@ -70,8 +70,8 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   scene.environment = environment;
   scene.environmentIntensity = 0.58;
 
-  scene.add(new T.HemisphereLight(0xe2edf6, 0x565d50, 1.42));
-  const sun = new T.DirectionalLight(0xffefda, 2.55);
+  scene.add(new T.HemisphereLight(0xe2edf6, 0x565d50, low ? 1.10 : 1.42));
+  const sun = new T.DirectionalLight(0xffefda, low ? 2.10 : 2.55);
   sun.position.set(-18, 24, 11);
   sun.castShadow = true;
   sun.shadow.mapSize.set(low ? 1024 : 2048, low ? 1024 : 2048);
@@ -85,7 +85,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   sun.shadow.normalBias = 0.065;
   sun.shadow.intensity = 0.86;
   scene.add(sun);
-  const fill = new T.DirectionalLight(0xcbd9f3, 0.97);
+  const fill = new T.DirectionalLight(0xcbd9f3, low ? 0.70 : 0.97);
   fill.position.set(12, 8, -15);
   scene.add(fill);
   const model = buildModel(requestRender, low);
@@ -442,7 +442,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       motion.removeEventListener("change", motionChange);
       model.dispose();
       sun.shadow.dispose();
-      environment.dispose();
+      environment?.dispose();
       renderer.dispose();
       if (!lost) renderer.forceContextLoss();
       canvas.remove();

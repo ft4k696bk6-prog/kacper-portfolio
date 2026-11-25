@@ -1,5 +1,5 @@
 import * as T from "three";
-import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
+import { mergeGeometries, mergeVertices } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { projects, type Point, type Zone } from "./content";
 
@@ -41,12 +41,8 @@ function contactTexture() {
   return new T.CanvasTexture(canvas);
 }
 
-function standard(color: number, roughness = 0.76, metalness = 0, map?: T.Texture) {
-  return new T.MeshStandardMaterial({ color, roughness, metalness, map: map ?? null });
-}
-
 function lit(color: number, emissiveIntensity = 0.65) {
-  return new T.MeshStandardMaterial({ color, emissive: color, emissiveIntensity, roughness: 0.66 });
+  return new T.MeshLambertMaterial({ color, emissive: color, emissiveIntensity });
 }
 
 function roundedFootprint(width: number, depth: number, radius: number) {
@@ -82,6 +78,11 @@ export function buildModel(render: () => void, low: boolean) {
   textures.add(ao);
   const random = sampler(317);
   const loader = new T.TextureLoader();
+  function standard(color: number, roughness = 0.76, metalness = 0, map: T.Texture | null = null) {
+    return low
+      ? new T.MeshLambertMaterial({ color, map })
+      : new T.MeshStandardMaterial({ color, roughness, metalness, map });
+  }
   const concrete = standard(0x777a77, 0.95, 0, noise);
   const limestone = standard(0xbfc2ba, 0.92, 0, noise);
   const white = standard(0xd3d9d2, 0.61, 0.16);
@@ -93,9 +94,11 @@ export function buildModel(render: () => void, low: boolean) {
   const foundation = standard(0x363a3c, 0.86, 0, noise);
   const aluminium = standard(0xa3acaa, 0.36, 0.68);
   const brushed = standard(0x59605d, 0.42, 0.55, noise);
-  const glass = new T.MeshPhysicalMaterial({
-    color: 0x263438, roughness: 0.2, metalness: 0.47, clearcoat: 0.33, clearcoatRoughness: 0.22,
-  });
+  const glass = low
+    ? new T.MeshPhongMaterial({ color: 0x29383b, shininess: 56, specular: 0x686d72 })
+    : new T.MeshPhysicalMaterial({
+      color: 0x263438, roughness: 0.2, metalness: 0.47, clearcoat: 0.33, clearcoatRoughness: 0.22,
+    });
   const windowGreen = lit(0x55734f, 0.18);
   const windowWarm = lit(0xe5c38a, 0.58);
   const lamp = lit(0xebffc8, 1.12);
@@ -124,7 +127,7 @@ export function buildModel(render: () => void, low: boolean) {
   }
 
   function rounded(x: number, y: number, z: number, w: number, h: number, d: number, m: T.Material, radius = 0.08, ry = 0) {
-    add(new RoundedBoxGeometry(w, h, d, 2, radius), m, x, y, z, true, 0, ry);
+    add(new RoundedBoxGeometry(w, h, d, low ? 1 : 2, radius), m, x, y, z, true, 0, ry);
   }
 
   function slab(w: number, d: number, height: number, radius: number, base: number, m: T.Material, x = 0, z = 0) {
@@ -500,10 +503,10 @@ export function buildModel(render: () => void, low: boolean) {
     for (const [geometries, castsShadow] of [[cast, true], [plain, false]] as const) {
       if (!geometries.length) continue;
       const compatible = geometries.map(geometry => {
-        if (!geometry.index) return geometry;
-        const expanded = geometry.toNonIndexed();
+        if (geometry.index) return geometry;
+        const indexed = mergeVertices(geometry);
         geometry.dispose();
-        return expanded;
+        return indexed;
       });
       const merged = mergeGeometries(compatible)!;
       compatible.forEach(geometry => geometry.dispose());
