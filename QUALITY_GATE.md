@@ -1,24 +1,22 @@
-# Bernecki World — weryfikacja wydania gry
+# Bernecki Universe — kontrola jakości
 
-## Interakcje i wydanie
+## Scena i portfolio
 
-- Produkcyjny build Next.js, TypeScript, kontrola PL/EN i 359 testów przeszły. ESLint w zmienionych komponentach świata zwrócił 0 błędów.
-- Playwright sprawdził zmianę zoomu, jazdę z klawiatury, skok z rampy, wjazd do strefy projektu, lot na Księżyc, interakcję ze znajdźką, terminal i tajny świat, tryb zdjęć, zapis po przeładowaniu oraz szybki powrót. Osobny scenariusz z animacjami potwierdził wykrycie UFO, przelot do Aster i powrót do B-CRM.
-- W profilu telefonu sprawdzono prawdziwe zdarzenia dwóch punktów dotyku w Chromium, jazdę przyciskiem dotykowym i zmianę orientacji. Przy wyłączonym WebGL sprawdzono dostęp do projektu, zmianę PL → EN → UK z zachowaniem projektu i powrót do Classic.
-- W sprawdzonych ścieżkach Chromium nie zgłosiło błędów konsoli. Axe nie wykrył naruszeń w polskim widoku startowym ani w otwartym menu.
-- 41 tras lokalnych, adresy kanoniczne i hreflang, sitemap, robots.txt i metadane przeszły kontrolę. Wszystkie sześć zewnętrznych linków „Otwórz projekt” zwróciło HTTP 200.
-- Obejrzano kadry w przeglądarce i skorygowano punkt startowy samochodu, widoczność Księżyca na telefonie oraz kompozycję po lądowaniu. [Kadry](docs/world/README.md#kadry-z-buildu-produkcyjnego)
+- Produkcyjny build Next.js, weryfikacja TypeScript i 363 testy przeszły. Zmiany zachowują istniejące ścieżki oraz hashe projektów.
+- Testy jednostkowe sprawdzają separację planet, obwiednie wzdłuż 66 punktów próbkowania każdej pary lotów, maski drogi i wody, odrzucanie przeszkód, orientację pojazdu i przejście przez szew zamkniętej trasy.
+- Na buildzie produkcyjnym sprawdzono osobne światy dla siedmiu realizacji i AI, karty projektów, lądowanie na księżycu, terminal, odkrycie The Unknown i ukrycie sekretów przed odblokowaniem. Kliknięcie modelu złotego auta odblokowało G-02. Zapis z wcześniejszej wersji zachował dostęp. Osobny scenariusz potwierdził też przerwanie lotu i wybór planety bezpośrednio na płótnie. Zweryfikowano skan UFO, aktywację widocznego obiektu, animowany przelot, zapis odkrycia i wyjście z trybu zdjęć.
+- Chromium potwierdził dotyk z dwoma punktami, wybór planety, obrót ekranu oraz brak błędów konsoli w scenariuszu. Axe sprawdził menu w polskiej wersji bez naruszeń.
+- Sprawdzono 41 tras, adresy kanoniczne, hreflang, sitemap, tryb bez WebGL z przełączaniem PL → EN → UK, zachowanie hasha i Classic. Nowe odsyłacze do Jalapeno i B-Code zwracają 200 w PL i EN. [Kadry](docs/world/README.md#kadry-z-buildu-produkcyjnego)
+
+## Ograniczenia
+
+Planety łączą modele autorskie, istniejącą zabudowę i uproszczone detale. Rozbudowane tunele, policyjny pościg, przestrzenne nagrania i dodatkowe mikrohistorie pozostają do rozwoju. Dźwięk oraz muzyka BeatMarket są syntetyczne. Pomiary wydajności pochodzą z przeglądarek emulowanych i nie potwierdzają celów na fizycznych urządzeniach.
 
 ## Pomiary
 
-Pomiary lokalnego buildu w Chromium ze SwiftShader i WebKit WPE. Środowisko nie udostępnia fizycznego telefonu ani sprzętowego GPU. Pierwsza klatka jest czasem od startu nawigacji do gotowości sceny. FPS pochodzi z krótkiego pomiaru faktycznych odświeżeń WebGL podczas przyspieszania samochodu.
+Próbka automatycznego obrotu wokół StarCars przez około 3,5 sekundy. Liczono faktyczne odświeżenia WebGL. Linuksowe środowisko testowe nie miało sprzętowego GPU ani fizycznego telefonu.
 
-| Profil przeglądarki | Pierwsza klatka | Jazda |
+| Profil | Pierwsza klatka 3D | FPS |
 | --- | ---: | ---: |
-| Chromium SwiftShader, 1440 × 900 | 3,12 s | 5,5 FPS (6 klatek) |
-| Chromium SwiftShader, Pixel 7 | 2,08 s | 10,9 FPS (13 klatek) |
-| WebKit WPE, profil iPhone 13 | 2,85 s | 48,8 FPS (54 klatki) |
-
-Odcięcie zabudowy za horyzontem zmniejszyło ilość renderowanej geometrii. Wynik krótkiej próby na SwiftShader pozostał podobny. Cele 60 FPS i 30 FPS pozostają do sprawdzenia na fizycznych urządzeniach. Nawigacja statyczna działa również bez WebGL.
-
-Symulacja jazdy używa lokalnej grawitacji i wybranych kolizji. Krajobraz obejmuje m.in. port, lagunę, elektrownię wiatrową, obserwatorium, wulkan i jaskinię. Większe tunele, lotnisko i pełna przestrzenna oprawa dźwiękowa pozostają do rozbudowy. Scenariusze przeglądarkowe próbkują mechaniki odkrywania, a stan osiągnięć sprawdza też test jednostkowy.
+| Chromium SwiftShader, 1440 × 900 | 2,55 s | 6,8 (24 klatki) |
+| WebKit WPE, profil iPhone 13 | 1,25 s | 45,6 (160 klatek) |

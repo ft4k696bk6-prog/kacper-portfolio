@@ -1,5 +1,5 @@
 import * as T from "three";
-import { globeDirection, globeRadius, makeSurfaceSites, type SurfaceStop } from "./globe";
+import { globeDirection, globeRadius } from "./globe";
 
 const islands = [
   [31, 32, 0.84], [1, -40, 0.81], [33, -112, 0.59], [-24, 38, 0.47],
@@ -61,66 +61,4 @@ export function colorTerrain(sphere: T.SphereGeometry, software: boolean) {
   }
   sphere.setAttribute("color", new T.BufferAttribute(colors, 3));
   sphere.computeVertexNormals();
-}
-
-export type Road = { start: T.Vector3; end: T.Vector3; turn: T.Quaternion; angle: number };
-export const roadPairs: [SurfaceStop, SurfaceStop][] = [
-  ["reenergy", "b-crm"], ["reenergy", "studio"], ["b-crm", "lab"], ["lab", "hq"],
-  ["hq", "motomizer"], ["motomizer", "starcars"], ["hq", "isto-kebab"], ["isto-kebab", "starcars"],
-  ["isto-kebab", "reenergy"], ["starcars", "beatmarket"], ["beatmarket", "studio"], ["studio", "b-crm"],
-];
-
-export function makeRoads() {
-  const sites = makeSurfaceSites();
-  return roadPairs.map(([a, b]) => {
-    const start = sites[a].normal;
-    const end = sites[b].normal;
-    return { start, end, turn: new T.Quaternion().setFromUnitVectors(start, end), angle: start.angleTo(end) };
-  });
-}
-
-export function roadPoint(road: Road, t: number, result: T.Vector3, rotation: T.Quaternion) {
-  return result.copy(road.start).applyQuaternion(rotation.identity().slerp(road.turn, t));
-}
-
-export function roadMeshes(roads: Road[]) {
-  const positions: number[] = [], colors: number[] = [], indices: number[] = [];
-  const radial = new T.Vector3(), sideways = new T.Vector3(), point = new T.Vector3();
-  const turn = new T.Quaternion();
-  const road = new T.Color("#777d87"), edge = new T.Color("#a99880"), bridge = new T.Color("#96755f"), dash = new T.Color("#edd1a1");
-  function strip(route: Road, start: number, end: number, width: number, height: number, steps: number, kind: "edge" | "road" | "dash") {
-    sideways.crossVectors(route.start, route.end).normalize();
-    const offset = positions.length / 3;
-    for (let i = 0; i <= steps; i++) {
-      roadPoint(route, T.MathUtils.lerp(start, end, i / steps), radial, turn);
-      for (const sign of [-1, 1]) {
-        point.copy(radial).addScaledVector(sideways, width * sign / globeRadius).normalize();
-        const span = terrainField(radial) < coast + 0.005;
-        const color = kind === "dash" ? dash : kind === "road" ? (span ? bridge : road) : edge;
-        point.multiplyScalar(Math.max(surfaceRadius(point) + height, globeRadius + (span ? 0.29 : 0) + height));
-        positions.push(point.x, point.y, point.z);
-        colors.push(color.r, color.g, color.b);
-      }
-      if (i) {
-        const a = offset + i * 2;
-        indices.push(a - 2, a - 1, a, a, a - 1, a + 1);
-      }
-    }
-  }
-  for (const route of roads) {
-    const margin = 2.1 / (route.angle * globeRadius);
-    const steps = Math.ceil(route.angle * 40);
-    strip(route, margin, 1 - margin, 0.80, 0.048, steps, "edge");
-    strip(route, margin, 1 - margin, 0.65, 0.070, steps, "road");
-    const increment = 1.40 / (route.angle * globeRadius);
-    for (let t = margin + increment * 0.5; t < 1 - margin - increment; t += increment) {
-      strip(route, t, t + increment * 0.44, 0.041, 0.081, 2, "dash");
-    }
-  }
-  const geometry = new T.BufferGeometry();
-  geometry.setAttribute("position", new T.Float32BufferAttribute(positions, 3));
-  geometry.setAttribute("color", new T.Float32BufferAttribute(colors, 3));
-  geometry.setIndex(indices);
-  geometry.computeVertexNormals();
-  return new T.Mesh(geometry, new T.MeshLambertMaterial({ vertexColors: true, side: T.DoubleSide }));
 }

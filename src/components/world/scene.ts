@@ -1,846 +1,624 @@
 import * as T from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { gsap } from "gsap";
-import { projects, projectStops, sceneStops, zones, type StopId, type Zone } from "./content";
+import { projects, zones, type Zone, type StopId } from "./content";
 import { buildModel, type Hit } from "./model";
 import { loadLighting } from "./lighting";
-import { colorTerrain } from "./terrain";
+import { globeDirection, loadPlanet, type SurfaceStop } from "./globe";
+import { colorTerrain, surfaceRadius } from "./terrain";
 import { createPlay, type Beacon } from "./play";
+import { makeUniverse } from "./universe";
+import { clearancePose, flightPath, safeDirection, spheres, systemAxis } from "./cameraFlight";
+import { isSecretBody, planets, systemDistance } from "./planets";
+import type { Body, CameraMode, Destination, FindId } from "./discoveries";
+import type { ProjectScene } from "./planetScene";
 import { observatoryDirection } from "./worldLife";
-import type { Body, CameraMode, FindId } from "./discoveries";
-import { globeDirection, globeRadius, loadPlanet, type SurfaceStop } from "./globe";
 
 type View = { zone: Zone | null; project: number | null };
 type Callbacks = {
   marker: (id: StopId, x: number, y: number, visible: boolean) => void;
-  hover: (id: StopId | null) => void;
   select: (hit: Hit) => void;
   lost: () => void;
   rendered: () => void;
   found: (id: FindId) => void;
   beacon: (id: Beacon, x: number, y: number, visible: boolean) => void;
-  arrived: (body: Body) => void;
-  traveling: (body: Body | null) => void;
+  planet: (id: Body, x: number, y: number, visible: boolean) => void;
+  arrived: (body: Destination) => void;
+  traveling: (body: Destination | null, keepPanel?: boolean) => void;
+  moonRevealed: () => void;
+  interrupted: (previous: View, failed: boolean) => void;
 };
-
-const initial = globeDirection(23, 6);
-const overview = new T.Vector3();
-const planetSphere = new T.Sphere(overview, globeRadius - 0.05);
-const fov = 35;
-const fovTangent = Math.tan(T.MathUtils.degToRad(fov / 2));
-type Pose = { target: T.Vector3; direction: T.Vector3; distance: number };
-const travelKeys = new Set(["w", "a", "s", "d"]);
-
-function makeContext(antialias: boolean) {
-  const canvas = document.createElement("canvas");
-  const options: WebGLContextAttributes = { alpha: true, antialias, powerPreference: "high-performance" };
-  const context = canvas.getContext("webgl2", options);
-  if (!(context instanceof WebGL2RenderingContext)) throw new Error("WebGL 2 is unavailable");
-  return { canvas, options, context };
-}
+type Pose = { target: T.Vector3; eye: T.Vector3 };
+const homeOrbit = globeDirection(21, 5);
+const heading = new T.Vector3(.54, .32, .78).normalize();
+const fov = T.MathUtils.degToRad(36) / 2;
+const origin = new T.Vector3();
 
 export async function createWorld(host: HTMLElement, callbacks: Callbacks, signal: AbortSignal) {
-  const compact = window.matchMedia("(pointer: coarse)").matches || host.clientWidth < 595;
+  const compact = host.clientWidth < 590 || window.matchMedia("(pointer: coarse)").matches;
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  let graphics = makeContext(!compact);
-  const debug = graphics.context.getExtension("WEBGL_debug_renderer_info");
-  const rendererName = debug ? String(graphics.context.getParameter(debug.UNMASKED_RENDERER_WEBGL)) : "";
-  const software = /swiftshader|llvmpipe|softpipe|software rasterizer/i.test(rendererName);
-  if (software && !compact) {
-    graphics.context.getExtension("WEBGL_lose_context")?.loseContext();
-    graphics = makeContext(false);
-  }
-  const { canvas, context, options } = graphics;
+  const canvas = document.createElement("canvas");
+  const options: WebGLContextAttributes = { alpha: true, antialias: false, powerPreference: "high-performance" };
+  const gl = canvas.getContext("webgl2", options);
+  if (!(gl instanceof WebGL2RenderingContext)) throw new Error("WebGL 2 is unavailable");
+  const info = gl.getExtension("WEBGL_debug_renderer_info");
+  const software = !!info && /swiftshader|llvmpipe|softpipe|software/i.test(gl.getParameter(info.UNMASKED_RENDERER_WEBGL));
   const low = compact || software;
-  let environment: T.Texture | null = null;
-  let planet: ReturnType<typeof loadPlanet>;
-  try {
-    if (!low) environment = await loadLighting(signal);
-    signal.throwIfAborted();
-    planet = loadPlanet(software, low);
-    colorTerrain(planet.sphere, software);
-  } catch (error) {
-    environment?.dispose();
-    context.getExtension("WEBGL_lose_context")?.loseContext();
-    throw error;
-  }
-  const renderer = new T.WebGLRenderer({ ...options, canvas, context });
-  renderer.setClearColor(0x101210, 0);
+  const environment = low ? null : await loadLighting(signal).catch(() => null);
+  if (signal.aborted) { environment?.dispose(); signal.throwIfAborted(); }
+  const renderer = new T.WebGLRenderer({ ...options, canvas, context: gl });
+  renderer.setClearColor(0x181b28, 0);
   renderer.outputColorSpace = T.SRGBColorSpace;
   renderer.toneMapping = T.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
-  const pixelBudget = software ? 560_000 : 1_550_000;
-  const motionBudget = compact ? 56_000 : 46_000;
-  const minimumDpr = 0.75;
-  let motionScale = 1;
-  let reduceMotionPixels = software;
-  let dpr = Math.min(window.devicePixelRatio || 1, software ? 1 : compact ? 1.15 : 1.55);
-  renderer.setPixelRatio(dpr);
-  renderer.shadowMap.enabled = !software;
-  renderer.shadowMap.type = low ? T.BasicShadowMap : T.PCFShadowMap;
-  renderer.shadowMap.autoUpdate = false;
-  renderer.domElement.setAttribute("aria-hidden", "true");
-  if (software) canvas.dataset.renderer = "software";
-  host.append(renderer.domElement);
-
+  renderer.toneMappingExposure = 1.15;
+  canvas.setAttribute("aria-hidden", "true");
+  canvas.dataset.renderer = software ? "software" : "hardware";
+  host.appendChild(canvas);
   const scene = new T.Scene();
-  const depthFog = new T.Fog(0x111a24, 205, 290);
-  scene.fog = depthFog;
-  const camera = new T.PerspectiveCamera(fov, 1, 0.15, 490);
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = !motion.matches;
-  controls.dampingFactor = software ? 0.17 : 0.074;
-  controls.enablePan = false;
-  controls.rotateSpeed = 0.59;
-  controls.enableZoom = true;
-  controls.zoomSpeed = 0.78;
-  controls.minPolarAngle = 0.12;
-  controls.maxPolarAngle = Math.PI - 0.12;
-  controls.mouseButtons = { LEFT: T.MOUSE.ROTATE, RIGHT: T.MOUSE.ROTATE };
-  controls.touches = { ONE: T.TOUCH.ROTATE, TWO: T.TOUCH.DOLLY_ROTATE };
-  controls.target.copy(overview);
-  camera.position.copy(initial).multiplyScalar(overviewDistance());
-  controls.update();
-  scene.add(planet.group);
-
   scene.environment = environment;
-  scene.environmentIntensity = 0.63;
+  scene.environmentIntensity = .55;
+  const camera = new T.PerspectiveCamera(36, 1, .20, 2300);
+  const controls = new OrbitControls(camera, canvas);
+  controls.enablePan = false;
+  controls.enableZoom = true;
+  controls.zoomSpeed = .79;
+  controls.rotateSpeed = .60;
+  controls.enableDamping = !motion.matches;
+  controls.dampingFactor = software ? .18 : .095;
+  controls.mouseButtons = { LEFT: T.MOUSE.ROTATE, MIDDLE: T.MOUSE.DOLLY, RIGHT: T.MOUSE.ROTATE };
+  controls.touches = { ONE: T.TOUCH.ROTATE, TWO: T.TOUCH.DOLLY_ROTATE };
+  const ambient = new T.HemisphereLight(0xf5f2ff, 0x626378, 1.45);
+  const sun = new T.DirectionalLight(0xffe6c8, 2.25);
+  const fill = new T.DirectionalLight(0xc9e9ff, .66);
+  sun.position.set(38, 49, 44);
+  fill.position.set(-15, 17, -31);
+  scene.add(ambient, sun, sun.target, fill, fill.target);
+  renderer.shadowMap.enabled = !low;
+  renderer.shadowMap.type = T.PCFShadowMap;
+  renderer.shadowMap.autoUpdate = false;
+  sun.castShadow = !low;
+  sun.shadow.mapSize.set(1024, 1024);
+  Object.assign(sun.shadow.camera, { left: -32, right: 32, top: 32, bottom: -32, near: .5, far: 128 });
+  sun.shadow.normalBias = .08;
+  sun.shadow.bias = -.00015;
+  sun.shadow.intensity = .62;
 
-  scene.add(new T.HemisphereLight(0xe3ebf6, 0x514d47, low ? 1.13 : 0.91));
-  const sun = new T.DirectionalLight(0xffedda, low ? 1.65 : 2.05);
-  sun.position.set(33, 56, 37);
-  sun.castShadow = true;
-  const shadowSize = software ? 512 : compact ? 1024 : 2048;
-  sun.shadow.mapSize.set(shadowSize, shadowSize);
-  sun.shadow.camera.left = -31;
-  sun.shadow.camera.right = 31;
-  sun.shadow.camera.top = 31;
-  sun.shadow.camera.bottom = -31;
-  sun.shadow.camera.near = 0.5;
-  sun.shadow.camera.far = 125;
-  sun.shadow.bias = -0.0002;
-  sun.shadow.normalBias = 0.065;
-  sun.shadow.intensity = 0.78;
-  sun.shadow.radius = 2.4;
-  scene.add(sun);
-  const fill = new T.DirectionalLight(0xd3e0f3, low ? 0.47 : 0.48);
-  fill.position.set(12, 8, -15);
-  scene.add(fill);
-  const model = buildModel(low, software);
-  const play = createPlay(scene, low, compact, {
+  const planet = loadPlanet(software, low);
+  colorTerrain(planet.sphere, software);
+  const home = buildModel(low, software, new Set<SurfaceStop>(["hq", "studio"]));
+  scene.add(planet.group, home.group);
+  const universe = makeUniverse(low);
+  scene.add(universe.group, universe.stars);
+  const play = createPlay(scene, low, {
     found: callbacks.found,
-    enter(id) {
-      const index = projects.findIndex(project => project.id === id);
-      callbacks.select(index === -1 ? { zone: id as Zone } : { zone: "gallery", project: index });
-    },
-    voyage: fly,
+    voyage(destination) { void fly(destination); },
+    observatory() { revealMoon(); void fly("system"); },
   });
-  const followTarget = new T.Vector3();
-  const followEye = new T.Vector3();
-  const spaceCenter = new T.Vector3();
-  const cameraWorldOffset = new T.Vector3();
-  const cameraProjected = new T.Vector3();
-  const startSun = sun.position.clone();
+  const bounds = new T.Vector2();
+  const v = new T.Vector3(), center = new T.Vector3(), projected = new T.Vector3(), radial = new T.Vector3(), offset = new T.Vector3();
+  const originRay = new T.Vector2();
+  const cast = new T.Raycaster(), sphere = new T.Sphere(), rayPoint = new T.Vector3();
+  let body: Body | null = "home";
+  let detail: ProjectScene | undefined;
   let mode: CameraMode = "planet";
-  let body: Body = "home";
-  let worldRadius = globeRadius;
-  let auto = false;
-  let day: "cycle" | "day" | "night" = "cycle";
+  let poseView: View = { zone: null, project: null };
   let quality: "auto" | "economy" | "high" = "auto";
-  let animationTimer = 0;
-  let flightId = 0;
-  let traveling = false;
-  const starCarsSite = model.sites.starcars.normal.clone().multiplyScalar(globeRadius);
-  scene.add(model.group);
-  renderer.shadowMap.needsUpdate = true;
+  let day: "cycle" | "day" | "night" = "cycle";
+  let auto = false;
+  let fx = true;
+  let moonKnown = false, unknown = false, garage = false;
+  let previous = 0, worldTime = 0, pending = 0, timer = 0, flightToken = 0;
+  let engineDpr = 1, fastBudget = !software, slow = 0;
+  let started = false, disposed = false, lost = false, dragging = false, ready = false, flying = false;
+  let flight: { tween: gsap.core.Tween; start: number; duration: number; finish: () => void; cancel?: () => void } | undefined;
+  let action: (() => void) | undefined;
+  let press: { x: number; y: number; id: number } | undefined;
+  let previewPrepared: ProjectScene | undefined;
 
-  const size = new T.Vector2();
-  const walkOrigin = new T.Vector2();
-  const raycaster = new T.Raycaster();
-  const pointer = new T.Vector2();
-  const projected = new T.Vector3();
-  const walkingPlane = new T.Plane(new T.Vector3(0, 1, 0), -0.25);
-  const walkRay = new T.Ray();
-  const walkHit = new T.Vector3();
-  const planetHit = new T.Vector3();
-  const avatarCamera = new T.Vector3();
-  const markerNormal = new T.Vector3();
-  const markerToEye = new T.Vector3();
-  const avatarCenter = new T.Vector2(0.10, 3.43);
-  const keys = new Set<string>();
-  let waypoint: T.Vector2 | null = null;
-  let travel = 0;
-  let request = 0;
-  let interacting = false;
-  let bufferWidth = 0;
-  let bufferHeight = 0;
-  let bufferDpr = 0;
-  let compiled = false;
-  let called = false;
-  let paused = document.hidden;
-  let disposed = false;
-  let lost = false;
-  let transition: { tween: gsap.core.Tween; start: number; duration: number; after?: () => void } | undefined;
-  let current: View = { zone: null, project: null };
-  let pointerStart: { id: number; x: number; y: number; time: number } | null = null;
-  let previous = 0;
-  let samples = 0;
-  let elapsed = 0;
-  let captureFrames = 0;
-  let slowWindows = 0;
-  let hover: StopId | null = null;
-
-  function overviewDistance() {
-    const fraction = Math.min(1, camera.aspect) * (compact ? 0.79 : 0.765);
-    return (globeRadius * 1.06) / Math.sin(Math.atan(fovTangent * fraction));
+  function redraw() {
+    if (started && !disposed && !lost && !document.hidden && !pending) pending = requestAnimationFrame(frame);
   }
-
-  function isOverview(view: View) {
-    return view.project === null && (view.zone === null || view.zone === "gallery" || view.zone === "contact");
+  function normalOf(id: Body) {
+    if (id === "home") return homeOrbit.clone();
+    if (id === "moon" || id === "garage") return globeDirection(19, 26);
+    if (id === "signal") return globeDirection(17, -28);
+    const look = {
+      starcars: [.89, .43, .16], reenergy: [.12, .63, .77], "b-crm": [.78, .55, .30],
+      ai: [.22, .43, .88], beatmarket: [.85, .23, .47], motomizer: [.77, .32, .34], "isto-kebab": [.25, .65, .73], jalapeno: [.72,.53,.48],
+    } as const;
+    return new T.Vector3(...look[id]).normalize();
   }
-
-  function writeCamera(pose: Pose) {
-    controls.target.copy(pose.target);
-    camera.position.copy(pose.target).addScaledVector(pose.direction, pose.distance);
-    controls.update();
-    requestRender();
-  }
-
-  function currentPose(): Pose {
-    const target = controls.target.clone();
-    const offset = camera.position.clone().sub(target);
-    return { target, distance: offset.length(), direction: offset.normalize() };
-  }
-
-  function requestRender() {
-    if (compiled && !disposed && !lost && !paused && !request) request = requestAnimationFrame(frame);
-  }
-
-  function resize() {
-    if (disposed || lost) return;
-    const width = Math.max(host.clientWidth, 1);
-    const height = Math.max(host.clientHeight, 1);
-    const pose = currentPose();
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-    size.set(width, height);
-    if (isOverview(current) && !transition && body === "home" && mode === "planet" && (!called || pose.distance > globeRadius * 2)) {
-      writeCamera({ ...pose, distance: overviewDistance() });
-    }
-    requestRender();
-  }
-
-  function updateDrawingBuffer(moving: boolean) {
-    // The camera uses CSS-pixel dimensions even when the render buffer is smaller.
-    const baseBudget = quality === "economy" ? pixelBudget * 0.51 : pixelBudget;
-    const budget = reduceMotionPixels && moving ? Math.min(motionBudget, size.x * size.y * (compact ? 0.24 : 0.31)) * motionScale : baseBudget;
-    const ratio = Math.min(dpr, Math.sqrt(budget / (size.x * size.y)));
-    if (size.x === bufferWidth && size.y === bufferHeight && ratio === bufferDpr) return;
-    bufferWidth = size.x;
-    bufferHeight = size.y;
-    bufferDpr = ratio;
-    renderer.setDrawingBufferSize(bufferWidth, bufferHeight, bufferDpr);
-  }
-
-  function moveAvatar(seconds: number) {
-    if (!keys.size && !waypoint) {
-      model.legs.forEach(leg => { leg.rotation.x = 0; });
-      return;
-    }
-    const position = model.avatar.position;
-    const amount = Math.min(seconds, 0.08) * 2.7;
-    const dx = Number(keys.has("d")) - Number(keys.has("a"));
-    const dz = Number(keys.has("s")) - Number(keys.has("w"));
-    avatarCamera.copy(camera.position).applyMatrix4(model.sites.hq.inverse);
-    const angle = Math.atan2(avatarCamera.x - position.x, avatarCamera.z - position.z);
-    const direction = new T.Vector2(dx * Math.cos(angle) + dz * Math.sin(angle), dz * Math.cos(angle) - dx * Math.sin(angle));
-    if (keys.size) waypoint = null;
-
-    if (waypoint) {
-      const radial = new T.Vector2(position.x, position.z).sub(avatarCenter);
-      const difference = waypoint.angle() - radial.angle();
-      const turn = Math.atan2(Math.sin(difference), Math.cos(difference));
-      if (Math.abs(turn) < 0.045) {
-        direction.copy(waypoint).sub(radial);
-        if (direction.length() < 0.05) waypoint = null;
-      } else {
-        direction.copy(radial).rotateAround(walkOrigin, Math.sign(turn) * Math.min(Math.abs(turn), amount / radial.length())).sub(radial);
+  function focusOf(id: Body, view?: View, prepared = detail): Pose {
+    const point = new T.Vector3(...planets[id].center);
+    const radius = planets[id].radius;
+    const factor = Math.min(camera.aspect, 1);
+    if (view?.project !== null && view?.project !== undefined || view?.zone === "lab") {
+      if (prepared) {
+        const target = prepared.focus.clone();
+        const direction = prepared.viewDirection;
+        return { target, eye: target.clone().addScaledVector(direction, (radius * .73 + 1.1) / Math.max(.63, factor)) };
       }
     }
-    if (!direction.lengthSq()) return;
-    direction.setLength(Math.min(amount, direction.length()));
-    const next = new T.Vector2(position.x + direction.x, position.z + direction.y).sub(avatarCenter);
-    if (next.lengthSq() < 0.0001) return;
-    next.setLength(T.MathUtils.clamp(next.length(), 1.44, 2.78)).add(avatarCenter);
-    const moving = Math.hypot(next.x - position.x, next.y - position.z) > 0.001;
-    if (moving) {
-      model.avatar.rotation.y = Math.atan2(next.x - position.x, next.y - position.z);
-      position.x = next.x;
-      position.z = next.y;
-      travel += seconds * 11;
+    if (id === "home" && (view?.zone === "hq" || view?.zone === "studio")) {
+      const s = home.sites[view.zone];
+      const target = new T.Vector3(...zones.find(zone => zone.id === view.zone)!.target);
+      if (view.zone === "hq") target.add(home.avatar.position);
+      target.applyMatrix4(s.matrix);
+      return { target, eye: target.clone().addScaledVector(s.normal.clone().addScaledVector(s.south, .77).normalize(), 10.8 / Math.max(.62, factor)) };
     }
-    model.legs.forEach((leg, i) => { leg.rotation.x = moving && !motion.matches ? Math.sin(travel + Math.PI * i) * 0.55 : 0; });
+    const distance = (radius * 1.08) / Math.sin(Math.atan(Math.tan(fov) * factor * (compact ? .83 : .77)));
+    const direction = safeDirection(id, normalOf(id), distance);
+    return { target: point, eye: point.clone().addScaledVector(direction, distance) };
   }
-
-  function frame(now: number) {
-    request = 0;
-    const measuredFrame = previous > 0;
-    const dt = measuredFrame ? now - previous : 0;
-    previous = now;
-    const seconds = Math.min(dt / 1000, 0.085);
-    if (transition) {
-      const progress = Math.min((now - transition.start) / transition.duration, 1);
-      transition.tween.progress(Math.max(progress, 0));
-      if (progress === 1) {
-        const after = transition.after;
-        cancelTransition();
-        controls.enabled = mode !== "drive";
-        after?.();
-      }
-    }
-    const animate = !motion.matches;
-    const clock = play.tick(seconds, animate && !traveling, quality === "high" || (quality === "auto" && !low), mode);
-    if (mode === "drive" && !transition) {
-      const car = play.vehicle;
-      followTarget.copy(car.root.position).addScaledVector(car.normal, 0.74).addScaledVector(car.forward, 0.7);
-      followEye.copy(car.root.position).addScaledVector(car.normal, 3.3).addScaledVector(car.forward, -5.9);
-      const mix = motion.matches ? 1 : 1 - Math.exp(-Math.max(0.016, seconds) * 10);
-      camera.position.lerp(followEye, mix);
-      controls.target.lerp(followTarget, mix);
-      camera.up.lerp(car.normal, mix).normalize();
-      camera.lookAt(controls.target);
+  function mapPose(): Pose {
+    // The camera remains in front of the orbital plane. Narrow screens use depth rather than smaller hit targets.
+    const portrait = camera.aspect < .77;
+    const short = portrait && bounds.y < 725;
+    const target = new T.Vector3(portrait ? short ? -20 : -7 : 6, 0, 0);
+    const width = portrait ? 106 : 153;
+    const distance = Math.max(short ? 640 : systemDistance, width / (Math.tan(fov) * Math.min(1, camera.aspect)));
+    return { target, eye: target.clone().addScaledVector(systemAxis, distance) };
+  }
+  function setUp(id: Body | null) {
+    if (!id && camera.aspect < .77) camera.up.set(1, 0, 0);
+    else camera.up.set(0, 1, 0);
+  }
+  function setControls(focus: boolean) {
+    controls.enabled = !flying;
+    controls.enableDamping = !motion.matches;
+    if (body) {
+      controls.minAzimuthAngle = -Infinity; controls.maxAzimuthAngle = Infinity;
+      controls.minPolarAngle = .045; controls.maxPolarAngle = Math.PI - .045;
+      controls.minDistance = focus ? 2.3 : planets[body].radius + 1.15;
+      controls.maxDistance = Math.max(planets[body].radius * 8, focusOf(body).target.distanceTo(focusOf(body).eye) * 1.24);
     } else {
-      moveAvatar(seconds);
+      controls.minAzimuthAngle = -.36; controls.maxAzimuthAngle = .36;
+      controls.minPolarAngle = 1.24; controls.maxPolarAngle = 1.77;
+      controls.minDistance = Math.max(365, mapPose().eye.length() * .79);
+      controls.maxDistance = 1800;
     }
-    if (animate || day !== "cycle") {
-      const night = day === "night" ? 1 : day === "day" ? 0 : T.MathUtils.smoothstep(Math.sin(clock / 29 - 1.14), .10, .94);
-      sun.intensity = T.MathUtils.lerp(low ? 1.65 : 2.05, .40, night);
-      sun.color.setRGB(1 - night * .28, .90 - night * .18, .73 + night * .24);
-      if (body === "home") sun.position.copy(startSun);
-      else sun.position.copy(play.bodyFocus(body, spaceCenter)).add(startSun);
-      const mood = Math.sin(clock / 29 - 1.1);
-      scene.environmentIntensity = .64 - night * .24 + Math.max(0, mood) * .048;
-      renderer.toneMappingExposure = 1.05 - (software ? night * .19 : night * .14);
+  }
+  function setPose(pose: Pose) {
+    controls.target.copy(pose.target);
+    camera.position.copy(pose.eye);
+    camera.lookAt(pose.target);
+  }
+  function keepOutside(eye = camera.position) {
+    if (!body) { clearancePose(eye, null); return; }
+    if (!eye.lengthSq()) eye.copy(heading);
+    play.bodyFocus(body, center);
+    radial.copy(eye).sub(center).normalize();
+    const activeBounds = body === "home" ? play.bounds : detail?.bounds ?? [];
+    let minHeight = 1.08;
+    for (const patch of activeBounds) if (radial.angleTo(patch.normal) < patch.radius + .02) minHeight = Math.max(minHeight, patch.height + .7);
+    if (body === "home") {
+      for (const site of [home.sites.hq, home.sites.studio]) if (radial.dot(site.normal) > .985) minHeight = Math.max(minHeight, 5.15);
+      minHeight += Math.max(0, surfaceRadius(radial) - planets.home.radius);
     }
-    if (!motion.matches) model.beacon.material.emissiveIntensity = 0.34 + Math.sin(now / 760) * 0.08;
-    if (!transition && !isOverview(current)) model.loadSurfaces(requestRender);
-    controls.autoRotate = auto && !transition && mode !== "drive" && animate;
-    const orbitMoved = mode === "drive" ? false : controls.update(seconds);
-    const moving = Boolean(transition || interacting || mode === "drive" && Math.abs(play.vehicle.speed) > 0.3 || orbitMoved || keys.size || waypoint);
-    if (!transition && body === "home" && mode !== "drive" && controls.target.lengthSq() > 1) {
-      cameraWorldOffset.copy(camera.position);
-      if (cameraWorldOffset.lengthSq() < (globeRadius + .75) ** 2) camera.position.copy(cameraWorldOffset.setLength(globeRadius + .75));
-      camera.lookAt(controls.target);
+    if (isSecretBody(body)) minHeight = 1.85;
+    clearancePose(eye, body, minHeight);
+  }
+  function placeLight() {
+    play.bodyFocus(body, center);
+    sun.position.copy(center).add(new T.Vector3(38, 49, 44));
+    fill.position.copy(center).add(new T.Vector3(-15, 17, -31));
+    sun.target.position.copy(center);
+    fill.target.position.copy(center);
+    renderer.shadowMap.needsUpdate = true;
+  }
+  function show() {
+    home.group.visible = planet.group.visible = body === "home";
+    if (detail) detail.root.visible = !!body && body !== "home" && !isSecretBody(body);
+    play.setBody(body);
+    universe.show(body === null || flying, body, moonKnown, unknown, garage);
+  }
+  function coords(point: T.Vector3 | null, report: (x: number, y: number, on: boolean) => void) {
+    if (!point || mode === "photo" || flying) { report(0, 0, false); return; }
+    projected.copy(point).project(camera);
+    report((projected.x * .5 + .5) * bounds.x, (.5 - projected.y * .5) * bounds.y,
+      Math.abs(projected.x) <= .935 && Math.abs(projected.y) <= .91 && Math.abs(projected.z) <= 1);
+  }
+  function projectMarkers() {
+    for (const { key } of spheres) {
+      const point = !body && universe.marker(key);
+      coords(point || null, (x, y, on) => callbacks.planet(key, x, y, on));
     }
-    updateDrawingBuffer(moving);
-    if (model.showDetailedCars(!transition && camera.position.distanceToSquared(starCarsSite) < 36 * 36)) {
-      renderer.shadowMap.needsUpdate = true;
+    const hq = body === "home" && !poseView.zone ? v.copy(home.avatar.position).add(new T.Vector3(0, 2.3, 0)).applyMatrix4(home.sites.hq.matrix) : null;
+    coords(hq && v.dot(camera.position.clone().sub(v)) > 0 ? hq : null, (x, y, on) => callbacks.marker("hq", x, y, on));
+    const marker = detail?.marker;
+    play.bodyFocus(body, center);
+    const front = marker && radial.copy(marker).sub(center).dot(offset.copy(camera.position).sub(marker)) > 0;
+    coords(front && !poseView.zone ? marker! : null, (x, y, on) => callbacks.beacon("landmark", x, y, on));
+    play.projectBeacons(camera, (id, point) => coords(point, (x, y, on) => callbacks.beacon(id, x, y, on)));
+    if (!body) coords(universe.visitor, (x, y, on) => callbacks.beacon("ufo", x, y, on));
+    coords(body === "home" && moonKnown ? universe.marker("moon") : null, (x, y, on) => callbacks.beacon("moon", x, y, on));
+    // Keep a keyboard equivalent near each project artifact, alongside direct raycast interaction.
+    action = undefined;
+    if (detail && !poseView.zone && !flying) {
+      let nearest = Infinity, anchor: T.Vector3 | null = null;
+      for (const item of detail.interactive) {
+        item.root.getWorldPosition(v);
+        if (radial.copy(v).sub(center).dot(offset.copy(camera.position).sub(v)) <= 0) continue;
+        const distance = v.distanceToSquared(camera.position);
+        if (distance > nearest || distance > 23 ** 2) continue;
+        projected.copy(v).project(camera);
+        if (Math.abs(projected.x) > .80 || Math.abs(projected.y) > .78 || Math.abs(projected.z) > 1) continue;
+        nearest = distance;
+        anchor = v.clone();
+        action = item.action;
+      }
+      coords(anchor, (x, y, on) => callbacks.beacon("nearby", x, y, on));
     }
-    fill.position.copy(camera.position).normalize().multiplyScalar(45);
-    const approach = body === "home" && !traveling ? T.MathUtils.smoothstep(controls.target.length(), 8, 20) : 0;
-    const distance = camera.position.distanceTo(controls.target);
-    depthFog.near = T.MathUtils.lerp(205, distance * (play.storm ? .83 : 1.12), approach);
-    depthFog.far = T.MathUtils.lerp(290, distance * (play.storm ? 1.95 : 2.85), approach);
-    depthFog.color.setHex(play.storm ? 0x354956 : 0x192637);
+  }
+  function resize() {
+    const size = new T.Vector2(host.clientWidth || 1, host.clientHeight || 1);
+    if (bounds.equals(size)) return;
+    bounds.copy(size);
+    camera.aspect = bounds.x / bounds.y;
+    camera.updateProjectionMatrix();
+    if (!flight && !flying && (!ready || !body || !!poseView.zone || camera.position.distanceTo(controls.target) > planets[body].radius * 2.7)) {
+      setUp(body);
+      setPose(body ? focusOf(body, poseView) : mapPose());
+      if (ready) setControls(!!poseView.zone);
+    }
+    redraw();
+  }
+  function frame(now: number) {
+    pending = 0;
+    const seconds = previous ? Math.min((now - previous) / 1000, .12) : .016;
+    previous = now;
+    const animate = !motion.matches;
+    const decorated = fx && quality !== "economy";
+    if (animate) worldTime += seconds;
+    if (flight) {
+      const progress = Math.min(1, (now - flight.start) / flight.duration);
+      flight.tween.progress(Math.max(0, progress));
+      if (progress === 1) {
+        const done = flight.finish;
+        flight.tween.kill();
+        flight = undefined;
+        done();
+      }
+    }
+    controls.autoRotate = auto && animate && !flying && !!body;
+    const orbiting = !flight && controls.update(seconds);
+    if (!flight) { keepOutside(); camera.lookAt(controls.target); }
+    if (animate && !flying) detail?.update(worldTime, decorated);
+    universe.update(worldTime, animate);
+    play.tick(seconds, animate && !flying, decorated);
+    if (body === "home" && animate) {
+      const a = worldTime * .39;
+      home.avatar.position.x = .10 + Math.sin(a) * 1.73;
+      home.avatar.position.z = 3.43 + Math.cos(a) * 1.73;
+      home.avatar.rotation.y = Math.atan2(Math.cos(a), -Math.sin(a));
+      home.legs.forEach((leg, i) => { leg.rotation.x = Math.sin(worldTime * 6 + i * Math.PI) * .42; });
+      home.cull(camera.position);
+    }
+    const night = body === "beatmarket" || day === "night" ? .72 : day === "day" || !animate ? 0 : T.MathUtils.smoothstep(Math.sin(worldTime * .019 - .9), .34, .98) * .58;
+    sun.intensity = 2.18 - night * 1.35;
+    sun.color.setRGB(1 - night * .31, .9 - night * .22, .74 + night * .23);
+    ambient.intensity = 1.39 - night * .65;
+    const moving = !!flight || dragging || !!orbiting;
+    if (moving && seconds > .064) slow = Math.min(12, slow + 1);
+    else slow = Math.max(0, slow - 1);
+    if (slow > 5) fastBudget = false;
+    const budget = software ? moving ? 120_000 : 365_000 : fastBudget && quality !== "economy" ? 1_440_000 : 390_000;
+    const ratio = Math.min(devicePixelRatio || 1, quality === "high" ? 1.55 : 1.25, Math.sqrt(budget / (bounds.x * bounds.y)));
+    if (Math.abs(ratio - engineDpr) > .018 || canvas.width !== Math.floor(bounds.x * engineDpr) || canvas.height !== Math.floor(bounds.y * engineDpr)) {
+      engineDpr = ratio;
+      renderer.setDrawingBufferSize(bounds.x, bounds.y, ratio);
+    }
     play.cull(camera.position);
-    model.cull(camera.position);
     renderer.render(scene, camera);
-    if (body === "home" && isOverview(current) && mode !== "drive" && mode !== "photo" && !traveling) for (const zone of sceneStops) {
-      const [x, y, z] = zone.marker;
-      projected.set(x, y, z);
-      if (zone.id === "hq") projected.add(model.avatar.position);
-      const site = model.sites[zone.id as SurfaceStop];
-      projected.applyMatrix4(site.matrix);
-      markerNormal.copy(projected).normalize();
-      markerToEye.copy(camera.position).sub(projected).normalize();
-      const front = markerNormal.dot(markerToEye) > 0.13;
-      projected.project(camera);
-      callbacks.marker(zone.id, (projected.x * 0.5 + 0.5) * size.x, (0.5 - projected.y * 0.5) * size.y,
-        front && projected.z > -1 && projected.z < 1 && Math.abs(projected.x) < 0.92 && Math.abs(projected.y) < 0.90);
-    }
-    play.projectBeacons(camera, (id, point) => {
-      if (!point || traveling || mode === "photo") { callbacks.beacon(id, 0, 0, false); return; }
-      cameraProjected.copy(point).project(camera);
-      const visible = Math.abs(cameraProjected.x) < .93 && Math.abs(cameraProjected.y) < .88 && Math.abs(cameraProjected.z) < 1;
-      callbacks.beacon(id, (cameraProjected.x * .5 + .5) * size.x, (.5 - cameraProjected.y * .5) * size.y, visible);
-    });
-    if (!called) {
-      called = true;
+    projectMarkers();
+    if (!ready) {
+      ready = true;
       callbacks.rendered();
     }
-    if (captureFrames > 0) captureFrames--;
-    if (captureFrames && dt > 0) {
-      samples++;
-      elapsed += Math.min(dt, 300);
-      // Some browsers mask their renderer name. React to sustained slow frames there as well.
-      if (!reduceMotionPixels && samples >= 4 && elapsed / samples > 95) {
-        reduceMotionPixels = true;
-        canvas.dataset.renderer = "adaptive";
-      }
-      if (samples === 12) {
-        const average = elapsed / samples;
-        if (average > (low ? 37 : 26)) {
-          if (reduceMotionPixels && motionScale > 0.63) motionScale = Math.max(0.62, motionScale * 0.86);
-          else if (!reduceMotionPixels && dpr > minimumDpr + 0.01) dpr = Math.max(minimumDpr, dpr * 0.82);
-        }
-        const minimumQuality = reduceMotionPixels ? motionScale <= 0.63 : dpr <= minimumDpr + 0.01;
-        slowWindows = average > 170 && minimumQuality ? slowWindows + 1 : 0;
-        samples = elapsed = 0;
-        if (slowWindows >= 3) {
-          callbacks.lost();
-          return;
-        }
-      }
-    }
-    if (transition || keys.size || waypoint || mode === "drive" && Math.abs(play.vehicle.speed) > .04) requestRender();
-    else if (animate && !animationTimer) {
-      if (!low && quality !== "economy") requestRender();
-      else animationTimer = window.setTimeout(() => { animationTimer = 0; requestRender(); }, software ? 63 : 24);
+    if (flight || orbiting || dragging || controls.autoRotate) redraw();
+    else if (animate && !timer) {
+      if (!low && quality !== "economy") redraw();
+      else timer = window.setTimeout(() => { timer = 0; redraw(); }, software ? 80 : 19);
     }
   }
-
-  function resolveView(view: View): Pose {
-    if (isOverview(view)) return { target: overview, direction: initial, distance: overviewDistance() };
-    const project = view.project === null ? null : projects[view.project];
-    const stop = project ? projectStops[project.id] : zones.find(place => place.id === view.zone)!;
-    const id = (project?.id ?? view.zone) as SurfaceStop;
-    const site = model.sites[id];
-    const target = new T.Vector3(...stop.target);
-    if (id === "hq") target.add(model.avatar.position);
-    target.applyMatrix4(site.matrix);
-    const tangent = new T.Vector3().setFromMatrixColumn(site.matrix, 0);
-    const tilt = id === "hq" ? 1.85 : id === "starcars" ? 1.28 : id === "b-crm" ? 1.38 : 1.02;
-    const direction = site.normal.clone().addScaledVector(site.south, tilt).addScaledVector(tangent, id === "b-crm" ? 0.46 : 0.23).normalize();
-    const span = id === "hq" ? 4.0 : Math.max(site.width, site.depth) + 1.8;
-    const aspect = Math.min(1.36, camera.aspect);
-    return { target, direction, distance: span / (2 * fovTangent * aspect * 0.81) };
-  }
-
   function cancelTransition() {
-    transition?.tween.kill();
-    transition = undefined;
-    controls.enableDamping = !motion.matches;
+    flight?.tween.kill();
+    flight?.cancel?.();
+    flight = undefined;
   }
-
-  function freezeOrbit() {
-    // Flush residual mouse or touch inertia without moving the rendered camera.
-    const position = camera.position.clone();
-    const target = controls.target.clone();
-    controls.enableDamping = false;
-    controls.update();
-    camera.position.copy(position);
-    controls.target.copy(target);
-    controls.update();
+  function transition(duration: number, update: (phase: number) => void, finish: () => void, cancel?: () => void) {
+    if (motion.matches) { update(1); finish(); return; }
+    const phase = { p: 0 };
+    const tween = gsap.to(phase, { p: 1, paused: true, duration: duration / 1000, ease: "sine.inOut", onUpdate: () => update(phase.p) });
+    flight = { tween, start: performance.now(), duration, finish, cancel };
+    redraw();
   }
-
-  function moveView(view: View, instant = false, opening = false) {
-    flightId++;
-    traveling = false;
-    callbacks.traveling(null);
-    const switchingBody = body !== "home";
-    if (switchingBody) {
-      body = "home";
-      worldRadius = globeRadius;
-      play.setBody(body);
-      model.group.visible = planet.group.visible = true;
-      callbacks.arrived(body);
+  function revealMoon() {
+    moonKnown = true;
+    callbacks.moonRevealed();
+    show(); redraw();
+  }
+  async function fly(destination: Destination, requested?: View, instant = false) {
+    const next = destination === "system" ? null : destination;
+    if (next === body && !flying) {
+      if (requested) focus(requested, instant);
+      return;
     }
-    mode = "planet";
-    play.vehicle.setActive(false);
-    camera.up.set(0, 1, 0);
-    const focusLimit = isOverview(view) ? globeRadius + 5 : 3.7;
-    controls.minDistance = .1;
-    controls.maxDistance = 164;
-    if (view.project !== null && projects[view.project].id === "starcars") {
-      void model.loadCars(() => { renderer.shadowMap.needsUpdate = true; requestRender(); });
-    }
-    const preserveBearing = (view.zone === "gallery" || view.zone === "contact") && isOverview(current);
-    current = view;
-    if (!isOverview(view)) { keys.clear(); waypoint = null; }
+    const token = ++flightToken;
     cancelTransition();
-    freezeOrbit();
+    previewPrepared?.dispose();
+    previewPrepared = undefined;
+    flying = true;
     controls.enabled = false;
-    const start = currentPose();
-    if (opening && isOverview(view) && !motion.matches) {
-      start.direction.applyAxisAngle(camera.up, 0.16);
-      writeCamera(start);
-    }
-    const destination = resolveView(view);
-    if (preserveBearing) destination.direction = start.direction;
-    if (instant || switchingBody || motion.matches || (opening && !isOverview(view))) {
-      writeCamera(destination);
-      controls.enabled = true;
-      controls.minDistance = focusLimit;
-      controls.enableDamping = !motion.matches;
-      return;
-    }
-
-    // Pull back before crossing the globe, orbit at a fixed radius, then approach from outside.
-    const outbound = start.target.lengthSq() > 1;
-    const inbound = destination.target.lengthSq() > 1;
-    const exitAt = outbound ? (inbound ? 0.30 : 0.56) : 0;
-    const approachAt = inbound ? (outbound ? 0.64 : 0.51) : 1;
-    const orbitDistance = overviewDistance();
-    const turn = new T.Quaternion().setFromUnitVectors(start.direction, destination.direction);
-    const rotation = new T.Quaternion();
-    const direction = new T.Vector3();
-    const target = new T.Vector3();
-    const progress = { value: 0 };
-    const ease = gsap.parseEase("sine.inOut");
-    captureFrames = 64;
-    previous = 0;
-    const duration = opening ? 1100 : outbound && inbound ? 1840 : 1460;
-    const tween = gsap.to(progress, {
-      value: 1, paused: true, lazy: false, duration: duration / 1000, ease: "none",
-      onUpdate() {
-        const t = progress.value;
-        if (exitAt && t < exitAt) {
-          const step = ease(t / exitAt);
-          writeCamera({ direction: start.direction, target: target.copy(start.target).lerp(overview, step), distance: T.MathUtils.lerp(start.distance, orbitDistance, step) });
-        } else if (t < approachAt) {
-          const step = ease((t - exitAt) / (approachAt - exitAt));
-          rotation.identity().slerp(turn, step);
-          writeCamera({ direction: direction.copy(start.direction).applyQuaternion(rotation), target: overview, distance: orbitDistance });
-        } else {
-          const step = inbound ? ease((t - approachAt) / (1 - approachAt)) : 1;
-          writeCamera({ direction: destination.direction, target: target.copy(overview).lerp(destination.target, step), distance: T.MathUtils.lerp(orbitDistance, destination.distance, step) });
-        }
-      },
-    });
-    transition = { tween, start: performance.now(), duration, after: () => { if (mode !== "drive") controls.minDistance = focusLimit; } };
-    requestRender();
-  }
-
-  function nudge(theta = 0, phi = 0) {
-    if (mode === "drive" || traveling) return;
-    cancelTransition();
-    freezeOrbit();
-    const spherical = new T.Spherical().setFromVector3(camera.position.clone().sub(controls.target));
-    spherical.theta += theta;
-    spherical.phi = T.MathUtils.clamp(spherical.phi + phi, controls.minPolarAngle, controls.maxPolarAngle);
-    writeCamera({ target: controls.target, direction: new T.Vector3().setFromSpherical(spherical).normalize(), distance: spherical.radius });
-    controls.enabled = true;
-    controls.enableDamping = !motion.matches;
-  }
-
-  function updatePointer(event: PointerEvent) {
-    const rect = canvas.getBoundingClientRect();
-    raycaster.setFromCamera(pointer.set(
-      (event.clientX - rect.left) / rect.width * 2 - 1,
-      1 - (event.clientY - rect.top) / rect.height * 2,
-    ), camera);
-    const hit = body === "home" ? raycaster.intersectObjects(model.hits, false)[0] : undefined;
-    const surface = body === "home" ? raycaster.ray.intersectSphere(planetSphere, planetHit) : null;
-    const limit = surface ? raycaster.ray.origin.distanceTo(surface) + .09 : Infinity;
-    const destination = hit && hit.distance <= limit ? hit : undefined;
-    return { destination, action: play.pick(raycaster, Math.min(limit, destination?.distance ?? Infinity)) };
-  }
-
-  function down(event: PointerEvent) {
-    if (!event.isPrimary || event.button !== 0) {
-      pointerStart = null;
-      return;
-    }
-    pointerStart = { id: event.pointerId, x: event.clientX, y: event.clientY, time: event.timeStamp };
-  }
-
-  function over(event: PointerEvent) {
-    if (event.buttons || event.pointerType === "touch") return;
-    const { destination: hit, action } = updatePointer(event);
-    canvas.style.cursor = hit || action ? "pointer" : "grab";
-    const destination = hit?.object.userData.hit as Hit | undefined;
-    const next = destination?.project !== undefined ? projects[destination.project].id : destination?.zone ?? null;
-    if (next !== hover) {
-      hover = next;
-      callbacks.hover(hover);
-    }
-  }
-
-  function up(event: PointerEvent) {
-    const start = pointerStart;
-    pointerStart = null;
-    if (transition || !start || event.pointerId !== start.id || event.timeStamp - start.time > 850 || Math.hypot(event.clientX - start.x, event.clientY - start.y) > 7) return;
-    const { destination: hit, action } = updatePointer(event);
-    if (action) { action(); requestRender(); return; }
-    if (hit) {
-      callbacks.select(hit.object.userData.hit as Hit);
-      return;
-    }
-    if (body !== "home" || mode === "drive" || transition || model.sites.hq.normal.dot(camera.position) < globeRadius) return;
-    const location = walkRay.copy(raycaster.ray).applyMatrix4(model.sites.hq.inverse).intersectPlane(walkingPlane, walkHit);
-    if (!location) return;
-    const step = new T.Vector2(location.x, location.z).sub(avatarCenter);
-    if (step.length() < 1.36 || step.length() > 2.92) return;
-    keys.clear();
-    waypoint = step.setLength(T.MathUtils.clamp(step.length(), 1.44, 2.78));
-    previous = performance.now();
-    requestRender();
-  }
-
-  function cancel() {
-    pointerStart = null;
-    canvas.style.cursor = "grab";
-    hover = null;
-    callbacks.hover(null);
-  }
-
-  function startInput() {
-    interacting = true;
-    cancelTransition();
-    captureFrames = 49;
-    previous = 0;
-  }
-
-  function endInput() {
-    interacting = false;
-    requestRender();
-  }
-
-  function visibility() {
-    paused = document.hidden;
-    if (paused) {
-      interacting = false;
-      keys.clear();
-      play.vehicle.clear();
-      window.clearTimeout(animationTimer);
-      animationTimer = 0;
-      cancelAnimationFrame(request);
-      request = 0;
-    } else {
-      previous = performance.now();
-      requestRender();
-    }
-  }
-
-  function contextLost(event: Event) {
-    event.preventDefault();
-    lost = true;
-    cancelAnimationFrame(request);
-    cancelTransition();
-    callbacks.lost();
-  }
-
-  function motionChange() {
-    controls.enableDamping = !motion.matches;
-    if (motion.matches && transition) {
-      transition.tween.progress(1);
-      const after = transition.after;
-      cancelTransition();
-      controls.enabled = mode !== "drive";
-      after?.();
-    }
-    requestRender();
-  }
-
-  controls.addEventListener("change", requestRender);
-  controls.addEventListener("start", startInput);
-  controls.addEventListener("end", endInput);
-  canvas.addEventListener("pointerdown", down);
-  canvas.addEventListener("pointermove", over);
-  canvas.addEventListener("pointerup", up);
-  canvas.addEventListener("pointercancel", cancel);
-  canvas.addEventListener("pointerleave", cancel);
-  canvas.addEventListener("webglcontextlost", contextLost);
-  document.addEventListener("visibilitychange", visibility);
-  motion.addEventListener("change", motionChange);
-  const observer = new ResizeObserver(resize);
-
-  async function fly(destination: Body) {
-    if (traveling || destination === body || disposed) return;
-    const token = ++flightId;
-    traveling = true;
-    callbacks.traveling(destination);
-    play.vehicle.setActive(false);
-    mode = "explore";
+    callbacks.traveling(destination, !!requested);
     const previousBody = body;
     try {
-      const world = destination === "home" ? undefined : await play.load(destination);
-      if (disposed || token !== flightId) return;
-      if (world) world.root.visible = true;
-      if (destination === "home") {
-        play.showHome();
-        model.group.visible = planet.group.visible = true;
+      let prepared: ProjectScene | undefined;
+      if (isSecretBody(next)) {
+        await play.load(next);
+      } else if (next && next !== "home") {
+        if (next === body && detail) prepared = detail;
+        else {
+          const { buildProjectScene } = await import("./planetScene");
+          if (disposed || token !== flightToken) return;
+          prepared = buildProjectScene(next, low, software, {
+            find(id) {
+              play.find(id);
+              if (id === "gold") garage = true;
+            }, alert: play.sound.play, beat: play.sound.beat, portal: play.portal,
+          });
+          previewPrepared = prepared;
+          prepared.root.visible = false;
+          scene.add(prepared.root);
+        }
       }
-      cancelTransition();
-      freezeOrbit();
-      controls.enabled = false;
-      controls.minDistance = .1;
-      controls.maxDistance = 320;
-      camera.up.set(0, 1, 0);
-      const start = currentPose();
-      const origin = play.bodyFocus(previousBody, new T.Vector3());
-      const center = play.bodyFocus(destination, new T.Vector3());
-      const tangent = world ? new T.Vector3().crossVectors(T.Object3D.DEFAULT_UP, world.descent).normalize() : null;
-      const finishDirection = world && tangent ? world.descent.clone().addScaledVector(tangent, .58).normalize() : initial;
-      const finishDistance = world ? world.radius * (destination === "moon" ? 3.48 : 3.32) * Math.max(1, .90 / camera.aspect) : overviewDistance();
-      const finishTarget = world ? center.clone().addScaledVector(world.descent, world.radius * .16) : center;
-      const finishEye = finishTarget.clone().addScaledVector(finishDirection, finishDistance);
-      const pull = start.direction.clone().multiplyScalar(previousBody === "home" ? 105 : worldRadius * 4).add(origin);
-      const outer = center.clone().addScaledVector(finishDirection, world ? world.radius * 3.6 : 99);
-      outer.y += (destination === "signal" ? 23 : 10);
-      const flight = new T.CubicBezierCurve3(camera.position.clone(), pull, outer, finishEye);
-      const phase = { value: 0 };
-      const eye = new T.Vector3(), target = new T.Vector3();
-      const complete = () => {
-        body = destination;
-        worldRadius = world?.radius ?? globeRadius;
-        play.setBody(body);
-        model.group.visible = planet.group.visible = body !== "signal";
-        traveling = false;
-        controls.minDistance = world ? world.radius * 1.06 : globeRadius + 5;
-        controls.maxDistance = world ? world.radius * 9 : 164;
-        controls.enabled = true;
-        callbacks.traveling(null);
-        callbacks.arrived(body);
-        writeCamera({ target: finishTarget, direction: finishDirection, distance: finishDistance });
-        renderer.shadowMap.needsUpdate = true;
+      if (disposed || token !== flightToken) { if (prepared && prepared !== detail) prepared.dispose(); return; }
+      const destinationPose = next ? focusOf(next, requested, prepared) : mapPose();
+      const follow = flightPath(camera.position, destinationPose.eye, previousBody, next);
+      const startingAim = controls.target.clone(), startingUp = camera.up.clone();
+      const endingUp = next === null && camera.aspect < .77 ? new T.Vector3(1, 0, 0) : new T.Vector3(0, 1, 0);
+      const eye = new T.Vector3(), aim = new T.Vector3();
+      const endPoint = play.bodyFocus(next, new T.Vector3());
+      const showTransit = () => {
+        universe.show(true, previousBody, moonKnown || next === "moon", unknown || next === "signal", garage || next === "garage");
       };
+      showTransit();
       play.sound.play("warp");
-      if (motion.matches) { complete(); return; }
-      const duration = destination === "signal" ? 2860 : 2350;
-      const tween = gsap.to(phase, {
-        value: 1, paused: true, lazy: false, ease: "power2.inOut", duration: duration / 1000,
-        onUpdate() {
-          flight.getPoint(phase.value, eye);
-          target.copy(start.target).lerp(finishTarget, T.MathUtils.smoothstep(phase.value, .12, .83));
-          camera.position.copy(eye);
-          controls.target.copy(target);
-          camera.lookAt(target);
-        },
-      });
-      transition = { tween, start: performance.now(), duration, after: complete };
-      captureFrames = 64;
-      requestRender();
+      function finish() {
+        if (token !== flightToken || disposed) return;
+        if (detail && detail !== prepared) detail.dispose();
+        if (previousBody !== next && isSecretBody(previousBody)) play.release(previousBody);
+        detail = prepared;
+        previewPrepared = undefined;
+        body = next;
+        poseView = requested ?? { zone: null, project: null };
+        flying = false;
+        mode = "planet";
+        if (next === "signal") unknown = true;
+        if (next === "moon") moonKnown = true;
+        show();
+        setUp(body);
+        setPose(destinationPose);
+        setControls(!!requested?.zone && requested.zone !== "contact");
+        placeLight();
+        detail?.loadSurfaces(redraw);
+        detail?.loadCars(() => { detail?.showCars(true); renderer.shadowMap.needsUpdate = true; redraw(); });
+        callbacks.traveling(null);
+        callbacks.arrived(destination);
+        redraw();
+      }
+      if (instant || motion.matches) { finish(); return; }
+      transition(next === "signal" ? 2300 : next === null || previousBody === null ? 1770 : 1960, amount => {
+        follow.sample(amount, eye);
+        aim.copy(startingAim).lerp(endPoint, T.MathUtils.smoothstep(amount, .13, .63)).lerp(destinationPose.target, T.MathUtils.smoothstep(amount, .65, .98));
+        if (eye.distanceToSquared(aim) < .025) aim.z -= .85;
+        camera.up.copy(startingUp).lerp(endingUp, T.MathUtils.smoothstep(amount,.33,.85)).normalize();
+        setPose({ target: aim, eye });
+      }, finish);
     } catch {
-      if (token !== flightId || disposed) return;
-      traveling = false;
-      controls.enabled = true;
-      callbacks.traveling(null);
-      requestRender();
+      if (disposed || flightToken !== token) return;
+      previewPrepared?.dispose(); previewPrepared = undefined;
+      flying = false; show(); setControls(!!poseView.zone); callbacks.traveling(null); callbacks.interrupted(poseView, true); redraw();
     }
   }
-
-  function setMode(value: CameraMode) {
-    if (traveling) return;
-    mode = value;
-    if (mode === "drive" && body !== "home") mode = "explore";
-    play.vehicle.setActive(mode === "drive");
-    if (mode !== "drive") camera.up.set(0, 1, 0);
-    controls.enabled = mode !== "drive" && !transition;
-    if (mode === "drive" && !transition) {
-      controls.minDistance = .1;
-      followTarget.copy(play.vehicle.root.position).addScaledVector(play.vehicle.normal, .74);
-      followEye.copy(play.vehicle.root.position).addScaledVector(play.vehicle.normal, 3.3).addScaledVector(play.vehicle.forward, -5.9);
-      controls.target.copy(followTarget);
-      camera.position.copy(followEye);
-    }
-    captureFrames = 48;
-    requestRender();
+  function stopFlight() {
+    const interrupted = flying;
+    flightToken++;
+    cancelTransition();
+    previewPrepared?.dispose(); previewPrepared = undefined;
+    flying = false;
+    if (disposed) return;
+    show();
+    setUp(body);
+    setPose(body ? focusOf(body, poseView) : mapPose());
+    setControls(!!poseView.zone);
+    callbacks.traveling(null);
+    if (interrupted) callbacks.interrupted(poseView, false);
+    redraw();
   }
-
+  function focus(view: View, instant: boolean) {
+    poseView = view;
+    if (!body || view.zone === "contact" || view.zone === "gallery" && view.project === null) { redraw(); return; }
+    const next = focusOf(body, view);
+    const startEye = camera.position.clone(), startTarget = controls.target.clone();
+    const eye = new T.Vector3(), aim = new T.Vector3();
+    cancelTransition();
+    controls.enabled = false;
+    const finish = () => { setPose(next); setControls(!!view.zone); keepOutside(); redraw(); };
+    if (instant || motion.matches) { finish(); return; }
+    transition(730, amount => {
+      eye.copy(startEye).lerp(next.eye, amount);
+      aim.copy(startTarget).lerp(next.target, amount);
+      keepOutside(eye);
+      setPose({ target: aim, eye });
+    }, finish);
+  }
+  function moveView(view: View, instant = false) {
+    mode = "planet";
+    if (view.zone === "contact" || view.zone === "gallery" && view.project === null) { poseView = view; redraw(); return; }
+    const next = view.project !== null ? projects[view.project].id : view.zone === "lab" ? "ai" : view.zone ? "home" : body;
+    if (next && next !== body) void fly(next, view, instant);
+    else if (!flying) focus(view, instant);
+  }
+  function inspect() {
+    if (detail) callbacks.select(detail.inspect);
+    else if (body === "home") callbacks.select({ zone: "hq" });
+  }
+  function pick(event: PointerEvent) {
+    const box = canvas.getBoundingClientRect();
+    cast.setFromCamera(originRay.set((event.clientX - box.left) * 2 / box.width - 1, 1 - (event.clientY - box.top) * 2 / box.height), camera);
+    if (!body) {
+      if (universe.hitVisitor(cast)) return encounter;
+      const found = cast.intersectObjects(universe.visible(), false)[0]?.object.userData.body as Body | undefined;
+      return found ? () => { void fly(found); } : undefined;
+    }
+    if (body === "home" && moonKnown && universe.marker("moon")) {
+      const moon = cast.intersectObjects(universe.visible(), false).find(hit => hit.object.userData.body === "moon");
+      if (moon) return () => { void fly("moon"); };
+    }
+    play.bodyFocus(body, center);
+    sphere.set(center, planets[body].radius - .22);
+    const surface = cast.ray.intersectSphere(sphere, rayPoint);
+    let distance = surface ? cast.ray.origin.distanceTo(surface) + .20 : Infinity;
+    const building = cast.intersectObjects(body === "home" ? home.hits : detail?.hits ?? [], false)[0];
+    let resolved: (() => void) | undefined;
+    if (building && building.distance <= distance) {
+      distance = building.distance + .05;
+      resolved = () => callbacks.select(building.object.userData.hit);
+    }
+    if (detail) {
+      for (const item of detail.interactive) {
+        const mesh = cast.intersectObject(item.root, true).find(hit => hit.object.visible);
+        if (mesh && mesh.distance < distance) { resolved = item.action; distance = mesh.distance; }
+      }
+    }
+    return play.pick(cast, distance) ?? resolved;
+  }
+  function down(event: PointerEvent) {
+    press = event.isPrimary && event.button === 0 ? { x: event.clientX, y: event.clientY, id: event.pointerId } : undefined;
+  }
+  function up(event: PointerEvent) {
+    const start = press; press = undefined;
+    if (!start || start.id !== event.pointerId || Math.hypot(start.x - event.clientX, start.y - event.clientY) > 7 || flying) return;
+    pick(event)?.(); redraw();
+  }
+  function encounter() {
+    if (!body && universe.visitor) { play.find("ufo"); play.sound.play("ufo"); void fly("signal"); }
+    else play.ufo();
+    redraw();
+  }
+  function hover(event: PointerEvent) {
+    if (event.pointerType !== "mouse" || event.buttons || flying) return;
+    canvas.style.cursor = pick(event) ? "pointer" : "grab";
+  }
+  function startDrag() { dragging = true; redraw(); }
+  function stopDrag() {
+    dragging = false;
+    if (!flying && body && !poseView.zone && camera.position.distanceTo(controls.target) >= controls.maxDistance * .965) void fly("system");
+    redraw();
+  }
+  function visibility() {
+    if (document.hidden) {
+      cancelAnimationFrame(pending); pending = 0; window.clearTimeout(timer); timer = 0;
+    } else { previous = 0; redraw(); }
+  }
+  function contextLost(event: Event) {
+    event.preventDefault();
+    lost = true; callbacks.lost();
+  }
+  function reduced() {
+    controls.enableDamping = !motion.matches;
+    if (motion.matches && flight) { const complete = flight.finish; cancelTransition(); complete(); }
+    redraw();
+  }
   function zoom(amount: number) {
-    if (mode === "drive" || traveling) return;
-    const pose = currentPose();
-    pose.distance = T.MathUtils.clamp(pose.distance * amount, controls.minDistance, controls.maxDistance);
-    writeCamera(pose);
+    if (flying) return;
+    offset.copy(camera.position).sub(controls.target);
+    const distance = offset.length() * amount;
+    if (body && amount > 1 && !poseView.zone && distance >= controls.maxDistance * .97) { void fly("system"); return; }
+    camera.position.copy(controls.target).add(offset.setLength(T.MathUtils.clamp(distance, controls.minDistance, controls.maxDistance)));
+    redraw();
+  }
+  function nudge(x: number, y: number) {
+    if (flying) return;
+    offset.copy(camera.position).sub(controls.target);
+    const spherical = new T.Spherical().setFromVector3(offset);
+    spherical.theta += x;
+    spherical.phi += y;
+    spherical.makeSafe();
+    camera.position.copy(controls.target).add(offset.setFromSpherical(spherical));
+    redraw();
   }
 
+  const observer = new ResizeObserver(resize);
   const controller = {
-    moveView,
-    nudge, zoom, setMode, fly,
-    setAuto(value: boolean) { auto = value; requestRender(); },
-    setDay(value: typeof day) { day = value; requestRender(); },
-    setQuality(value: typeof quality) { quality = value; resize(); },
-    setFinds(ids: FindId[]) { play.setFinds(ids); requestRender(); },
-    setSound(value: boolean) { play.sound.setEnabled(value); },
-    driveInput(key: string, value: boolean) { play.vehicle.input(key, value); requestRender(); },
-    resetCar() { play.vehicle.reset(); setMode("drive"); },
-    horn() { play.horn(); requestRender(); },
+    moveView, fly, zoom, nudge, inspect, revealMoon, stopFlight, refresh: redraw,
+    setMode(next: CameraMode) { mode = next; if (next === "planet" && body) focus({ zone: null, project: null }, false); redraw(); },
     scan() {
-      if (body !== "home") return;
+      if (body !== "home" || flying) return;
       cancelTransition();
-      freezeOrbit();
-      const goal = observatoryDirection.clone().applyAxisAngle(T.Object3D.DEFAULT_UP, .13);
-      const start = currentPose();
-      const distance = overviewDistance();
-      controls.minDistance = globeRadius + 5;
-      if (motion.matches) {
-        writeCamera({ target: overview, direction: goal, distance });
+      const start = camera.position.clone();
+      const target = origin.clone();
+      const goal = observatoryDirection.clone().applyAxisAngle(T.Object3D.DEFAULT_UP, .16);
+      const beginning = start.clone().normalize();
+      const rotation = new T.Quaternion().setFromUnitVectors(beginning, goal);
+      const partial = new T.Quaternion(), eye = new T.Vector3();
+      const distance = focusOf("home").eye.length();
+      controls.enabled = false;
+      transition(710, phase => {
+        partial.identity().slerp(rotation, phase);
+        eye.copy(beginning).applyQuaternion(partial).multiplyScalar(T.MathUtils.lerp(start.length(), distance, phase));
+        keepOutside(eye);
+        setPose({ target, eye });
+      }, () => {
+        setControls(false);
         play.scan();
-      } else {
-        const rotation = new T.Quaternion().setFromUnitVectors(start.direction, goal);
-        const vector = new T.Vector3(), turn = new T.Quaternion(), aim = new T.Vector3();
-        const phase = { value: 0 };
-        const duration = 930;
-        controls.enabled = false;
-        const tween = gsap.to(phase, { value: 1, paused: true, lazy: false, ease: "sine.inOut", duration: duration / 1000,
-          onUpdate() {
-            turn.identity().slerp(rotation, phase.value);
-            writeCamera({ target: aim.copy(start.target).lerp(overview, phase.value), direction: vector.copy(start.direction).applyQuaternion(turn), distance: T.MathUtils.lerp(start.distance, distance, phase.value) });
-          } });
-        transition = { tween, start: performance.now(), duration, after: () => play.scan() };
-      }
-      requestRender();
+        redraw();
+      });
     },
-    portal() { play.portal(); requestRender(); },
-    interact() { play.interact(); requestRender(); },
-    ufo() { play.ufo(); requestRender(); },
-    avatarKey(key: string, pressed: boolean) {
-      if (!travelKeys.has(key)) return;
-      if (pressed) {
-        if (!keys.size) previous = performance.now();
-        keys.add(key);
-      } else {
-        keys.delete(key);
-      }
-      requestRender();
-    },
-    blur() { keys.clear(); play.vehicle.clear(); requestRender(); },
+    setAuto(value: boolean) { auto = value; redraw(); },
+    setDay(value: typeof day) { day = value; redraw(); },
+    setEffects(value: boolean) { fx = value; if (motion.matches) detail?.update(0, false); redraw(); },
+    setQuality(value: typeof quality) { quality = value; fastBudget = !software; redraw(); },
+    setSound(value: boolean) { play.sound.setEnabled(value); },
+    setFinds(ids: FindId[], moon: boolean, secret: boolean) { play.setFinds(ids); moonKnown = moon; unknown = secret; garage = ids.includes("gold"); show(); redraw(); },
+    portal() { play.portal(); redraw(); },
+    interact() { if (action) action(); else play.interact(); redraw(); },
+    ufo: encounter,
     dispose() {
-      disposed = true;
-      flightId++;
-      window.clearTimeout(animationTimer);
-      cancelTransition();
-      cancelAnimationFrame(request);
-      observer.disconnect();
-      controls.removeEventListener("change", requestRender);
-      controls.removeEventListener("start", startInput);
-      controls.removeEventListener("end", endInput);
-      controls.dispose();
-      canvas.removeEventListener("pointerdown", down);
-      canvas.removeEventListener("pointermove", over);
-      canvas.removeEventListener("pointerup", up);
-      canvas.removeEventListener("pointercancel", cancel);
-      canvas.removeEventListener("pointerleave", cancel);
-      canvas.removeEventListener("webglcontextlost", contextLost);
+      disposed = true; stopFlight();
+      cancelAnimationFrame(pending); window.clearTimeout(timer);
+      observer.disconnect(); controls.dispose(); play.dispose(); detail?.dispose(); universe.dispose(); home.dispose(); planet.dispose();
       document.removeEventListener("visibilitychange", visibility);
-      motion.removeEventListener("change", motionChange);
-      play.dispose();
-      model.dispose();
-      planet.dispose();
-      sun.shadow.dispose();
-      environment?.dispose();
-      renderer.dispose();
+      motion.removeEventListener("change", reduced);
+      canvas.removeEventListener("webglcontextlost", contextLost);
+      sun.shadow.dispose(); environment?.dispose(); renderer.dispose();
       if (!lost) renderer.forceContextLoss();
       canvas.remove();
     },
   };
-
+  resize();
+  setPose(focusOf("home"));
+  setControls(false);
+  show();
   try {
-    if (context.getExtension("KHR_parallel_shader_compile")) await renderer.compileAsync(scene, camera);
+    if (gl.getExtension("KHR_parallel_shader_compile")) await renderer.compileAsync(scene, camera);
     else renderer.compile(scene, camera);
     signal.throwIfAborted();
-    if (lost) throw new Error("The WebGL context was lost during startup");
-  } catch (error) {
-    controller.dispose();
-    throw error;
-  }
-  compiled = true;
-  controls.minDistance = globeRadius + 5;
-  controls.maxDistance = 164;
-  void play.load("moon").then(requestRender).catch(() => {});
+  } catch (error) { controller.dispose(); throw error; }
+  started = true;
+  controls.addEventListener("change", redraw);
+  controls.addEventListener("start", startDrag);
+  controls.addEventListener("end", stopDrag);
+  canvas.addEventListener("pointerdown", down);
+  canvas.addEventListener("pointerup", up);
+  canvas.addEventListener("pointermove", hover);
+  canvas.addEventListener("pointercancel", () => { press = undefined; });
+  canvas.addEventListener("webglcontextlost", contextLost);
+  document.addEventListener("visibilitychange", visibility);
+  motion.addEventListener("change", reduced);
   observer.observe(host);
-  resize();
+  redraw();
   return controller;
 }
 

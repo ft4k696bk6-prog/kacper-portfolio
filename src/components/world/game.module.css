@@ -13,14 +13,12 @@
   position: absolute; z-index: 5; right: 0; bottom: max(20px, env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 5px;
   background: #141b28df; border: 1px solid #c2af8352; border-radius: 28px; padding: 4px; backdrop-filter: blur(9px);
 }
-.hud button, .button, .exitPhoto, .touchpad button {
+.hud button, .button, .exitPhoto {
   display: inline-flex; text-decoration: none; align-items: center; justify-content: center; gap: 7px; min-height: 43px; min-width: 43px;
   padding: 0 10px; color: #f7ead4; border: 1px solid transparent; border-radius: 22px; background: transparent;
   font: 590 .75rem var(--world-font), sans-serif; cursor: pointer;
 }
-.hud button:hover, .button:hover, .touchpad button:active, .exitPhoto:hover { color: #fff1c8; background: #344355; }
-.hud .drive { color: #382719; background: #f0b477; padding-inline: 13px; }
-.hud .drive:hover { color: #382719; background: #ffcc97; }
+.hud button:hover, .button:hover, .exitPhoto:hover { color: #fff1c8; background: #344355; }
 .options { display: grid; gap: 5px; padding: 8px 0 5px; }
 .options details { border: 1px solid #beac7b36; border-radius: 8px; }
 .options details summary { display: flex; align-items: center; gap: 9px; min-height: 36px; padding: 0 9px; cursor: pointer; }
@@ -46,12 +44,7 @@
   pointer-events: none;
 }
 .transit { top: 51px; color: #ffe0a5; }
-.driveHelp { position: absolute; bottom: 23px; left: 0; font: .73rem var(--mono); color: #e4dec9; margin: 0; }
-.touchpad { display: none; }
 @media (pointer: coarse), (max-width: 650px) {
-  .touchpad { display: flex; justify-content: space-between; gap: 7px; position: absolute; left: 0; z-index: 6; bottom: max(79px, calc(env(safe-area-inset-bottom) + 66px)); }
-  .touchpad button { flex: none; width: 52px; height: 52px; background: #172431e9; border-color: #acb29266; touch-action: none; user-select: none; }
-  .driveHelp { display: none; }
   .location { bottom: max(76px, calc(env(safe-area-inset-bottom) + 57px)); }
   .notice:not(:empty), .transit { width: max-content; max-width: 100%; font-size: .74rem; }
   .beacon { min-width: 42px; min-height: 42px; padding-inline: 8px; }
@@ -59,11 +52,42 @@
 @media (max-width: 360px) {
   .hud { gap: 2px; }
   .hud button { gap: 5px; padding-inline: 8px; }
-  .touchpad { gap: 4px; }
-  .touchpad button { width: 47px; }
 }
 .layer { display: contents; }
 .location .button + .button { margin-left: .35rem; }
 @media (max-width: 830px) {
   main:not([data-view="overview"]) .hud { top: 10px; bottom: auto; }
 }
+
+.mapTag {
+  position: absolute; left: 0; top: 0; z-index: 2; margin-top: 24px; min-height: 34px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 0 10px; border: 1px solid #b7cce74a; border-radius: 20px;
+  color: #faead6; background: #151c2ee8; pointer-events: auto; white-space: nowrap;
+  cursor: pointer; font: 560 .72rem var(--world-font), sans-serif; backdrop-filter: blur(6px);
+}
+.mapTag[data-visible="false"] { visibility: hidden; pointer-events: none; }
+.mapTag:hover, .mapTag:focus-visible, .hud .mapAction:hover { background: #3b4c64; border-color: #e5b780a8; }
+.hud .mapAction { padding-inline: 12px; border: 1px solid #d4ad765e; background: #352f3e; }
+.eyebrow { display: block; margin-bottom: 5px; font: 600 .61rem var(--mono); letter-spacing: .095em; color: #d4b393; text-transform: uppercase; }
+.location { left: 0; max-width: min(320px, 42vw); min-height: 0; }
+.location strong { display: block; margin: 0; color: #f4e9dc; font: 540 clamp(1.44rem, 3.3vw, 2.8rem)/.98 var(--world-font), sans-serif; letter-spacing: -.064em; }
+.location p { margin: 7px 0 0; }
+.transit { top: 3px; padding: 2px 4px 2px 13px; pointer-events: auto; }
+.transit span { display: flex; gap: 8px; align-items: center; }
+.transit button { border: 0; color: #fbe1be; background: transparent; cursor: pointer; display: grid; min-width: 37px; min-height: 37px; place-items: center; }
+@media (max-width: 830px) {
+  .location { max-width: 90%; bottom: 85px; }
+  .hud { max-width: 100%; bottom: max(17px, env(safe-area-inset-bottom)); }
+  .hud .mapAction { padding-inline: 9px; }
+  .mapTag { min-height: 34px; margin-top: 17px; font-size: .62rem; padding-inline: 7px; gap: 4px; }
+  .mapTag svg { display: none; }
+}
+@media (max-width: 380px) {
+  .hud .mapAction span { display: none; }
+}
+@media (max-width: 480px) {
+  .hud { gap: 2px; }
+  .hud button { min-width: 35px; min-height: 42px; padding-inline: 7px; white-space: nowrap; }
+}
+.location { pointer-events: none; }

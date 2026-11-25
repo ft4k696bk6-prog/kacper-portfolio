@@ -15,9 +15,10 @@ import { gameCopy } from "./gameCopy";
 import { finds, localeIndex, type CameraMode } from "./discoveries";
 import styles from "./world.module.css";
 import gameStyles from "./game.module.css";
+import { planets, projectBodies } from "./planets";
 
 const projectLabels: Record<ProjectId, string> = {
-  reenergy: "ReEnergy", starcars: "StarCars", "isto-kebab": "Isto Kebab", "b-crm": "B-CRM", motomizer: "Motomizer", beatmarket: "BeatMarket",
+  reenergy: "ReEnergy", starcars: "StarCars", "isto-kebab": "Isto Kebab", "b-crm": "B-CRM", motomizer: "Motomizer", beatmarket: "BeatMarket", jalapeno: "Jalapeno",
 };
 function isProject(id: StopId): id is ProjectId {
   return Object.hasOwn(projectStops, id);
@@ -53,7 +54,6 @@ export function World({ locale }: { locale: WorldLocale }) {
   const gameRef = useRef(game);
   gameRef.current = game;
   const gameLog = useRef<HTMLDetailsElement>(null);
-  const returnStop = useRef<StopId | null>(null);
   const [selection, setSelection] = useState<Selection>(overview);
   const [photo, setPhoto] = useState(0);
   const [status, setStatus] = useState<"loading" | "ready" | "static">("loading");
@@ -94,11 +94,6 @@ export function World({ locale }: { locale: WorldLocale }) {
   const selectProject = useCallback((project: number) => go({ zone: "gallery", project }), [go]);
 
   const selectStop = (id: StopId) => {
-    if (gameRef.current.body !== "home" && scene.current) {
-      returnStop.current = id;
-      void scene.current.fly("home");
-      return;
-    }
     if (isProject(id)) selectProject(projectIndex(id));
     else selectZone(id);
   };
@@ -153,38 +148,35 @@ export function World({ locale }: { locale: WorldLocale }) {
               const offscreen = visible ? "false" : "true";
               if (marker.dataset.offscreen !== offscreen) marker.dataset.offscreen = offscreen;
             },
-            hover(id) {
-              for (const zone of sceneStops) {
-                const button = markers.current[zone.id];
-                if (button) button.dataset.hovered = id === zone.id ? "true" : "false";
-              }
-            },
             select(hit) {
               if (hit.project !== undefined) selectProject(hit.project);
               else selectZone(hit.zone);
             },
             beacon(id, x, y, visible) { gameRef.current.project(id, x, y, visible); },
+            planet(id, x, y, visible) { gameRef.current.project(id, x, y, visible, true); },
+            moonRevealed() { gameRef.current.revealMoon(true); },
             found(id) {
               if (gameRef.current.found(id)) gameRef.current.notify(finds[id][localeIndex[locale]]);
             },
-            traveling(destination) {
+            traveling(destination, keepPanel) {
               gameRef.current.setTransit(destination);
-              if (!destination) return;
+              if (!destination || keepPanel) return;
               current.current = overview;
               setSelection(overview);
               window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search);
             },
             arrived(destination) {
               gameRef.current.arrive(destination);
-              const stop = returnStop.current;
-              returnStop.current = null;
-              if (destination === "home" && stop) {
-                queueMicrotask(() => {
-                  if (stopped) return;
-                  if (isProject(stop)) selectProject(projectIndex(stop));
-                  else selectZone(stop);
-                });
-              } else if (destination !== "home") stage.current?.focus({ preventScroll: true });
+              if (!current.current.zone) stage.current?.focus({ preventScroll: true });
+            },
+            interrupted(previous, failed) {
+              focusOnChange.current = false;
+              current.current = previous;
+              setSelection(previous);
+              setPhoto(0);
+              window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search + selectionHash(previous));
+              if (failed) gameRef.current.notify(gameCopy(locale).flightError);
+              stage.current?.focus({ preventScroll: true });
             },
             lost: fallback,
             rendered() { if (!stopped) setStatus("ready"); },
@@ -196,7 +188,7 @@ export function World({ locale }: { locale: WorldLocale }) {
           controller = created;
           scene.current = controller;
           gameRef.current.init(controller);
-          controller.moveView(current.current, current.current.zone !== null, true);
+          controller.moveView(current.current, current.current.zone !== null);
         } catch {
           fallback();
         }
@@ -215,6 +207,8 @@ export function World({ locale }: { locale: WorldLocale }) {
       if (scene.current === controller) scene.current = null;
     };
   }, [locale, selectProject, selectZone, staticOnly, sceneAttempt]);
+
+  useEffect(() => { scene.current?.refresh(); }, [status, game.body, game.chartedMoon, selection.zone]);
 
   useEffect(() => {
     if (!main.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -248,36 +242,21 @@ export function World({ locale }: { locale: WorldLocale }) {
     return () => context.revert();
   }, [selection]);
 
-  useEffect(() => {
-    const stop = () => scene.current?.blur();
-    window.addEventListener("blur", stop);
-    return () => window.removeEventListener("blur", stop);
-  }, []);
-
   function keydown(event: KeyboardEvent<HTMLElement>) {
     if (event.key === "Escape") {
       if (modeDialog || menuOpen) return;
       if (game.mode === "photo") { changeMode("explore"); return; }
-      if (game.mode === "drive") { go(overview); return; }
-      if (game.body !== "home") { void scene.current?.fly("home"); return; }
-      if (selection.zone) go(overview);
+      if (game.transit) { scene.current?.stopFlight(); return; }
+      if (selection.zone) { go(overview); return; }
+      if (game.body !== "home") void scene.current?.fly(game.body === "system" ? "home" : "system");
       return;
     }
     if (modeDialog || menuOpen || event.ctrlKey || event.metaKey || event.altKey || (event.shiftKey && event.key !== "+") || event.target !== stage.current) return;
     const lower = event.key.toLowerCase();
     if (game.transit) return;
-    if (lower === "f" && game.mode !== "drive") { event.preventDefault(); changeMode(game.mode === "photo" ? "explore" : "photo"); return; }
+    if (lower === "f") { event.preventDefault(); changeMode(game.mode === "photo" ? "explore" : "photo"); return; }
     if (lower === "e") { event.preventDefault(); scene.current?.interact(); return; }
-    if (game.mode === "drive") {
-      if (["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"].includes(event.key)) {
-        event.preventDefault(); scene.current?.driveInput(event.key, true);
-      } else if (lower === "r") {
-        event.preventDefault(); scene.current?.resetCar();
-      } else if (event.code === "Space") {
-        event.preventDefault(); if (!event.repeat) scene.current?.horn();
-      }
-      return;
-    }
+    if (lower === "g") { event.preventDefault(); void scene.current?.fly(game.body === "system" ? "home" : "system"); return; }
     if (event.key === "+" || event.key === "=" || event.key === "-") {
       event.preventDefault(); scene.current?.zoom(event.key === "-" ? 1.22 : .82); return;
     }
@@ -290,9 +269,7 @@ export function World({ locale }: { locale: WorldLocale }) {
     if (event.key in steps) {
       event.preventDefault();
       scene.current?.nudge(...steps[event.key]);
-    } else if (["w", "a", "s", "d"].includes(event.key.toLowerCase())) {
-      event.preventDefault();
-      scene.current?.avatarKey(event.key.toLowerCase(), true);
+
     }
   }
 
@@ -316,7 +293,6 @@ export function World({ locale }: { locale: WorldLocale }) {
   }
 
   function openMenu() {
-    scene.current?.blur();
     menuPanel.current?.showModal();
     setMenuOpen(true);
   }
@@ -329,10 +305,9 @@ export function World({ locale }: { locale: WorldLocale }) {
   function changeMode(mode: CameraMode) {
     if (menuOpen) closeMenu();
     if (mode === "planet") {
-      if (game.body !== "home") void scene.current?.fly("home");
-      else go(overview, false);
+      go(overview, false);
+      scene.current?.setMode("planet");
     } else {
-      if (mode === "drive" && selection.zone) go(overview, false);
       game.setMode(mode);
       scene.current?.setMode(mode);
     }
@@ -351,10 +326,7 @@ export function World({ locale }: { locale: WorldLocale }) {
 
   return <main ref={main} className={styles.world} data-render={status} data-view={selection.zone === "gallery" && !gallery ? "gallery-list" : selection.zone ?? "overview"} data-testid="world"
     data-camera={game.mode} data-light={game.equipment.day} data-body={game.body} data-transit={game.transit ?? undefined}
-    onKeyDown={keydown} onKeyUp={event => {
-      scene.current?.avatarKey(event.key.toLowerCase(), false);
-      scene.current?.driveInput(event.key, false);
-    }}>
+    onKeyDown={keydown}>
     <header className={styles.header}>
       <a href={classicPaths[locale]} className={styles.brand} onClick={() => rememberExperience("classic")} data-world-logo="">
         <Image src="/favicon.svg" alt="" width={34} height={34} unoptimized />
@@ -366,7 +338,7 @@ export function World({ locale }: { locale: WorldLocale }) {
 
     <div className={styles.experience}>
       <div ref={stage} className={styles.stage} role="region" aria-label={t.scene} aria-describedby="world-control-instructions"
-        tabIndex={0} onBlur={() => scene.current?.blur()} data-testid="world-stage"
+        tabIndex={0} data-testid="world-stage"
         onPointerDown={event => {
           if (event.pointerType === "mouse" && event.target instanceof HTMLCanvasElement) stage.current?.focus({ preventScroll: true });
         }}>
@@ -374,11 +346,11 @@ export function World({ locale }: { locale: WorldLocale }) {
           <Image ref={poster} src="/images/world/model.webp" alt="" fill unoptimized priority fetchPriority="high" />
         </div>
         <div className={styles.canvas} ref={host} />
-        {status === "ready" && <GameBeacons game={game} copy={gt} scene={scene} />}
+        {status === "ready" && <GameBeacons game={game} copy={gt} scene={scene} locale={locale} />}
         <div className={styles.hotspots} role="group" aria-label={t.places}>
           {sceneStops.map(place => (
             <button type="button" key={place.id} className={styles.hotspot}
-              data-zone={place.id} data-side={place.labelSide} aria-label={stopLabel(place.id)}
+              data-zone={place.id} data-offscreen="true" data-side={place.labelSide} aria-label={stopLabel(place.id)}
               ref={node => { markers.current[place.id] = node; }}
               tabIndex={isOverview && status === "ready" ? 0 : -1} onClick={() => selectStop(place.id)}>
               <span className={styles.hotspotDot} aria-hidden="true" />
@@ -390,10 +362,10 @@ export function World({ locale }: { locale: WorldLocale }) {
 
       <section ref={copyArea} className={styles.story} aria-label={activePlace?.title ?? "Bernecki World"}>
         <div className={isOverview ? styles.intro : styles.visuallyHidden}>
-          <h1 className={styles.title} aria-label="Bernecki World"><span data-world-line="">Bernecki <em>World.</em></span></h1>
+          <h1 className={styles.title} aria-label="Bernecki Universe"><span data-world-line="">Bernecki <em>Universe.</em></span></h1>
         </div>
 
-        {activePlace && game.mode !== "photo" && <div className={styles.place} data-testid="world-place">
+        {activePlace && game.mode !== "photo" && !game.transit && <div className={styles.place} data-testid="world-place">
           <div className={styles.placeTop} data-place-reveal="">
             <button type="button" className={styles.back} onClick={() => go(overview)}>
               <ChevronLeft size={16} strokeWidth={1.6} />{t.overview}
@@ -419,8 +391,9 @@ export function World({ locale }: { locale: WorldLocale }) {
             </div>
             <p className={styles.placeText}>{gallery.copy[locale][0]}</p>
             <div className={styles.placeLinks}>
-              <ActionLink href={gallery.site} primary>{t.live}</ActionLink>
-              {gallery.caseStudy[locale] && <ActionLink href={gallery.caseStudy[locale]}>{t.caseStudy}</ActionLink>}
+              {gallery.site && <ActionLink href={gallery.site} primary>{t.live}</ActionLink>}
+              {gallery.caseStudy[locale] && <ActionLink href={gallery.caseStudy[locale]} primary={!gallery.site}>{t.caseStudy}</ActionLink>}
+              {!gallery.site && <ActionLink href={contactPaths[locale]} primary={!gallery.caseStudy[locale]}>{t.contact}</ActionLink>}
               {gallery.links?.[locale]?.map(([label, href]) => <ActionLink key={href} href={href}>{label}</ActionLink>)}
             </div>
             <h3>{t.features}</h3>
@@ -454,15 +427,14 @@ export function World({ locale }: { locale: WorldLocale }) {
 
       <div className={styles.controls}>
         <div className={styles.guide} id="world-control-instructions" data-world-reveal="">
-          <span className={styles.visuallyHidden}>{gt.controlsOrbit} {gt.controlsDrive}</span>
+          <span className={styles.visuallyHidden}>{gt.controlsOrbit}</span>
           {status === "ready" ? <>
             <span className={styles.mouseHint}><Move size={14} strokeWidth={1.4} />{t.rotate}</span>
             <span className={styles.touchHint}><Move size={14} strokeWidth={1.4} />{t.touch}</span>
           </> : <span role="status">{status === "loading" ? t.loading : t.fallback}</span>}
         </div>
       </div>
-      {status === "ready" && <div className={gameStyles.layer}><GameHud game={game} copy={gt} scene={scene} change={changeMode}
-        reset={() => changeMode("planet")} openLog={showLog} fieldLink={game.body === "signal" ? t.zones.lab.links?.[0] : undefined} /></div>}
+      {status === "ready" && <div className={gameStyles.layer}><GameHud game={game} copy={gt} scene={scene} change={changeMode} openLog={showLog} /></div>}
     </div>
 
     <dialog ref={menuPanel} id="world-menu" className={styles.menuPanel} aria-labelledby="world-menu-title"
@@ -470,16 +442,24 @@ export function World({ locale }: { locale: WorldLocale }) {
       onClick={event => { if (event.target === event.currentTarget) closeMenu(); }}>
       <div className={styles.menuInner}>
         <div className={styles.menuHeading}>
-          <h2 id="world-menu-title">{t.places}</h2>
+          <h2 id="world-menu-title">{gt.universe}</h2>
           <button type="button" onClick={closeMenu} aria-label={t.close} className={styles.square}><X size={19} strokeWidth={1.5} /></button>
         </div>
-        <nav className={styles.menuPlaces} aria-label={t.places}>
-          <button type="button" aria-current={isOverview ? "location" : undefined}
-            onClick={() => { closeMenu(); changeMode("planet"); }} data-testid="nav-overview">{t.overview}<ChevronRight size={16} strokeWidth={1.5} /></button>
-          {mapStops.filter(id => id !== "gallery").map(id =>
-            <button type="button" key={id} aria-current={activeStop === id ? "location" : undefined}
+        <nav className={styles.menuPlaces} aria-label={gt.fast}>
+          <button type="button" aria-current={game.body === "home" ? "location" : undefined}
+            onClick={() => { closeMenu(); if (game.body !== "home" && scene.current) void scene.current.fly("home"); else go(overview); }}
+            data-testid="nav-overview">{planets.home.label}<ChevronRight size={16} strokeWidth={1.5} /></button>
+          {status === "ready" && <button type="button" onClick={() => { closeMenu(); void scene.current?.fly("system"); }}>{gt.map}<ChevronRight size={16} strokeWidth={1.5} /></button>}
+          <h3 className={styles.menuSection}>{gt.projects}</h3>
+          {projectBodies.map(id =>
+            <button type="button" key={id} aria-current={activeStop === id || game.body === id ? "location" : undefined}
               onClick={() => { closeMenu(); selectStop(id); }} data-testid={`nav-${id}`}>{stopLabel(id)}<ChevronRight size={16} strokeWidth={1.5} /></button>
           )}
+          <h3 className={styles.menuSection}>{gt.technology}</h3>
+          <button type="button" onClick={() => { closeMenu(); selectStop("lab"); }} data-testid="nav-lab">{planets.ai.label}<ChevronRight size={16} strokeWidth={1.5} /></button>
+          <button type="button" onClick={() => { closeMenu(); selectStop("studio"); }} data-testid="nav-studio">{stopLabel("studio")}<ChevronRight size={16} strokeWidth={1.5} /></button>
+          <button type="button" onClick={() => { closeMenu(); selectStop("hq"); }} data-testid="nav-hq">{stopLabel("hq")}<ChevronRight size={16} strokeWidth={1.5} /></button>
+          <button type="button" onClick={() => { closeMenu(); selectStop("contact"); }} data-testid="nav-contact">{t.contact}<ChevronRight size={16} strokeWidth={1.5} /></button>
         </nav>
         <div className={styles.menuOptions}>
           {status === "ready" && <GameMenu game={game} copy={gt} scene={scene} change={changeMode} leave={closeMenu} log={gameLog} />}

@@ -1,29 +1,31 @@
 import { useEffect, useRef, useState } from "react";
-import { emptyExpedition, gameStorage, readExpedition, type Body, type CameraMode, type Expedition, type FindId } from "./discoveries";
+import { emptyExpedition, gameStorage, readExpedition, type Body, type CameraMode, type Destination, type Expedition, type FindId } from "./discoveries";
 import type { Beacon } from "./play";
 import type { WorldController } from "./scene";
 
 export function useWorldGame() {
-  const [body, setBody] = useState<Body>("home");
-  const [transit, setTransit] = useState<Body | null>(null);
+  const [body, setBody] = useState<Destination>("home");
+  const [transit, setTransit] = useState<Destination | null>(null);
   const [mode, setMode] = useState<CameraMode>("planet");
+  const [chartedMoon, revealMoon] = useState(false);
   const [expedition, setExpedition] = useState<Expedition>(emptyExpedition);
-  const [equipment, setEquipment] = useState({ auto: false, sound: false, day: "cycle" as "cycle" | "day" | "night", quality: "auto" as "auto" | "economy" | "high" });
+  const [equipment, setEquipment] = useState({ auto: false, sound: false, fx: true, day: "cycle" as "cycle" | "day" | "night", quality: "auto" as "auto" | "economy" | "high" });
   const [notice, setNotice] = useState("");
   const live = useRef(emptyExpedition);
-  const markers = useRef<Partial<Record<Beacon, HTMLButtonElement | null>>>({});
+  const markers = useRef<Partial<Record<Beacon | `map-${Body}`, HTMLButtonElement | null>>>({});
   const timer = useRef<number>(0);
 
   useEffect(() => {
     live.current = readExpedition();
     setExpedition(live.current);
+    revealMoon(live.current.moon);
     return () => window.clearTimeout(timer.current);
   }, []);
 
   function notify(message: string) {
     window.clearTimeout(timer.current);
     setNotice(message);
-    timer.current = window.setTimeout(() => setNotice(""), 4400);
+    timer.current = window.setTimeout(() => setNotice(""), 4200);
   }
 
   function save(next: Expedition) {
@@ -38,29 +40,35 @@ export function useWorldGame() {
     return true;
   }
 
-  function arrive(destination: Body) {
+  function arrive(destination: Destination) {
     setBody(destination);
-    setMode(destination === "home" ? "planet" : "explore");
-    if (destination !== "home" && !live.current[destination]) save({ ...live.current, [destination]: true });
+    setMode("planet");
+    if (destination === "moon") revealMoon(true);
+    if ((destination === "moon" || destination === "signal") && !live.current[destination]) save({ ...live.current, [destination]: true });
   }
 
-  function project(id: Beacon, x: number, y: number, visible: boolean) {
-    const button = markers.current[id];
+  function project(id: Beacon | Body, x: number, y: number, visible: boolean, system = false) {
+    const key = system ? `map-${id as Body}` as const : id as Beacon;
+    const button = markers.current[key];
     if (!button) return;
     const next = visible ? "true" : "false";
     if (button.dataset.visible !== next) {
       button.dataset.visible = next;
       button.tabIndex = visible ? 0 : -1;
     }
-    if (visible) button.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, -50%)`;
+    if (visible) {
+      const translate = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, -50%)`;
+      if (button.style.transform !== translate) button.style.transform = translate;
+    }
   }
 
   function init(scene: WorldController) {
-    scene.setFinds(live.current.finds);
+    scene.setFinds(live.current.finds, live.current.moon || chartedMoon, live.current.signal);
     scene.setAuto(equipment.auto);
     scene.setDay(equipment.day);
     scene.setQuality(equipment.quality);
+    scene.setEffects(equipment.fx);
   }
 
-  return { body, transit, mode, expedition, equipment, notice, markers, notify, found, arrive, project, init, setTransit, setMode, setEquipment };
+  return { body, transit, mode, expedition, equipment, notice, markers, notify, found, arrive, project, init, chartedMoon, revealMoon, setTransit, setMode, setEquipment };
 }

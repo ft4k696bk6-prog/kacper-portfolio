@@ -1,46 +1,53 @@
-# Bernecki World
+# Bernecki Universe
 
-Interaktywne portfolio działa pod adresami `/world`, `/en/world` i `/uk/world`. Menu zawiera istniejące realizacje i usługi, kontakt oraz przejście do Classic. Każdy projekt zachowuje link `#project-*`.
+Portfel projektów działa pod adresami `/world`, `/en/world` i `/uk/world`. Wejście prowadzi na Bernecki World. Menu zawiera mapę, karty realizacji, kontakt i powrót do Classic. Każda realizacja zachowuje adres `#project-*`.
 
-## Poruszanie się
+## Eksploracja
 
-| Tryb | Sterowanie |
+| Cel | Sterowanie |
 | --- | --- |
-| Glob i swobodna kamera | Przeciągnij myszą lub palcem. Zmień zoom kółkiem, gestem dwoma palcami lub klawiszami + i −. Obrót klawiaturą obsługują strzałki. |
-| Samochód | WASD, strzałki lub przyciski dotykowe. Spacja włącza klakson, R wraca na linię startu. Wjazd w strefę projektu otwiera jego kartę. |
-| Fotografia | F lub opcja kamery w menu. Wyjście klawiszem Escape albo dyskretnym przyciskiem. Dzień i noc można ustawić w menu kamery. |
-| Odkrycia | Kliknij obiekt lub skorzystaj z przycisku „Zbadaj” i klawisza E. Dziennik zapisuje licznik i osiągnięcia lokalnie. |
-| Podróże | Pomocnik wskazuje widoczne ciało niebieskie. Fast Travel pokazuje odkryte światy. |
+| Obejrzyj planetę | Przeciągnij palcem lub myszą. Użyj gestu dwoma palcami, kółka albo klawiszy + i −, by zmienić zoom. Strzałki na scenie obracają kamerę. |
+| Przejdź między światami | Użyj Mapy układu lub menu. Klawisz G otwiera mapę, a Escape przerywa lot. |
+| Zobacz projekt | Wybierz obiekt z nazwą na powierzchni lub otwórz kartę z menu. |
+| Odkrywaj | Klikaj miejsca w scenie. E aktywuje najbliższą widoczną wskazówkę. Dziennik zachowuje stan w przeglądarce. |
+| Fotografuj | Klawisz F lub menu kamery włącza tryb zdjęć. Escape przywraca interfejs. |
 
-Scena przechodzi w statyczny podgląd, jeśli WebGL nie jest dostępny. Projekty pozostają wtedy dostępne z menu. Preferencja ograniczonego ruchu zatrzymuje animacje otoczenia i skraca przeloty.
+Grafika, oświetlenie i intensywność efektów są regulowane w menu. Dźwięk jest domyślnie wyłączony. W trybie bez WebGL dostępne są obraz planety, karty projektów, klasyczne portfolio i kontakt. Ograniczenie ruchu zatrzymuje środowisko i skraca loty.
 
-## Realizacje
+## Światy
 
-| Miejsce | Co otwiera |
+| Planeta | Charakter i realizacja |
 | --- | --- |
-| Centrum fotowoltaiki ReEnergy | Strona firmowa, kampanie Meta Ads i obsługa leadów w CRM |
-| Plac StarCars | Strona importera, kalkulator kosztów i formularze zapytań |
-| Budka Isto Kebab | Strona restauracji, menu i zamówienia |
-| Budynek B-CRM | Demo CRM z rolami, leadami i przekazywaniem spraw do realizacji |
-| Laboratorium AI | Wdrożenia AI, automatyzacje i integracje |
-| Warsztat Motomizer | Prezentacja produktu i wariantów |
-| Scena BeatMarket | Platforma producentów i odsłuch beatów |
-| Pluszowy przewodnik Kacper | Informacje o autorze i ścieżka współpracy |
+| Bernecki World | Siedziba, obserwatorium, port, góry, wulkan i miejsce startu. |
+| StarCars | Salon importera, tor, laweta, dźwig i transport wodny. |
+| ReEnergy | Centrum fotowoltaiki, turbiny, magazyn energii, przepływ energii. |
+| B-CRM | Centrum operacyjne, serwerownie i animowany przepływ syntetycznych danych. |
+| AI World | Laboratorium, robot naprawczy, mieszkańcy i terminal. Karta AI zawiera również odsyłacz do autorskiego B-Code w PL i EN. |
+| Motomizer | Warsztat i widoczna od góry fabryka z taśmą i ramionami robotów. |
+| BeatMarket | Sceny, ruchomy tłum, pokaz świetlny i syntetyczne warianty muzyki. |
+| Isto Kebab | Bistro z menu i zamówieniami, stragany i gotująca postać. |
+| Jalapeno | Plac z przyczepą gastronomiczną odsyła do istniejącej realizacji marketingowej. |
+
+Dodatkowe ciała niebieskie pojawiają się na mapie po odkryciu.
 
 ## Kadry z buildu produkcyjnego
 
-- [Planeta i Księżyc](screenshots/game-desktop.webp) · [Planeta na telefonie](screenshots/game-mobile.webp)
-- [Kamera za samochodem](screenshots/game-drive.webp) · [Sterowanie dotykiem](screenshots/game-mobile-drive.webp)
-- [Menu](screenshots/game-menu.webp) · [B-CRM](screenshots/game-project.webp)
-- [Baza księżycowa](screenshots/game-moon.webp) · [Aster](screenshots/game-signal.webp) · [UFO](screenshots/game-ufo.webp)
-- [Przelot kosmiczny](screenshots/game-transit.webp) · [Tryb bez WebGL](screenshots/game-static.webp)
+- [Start](screenshots/universe-home.webp) · [Mapa](screenshots/universe-system.webp) · [Menu](screenshots/universe-menu.webp)
+- [Telefon](screenshots/universe-mobile-home.webp) · [Mapa na telefonie](screenshots/universe-mobile-system.webp) · [BeatMarket na telefonie](screenshots/universe-mobile-beatmarket.webp)
+- [StarCars](screenshots/universe-starcars.webp) · [ReEnergy](screenshots/universe-reenergy.webp) · [B-CRM](screenshots/universe-b-crm.webp) · [AI World](screenshots/universe-ai.webp)
+- [Motomizer](screenshots/universe-motomizer.webp) · [BeatMarket](screenshots/universe-beatmarket.webp) · [Isto](screenshots/universe-isto-kebab.webp) · [Jalapeno](screenshots/universe-jalapeno.webp)
+- [K-01](screenshots/universe-moon.webp) · [G-02](screenshots/universe-garage.webp) · [The Unknown](screenshots/universe-unknown.webp)
+- [Skan UFO](screenshots/universe-ufo.webp) · [Podróż](screenshots/universe-flight.webp)
+- [Szczegóły B-CRM i karta](screenshots/universe-b-crm-panel.webp) · [Widok bez WebGL](screenshots/universe-static.webp)
 - [Sprawdzenia i pomiary](../../QUALITY_GATE.md) · [Stan projektu](../../PROGRESS.md)
 
-## Zasoby
+## Scena i źródła
 
-Mapa terenu, drogi, pojazd gracza, dodatkowe światy i efekty to modele i materiały generowane przez scenę Three.js. LOD i profil jakości ograniczają zagęszczenie siatek, cząsteczki są buforowane, a flora jest instancjonowana. Aster jest budowane przy pierwszej podróży. Scena wycisza animacje w tle i ogranicza rozdzielczość, gdy renderer zwalnia.
+Rejestr planet utrzymuje pozycje i promienie. Widok układu używa prostych zastępników. Z aktywną planetą wczytywane są lokalna architektura i ruch, a zasoby projektu są zwalniane po opuszczeniu planety. Drogi, tory i chodniki powstają z tych samych zweryfikowanych próbek co ruch. Trasy wodne korzystają z maski przeciwnej do tras lądowych.
 
-- Szczegółowe samochody StarCars są pobierane przy wejściu do projektu. [Mid-Engine Supercar v2, tevy · CC0](https://tevy.dev/models/supercar)
-- Kolor, normalne i szorstkość powierzchni pochodzą z map ambientCG. [Asphalt 012](https://ambientcg.com/view?id=Asphalt012) · [Concrete 034](https://ambientcg.com/view?id=Concrete034) · [Wood 049](https://ambientcg.com/view?id=Wood049)
-- Światło bazowe korzysta z atlasu HDRI. [Poly Haven Kloppenheim 06 Pure Sky · CC0](https://polyhaven.com/a/kloppenheim_06_puresky)
-- Pluszowy portret powstał w ImageGen na podstawie portretu właściciela z portfolio. Model 3D wykorzystuje jego charakterystyczną fryzurę, zarost i marynarkę.
+- Samochody ekspozycyjne StarCars pochodzą z modelu [Mid-Engine Supercar v2, tevy · CC0](https://tevy.dev/models/supercar).
+- Kolor, normalne i szorstkość wykorzystują [Asphalt 012](https://ambientcg.com/view?id=Asphalt012), [Concrete 034](https://ambientcg.com/view?id=Concrete034) i [Wood 049](https://ambientcg.com/view?id=Wood049).
+- Oświetlenie wykorzystuje [Poly Haven Kloppenheim 06 Pure Sky · CC0](https://polyhaven.com/a/kloppenheim_06_puresky).
+- Modele przestrzeni, wnętrza scen projektowych i dźwięki syntezowane są częścią implementacji. Portret pluszowego przewodnika wykorzystuje portret autora.
+
+Na potrzeby lokalnego uruchomienia użyj `npm ci` oraz `npm run dev`.

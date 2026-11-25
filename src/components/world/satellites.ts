@@ -1,6 +1,6 @@
 import * as T from "three";
 import { alignRadially, box, disposeObjects, gamePalette, solid } from "./gameObjects";
-import type { Body, FindId } from "./discoveries";
+import type { SecretBody, FindId } from "./discoveries";
 import { globeDirection } from "./globe";
 import { makeCar } from "./vehicle";
 
@@ -10,16 +10,17 @@ const alienDescent = globeDirection(16, -24);
 const craterPattern = [[19, -27, .32], [0, 53, .35], [54, 39, .27], [-26, 7, .29], [-37, -69, .3], [32, 142, .41], [15, -127, .36], [-39, 156, .3]]
   .map(([lat, lon, size]) => ({ normal: globeDirection(lat, lon), size }));
 
-export function makeSatellite(kind: Exclude<Body, "home">, low: boolean) {
-  const moon = kind === "moon";
-  const radius = moon ? 6.25 : 12.6;
+export function makeSatellite(kind: SecretBody, low: boolean) {
+  const garage = kind === "garage";
+  const moon = kind !== "signal";
+  const radius = garage ? 5.6 : moon ? 6.25 : 12.6;
   const root = new T.Group();
   const palette = gamePalette();
   const geometry = new T.SphereGeometry(radius, low ? 70 : 100, low ? 42 : 64);
   const colors: number[] = [];
   const position = geometry.getAttribute("position");
-  const base = new T.Color(moon ? 0xc6b8aa : 0x65557f);
-  const ridge = new T.Color(moon ? 0xead7bd : 0xc0848d);
+  const base = new T.Color(garage ? 0xbc8c75 : moon ? 0xc6b8aa : 0x65557f);
+  const ridge = new T.Color(garage ? 0xfad1a0 : moon ? 0xead7bd : 0xc0848d);
   const basin = new T.Color(moon ? 0x847784 : 0x303e58);
   const color = new T.Color(), normal = new T.Vector3();
   for (let i = 0; i < position.count; i++) {
@@ -77,7 +78,20 @@ export function makeSatellite(kind: Exclude<Body, "home">, low: boolean) {
   flag.add(flagMesh);
   flag.position.set(.89, .01, .88);
   baseCamp.add(flag);
-  if (moon) {
+  if (garage) {
+    const hangar = new T.Group();
+    hangar.position.set(.10,.03,1.48);
+    hangar.add(box(1.88,.16,1.37,palette.ink,0,.09), box(1.83,1.02,.10,palette.chalk,0,.54,-.59),
+      box(.12,1.07,1.24,palette.coral,-.84,.58), box(.12,1.07,1.24,palette.coral,.84,.58),
+      box(1.98,.14,1.28,palette.chalk,0,1.09), box(1.56,.10,.09,palette.warm,0,1.03,.59));
+    const model = makeCar(palette,true).root;
+    model.position.set(0,.22,.35);
+    model.scale.setScalar(.64);
+    model.traverse(item => { if (item instanceof T.Mesh && item.material === palette.coral) item.material = palette.gold; });
+    hangar.add(model);
+    baseCamp.add(hangar);
+    targets.push({ id: "garage", object: model });
+  } else if (moon) {
     targets.push({ id: "flag", object: flag });
     const rover = makeCar(palette, true).root;
     rover.scale.setScalar(.48);
@@ -126,7 +140,11 @@ export function makeSatellite(kind: Exclude<Body, "home">, low: boolean) {
   }
   root.add(fragments);
   let anomaly: T.Object3D | undefined;
-  if (moon) {
+  if (garage) {
+    const crates = new T.Group();
+    for (const x of [-.39,.39]) crates.add(box(.62,.43,.58,palette.chalk,x,.21));
+    root.add(alignRadially(crates,globeDirection(-18,-24),radius+.1));
+  } else if (moon) {
     artifact("capsule", globeDirection(-8, 41), solid(new T.CapsuleGeometry(.19, .41, 5, 13), palette.coral, 0, .39));
     const plaque = new T.Group().add(box(.50, .50, .15, palette.ink, 0, .26), box(.29, .13, .055, palette.warm, .035, .29, .09));
     artifact("message", globeDirection(21, -53), plaque);

@@ -1,7 +1,8 @@
-# Bernecki World — interaktywna gra
+# Bernecki Universe
 
-- Baza premium `df0d0b7` jest zachowana na `backup/bernecki-world-before-game` i w dotychczasowym podglądzie Vercel.
-- Gotowe — stylizowany glob, swobodna kamera, jazda z lokalną grawitacją, niezależne animacje, Księżyc, terminal, Aster, UFO i 18 odkryć z lokalnym zapisem. Menu zachowuje sześć realizacji, Classic, tryb statyczny oraz PL, EN i UK.
-- Weryfikacja — build, TypeScript, 359 testów, 41 tras i sześć zewnętrznych CTA. Przeglądarka potwierdziła jazdę, dotyk, przeloty, zapis, zmianę języka i tryb bez WebGL. [Kadry](docs/world/README.md#kadry-z-buildu-produkcyjnego)
-- Wykryte problemy — poprawiono położenie auta, kadry lądowania i widoczność Księżyca na mobile. Płynność spada w SwiftShader pomimo ograniczenia geometrii za horyzontem. [Pomiary i ograniczenia](QUALITY_GATE.md)
-- Następny krok — zmierzyć jazdę i zbliżenia na fizycznym telefonie oraz sprzętowym GPU. [Podgląd i kontrole w PR #116](https://github.com/ft4k696bk6-prog/kacper-portfolio/pull/116)
+- Wersja gry `c0d9e51` jest zachowana na `backup/bernecki-world-before-universe` i w poprzednim podglądzie Vercel.
+- Gotowe — planeta startowa, siedem planet realizacji, AI World, dwa księżyce i tajna planeta. Sterowanie obejmuje kamerę. Postacie, pojazdy i otoczenie działają autonomicznie.
+- Mapa pokazuje uproszczone reprezentacje, a aktywna planeta wczytuje własną architekturę i animacje. Trasy wynikają z masek terenu i omijają zabudowę. Dziennik zachowuje 25 odkryć i postęp poprzedniego wydania.
+- Zweryfikowano build, TypeScript, 363 testy, 41 tras, gesty i obrót telefonu, karty, przełączanie języków, Classic, przerwanie lotu, oba księżyce i UFO. Poprawiono kadr na krótkich ekranach i konflikt skanowania z resetem kamery. [Kadry](docs/world/README.md#kadry-z-buildu-produkcyjnego)
+- Ograniczenie — pomiar na sprzętowym GPU i fizycznym telefonie pozostaje otwarty. [Wyniki](QUALITY_GATE.md)
+- Następny krok — sprawdzić cel 60/30 FPS na sprzęcie. [Podgląd i kontrole w PR #116](https://github.com/ft4k696bk6-prog/kacper-portfolio/pull/116)

@@ -1,7 +1,8 @@
 import * as T from "three";
 import { globeDirection, globeRadius, makeSurfaceSites } from "./globe";
-import { roadPoint, surfaceRadius, terrainField, type Road } from "./terrain";
-import { carRamp, carSpawn } from "./vehicle";
+import { surfaceRadius, terrainField } from "./terrain";
+import { createTraffic, laneMesh, makeLane, ringWaypoints, type Lane } from "./routes";
+import { makeCar } from "./vehicle";
 import { alignRadially, box, solid, type GamePalette } from "./gameObjects";
 
 export const volcanoDirection = globeDirection(-31, 110);
@@ -9,11 +10,9 @@ export const observatoryDirection = globeDirection(36, 112);
 export const lakeDirection = globeDirection(25, -64);
 export const portDirection = globeDirection(-19, -52);
 export const windDirection = globeDirection(52, 29);
+export const ridgeDirection = globeDirection(56, 10);
 export const impactDirection = globeDirection(41, 145);
 
-function route(a: T.Vector3, b: T.Vector3): Road {
-  return { start: a, end: b, turn: new T.Quaternion().setFromUnitVectors(a, b), angle: a.angleTo(b) };
-}
 function seeded(seed: number) {
   return () => {
     seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
@@ -21,14 +20,48 @@ function seeded(seed: number) {
   };
 }
 
-export function makeWorldLife(p: GamePalette, roads: Road[], low: boolean) {
+export function makeWorldLife(p: GamePalette, low: boolean) {
   const group = new T.Group();
   const random = seeded(314824);
-  const direction = new T.Vector3(), forward = new T.Vector3(), right = new T.Vector3(), dummy = new T.Object3D();
-  const rotation = new T.Quaternion(), basis = new T.Matrix4();
-  const siteNormals = Object.values(makeSurfaceSites()).map(site => site.normal);
-  const roadTests = roads.map(road => ({ ...road, plane: road.start.clone().cross(road.end).normalize() }));
-  const decorative = [volcanoDirection, observatoryDirection, lakeDirection, portDirection, windDirection, impactDirection, carRamp, carSpawn];
+  const direction = new T.Vector3(), dummy = new T.Object3D();
+  const { hq, studio } = makeSurfaceSites();
+  const siteNormals = [hq.normal, studio.normal];
+  const decorative = [volcanoDirection, observatoryDirection, lakeDirection, portDirection, windDirection, ridgeDirection, impactDirection];
+  const lanes: Lane[] = [];
+  const traffic = createTraffic();
+  const surface = { radius: surfaceRadius, land: (point: T.Vector3) => terrainField(point) > .655 };
+  const obstacles = [...siteNormals, ...decorative].map(normal => ({ normal, radius: .12 }));
+  const trails = [
+    { kind: "road", candidates: [[30, 28, .21], [30, 29, .18], [50, 14, .19]] },
+    { kind: "road", candidates: [[1, -40, .22], [0, -42, .19], [10, -30, .20]] },
+    { kind: "rail", candidates: [[-41, 130, .19], [-33, 133, .23], [25, 150, .23], [-48, -125, .20]] },
+  ] as const;
+  for (const { kind, candidates } of trails) {
+    const lane = candidates.map(([lat,lon,size]) => makeLane(kind, ringWaypoints(globeDirection(lat,lon), size, 13), surface, obstacles))
+      .find(candidate => candidate !== null);
+    if (!lane) continue;
+    lanes.push(lane);
+    for (let i = 0; i < (kind === "rail" ? 3 : 2); i++) {
+      const object = kind === "rail" ? new T.Group().add(box(.51,.32,.65,i ? p.chalk : p.coral,0,.22),box(.38,.19,.40,p.glass,0,.43)) : makeCar(p, true).root;
+      object.scale.setScalar(.58);
+      traffic.add(object, lane, kind === "rail" ? 1.67 : 1.35, kind === "rail" ? i * .065 : i * .5, kind === "rail" ? 0 : .16);
+    }
+  }
+  const waterLane = makeLane("water", ringWaypoints(globeDirection(-18, -67), .12, 10), surface)
+    ?? makeLane("water", ringWaypoints(globeDirection(-4, -78), .15, 10), surface)
+    ?? makeLane("water", ringWaypoints(globeDirection(-8, -168), .14, 10), surface);
+  if (waterLane) lanes.push(waterLane);
+  const boatBody = new T.Group().add(box(.50,.21,.95,p.coral,0,.11),box(.35,.22,.52,p.chalk,0,.29),box(.29,.14,.36,p.glass,0,.43));
+  traffic.add(boatBody, waterLane, .81, .18);
+  const wildlife = makeLane("wild", ringWaypoints(globeDirection(58, -167), .095), {
+    radius: surfaceRadius, land: point => terrainField(point) > .69,
+  }, obstacles);
+  const tortoise = new T.Group();
+  const legs = [-1,1].flatMap(side => [-1,1].map(end => solid(new T.SphereGeometry(.10,7,5),p.moss,side*.205,.065,end*.13)));
+  tortoise.add(solid(new T.SphereGeometry(.25,12,8).scale(.89,.58,1.19),p.moss,0,.18),
+    solid(new T.SphereGeometry(.09,8,6),p.chalk,0,.13,.29),...legs);
+  traffic.add(tortoise,wildlife,.21,.36,0,t => legs.forEach((leg,i) => {leg.position.z = Math.sign(i%2-.5)*.13 + Math.sin(t*4.7+i)*.055;}));
+  group.add(traffic.group, laneMesh(lanes));
   const groveCount = low ? 175 : 320;
   const trees = new T.InstancedMesh(new T.SphereGeometry(0.49, low ? 7 : 10, low ? 6 : 8), new T.MeshLambertMaterial({ color: 0xffffff }), groveCount);
   const trunks = new T.InstancedMesh(new T.CylinderGeometry(0.054, .095, .61, 6), p.ink, groveCount);
@@ -47,8 +80,7 @@ export function makeWorldLife(p: GamePalette, roads: Road[], low: boolean) {
     const field = terrainField(direction);
     if (field < 0.69 || siteNormals.some(site => site.dot(direction) > 0.968)
       || decorative.some(site => site.dot(direction) > 0.979)
-      || roadTests.some(road => Math.abs(road.plane.dot(direction)) < 0.056
-        && road.start.angleTo(direction) + road.end.angleTo(direction) < road.angle + 0.014)) continue;
+      || lanes.some(lane => lane.directions.some((point, index) => index % 4 === 0 && point.angleTo(direction) < .065))) continue;
     const scale = 0.6 + random() * 0.53;
     const radius = surfaceRadius(direction);
     if ((field > 0.82 || random() < 0.30) && plant < groveCount) {
@@ -88,6 +120,14 @@ export function makeWorldLife(p: GamePalette, roads: Road[], low: boolean) {
   }
   const edifice = new T.MeshLambertMaterial({ color: 0x78555b });
   const ash = new T.MeshLambertMaterial({ color: 0x514954 });
+  const ridge = site(ridgeDirection);
+  const granite = new T.MeshLambertMaterial({color: 0x85808a});
+  const snow = new T.MeshLambertMaterial({color: 0xebe4cb});
+  for (const [x,z,width,height] of [[-.98,.28,1.12,2.47],[.27,-.15,1.49,3.53],[1.24,.25,1.03,2.23]]) {
+    const silhouette = new T.LatheGeometry([[0,.01],[width,.01],[width*.81,height*.18],[width*.55,height*.43],[width*.27,height*.69],[0,height]]
+      .map(([a,b])=>new T.Vector2(a,b)), 13);
+    ridge.add(solid(silhouette,granite,x,0,z),solid(new T.ConeGeometry(width*.29,height*.33,12),snow,x,height*.84,z));
+  }
   const lava = new T.MeshLambertMaterial({ color: 0xf06b38, emissive: 0xec441e, emissiveIntensity: 0.7 });
   const volcano = site(volcanoDirection);
   const outline = [[0, 0.05], [3.84, 0.05], [3.47, 0.27], [2.65, 0.87], [1.62, 2.11], [1.14, 2.55], [0.83, 2.43], [0.68, 2.00], [0, 1.93]];
@@ -140,14 +180,18 @@ export function makeWorldLife(p: GamePalette, roads: Road[], low: boolean) {
   const waterfall = new T.Group();
   waterfall.position.set(-0.96, 0.20, -0.44);
   ocean.add(waterfall);
+  const footbridge = new T.Group();
+  footbridge.position.set(.39,.26,.68);
+  for (let i=0; i<8; i++) footbridge.add(box(.15,.06,.43,p.chalk,(i-3.5)*.137,.023*Math.sin(i/7*Math.PI)));
+  for (const z of [-.19,.19]) {
+    footbridge.add(box(1.15,.034,.055,p.ink,0,.21,z));
+    for (const x of [-.5,0,.5]) footbridge.add(box(.031,.22,.04,p.ink,x,.12,z));
+  }
+  ocean.add(footbridge);
   for (let i = 0; i < 3; i++) waterfall.add(box(.16, .74, .09, p.crystal, i * .17, .32));
   const port = site(portDirection);
   port.add(box(2.95, 0.17, 1.22, p.chalk, 0, .12), box(.90, .48, .55, p.coral, .75, .40),
     box(.92, .47, .56, p.sea, -.87, .40), box(.53, .42, .63, p.chalk, 0, .41));
-  const boat = new T.Group();
-  boat.add(box(.55, .22, 1.0, p.coral, 0, .11), box(.35, .22, .52, p.chalk, 0, .30),
-    box(.29, .14, .36, p.glass, 0, .46));
-  port.add(boat);
   const crane = new T.Group();
   crane.position.set(1.25, .13, -.58);
   crane.add(box(.16, 1.16, .16, p.ink, 0, .59), box(.82, .14, .17, p.coral, -.26, 1.15));
@@ -169,20 +213,6 @@ export function makeWorldLife(p: GamePalette, roads: Road[], low: boolean) {
     return rotor;
   });
 
-  const traffic = roads.filter((_, i) => i % 3 === 0).map((road, i) => {
-    const vehicle = new T.Group().add(box(.48, .24, .86, i % 2 ? p.coral : p.sea, 0, .15),
-      box(.38, .18, .43, p.glass, 0, .34), box(.45, .065, .11, p.warm, 0, .16, .43));
-    group.add(vehicle);
-    return { road, vehicle };
-  });
-  const train = [0, 1, 2].map(i => {
-    const wagon = new T.Group().add(box(.61, .40, .95, i ? p.chalk : p.coral, 0, .32),
-      box(.57, .19, .65, p.glass, 0, .57), box(.64, .11, .14, p.ink, 0, .16, .45));
-    group.add(wagon);
-    return wagon;
-  });
-  const trainRoute = [[-24, -66], [-32, 28], [-30, 111], [-30, -160]].map(([lat, lon]) => globeDirection(lat, lon));
-  const trainTracks = trainRoute.map((point, i) => route(point, trainRoute[(i + 1) % trainRoute.length]));
   const flyers = Array.from({ length: low ? 3 : 5 }, (_, i) => {
     const bird = new T.Group();
     if (i === 0) {
@@ -269,14 +299,6 @@ export function makeWorldLife(p: GamePalette, roads: Road[], low: boolean) {
   let ufoSeen = false;
   let stormTime = 0;
   let meteorTime = 0;
-  function onRoad(object: T.Object3D, road: Road, t: number) {
-    roadPoint(road, t, direction, rotation);
-    roadPoint(road, Math.min(t + .005, 1), forward, rotation).sub(direction).normalize();
-    right.crossVectors(direction, forward).normalize();
-    forward.crossVectors(right, direction).normalize();
-    object.quaternion.setFromRotationMatrix(basis.makeBasis(right, direction, forward));
-    object.position.copy(direction).multiplyScalar(Math.max(surfaceRadius(direction), globeRadius + .29) + .11);
-  }
   function update(time: number, enabled: boolean, decorated: boolean) {
     const t = enabled ? time : 1;
     if (enabled && decorated) {
@@ -296,22 +318,9 @@ export function makeWorldLife(p: GamePalette, roads: Road[], low: boolean) {
       gull.rotation.y = -angle;
       wings.forEach((wing, side) => { wing.rotation.z = (side ? -1 : 1) * Math.sin(t * 8 - i) * .53; });
     });
-    for (let i = 0; i < traffic.length; i++) {
-      const { vehicle, road } = traffic[i];
-      const phase = ((t * (.020 + i * .002) + i * .24) % 1);
-      const p = phase < .12 ? .12 : phase > .89 ? .89 : phase;
-      onRoad(vehicle, road, i % 2 ? 1 - p : p);
-      if (i % 2) vehicle.rotateY(Math.PI);
-    }
-    const trainStart = (t * .047 + 1.2) % 4;
-    train.forEach((wagon, i) => {
-      const segment = (4 + trainStart - i * .043) % 4;
-      onRoad(wagon, trainTracks[Math.floor(segment)], segment % 1);
-    });
+    traffic.tick(t);
     dish.rotation.y = t * .31;
     blades.forEach((blade, i) => { blade.rotation.z = t * (1.53 + i * .22); });
-    boat.position.set(Math.cos(t * .28) * .87, .17 + Math.sin(t * 2) * .055, 1.02 + Math.sin(t * .28) * .29);
-    boat.rotation.y = Math.PI * .45 + t * .28 % (Math.PI * 2);
     gate.rotation.z = -.07 - T.MathUtils.smoothstep(Math.sin(t * .61), .1, .79) * 1.19;
     trafficSignal.scale.setScalar(Math.sin(t * .61) > .1 ? 1.10 : .62);
     crane.rotation.y = Math.sin(t * .45) * .57;
@@ -415,7 +424,7 @@ export function makeWorldLife(p: GamePalette, roads: Road[], low: boolean) {
   update(0, false, !low);
   return {
     group, ufo, observatory,
-    update, cull,
+    update, cull, lanes,
     summon(time: number) { ufoDelay = time; ufoSeen = false; },
   };
 }

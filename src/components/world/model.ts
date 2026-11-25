@@ -98,7 +98,7 @@ function bakeSurface(geometry: T.BufferGeometry, material: T.MeshLambertMaterial
   return geometry;
 }
 
-export function buildModel(low: boolean, bakeLighting = false) {
+export function buildModel(low: boolean, bakeLighting = false, included?: ReadonlySet<SurfaceStop>, siteTint?: number) {
   const group = new T.Group();
   const sites = makeSurfaceSites();
   let active: SurfaceStop = "reenergy";
@@ -164,6 +164,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   const shadow = new T.MeshBasicMaterial({ map: ao, transparent: true, depthWrite: false, opacity: 0.84, polygonOffset: true, polygonOffsetFactor: -2 });
 
   function add(geometry: T.BufferGeometry, material: T.Material, x: number, y: number, z: number, cast = true, rx = 0, ry = 0, rz = 0) {
+    if (included && !included.has(active)) { geometry.dispose(); return; }
     geometry.rotateX(rx).rotateY(ry).rotateZ(rz).translate(x, y, z);
     if (finishes.has(material)) {
       const position = geometry.getAttribute("position");
@@ -257,10 +258,12 @@ export function buildModel(low: boolean, bakeLighting = false) {
 
   const signs: Array<{ text: string; x: number; y: number; z: number; width: number; height: number; color: string; site: SurfaceStop }> = [];
   function sign(text: string, x: number, y: number, z: number, width: number, height: number, color = "#ebf1db") {
+    if (included && !included.has(active)) return;
     signs.push({ text, x, y, z, width, height, color, site: active });
   }
 
   function addSigns() {
+    if (!signs.length) return;
     const row = 80;
     const canvas = document.createElement("canvas");
     canvas.width = 512;
@@ -287,6 +290,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   }
 
   function proxy(x: number, y: number, z: number, w: number, h: number, d: number, hit: Hit) {
+    if (included && !included.has(active)) return;
     const material = new T.MeshBasicMaterial({ visible: false });
     materials.add(material);
     const object = new T.Mesh(new T.BoxGeometry(w, h, d), material);
@@ -371,7 +375,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   for (const id of Object.keys(sites) as SurfaceStop[]) {
     active = id;
     const { x, z, width, depth } = sites[id];
-    const ground = standard(terrains[id], 1, 0, noise);
+    const ground = standard(siteTint ?? terrains[id], 1, 0, noise);
     ground.vertexColors = true;
     add(terrain(width, depth), ground, x, 0, z, false);
     slab(width, depth, 1.10, 0.6, -0.88, curb, x, z);
@@ -743,8 +747,23 @@ export function buildModel(low: boolean, bakeLighting = false) {
   sign("STUDIO", studioX, 1.79, studioZ + 1.118, 1.52, 0.22);
   proxy(studioX, 1.05, studioZ, 2.75, 1.63, 2.28, { zone: "studio" });
 
-  // The mascot's central walking plaza and a small fountain at the centre of the map.
+  // The headquarters and the mascot's plaza share the home planet. and a small fountain at the centre of the map.
   active = "hq";
+  rounded(-.14, .50, .49, 3.02, .81, 1.77, sandstone, .18);
+  rounded(-.14, 1.82, .48, 2.82, 2.45, 1.56, pale, .21);
+  rounded(-.14, 3.15, .44, 2.97, .22, 1.68, graphite, .09);
+  rounded(-.61, 3.48, .43, 1.47, .64, 1.37, glass, .22);
+  rounded(-.61, 3.82, .43, 1.51, .14, 1.43, pale, .1);
+  for (const x of [-1.14, -.71, -.28, .15, .58, 1.01]) {
+    rounded(x, 1.82, 1.268, .30, 1.63, .075, glass, .031);
+    box(x, 1.75, 1.315, .30, .065, .035, stone, false);
+  }
+  rounded(-.14, .43, 1.41, .57, .78, .083, deepGlass, .047);
+  rounded(-.13, .87, 1.50, 1.06, .117, .56, graphite, .045);
+  cylinder(.67, 3.67, .39, .033, .075, 1.04, bronze, 9);
+  ball(.67, 4.24, .39, .075, .087, .075, lamp);
+  sign("BERNECKI.DEV", -.14, 2.90, 1.274, 2.35, .22);
+  proxy(-.14, 1.61, .51, 2.91, 3.26, 1.82, { zone: "hq" });
   cylinder(0.10, 0.193, 3.43, 3.03, 3.17, 0.096, stone, 60);
   ring(0.10, 0.247, 3.43, 2.88, 0.019, bronze, 70);
   ring(0.10, 0.247, 3.43, 2.30, 0.011, curb, 60);
@@ -765,7 +784,8 @@ export function buildModel(low: boolean, bakeLighting = false) {
   beacon.rotation.x = -Math.PI / 2;
   beacon.position.set(labX, 2.74, labZ).applyMatrix4(sites.lab.matrix);
   beacon.quaternion.premultiply(new T.Quaternion().setFromRotationMatrix(sites.lab.matrix));
-  group.add(beacon);
+  if (!included || included.has("lab")) group.add(beacon);
+  else beacon.geometry.dispose();
 
   const avatar = new T.Group();
   const fabric = standard(0xa87955, 0.97, 0, noise);
@@ -847,11 +867,12 @@ export function buildModel(low: boolean, bakeLighting = false) {
   avatarHit.position.set(0, 0.81, 0.051);
   avatarHit.userData.hit = { zone: "hq" } satisfies Hit;
   avatar.add(avatarHit);
-  hits.push(avatarHit);
+  if (!included || included.has("hq")) hits.push(avatarHit);
   const plaza = new T.Group();
   plaza.applyMatrix4(sites.hq.matrix);
   plaza.add(avatar);
-  group.add(plaza);
+  if (!included || included.has("hq")) group.add(plaza);
+  else avatar.traverse(object => { if (object instanceof T.Mesh) object.geometry.dispose(); });
 
   addSigns();
 

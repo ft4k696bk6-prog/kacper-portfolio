@@ -1,17 +1,19 @@
-import type { WorldLocale } from "./content";
+import type { ProjectId, WorldLocale } from "./content";
 
-export type Body = "home" | "moon" | "signal";
-export type CameraMode = "planet" | "explore" | "drive" | "photo";
-export type DriveInput = "forward" | "reverse" | "left" | "right";
+export type ProjectBody = ProjectId | "ai";
+export type SecretBody = "moon" | "signal" | "garage";
+export type Body = "home" | ProjectBody | SecretBody;
+export type Destination = Body | "system";
+export type CameraMode = "planet" | "explore" | "photo";
 export const finds = {
   chest: ["Skrzynia z nabrzeża", "Harbor chest", "Портова скриня"],
   gold: ["Złoty kluczyk", "Golden key", "Золотий ключ"],
   cave: ["Kamień z jaskini", "Cave stone", "Печерний камінь"],
   lake: ["Perła z laguny", "Lagoon pearl", "Перлина лагуни"],
   billboard: ["Miś na afiszu", "Bear on the billboard", "Ведмедик на афіші"],
-  ramp: ["Lot nad rampą", "Ramp flight", "Політ над трампліном"],
-  horn: ["Odpowiedź na klakson", "An answer to the horn", "Відповідь на клаксон"],
-  cones: ["Przewrócony pachołek", "Tipped traffic cone", "Збитий конус"],
+  ramp: ["Próba na torze", "Track demonstration", "Показ на трасі"],
+  horn: ["Sygnał z portu", "Harbor signal", "Сигнал із порту"],
+  cones: ["Najmniejszy model", "The smallest model", "Найменша модель"],
   impact: ["Odłamek meteorytu", "Meteorite fragment", "Уламок метеорита"],
   terminal: ["Kod z laboratorium", "Laboratory code", "Код лабораторії"],
   rover: ["Dziennik łazika", "Rover log", "Журнал ровера"],
@@ -21,6 +23,13 @@ export const finds = {
   crystal: ["Świecący kryształ", "Glowing crystal", "Сяйливий кристал"],
   relic: ["Rdzeń napędu", "Drive core", "Ядро двигуна"],
   anomaly: ["Anomalia grawitacyjna", "Gravity anomaly", "Гравітаційна аномалія"],
+  grid: ["Połączona sieć", "Connected grid", "З’єднана мережа"],
+  concert: ["Koncert po godzinach", "After-hours concert", "Концерт після опівночі"],
+  leads: ["Pierwsze przekazanie", "First handoff", "Перша передача"],
+  robot: ["Robot na przerwie", "Robot on a break", "Робот на перерві"],
+  recipe: ["Sekretny sos", "The secret sauce", "Таємний соус"],
+  garage: ["Model z hangaru G-02", "G-02 hangar model", "Модель з ангара G-02"],
+  launch: ["Start rakiety", "Liftoff", "Старт ракети"],
   ufo: ["Kontakt z obcymi", "Alien contact", "Контакт з прибульцями"],
 } as const;
 export type FindId = keyof typeof finds;

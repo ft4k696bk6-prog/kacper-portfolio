@@ -232,7 +232,7 @@
   mask-image: none;
 }
 .world .stage { touch-action: none; }
-.world:is([data-camera="drive"], [data-camera="photo"], :not([data-body="home"]), [data-transit]) :is(.intro,.controls,.hotspots) { visibility: hidden; }
+.world:is([data-camera="photo"], :not([data-body="home"]), [data-transit]) :is(.intro,.controls,.hotspots) { visibility: hidden; }
 .world[data-camera="photo"] .header, .world[data-camera="photo"] .header * { visibility: hidden !important; pointer-events: none; }
 .world[data-camera="photo"] .stage { inset: calc(-1 * var(--bar)) calc(-1 * var(--pad)) auto; width: auto; height: 100svh; }
 .world[data-camera="photo"] .canvas { mask-image: none !important; }
@@ -244,8 +244,17 @@
 @media (max-width: 830px) {
   .world[data-view="overview"] .intro { transform: translateY(-17px); }
   .world[data-view="overview"] .controls { margin-top: -13px; }
-  .world[data-camera="drive"] { overscroll-behavior: none; }
-  .world[data-camera="drive"] .stage, .world[data-camera="photo"] .stage { inset: calc(-1 * var(--bar)) calc(-1 * var(--pad)) auto; height: 100svh; }
+  .world[data-camera="photo"] .stage { inset: calc(-1 * var(--bar)) calc(-1 * var(--pad)) auto; height: 100svh; }
 }
 .world[data-light="night"] .canvas { filter: brightness(.79) saturate(.84) hue-rotate(8deg); }
 .world[data-light="night"] { background: radial-gradient(ellipse at 52% 49%, #222944, #171d34 54%, #101329 88%); }
+
+.world[data-body="system"] { background: radial-gradient(ellipse at 50% 49%, #283045, #1c2136 56%, #141a2c 89%); }
+.world[data-body="starcars"] { background: radial-gradient(ellipse at 52% 45%, #433b43, #222339 63%, #171a2b 88%); }
+.world[data-body="reenergy"] { background: radial-gradient(ellipse at 52% 44%, #314b47, #1c2b3c 58%, #141b2c 91%); }
+.world[data-body="beatmarket"] { background: radial-gradient(ellipse at 55% 43%, #503457, #24213d 59%, #15162b 90%); }
+.world[data-body="ai"] { background: radial-gradient(ellipse at 53% 44%, #3d4564, #263247 58%, #171d2d 92%); }
+.world[data-transit] .stage { position: absolute; inset: calc(-1 * var(--bar)) calc(-1 * var(--pad)) auto; height: 100svh; width: auto; }
+.world[data-transit] .canvas { mask-image: none !important; }
+.world[data-transit] .story { visibility: hidden; }
+.menuSection { padding: 10px 8px 2px; margin: 0; color: #d4b598; font: 620 .64rem/1.1 var(--mono); text-transform: uppercase; letter-spacing: .09em; }

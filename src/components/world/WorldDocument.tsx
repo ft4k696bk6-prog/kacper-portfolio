@@ -11,12 +11,12 @@ const alternates = { "pl-PL": worldPaths.pl, en: worldPaths.en, "uk-UA": worldPa
 export function worldMetadata(locale: WorldLocale): Metadata {
   return {
     metadataBase: new URL(origin),
-    title: `Bernecki World — ${copy[locale].explore}`,
+    title: `Bernecki Universe — ${copy[locale].explore}`,
     description: copy[locale].description,
     alternates: { canonical: worldPaths[locale], languages: alternates },
     icons: { icon: "/favicon.svg", apple: "/apple-icon" },
     openGraph: {
-      title: "Bernecki World",
+      title: "Bernecki Universe",
       locale: openGraphLocales[locale],
       alternateLocale: Object.values(openGraphLocales).filter(value => value !== openGraphLocales[locale]),
       description: copy[locale].description,
@@ -40,7 +40,7 @@ export function WorldStructuredData({ locale }: { locale: WorldLocale }) {
   const data = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Bernecki World",
+    name: "Bernecki Universe",
     url: origin + worldPaths[locale],
     description: copy[locale].description,
     inLanguage: locale,

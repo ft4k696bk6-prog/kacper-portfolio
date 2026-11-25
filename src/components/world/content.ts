@@ -18,6 +18,7 @@ export const zones = [
 ] as const satisfies ReadonlyArray<CameraStop & { id: Zone }>;
 
 export const projectStops = {
+  "jalapeno": { marker: [0, 3, 0], target: [0, 1, 0], labelSide: "right" },
   "starcars": { marker: [7.15, 1.52, 6.5], target: [6.35, 0.8, 5.95], labelSide: "right" },
   "b-crm": { marker: [-9.9, 4.05, 0.85], target: [-9.6, 1.9, 0.0], labelSide: "left" },
   "isto-kebab": { marker: [-5.0, 3.4, 8.15], target: [-5.1, 1.25, 8.2], labelSide: "left" },
@@ -34,7 +35,7 @@ type Project = {
   name: string;
   id: ProjectId;
   images: readonly string[];
-  site: string;
+  site?: string;
   caseStudy: Partial<Record<WorldLocale, string>>;
   stack?: readonly string[];
   links?: Partial<Record<WorldLocale, ReadonlyArray<readonly [string, string]>>>;
@@ -117,16 +118,26 @@ export const projects: readonly Project[] = [
       uk: ["Майданчик для пошуку бітів із профілями продюсерів і прослуховуванням у браузері.", ["Прослуховування бітів", "Профілі продюсерів", "Пошук за жанрами й перегляд різних ліцензій"]],
     },
   },
+  {
+    id: "jalapeno", name: "Jalapeno Kebab",
+    images: ["jalapeno-campaign-results.jpg"],
+    caseStudy: { pl: "/realizacje/jalapeno-marketing", en: "/en/projects/jalapeno-marketing" },
+    stack: ["Meta Ads"],
+    copy: {
+      pl: ["Komunikacja i kampanie Meta Ads dla restauracji w Niemcach, kierowane do lokalnej społeczności.", ["Prowadzenie komunikacji w social media", "Kampanie rozpoznawalności i interakcji", "Docieranie do gości w Niemcach i okolicach"]],
+      en: ["Social media and Meta Ads for a restaurant in Niemce, focused on reaching its local community.", ["Social media communication", "Awareness and engagement campaigns", "Reaching customers in Niemce and nearby towns"]],
+      uk: ["Комунікація в соцмережах і рекламі Meta для ресторану в Нємце з акцентом на місцеву громаду.", ["Комунікація в соцмережах", "Кампанії впізнаваності та залучення", "Охоплення гостей у Нємце та сусідніх містах"]],
+    },
+  },
 ];
 
 export const projectIndex = (id: ProjectId) => projects.findIndex(project => project.id === id);
 
 export const sceneStops = [
-  ...projects.map(project => ({ id: project.id, ...projectStops[project.id] })),
-  ...zones.filter(zone => zone.id === "hq" || zone.id === "lab"),
+  ...zones.filter(zone => zone.id === "hq"),
 ];
 
-export const mapStops = ["reenergy", "starcars", "isto-kebab", "b-crm", "lab", "motomizer", "beatmarket", "hq", "gallery", "studio", "contact"] as const satisfies readonly StopId[];
+export const mapStops = ["reenergy", "starcars", "isto-kebab", "b-crm", "lab", "motomizer", "beatmarket", "hq", "jalapeno", "gallery", "studio", "contact"] as const satisfies readonly StopId[];
 
 type PlaceCopy = { title: string; short: string; eyebrow: string; text: string; links?: ReadonlyArray<readonly [string, string]> };
 type Labels = {
@@ -142,15 +153,15 @@ type Labels = {
 
 export const copy: Record<WorldLocale, Labels> = {
   pl: {
-    description: "Obróć planetę i odkryj moje realizacje. Wybierz miejsce, żeby zobaczyć je z bliska.",
+    description: "Odkryj Bernecki Universe, interaktywne portfolio 3D. Każdy projekt ma własną planetę z autonomicznym życiem i sekretami.",
     enter: "Zobacz projekty", explore: "Interaktywne portfolio 3D", overview: "Przegląd",
-    classic: "Klasyczna strona", interactive: "Świat 3D", switch: "Zmień tryb",
+    classic: "Klasyczne portfolio", interactive: "Odkryj uniwersum", switch: "Zmień tryb",
     classicBlurb: "Oferta, ceny i realizacje w klasycznej wersji serwisu.",
-    worldBlurb: "Obróć planetę, na której każdy projekt ma własne miejsce.",
+    worldBlurb: "Odwiedź żyjące planety, z których każda przedstawia inny projekt.",
     chooserTitle: "Wybierz tryb portfolio", contact: "Kontakt", language: "Język",
     menu: "Menu", places: "Miejsca", rotate: "Przeciągnij, aby obrócić", rotateLeft: "Obróć w lewo", rotateRight: "Obróć w prawo",
     reset: "Resetuj kamerę", help: "Sterowanie", touch: "Przeciągnij palcem, aby obrócić", close: "Zamknij",
-    keyboard: "Strzałki obracają planetę. 0 przywraca przegląd, a klawisze od 1 do 8 otwierają miejsca z bliska. W, A, S i D poruszają postacią na placu.",
+    keyboard: "Strzałki obracają planetę. 0 przywraca przegląd, a klawisze od 1 do 8 otwierają miejsca z bliska. G otwiera mapę układu.",
     gallery: "Wybierz projekt", projectImage: "Zrzut ekranu projektu", prev: "Poprzedni projekt", next: "Następny projekt",
     prevPhoto: "Poprzedni zrzut", nextPhoto: "Następny zrzut", live: "Otwórz projekt", caseStudy: "Opis realizacji", features: "Funkcje", stack: "Technologie",
     loading: "Ładowanie sceny 3D", fallback: "Widok statyczny. Wszystkie miejsca możesz otworzyć z menu.",
@@ -160,20 +171,20 @@ export const copy: Record<WorldLocale, Labels> = {
       hq: { title: "Kacper Bernecki", short: "Kacper", eyebrow: "Kacper Bernecki", text: "Tworzę strony, CRM i aplikacje webowe. Pomagam też łączyć narzędzia, automatyzować obsługę klientów i rozwijać sprzedaż. Możesz pracować ze mną bezpośrednio, od ustalenia zakresu po wdrożenie.", links: [["O współpracy", "/partner-w-rozwoju-biznesu"], ["LinkedIn", "https://www.linkedin.com/in/kacper-bernecki/"]] },
       gallery: { title: "Galeria projektów", short: "Projekty", eyebrow: "Wybrane realizacje", text: "Zobacz działające strony i aplikacje. Wybierz miejsce na planecie lub projekt z listy." },
       studio: { title: "Studio deweloperskie", short: "Studio", eyebrow: "Strony i aplikacje", text: "Strony firmowe, landing pages i aplikacje webowe dopasowane do tego, jak działa Twoja firma. Zakres może obejmować projekt, integracje i wdrożenie.", links: [["Strony i landing pages", "/tworzenie-stron-internetowych"], ["Aplikacje webowe i CRM", "/crm-i-aplikacje-webowe"], ["Pakiety", "/pakiety"], ["Cennik", "/cennik"]] },
-      lab: { title: "Laboratorium AI", short: "Lab AI", eyebrow: "AI i automatyzacja", text: "Łączę CRM, formularze i systemy przez API. Automatyzuję przekazywanie leadów, obsługę zapytań i powtarzalne zadania. Wdrażam narzędzia AI tam, gdzie usprawniają pracę zespołu.", links: [["Wdrożenia AI", "/wdrozenia-ai-dla-firm"], ["Automatyzacje", "/automatyzacja-leadow-i-sprzedazy"], ["Integracje API", "/oferta/integracje-api"]] },
+      lab: { title: "Laboratorium AI", short: "Lab AI", eyebrow: "AI i automatyzacja", text: "Łączę CRM, formularze i systemy przez API. Automatyzuję przekazywanie leadów, obsługę zapytań i powtarzalne zadania. Wdrażam narzędzia AI tam, gdzie usprawniają pracę zespołu.", links: [["Wdrożenia AI", "/wdrozenia-ai-dla-firm"], ["Automatyzacje", "/automatyzacja-leadow-i-sprzedazy"], ["Integracje API", "/oferta/integracje-api"], ["B-Code · projekt własny", "/realizacje/b-code"]] },
       contact: { title: "Porozmawiajmy", short: "Kontakt", eyebrow: "Kontakt", text: "Opowiedz mi o projekcie, który chcesz zrealizować. Możesz napisać bezpośrednio lub skorzystać z formularza i kalendarza na stronie kontaktowej." },
     },
   },
   en: {
-    description: "Spin the globe to discover my work. Select a location to see it up close.",
+    description: "Explore Bernecki Universe, an interactive 3D portfolio with a living planet for each project.",
     enter: "Explore projects", explore: "Interactive 3D portfolio", overview: "Overview",
-    classic: "Classic site", interactive: "3D world", switch: "Switch mode",
+    classic: "Classic Portfolio", interactive: "Explore Universe", switch: "Switch mode",
     classicBlurb: "Services, pricing and case studies in the classic portfolio.",
-    worldBlurb: "Explore a planet where each project has its own place.",
+    worldBlurb: "Explore living planets, each built around a different project.",
     chooserTitle: "Choose your experience", contact: "Contact", language: "Language",
     menu: "Menu", places: "Locations", rotate: "Drag to rotate", rotateLeft: "Rotate left", rotateRight: "Rotate right",
     reset: "Reset camera", help: "Controls", touch: "Drag to spin the globe", close: "Close",
-    keyboard: "Use the arrow keys to spin the globe, 0 to reset, and 1–8 to visit a place up close. W, A, S and D move the figure around the courtyard.",
+    keyboard: "Use the arrow keys to spin the globe, 0 to reset, and 1–8 to visit a place up close. G opens the system map.",
     gallery: "Choose a project", projectImage: "Project screenshot", prev: "Previous project", next: "Next project",
     prevPhoto: "Previous screenshot", nextPhoto: "Next screenshot", live: "Open project", caseStudy: "Case study", features: "Features", stack: "Technologies",
     loading: "Loading the 3D scene", fallback: "Static view. You can open every location from the menu.",
@@ -183,20 +194,20 @@ export const copy: Record<WorldLocale, Labels> = {
       hq: { title: "Kacper Bernecki", short: "Kacper", eyebrow: "Kacper Bernecki", text: "I build websites, CRM systems and web applications. I also connect tools, automate customer workflows and support sales. You can work with me directly, from scoping through deployment.", links: [["Working together", "/en/business"], ["LinkedIn", "https://www.linkedin.com/in/kacper-bernecki/"]] },
       gallery: { title: "Project Gallery", short: "Project Gallery", eyebrow: "Selected work", text: "See real websites and applications. Pick a place on the planet or choose a project from the list." },
       studio: { title: "Development Studio", short: "Dev Studio", eyebrow: "Websites and apps", text: "Company websites, landing pages and web applications built around your business. The scope can cover design, integrations and deployment.", links: [["Websites and landing pages", "/en/services/websites"], ["Web applications and CRM", "/en/services/crm"], ["Packages", "/en/packages"], ["Pricing", "/en/pricing"]] },
-      lab: { title: "AI & Automation Lab", short: "AI Lab", eyebrow: "AI and automation", text: "I connect CRMs, forms and other systems through APIs. I automate lead handoffs, enquiries and repetitive tasks, and introduce AI where it improves the team’s work.", links: [["AI and automation", "/en/services/automation"], ["CRM and integrations", "/en/services/crm"]] },
+      lab: { title: "AI & Automation Lab", short: "AI Lab", eyebrow: "AI and automation", text: "I connect CRMs, forms and other systems through APIs. I automate lead handoffs, enquiries and repetitive tasks, and introduce AI where it improves the team’s work.", links: [["AI and automation", "/en/services/automation"], ["CRM and integrations", "/en/services/crm"], ["B-Code · independent project", "/en/projects/b-code"]] },
       contact: { title: "Let’s talk", short: "Contact", eyebrow: "Contact", text: "Tell me what you’d like to build. Email me directly or use the enquiry form and booking calendar on the contact page." },
     },
   },
   uk: {
-    description: "Обертай планету, щоб дослідити мої проєкти. Обери локацію, щоб побачити її зблизька.",
+    description: "Дослідіть Bernecki Universe — інтерактивне 3D-портфоліо, де кожен проєкт має власну живу планету.",
     enter: "Переглянути проєкти", explore: "Інтерактивне 3D-портфоліо", overview: "Огляд",
-    classic: "Класичний сайт", interactive: "Світ 3D", switch: "Змінити режим",
+    classic: "Класичне портфоліо", interactive: "Досліджуйте всесвіт", switch: "Змінити режим",
     classicBlurb: "Послуги, ціни та реалізовані проєкти.",
-    worldBlurb: "Дослідіть планету, де кожен проєкт має власне місце.",
+    worldBlurb: "Відвідайте живі планети, кожна з яких представляє окремий проєкт.",
     chooserTitle: "Оберіть режим портфоліо", contact: "Контакт", language: "Мова",
     menu: "Меню", places: "Локації", rotate: "Перетягніть, щоб повернути", rotateLeft: "Обернути ліворуч", rotateRight: "Обернути праворуч",
     reset: "Скинути камеру", help: "Керування", touch: "Проведіть пальцем, щоб обертати планету", close: "Закрити",
-    keyboard: "Стрілки обертають планету, 0 повертає до огляду, а 1–8 наближають локації. Клавіші W, A, S і D переміщують фігурку подвір’ям.",
+    keyboard: "Стрілки обертають планету, 0 повертає до огляду, а 1–8 наближають локації. G відкриває мапу системи.",
     gallery: "Оберіть проєкт", projectImage: "Знімок екрана проєкту", prev: "Попередній проєкт", next: "Наступний проєкт",
     prevPhoto: "Попередній знімок", nextPhoto: "Наступний знімок", live: "Відкрити проєкт", caseStudy: "Опис проєкту", features: "Функції", stack: "Технології",
     loading: "Завантаження 3D-сцени", fallback: "Статичний вигляд. Усі локації доступні в меню.",

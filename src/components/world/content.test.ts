@@ -2,7 +2,9 @@ import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import sitemap from "../../app/sitemap";
-import { classicPaths, contactPaths, copy, mapStops, projectStops, projects, sceneStops, worldPaths, zones } from "./content";
+import { classicPaths, contactPaths, copy, mapStops, projectStops, projects, worldPaths, zones } from "./content";
+
+import { planets, projectBodies } from "./planets";
 
 const locales = ["pl", "en", "uk"] as const;
 const origin = "https://bernecki.dev";
@@ -25,7 +27,8 @@ describe("Bernecki World content", () => {
   it("only exposes real existing captures and project details in every locale", () => {
     expect(new Set(projects.map(project => project.id)).size).toBe(projects.length);
     for (const project of projects) {
-      expect(new URL(project.site).protocol).toBe("https:");
+      if (project.site) expect(new URL(project.site).protocol).toBe("https:");
+      else expect(project.caseStudy.en).toBeTruthy();
       expect(project.images.length).toBeGreaterThan(0);
       for (const name of project.images) expect(existsSync(resolve("public/images/projects", name)), name).toBe(true);
       expect(existsSync(resolve("public/images/world", `${project.id}.webp`))).toBe(true);
@@ -37,11 +40,12 @@ describe("Bernecki World content", () => {
     }
   });
 
-  it("gives every project a distinct camera stop, marker, and map entry", () => {
+  it("gives every project a distinct planet, camera stop and map entry", () => {
     expect(Object.keys(projectStops).sort()).toEqual(projects.map(project => project.id).sort());
     expect(new Set(projects.map(project => projectStops[project.id].target.join(","))).size).toBe(projects.length);
     for (const project of projects) {
-      expect(sceneStops.filter(stop => stop.id === project.id)).toHaveLength(1);
+      expect(projectBodies.filter(id => id === project.id)).toHaveLength(1);
+      expect(planets[project.id].radius).toBeGreaterThan(0);
       expect(mapStops.filter(id => id === project.id)).toHaveLength(1);
     }
   });
