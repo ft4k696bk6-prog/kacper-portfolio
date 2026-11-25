@@ -341,13 +341,13 @@ export function World({ locale }: { locale: WorldLocale }) {
               </div>}
             </div>
             <p className={styles.placeText}>{gallery.copy[locale][0]}</p>
-            <h3>{t.features}</h3>
-            <ul className={styles.features}>{gallery.copy[locale][1].map(feature => <li key={feature}>{feature}</li>)}</ul>
-            {gallery.stack && <p className={styles.stack}><strong>{t.stack}</strong> {gallery.stack.join(" · ")}</p>}
             <div className={styles.placeLinks}>
               <ActionLink href={gallery.site} primary>{t.live}</ActionLink>
               {gallery.caseStudy[locale] && <ActionLink href={gallery.caseStudy[locale]}>{t.caseStudy}</ActionLink>}
             </div>
+            <h3>{t.features}</h3>
+            <ul className={styles.features}>{gallery.copy[locale][1].map(feature => <li key={feature}>{feature}</li>)}</ul>
+            {gallery.stack && <p className={styles.stack}><strong>{t.stack}</strong> {gallery.stack.join(" · ")}</p>}
           </>}
           {!gallery && <>
             {selection.zone === "hq" && <div className={styles.portrait} data-place-reveal="">

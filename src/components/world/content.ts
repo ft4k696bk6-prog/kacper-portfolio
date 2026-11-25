@@ -33,6 +33,7 @@ export const projects: readonly Project[] = [
     images: ["starcars-live-current.jpg", "starcars-live-2.jpg", "starcars-live-3.jpg"],
     site: "https://star-cars.us",
     caseStudy: { pl: "/case-studies/starcars" },
+    stack: ["React", "TypeScript", "Vite", "Three.js", "GSAP", "NBP API"],
     copy: {
       pl: ["Strona firmy sprowadzającej auta z USA i Kanady. Kalkulator pozwala oszacować koszty importu przed wysłaniem zapytania.", ["Kalkulator kosztów importu", "Prezentacja procesu sprowadzenia auta", "Formularze zapytań"]],
       en: ["A website for a company importing vehicles from the US and Canada. Its calculator estimates the landed cost before a customer sends an enquiry.", ["Import-cost calculator", "Guide to the import process", "Enquiry forms"]],
@@ -67,6 +68,7 @@ export const projects: readonly Project[] = [
     images: ["motomizer-live.jpg", "motomizer-live-2.jpg", "motomizer-live-3.jpg"],
     site: "https://motomizer.pl",
     caseStudy: { pl: "/case-studies/motomizer" },
+    stack: ["HTML", "CSS", "JavaScript"],
     copy: {
       pl: ["Dwujęzyczna strona produktowa z interaktywną prezentacją funkcji Motomizera.", ["Galeria wariantów", "Prezentacja funkcji", "Zapytania o dostępność"]],
       en: ["A bilingual product site with an interactive presentation of Motomizer’s features.", ["Variant galleries", "Interactive feature presentation", "Availability enquiries"]],
@@ -78,6 +80,7 @@ export const projects: readonly Project[] = [
     images: ["beatmarket-live.jpg", "beatmarket-live-2.jpg", "beatmarket-live-3.jpg"],
     site: "https://beatmarket.bernecki.dev",
     caseStudy: { pl: "/case-studies/beatmarket" },
+    stack: ["Next.js", "React", "JavaScript", "Supabase", "PostgreSQL"],
     copy: {
       pl: ["Platforma do odkrywania beatów i prezentacji producentów, z odsłuchem bezpośrednio w przeglądarce.", ["Odsłuch beatów", "Profile producentów", "Przeglądanie gatunków i wariantów licencji"]],
       en: ["A beat discovery marketplace with producer profiles and in-browser previews.", ["Beat previews", "Producer profiles", "Browsing genres and licensing options"]],
