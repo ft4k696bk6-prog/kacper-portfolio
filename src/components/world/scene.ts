@@ -466,7 +466,8 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   };
 
   try {
-    await renderer.compileAsync(scene, camera);
+    if (context.getExtension("KHR_parallel_shader_compile")) await renderer.compileAsync(scene, camera);
+    else renderer.compile(scene, camera);
     signal.throwIfAborted();
     if (lost) throw new Error("The WebGL context was lost during startup");
   } catch (error) {
