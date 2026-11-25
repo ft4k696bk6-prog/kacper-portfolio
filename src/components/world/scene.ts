@@ -105,7 +105,7 @@ export function createWorld(host: HTMLElement, callbacks: Callbacks) {
   let paused = document.hidden;
   let disposed = false;
   let lost = false;
-  let activeTween: gsap.core.Tween | undefined;
+  let transition: { tween: gsap.core.Tween; start: number; duration: number } | undefined;
   let current: View = { zone: null, project: null };
   let pointerStart: { id: number; x: number; y: number; time: number } | null = null;
   let previous = 0;
@@ -189,6 +189,13 @@ export function createWorld(host: HTMLElement, callbacks: Callbacks) {
     const measuredFrame = previous > 0;
     const dt = measuredFrame ? now - previous : 0;
     previous = now;
+    if (transition) {
+      const progress = Math.min((now - transition.start) / transition.duration, 1);
+      transition.tween.progress(Math.max(progress, 0));
+      if (progress === 1) {
+        cancelTransition();
+      }
+    }
     moveAvatar(dt / 1000);
     if (!motion.matches) model.beacon.material.emissiveIntensity = 0.7 + Math.sin(now / 560) * 0.21;
     controls.update();
@@ -222,7 +229,7 @@ export function createWorld(host: HTMLElement, callbacks: Callbacks) {
         }
       }
     }
-    if (keys.size || waypoint) requestRender();
+    if (transition || keys.size || waypoint) requestRender();
   }
 
   function resolveView(view: View) {
@@ -240,9 +247,27 @@ export function createWorld(host: HTMLElement, callbacks: Callbacks) {
     };
   }
 
+  function cancelTransition() {
+    transition?.tween.kill();
+    transition = undefined;
+    controls.enableDamping = !motion.matches;
+  }
+
+  function freezeOrbit() {
+    // Flush residual mouse or touch inertia without moving the rendered camera.
+    const position = camera.position.clone();
+    const target = controls.target.clone();
+    controls.enableDamping = false;
+    controls.update();
+    camera.position.copy(position);
+    controls.target.copy(target);
+    controls.update();
+  }
+
   function moveView(view: View, instant = false, opening = false) {
     current = view;
-    activeTween?.kill();
+    cancelTransition();
+    freezeOrbit();
     const start = {
       theta: controls.getAzimuthalAngle(), phi: controls.getPolarAngle(),
       radius: camera.position.distanceTo(controls.target),
@@ -259,22 +284,28 @@ export function createWorld(host: HTMLElement, callbacks: Callbacks) {
     destination.theta = start.theta + Math.atan2(Math.sin(turn), Math.cos(turn));
     if (instant || motion.matches) {
       writeCamera(destination.theta, destination.phi, destination.radius, destination.x, destination.y, destination.z, destination.zoom);
+      cancelTransition();
       return;
     }
     captureFrames = 49;
     previous = 0;
-    activeTween = gsap.to(start, {
-      ...destination, duration: opening ? 1.28 : view.project !== null ? 0.91 : 1.1, ease: "power3.inOut",
+    const duration = opening ? 1280 : view.project !== null ? 910 : 1100;
+    // The scene clock advances the tween and draws the resulting pose in the same frame.
+    const tween = gsap.to(start, {
+      ...destination, paused: true, lazy: false, duration: duration / 1000, ease: "power3.inOut",
       onUpdate: () => writeCamera(start.theta, start.phi, start.radius, start.x, start.y, start.z, start.zoom),
-      onComplete: () => { activeTween = undefined; },
     });
+    transition = { tween, start: performance.now(), duration };
+    requestRender();
   }
 
   function nudge(theta = 0, phi = 0, zoom = 1) {
-    activeTween?.kill();
+    cancelTransition();
+    freezeOrbit();
     writeCamera(controls.getAzimuthalAngle() + theta,
       T.MathUtils.clamp(controls.getPolarAngle() + phi, controls.minPolarAngle, controls.maxPolarAngle),
       camera.position.distanceTo(controls.target), controls.target.x, controls.target.y, controls.target.z, camera.zoom * zoom);
+    cancelTransition();
   }
 
   function updatePointer(event: PointerEvent) {
@@ -332,7 +363,7 @@ export function createWorld(host: HTMLElement, callbacks: Callbacks) {
   }
 
   function startInput() {
-    activeTween?.kill();
+    cancelTransition();
     captureFrames = 49;
     previous = 0;
   }
@@ -353,13 +384,13 @@ export function createWorld(host: HTMLElement, callbacks: Callbacks) {
     event.preventDefault();
     lost = true;
     cancelAnimationFrame(request);
-    activeTween?.kill();
+    cancelTransition();
     callbacks.lost();
   }
 
   function motionChange() {
     controls.enableDamping = !motion.matches;
-    if (motion.matches && activeTween?.isActive()) moveView(current, true);
+    if (motion.matches && transition) moveView(current, true);
   }
 
   controls.addEventListener("change", requestRender);
@@ -392,7 +423,7 @@ export function createWorld(host: HTMLElement, callbacks: Callbacks) {
     blur() { keys.clear(); requestRender(); },
     dispose() {
       disposed = true;
-      activeTween?.kill();
+      cancelTransition();
       cancelAnimationFrame(request);
       observer.disconnect();
       controls.removeEventListener("change", requestRender);
