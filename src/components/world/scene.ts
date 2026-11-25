@@ -55,13 +55,15 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   renderer.toneMapping = T.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
   const pixelBudget = software ? 450_000 : 1_550_000;
-  const minimumDpr = software ? 0.58 : 0.75;
+  const minimumDpr = 0.75;
+  let motionScale = 1;
   let dpr = Math.min(window.devicePixelRatio || 1, software ? 0.9 : compact ? 1.15 : 1.55);
   renderer.setPixelRatio(dpr);
-  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.enabled = !software;
   renderer.shadowMap.type = low ? T.BasicShadowMap : T.PCFShadowMap;
   renderer.shadowMap.autoUpdate = false;
   renderer.domElement.setAttribute("aria-hidden", "true");
+  if (software) canvas.dataset.renderer = "software";
   host.append(renderer.domElement);
 
   const scene = new T.Scene();
@@ -105,7 +107,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   const fill = new T.DirectionalLight(0xcbd9f3, low ? 0.70 : 0.97);
   fill.position.set(12, 8, -15);
   scene.add(fill);
-  const model = buildModel(requestRender, low);
+  const model = buildModel(requestRender, low, software);
   scene.add(model.group);
   renderer.shadowMap.needsUpdate = true;
 
@@ -121,6 +123,10 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   let waypoint: T.Vector2 | null = null;
   let travel = 0;
   let request = 0;
+  let interacting = false;
+  let bufferWidth = 0;
+  let bufferHeight = 0;
+  let bufferDpr = 0;
   let compiled = false;
   let called = false;
   let paused = document.hidden;
@@ -160,10 +166,19 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     camera.top = frustum / 2;
     camera.bottom = -frustum / 2;
     camera.updateProjectionMatrix();
-    renderer.setPixelRatio(Math.min(dpr, Math.sqrt(pixelBudget / (width * height))));
-    renderer.setSize(width, height, false);
     size.set(width, height);
     requestRender();
+  }
+
+  function updateDrawingBuffer(moving: boolean) {
+    // The camera uses CSS-pixel dimensions even when the render buffer is smaller.
+    const budget = software && moving ? Math.min(66_000, size.x * size.y * 0.34) * motionScale : pixelBudget;
+    const ratio = Math.min(dpr, Math.sqrt(budget / (size.x * size.y)));
+    if (size.x === bufferWidth && size.y === bufferHeight && ratio === bufferDpr) return;
+    bufferWidth = size.x;
+    bufferHeight = size.y;
+    bufferDpr = ratio;
+    renderer.setDrawingBufferSize(bufferWidth, bufferHeight, bufferDpr);
   }
 
   function moveAvatar(seconds: number) {
@@ -219,7 +234,9 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     }
     moveAvatar(dt / 1000);
     if (!motion.matches) model.beacon.material.emissiveIntensity = 0.7 + Math.sin(now / 560) * 0.21;
-    controls.update();
+    const orbitMoved = controls.update();
+    const moving = Boolean(transition || interacting || orbitMoved || keys.size || waypoint);
+    updateDrawingBuffer(moving);
     renderer.render(scene, camera);
     for (const zone of zones) {
       const [x, y, z] = zone.marker;
@@ -238,11 +255,12 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       elapsed += Math.min(dt, 300);
       if (samples === 12) {
         const average = elapsed / samples;
-        if (average > (low ? 37 : 26) && dpr > minimumDpr + 0.01) {
-          dpr = Math.max(minimumDpr, dpr * 0.82);
-          resize();
+        if (average > (low ? 37 : 26)) {
+          if (software && motionScale > 0.63) motionScale = Math.max(0.62, motionScale * 0.86);
+          else if (!software && dpr > minimumDpr + 0.01) dpr = Math.max(minimumDpr, dpr * 0.82);
         }
-        slowWindows = average > 170 && dpr <= minimumDpr + 0.01 ? slowWindows + 1 : 0;
+        const minimumQuality = software ? motionScale <= 0.63 : dpr <= minimumDpr + 0.01;
+        slowWindows = average > 170 && minimumQuality ? slowWindows + 1 : 0;
         samples = elapsed = 0;
         if (slowWindows >= 3) {
           callbacks.lost();
@@ -384,14 +402,21 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   }
 
   function startInput() {
+    interacting = true;
     cancelTransition();
     captureFrames = 49;
     previous = 0;
   }
 
+  function endInput() {
+    interacting = false;
+    requestRender();
+  }
+
   function visibility() {
     paused = document.hidden;
     if (paused) {
+      interacting = false;
       keys.clear();
       cancelAnimationFrame(request);
       request = 0;
@@ -416,6 +441,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
 
   controls.addEventListener("change", requestRender);
   controls.addEventListener("start", startInput);
+  controls.addEventListener("end", endInput);
   canvas.addEventListener("pointerdown", down);
   canvas.addEventListener("pointermove", over);
   canvas.addEventListener("pointerup", up);
@@ -447,6 +473,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       observer.disconnect();
       controls.removeEventListener("change", requestRender);
       controls.removeEventListener("start", startInput);
+      controls.removeEventListener("end", endInput);
       controls.dispose();
       canvas.removeEventListener("pointerdown", down);
       canvas.removeEventListener("pointermove", over);

@@ -126,7 +126,8 @@ export function World({ locale }: { locale: WorldLocale }) {
               if (!marker) return;
               marker.style.setProperty("--x", `${x.toFixed(1)}px`);
               marker.style.setProperty("--y", `${y.toFixed(1)}px`);
-              marker.dataset.offscreen = visible ? "false" : "true";
+              const offscreen = visible ? "false" : "true";
+              if (marker.dataset.offscreen !== offscreen) marker.dataset.offscreen = offscreen;
             },
             rotate(angle) { compass.current?.style.setProperty("--bearing", `${angle * -180 / Math.PI + 38}deg`); },
             hover(id) {

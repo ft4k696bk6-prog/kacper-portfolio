@@ -66,15 +66,47 @@ export const screenPositions: readonly Point[] = [
   [7.55, 1.95, 3.91], [4.57, 1.72, 3.72], [10.46, 1.72, 3.72], [4.26, 1.65, 1.03], [10.77, 1.65, 1.03],
 ];
 
-export function buildModel(render: () => void, low: boolean) {
+const sunlight = new T.Vector3(-18, 24, 11).normalize();
+
+// Fit the scene exposure once per vertex for the software-rendered profile.
+function filmicChannel(linear: number) {
+  const exposed = linear * 1.75;
+  const mapped = (exposed * (exposed + 0.0245786) - 0.000090537)
+    / (exposed * (0.983729 * exposed + 0.432951) + 0.238081);
+  return Math.round(T.MathUtils.clamp(mapped, 0, 1) * 255);
+}
+
+function bakeSurface(geometry: T.BufferGeometry, material: T.MeshLambertMaterial | T.MeshPhongMaterial) {
+  const normal = geometry.getAttribute("normal");
+  const position = geometry.getAttribute("position");
+  const colors = new Uint8Array(normal.count * 3);
+  const base = material.color;
+  const emission = material.emissive;
+  const intensity = material.emissiveIntensity;
+  for (let i = 0; i < normal.count; i++) {
+    const y = normal.getY(i);
+    const direct = Math.max(0, normal.getX(i) * sunlight.x + y * sunlight.y + normal.getZ(i) * sunlight.z);
+    const ambient = 0.57 + Math.max(0, y) * 0.23;
+    const light = ambient + direct * 0.59 + Math.min(0.045, Math.max(0, position.getY(i)) * 0.01);
+    colors[i * 3] = filmicChannel(base.r * light + emission.r * intensity);
+    colors[i * 3 + 1] = filmicChannel(base.g * light * 0.99 + emission.g * intensity);
+    colors[i * 3 + 2] = filmicChannel(base.b * light * 0.96 + emission.b * intensity);
+  }
+  geometry.deleteAttribute("normal");
+  geometry.deleteAttribute("uv");
+  geometry.setAttribute("color", new T.BufferAttribute(colors, 3, true));
+  return geometry;
+}
+
+export function buildModel(render: () => void, low: boolean, bakeLighting = false) {
   const group = new T.Group();
   const batches = new Map<T.Material, { cast: T.BufferGeometry[]; plain: T.BufferGeometry[] }>();
   const textures = new Set<T.Texture>();
   const materials = new Set<T.Material>();
   const hits: T.Mesh<T.BufferGeometry, T.Material>[] = [];
-  const noise = surfaceTexture();
+  const noise = bakeLighting ? null : surfaceTexture();
   const ao = contactTexture();
-  textures.add(noise);
+  if (noise) textures.add(noise);
   textures.add(ao);
   const random = sampler(317);
   const loader = new T.TextureLoader();
@@ -127,7 +159,10 @@ export function buildModel(render: () => void, low: boolean) {
   }
 
   function rounded(x: number, y: number, z: number, w: number, h: number, d: number, m: T.Material, radius = 0.08, ry = 0) {
-    add(new RoundedBoxGeometry(w, h, d, low ? 1 : 2, radius), m, x, y, z, true, 0, ry);
+    const geometry = bakeLighting && radius < 0.055
+      ? new T.BoxGeometry(w, h, d)
+      : new RoundedBoxGeometry(w, h, d, low ? 1 : 2, radius);
+    add(geometry, m, x, y, z, true, 0, ry);
   }
 
   function slab(w: number, d: number, height: number, radius: number, base: number, m: T.Material, x = 0, z = 0) {
@@ -141,7 +176,7 @@ export function buildModel(render: () => void, low: boolean) {
   }
 
   function ring(x: number, y: number, z: number, radius: number, tube: number, m: T.Material, segments = 64) {
-    add(new T.TorusGeometry(radius, tube, 6, segments), m, x, y, z, false, Math.PI / 2);
+    add(new T.TorusGeometry(radius, tube, 6, bakeLighting ? Math.min(segments, 36) : segments), m, x, y, z, false, Math.PI / 2);
   }
 
   function groundShade(x: number, z: number, w: number, d: number, y = 0.054, material = shadow) {
@@ -210,7 +245,7 @@ export function buildModel(render: () => void, low: boolean) {
   }
 
   // A layered plinth, recessed panel joints and a raised paving surface.
-  groundShade(0.45, 0.7, 44, 35, -2.31, reflection);
+  groundShade(0.45, 0.7, bakeLighting ? 37 : 44, bakeLighting ? 29 : 35, -2.31, reflection);
   slab(30.4, 22.2, 0.38, 2.5, -2.22, black);
   slab(31.95, 23.45, 0.32, 2.7, -1.84, graphite);
   slab(32.13, 23.63, 0.11, 2.7, -1.52, brushed);
@@ -499,6 +534,8 @@ export function buildModel(render: () => void, low: boolean) {
     grasses(x, z, 13, 0.35, 0.255);
   }
 
+  // Static opaque surfaces share one unlit draw call in the software profile.
+  const bakedSurfaces: T.BufferGeometry[] = [];
   for (const [material, { cast, plain }] of batches) {
     for (const [geometries, castsShadow] of [[cast, true], [plain, false]] as const) {
       if (!geometries.length) continue;
@@ -508,6 +545,10 @@ export function buildModel(render: () => void, low: boolean) {
         geometry.dispose();
         return indexed;
       });
+      if (bakeLighting && (material instanceof T.MeshLambertMaterial || material instanceof T.MeshPhongMaterial)) {
+        for (const geometry of compatible) bakedSurfaces.push(bakeSurface(geometry, material));
+        continue;
+      }
       const merged = mergeGeometries(compatible)!;
       compatible.forEach(geometry => geometry.dispose());
       const mesh = new T.Mesh(merged, material);
@@ -515,6 +556,12 @@ export function buildModel(render: () => void, low: boolean) {
       mesh.receiveShadow = !material.transparent;
       group.add(mesh);
     }
+  }
+  if (bakedSurfaces.length) {
+    const surfaceMaterial = new T.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
+    materials.add(surfaceMaterial);
+    group.add(new T.Mesh(mergeGeometries(bakedSurfaces)!, surfaceMaterial));
+    bakedSurfaces.forEach(geometry => geometry.dispose());
   }
 
   const beaconMaterial = lit(0xd8f98c, 0.8);
