@@ -26,6 +26,8 @@ export function SiteFooter() {
         <Link className="block" href={english?"/en/customer-acquisition":"/pozyskiwanie-klientow"}>{english?"Customer acquisition":"Jak pomagam zdobywać klientów"}</Link>
 
         {!english && <Link className="block" href="/crm-dla-firm-handlowych">CRM dla firm handlowych</Link>}
+        {!english && <Link className="block" href="/oferta/chatbot-ai-dla-firm">Chatbot AI dla firm</Link>}
+        {!english && <Link className="block" href="/oferta/landing-page">Landing page na zamówienie</Link>}
         {!english && <Link className="block" href="/automatyzacja-leadow-i-sprzedazy">Automatyzacja leadów i sprzedaży</Link>}
         <Link className="block" href={english?"/en/services/marketing":"/marketing-i-reklamy"}>{english?"Marketing, advertising and social media":"Marketing, reklamy i social media"}</Link>
         {!english && <Link className="block" href="/uslugi">Usługi dla firm w całej Polsce</Link>}
