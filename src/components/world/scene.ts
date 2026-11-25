@@ -9,7 +9,6 @@ import { globeDirection, globeRadius, loadPlanet, type SurfaceStop } from "./glo
 type View = { zone: Zone | null; project: number | null };
 type Callbacks = {
   marker: (id: StopId, x: number, y: number, visible: boolean) => void;
-  rotate: (angle: number) => void;
   hover: (id: StopId | null) => void;
   select: (hit: Hit) => void;
   lost: () => void;
@@ -75,6 +74,8 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   host.append(renderer.domElement);
 
   const scene = new T.Scene();
+  const depthFog = new T.Fog(0x111a24, 205, 290);
+  scene.fog = depthFog;
   const camera = new T.PerspectiveCamera(fov, 1, 0.15, 260);
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = !motion.matches;
@@ -92,10 +93,10 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   scene.add(planet.group);
 
   scene.environment = environment;
-  scene.environmentIntensity = 0.86;
+  scene.environmentIntensity = 0.63;
 
-  scene.add(new T.HemisphereLight(0xe3eeff, 0x46536b, low ? 1.21 : 1.38));
-  const sun = new T.DirectionalLight(0xffefdd, low ? 1.62 : 2.30);
+  scene.add(new T.HemisphereLight(0xe3ebf6, 0x514d47, low ? 1.13 : 0.91));
+  const sun = new T.DirectionalLight(0xffedda, low ? 1.65 : 2.05);
   sun.position.set(33, 56, 37);
   sun.castShadow = true;
   const shadowSize = software ? 512 : compact ? 1024 : 2048;
@@ -108,9 +109,10 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   sun.shadow.camera.far = 125;
   sun.shadow.bias = -0.0002;
   sun.shadow.normalBias = 0.065;
-  sun.shadow.intensity = 0.86;
+  sun.shadow.intensity = 0.78;
+  sun.shadow.radius = 2.4;
   scene.add(sun);
-  const fill = new T.DirectionalLight(0xb8d7ff, low ? 0.54 : 0.66);
+  const fill = new T.DirectionalLight(0xd3e0f3, low ? 0.47 : 0.48);
   fill.position.set(12, 8, -15);
   scene.add(fill);
   const model = buildModel(low, software);
@@ -155,7 +157,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   let hover: StopId | null = null;
 
   function overviewDistance() {
-    const fraction = Math.min(1, camera.aspect) * (compact ? 0.83 : 0.78);
+    const fraction = Math.min(1, camera.aspect) * (compact ? 0.86 : 0.765);
     return (globeRadius * 1.06) / Math.sin(Math.atan(fovTangent * fraction));
   }
 
@@ -258,7 +260,8 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       }
     }
     moveAvatar(dt / 1000);
-    if (!motion.matches) model.beacon.material.emissiveIntensity = 0.7 + Math.sin(now / 560) * 0.21;
+    if (!motion.matches) model.beacon.material.emissiveIntensity = 0.34 + Math.sin(now / 760) * 0.08;
+    if (!transition && !isOverview(current)) model.loadSurfaces(requestRender);
     const orbitMoved = controls.update();
     const moving = Boolean(transition || interacting || orbitMoved || keys.size || waypoint);
     updateDrawingBuffer(moving);
@@ -266,6 +269,10 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       renderer.shadowMap.needsUpdate = true;
     }
     fill.position.copy(camera.position).normalize().multiplyScalar(45);
+    const approach = T.MathUtils.smoothstep(controls.target.length(), 8, 20);
+    const distance = camera.position.distanceTo(controls.target);
+    depthFog.near = T.MathUtils.lerp(205, distance * 1.12, approach);
+    depthFog.far = T.MathUtils.lerp(290, distance * 2.85, approach);
     renderer.render(scene, camera);
     for (const zone of sceneStops) {
       const [x, y, z] = zone.marker;
@@ -280,7 +287,6 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       callbacks.marker(zone.id, (projected.x * 0.5 + 0.5) * size.x, (0.5 - projected.y * 0.5) * size.y,
         front && projected.z > -1 && projected.z < 1 && Math.abs(projected.x) < 0.92 && Math.abs(projected.y) < 0.90);
     }
-    callbacks.rotate(controls.getAzimuthalAngle());
     if (!called) {
       called = true;
       callbacks.rendered();
@@ -322,8 +328,8 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     if (id === "hq") target.add(model.avatar.position);
     target.applyMatrix4(site.matrix);
     const tangent = new T.Vector3().setFromMatrixColumn(site.matrix, 0);
-    const tilt = id === "hq" ? 1.85 : id === "starcars" ? 1.28 : 1.02;
-    const direction = site.normal.clone().addScaledVector(site.south, tilt).addScaledVector(tangent, 0.23).normalize();
+    const tilt = id === "hq" ? 1.85 : id === "starcars" ? 1.28 : id === "b-crm" ? 1.38 : 1.02;
+    const direction = site.normal.clone().addScaledVector(site.south, tilt).addScaledVector(tangent, id === "b-crm" ? 0.46 : 0.23).normalize();
     const span = id === "hq" ? 4.0 : Math.max(site.width, site.depth) + 1.8;
     const aspect = Math.min(1.36, camera.aspect);
     return { target, direction, distance: span / (2 * fovTangent * aspect * 0.81) };
@@ -357,9 +363,13 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     freezeOrbit();
     controls.enabled = false;
     const start = currentPose();
+    if (opening && isOverview(view) && !motion.matches) {
+      start.direction.applyAxisAngle(camera.up, 0.16);
+      writeCamera(start);
+    }
     const destination = resolveView(view);
     if (preserveBearing) destination.direction = start.direction;
-    if (instant || motion.matches || opening) {
+    if (instant || motion.matches || (opening && !isOverview(view))) {
       writeCamera(destination);
       controls.enabled = isOverview(view);
       controls.enableDamping = !motion.matches;
@@ -377,10 +387,10 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     const direction = new T.Vector3();
     const target = new T.Vector3();
     const progress = { value: 0 };
-    const ease = gsap.parseEase("power2.inOut");
+    const ease = gsap.parseEase("sine.inOut");
     captureFrames = 64;
     previous = 0;
-    const duration = outbound && inbound ? 1660 : 1350;
+    const duration = opening ? 1100 : outbound && inbound ? 1840 : 1460;
     const tween = gsap.to(progress, {
       value: 1, paused: true, lazy: false, duration: duration / 1000, ease: "none",
       onUpdate() {

@@ -64,7 +64,8 @@ function roundedFootprint(width: number, depth: number, radius: number) {
 }
 
 export type Hit = { zone: Zone; project?: number };
-const sunlight = new T.Vector3(-18, 24, 11).normalize();
+const sunlight = new T.Vector3(33, 56, 37).normalize();
+type SurfaceFinish = "stone" | "timber";
 
 // Fit the scene exposure once per vertex for the software-rendered profile.
 function filmicChannel(linear: number) {
@@ -74,7 +75,7 @@ function filmicChannel(linear: number) {
   return Math.round(T.MathUtils.clamp(mapped, 0, 1) * 255);
 }
 
-function bakeSurface(geometry: T.BufferGeometry, material: T.MeshLambertMaterial | T.MeshPhongMaterial) {
+function bakeSurface(geometry: T.BufferGeometry, material: T.MeshLambertMaterial | T.MeshPhongMaterial, textured = false) {
   const normal = geometry.getAttribute("normal");
   const position = geometry.getAttribute("position");
   const colors = new Uint8Array(normal.count * 3);
@@ -92,7 +93,7 @@ function bakeSurface(geometry: T.BufferGeometry, material: T.MeshLambertMaterial
     colors[i * 3 + 2] = filmicChannel(base.b * light * 0.96 + emission.b * intensity);
   }
   geometry.deleteAttribute("normal");
-  geometry.deleteAttribute("uv");
+  if (!textured) geometry.deleteAttribute("uv");
   geometry.setAttribute("color", new T.BufferAttribute(colors, 3, true));
   return geometry;
 }
@@ -109,6 +110,11 @@ export function buildModel(low: boolean, bakeLighting = false) {
   const carPlacements: Array<{ x: number; z: number; angle: number }> = [];
   let currentBatch = batches;
   let carsRequested = false;
+  let surfacesRequested = false;
+  const finishes = new Map<T.Material, SurfaceFinish>();
+  const surfaceMaterials = new Map<SurfaceFinish, Set<T.MeshBasicMaterial | T.MeshLambertMaterial | T.MeshStandardMaterial>>([
+    ["stone", new Set()], ["timber", new Set()],
+  ]);
   let disposed = false;
   const textures = new Set<T.Texture>();
   const materials = new Set<T.Material>();
@@ -123,17 +129,19 @@ export function buildModel(low: boolean, bakeLighting = false) {
       ? new T.MeshLambertMaterial({ color, map })
       : new T.MeshStandardMaterial({ color, roughness, metalness, map });
   }
-  const stone = standard(0xc0aa91, 0.95, 0, noise);
-  const sandstone = standard(0xddc5a4, 0.91, 0, noise);
-  const pale = standard(0xe9dbc4, 0.8, 0.06);
+  const stone = standard(0xc7b6a4, 0.92);
+  const sandstone = standard(0xdfd2bc, 0.86);
+  const pale = standard(0xe4d8c6, 0.82);
   const asphalt = standard(0x363b43, 0.97);
-  const curb = standard(0x9c8e7d, 0.88, 0, noise);
+  const curb = standard(0x9e9487, 0.93);
   const slate = standard(0x30373e, 0.88, 0, noise);
   const graphite = standard(0x292e36, 0.64, 0.24);
   const black = standard(0x191b21, 0.79);
   const metal = standard(0x9ca5a7, 0.37, 0.56);
   const bronze = standard(0x997155, 0.44, 0.42);
-  const wood = standard(0x62453a, 0.95);
+  const wood = standard(0x8b6b53, 0.86);
+  for (const material of [stone, sandstone, pale, curb]) finishes.set(material, "stone");
+  finishes.set(wood, "timber");
   const soil = standard(0x4b563a, 1, 0, noise);
   const terrains = {
     reenergy: 0x4a5541, "b-crm": 0x7a6e55, "isto-kebab": 0x9a7d53, starcars: 0x535941,
@@ -149,12 +157,25 @@ export function buildModel(low: boolean, bakeLighting = false) {
   const warmGlass = lit(0xd1a369, 0.35);
   const cyanGlass = lit(0x287a82, 0.34);
   const lamp = lit(0xffd699, 0.84);
-  const cyan = lit(0x61eadb, 0.82);
+  const cyan = lit(0x8ba6ab, 0.37);
   const paintLine = standard(0xe8d9ba, 0.88);
   const shadow = new T.MeshBasicMaterial({ map: ao, transparent: true, depthWrite: false, opacity: 0.84, polygonOffset: true, polygonOffsetFactor: -2 });
 
   function add(geometry: T.BufferGeometry, material: T.Material, x: number, y: number, z: number, cast = true, rx = 0, ry = 0, rz = 0) {
-    geometry.rotateX(rx).rotateY(ry).rotateZ(rz).translate(x, y, z).applyMatrix4(sites[active].matrix);
+    geometry.rotateX(rx).rotateY(ry).rotateZ(rz).translate(x, y, z);
+    if (finishes.has(material)) {
+      const position = geometry.getAttribute("position");
+      const normal = geometry.getAttribute("normal");
+      const uv = geometry.getAttribute("uv");
+      const repeat = finishes.get(material) === "timber" ? 0.85 : 0.64;
+      for (let i = 0; i < uv.count; i++) {
+        const nx = Math.abs(normal.getX(i)), ny = Math.abs(normal.getY(i)), nz = Math.abs(normal.getZ(i));
+        const u = nx > Math.max(ny, nz) ? position.getZ(i) : position.getX(i);
+        const v = ny > Math.max(nx, nz) ? position.getZ(i) : position.getY(i);
+        uv.setXY(i, u * repeat, v * repeat);
+      }
+    }
+    geometry.applyMatrix4(sites[active].matrix);
     let batch = currentBatch.get(material);
     if (!batch) {
       batch = { cast: [], plain: [] };
@@ -201,12 +222,12 @@ export function buildModel(low: boolean, bakeLighting = false) {
   function tree(x: number, z: number, size: number, base = 0.1) {
     groundShade(x, z, size * 1.8, size * 1.6, base + 0.013);
     cylinder(x, base + size * 0.37, z, size * 0.042, size * 0.068, size * 0.74, wood, 6);
-    const count = low ? 12 : 31;
+    const count = low ? 17 : 43;
     for (let i = 0; i < count; i++) {
       const angle = random() * tau;
       const spread = (0.04 + random() * 0.39) * size;
-      const radius = (0.108 + random() * 0.172) * size;
-      const leaf = new T.IcosahedronGeometry(radius, low ? 0 : 1).scale(1.24, 0.53 + random() * 0.52, 1);
+      const radius = (0.067 + random() * 0.143) * size;
+      const leaf = new T.IcosahedronGeometry(radius, low ? 0 : 1).scale(1.16, 0.66 + random() * 0.46, 1);
       add(leaf, leaves[Math.floor(random() * leaves.length)], x + Math.cos(angle) * spread,
         base + size * (0.66 + random() * 0.4) - spread * 0.18, z + Math.sin(angle) * spread, true, 0, angle);
     }
@@ -363,7 +384,8 @@ export function buildModel(low: boolean, bakeLighting = false) {
 
   // ReEnergy. Terracotta structure, glass showroom and two tracked arrays of solar cells.
   active = "reenergy";
-  const terracotta = standard(0xb58362, 0.81, 0, noise);
+  const terracotta = standard(0xa2907c, 0.81);
+  finishes.set(terracotta, "stone");
   const solarFrame = standard(0x93a7b6, 0.44, 0.37);
   const solarCell = [0x2c4968, 0x325373, 0x466b86].map(color => standard(color, 0.28, 0.42));
   const solarGrid = standard(0x9aaab9, 0.53, 0.35);
@@ -377,6 +399,15 @@ export function buildModel(low: boolean, bakeLighting = false) {
     box(energyX + i * 0.53, 1.2, energyZ + 1.79, 0.38, 0.7, 0.025, i % 3 === 0 ? warmGlass : deepGlass, false);
   }
   rounded(energyX, 2.51, energyZ, 6.66, 0.29, 3.93, sandstone, 0.08);
+  for (const side of [-1, 1]) {
+    box(energyX + side * 0.37, 1.17, energyZ + 1.82, 0.038, 1.39, 0.043, graphite);
+    box(energyX + side * 0.10, 1.15, energyZ + 1.84, 0.022, 0.21, 0.038, metal, false);
+    for (const offset of [-1.52, 1.52]) {
+      box(energyX + side * 3.10, 1.30, energyZ + offset, 0.046, 1.67, 0.07, metal);
+    }
+    box(energyX + side * 3.24, 2.55, energyZ - 0.08, 0.052, 0.043, 3.6, metal, false);
+  }
+  box(energyX, 0.52, energyZ + 1.98, 1.05, 0.052, 0.46, stone);
   box(energyX, 2.332, energyZ + 1.99, 6.0, 0.065, 0.055, lamp, false);
   sign("RE · ENERGY", energyX, 2.52, energyZ + 1.97, 2.7, 0.33, "#342a25");
   for (const z of [energyZ - 0.91, energyZ + 0.46]) {
@@ -404,9 +435,13 @@ export function buildModel(low: boolean, bakeLighting = false) {
   // B-CRM headquarters with a columned façade.
   active = "b-crm";
   const civicX = -9.55, civicZ = -0.28;
-  const civicRoof = standard(0x73777a, 0.68, 0.38);
-  const civicTrim = standard(0xae9c81, 0.76, 0.06);
+  const civicRoof = standard(0x78716a, 0.79, 0.12);
+  finishes.set(civicRoof, "stone");
+  const roofSeam = standard(0x6e6760, 0.78, 0.12);
+  const civicTrim = standard(0xb4a48d, 0.79);
+  finishes.set(civicTrim, "stone");
   const civicBay = standard(0x756e61, 0.93);
+  finishes.set(civicBay, "stone");
   shadeBuilding(civicX, civicZ, 7.75, 6.3);
   rounded(civicX, 0.42, civicZ, 5.90, 0.33, 4.54, civicTrim);
   box(civicX, 1.73, civicZ - 0.2, 5.38, 2.56, 3.62, sandstone);
@@ -427,7 +462,16 @@ export function buildModel(low: boolean, bakeLighting = false) {
   box(civicX, 1.28, civicZ + 1.77, 1.16, 1.51, 0.037, deepGlass);
   box(civicX, 1.27, civicZ + 1.80, 0.06, 1.51, 0.045, bronze);
   for (const x of [-1.36,-0.47,0.47,1.36]) {
-    cylinder(civicX + x, 1.63, civicZ + 2.22, 0.101, 0.138, 1.98, pale, 12);
+    const column = new T.CylinderGeometry(0.101, 0.138, 1.98, 40);
+    const position = column.getAttribute("position");
+    for (let i = 0; i < position.count; i++) {
+      const px = position.getX(i), pz = position.getZ(i);
+      const fluting = 1 - 0.077 * (1 + Math.cos(Math.atan2(px, pz) * 10));
+      position.setX(i, px * fluting);
+      position.setZ(i, pz * fluting);
+    }
+    column.computeVertexNormals();
+    add(column, pale, civicX + x, 1.63, civicZ + 2.22);
     cylinder(civicX + x, 0.64, civicZ + 2.22, 0.15, 0.17, 0.12, civicTrim, 12);
     cylinder(civicX + x, 2.58, civicZ + 2.22, 0.17, 0.14, 0.105, pale, 12);
   }
@@ -439,6 +483,17 @@ export function buildModel(low: boolean, bakeLighting = false) {
   const roof = new T.CylinderGeometry(1, 1.62, 0.62, 4, 1).rotateY(Math.PI / 4).scale(2.44, 1, 1.66);
   add(roof, civicRoof, civicX, 3.46, civicZ - 0.12, true);
   box(civicX, 3.79, civicZ - 0.12, 2.6, 0.10, 1.86, civicRoof);
+  for (const side of [-1, 1]) {
+    for (let i = -4; i <= 4; i++) {
+      const x = i * 0.51;
+      rail([civicX + x, 3.16, civicZ - 0.12 + side * 1.90], [civicX + x * 0.62, 3.78, civicZ - 0.12 + side * 1.175], 0.018, roofSeam, false);
+    }
+  }
+  for (const side of [-1, 1]) {
+    const x = civicX + side * 1.76;
+    rail([x, 0.94, civicZ + 2.46], [x, 0.74, civicZ + 2.99], 0.030, bronze);
+    for (const z of [2.46, 2.99]) box(x, 0.52, civicZ + z, 0.039, 0.60, 0.039, bronze);
+  }
   const pediment = new T.Shape().moveTo(-1.62, 0).lineTo(0, 0.61).lineTo(1.62, 0).closePath();
   add(new T.ExtrudeGeometry(pediment, { depth: 0.13, bevelEnabled: false }), sandstone, civicX, 2.92, civicZ + 2.24);
   rail([civicX - 1.63, 2.94, civicZ + 2.39], [civicX, 3.56, civicZ + 2.39], 0.07, pale);
@@ -594,8 +649,8 @@ export function buildModel(low: boolean, bakeLighting = false) {
   const labX = 5.25, labZ = -7.77;
   const ceramic = standard(0x3a4d54, 0.53, 0.43);
   const chamber = standard(0x717c7d, 0.65, 0.40);
-  const labRoof = low ? new T.MeshPhongMaterial({ color: 0x2e5f68, emissive: 0x124c50, emissiveIntensity: 0.28, shininess: 82 })
-    : new T.MeshPhysicalMaterial({ color: 0x376f78, emissive: 0x105558, emissiveIntensity: 0.23, roughness: 0.19, metalness: 0.27, clearcoat: 0.65 });
+  const labRoof = low ? new T.MeshPhongMaterial({ color: 0x37545e, emissive: 0x222d30, emissiveIntensity: 0.13, shininess: 82 })
+    : new T.MeshPhysicalMaterial({ color: 0x456170, emissive: 0x273239, emissiveIntensity: 0.09, roughness: 0.19, metalness: 0.27, clearcoat: 0.65 });
   shadeBuilding(labX, labZ, 8.30, 7.28);
   cylinder(labX, 0.43, labZ, 3.19, 3.34, 0.34, slate, 48);
   cylinder(labX, 0.72, labZ, 2.93, 3.15, 0.28, metal, 48);
@@ -604,7 +659,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   cylinder(labX, 2.58, labZ, 2.92, 3.01, 0.24, slate, 48);
   const dome = new T.SphereGeometry(1, low ? 24 : 48, low ? 10 : 18, 0, tau, 0, Math.PI * 0.5).scale(2.71, 1.94, 2.71);
   add(dome, labRoof, labX, 2.69, labZ);
-  ring(labX, 2.70, labZ, 2.78, 0.036, cyan, 96);
+  ring(labX, 2.70, labZ, 2.78, 0.036, metal, 96);
   ring(labX, 3.50, labZ, 2.48, 0.033, metal, 72);
   ring(labX, 4.16, labZ, 1.79, 0.033, chamber, 60);
   for (let i = 0; i < 12; i++) {
@@ -624,7 +679,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
   box(labX, 1.08, labZ + 3.42, 0.068, 1.39, 0.045, chamber);
   for (const x of [-0.72, 0.72]) box(labX + x, 1.09, labZ + 3.439, 0.036, 1.41, 0.028, cyan, false);
   rounded(labX, 2.07, labZ + 3.18, 1.94, 0.25, 0.54, slate, 0.055);
-  sign("AI LAB", labX, 2.065, labZ + 3.46, 1.62, 0.26, "#9ff9e9");
+  sign("AI LAB", labX, 2.065, labZ + 3.46, 1.62, 0.26, "#d2e0dd");
   cylinder(labX, 4.63, labZ, 0.37, 0.57, 0.23, bronze, 20);
   cylinder(labX, 4.98, labZ, 0.037, 0.083, 0.60, metal, 12);
   ball(labX, 5.29, labZ, 0.11, 0.11, 0.11, cyan);
@@ -791,7 +846,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
 
   // Static opaque surfaces share one unlit draw call in the software profile.
   function flush(source: Batches, destination: T.Group) {
-    const bakedSurfaces: T.BufferGeometry[] = [];
+    const baked = new Map<SurfaceFinish | undefined, T.BufferGeometry[]>();
     for (const [material, { cast, plain }] of source) {
       for (const [geometries, castsShadow] of [[cast, true], [plain, false]] as const) {
         if (!geometries.length) continue;
@@ -802,7 +857,10 @@ export function buildModel(low: boolean, bakeLighting = false) {
           return indexed;
         });
         if (bakeLighting && material !== asphalt && (material instanceof T.MeshLambertMaterial || material instanceof T.MeshPhongMaterial)) {
-          for (const geometry of compatible) bakedSurfaces.push(bakeSurface(geometry, material));
+          const finish = finishes.get(material);
+          const surfaces = baked.get(finish) ?? [];
+          for (const geometry of compatible) surfaces.push(bakeSurface(geometry, material, finish !== undefined));
+          baked.set(finish, surfaces);
           continue;
         }
         const merged = mergeGeometries(compatible)!;
@@ -812,12 +870,17 @@ export function buildModel(low: boolean, bakeLighting = false) {
         mesh.receiveShadow = !material.transparent;
         destination.add(mesh);
       }
+      const finish = finishes.get(material);
+      if (finish && (material instanceof T.MeshStandardMaterial || material instanceof T.MeshLambertMaterial)) {
+        surfaceMaterials.get(finish)!.add(material);
+      }
     }
-    if (bakedSurfaces.length) {
+    for (const [finish, geometries] of baked) {
       const surfaceMaterial = new T.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
       materials.add(surfaceMaterial);
-      destination.add(new T.Mesh(mergeGeometries(bakedSurfaces)!, surfaceMaterial));
-      bakedSurfaces.forEach(geometry => geometry.dispose());
+      if (finish) surfaceMaterials.get(finish)!.add(surfaceMaterial);
+      destination.add(new T.Mesh(mergeGeometries(geometries)!, surfaceMaterial));
+      geometries.forEach(geometry => geometry.dispose());
     }
   }
 
@@ -825,6 +888,39 @@ export function buildModel(low: boolean, bakeLighting = false) {
   flush(carBatches, carFallback);
   carModels.visible = false;
   group.add(carFallback, carModels);
+
+  function loadSurfaces(render: () => void) {
+    if (surfacesRequested || disposed) return;
+    surfacesRequested = true;
+    const loader = new T.TextureLoader();
+    for (const [finish, bound] of surfaceMaterials) {
+      const suffixes = low ? ["color"] : ["color", "normal", "roughness"];
+      for (const suffix of suffixes) {
+        loader.load(`/images/world/${finish}-${suffix}.webp`, texture => {
+          if (disposed) { texture.dispose(); return; }
+          texture.wrapS = texture.wrapT = T.RepeatWrapping;
+          texture.anisotropy = low ? 2 : 8;
+          if (suffix === "color") texture.colorSpace = T.SRGBColorSpace;
+          textures.add(texture);
+          for (const material of bound) {
+            if (suffix === "color") material.map = texture;
+            else if (material instanceof T.MeshStandardMaterial) {
+              if (suffix === "normal") {
+                material.normalMap = texture;
+                const strength = finish === "stone" ? 0.23 : 0.34;
+                material.normalScale.set(strength, strength);
+              } else {
+                material.roughnessMap = texture;
+                material.roughness = 1;
+              }
+            }
+            material.needsUpdate = true;
+          }
+          render();
+        });
+      }
+    }
+  }
 
   async function loadCars(render: () => void) {
     if (carsRequested || disposed) return;
@@ -918,5 +1014,5 @@ export function buildModel(low: boolean, bakeLighting = false) {
     textures.clear();
   }
 
-  return { group, sites, hits, avatar, legs, beacon, loadCars, showDetailedCars, dispose };
+  return { group, sites, hits, avatar, legs, beacon, loadSurfaces, loadCars, showDetailedCars, dispose };
 }

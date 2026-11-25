@@ -3,8 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import Image from "next/image";
 import {
-  ArrowDownRight, ArrowUpRight, AudioLines, Box, Building2, CarFront, ChevronLeft, ChevronRight, CircleHelp, Code2,
-  Compass, Cpu, Globe2, Images, Mail, Move, RotateCcw, ScanLine, SunMedium, UserRound, Utensils, Wrench, X,
+  ArrowUpRight, ChevronLeft, ChevronRight, Menu, Move, X,
 } from "lucide-react";
 import { gsap } from "gsap";
 import { classicPaths, contactPaths, copy, mapStops, projectIndex, projects, projectStops, sceneStops, worldPaths, zones, type ProjectId, type StopId, type WorldLocale, type Zone } from "./content";
@@ -12,10 +11,6 @@ import { ExperienceDialog, rememberExperience } from "./Experience";
 import type { WorldController } from "./scene";
 import styles from "./world.module.css";
 
-const icons = {
-  hq: UserRound, gallery: Images, studio: Code2, lab: Cpu, contact: Mail,
-  reenergy: SunMedium, starcars: CarFront, "isto-kebab": Utensils, "b-crm": Building2, motomizer: Wrench, beatmarket: AudioLines,
-};
 const projectLabels: Record<ProjectId, string> = {
   reenergy: "ReEnergy", starcars: "StarCars", "isto-kebab": "Isto Kebab", "b-crm": "B-CRM", motomizer: "Motomizer", beatmarket: "BeatMarket",
 };
@@ -52,26 +47,21 @@ export function World({ locale }: { locale: WorldLocale }) {
   const [photo, setPhoto] = useState(0);
   const [status, setStatus] = useState<"loading" | "ready" | "static">("loading");
   const [modeDialog, setModeDialog] = useState(false);
-  const [help, setHelp] = useState(false);
-  const [language, setLanguage] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [staticOnly, setStaticOnly] = useState(false);
   const [sceneAttempt, setSceneAttempt] = useState(0);
   const stage = useRef<HTMLDivElement>(null);
   const host = useRef<HTMLDivElement>(null);
   const poster = useRef<HTMLImageElement>(null);
-  const compass = useRef<SVGSVGElement>(null);
   const scene = useRef<WorldController | null>(null);
   const main = useRef<HTMLElement>(null);
   const copyArea = useRef<HTMLElement>(null);
   const markers = useRef<Partial<Record<StopId, HTMLButtonElement | null>>>({});
-  const modeButton = useRef<HTMLButtonElement>(null);
-  const resetButton = useRef<HTMLButtonElement>(null);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const menuPanel = useRef<HTMLDialogElement>(null);
   const lastTrigger = useRef<HTMLElement | null>(null);
   const current = useRef<Selection>(overview);
-  const langMenu = useRef<HTMLDivElement>(null);
-  const langButton = useRef<HTMLButtonElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
-  const helpButton = useRef<HTMLButtonElement>(null);
   const gallery = selection.project !== null ? projects[selection.project] : null;
   const isOverview = selection.zone === null;
   const focusOnChange = useRef(false);
@@ -143,7 +133,6 @@ export function World({ locale }: { locale: WorldLocale }) {
               const offscreen = visible ? "false" : "true";
               if (marker.dataset.offscreen !== offscreen) marker.dataset.offscreen = offscreen;
             },
-            rotate(angle) { compass.current?.style.setProperty("--bearing", `${angle * -180 / Math.PI + 38}deg`); },
             hover(id) {
               for (const zone of sceneStops) {
                 const button = markers.current[zone.id];
@@ -204,25 +193,16 @@ export function World({ locale }: { locale: WorldLocale }) {
     }
     const trigger = lastTrigger.current;
     if (trigger && trigger !== document.body && trigger.isConnected) trigger.focus({ preventScroll: true });
-    else resetButton.current?.focus({ preventScroll: true });
+    else menuButton.current?.focus({ preventScroll: true });
   }, [selection]);
 
   useEffect(() => {
     if (!selection.zone || !copyArea.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const context = gsap.context(() => {
-      gsap.from("[data-place-reveal]", { y: 8, opacity: 0, duration: 0.43, stagger: 0.045, ease: "power3.out", clearProps: "transform,opacity" });
+      gsap.from("[data-testid=world-place]", { y: 12, opacity: 0, delay: 0.12, duration: 0.56, ease: "power3.out", clearProps: "transform,opacity" });
     }, copyArea.current);
     return () => context.revert();
   }, [selection]);
-
-  useEffect(() => {
-    if (!language) return;
-    const close = (event: PointerEvent) => {
-      if (!langMenu.current?.contains(event.target as Node)) setLanguage(false);
-    };
-    document.addEventListener("pointerdown", close);
-    return () => document.removeEventListener("pointerdown", close);
-  }, [language]);
 
   useEffect(() => {
     const stop = () => scene.current?.blur();
@@ -232,13 +212,11 @@ export function World({ locale }: { locale: WorldLocale }) {
 
   function keydown(event: KeyboardEvent<HTMLElement>) {
     if (event.key === "Escape") {
-      if (modeDialog) return;
-      if (language) { setLanguage(false); langButton.current?.focus(); return; }
-      if (help) { setHelp(false); helpButton.current?.focus(); return; }
+      if (modeDialog || menuOpen) return;
       if (selection.zone) go(overview);
       return;
     }
-    if (modeDialog || event.ctrlKey || event.metaKey || event.altKey || (event.shiftKey && event.key !== "+") || event.target !== stage.current) return;
+    if (modeDialog || menuOpen || event.ctrlKey || event.metaKey || event.altKey || (event.shiftKey && event.key !== "+") || event.target !== stage.current) return;
     const slot = Number(event.key) - 1;
     if (event.key.length === 1 && slot >= 0 && slot < 8) { event.preventDefault(); selectStop(mapStops[slot]); return; }
     if (event.key === "0") { event.preventDefault(); go(overview); return; }
@@ -270,7 +248,16 @@ export function World({ locale }: { locale: WorldLocale }) {
     go({ zone: "gallery", project: (selection.project + direction + projects.length) % projects.length }, false);
   }
 
-  const statusLabel = status === "ready" ? t.world3d : status === "loading" ? t.loading : t.staticView;
+  function openMenu() {
+    menuPanel.current?.showModal();
+    setMenuOpen(true);
+  }
+
+  function closeMenu() {
+    menuPanel.current?.close();
+    setMenuOpen(false);
+    menuButton.current?.focus({ preventScroll: true });
+  }
   const activePlace = selection.zone ? t.zones[selection.zone] : null;
   const activeStop = gallery?.id ?? selection.zone;
   const stopLabel = (id: StopId) => isProject(id) ? projectLabels[id] : t.zones[id].short;
@@ -282,28 +269,8 @@ export function World({ locale }: { locale: WorldLocale }) {
         <Image src="/favicon.svg" alt="" width={34} height={34} unoptimized />
         <span>bernecki<span className={styles.brandExtension}>.dev</span></span>
       </a>
-      <div className={styles.headerMode}>
-        <button type="button" className={styles.mode} ref={modeButton} onClick={() => setModeDialog(true)} aria-haspopup="dialog">
-          <Box size={14} strokeWidth={1.5} /><span>{t.interactive}</span><ChevronRight size={13} strokeWidth={1.6} />
-          <span className={styles.visuallyHidden}> / {t.switch}</span>
-        </button>
-      </div>
-      <div className={styles.headerActions}>
-        <div className={styles.lang} ref={langMenu}>
-          <button type="button" ref={langButton} aria-expanded={language} aria-controls="world-languages" aria-label={`${t.language} · ${locale.toUpperCase()}`}
-            onClick={() => setLanguage(open => !open)}><Globe2 size={15} strokeWidth={1.5} />{locale.toUpperCase()}</button>
-          <div className={styles.langMenu} id="world-languages" hidden={!language}>
-            {(Object.keys(worldPaths) as WorldLocale[]).map(key =>
-              <a key={key} href={worldPaths[key] + selectionHash(selection)} lang={key} hrefLang={key} aria-current={key === locale ? "page" : undefined}>{localeLabels[key]}</a>)}
-          </div>
-        </div>
-        <a href={contactPaths[locale]} className={styles.contactTop} aria-current={selection.zone === "contact" ? "location" : undefined}
-          onClick={event => {
-            if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-            event.preventDefault();
-            selectZone("contact");
-          }}>{t.contact}<ArrowUpRight size={15} strokeWidth={1.6} /></a>
-      </div>
+      <button type="button" ref={menuButton} className={styles.menuTrigger} aria-haspopup="dialog"
+        aria-expanded={menuOpen} aria-controls="world-menu" onClick={openMenu}>{t.menu}<Menu size={20} strokeWidth={1.45} /></button>
     </header>
 
     <div className={styles.experience}>
@@ -329,18 +296,9 @@ export function World({ locale }: { locale: WorldLocale }) {
         </div>
       </div>
 
-      <div className={styles.compass}>
-        <button type="button" ref={resetButton} onClick={() => go(overview)} aria-label={t.reset} title={t.reset}>
-          <span className={styles.north} aria-hidden="true">N</span><Compass ref={compass} size={31} strokeWidth={1.03} />
-        </button>
-      </div>
-
       <section ref={copyArea} className={styles.story} aria-label={activePlace?.title ?? "Bernecki World"}>
         <div className={isOverview ? styles.intro : styles.visuallyHidden}>
-          <p className={styles.kicker} data-world-reveal=""><span />{t.explore}</p>
-          <h1 className={styles.title} aria-label="Bernecki World"><span><span data-world-line="">Bernecki</span></span><span><span data-world-line="">World<span>.</span></span></span></h1>
-          <p className={styles.description} data-world-reveal="">{t.description}</p>
-          <button type="button" className={styles.primary} hidden={!isOverview} onClick={() => selectZone("gallery")} data-world-reveal="">{t.enter}<ArrowDownRight size={19} strokeWidth={1.7} /></button>
+          <h1 className={styles.title} aria-label="Bernecki World"><span data-world-line="">Bernecki <em>World.</em></span></h1>
         </div>
 
         {activePlace && <div className={styles.place} data-testid="world-place">
@@ -348,9 +306,8 @@ export function World({ locale }: { locale: WorldLocale }) {
             <button type="button" className={styles.back} onClick={() => go(overview)}>
               <ChevronLeft size={16} strokeWidth={1.6} />{t.overview}
             </button>
-            <button type="button" className={styles.square} aria-label={t.close} onClick={() => go(overview)}><X size={17} strokeWidth={1.5} /></button>
           </div>
-          <p className={styles.kicker} data-place-reveal=""><span />{activePlace.eyebrow}</p>
+          {!gallery && <p className={styles.kicker} data-place-reveal=""><span />{activePlace.eyebrow}</p>}
           <h2 tabIndex={-1} ref={title} data-place-reveal="">{gallery?.name ?? activePlace.title}</h2>
           {gallery && <>
             <div className={styles.projectNav} data-place-reveal="">
@@ -400,61 +357,57 @@ export function World({ locale }: { locale: WorldLocale }) {
       </section>
 
       <div className={styles.controls}>
-        <div className={styles.guide} id="world-control-instructions">
+        <div className={styles.guide} id="world-control-instructions" data-world-reveal="">
           <span className={styles.visuallyHidden}>{t.keyboard}</span>
           {status === "ready" ? <>
             <span className={styles.mouseHint}><Move size={14} strokeWidth={1.4} />{t.rotate}</span>
             <span className={styles.touchHint}><Move size={14} strokeWidth={1.4} />{t.touch}</span>
           </> : <span role="status">{status === "loading" ? t.loading : t.fallback}</span>}
         </div>
-        <div className={styles.tools}>
-          {status === "ready" && isOverview && <>
-            <button type="button" className={styles.square} aria-label={t.rotateLeft} title={t.rotateLeft} onClick={() => scene.current?.nudge(-0.25, 0)}><ChevronLeft size={19} strokeWidth={1.5} /></button>
-            <button type="button" className={styles.square} aria-label={t.rotateRight} title={t.rotateRight} onClick={() => scene.current?.nudge(0.25, 0)}><ChevronRight size={19} strokeWidth={1.5} /></button>
-          </>}
-          <button type="button" className={styles.square} aria-label={t.reset} title={t.reset} onClick={() => go(overview)}><RotateCcw size={16} strokeWidth={1.5} /></button>
-          <button type="button" ref={helpButton} className={styles.square} aria-expanded={help} aria-controls="world-help" aria-label={t.help} title={t.help} onClick={() => setHelp(value => !value)}><CircleHelp size={16} strokeWidth={1.5} /></button>
-          <div className={styles.help} id="world-help" hidden={!help}>
-            <strong>{t.help}</strong><p>{status === "ready" ? t.keyboard : t.fallback}</p>
-            <button type="button" onClick={toggleStatic} disabled={status === "loading"}>{status === "ready" ? t.staticView : t.world3d}</button>
-          </div>
-        </div>
       </div>
     </div>
 
-    <footer className={styles.footer}>
-      <div className={styles.mapMeta}>
-        <span><i />{t.places}</span>
-        <span aria-live="polite">{statusLabel}</span>
-      </div>
-      <nav className={styles.map} aria-label={t.places}>
-        <button type="button" aria-pressed={isOverview} onClick={() => go(overview)} data-testid="nav-overview">
-          <ScanLine size={18} strokeWidth={1.45} /><strong>{t.overview}</strong>
-          <ArrowUpRight className={styles.mapArrow} size={14} strokeWidth={1.45} />
-        </button>
-        {mapStops.map(id => {
-          const Icon = icons[id];
-          return <button type="button" key={id} aria-pressed={activeStop === id} onClick={() => selectStop(id)} data-testid={`nav-${id}`}>
-            <Icon size={18} strokeWidth={1.45} /><strong>{stopLabel(id)}</strong>
-            <ArrowUpRight className={styles.mapArrow} size={13} strokeWidth={1.45} />
-          </button>;
-        })}
-      </nav>
-      <div className={styles.footerEnd}>
-        <a href={classicPaths[locale]} onClick={() => rememberExperience("classic")}>{t.classic}<ArrowUpRight size={13} strokeWidth={1.55} /></a>
-        <details className={styles.credits}>
-          <summary>{t.credits}</summary>
-          <div>
-            <a href="https://www.solarsystemscope.com/textures/">Solar System Scope / NASA</a>
+    <dialog ref={menuPanel} id="world-menu" className={styles.menuPanel} aria-labelledby="world-menu-title"
+      onCancel={event => { event.preventDefault(); closeMenu(); }}
+      onClick={event => { if (event.target === event.currentTarget) closeMenu(); }}>
+      <div className={styles.menuInner}>
+        <div className={styles.menuHeading}>
+          <h2 id="world-menu-title">{t.places}</h2>
+          <button type="button" onClick={closeMenu} aria-label={t.close} className={styles.square}><X size={19} strokeWidth={1.5} /></button>
+        </div>
+        <nav className={styles.menuPlaces} aria-label={t.places}>
+          <button type="button" aria-current={isOverview ? "location" : undefined}
+            onClick={() => { closeMenu(); go(overview); }} data-testid="nav-overview">{t.overview}<ChevronRight size={16} strokeWidth={1.5} /></button>
+          {mapStops.filter(id => id !== "gallery").map(id =>
+            <button type="button" key={id} aria-current={activeStop === id ? "location" : undefined}
+              onClick={() => { closeMenu(); selectStop(id); }} data-testid={`nav-${id}`}>{stopLabel(id)}<ChevronRight size={16} strokeWidth={1.5} /></button>
+          )}
+        </nav>
+        <div className={styles.menuOptions}>
+          <button type="button" onClick={() => { closeMenu(); setModeDialog(true); }}>{t.switch}</button>
+          <a href={classicPaths[locale]} onClick={() => rememberExperience("classic")}>{t.classic}<ArrowUpRight size={14} strokeWidth={1.5} /></a>
+          <nav aria-label={t.language} className={styles.menuLanguages}>
+            {(Object.keys(worldPaths) as WorldLocale[]).map(key =>
+              <a key={key} href={worldPaths[key] + selectionHash(selection)} lang={key} hrefLang={key} aria-current={key === locale ? "page" : undefined}>{localeLabels[key]}</a>)}
+          </nav>
+          <details>
+            <summary>{t.help}</summary>
+            <p>{status === "ready" ? t.keyboard : t.fallback}</p>
+            <button type="button" onClick={toggleStatic} disabled={status === "loading"}>{status === "ready" ? t.staticView : t.world3d}</button>
+          </details>
+          <details>
+            <summary>{t.credits}</summary>
+            <a href="https://www.solarsystemscope.com/textures/">Solar System Scope / NASA · CC BY 4.0</a>
             <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
             <a href="https://tevy.dev/models/supercar">tevy · CC0</a>
-            <a href="https://ambientcg.com/view?id=Asphalt012">ambientCG · CC0</a>
-          </div>
-        </details>
+            <a href="https://ambientcg.com/">ambientCG · CC0</a>
+            <a href="https://polyhaven.com/a/kloppenheim_06_puresky">Poly Haven · CC0</a>
+          </details>
+        </div>
       </div>
-    </footer>
-    <ExperienceDialog locale={locale} current="world" open={modeDialog} onClose={() => { setModeDialog(false); modeButton.current?.focus(); }} />
-    <noscript><style>{`.${styles.hotspots},.${styles.tools},.${styles.headerMode},.${styles.lang},.${styles.compass},.${styles.primary}[data-world-reveal],.${styles.map}{display:none!important}`}</style>
+    </dialog>
+    <ExperienceDialog locale={locale} current="world" open={modeDialog} onClose={() => { setModeDialog(false); menuButton.current?.focus(); }} />
+    <noscript><style>{`.${styles.hotspots},.${styles.menuTrigger}{display:none!important}`}</style>
       <div className={styles.noScript}><a href={contactPaths[locale]}>{t.contact}</a> · <a href={locale === "en" ? "/en/case-studies" : "/case-studies"}>{t.zones.gallery.title}</a></div>
     </noscript>
   </main>;

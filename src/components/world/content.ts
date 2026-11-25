@@ -132,7 +132,7 @@ type PlaceCopy = { title: string; short: string; eyebrow: string; text: string; 
 type Labels = {
   description: string; enter: string; explore: string; overview: string; classic: string; interactive: string;
   switch: string; classicBlurb: string; worldBlurb: string; chooserTitle: string; contact: string; language: string;
-  places: string; rotate: string; rotateLeft: string; rotateRight: string; reset: string; help: string;
+  menu: string; places: string; rotate: string; rotateLeft: string; rotateRight: string; reset: string; help: string;
   touch: string; close: string; keyboard: string; gallery: string; projectImage: string;
   prev: string; next: string; prevPhoto: string; nextPhoto: string; live: string; caseStudy: string; features: string; stack: string;
   loading: string; fallback: string; staticView: string; world3d: string; scene: string; photo: string; mail: string;
@@ -148,12 +148,12 @@ export const copy: Record<WorldLocale, Labels> = {
     classicBlurb: "Oferta, ceny i realizacje w klasycznej wersji serwisu.",
     worldBlurb: "Obróć planetę, na której każdy projekt ma własne miejsce.",
     chooserTitle: "Wybierz tryb portfolio", contact: "Kontakt", language: "Język",
-    places: "Mapa świata", rotate: "Przeciągnij, aby obrócić", rotateLeft: "Obróć w lewo", rotateRight: "Obróć w prawo",
+    menu: "Menu", places: "Miejsca", rotate: "Przeciągnij, aby obrócić", rotateLeft: "Obróć w lewo", rotateRight: "Obróć w prawo",
     reset: "Resetuj kamerę", help: "Sterowanie", touch: "Przeciągnij palcem, aby obrócić", close: "Zamknij",
     keyboard: "Strzałki obracają planetę. 0 przywraca przegląd, a klawisze od 1 do 8 otwierają miejsca z bliska. W, A, S i D poruszają postacią na placu.",
     gallery: "Wybierz projekt", projectImage: "Zrzut ekranu projektu", prev: "Poprzedni projekt", next: "Następny projekt",
     prevPhoto: "Poprzedni zrzut", nextPhoto: "Następny zrzut", live: "Otwórz projekt", caseStudy: "Opis realizacji", features: "Funkcje", stack: "Technologie",
-    loading: "Ładowanie sceny 3D", fallback: "Widok statyczny. Wszystkie miejsca możesz otworzyć z mapy.",
+    loading: "Ładowanie sceny 3D", fallback: "Widok statyczny. Wszystkie miejsca możesz otworzyć z menu.",
     staticView: "Widok statyczny", world3d: "Scena 3D", scene: "Interaktywna planeta projektów Bernecki.dev", photo: "Otwórz zrzut ekranu", mail: "Napisz e-mail",
     portrait: "Pluszowa postać Kacpra Berneckiego", credits: "Źródła zasobów 3D",
     zones: {
@@ -171,12 +171,12 @@ export const copy: Record<WorldLocale, Labels> = {
     classicBlurb: "Services, pricing and case studies in the classic portfolio.",
     worldBlurb: "Explore a planet where each project has its own place.",
     chooserTitle: "Choose your experience", contact: "Contact", language: "Language",
-    places: "World map", rotate: "Drag to rotate", rotateLeft: "Rotate left", rotateRight: "Rotate right",
+    menu: "Menu", places: "Locations", rotate: "Drag to rotate", rotateLeft: "Rotate left", rotateRight: "Rotate right",
     reset: "Reset camera", help: "Controls", touch: "Drag to spin the globe", close: "Close",
     keyboard: "Use the arrow keys to spin the globe, 0 to reset, and 1–8 to visit a place up close. W, A, S and D move the figure around the courtyard.",
     gallery: "Choose a project", projectImage: "Project screenshot", prev: "Previous project", next: "Next project",
     prevPhoto: "Previous screenshot", nextPhoto: "Next screenshot", live: "Open project", caseStudy: "Case study", features: "Features", stack: "Technologies",
-    loading: "Loading the 3D scene", fallback: "Static view. You can still open every location from the map.",
+    loading: "Loading the 3D scene", fallback: "Static view. You can open every location from the menu.",
     staticView: "Static view", world3d: "3D scene", scene: "Interactive globe of Bernecki.dev projects", photo: "Open screenshot", mail: "Send an email",
     portrait: "Plush figure of Kacper Bernecki", credits: "3D asset credits",
     zones: {
@@ -194,12 +194,12 @@ export const copy: Record<WorldLocale, Labels> = {
     classicBlurb: "Послуги, ціни та реалізовані проєкти.",
     worldBlurb: "Дослідіть планету, де кожен проєкт має власне місце.",
     chooserTitle: "Оберіть режим портфоліо", contact: "Контакт", language: "Мова",
-    places: "Мапа світу", rotate: "Перетягніть, щоб повернути", rotateLeft: "Обернути ліворуч", rotateRight: "Обернути праворуч",
+    menu: "Меню", places: "Локації", rotate: "Перетягніть, щоб повернути", rotateLeft: "Обернути ліворуч", rotateRight: "Обернути праворуч",
     reset: "Скинути камеру", help: "Керування", touch: "Проведіть пальцем, щоб обертати планету", close: "Закрити",
     keyboard: "Стрілки обертають планету, 0 повертає до огляду, а 1–8 наближають локації. Клавіші W, A, S і D переміщують фігурку подвір’ям.",
     gallery: "Оберіть проєкт", projectImage: "Знімок екрана проєкту", prev: "Попередній проєкт", next: "Наступний проєкт",
     prevPhoto: "Попередній знімок", nextPhoto: "Наступний знімок", live: "Відкрити проєкт", caseStudy: "Опис проєкту", features: "Функції", stack: "Технології",
-    loading: "Завантаження 3D-сцени", fallback: "Статичний вигляд. Усі локації доступні на мапі.",
+    loading: "Завантаження 3D-сцени", fallback: "Статичний вигляд. Усі локації доступні в меню.",
     staticView: "Статичний вигляд", world3d: "3D-сцена", scene: "Інтерактивна планета проєктів Bernecki.dev", photo: "Відкрити знімок екрана", mail: "Написати листа",
     portrait: "Плюшева фігурка Кацпера Бернецького", credits: "Джерела 3D-матеріалів",
     zones: {
