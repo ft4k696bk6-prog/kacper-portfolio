@@ -3,16 +3,25 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import Image from "next/image";
 import {
-  ArrowDownRight, ArrowUpRight, Box, Building2, ChevronLeft, ChevronRight, CircleHelp, Code2,
-  Compass, Cpu, Globe2, Images, Mail, Minus, Mouse, Move, Plus, RotateCcw, ScanLine, X,
+  ArrowDownRight, ArrowUpRight, AudioLines, Box, Building2, CarFront, ChevronLeft, ChevronRight, CircleHelp, Code2,
+  Compass, Cpu, Globe2, Images, Mail, Minus, Mouse, Move, Plus, RotateCcw, ScanLine, SunMedium, UserRound, Utensils, Wrench, X,
 } from "lucide-react";
 import { gsap } from "gsap";
-import { classicPaths, contactPaths, copy, projects, worldPaths, zones, type WorldLocale, type Zone } from "./content";
+import { classicPaths, contactPaths, copy, mapStops, projectIndex, projects, projectStops, sceneStops, worldPaths, zones, type ProjectId, type StopId, type WorldLocale, type Zone } from "./content";
 import { ExperienceDialog, rememberExperience } from "./Experience";
 import type { WorldController } from "./scene";
 import styles from "./world.module.css";
 
-const icons = { hq: Building2, gallery: Images, studio: Code2, lab: Cpu, contact: Mail };
+const icons = {
+  hq: UserRound, gallery: Images, studio: Code2, lab: Cpu, contact: Mail,
+  reenergy: SunMedium, starcars: CarFront, "isto-kebab": Utensils, "b-crm": Building2, motomizer: Wrench, beatmarket: AudioLines,
+};
+const projectLabels: Record<ProjectId, string> = {
+  reenergy: "ReEnergy", starcars: "StarCars", "isto-kebab": "Isto Kebab", "b-crm": "B-CRM", motomizer: "Motomizer", beatmarket: "BeatMarket",
+};
+function isProject(id: StopId): id is ProjectId {
+  return Object.hasOwn(projectStops, id);
+}
 const localeLabels = { pl: "Polski", en: "English", uk: "Українська" } as const;
 type Selection = { zone: Zone | null; project: number | null };
 const overview: Selection = { zone: null, project: null };
@@ -54,7 +63,7 @@ export function World({ locale }: { locale: WorldLocale }) {
   const scene = useRef<WorldController | null>(null);
   const main = useRef<HTMLElement>(null);
   const copyArea = useRef<HTMLElement>(null);
-  const markers = useRef<Partial<Record<Zone, HTMLButtonElement | null>>>({});
+  const markers = useRef<Partial<Record<StopId, HTMLButtonElement | null>>>({});
   const modeButton = useRef<HTMLButtonElement>(null);
   const resetButton = useRef<HTMLButtonElement>(null);
   const lastTrigger = useRef<HTMLElement | null>(null);
@@ -81,6 +90,11 @@ export function World({ locale }: { locale: WorldLocale }) {
 
   const selectZone = useCallback((zone: Zone) => go({ zone, project: null }), [go]);
   const selectProject = useCallback((project: number) => go({ zone: "gallery", project }), [go]);
+
+  const selectStop = (id: StopId) => {
+    if (isProject(id)) selectProject(projectIndex(id));
+    else selectZone(id);
+  };
 
   useEffect(() => {
     const read = () => {
@@ -131,7 +145,7 @@ export function World({ locale }: { locale: WorldLocale }) {
             },
             rotate(angle) { compass.current?.style.setProperty("--bearing", `${angle * -180 / Math.PI + 38}deg`); },
             hover(id) {
-              for (const zone of zones) {
+              for (const zone of sceneStops) {
                 const button = markers.current[zone.id];
                 if (button) button.dataset.hovered = id === zone.id ? "true" : "false";
               }
@@ -225,8 +239,8 @@ export function World({ locale }: { locale: WorldLocale }) {
       return;
     }
     if (modeDialog || event.ctrlKey || event.metaKey || event.altKey || (event.shiftKey && event.key !== "+") || event.target !== stage.current) return;
-    const slot = ["1", "2", "3", "4", "5"].indexOf(event.key);
-    if (slot !== -1) { event.preventDefault(); selectZone(zones[slot].id); return; }
+    const slot = Number(event.key) - 1;
+    if (event.key.length === 1 && slot >= 0 && slot < 8) { event.preventDefault(); selectStop(mapStops[slot]); return; }
     if (event.key === "0") { event.preventDefault(); go(overview); return; }
     const steps: Record<string, [number, number, number]> = {
       ArrowLeft: [-0.16, 0, 1], ArrowRight: [0.16, 0, 1], ArrowUp: [0, -0.12, 1], ArrowDown: [0, 0.12, 1],
@@ -259,9 +273,10 @@ export function World({ locale }: { locale: WorldLocale }) {
 
   const statusLabel = status === "ready" ? t.world3d : status === "loading" ? t.loading : t.staticView;
   const activePlace = selection.zone ? t.zones[selection.zone] : null;
-  const activeNumber = zones.findIndex(zone => zone.id === selection.zone) + 1;
+  const activeStop = gallery?.id ?? selection.zone;
+  const stopLabel = (id: StopId) => isProject(id) ? projectLabels[id] : t.zones[id].short;
 
-  return <main ref={main} className={styles.world} data-render={status} data-view={selection.zone ?? "overview"} data-testid="world"
+  return <main ref={main} className={styles.world} data-render={status} data-view={selection.zone === "gallery" && !gallery ? "gallery-list" : selection.zone ?? "overview"} data-testid="world"
     onKeyDown={keydown} onKeyUp={event => scene.current?.avatarKey(event.key.toLowerCase(), false)}>
     <header className={styles.header}>
       <a href={classicPaths[locale]} className={styles.brand} onClick={() => rememberExperience("classic")} data-world-logo="">
@@ -303,13 +318,13 @@ export function World({ locale }: { locale: WorldLocale }) {
         </div>
         <div className={styles.canvas} ref={host} />
         <div className={styles.hotspots} aria-label={t.places}>
-          {zones.map((place, i) => (
+          {sceneStops.map(place => (
             <button type="button" key={place.id} className={styles.hotspot}
-              data-zone={place.id} data-side={place.labelSide} data-selected={selection.zone === place.id}
+              data-zone={place.id} data-side={place.labelSide} aria-label={stopLabel(place.id)}
               ref={node => { markers.current[place.id] = node; }}
-              tabIndex={isOverview ? 0 : -1} onClick={() => selectZone(place.id)}>
+              tabIndex={isOverview && status === "ready" ? 0 : -1} onClick={() => selectStop(place.id)}>
               <span className={styles.hotspotDot} aria-hidden="true" />
-              <span className={styles.hotspotCaption}><small>{String(i + 1).padStart(2, "0")}</small>{" "}{t.zones[place.id].short}<ArrowUpRight size={11} strokeWidth={1.65} aria-hidden="true" /></span>
+              <span className={styles.hotspotCaption}>{stopLabel(place.id)}<ArrowUpRight size={11} strokeWidth={1.65} aria-hidden="true" /></span>
             </button>
           ))}
         </div>
@@ -326,17 +341,17 @@ export function World({ locale }: { locale: WorldLocale }) {
           <p className={styles.kicker} data-world-reveal=""><span />{t.explore}</p>
           <h1 className={styles.title} aria-label="Bernecki World"><span><span data-world-line="">Bernecki</span></span><span><span data-world-line="">World<span>.</span></span></span></h1>
           <p className={styles.description} data-world-reveal="">{t.description}</p>
-          <button type="button" className={styles.primary} hidden={!isOverview} onClick={() => selectZone("gallery")} data-world-reveal="">{t.enter}<ArrowDownRight size={19} strokeWidth={1.7} /></button>
+          <button type="button" className={styles.primary} hidden={!isOverview} onClick={() => selectStop("reenergy")} data-world-reveal="">{t.enter}<ArrowDownRight size={19} strokeWidth={1.7} /></button>
         </div>
 
         {activePlace && <div className={styles.place} data-testid="world-place">
           <div className={styles.placeTop} data-place-reveal="">
-            <button type="button" className={styles.back} onClick={() => gallery ? selectZone("gallery") : go(overview)}>
-              <ChevronLeft size={16} strokeWidth={1.6} />{gallery ? t.zones.gallery.short : t.overview}
+            <button type="button" className={styles.back} onClick={() => go(overview)}>
+              <ChevronLeft size={16} strokeWidth={1.6} />{t.overview}
             </button>
             <button type="button" className={styles.square} aria-label={t.close} onClick={() => go(overview)}><X size={17} strokeWidth={1.5} /></button>
           </div>
-          <p className={styles.kicker} data-place-reveal=""><span />{String(activeNumber).padStart(2, "0")} / {activePlace.eyebrow}</p>
+          <p className={styles.kicker} data-place-reveal=""><span />{activePlace.eyebrow}</p>
           <h2 tabIndex={-1} ref={title} data-place-reveal="">{gallery?.name ?? activePlace.title}</h2>
           {gallery && <>
             <div className={styles.projectNav} data-place-reveal="">
@@ -358,6 +373,7 @@ export function World({ locale }: { locale: WorldLocale }) {
             <div className={styles.placeLinks}>
               <ActionLink href={gallery.site} primary>{t.live}</ActionLink>
               {gallery.caseStudy[locale] && <ActionLink href={gallery.caseStudy[locale]}>{t.caseStudy}</ActionLink>}
+              {gallery.links?.[locale]?.map(([label, href]) => <ActionLink key={href} href={href}>{label}</ActionLink>)}
             </div>
             <h3>{t.features}</h3>
             <ul className={styles.features}>{gallery.copy[locale][1].map(feature => <li key={feature}>{feature}</li>)}</ul>
@@ -415,14 +431,14 @@ export function World({ locale }: { locale: WorldLocale }) {
       </div>
       <nav className={styles.map} aria-label={t.places}>
         <button type="button" aria-pressed={isOverview} onClick={() => go(overview)} data-testid="nav-overview">
-          <ScanLine size={20} strokeWidth={1.45} /><span><small>00</small><strong>{t.overview}</strong></span>
+          <ScanLine size={18} strokeWidth={1.45} /><strong>{t.overview}</strong>
           <ArrowUpRight className={styles.mapArrow} size={14} strokeWidth={1.45} />
         </button>
-        {zones.map((zone, i) => {
-          const Icon = icons[zone.id];
-          return <button type="button" key={zone.id} aria-pressed={selection.zone === zone.id} onClick={() => selectZone(zone.id)} data-testid={`nav-${zone.id}`}>
-            <Icon size={20} strokeWidth={1.45} /><span><small>{String(i + 1).padStart(2, "0")}</small><strong>{t.zones[zone.id].short}</strong></span>
-            <ArrowUpRight className={styles.mapArrow} size={14} strokeWidth={1.45} />
+        {mapStops.map(id => {
+          const Icon = icons[id];
+          return <button type="button" key={id} aria-pressed={activeStop === id} onClick={() => selectStop(id)} data-testid={`nav-${id}`}>
+            <Icon size={18} strokeWidth={1.45} /><strong>{stopLabel(id)}</strong>
+            <ArrowUpRight className={styles.mapArrow} size={13} strokeWidth={1.45} />
           </button>;
         })}
       </nav>

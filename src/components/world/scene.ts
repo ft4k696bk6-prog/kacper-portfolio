@@ -1,22 +1,22 @@
 import * as T from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { gsap } from "gsap";
-import { zones, type Zone } from "./content";
-import { buildModel, screenPositions, type Hit } from "./model";
+import { projects, projectStops, sceneStops, zones, type StopId, type Zone } from "./content";
+import { buildModel, type Hit } from "./model";
 import { loadLighting } from "./lighting";
 
 type View = { zone: Zone | null; project: number | null };
 type Callbacks = {
-  marker: (id: Zone, x: number, y: number, visible: boolean) => void;
+  marker: (id: StopId, x: number, y: number, visible: boolean) => void;
   rotate: (angle: number) => void;
-  hover: (id: Zone | null) => void;
+  hover: (id: StopId | null) => void;
   select: (hit: Hit) => void;
   lost: () => void;
   rendered: () => void;
 };
 
-const initial = { theta: 0.66, phi: 0.956, zoom: 1 };
-const overview = new T.Vector3(0, 0.9, 0);
+const initial = { theta: 0.53, phi: 0.88, zoom: 1 };
+const overview = new T.Vector3(0, 0.5, 0);
 const travelKeys = new Set(["w", "a", "s", "d"]);
 
 function makeContext(antialias: boolean) {
@@ -54,10 +54,10 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   renderer.outputColorSpace = T.SRGBColorSpace;
   renderer.toneMapping = T.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
-  const pixelBudget = software ? 450_000 : 1_550_000;
+  const pixelBudget = software ? 560_000 : 1_550_000;
   const minimumDpr = 0.75;
   let motionScale = 1;
-  let dpr = Math.min(window.devicePixelRatio || 1, software ? 0.9 : compact ? 1.15 : 1.55);
+  let dpr = Math.min(window.devicePixelRatio || 1, software ? 1 : compact ? 1.15 : 1.55);
   renderer.setPixelRatio(dpr);
   renderer.shadowMap.enabled = !software;
   renderer.shadowMap.type = low ? T.BasicShadowMap : T.PCFShadowMap;
@@ -107,7 +107,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   const fill = new T.DirectionalLight(0xcbd9f3, low ? 0.70 : 0.97);
   fill.position.set(12, 8, -15);
   scene.add(fill);
-  const model = buildModel(requestRender, low, software);
+  const model = buildModel(low, software);
   scene.add(model.group);
   renderer.shadowMap.needsUpdate = true;
 
@@ -116,9 +116,9 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   const raycaster = new T.Raycaster();
   const pointer = new T.Vector2();
   const projected = new T.Vector3();
-  const walkingPlane = new T.Plane(new T.Vector3(0, 1, 0), -0.26);
+  const walkingPlane = new T.Plane(new T.Vector3(0, 1, 0), -0.25);
   const walkRay = new T.Vector3();
-  const avatarCenter = new T.Vector2(0, 0.65);
+  const avatarCenter = new T.Vector2(0.10, 3.43);
   const keys = new Set<string>();
   let waypoint: T.Vector2 | null = null;
   let travel = 0;
@@ -140,7 +140,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   let elapsed = 0;
   let captureFrames = 0;
   let slowWindows = 0;
-  let hover: Zone | null = null;
+  let hover: StopId | null = null;
 
   function writeCamera(theta: number, phi: number, radius: number, x: number, y: number, z: number, zoom: number) {
     controls.target.set(x, y, z);
@@ -160,7 +160,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     const width = Math.max(host.clientWidth, 1);
     const height = Math.max(host.clientHeight, 1);
     const aspect = width / height;
-    const frustum = Math.max(25.4, (compact ? 38.8 : 38.2) / aspect);
+    const frustum = Math.max(25.8, (compact ? 39.25 : 38.6) / aspect);
     camera.left = -frustum * aspect / 2;
     camera.right = frustum * aspect / 2;
     camera.top = frustum / 2;
@@ -187,7 +187,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       return;
     }
     const position = model.avatar.position;
-    const amount = Math.min(seconds, 0.05) * 2.55;
+    const amount = Math.min(seconds, 0.08) * 2.7;
     const dx = Number(keys.has("d")) - Number(keys.has("a"));
     const dz = Number(keys.has("s")) - Number(keys.has("w"));
     const angle = controls.getAzimuthalAngle();
@@ -209,7 +209,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     direction.setLength(Math.min(amount, direction.length()));
     const next = new T.Vector2(position.x + direction.x, position.z + direction.y).sub(avatarCenter);
     if (next.lengthSq() < 0.0001) return;
-    next.setLength(T.MathUtils.clamp(next.length(), 1.79, 3.38)).add(avatarCenter);
+    next.setLength(T.MathUtils.clamp(next.length(), 1.44, 2.78)).add(avatarCenter);
     const moving = Math.hypot(next.x - position.x, next.y - position.z) > 0.001;
     if (moving) {
       model.avatar.rotation.y = Math.atan2(next.x - position.x, next.y - position.z);
@@ -238,9 +238,11 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     const moving = Boolean(transition || interacting || orbitMoved || keys.size || waypoint);
     updateDrawingBuffer(moving);
     renderer.render(scene, camera);
-    for (const zone of zones) {
+    for (const zone of sceneStops) {
       const [x, y, z] = zone.marker;
-      projected.set(x, y, z).project(camera);
+      projected.set(x, y, z);
+      if (zone.id === "hq") projected.add(model.avatar.position);
+      projected.project(camera);
       callbacks.marker(zone.id, (projected.x * 0.5 + 0.5) * size.x, (0.5 - projected.y * 0.5) * size.y,
         projected.z > -1 && projected.z < 1 && Math.abs(projected.x) < 0.92 && Math.abs(projected.y) < 0.90);
     }
@@ -272,18 +274,14 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   }
 
   function resolveView(view: View) {
-    const match = zones.find(place => place.id === view.zone);
-    const display = view.project === null ? null : screenPositions[view.project];
-    const target = display ? new T.Vector3(display[0], display[1], display[2] - 0.10) : match ? new T.Vector3(...match.target) : overview;
-    const angle = match?.angle ?? [initial.theta, initial.phi, 46];
-    const scenario = view.project === 3 ? -0.34 : view.project === 4 ? 0.96 : 0.29;
-    return {
-      theta: display ? scenario : angle[0],
-      phi: display ? 1.10 : angle[1],
-      radius: display ? 14 : angle[2],
-      x: target.x, y: target.y, z: target.z,
-      zoom: display ? compact ? 3.22 : 3.5 : match ? compact ? 2.05 : 2.17 : 1,
-    };
+    const match = view.project === null
+      ? zones.find(place => place.id === view.zone)
+      : projectStops[projects[view.project].id];
+    const [x, y, z] = match?.target ?? overview.toArray();
+    const [theta, phi, radius] = match?.angle ?? [initial.theta, initial.phi, 46];
+    const zoom = match?.zoom ?? 1;
+    const avatar = view.zone === "hq" || view.zone === "contact" ? model.avatar.position : null;
+    return { theta, phi, radius, x: x + (avatar?.x ?? 0), y: y + (avatar?.y ?? 0), z: z + (avatar?.z ?? 0), zoom: compact && zoom > 1 ? zoom * 0.92 : zoom };
   }
 
   function cancelTransition() {
@@ -305,6 +303,10 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
 
   function moveView(view: View, instant = false, opening = false) {
     current = view;
+    if (view.zone === "hq" || view.zone === "contact") {
+      keys.clear();
+      waypoint = null;
+    }
     cancelTransition();
     freezeOrbit();
     const start = {
@@ -368,7 +370,8 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     if (event.buttons || event.pointerType === "touch") return;
     const hit = updatePointer(event);
     canvas.style.cursor = hit ? "pointer" : "grab";
-    const next = hit ? (hit.object.userData.hit as Hit).zone : null;
+    const destination = hit?.object.userData.hit as Hit | undefined;
+    const next = destination?.project !== undefined ? projects[destination.project].id : destination?.zone ?? null;
     if (next !== hover) {
       hover = next;
       callbacks.hover(hover);
@@ -387,9 +390,9 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     const location = raycaster.ray.intersectPlane(walkingPlane, walkRay);
     if (!location) return;
     const step = new T.Vector2(location.x, location.z).sub(avatarCenter);
-    if (step.length() < 1.72 || step.length() > 3.5) return;
+    if (step.length() < 1.36 || step.length() > 2.92) return;
     keys.clear();
-    waypoint = step.setLength(T.MathUtils.clamp(step.length(), 1.79, 3.38));
+    waypoint = step.setLength(T.MathUtils.clamp(step.length(), 1.44, 2.78));
     previous = performance.now();
     requestRender();
   }

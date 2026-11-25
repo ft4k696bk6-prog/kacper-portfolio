@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import sitemap from "../../app/sitemap";
-import { classicPaths, contactPaths, copy, projects, worldPaths, zones } from "./content";
+import { classicPaths, contactPaths, copy, mapStops, projectStops, projects, sceneStops, worldPaths, zones } from "./content";
 
 const locales = ["pl", "en", "uk"] as const;
 const origin = "https://bernecki.dev";
@@ -34,6 +34,15 @@ describe("Bernecki World content", () => {
         expect(description.length).toBeGreaterThan(30);
         expect(features.length).toBeGreaterThan(0);
       }
+    }
+  });
+
+  it("gives every project a distinct camera stop, marker, and map entry", () => {
+    expect(Object.keys(projectStops).sort()).toEqual(projects.map(project => project.id).sort());
+    expect(new Set(projects.map(project => projectStops[project.id].target.join(","))).size).toBe(projects.length);
+    for (const project of projects) {
+      expect(sceneStops.filter(stop => stop.id === project.id)).toHaveLength(1);
+      expect(mapStops.filter(id => id === project.id)).toHaveLength(1);
     }
   });
 });
