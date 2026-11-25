@@ -104,11 +104,13 @@ export function buildModel(low: boolean, bakeLighting = false) {
   let active: SurfaceStop = "reenergy";
   type Batches = Map<T.Material, { cast: T.BufferGeometry[]; plain: T.BufferGeometry[] }>;
   const batches: Batches = new Map();
+  const siteBatches = new Map<SurfaceStop, Batches>();
+  const siteMeshes: { normal: T.Vector3; root: T.Group }[] = [];
   const carBatches: Batches = new Map();
   const carFallback = new T.Group();
   const carModels = new T.Group();
   const carPlacements: Array<{ x: number; z: number; angle: number }> = [];
-  let currentBatch = batches;
+  let buildingCars = false;
   let carsRequested = false;
   let surfacesRequested = false;
   const finishes = new Map<T.Material, SurfaceFinish>();
@@ -144,10 +146,10 @@ export function buildModel(low: boolean, bakeLighting = false) {
   finishes.set(wood, "timber");
   const soil = standard(0x4b563a, 1, 0, noise);
   const terrains = {
-    reenergy: 0x4a5541, "b-crm": 0x7a6e55, "isto-kebab": 0x9a7d53, starcars: 0x535941,
-    lab: 0x796145, motomizer: 0x605b43, beatmarket: 0x535b44, studio: 0x4f5a46, hq: 0x424e39,
+    reenergy: 0x789375, "b-crm": 0x90a264, "isto-kebab": 0xb29759, starcars: 0x68896a,
+    lab: 0x7e8d72, motomizer: 0x929878, beatmarket: 0x767d66, studio: 0x88a174, hq: 0x709067,
   } satisfies Record<SurfaceStop, number>;
-  const leaves = [0x3d5137, 0x4f6542, 0x667b4b, 0x7d8e55, 0xa2a66b].map(color => standard(color, 0.98));
+  const leaves = [0x436e55, 0x5a8462, 0x7c9c64, 0x90aa61, 0xb3ad68].map(color => standard(color, 0.98));
   const glass = low
     ? new T.MeshPhongMaterial({ color: 0x354a56, shininess: 72, specular: 0x737c8e })
     : new T.MeshPhysicalMaterial({ color: 0x354a56, roughness: 0.17, metalness: 0.36, clearcoat: 0.52 });
@@ -176,6 +178,15 @@ export function buildModel(low: boolean, bakeLighting = false) {
       }
     }
     geometry.applyMatrix4(sites[active].matrix);
+    let currentBatch = buildingCars ? carBatches : batches;
+    if (bakeLighting && !buildingCars) {
+      let atSite = siteBatches.get(active);
+      if (!atSite) {
+        atSite = new Map();
+        siteBatches.set(active, atSite);
+      }
+      currentBatch = atSite;
+    }
     let batch = currentBatch.get(material);
     if (!batch) {
       batch = { cast: [], plain: [] };
@@ -568,9 +579,9 @@ export function buildModel(low: boolean, bakeLighting = false) {
     const r = i === 0 ? -0.20 : i === 1 ? -0.33 : -0.36;
     groundShade(x, z, 2.16, 3.55, 0.279);
     carPlacements.push({ x, z, angle: r });
-    currentBatch = carBatches;
+    buildingCars = true;
     car(x, z, r, [red, silver, blue][i], i);
-    currentBatch = batches;
+    buildingCars = false;
     projectHit("starcars", x, 0.70, z, 1.92, 0.93, 3.13);
   }
   const canopyZ = carsZ - 2.03;
@@ -844,7 +855,7 @@ export function buildModel(low: boolean, bakeLighting = false) {
 
   addSigns();
 
-  // Static opaque surfaces share one unlit draw call in the software profile.
+  // Bake software lighting once, while keeping each site independently cullable.
   function flush(source: Batches, destination: T.Group) {
     const baked = new Map<SurfaceFinish | undefined, T.BufferGeometry[]>();
     for (const [material, { cast, plain }] of source) {
@@ -885,6 +896,19 @@ export function buildModel(low: boolean, bakeLighting = false) {
   }
 
   flush(batches, group);
+  for (const [name, siteBatch] of siteBatches) {
+    const root = new T.Group();
+    flush(siteBatch, root);
+    group.add(root);
+    siteMeshes.push({ normal: sites[name].normal, root });
+  }
+  const cameraNormal = new T.Vector3();
+  function cull(eye: T.Vector3) {
+    if (!siteMeshes.length) return;
+    const threshold = Math.max(-.17, globeRadius / Math.max(globeRadius, eye.length()) - .34);
+    cameraNormal.copy(eye).normalize();
+    for (const { normal, root } of siteMeshes) root.visible = normal.dot(cameraNormal) > threshold;
+  }
   flush(carBatches, carFallback);
   carModels.visible = false;
   group.add(carFallback, carModels);
@@ -1014,5 +1038,5 @@ export function buildModel(low: boolean, bakeLighting = false) {
     textures.clear();
   }
 
-  return { group, sites, hits, avatar, legs, beacon, loadSurfaces, loadCars, showDetailedCars, dispose };
+  return { group, sites, hits, avatar, legs, beacon, loadSurfaces, loadCars, showDetailedCars, cull, dispose };
 }

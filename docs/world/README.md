@@ -1,8 +1,20 @@
 # Bernecki World
 
-Świat jest dostępny pod adresami `/world`, `/en/world` i `/uk/world`. Przeciągnięcie myszą lub palcem obraca planetę przy stałym środku i skali. Menu miejsc otwiera się na żądanie. Wybranie miejsca w scenie, menu lub z klawiatury uruchamia przelot i zbliżenie. W klasycznej stronie przycisk „Świat 3D” otwiera wybór trybu z dwoma podglądami.
+Interaktywne portfolio działa pod adresami `/world`, `/en/world` i `/uk/world`. Menu zawiera istniejące realizacje i usługi, kontakt oraz przejście do Classic. Każdy projekt zachowuje link `#project-*`.
 
-## Miejsca na planecie
+## Poruszanie się
+
+| Tryb | Sterowanie |
+| --- | --- |
+| Glob i swobodna kamera | Przeciągnij myszą lub palcem. Zmień zoom kółkiem, gestem dwoma palcami lub klawiszami + i −. Obrót klawiaturą obsługują strzałki. |
+| Samochód | WASD, strzałki lub przyciski dotykowe. Spacja włącza klakson, R wraca na linię startu. Wjazd w strefę projektu otwiera jego kartę. |
+| Fotografia | F lub opcja kamery w menu. Wyjście klawiszem Escape albo dyskretnym przyciskiem. Dzień i noc można ustawić w menu kamery. |
+| Odkrycia | Kliknij obiekt lub skorzystaj z przycisku „Zbadaj” i klawisza E. Dziennik zapisuje licznik i osiągnięcia lokalnie. |
+| Podróże | Pomocnik wskazuje widoczne ciało niebieskie. Fast Travel pokazuje odkryte światy. |
+
+Scena przechodzi w statyczny podgląd, jeśli WebGL nie jest dostępny. Projekty pozostają wtedy dostępne z menu. Preferencja ograniczonego ruchu zatrzymuje animacje otoczenia i skraca przeloty.
+
+## Realizacje
 
 | Miejsce | Co otwiera |
 | --- | --- |
@@ -15,56 +27,20 @@
 | Scena BeatMarket | Platforma producentów i odsłuch beatów |
 | Pluszowy przewodnik Kacper | Informacje o autorze i ścieżka współpracy |
 
-Przyciski menu, kliknięcia obiektów i linki `#project-*` prowadzą do tych samych kart i zbliżeń. Miejsca rozmieszczono dla kompozycji globu i odkrywania jego drugiej strony. Etykieta Kacpra śledzi postać podczas poruszania klawiszami W, A, S, D lub kliknięciem alejki na placu.
-
 ## Kadry z buildu produkcyjnego
 
-| Ekran | Zrzut |
-| --- | --- |
-| 1920 × 1080 | [Przegląd](screenshots/1920x1080.webp) |
-| 1440 × 900 | [Przegląd](screenshots/1440x900.webp) |
-| 1024 × 768 | [Przegląd](screenshots/1024x768.webp) |
-| 768 × 1024 | [Przegląd](screenshots/768x1024.webp) |
-| 390 × 844 | [Przegląd](screenshots/390x844.webp) |
-| 390 × 664 | [Przegląd](screenshots/390x664.webp) |
-| 320 × 568 | [Przegląd](screenshots/320x568.webp) |
+- [Planeta i Księżyc](screenshots/game-desktop.webp) · [Planeta na telefonie](screenshots/game-mobile.webp)
+- [Kamera za samochodem](screenshots/game-drive.webp) · [Sterowanie dotykiem](screenshots/game-mobile-drive.webp)
+- [Menu](screenshots/game-menu.webp) · [B-CRM](screenshots/game-project.webp)
+- [Baza księżycowa](screenshots/game-moon.webp) · [Aster](screenshots/game-signal.webp) · [UFO](screenshots/game-ufo.webp)
+- [Przelot kosmiczny](screenshots/game-transit.webp) · [Tryb bez WebGL](screenshots/game-static.webp)
+- [Sprawdzenia i pomiary](../../QUALITY_GATE.md) · [Stan projektu](../../PROGRESS.md)
 
-- [Pełny profil renderowania, 1440 × 900](screenshots/full-quality-1440.webp)
-- [Panele słoneczne i karta ReEnergy](screenshots/reenergy.webp)
-- [ReEnergy w pełnym profilu materiałów](screenshots/reenergy-hdr.webp)
-- [Zbliżenie i karta StarCars na komputerze](screenshots/project-1440.webp)
-- [Plac StarCars na telefonie](screenshots/starcars-mobile.webp)
-- [Karta Isto Kebab w widoku dotykowym](screenshots/project-390.webp)
-- [Budka Isto Kebab](screenshots/isto-kebab.webp)
-- [Budynek B-CRM](screenshots/b-crm.webp)
-- [Kopuła Laboratorium AI](screenshots/lab.webp)
-- [Warsztat Motomizer](screenshots/motomizer.webp)
-- [Scena BeatMarket](screenshots/beatmarket.webp)
-- [Pluszowy przewodnik](screenshots/hq.webp)
-- [Wybór trybu](screenshots/mode.webp)
-- [Menu na komputerze](screenshots/menu-1440x900.webp)
-- [Menu w widoku dotykowym](screenshots/menu-390x844.webp)
-- [Widok po wyłączeniu WebGL](screenshots/fallback.webp)
-- [Profil iPhone 13 w WebKit](screenshots/webkit-iphone.webp)
+## Zasoby
 
-Przeglądy w tabeli wykonano w Chromium z renderowaniem programowym. Kadry pełnego profilu pokazują HDRI i materiały PBR z wymuszonym profilem w tej samej przeglądarce. Kadry mobilne pochodzą z profili przeglądarek. Na małych ekranach listę w menu można przewijać.
+Mapa terenu, drogi, pojazd gracza, dodatkowe światy i efekty to modele i materiały generowane przez scenę Three.js. LOD i profil jakości ograniczają zagęszczenie siatek, cząsteczki są buforowane, a flora jest instancjonowana. Aster jest budowane przy pierwszej podróży. Scena wycisza animacje w tle i ogranicza rozdzielczość, gdy renderer zwalnia.
 
-## Uruchomienie i źródła
-
-```sh
-npm ci
-npm run dev
-```
-
-Scena wczytuje się dynamicznie na trasach World. Kula Three.js ma teksturę satelitarną i atmosferę. Kamera najpierw odsuwa się od aktywnego miejsca, przemieszcza po zewnętrznym łuku i zbliża do celu od strony powierzchni. Plan dalszy stopniowo zanika w mgiełce. Przy pierwszym zbliżeniu aplikacja pobiera tekstury kamienia i drewna. Na wolnym sprzęcie używa uproszczonego oświetlenia i obniża rozdzielczość podczas ruchu.
-
-## Źródła modeli i tekstur
-
-- **Ziemia i chmury.** `planet-earth.webp` łączy mapę dzienną i mapę chmur Solar System Scope opartą na danych NASA, w tym Blue Marble. Zmieniono kolor i krycie chmur oraz zapisano wynik w WebP. [Solar System Scope](https://www.solarsystemscope.com/textures/) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
-- **Samochody.** `starcars-supercar.glb` to zoptymalizowany wariant LOD1 modelu Mid-Engine Supercar v2. Scena używa trzech wariantów lakieru i pobiera model przy wejściu do StarCars. [tevy](https://tevy.dev/models/supercar) · [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
-- **Asfalt.** `starcars-asphalt.webp` wykorzystuje mapę koloru Asphalt 012 z ambientCG. [ambientCG](https://ambientcg.com/view?id=Asphalt012) · [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
-- **Beton i drewno.** Tekstury koloru, normalnych i szorstkości pochodzą z zestawów Concrete 034 i Wood 049. [Concrete 034](https://ambientcg.com/view?id=Concrete034) · [Wood 049](https://ambientcg.com/view?id=Wood049) · [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
-- **Światło.** `environment.webp` to atlas CubeUV 128 px przygotowany z mapy HDRI Kloppenheim 06 Pure Sky. [Poly Haven](https://polyhaven.com/a/kloppenheim_06_puresky) · [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
-- **Kacper.** Pluszowy portret powstał w ImageGen na podstawie portretu właściciela z portfolio. Model 3D odtwarza zaczesane włosy, zarost, marynarkę i skrzyżowane ręce.
-
-Sterowanie i ustawienie widoku statycznego są dostępne w sekcji pomocy w menu. Pełny raport sprawdzeń znajduje się w [QUALITY_GATE.md](../../QUALITY_GATE.md), a aktualny stan wydania w [HEARTBEAT.md](../../HEARTBEAT.md).
+- Szczegółowe samochody StarCars są pobierane przy wejściu do projektu. [Mid-Engine Supercar v2, tevy · CC0](https://tevy.dev/models/supercar)
+- Kolor, normalne i szorstkość powierzchni pochodzą z map ambientCG. [Asphalt 012](https://ambientcg.com/view?id=Asphalt012) · [Concrete 034](https://ambientcg.com/view?id=Concrete034) · [Wood 049](https://ambientcg.com/view?id=Wood049)
+- Światło bazowe korzysta z atlasu HDRI. [Poly Haven Kloppenheim 06 Pure Sky · CC0](https://polyhaven.com/a/kloppenheim_06_puresky)
+- Pluszowy portret powstał w ImageGen na podstawie portretu właściciela z portfolio. Model 3D wykorzystuje jego charakterystyczną fryzurę, zarost i marynarkę.

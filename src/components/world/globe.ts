@@ -40,27 +40,11 @@ export function makeSurfaceSites() {
   }>;
 }
 
-export async function loadPlanet(software: boolean, low: boolean, signal: AbortSignal) {
-  const loader = new T.TextureLoader();
-  const surfaceMap = await loader.loadAsync("/images/world/planet-earth.webp");
-  try { signal.throwIfAborted(); } catch (error) { surfaceMap.dispose(); throw error; }
-  surfaceMap.colorSpace = T.SRGBColorSpace;
-  surfaceMap.anisotropy = low ? 2 : 8;
-  const sphere = new T.SphereGeometry(globeRadius, low ? 64 : 112, low ? 36 : 72);
+export function loadPlanet(software: boolean, low: boolean) {
+  const sphere = new T.SphereGeometry(globeRadius, low ? 112 : 160, low ? 64 : 96);
   const material = software
-    ? new T.MeshBasicMaterial({ map: surfaceMap, vertexColors: true, toneMapped: false })
-    : new T.MeshPhongMaterial({ map: surfaceMap, shininess: 23, specular: 0x101d30, emissive: 0x8ca6c5, emissiveIntensity: 0.28, emissiveMap: surfaceMap });
-  if (software) {
-    const sun = new T.Vector3(33, 56, 37).normalize();
-    const normal = sphere.getAttribute("normal");
-    const color = new Float32Array(normal.count * 3);
-    for (let i = 0; i < normal.count; i++) {
-      const direct = Math.max(0, sun.x * normal.getX(i) + sun.y * normal.getY(i) + sun.z * normal.getZ(i));
-      const light = 0.36 + 0.64 * Math.pow(direct, 0.7);
-      color.set([light, light, light + 0.045 * (1 - light)], i * 3);
-    }
-    sphere.setAttribute("color", new T.BufferAttribute(color, 3));
-  }
+    ? new T.MeshBasicMaterial({ vertexColors: true, toneMapped: false })
+    : new T.MeshPhongMaterial({ vertexColors: true, shininess: 18, specular: 0x122b38, emissive: 0x2c3b51, emissiveIntensity: 0.27 });
   const globe = new T.Mesh(sphere, material);
   const group = new T.Group().add(globe);
   const atmosphere = new T.Mesh(new T.SphereGeometry(globeRadius * 1.060, low ? 48 : 80, low ? 24 : 48), new T.ShaderMaterial({
@@ -80,15 +64,15 @@ export async function loadPlanet(software: boolean, low: boolean, signal: AbortS
       void main() {
         float edge = abs(dot(normalize(viewNormal), normalize(toEye)));
         float haze = smoothstep(0.0, 0.20, edge) * exp(-2.6 * (1.0 - edge));
-        gl_FragColor = vec4(vec3(0.27, 0.55, 0.96), haze * 0.82);
+        gl_FragColor = vec4(vec3(0.32, 0.67, 0.92), haze * 0.64);
       }`,
   }));
   group.add(atmosphere);
   if (!software) globe.receiveShadow = true;
   return {
     group,
+    sphere,
     dispose() {
-      surfaceMap.dispose();
       globe.geometry.dispose();
       globe.material.dispose();
       atmosphere.geometry.dispose();
