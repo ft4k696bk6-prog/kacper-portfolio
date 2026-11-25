@@ -69,7 +69,7 @@
 .fallback { pointer-events: none; transition: opacity .46s; }
 .fallback img { object-fit: contain; }
 .world[data-render="ready"] .canvas { opacity: 1; }
-.world[data-render="static"] .canvas { pointer-events: none; }
+.world:not([data-render="ready"]) .canvas { pointer-events: none; }
 .world:not([data-view="overview"]) .canvas {
   mask-image: linear-gradient(90deg, transparent, #000 9%, #000 96%, transparent),
     linear-gradient(0deg, transparent, #000 9%, #000 93%, transparent);

@@ -49,6 +49,7 @@ export function World({ locale }: { locale: WorldLocale }) {
   const [sceneAttempt, setSceneAttempt] = useState(0);
   const stage = useRef<HTMLDivElement>(null);
   const host = useRef<HTMLDivElement>(null);
+  const poster = useRef<HTMLImageElement>(null);
   const compass = useRef<SVGSVGElement>(null);
   const scene = useRef<WorldController | null>(null);
   const main = useRef<HTMLElement>(null);
@@ -112,8 +113,9 @@ export function World({ locale }: { locale: WorldLocale }) {
       }
       setStatus("static");
     };
-    // The route and static model paint before Three.js is requested.
-    const paint = requestAnimationFrame(() => {
+    let paint = 0;
+    // Decode and paint the overview artwork before starting GPU and shader setup.
+    const loadScene = () => {
       import("./scene").then(async ({ createWorld }) => {
         if (stopped) return;
         if (!window.WebGL2RenderingContext) { fallback(); return; }
@@ -151,6 +153,11 @@ export function World({ locale }: { locale: WorldLocale }) {
           fallback();
         }
       }, fallback);
+    };
+    const decoded = poster.current?.decode() ?? Promise.resolve();
+    decoded.catch(() => {}).then(() => {
+      if (stopped) return;
+      paint = requestAnimationFrame(() => { paint = requestAnimationFrame(loadScene); });
     });
     return () => {
       stopped = true;
@@ -291,7 +298,7 @@ export function World({ locale }: { locale: WorldLocale }) {
           if (event.pointerType === "mouse" && event.target instanceof HTMLCanvasElement) stage.current?.focus({ preventScroll: true });
         }}>
         <div className={styles.fallback} aria-hidden="true">
-          <Image src="/images/world/model.webp" alt="" fill unoptimized priority />
+          <Image ref={poster} src="/images/world/model.webp" alt="" fill unoptimized priority fetchPriority="high" />
         </div>
         <div className={styles.canvas} ref={host} />
         <div className={styles.hotspots} aria-label={t.places}>
@@ -299,10 +306,9 @@ export function World({ locale }: { locale: WorldLocale }) {
             <button type="button" key={place.id} className={styles.hotspot}
               data-zone={place.id} data-side={place.labelSide} data-selected={selection.zone === place.id}
               ref={node => { markers.current[place.id] = node; }}
-              aria-label={t.zones[place.id].title} tabIndex={isOverview ? 0 : -1}
-              onClick={() => selectZone(place.id)}>
+              tabIndex={isOverview ? 0 : -1} onClick={() => selectZone(place.id)}>
               <span className={styles.hotspotDot} aria-hidden="true" />
-              <span className={styles.hotspotCaption} aria-hidden="true"><small>{String(i + 1).padStart(2, "0")}</small>{t.zones[place.id].short}<ArrowUpRight size={11} strokeWidth={1.65} /></span>
+              <span className={styles.hotspotCaption}><small>{String(i + 1).padStart(2, "0")}</small>{" "}{t.zones[place.id].short}<ArrowUpRight size={11} strokeWidth={1.65} aria-hidden="true" /></span>
             </button>
           ))}
         </div>

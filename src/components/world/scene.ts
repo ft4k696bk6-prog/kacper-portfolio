@@ -19,28 +19,44 @@ const initial = { theta: 0.66, phi: 0.956, zoom: 1 };
 const overview = new T.Vector3(0, 0.9, 0);
 const travelKeys = new Set(["w", "a", "s", "d"]);
 
+function makeContext(antialias: boolean) {
+  const canvas = document.createElement("canvas");
+  const options: WebGLContextAttributes = { alpha: true, antialias, powerPreference: "high-performance" };
+  const context = canvas.getContext("webgl2", options);
+  if (!(context instanceof WebGL2RenderingContext)) throw new Error("WebGL 2 is unavailable");
+  return { canvas, options, context };
+}
 
 export async function createWorld(host: HTMLElement, callbacks: Callbacks, signal: AbortSignal) {
-  const low = window.matchMedia("(pointer: coarse)").matches || host.clientWidth < 595;
+  const compact = window.matchMedia("(pointer: coarse)").matches || host.clientWidth < 595;
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const environment = low ? null : await loadLighting(signal);
-  if (signal.aborted) {
-    environment?.dispose();
-    signal.throwIfAborted();
+  let graphics = makeContext(!compact);
+  const debug = graphics.context.getExtension("WEBGL_debug_renderer_info");
+  const rendererName = debug ? String(graphics.context.getParameter(debug.UNMASKED_RENDERER_WEBGL)) : "";
+  const software = /swiftshader|llvmpipe|softpipe|software rasterizer/i.test(rendererName);
+  if (software && !compact) {
+    graphics.context.getExtension("WEBGL_lose_context")?.loseContext();
+    graphics = makeContext(false);
   }
-  const canvas = document.createElement("canvas");
-  const options: WebGLContextAttributes = { alpha: true, antialias: !low, powerPreference: "high-performance" };
-  const context = canvas.getContext("webgl2", options);
-  if (!(context instanceof WebGL2RenderingContext)) {
+  const { canvas, context, options } = graphics;
+  const low = compact || software;
+  let environment: T.Texture | null = null;
+  try {
+    if (!low) environment = await loadLighting(signal);
+    signal.throwIfAborted();
+  } catch (error) {
     environment?.dispose();
-    throw new Error("WebGL 2 is unavailable");
+    context.getExtension("WEBGL_lose_context")?.loseContext();
+    throw error;
   }
   const renderer = new T.WebGLRenderer({ ...options, canvas, context });
   renderer.setClearColor(0x101210, 0);
   renderer.outputColorSpace = T.SRGBColorSpace;
   renderer.toneMapping = T.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
-  let dpr = Math.min(window.devicePixelRatio || 1, low ? 1.15 : 1.55);
+  const pixelBudget = software ? 450_000 : 1_550_000;
+  const minimumDpr = software ? 0.58 : 0.75;
+  let dpr = Math.min(window.devicePixelRatio || 1, software ? 0.9 : compact ? 1.15 : 1.55);
   renderer.setPixelRatio(dpr);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = low ? T.BasicShadowMap : T.PCFShadowMap;
@@ -53,7 +69,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   const spherical = new T.Spherical(46, initial.phi, initial.theta);
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = !motion.matches;
-  controls.dampingFactor = 0.074;
+  controls.dampingFactor = software ? 0.17 : 0.074;
   controls.enablePan = false;
   controls.rotateSpeed = 0.6;
   controls.zoomSpeed = 0.88;
@@ -74,7 +90,8 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   const sun = new T.DirectionalLight(0xffefda, low ? 2.10 : 2.55);
   sun.position.set(-18, 24, 11);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(low ? 1024 : 2048, low ? 1024 : 2048);
+  const shadowSize = software ? 512 : compact ? 1024 : 2048;
+  sun.shadow.mapSize.set(shadowSize, shadowSize);
   sun.shadow.camera.left = -23;
   sun.shadow.camera.right = 23;
   sun.shadow.camera.top = 20;
@@ -104,6 +121,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   let waypoint: T.Vector2 | null = null;
   let travel = 0;
   let request = 0;
+  let compiled = false;
   let called = false;
   let paused = document.hidden;
   let disposed = false;
@@ -128,7 +146,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   }
 
   function requestRender() {
-    if (!disposed && !lost && !paused && !request) request = requestAnimationFrame(frame);
+    if (compiled && !disposed && !lost && !paused && !request) request = requestAnimationFrame(frame);
   }
 
   function resize() {
@@ -136,13 +154,13 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     const width = Math.max(host.clientWidth, 1);
     const height = Math.max(host.clientHeight, 1);
     const aspect = width / height;
-    const frustum = Math.max(25.4, (low ? 38.8 : 38.2) / aspect);
+    const frustum = Math.max(25.4, (compact ? 38.8 : 38.2) / aspect);
     camera.left = -frustum * aspect / 2;
     camera.right = frustum * aspect / 2;
     camera.top = frustum / 2;
     camera.bottom = -frustum / 2;
     camera.updateProjectionMatrix();
-    renderer.setPixelRatio(Math.min(dpr, Math.sqrt(1_550_000 / (width * height))));
+    renderer.setPixelRatio(Math.min(dpr, Math.sqrt(pixelBudget / (width * height))));
     renderer.setSize(width, height, false);
     size.set(width, height);
     requestRender();
@@ -220,11 +238,11 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       elapsed += Math.min(dt, 300);
       if (samples === 12) {
         const average = elapsed / samples;
-        if (average > (low ? 37 : 26) && dpr > 0.76) {
-          dpr = Math.max(0.75, dpr * 0.82);
+        if (average > (low ? 37 : 26) && dpr > minimumDpr + 0.01) {
+          dpr = Math.max(minimumDpr, dpr * 0.82);
           resize();
         }
-        slowWindows = average > 170 && dpr <= 0.76 ? slowWindows + 1 : 0;
+        slowWindows = average > 170 && dpr <= minimumDpr + 0.01 ? slowWindows + 1 : 0;
         samples = elapsed = 0;
         if (slowWindows >= 3) {
           callbacks.lost();
@@ -246,7 +264,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       phi: display ? 1.10 : angle[1],
       radius: display ? 14 : angle[2],
       x: target.x, y: target.y, z: target.z,
-      zoom: display ? low ? 3.22 : 3.5 : match ? low ? 2.05 : 2.17 : 1,
+      zoom: display ? compact ? 3.22 : 3.5 : match ? compact ? 2.05 : 2.17 : 1,
     };
   }
 
@@ -407,10 +425,8 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   document.addEventListener("visibilitychange", visibility);
   motion.addEventListener("change", motionChange);
   const observer = new ResizeObserver(resize);
-  observer.observe(host);
-  resize();
 
-  return {
+  const controller = {
     moveView,
     nudge,
     avatarKey(key: string, pressed: boolean) {
@@ -448,6 +464,19 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       canvas.remove();
     },
   };
+
+  try {
+    await renderer.compileAsync(scene, camera);
+    signal.throwIfAborted();
+    if (lost) throw new Error("The WebGL context was lost during startup");
+  } catch (error) {
+    controller.dispose();
+    throw error;
+  }
+  compiled = true;
+  observer.observe(host);
+  resize();
+  return controller;
 }
 
 export type WorldController = Awaited<ReturnType<typeof createWorld>>;
