@@ -268,7 +268,7 @@ export function World({ locale }: { locale: WorldLocale }) {
       </div>
       <div className={styles.headerActions}>
         <div className={styles.lang} ref={langMenu}>
-          <button type="button" ref={langButton} aria-expanded={language} aria-controls="world-languages" aria-label={t.language}
+          <button type="button" ref={langButton} aria-expanded={language} aria-controls="world-languages" aria-label={`${t.language} · ${locale.toUpperCase()}`}
             onClick={() => setLanguage(open => !open)}><Globe2 size={15} strokeWidth={1.5} />{locale.toUpperCase()}</button>
           <div className={styles.langMenu} id="world-languages" hidden={!language}>
             {(Object.keys(worldPaths) as WorldLocale[]).map(key =>
