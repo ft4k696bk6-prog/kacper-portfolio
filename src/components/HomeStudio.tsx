@@ -17,6 +17,7 @@ import { LeadContactForm } from "./LeadContactForm";
 import { OfferCards } from "./OfferCards";
 import { commercialServiceDetails } from "@/content/commercial-services";
 import styles from "./HomeStudio.module.css";
+import { ExperienceEntry } from "./world/Experience";
 
 export function HomeStudio() {
   const { lang, t } = useLanguage();
@@ -138,6 +139,7 @@ export function HomeStudio() {
           <a className={styles.secondary} href="#projects">{c.projects}<ArrowUpRight size={18}/></a>
           <Link className={styles.secondary} href={lang==="en"?"/en/services/websites":"/tworzenie-stron-internetowych"}>{lang==="pl"?"Strony i landing page":"Websites and landing pages"}<ArrowUpRight size={18}/></Link>
         </div>
+        <ExperienceEntry locale={lang} />
       </div>
       <div className={styles.heroScene}>
         <div className={styles.portraitLight} aria-hidden="true" />

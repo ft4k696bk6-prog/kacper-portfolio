@@ -26,6 +26,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...ukSalesPages.map(page=>({url:siteUrl+ukPath(page),changeFrequency:"monthly" as const,priority:page.slug?0.82:0.93,alternates:{languages:ukAlternates(page)}})),
     {url:siteUrl+"/minigry",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/minigry",en:siteUrl+"/en/games"}}},
     {url:siteUrl+"/en/games",changeFrequency:"monthly",priority:0.8,alternates:{languages:{"pl-PL":siteUrl+"/minigry",en:siteUrl+"/en/games"}}},
+    ...["/world", "/en/world", "/uk/world"].map(path => ({
+      url: siteUrl + path,
+      changeFrequency: "monthly" as const,
+      alternates: { languages: { "pl-PL": siteUrl + "/world", en: siteUrl + "/en/world", "uk-UA": siteUrl + "/uk/world" } },
+    })),
     // Every commercial translation is indexed as its own canonical URL, with reciprocal hreflang.
     ...([["/cennik","/en/pricing",0.95],["/pakiety","/en/packages",0.95],["/pozyskiwanie-klientow","/en/customer-acquisition",0.96],["/reklamy-online","/en/advertising",0.95],["/kontakt","/en/contact",0.85],["/polityka-prywatnosci","/en/privacy",0.2],["/automatyzacja-leadow-i-sprzedazy","/en/services/automation",0.9]] as const).flatMap(([pl,en,priority])=>{
       const languages={"pl-PL":siteUrl+pl,en:siteUrl+en};
