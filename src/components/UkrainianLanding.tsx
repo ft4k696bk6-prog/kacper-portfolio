@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ExperienceEntry } from "./world/Experience";
 import {UkrainianLeadForm} from "@/components/UkrainianLeadForm";
 import {ukSalesPages,ukPath,type UkrainianSalesPage} from "@/content/uk-sales";
 
@@ -18,6 +19,7 @@ export function UkrainianLanding({page}:{page:UkrainianSalesPage}){
     <h1 className="max-w-4xl text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">{page.h1}</h1>
     <p className="mt-8 max-w-3xl text-lg leading-8 text-white/75">{page.lead}</p>
     <div className="mt-9 flex flex-wrap gap-3"><Link href="/uk/kontakty#forma" className="brand-action rounded-lg px-6 py-3 font-semibold text-black">Обговорити проєкт</Link><Link href="/uk/tsiny" className="rounded-lg border border-white/25 px-6 py-3">Як формується ціна</Link></div>
+    {!page.slug && <ExperienceEntry locale="uk" />}
    </section>
    <section className="border-y border-white/10 bg-[#101010] py-14">
     <div className="mx-auto grid max-w-6xl gap-8 px-5 md:grid-cols-2">

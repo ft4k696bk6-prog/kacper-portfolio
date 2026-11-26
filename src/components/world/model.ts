@@ -1,0 +1,1260 @@
+import * as T from "three";
+import { mergeGeometries, mergeVertices } from "three/addons/utils/BufferGeometryUtils.js";
+import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+import { projectIndex, type ProjectId, type Zone } from "./content";
+import { globeRadius, makeSurfaceSites, type SurfaceStop } from "./globe";
+
+const tau = Math.PI * 2;
+
+function sampler(seed: number) {
+  return () => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return seed / 4294967296;
+  };
+}
+
+function surfaceTexture() {
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = 128;
+  const context = canvas.getContext("2d")!;
+  const pixels = context.createImageData(128, 128);
+  const random = sampler(73);
+  for (let i = 0; i < pixels.data.length; i += 4) {
+    const value = Math.round(205 + random() * 45);
+    pixels.data.set([value, value, value, 255], i);
+  }
+  context.putImageData(pixels, 0, 0);
+  const texture = new T.CanvasTexture(canvas);
+  texture.colorSpace = T.SRGBColorSpace;
+  texture.wrapS = texture.wrapT = T.RepeatWrapping;
+  return texture;
+}
+
+function contactTexture() {
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = 128;
+  const context = canvas.getContext("2d")!;
+  const gradient = context.createRadialGradient(64, 64, 9, 64, 64, 63);
+  gradient.addColorStop(0, "rgba(0,0,0,.7)");
+  gradient.addColorStop(0.5, "rgba(0,0,0,.34)");
+  gradient.addColorStop(1, "rgba(0,0,0,0)");
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, 128, 128);
+  return new T.CanvasTexture(canvas);
+}
+
+function lit(color: number, emissiveIntensity = 0.65) {
+  return new T.MeshLambertMaterial({ color, emissive: color, emissiveIntensity });
+}
+
+function roundedFootprint(width: number, depth: number, radius: number) {
+  const w = width / 2;
+  const d = depth / 2;
+  const shape = new T.Shape();
+  shape.moveTo(-w + radius, -d);
+  shape.lineTo(w - radius, -d);
+  shape.quadraticCurveTo(w, -d, w, -d + radius);
+  shape.lineTo(w, d - radius);
+  shape.quadraticCurveTo(w, d, w - radius, d);
+  shape.lineTo(-w + radius, d);
+  shape.quadraticCurveTo(-w, d, -w, d - radius);
+  shape.lineTo(-w, -d + radius);
+  shape.quadraticCurveTo(-w, -d, -w + radius, -d);
+  return shape;
+}
+
+export type Hit = { zone: Zone; project?: number };
+const sunlight = new T.Vector3(33, 56, 37).normalize();
+type SurfaceFinish = "stone" | "timber";
+
+// Fit the scene exposure once per vertex for the software-rendered profile.
+function filmicChannel(linear: number) {
+  const exposed = linear * 1.75;
+  const mapped = (exposed * (exposed + 0.0245786) - 0.000090537)
+    / (exposed * (0.983729 * exposed + 0.432951) + 0.238081);
+  return Math.round(T.MathUtils.clamp(mapped, 0, 1) * 255);
+}
+
+function bakeSurface(geometry: T.BufferGeometry, material: T.MeshLambertMaterial | T.MeshPhongMaterial, textured = false) {
+  const normal = geometry.getAttribute("normal");
+  const position = geometry.getAttribute("position");
+  const colors = new Uint8Array(normal.count * 3);
+  const tint = geometry.getAttribute("color");
+  const base = material.color;
+  const emission = material.emissive;
+  const intensity = material.emissiveIntensity;
+  for (let i = 0; i < normal.count; i++) {
+    const y = normal.getY(i);
+    const direct = Math.max(0, normal.getX(i) * sunlight.x + y * sunlight.y + normal.getZ(i) * sunlight.z);
+    const ambient = 0.57 + Math.max(0, y) * 0.23;
+    const light = (ambient + direct * 0.59 + Math.min(0.045, Math.max(0, position.getY(i)) * 0.01)) * (tint ? tint.getX(i) : 1);
+    colors[i * 3] = filmicChannel(base.r * light + emission.r * intensity);
+    colors[i * 3 + 1] = filmicChannel(base.g * light * 0.99 + emission.g * intensity);
+    colors[i * 3 + 2] = filmicChannel(base.b * light * 0.96 + emission.b * intensity);
+  }
+  geometry.deleteAttribute("normal");
+  if (!textured) geometry.deleteAttribute("uv");
+  geometry.setAttribute("color", new T.BufferAttribute(colors, 3, true));
+  return geometry;
+}
+
+export function buildModel(low: boolean, bakeLighting = false, included?: ReadonlySet<SurfaceStop>, siteTint?: number, atlas = false) {
+  const group = new T.Group();
+  const sites = makeSurfaceSites();
+  let active: SurfaceStop = "reenergy";
+  type Batches = Map<T.Material, { cast: T.BufferGeometry[]; plain: T.BufferGeometry[] }>;
+  const batches: Batches = new Map();
+  const siteBatches = new Map<SurfaceStop, Batches>();
+  const siteMeshes: { normal: T.Vector3; root: T.Group }[] = [];
+  const atlasSites = new Map<SurfaceStop, T.Group>();
+  const carBatches: Batches = new Map();
+  const carFallback = new T.Group();
+  const carModels = new T.Group();
+  const carPlacements: Array<{ x: number; z: number; angle: number }> = [];
+  let buildingCars = false;
+  let carsRequested = false;
+  let surfacesRequested = false;
+  const finishes = new Map<T.Material, SurfaceFinish>();
+  const surfaceMaterials = new Map<SurfaceFinish, Set<T.MeshBasicMaterial | T.MeshLambertMaterial | T.MeshStandardMaterial>>([
+    ["stone", new Set()], ["timber", new Set()],
+  ]);
+  let disposed = false;
+  const textures = new Set<T.Texture>();
+  const materials = new Set<T.Material>();
+  const hits: T.Mesh<T.BufferGeometry, T.Material>[] = [];
+  const noise = bakeLighting ? null : surfaceTexture();
+  const ao = atlas ? null : contactTexture();
+  if (noise) textures.add(noise);
+  if (ao) textures.add(ao);
+  const random = sampler(317);
+  function standard(color: number, roughness = 0.76, metalness = 0, map: T.Texture | null = null) {
+    return low
+      ? new T.MeshLambertMaterial({ color, map })
+      : new T.MeshStandardMaterial({ color, roughness, metalness, map });
+  }
+  const stone = standard(0xc7b6a4, 0.92);
+  const sandstone = standard(0xdfd2bc, 0.86);
+  const pale = standard(0xe4d8c6, 0.82);
+  const asphalt = standard(0x363b43, 0.97);
+  const curb = standard(0x9e9487, 0.93);
+  const slate = standard(0x30373e, 0.88, 0, noise);
+  const graphite = standard(0x292e36, 0.64, 0.24);
+  const black = standard(0x191b21, 0.79);
+  const metal = standard(0x9ca5a7, 0.37, 0.56);
+  const bronze = standard(0x997155, 0.44, 0.42);
+  const wood = standard(0x8b6b53, 0.86);
+  for (const material of [stone, sandstone, pale, curb]) finishes.set(material, "stone");
+  finishes.set(wood, "timber");
+  const soil = standard(0x4b563a, 1, 0, noise);
+  const terrains = {
+    reenergy: 0x789375, "b-crm": 0x90a264, "isto-kebab": 0xb29759, starcars: 0x68896a,
+    lab: 0x7e8d72, motomizer: 0x929878, beatmarket: 0x767d66, studio: 0x88a174, hq: 0x709067,
+  } satisfies Record<SurfaceStop, number>;
+  const leaves = [0x436e55, 0x5a8462, 0x7c9c64, 0x90aa61, 0xb3ad68].map(color => standard(color, 0.98));
+  const glass = low
+    ? new T.MeshPhongMaterial({ color: 0x354a56, shininess: 72, specular: 0x737c8e })
+    : new T.MeshPhysicalMaterial({ color: 0x354a56, roughness: 0.17, metalness: 0.36, clearcoat: 0.52 });
+  const deepGlass = low
+    ? new T.MeshPhongMaterial({ color: 0x202b37, shininess: 82, specular: 0x777e8b })
+    : new T.MeshPhysicalMaterial({ color: 0x202b37, roughness: 0.16, metalness: 0.39, clearcoat: 0.59 });
+  const warmGlass = lit(0xd1a369, 0.35);
+  const cyanGlass = lit(0x287a82, 0.34);
+  const lamp = lit(0xffd699, 0.84);
+  const cyan = lit(0x8ba6ab, 0.37);
+  const paintLine = standard(0xe8d9ba, 0.88);
+  const shadow = new T.MeshBasicMaterial({ map: ao, transparent: true, depthWrite: false, opacity: 0.84, polygonOffset: true, polygonOffsetFactor: -2 });
+
+  const span = new T.Vector3();
+  function add(geometry: T.BufferGeometry, material: T.Material, x: number, y: number, z: number, cast = true, rx = 0, ry = 0, rz = 0) {
+    if (included && !included.has(active)) { geometry.dispose(); return; }
+    if (atlas) {
+      geometry.computeBoundingBox();
+      geometry.boundingBox!.getSize(span);
+      const area = Math.max(span.x * span.y, span.x * span.z, span.y * span.z);
+      if (material.transparent || area < (buildingCars ? .24 : .51)) { geometry.dispose(); return; }
+    }
+    geometry.rotateX(rx).rotateY(ry).rotateZ(rz).translate(x, y, z);
+    if (!atlas && finishes.has(material)) {
+      const position = geometry.getAttribute("position");
+      const normal = geometry.getAttribute("normal");
+      const uv = geometry.getAttribute("uv");
+      const repeat = finishes.get(material) === "timber" ? 0.85 : 0.64;
+      for (let i = 0; i < uv.count; i++) {
+        const nx = Math.abs(normal.getX(i)), ny = Math.abs(normal.getY(i)), nz = Math.abs(normal.getZ(i));
+        const u = nx > Math.max(ny, nz) ? position.getZ(i) : position.getX(i);
+        const v = ny > Math.max(nx, nz) ? position.getZ(i) : position.getY(i);
+        uv.setXY(i, u * repeat, v * repeat);
+      }
+    }
+    geometry.applyMatrix4(sites[active].matrix);
+    let currentBatch = buildingCars ? carBatches : batches;
+    if (bakeLighting && !buildingCars) {
+      let atSite = siteBatches.get(active);
+      if (!atSite) {
+        atSite = new Map();
+        siteBatches.set(active, atSite);
+      }
+      currentBatch = atSite;
+    }
+    let batch = currentBatch.get(material);
+    if (!batch) {
+      batch = { cast: [], plain: [] };
+      currentBatch.set(material, batch);
+    }
+    (cast ? batch.cast : batch.plain).push(geometry);
+    materials.add(material);
+  }
+
+  function box(x: number, y: number, z: number, w: number, h: number, d: number, m: T.Material, cast = true, ry = 0) {
+    if (included && !included.has(active)) return;
+    add(new T.BoxGeometry(w, h, d), m, x, y, z, cast, 0, ry);
+  }
+
+  function rounded(x: number, y: number, z: number, w: number, h: number, d: number, m: T.Material, radius = 0.08, ry = 0) {
+    if (included && !included.has(active)) return;
+    const geometry = atlas || bakeLighting && radius < 0.055
+      ? new T.BoxGeometry(w, h, d)
+      : new RoundedBoxGeometry(w, h, d, low ? 1 : 2, radius);
+    add(geometry, m, x, y, z, true, 0, ry);
+  }
+
+  function slab(w: number, d: number, height: number, radius: number, base: number, m: T.Material, x = 0, z = 0) {
+    if (included && !included.has(active)) return;
+    add(new T.ExtrudeGeometry(roundedFootprint(w, d, radius), {
+      depth: height, steps: 1, bevelEnabled: false, curveSegments: 10,
+    }), m, x, base, z, true, -Math.PI / 2);
+  }
+
+  function cylinder(x: number, y: number, z: number, rt: number, rb: number, h: number, m: T.Material, n = 32, cast = true) {
+    if (included && !included.has(active)) return;
+    add(new T.CylinderGeometry(rt, rb, h, atlas ? Math.min(n, 14) : n), m, x, y, z, cast);
+  }
+
+  function ring(x: number, y: number, z: number, radius: number, tube: number, m: T.Material, segments = 64) {
+    if (included && !included.has(active)) return;
+    add(new T.TorusGeometry(radius, tube, 6, bakeLighting ? Math.min(segments, 36) : segments), m, x, y, z, false, Math.PI / 2);
+  }
+
+  function groundShade(x: number, z: number, w: number, d: number, y = 0.054, material = shadow) {
+    if (included && !included.has(active)) return;
+    add(new T.PlaneGeometry(w, d), material, x, y, z, false, -Math.PI / 2);
+  }
+
+  function post(x: number, z: number, h: number, y = 0.05) {
+    box(x, y + h / 2, z, 0.14, h, 0.14, graphite);
+    box(x, y + h, z, 0.19, 0.06, 0.19, lamp, false);
+  }
+
+  function tree(x: number, z: number, size: number, base = 0.1) {
+    if (included && !included.has(active)) return;
+    groundShade(x, z, size * 1.8, size * 1.6, base + 0.013);
+    cylinder(x, base + size * 0.37, z, size * 0.042, size * 0.068, size * 0.74, wood, 6);
+    const count = low ? 17 : 43;
+    for (let i = 0; i < count; i++) {
+      const angle = random() * tau;
+      const spread = (0.04 + random() * 0.39) * size;
+      const radius = (0.067 + random() * 0.143) * size;
+      const leaf = new T.IcosahedronGeometry(radius, low ? 0 : 1).scale(1.16, 0.66 + random() * 0.46, 1);
+      add(leaf, leaves[Math.floor(random() * leaves.length)], x + Math.cos(angle) * spread,
+        base + size * (0.66 + random() * 0.4) - spread * 0.18, z + Math.sin(angle) * spread, true, 0, angle);
+    }
+  }
+
+  function grasses(x: number, z: number, n: number, spread: number, base = 0.052) {
+    for (let i = 0; i < n; i++) {
+      const angle = random() * tau;
+      const r = random() * spread;
+      const h = 0.12 + random() * 0.3;
+      const g = new T.ConeGeometry(0.036 + random() * 0.06, h, 3);
+      add(g, leaves[Math.floor(random() * leaves.length)], x + Math.cos(angle) * r, base + h / 2, z + Math.sin(angle) * r, false,
+        random() * 0.35 - 0.17, angle, random() * 0.48 - 0.24);
+    }
+  }
+
+  const signs: Array<{ text: string; x: number; y: number; z: number; width: number; height: number; color: string; site: SurfaceStop }> = [];
+  function sign(text: string, x: number, y: number, z: number, width: number, height: number, color = "#ebf1db") {
+    if (atlas || included && !included.has(active)) return;
+    signs.push({ text, x, y, z, width, height, color, site: active });
+  }
+
+  function addSigns() {
+    if (!signs.length) return;
+    const row = 80;
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = row * signs.length;
+    const ctx = canvas.getContext("2d")!;
+    ctx.font = "650 48px system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    const texture = new T.CanvasTexture(canvas);
+    texture.colorSpace = T.SRGBColorSpace;
+    textures.add(texture);
+    const material = new T.MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false });
+    signs.forEach(({ text, x, y, z, width, height, color, site }, i) => {
+      active = site;
+      ctx.fillStyle = color;
+      ctx.fillText(text, canvas.width / 2, row * (i + 0.53), canvas.width - 26);
+      const geometry = new T.PlaneGeometry(width, height);
+      const uv = geometry.getAttribute("uv");
+      for (let j = 0; j < uv.count; j++) {
+        uv.setY(j, 1 - (row * (i + 1 - uv.getY(j))) / canvas.height);
+      }
+      add(geometry, material, x, y, z, false);
+    });
+  }
+
+  function proxy(x: number, y: number, z: number, w: number, h: number, d: number, hit: Hit) {
+    if (atlas || included && !included.has(active)) return;
+    const material = new T.MeshBasicMaterial({ visible: false });
+    materials.add(material);
+    const object = new T.Mesh(new T.BoxGeometry(w, h, d), material);
+    object.position.set(x, y, z).applyMatrix4(sites[active].matrix);
+    object.quaternion.setFromRotationMatrix(sites[active].matrix);
+    object.userData.hit = hit;
+    group.add(object);
+    hits.push(object);
+  }
+
+  function projectHit(id: ProjectId, x: number, y: number, z: number, w: number, h: number, d: number) {
+    proxy(x, y, z, w, h, d, { zone: "gallery", project: projectIndex(id) });
+  }
+
+  function ball(x: number, y: number, z: number, w: number, h: number, d: number, material: T.Material, rx = 0, ry = 0, rz = 0) {
+    if (included && !included.has(active)) return;
+    add(new T.SphereGeometry(1, low ? 10 : 18, low ? 7 : 12).scale(w, h, d), material, x, y, z, true, rx, ry, rz);
+  }
+
+  function rail(a: readonly [number, number, number], b: readonly [number, number, number], width: number, material: T.Material, cast = true) {
+    if (included && !included.has(active)) return;
+    const start = new T.Vector3(...a);
+    const end = new T.Vector3(...b);
+    const delta = end.clone().sub(start);
+    const midpoint = start.lerp(end, 0.5);
+    const rotation = new T.Quaternion().setFromUnitVectors(T.Object3D.DEFAULT_UP, delta.clone().normalize());
+    const geometry = new T.BoxGeometry(width, delta.length(), width).applyQuaternion(rotation);
+    add(geometry, material, midpoint.x, midpoint.y, midpoint.z, cast);
+  }
+
+  function flowerBed(x: number, z: number, width: number, depth: number, raisedBy = 0) {
+    if (included && !included.has(active)) return;
+    rounded(x, raisedBy + 0.23, z, width, 0.32, depth, stone, 0.07);
+    box(x, raisedBy + 0.40, z, width - 0.13, 0.035, depth - 0.13, soil);
+    for (let i = 0; i < 7; i++) {
+      const r = random();
+      ball(x + (r - 0.5) * (width - 0.30), raisedBy + 0.45 + random() * 0.09, z + (random() - 0.5) * (depth - 0.25), 0.13, 0.17, 0.14, leaves[i % leaves.length]);
+    }
+  }
+
+  function seat(x: number, z: number, angle = 0) {
+    for (const t of [-0.48, 0.48]) box(x + Math.cos(angle) * t, 0.29, z - Math.sin(angle) * t, 0.08, 0.36, 0.46, graphite, true, angle);
+    for (const t of [-0.13, 0, 0.13]) box(x + Math.sin(angle) * t, 0.47, z + Math.cos(angle) * t, 1.32, 0.065, 0.095, bronze, true, angle);
+  }
+
+  // The edges of each local terrain descend to the planet's curved surface.
+  function terrain(width: number, depth: number) {
+    const segments = 42;
+    const rings = 8;
+    const vertices: number[] = [];
+    const colors: number[] = [];
+    const uv: number[] = [];
+    const indices: number[] = [];
+    for (let ring = 0; ring <= rings; ring++) {
+      const distance = ring / rings;
+      const slope = T.MathUtils.smoothstep(distance, 0.67, 1);
+      for (let i = 0; i <= segments; i++) {
+        const angle = i * tau / segments;
+        const outline = 1 + Math.sin(angle * 3 + width) * 0.09 + Math.cos(angle * 7 + depth) * 0.045;
+        const x = Math.cos(angle) * (width + 2.0) * 0.59 * distance * outline;
+        const z = Math.sin(angle) * (depth + 1.9) * 0.62 * distance * outline;
+        const sphere = Math.sqrt(globeRadius ** 2 - x ** 2 - z ** 2) - globeRadius;
+        const micro = (Math.sin(x * 2.1 + z) * 0.14 + Math.cos(z * 3.1 - x) * 0.08) * distance;
+        const height = T.MathUtils.lerp(0.135 + micro, sphere + 0.011, slope);
+        const shade = 0.81 + random() * 0.28 + Math.sin(x + z * 2) * 0.07;
+        vertices.push(x, height, z);
+        colors.push(shade, shade, shade);
+        uv.push(x * 0.43, z * 0.43);
+        if (ring && i) {
+          const a = ring * (segments + 1) + i;
+          const b = a - segments - 1;
+          indices.push(a, b - 1, b, a, a - 1, b - 1);
+        }
+      }
+    }
+    const geometry = new T.BufferGeometry();
+    geometry.setAttribute("position", new T.Float32BufferAttribute(vertices, 3));
+    geometry.setAttribute("color", new T.Float32BufferAttribute(colors, 3));
+    geometry.setAttribute("uv", new T.Float32BufferAttribute(uv, 2));
+    geometry.setIndex(indices);
+    geometry.computeVertexNormals();
+    return geometry;
+  }
+
+  for (const id of Object.keys(sites) as SurfaceStop[]) {
+    if (included && !included.has(id)) continue;
+    active = id;
+    const { x, z, width, depth } = sites[id];
+    const ground = standard(siteTint ?? terrains[id], 1, 0, noise);
+    ground.vertexColors = true;
+    add(terrain(width, depth), ground, x, 0, z, false);
+    slab(width, depth, 1.10, 0.6, -0.88, curb, x, z);
+    slab(width - 0.12, depth - 0.12, 0.035, 0.53, 0.22, stone, x, z);
+    if (id !== "starcars" && id !== "hq") {
+      for (let i = 1; i * 0.67 < width - 0.85; i++) {
+        box(x - width / 2 + 0.34 + i * 0.67, 0.257, z, 0.014, 0.004, depth - 0.37, curb, false);
+      }
+      for (let i = 1; i * 0.67 < depth - 0.85; i++) {
+        box(x, 0.257, z - depth / 2 + 0.34 + i * 0.67, width - 0.43, 0.004, 0.014, curb, false);
+      }
+    }
+    for (const side of [-1, 1]) {
+      const tx = x + side * (width / 2 + 0.26);
+      const tz = z + side * (depth / 2 - 0.6);
+      tree(tx, tz, 1.18 + random() * 0.35, -0.12);
+      grasses(tx, tz, 10, 0.42, -0.11);
+      post(x + side * (width / 2 - 0.33), z + depth / 2 - 0.40, 0.78, 0.255);
+    }
+  }
+
+  // ReEnergy headquarters. Laminated fins shade a showroom below two roof arrays.
+  active = "reenergy";
+  const terracotta = standard(0xb19371, 0.86);
+  finishes.set(terracotta, "stone");
+  const solarFrame = standard(0x93a7b6, 0.44, 0.37);
+  const solarCell = [0x304e75, 0x3d628d, 0x4d789a].map(color => standard(color, 0.28, 0.42));
+  const solarGrid = standard(0x9aaab9, 0.53, 0.35);
+  const energyX = -7.45, energyZ = -7.28;
+  shadeBuilding(energyX, energyZ, 8.6, 6.2);
+  rounded(energyX, 0.37, energyZ, 6.75, 0.26, 4.05, slate, 0.10);
+  rounded(energyX, 1.38, energyZ, 6.25, 1.96, 3.48, terracotta, 0.08);
+  box(energyX, 1.37, energyZ + 1.75, 5.98, 1.49, 0.054, glass);
+  for (let i = -5; i <= 5; i++) {
+    const x = energyX + i * 0.56;
+    box(x, 1.36, energyZ + 1.81, 0.072, 1.57, 0.19, wood);
+    if (i !== 0 && Math.abs(i) !== 1) box(x + 0.13, 1.40, energyZ + 1.81, 0.030, 1.48, 0.12, bronze, false);
+  }
+  box(energyX, 0.69, energyZ + 1.855, 5.86, 0.044, 0.087, bronze, false);
+  for (let i = -4; i <= 4; i++) {
+    box(energyX + i * 0.53, 1.2, energyZ + 1.79, 0.38, 0.7, 0.025, i % 3 === 0 ? warmGlass : deepGlass, false);
+  }
+  rounded(energyX, 2.49, energyZ, 6.72, 0.31, 4.18, sandstone, 0.094);
+  rounded(energyX, 2.626, energyZ - 0.12, 6.07, 0.062, 3.78, slate, 0.026);
+  for (const side of [-1, 1]) {
+    rounded(energyX + side * 1.91, 2.81, energyZ - 1.68, 1.06, 0.26, 0.30, metal, 0.05);
+    for (let i = -3; i <= 3; i++) box(energyX + side * 1.91 + i * 0.12, 2.946, energyZ - 1.68, 0.045, 0.008, 0.24, graphite, false);
+  }
+  for (const side of [-1, 1]) {
+    box(energyX + side * 0.37, 1.17, energyZ + 1.82, 0.038, 1.39, 0.043, graphite);
+    box(energyX + side * 0.10, 1.15, energyZ + 1.84, 0.022, 0.21, 0.038, metal, false);
+    for (const offset of [-1.52, 1.52]) {
+      box(energyX + side * 3.10, 1.30, energyZ + offset, 0.046, 1.67, 0.07, metal);
+    }
+    box(energyX + side * 3.24, 2.55, energyZ - 0.08, 0.052, 0.043, 3.6, metal, false);
+    box(energyX + side * 3.135, 1.42, energyZ - 0.27, 0.033, 1.17, 1.66, deepGlass);
+    for (let i = -3; i <= 3; i++) box(energyX + side * 3.166, 1.42, energyZ - 0.27 + i * 0.237, 0.115, 1.29, 0.048, wood, false);
+    box(energyX + side * 3.204, 0.79, energyZ - 0.27, 0.085, 0.047, 1.66, bronze, false);
+  }
+  box(energyX, 0.52, energyZ + 1.98, 1.05, 0.052, 0.46, stone);
+  box(energyX, 2.332, energyZ + 2.064, 6.2, 0.035, 0.048, lamp, false);
+  sign("RE · ENERGY", energyX, 2.49, energyZ + 2.094, 2.7, 0.289, "#342a25");
+  for (const z of [energyZ - 0.91, energyZ + 0.52]) {
+    for (let i = -1; i <= 1; i++) panel(energyX + i * 1.97, 2.99, z, 1.81, 1.22);
+  }
+  for (const x of [energyX - 2.4, energyX + 2.4]) flowerBed(x, energyZ + 2.41, 1.62, 0.58);
+  for (const side of [-1, 1]) {
+    const x = energyX + side * 3.67;
+    rounded(x, 0.70, energyZ - 0.64, 0.44, 0.89, 1.28, slate, 0.064);
+    rounded(x, 0.79, energyZ - 0.63, 0.457, 0.52, 1.12, metal, 0.046);
+    for (let i = -1; i <= 1; i++) {
+      box(x, 0.80 + i * 0.099, energyZ - 0.064, 0.30, 0.039, 0.02, graphite, false);
+      box(x + side * 0.231, 0.75, energyZ - 0.62 + i * 0.37, 0.012, 0.045, 0.13, cyanGlass, false);
+    }
+  }
+  projectHit("reenergy", energyX, 1.88, energyZ, 6.86, 3.44, 4.09);
+
+  function panel(x: number, y: number, z: number, width: number, depth: number) {
+    const tilt = 0.33;
+    for (const dx of [-0.64, 0.64]) {
+      rail([x + dx, y - 0.32, z - 0.34], [x + dx, y + 0.1, z - 0.34], 0.08, graphite);
+      rail([x + dx, y - 0.32, z + 0.34], [x + dx, y - 0.09, z + 0.34], 0.08, graphite);
+    }
+    add(new T.BoxGeometry(width, 0.066, depth), solarFrame, x, y, z, true, tilt);
+    add(new T.BoxGeometry(width - 0.067, 0.024, depth - 0.065), solarCell[Math.floor(random() * 3)], x, y + 0.045, z + 0.013, true, tilt);
+    for (let i = -2; i <= 2; i++) {
+      add(new T.BoxGeometry(0.016, 0.011, depth - 0.071), solarGrid, x + i * width / 6, y + 0.059, z + 0.017, false, tilt);
+    }
+    for (const t of [-0.25, 0, 0.25]) {
+      add(new T.BoxGeometry(width - 0.065, 0.01, 0.014), solarGrid, x, y + 0.057 - Math.sin(tilt) * depth * t, z + 0.016 + Math.cos(tilt) * depth * t, false, tilt);
+    }
+  }
+
+  // B-CRM headquarters with a columned façade.
+  active = "b-crm";
+  const civicX = -9.55, civicZ = -0.28;
+  const civicRoof = standard(0x4b5865, 0.64, 0.22);
+  const roofSeam = standard(0x8994a0, 0.66, 0.26);
+  const civicTrim = standard(0xb4a48d, 0.79);
+  finishes.set(civicTrim, "stone");
+  const civicBay = standard(0x756e61, 0.93);
+  finishes.set(civicBay, "stone");
+  shadeBuilding(civicX, civicZ, 7.75, 6.3);
+  rounded(civicX, 0.42, civicZ, 5.90, 0.33, 4.54, civicTrim);
+  box(civicX, 1.73, civicZ - 0.2, 5.38, 2.56, 3.62, sandstone);
+  for (const side of [-1, 1]) {
+    box(civicX + side * 1.99, 1.76, civicZ + 1.64, 1.21, 2.49, 0.53, sandstone);
+    for (const y of [1.02, 2.13]) {
+      box(civicX + side * 1.99, y, civicZ + 1.92, 0.66, 0.70, 0.052, civicTrim);
+      box(civicX + side * 1.99, y + 0.02, civicZ + 1.95, 0.51, 0.59, 0.05, warmGlass, false);
+      box(civicX + side * 1.99, y + 0.02, civicZ + 1.982, 0.034, 0.57, 0.025, graphite);
+      box(civicX + side * 1.99, y - 0.34, civicZ + 1.97, 0.75, 0.056, 0.11, pale);
+      for (const dz of [-1.25, -0.42, 0.41, 1.24]) {
+        box(civicX + side * 2.71, y, civicZ + dz, 0.035, 0.57, 0.47, y > 2 ? deepGlass : warmGlass, false);
+        box(civicX + side * 2.73, y - 0.31, civicZ + dz, 0.045, 0.045, 0.54, civicTrim);
+      }
+    }
+  }
+  box(civicX, 1.52, civicZ + 1.63, 2.88, 1.81, 0.23, civicBay);
+  rounded(civicX, 1.36, civicZ + 1.77, 1.44, 1.69, 0.095, bronze, 0.05);
+  box(civicX, 1.33, civicZ + 1.829, 1.24, 1.54, 0.037, deepGlass);
+  box(civicX, 1.32, civicZ + 1.85, 0.054, 1.52, 0.046, bronze);
+  box(civicX, 1.77, civicZ + 1.855, 1.25, 0.038, 0.043, bronze);
+  for (const side of [-1, 1]) {
+    box(civicX + side * 0.112, 1.18, civicZ + 1.873, 0.035, 0.175, 0.022, metal, false);
+    box(civicX + side * 0.33, 1.93, civicZ + 1.853, 0.50, 0.16, 0.025, warmGlass, false);
+  }
+  for (const x of [-1.36,-0.47,0.47,1.36]) {
+    const column = new T.CylinderGeometry(0.101, 0.138, 1.98, 40);
+    const position = column.getAttribute("position");
+    for (let i = 0; i < position.count; i++) {
+      const px = position.getX(i), pz = position.getZ(i);
+      const fluting = 1 - 0.077 * (1 + Math.cos(Math.atan2(px, pz) * 10));
+      position.setX(i, px * fluting);
+      position.setZ(i, pz * fluting);
+    }
+    column.computeVertexNormals();
+    add(column, pale, civicX + x, 1.63, civicZ + 2.22);
+    cylinder(civicX + x, 0.64, civicZ + 2.22, 0.15, 0.17, 0.12, civicTrim, 12);
+    cylinder(civicX + x, 2.58, civicZ + 2.22, 0.17, 0.14, 0.105, pale, 12);
+  }
+  for (let i = 0; i < 4; i++) box(civicX, 0.27 + i * 0.074, civicZ + 2.65 - i * 0.123, 3.25, 0.10, 0.79 - i * 0.06, civicTrim);
+  box(civicX, 2.78, civicZ + 1.83, 3.24, 0.27, 0.98, pale);
+  sign("B-CRM", civicX, 2.78, civicZ + 2.329, 1.55, 0.22, "#322b25");
+  box(civicX, 3.07, civicZ - 0.07, 5.81, 0.15, 4.28, pale);
+  box(civicX, 3.17, civicZ - 0.1, 5.5, 0.09, 3.98, civicTrim);
+  const roof = new T.CylinderGeometry(1, 1.62, 0.62, 4, 1).rotateY(Math.PI / 4).scale(2.44, 1, 1.66);
+  add(roof, civicRoof, civicX, 3.46, civicZ - 0.12, true);
+  box(civicX, 3.79, civicZ - 0.12, 2.6, 0.10, 1.86, civicRoof);
+  rounded(civicX, 3.98, civicZ - 0.57, 2.06, 0.32, 1.02, deepGlass, 0.075);
+  rounded(civicX, 4.16, civicZ - 0.57, 2.26, 0.12, 1.24, civicRoof, 0.046);
+  for (const side of [-1, 1]) {
+    for (let i = -4; i <= 4; i++) box(civicX + i * 0.21, 3.991, civicZ - 0.57 + side * 0.518, 0.036, 0.274, 0.036, bronze, false);
+    box(civicX, 3.851, civicZ - 0.57 + side * 0.55, 2.04, 0.04, 0.03, roofSeam, false);
+  }
+  for (const side of [-1, 1]) {
+    for (let i = -4; i <= 4; i++) {
+      const x = i * 0.51;
+      rail([civicX + x, 3.16, civicZ - 0.12 + side * 1.90], [civicX + x * 0.62, 3.78, civicZ - 0.12 + side * 1.175], 0.018, roofSeam, false);
+    }
+  }
+  for (const side of [-1, 1]) {
+    const x = civicX + side * 1.76;
+    rail([x, 0.94, civicZ + 2.46], [x, 0.74, civicZ + 2.99], 0.030, bronze);
+    for (const z of [2.46, 2.99]) box(x, 0.52, civicZ + z, 0.039, 0.60, 0.039, bronze);
+  }
+  const pediment = new T.Shape().moveTo(-1.62, 0).lineTo(0, 0.61).lineTo(1.62, 0).closePath();
+  add(new T.ExtrudeGeometry(pediment, { depth: 0.13, bevelEnabled: false }), sandstone, civicX, 2.92, civicZ + 2.24);
+  rail([civicX - 1.63, 2.94, civicZ + 2.39], [civicX, 3.56, civicZ + 2.39], 0.07, pale);
+  rail([civicX, 3.56, civicZ + 2.39], [civicX + 1.63, 2.94, civicZ + 2.39], 0.07, pale);
+  add(new T.CylinderGeometry(0.13, 0.13, 0.04, 20), bronze, civicX, 3.15, civicZ + 2.386, false, Math.PI / 2);
+  for (const side of [-1, 1]) {
+    flowerBed(civicX + side * 2.42, civicZ + 2.43, 1.17, 0.62);
+    box(civicX + side * 2.71, 2.64, civicZ - 0.15, 0.088, 0.065, 3.25, civicTrim, false);
+    box(civicX + side * 2.71, 0.67, civicZ - 0.15, 0.088, 0.075, 3.25, civicTrim, false);
+  }
+  projectHit("b-crm", civicX, 2.19, civicZ + 0.11, 5.91, 4.01, 5.2);
+
+  function shadeBuilding(x: number, z: number, w: number, d: number) {
+    groundShade(x + 0.36, z - 0.25, w, d, 0.263);
+  }
+
+  // Isto Kebab. Ribbed counter, striped canopy, scaled menu and a roof-mounted kebab.
+  active = "isto-kebab";
+  const kioskX = -5.35, kioskZ = 7.18;
+  const orange = standard(0xc95f31, 0.63, 0.04);
+  const awning = standard(0xde7750, 0.89);
+  const tortilla = standard(0xd7a96e, 0.89);
+  shadeBuilding(kioskX, kioskZ + 0.48, 6.25, 4.75);
+  rounded(kioskX, 0.35, kioskZ, 4.1, 0.18, 2.86, black);
+  rounded(kioskX, 1.35, kioskZ, 3.91, 1.91, 2.72, orange);
+  box(kioskX, 1.55, kioskZ + 1.381, 3.29, 0.91, 0.07, black);
+  box(kioskX - 0.18, 1.54, kioskZ + 1.42, 2.49, 0.70, 0.035, warmGlass, false);
+  box(kioskX, 1.14, kioskZ + 1.59, 3.57, 0.094, 0.48, wood);
+  for (let i = -9; i <= 9; i++) box(kioskX + i * 0.193, 0.77, kioskZ + 1.384, 0.035, 0.53, 0.049, i % 4 === 0 ? bronze : wood);
+  box(kioskX + 1.40, 1.56, kioskZ + 1.425, 0.43, 0.64, 0.04, graphite);
+  for (let i = 0; i < 4; i++) box(kioskX + 1.39, 1.77 - i * 0.094, kioskZ + 1.448, 0.285 - (i % 2) * 0.09, 0.023, 0.012, pale, false);
+  for (const side of [-1, 1]) {
+    box(kioskX + side * 1.82, 1.60, kioskZ + 1.42, 0.059, 1.2, 0.07, bronze);
+    box(kioskX + side * 1.96, 1.47, kioskZ, 0.022, 0.75, 1.52, deepGlass);
+  }
+  rounded(kioskX, 2.40, kioskZ, 4.25, 0.29, 2.96, pale, 0.09);
+  box(kioskX, 2.35, kioskZ + 1.50, 3.85, 0.45, 0.06, graphite);
+  sign("ISTO KEBAB", kioskX, 2.36, kioskZ + 1.54, 3.28, 0.41, "#fff0d0");
+  for (let i = 0; i < 12; i++) {
+    const x = kioskX + (i - 5.5) * 0.33;
+    const material = i % 2 === 0 ? awning : pale;
+    add(new T.BoxGeometry(0.331, 0.059, 0.9), material, x, 2.07, kioskZ + 1.90, true, 0.24);
+    box(x, 1.93, kioskZ + 2.337, 0.331, 0.16, 0.057, material);
+  }
+  box(kioskX, 1.99, kioskZ + 2.19, 3.74, 0.027, 0.027, lamp, false);
+  rail([kioskX + 0.95,2.53,kioskZ + 0.32],[kioskX + 0.96,3.05,kioskZ + 0.32],0.11,graphite);
+  ball(kioskX + 0.94, 3.00, kioskZ + 0.31, 0.75, 0.31, 0.33, tortilla, 0.05, -0.14, 0.20);
+  for (let i = 0; i < 9; i++) {
+    ball(kioskX + 0.54 + i * 0.10, 3.20 + i * 0.015, kioskZ + 0.39, 0.13, 0.105, 0.14, i % 3 === 0 ? awning : leaves[i % leaves.length]);
+  }
+  for (const x of [kioskX - 2.38, kioskX + 2.18]) {
+    const z = kioskZ + 1.97;
+    cylinder(x, 0.53, z, 0.051, 0.11, 0.55, graphite, 12);
+    cylinder(x, 0.79, z, 0.30, 0.30, 0.075, wood, 20);
+    cylinder(x, 1.49, z, 0.026, 0.026, 1.43, metal, 8);
+    cylinder(x, 1.99, z, 0.08, 0.55, 0.18, awning, 12);
+    seat(x, z + 0.54);
+  }
+  projectHit("isto-kebab", kioskX, 1.65, kioskZ + 0.25, 4.6, 2.94, 3.95);
+
+  // StarCars. A striped display lot with three individually shaped sports cars.
+  active = "starcars";
+  const carsX = 6.69, carsZ = 5.7;
+  const red = standard(0xc03c32, 0.26, 0.34);
+  const blue = standard(0x77a8b1, 0.29, 0.38);
+  const silver = standard(0xd4b994, 0.30, 0.43);
+  const tire = standard(0x1c2025, 0.99);
+  const tail = lit(0xf85a42, 0.75);
+  const head = lit(0xe9faff, 0.58);
+  slab(9.28, 5.67, 0.015, 0.55, 0.259, asphalt, carsX, carsZ);
+  box(carsX, 0.286, carsZ + 2.40, 8.36, 0.012, 0.057, paintLine, false);
+  box(carsX, 0.286, carsZ - 1.65, 8.39, 0.012, 0.055, paintLine, false);
+  for (let i = 0; i < 4; i++) box(carsX + (i - 1.5) * 2.54, 0.282, carsZ + 0.21, 0.051, 0.014, 3.63, paintLine, false, -0.25);
+  for (let i = 0; i < 3; i++) {
+    const x = carsX + (i - 1) * 2.50;
+    const z = carsZ + (i === 1 ? 0.55 : 0.17);
+    const r = i === 0 ? -0.20 : i === 1 ? -0.33 : -0.36;
+    groundShade(x, z, 2.16, 3.55, 0.279);
+    carPlacements.push({ x, z, angle: r });
+    buildingCars = true;
+    car(x, z, r, [red, silver, blue][i], i);
+    buildingCars = false;
+    projectHit("starcars", x, 0.70, z, 1.92, 0.93, 3.13);
+  }
+  const canopyZ = carsZ - 2.1;
+  // Low pit wall and cantilevered roof leave the display cars open on three sides.
+  const pitRed = standard(0x933c35, 0.69, 0.15);
+  rounded(carsX, 0.41, canopyZ, 8.75, 0.28, 1.47, graphite, 0.10);
+  rounded(carsX, 1.50, canopyZ - 0.57, 8.39, 1.90, 0.17, slate, 0.067);
+  for (const x of [-3.92, -1.35, 1.35, 3.92]) {
+    rounded(carsX + x, 1.43, canopyZ + 0.32, 0.18, 1.83, 0.23, graphite, 0.05);
+    box(carsX + x, 0.61, canopyZ + 0.33, 0.22, 0.21, 0.27, pitRed);
+  }
+  for (const x of [-2.55, 0, 2.55]) {
+    box(carsX + x, 1.34, canopyZ - 0.459, 1.79, 0.92, 0.069, glass);
+    for (const mullion of [-0.88, 0, 0.88]) box(carsX + x + mullion, 1.34, canopyZ - 0.415, 0.039, 0.91, 0.037, metal, false);
+    box(carsX + x, 0.83, canopyZ - 0.41, 1.77, 0.08, 0.08, bronze);
+  }
+  const wing = new T.Shape().moveTo(-4.34, 0.02).lineTo(-3.99, 0.38).lineTo(3.96, 0.38).lineTo(4.43, 0.09).lineTo(4.18, 0).closePath();
+  add(new T.ExtrudeGeometry(wing, { depth: 1.60, bevelEnabled: true, bevelSize: 0.035, bevelThickness: 0.035, bevelSegments: 1 }), pitRed, carsX, 2.29, canopyZ - 0.81);
+  box(carsX, 2.454, canopyZ + 0.826, 8.22, 0.066, 0.034, paintLine, false);
+  box(carsX, 2.267, canopyZ + 0.764, 7.92, 0.025, 0.030, lamp, false);
+  for (const side of [-1, 1]) {
+    box(carsX + side * 2.91, 2.709, canopyZ, 1.77, 0.015, 1.24, graphite, false);
+    for (const z of [-0.39, 0, 0.39]) box(carsX + side * 2.91, 2.722, canopyZ + z, 1.66, 0.012, 0.033, metal, false);
+  }
+  rounded(carsX, 2.73, canopyZ + 0.40, 2.91, 0.38, 0.21, graphite, 0.048);
+  sign("STAR CARS", carsX, 2.736, canopyZ + 0.514, 2.59, 0.274, "#fff2e0");
+  for (const side of [-1, 1]) {
+    const x = carsX + side * 4.21;
+    for (let i = 0; i < 6; i++) box(x + (i % 2) * side * 0.16, 0.293, carsZ + 2.01 - i * 0.16, 0.15, 0.014, 0.16, paintLine, false);
+    rounded(x, 0.41, carsZ + 0.53, 0.26, 0.25, 2.16, slate, 0.07);
+    for (const z of [-0.27, 0.53, 1.33]) box(x, 0.547, carsZ + z, 0.285, 0.018, 0.13, pitRed, false);
+  }
+  projectHit("starcars", carsX, 1.62, canopyZ, 8.86, 2.45, 1.84);
+
+  function car(x: number, z: number, angle: number, paint: T.Material, variant: number) {
+    if (included && !included.has(active)) return;
+    const cos = Math.cos(angle), sin = Math.sin(angle);
+    const local = (dx: number, y: number, dz: number): [number, number, number] => [x + dx * cos + dz * sin, y, z - dx * sin + dz * cos];
+    const height = variant === 2 ? 0.91 : 0.85;
+    // Cross-sections follow the front bumper, bonnet, cabin, rear deck and diffuser.
+    const body = [
+      [-1.55,0.53,0.48,0.58],[-1.31,0.72,0.44,0.69],[-0.79,0.70,0.43,0.74],
+      [0.075,0.68,0.42,0.78],[0.94,0.76,0.44,0.72],[1.42,0.70,0.48,0.66],[1.55,0.55,0.47,0.59],
+    ];
+    hull(body, paint);
+    hull([[-0.73,0.52,0.71,0.75],[-0.29,0.46,0.72,height+0.17],[0.48,0.42,0.69,height+0.15],[0.95,0.51,0.68,0.73]], deepGlass);
+    const [roofX,roofY,roofZ] = local(0,height+0.145,0.12);
+    rounded(roofX, roofY, roofZ, 0.80, 0.06, 0.62, variant === 0 ? black : paint, 0.027, angle);
+    for (const side of [-1, 1]) {
+      for (const dz of [-0.97, 0.96]) {
+        const wheel = local(side * 0.67, 0.50, dz);
+        add(new T.CylinderGeometry(0.226, 0.226, 0.18, 18).rotateZ(Math.PI / 2), tire, ...wheel, true, 0, angle);
+        // Align a cylinder with the car's local axle.
+        const [hx,hy,hz] = local(side * 0.766, 0.50, dz);
+        const axle = new T.CylinderGeometry(0.13, 0.13, 0.028, 14).rotateZ(Math.PI / 2);
+        add(axle, metal, hx,hy,hz,true,0,angle);
+      }
+      const [px,py,pz] = local(side * 0.44,0.63,-1.387);
+      box(px,py,pz,0.246,0.040,0.071,head,false,angle);
+      const [tx,ty,tz] = local(side * 0.44,0.61,1.46);
+      box(tx,ty,tz,0.225,0.046,0.054,tail,false,angle);
+      const [mx,my,mz] = local(side * 0.71,0.80,-0.36);
+      box(mx,my,mz,0.16,0.077,0.19,paint,true,angle);
+    }
+    const [bx,by,bz] = local(0,0.531,-1.53);
+    box(bx,by,bz,0.70,0.088,0.069,black,true,angle);
+    if (variant === 1) {
+      const [wx,wy,wz] = local(0,0.81,1.24);
+      box(wx,wy,wz,1.28,0.068,0.32,black,true,angle);
+      for (const side of [-1,1]) {
+        const [px,py,pz] = local(side * 0.42,0.742,1.24);
+        box(px,py,pz,0.045,0.102,0.09,metal,true,angle);
+      }
+    }
+
+    function hull(sections: readonly (readonly number[])[], material: T.Material) {
+      const vertices: number[] = [];
+      const profile = ([z, w, base, top]: readonly number[]) => [
+        local(-w * 0.93,base,z), local(-w,base + (top-base) * 0.50,z), local(-w * 0.78,top,z),
+        local(w * 0.78,top,z), local(w,base + (top-base) * 0.50,z), local(w * 0.93,base,z),
+      ];
+      const outlines = sections.map(profile);
+      for (let i = 0; i < outlines.length - 1; i++) {
+        const a = outlines[i], b = outlines[i + 1];
+        for (let j = 0; j < 6; j++) {
+          const n = (j + 1) % 6;
+          vertices.push(...a[j],...b[j],...a[n],...a[n],...b[j],...b[n]);
+        }
+      }
+      for (let i = 1; i < 5; i++) vertices.push(...outlines[0][0],...outlines[0][i],...outlines[0][i + 1],...outlines.at(-1)![0],...outlines.at(-1)![i + 1],...outlines.at(-1)![i]);
+      const geometry = new T.BufferGeometry();
+      geometry.setAttribute("position", new T.Float32BufferAttribute(vertices, 3));
+      geometry.setAttribute("uv", new T.BufferAttribute(new Float32Array(vertices.length / 3 * 2), 2));
+      geometry.computeVertexNormals();
+      add(geometry, material, 0, 0, 0);
+    }
+  }
+
+  // AI laboratory. A shuttered observatory with instrument pods and a luminous ring.
+  active = "lab";
+  const labX = 5.25, labZ = -7.77;
+  const ceramic = standard(0x526675, 0.58, 0.38);
+  const chamber = standard(0x99aaac, 0.65, 0.40);
+  const labRoof = low ? new T.MeshPhongMaterial({ color: 0x37545e, emissive: 0x222d30, emissiveIntensity: 0.13, shininess: 82 })
+    : new T.MeshPhysicalMaterial({ color: 0x597b88, emissive: 0x273239, emissiveIntensity: 0.09, roughness: 0.26, metalness: 0.27, clearcoat: 0.55 });
+  shadeBuilding(labX, labZ, 8.30, 7.28);
+  cylinder(labX, 0.43, labZ, 3.19, 3.34, 0.34, slate, 48);
+  cylinder(labX, 0.72, labZ, 2.93, 3.15, 0.28, metal, 48);
+  ring(labX, 0.75, labZ, 3.059, 0.029, bronze, 72);
+  cylinder(labX, 1.55, labZ, 2.75, 2.90, 1.48, ceramic, 48);
+  cylinder(labX, 2.36, labZ, 2.95, 2.75, 0.24, bronze, 48);
+  cylinder(labX, 2.58, labZ, 2.92, 3.01, 0.24, slate, 48);
+  const dome = new T.SphereGeometry(1, low ? 24 : 48, low ? 10 : 18, 0, tau, 0, Math.PI * 0.5).scale(2.71, 1.94, 2.71);
+  add(dome, labRoof, labX, 2.69, labZ);
+  const shutter = new T.SphereGeometry(1, low ? 12 : 24, low ? 8 : 16, Math.PI * 0.19, Math.PI * 0.20, 0.08, 1.48).scale(2.725, 1.95, 2.725);
+  add(shutter, deepGlass, labX, 2.699, labZ, false);
+  ring(labX, 2.70, labZ, 2.78, 0.036, metal, 96);
+  ring(labX, 3.50, labZ, 2.48, 0.033, metal, 72);
+  ring(labX, 4.16, labZ, 1.79, 0.033, chamber, 60);
+  for (let i = 0; i < 12; i++) {
+    const a = i / 12 * tau;
+    const x = Math.cos(a), z = Math.sin(a);
+    for (let j = 0; j < 8; j++) {
+      const p = j / 8 * Math.PI / 2, q = (j + 1) / 8 * Math.PI / 2;
+      rail([labX + 2.73 * Math.cos(p) * x, 2.69 + 1.96 * Math.sin(p), labZ + 2.73 * Math.cos(p) * z],
+        [labX + 2.73 * Math.cos(q) * x, 2.69 + 1.96 * Math.sin(q), labZ + 2.73 * Math.cos(q) * z], 0.048, metal, false);
+    }
+    const rotation = Math.PI / 2 - a;
+    if (i !== 3) {
+      rounded(labX + x * 2.81, 1.72, labZ + z * 2.81, 0.86, 0.48, 0.12, graphite, 0.04, rotation);
+      box(labX + x * 2.88, 1.725, labZ + z * 2.88, 0.68, 0.235, 0.031, i % 3 === 1 ? cyanGlass : deepGlass, false, rotation);
+      box(labX + x * 2.913, 2.098, labZ + z * 2.913, 0.96, 0.10, 0.09, chamber, false, rotation);
+    }
+    if (i % 3 === 1) box(labX + x * 2.94, 1.023, labZ + z * 2.94, 0.39, 0.056, 0.03, cyan, false, rotation);
+  }
+  rounded(labX, 1.16, labZ + 2.83, 1.97, 1.81, 1.06, graphite, 0.12);
+  box(labX, 1.08, labZ + 3.385, 1.40, 1.39, 0.045, cyanGlass, false);
+  box(labX, 1.08, labZ + 3.42, 0.068, 1.39, 0.045, chamber);
+  for (const x of [-0.72, 0.72]) box(labX + x, 1.09, labZ + 3.439, 0.036, 1.41, 0.028, cyan, false);
+  rounded(labX, 2.07, labZ + 3.18, 1.94, 0.25, 0.54, slate, 0.055);
+  sign("AI LAB", labX, 2.065, labZ + 3.46, 1.62, 0.26, "#d2e0dd");
+  for (const x of [-1.06, 1.06]) {
+    box(labX + x, 0.59, labZ + 3.16, 0.19, 0.78, 0.44, ceramic);
+    box(labX + x, 0.94, labZ + 3.40, 0.19, 0.051, 0.038, cyan, false);
+  }
+  cylinder(labX, 4.63, labZ, 0.37, 0.57, 0.23, bronze, 20);
+  ring(labX, 4.77, labZ, 0.36, 0.028, cyan, 24);
+  add(new T.TorusGeometry(0.31, 0.027, 6, 32), metal, labX, 4.99, labZ, false, 0.44, 0.65);
+  cylinder(labX, 4.98, labZ, 0.037, 0.083, 0.60, metal, 12);
+  ball(labX, 5.29, labZ, 0.11, 0.11, 0.11, cyan);
+  for (const dx of [-3.35, 3.35]) {
+    cylinder(labX + dx, 0.84, labZ - 0.95, 0.22, 0.35, 1.14, graphite, 16);
+    cylinder(labX + dx, 1.32, labZ - 0.95, 0.23, 0.22, 0.18, cyanGlass, 16);
+    rail([labX + dx,0.62,labZ - 0.95],[labX + dx * 0.82,0.62,labZ - 0.95],0.13,bronze);
+  }
+  for (const side of [-1, 1]) {
+    const x = labX + side * 2.52;
+    const z = labZ - 2.10;
+    rounded(x, 0.84, z, 0.83, 1.13, 1.80, graphite, 0.12);
+    rounded(x, 1.50, z, 0.87, 0.26, 1.72, chamber, 0.087);
+    box(x + side * 0.421, 0.96, z, 0.025, 0.51, 1.20, deepGlass, false);
+    for (let i = -3; i <= 3; i++) box(x + side * 0.445, 1.00, z + i * 0.169, 0.051, 0.35, 0.037, metal, false);
+    box(x, 0.99, z + 0.922, 0.43, 0.068, 0.039, cyanGlass, false);
+    rail([x, 1.66, z], [labX + side * 1.66, 1.94, labZ - 2.02], 0.14, bronze);
+  }
+  proxy(labX, 2.70, labZ + 0.17, 6.88, 5.20, 6.89, { zone: "lab" });
+
+  // Motomizer's tuning garage and BeatMarket's open-air sound stage.
+  active = "motomizer";
+  const garageX = 10.52, garageZ = -0.38;
+  const amber = lit(0xffac55, 0.68);
+  const yellow = standard(0xcca85a, 0.76);
+  shadeBuilding(garageX, garageZ, 4.63, 3.95);
+  shadeBuilding(garageX, garageZ, 5.4, 4.65);
+  rounded(garageX, 1.18, garageZ, 3.70, 1.89, 2.62, graphite, 0.09);
+  rounded(garageX, 0.34, garageZ + 0.12, 3.87, 0.16, 2.98, slate, 0.061);
+  for (const side of [-1, 1]) {
+    const x = garageX + side * 1.87;
+    box(x, 1.44, garageZ - 0.25, 0.035, 0.65, 1.38, glass, false);
+    box(x, 0.63, garageZ, 0.038, 0.09, 2.61, metal);
+    for (let i = -3; i <= 3; i++) box(x + side * 0.035, 1.45, garageZ - 0.25 + i * 0.17, 0.075, 0.70, 0.036, black, false);
+  }
+  box(garageX, 1.08, garageZ + 1.33, 2.92, 1.35, 0.136, black);
+  box(garageX, 1.16, garageZ + 1.412, 2.85, 1.06, 0.043, slate);
+  for (let i = 0; i < 8; i++) box(garageX, 0.702 + i * 0.122, garageZ + 1.442, 2.82, 0.042, 0.031, metal, false);
+  box(garageX, 0.647, garageZ + 1.445, 2.85, 0.073, 0.051, black);
+  for (const s of [-1, 1]) box(garageX + s * 1.48, 1.05, garageZ + 1.42, 0.082, 1.39, 0.066, amber, false);
+  rounded(garageX, 2.17, garageZ, 4.04, 0.30, 2.87, yellow, 0.075);
+  sign("MOTOMIZER", garageX, 2.16, garageZ + 1.446, 3.10, 0.27, "#282422");
+  rounded(garageX, 2.35, garageZ - 0.20, 3.60, 0.073, 2.36, slate, 0.036);
+  for (let i = -3; i <= 3; i++) box(garageX + i * 0.44, 2.40, garageZ - 0.22, 0.026, 0.041, 2.21, graphite, false);
+  for (const side of [-1, 1]) {
+    const x = garageX + side * 1.28;
+    cylinder(x, 2.58, garageZ - 0.62, 0.13, 0.15, 0.36, graphite, 16);
+    cylinder(x, 2.79, garageZ - 0.62, 0.192, 0.18, 0.10, metal, 16);
+    for (let i = 0; i < 3; i++) box(garageX + side * (1.07 + i * 0.19), 0.431, garageZ + 1.52, 0.11, 0.012, 0.20, i % 2 ? yellow : black, false);
+  }
+  for (let i = 0; i < 4; i++) cylinder(garageX + 1.69, 0.29 + i * 0.13, garageZ + 1.70, 0.20, 0.20, 0.12, tire, 16);
+  projectHit("motomizer", garageX, 1.47, garageZ, 4.06, 2.69, 3.53);
+
+  active = "beatmarket";
+  const stageX = 1.23, stageZ = -2.68;
+  const aubergine = standard(0x684b63, 0.72);
+  const pink = lit(0xdc8295, 0.51);
+  shadeBuilding(stageX, stageZ, 5.3, 3.2);
+  rounded(stageX, 0.40, stageZ, 4.07, 0.25, 2.05, graphite, 0.073);
+  box(stageX, 0.446, stageZ + 1.035, 3.58, 0.047, 0.038, pink, false);
+  for (const x of [-1.34, 1.34]) {
+    for (let j = 0; j < 3; j++) box(stageX + x, 0.29 + 0.069 * j, stageZ + 1.24 - 0.092 * j, 0.54, 0.074, 0.27, slate);
+  }
+  box(stageX, 1.21, stageZ - 0.85, 3.73, 1.43, 0.064, aubergine);
+  box(stageX, 1.41, stageZ - 0.803, 2.46, 0.89, 0.06, black);
+  const bars = [0.26,0.43,0.33,0.65,0.55,0.38,0.68,0.46,0.54,0.22];
+  bars.forEach((h, i) => box(stageX + (i - 4.5) * 0.207, 1.045 + h / 2, stageZ - 0.761, 0.106, h, 0.02, i % 3 ? pink : amber, false));
+  for (const x of [-1.68, 1.68]) {
+    box(stageX + x, 1.21, stageZ + 0.32, 0.52, 1.42, 0.57, black);
+    for (const h of [0.89,1.42]) add(new T.CylinderGeometry(0.178,0.178,0.033,20), metal, stageX + x, h, stageZ + 0.62, false, Math.PI / 2);
+  }
+  for (const x of [-1.84, 1.84]) {
+    for (const dz of [-0.69, 0.43]) box(stageX + x, 1.41, stageZ + dz, 0.088, 1.93, 0.088, metal);
+    for (let i = 0; i < 4; i++) rail([stageX + x, 0.60 + i * 0.40, stageZ - 0.69],
+      [stageX + x, 0.98 + i * 0.40, stageZ + 0.43], 0.036, metal, false);
+    for (const y of [1.04, 1.80]) box(stageX + x, y, stageZ - 0.13, 0.069, 0.065, 1.16, aubergine);
+  }
+  const mixerZ = stageZ + 0.28;
+  rounded(stageX, 0.84, mixerZ, 1.31, 0.62, 0.57, graphite, 0.075);
+  box(stageX, 0.874, mixerZ + 0.29, 1.18, 0.119, 0.047, aubergine);
+  box(stageX, 0.871, mixerZ + 0.319, 1.05, 0.023, 0.024, cyanGlass, false);
+  for (const x of [-0.37, 0.37]) {
+    cylinder(stageX + x, 1.164, mixerZ, 0.198, 0.20, 0.06, black, 22);
+    cylinder(stageX + x, 1.200, mixerZ, 0.084, 0.084, 0.014, bronze, 16, false);
+  }
+  rounded(stageX, 2.41, stageZ - 0.34, 4.04, 0.23, 1.68, aubergine, 0.07);
+  box(stageX, 2.262, stageZ + 0.45, 3.85, 0.065, 0.10, graphite);
+  for (let i = -3; i <= 3; i++) {
+    add(new T.CylinderGeometry(0.058, 0.08, 0.08, 12), i % 2 === 0 ? pink : amber, stageX + i * 0.42, 2.205, stageZ + 0.45, false);
+  }
+  box(stageX, 2.508, stageZ - 0.34, 3.78, 0.073, 1.41, graphite);
+  sign("BEATMARKET", stageX, 2.411, stageZ + 0.514, 3.12, 0.206);
+  projectHit("beatmarket", stageX, 1.4, stageZ, 4.10, 2.37, 2.45);
+
+  active = "studio";
+  const studioX = -2.68, studioZ = -4.45;
+  rounded(studioX, 0.96, studioZ, 2.55, 1.44, 2.0, sandstone, 0.08);
+  box(studioX, 1.01, studioZ + 1.025, 2.13, 0.86, 0.07, glass);
+  for (const x of [-0.77,0,0.77]) box(studioX + x, 1.02, studioZ + 1.07, 0.052, 0.85, 0.045, bronze);
+  rounded(studioX, 1.78, studioZ, 2.77, 0.22, 2.21, graphite, 0.08);
+  sign("STUDIO", studioX, 1.79, studioZ + 1.118, 1.52, 0.22);
+  proxy(studioX, 1.05, studioZ, 2.75, 1.63, 2.28, { zone: "studio" });
+
+  // Home headquarters. The terrace and the glass tower open onto the public plaza.
+  active = "hq";
+  const hqX = -0.18, hqZ = 0.61;
+  const towerX = hqX - 0.94;
+  shadeBuilding(hqX, hqZ, 6.75, 3.42);
+  slab(6.04, 2.62, 0.23, 0.39, 0.238, curb, hqX, hqZ);
+  slab(5.90, 2.50, 0.10, 0.35, 0.46, sandstone, hqX, hqZ);
+  rounded(hqX, 1.22, hqZ - 0.12, 5.12, 1.39, 1.95, graphite, 0.14);
+  rounded(hqX, 1.25, hqZ + 0.83, 4.97, 1.22, 0.20, deepGlass, 0.09);
+  for (let i = 0; i < 11; i++) {
+    const x = hqX + (i - 5) * 0.43;
+    box(x, 1.20, hqZ + 0.94, 0.36, 0.99, 0.03, i < 7 && i % 3 !== 0 ? glass : deepGlass, false);
+    box(x - 0.20, 1.25, hqZ + 0.96, 0.027, 1.19, 0.044, bronze, false);
+    if (i === 1 || i === 8 || i === 9) box(x, 0.78, hqZ + 0.965, 0.30, 0.20, 0.024, warmGlass, false);
+  }
+  for (const side of [-1, 1]) {
+    box(hqX + side * 2.56, 1.05, hqZ + 0.035, 0.042, 0.62, 1.37, glass, false);
+    for (const z of [-0.53, -0.01, 0.51]) box(hqX + side * 2.59, 1.09, hqZ + z, 0.057, 0.78, 0.033, bronze);
+  }
+  rounded(hqX, 1.94, hqZ - 0.068, 5.49, 0.31, 2.29, sandstone, 0.095);
+  box(hqX, 1.84, hqZ + 1.091, 5.20, 0.039, 0.032, bronze, false);
+  for (const x of [-2.35, 2.35]) box(hqX + x, 1.16, hqZ + 1.07, 0.13, 1.30, 0.12, sandstone);
+  rounded(hqX + 0.86, 1.72, hqZ + 1.13, 1.04, 0.095, 0.49, pale, 0.035);
+  box(hqX + 0.86, 1.14, hqZ + 0.995, 0.66, 1.03, 0.057, deepGlass);
+  box(hqX + 0.86, 1.15, hqZ + 1.028, 0.028, 1.02, 0.035, bronze);
+  for (const side of [-1, 1]) box(hqX + 0.86 + side * 0.079, 1.09, hqZ + 1.047, 0.026, 0.19, 0.030, metal, false);
+  for (let i = 0; i < 3; i++) box(hqX + 0.86, 0.327 + i * 0.077, hqZ + 1.54 - i * 0.16, 1.45, 0.085, 0.44, sandstone);
+  sign("BERNECKI.DEV", hqX + 0.62, 1.985, hqZ + 1.085, 2.65, 0.225, "#312f28");
+
+  rounded(towerX, 2.28, hqZ - 0.13, 2.93, 0.40, 1.87, pale, 0.13);
+  rounded(towerX, 3.06, hqZ - 0.13, 2.55, 1.38, 1.68, glass, 0.19);
+  for (const dz of [-0.96, 0.71]) {
+    for (let i = 0; i < 8; i++) {
+      const x = towerX + (i - 3.5) * 0.29;
+      box(x, 3.04, hqZ + dz, 0.053, 1.45, 0.11, i % 3 === 0 ? sandstone : bronze, false);
+      if (i === 1 || i === 6) box(x + 0.13, 2.88, hqZ + dz, 0.17, 0.77, 0.034, warmGlass, false);
+    }
+    box(towerX, 2.58, hqZ + dz, 2.54, 0.057, 0.077, bronze);
+  }
+  rounded(towerX, 3.81, hqZ - 0.13, 2.94, 0.20, 2.02, sandstone, 0.092);
+  rounded(towerX, 3.98, hqZ - 0.18, 2.52, 0.20, 1.66, graphite, 0.095);
+  for (const side of [-1, 1]) {
+    rail([towerX + side * 0.93, 4.02, hqZ - 0.13], [towerX + side * 0.67, 4.58, hqZ - 0.13], 0.10, bronze);
+    rail([towerX + side * 0.93, 4.02, hqZ - 0.13], [towerX + side * 0.67, 4.58, hqZ - 0.79], 0.059, metal);
+  }
+  rail([towerX - 0.71, 4.57, hqZ - 0.13], [towerX + 0.71, 4.57, hqZ - 0.13], 0.092, bronze);
+  add(new T.TorusGeometry(0.33, 0.026, 6, 32), bronze, towerX, 4.35, hqZ - 0.12, false);
+  cylinder(towerX, 4.31, hqZ - 0.13, 0.032, 0.053, 0.59, metal, 12);
+  ball(towerX, 4.61, hqZ - 0.13, 0.05, 0.062, 0.05, lamp);
+
+  const terraceX = hqX + 1.58;
+  for (const z of [-0.84, 0.74]) {
+    box(terraceX, 2.35, hqZ + z, 1.52, 0.044, 0.055, bronze);
+    for (const dx of [-0.72, 0, 0.72]) box(terraceX + dx, 2.23, hqZ + z, 0.034, 0.25, 0.034, metal);
+  }
+  flowerBed(terraceX, hqZ + 0.46, 1.20, 0.38, 1.98);
+  cylinder(terraceX, 2.14, hqZ - 0.35, 0.25, 0.25, 0.19, stone, 18);
+  tree(terraceX, hqZ - 0.35, 0.81, 2.23);
+  proxy(hqX, 2.43, hqZ - 0.02, 5.58, 4.32, 2.40, { zone: "hq" });
+
+  cylinder(0.10, 0.235, 3.43, 3.02, 3.17, 0.10, stone, 60);
+  ring(0.10, 0.291, 3.43, 2.89, 0.016, bronze, 60);
+  ring(0.10, 0.291, 3.43, 2.30, 0.012, curb, 60);
+  for (let i = 0; i < 16; i++) {
+    const angle = i * tau / 16;
+    const length = i % 4 === 0 ? 0.46 : 0.18;
+    box(0.10 + Math.sin(angle) * 2.60, 0.291, 3.43 + Math.cos(angle) * 2.60, 0.025, 0.008, length, bronze, false, angle);
+  }
+  const water = low ? new T.MeshPhongMaterial({ color: 0x4b7d7d, shininess: 85, specular: 0x91c9c9 })
+    : new T.MeshPhysicalMaterial({ color: 0x4b7d7d, roughness: 0.18, metalness: 0.42, clearcoat: 0.68 });
+  cylinder(0.10, 0.386, 3.43, 1.22, 1.30, 0.29, sandstone, 48);
+  cylinder(0.10, 0.54, 3.43, 1.13, 1.13, 0.028, water, 48, false);
+  ring(0.10, 0.558, 3.43, 1.18, 0.074, sandstone, 60);
+  ring(0.10, 0.559, 3.43, 0.79, 0.009, cyanGlass, 44);
+  cylinder(0.10, 0.66, 3.43, 0.115, 0.18, 0.23, bronze, 16);
+  cylinder(0.10, 0.82, 3.43, 0.033, 0.066, 0.30, water, 12, false);
+  for (const [x,z,r] of [[-2.28,4.04,1.03],[1.81,5.21,-0.83],[-1.62,2.32,0.51],[2.51,3.57,-1.45]]) seat(x,z,r);
+  for (const [x,z] of [[-2.9,5.74],[2.79,6.06],[0.55,6.54]]) post(x,z,0.75,0.15);
+
+  const beaconMaterial = lit(0x86e9d9, 0.8);
+  materials.add(beaconMaterial);
+  const beacon = new T.Mesh(new T.TorusGeometry(2.79, 0.022, 5, 64), beaconMaterial);
+  beacon.rotation.x = -Math.PI / 2;
+  beacon.position.set(labX, 2.74, labZ).applyMatrix4(sites.lab.matrix);
+  beacon.quaternion.premultiply(new T.Quaternion().setFromRotationMatrix(sites.lab.matrix));
+  if (!included || included.has("lab")) group.add(beacon);
+  else beacon.geometry.dispose();
+
+  const avatar = new T.Group();
+  const fabric = standard(0xa87955, 0.97, 0, noise);
+  const plushCream = standard(0xe4bc97, 0.93);
+  const blazer = standard(0x202733, 0.93, 0, noise);
+  const lapel = standard(0x303948, 0.92, 0, noise);
+  const hair = standard(0x251b19, 0.92, 0, noise);
+  const eye = standard(0x1b2024, 0.55);
+  const plushParts = new Map<T.MeshLambertMaterial | T.MeshStandardMaterial, T.BufferGeometry[]>();
+  function plushGeometry(w: number, h: number, d: number) {
+    return new T.SphereGeometry(1, low ? 12 : 24, low ? 8 : 16).scale(w, h, d);
+  }
+  function plushPart(material: T.MeshLambertMaterial | T.MeshStandardMaterial, geometry: T.BufferGeometry) {
+    const shapes = plushParts.get(material) ?? [];
+    shapes.push(geometry);
+    plushParts.set(material, shapes);
+    materials.add(material);
+  }
+  function plush(material: T.MeshLambertMaterial | T.MeshStandardMaterial, x: number, y: number, z: number, w: number, h: number, d: number, rotationZ = 0) {
+    plushPart(material, plushGeometry(w, h, d).rotateZ(rotationZ).translate(x, y, z));
+  }
+  // Based on the owner's portrait: swept-back dark hair, angular beard and a navy blazer.
+  plush(blazer, 0, 0.68, 0, 0.42, 0.40, 0.31);
+  plush(black, 0, 0.81, 0.263, 0.17, 0.23, 0.08);
+  for (const side of [-1, 1]) {
+    plush(lapel, side * 0.14, 0.81, 0.30, 0.065, 0.21, 0.036, -side * 0.36);
+    plush(blazer, side * 0.36, 0.70, 0.13, 0.13, 0.24, 0.14, -side * 0.46);
+    plush(blazer, side * 0.19, 0.64, 0.30, 0.24, 0.093, 0.113, side * 0.17);
+    plush(fabric, side * 0.038, 0.66, 0.375, 0.09, 0.079, 0.065);
+  }
+  plushPart(bronze, new T.TorusGeometry(0.043, 0.006, 5, 16).translate(-0.275, 0.83, 0.293));
+  plush(fabric, 0, 1.22, 0.026, 0.41, 0.37, 0.33);
+  plush(hair, -0.025, 1.474, -0.032, 0.393, 0.143, 0.293, 0.06);
+  for (let i = 0; i < 8; i++) {
+    plush(i % 3 === 0 ? wood : hair, -0.282 + i * 0.076, 1.505 + Math.sin(i * 0.4) * 0.067,
+      0.077 - i * 0.019, 0.054, 0.082, 0.241, -0.105);
+  }
+  for (const side of [-1, 1]) {
+    plush(fabric, side * 0.325, 1.48, 0.011, 0.152, 0.143, 0.102, side * -0.29);
+    plush(plushCream, side * 0.327, 1.481, 0.093, 0.102, 0.096, 0.036, side * -0.29);
+    plush(eye, side * 0.142, 1.272, 0.325, 0.052, 0.056, 0.045);
+    plush(plushCream, side * 0.150, 1.296, 0.365, 0.015, 0.016, 0.010);
+    plush(hair, side * 0.144, 1.352, 0.319, 0.084, 0.026, 0.026, -side * 0.18);
+    plush(hair, side * 0.204, 1.095, 0.257, 0.095, 0.144, 0.065, side * 0.40);
+  }
+  plush(hair, 0, 0.996, 0.288, 0.175, 0.083, 0.071);
+  plush(plushCream, 0, 1.115, 0.307, 0.168, 0.092, 0.078);
+  plush(eye, 0, 1.153, 0.376, 0.058, 0.039, 0.031);
+  plush(hair, 0, 1.085, 0.379, 0.069, 0.017, 0.016, -0.1);
+  const costume = [...plushParts].flatMap(([material, geometries]) => {
+    if (bakeLighting && material instanceof T.MeshLambertMaterial) return geometries.map(geometry => bakeSurface(geometry, material));
+    const mesh = new T.Mesh(mergeGeometries(geometries)!, material);
+    mesh.castShadow = true;
+    avatar.add(mesh);
+    geometries.forEach(geometry => geometry.dispose());
+    return [];
+  });
+  if (costume.length) {
+    const fabricBaked = new T.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
+    materials.add(fabricBaked);
+    avatar.add(new T.Mesh(mergeGeometries(costume)!, fabricBaked));
+    costume.forEach(geometry => geometry.dispose());
+  }
+  const legs = [-0.175, 0.175].map(x => {
+    const leg = new T.Mesh(plushGeometry(0.151, 0.21, 0.194), blazer);
+    leg.position.set(x, 0.23, 0.063);
+    leg.castShadow = true;
+    avatar.add(leg);
+    return leg;
+  });
+  const avatarShadow = new T.Mesh(new T.PlaneGeometry(1.59, 1.50), shadow);
+  avatarShadow.rotation.x = -Math.PI / 2;
+  avatarShadow.position.y = 0.009;
+  avatar.add(avatarShadow);
+  avatar.position.set(-0.28,0.29,5.12);
+  avatar.rotation.y = 0.40;
+  const avatarHit = new T.Mesh(new T.BoxGeometry(1.02, 1.59, 0.74), new T.MeshBasicMaterial({ visible: false }));
+  materials.add(avatarHit.material);
+  avatarHit.position.set(0, 0.81, 0.051);
+  avatarHit.userData.hit = { zone: "hq" } satisfies Hit;
+  avatar.add(avatarHit);
+  if (!included || included.has("hq")) hits.push(avatarHit);
+  const plaza = new T.Group();
+  plaza.applyMatrix4(sites.hq.matrix);
+  plaza.add(avatar);
+  if (!atlas && (!included || included.has("hq"))) group.add(plaza);
+  else avatar.traverse(object => { if (object instanceof T.Mesh) object.geometry.dispose(); });
+
+  addSigns();
+
+  // Bake software lighting once, while keeping each site independently cullable.
+  function flush(source: Batches, destination: T.Group) {
+    const baked = new Map<SurfaceFinish | undefined, T.BufferGeometry[]>();
+    for (const [material, { cast, plain }] of source) {
+      for (const [geometries, castsShadow] of [[cast, true], [plain, false]] as const) {
+        if (!geometries.length) continue;
+        const compatible = geometries.map(geometry => {
+          if (geometry.index) return geometry;
+          const indexed = mergeVertices(geometry);
+          geometry.dispose();
+          return indexed;
+        });
+        if (bakeLighting && (atlas || material !== asphalt) && (material instanceof T.MeshLambertMaterial || material instanceof T.MeshPhongMaterial)) {
+          const finish = atlas ? undefined : finishes.get(material);
+          const surfaces = baked.get(finish) ?? [];
+          for (const geometry of compatible) surfaces.push(bakeSurface(geometry, material, finish !== undefined));
+          baked.set(finish, surfaces);
+          continue;
+        }
+        const merged = mergeGeometries(compatible)!;
+        compatible.forEach(geometry => geometry.dispose());
+        const mesh = new T.Mesh(merged, material);
+        mesh.castShadow = castsShadow && !material.transparent;
+        mesh.receiveShadow = !material.transparent;
+        destination.add(mesh);
+      }
+      const finish = finishes.get(material);
+      if (finish && (material instanceof T.MeshStandardMaterial || material instanceof T.MeshLambertMaterial)) {
+        surfaceMaterials.get(finish)!.add(material);
+      }
+    }
+    for (const [finish, geometries] of baked) {
+      const surfaceMaterial = new T.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
+      materials.add(surfaceMaterial);
+      if (finish) surfaceMaterials.get(finish)!.add(surfaceMaterial);
+      destination.add(new T.Mesh(mergeGeometries(geometries)!, surfaceMaterial));
+      geometries.forEach(geometry => geometry.dispose());
+    }
+  }
+
+  flush(batches, group);
+  for (const [name, siteBatch] of siteBatches) {
+    const root = new T.Group();
+    flush(siteBatch, root);
+    group.add(root);
+    siteMeshes.push({ normal: sites[name].normal, root });
+    if (atlas) atlasSites.set(name, root);
+  }
+  const cameraNormal = new T.Vector3();
+  function cull(eye: T.Vector3) {
+    if (!siteMeshes.length) return;
+    const threshold = Math.max(-.17, globeRadius / Math.max(globeRadius, eye.length()) - .34);
+    cameraNormal.copy(eye).normalize();
+    for (const { normal, root } of siteMeshes) root.visible = normal.dot(cameraNormal) > threshold;
+  }
+  flush(carBatches, carFallback);
+  carModels.visible = false;
+  group.add(carFallback, carModels);
+  if (atlas) atlasSites.get("starcars")?.add(carFallback);
+
+  function loadSurfaces(render: () => void) {
+    if (surfacesRequested || disposed) return;
+    surfacesRequested = true;
+    const loader = new T.TextureLoader();
+    for (const [finish, bound] of surfaceMaterials) {
+      const suffixes = low ? ["color"] : ["color", "normal", "roughness"];
+      if (!bound.size) continue;
+      for (const suffix of suffixes) {
+        loader.load(`/images/world/${finish}-${suffix}.webp`, texture => {
+          if (disposed) { texture.dispose(); return; }
+          texture.wrapS = texture.wrapT = T.RepeatWrapping;
+          texture.anisotropy = low ? 2 : 8;
+          if (suffix === "color") texture.colorSpace = T.SRGBColorSpace;
+          textures.add(texture);
+          for (const material of bound) {
+            if (suffix === "color") material.map = texture;
+            else if (material instanceof T.MeshStandardMaterial) {
+              if (suffix === "normal") {
+                material.normalMap = texture;
+                const strength = finish === "stone" ? 0.23 : 0.34;
+                material.normalScale.set(strength, strength);
+              } else {
+                material.roughnessMap = texture;
+                material.roughness = 1;
+              }
+            }
+            material.needsUpdate = true;
+          }
+          render();
+        });
+      }
+    }
+  }
+
+  async function loadCars(render: () => void) {
+    if (carsRequested || disposed) return;
+    carsRequested = true;
+    try {
+      const [{ GLTFLoader }, { MeshoptDecoder }] = await Promise.all([
+        import("three/addons/loaders/GLTFLoader.js"), import("three/addons/libs/meshopt_decoder.module.js"),
+      ]);
+      const { scene: asset } = await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync("/images/world/starcars-supercar.glb");
+      const colors = [0xbd2527, 0xc8a171, 0x4385a0];
+      const variants = new Map<T.Material, T.Material[]>();
+      const localGeometries = new Set<T.BufferGeometry>();
+      const localMaterials = new Set<T.Material>();
+      asset.traverse(node => {
+        if (!(node instanceof T.Mesh)) return;
+        localGeometries.add(node.geometry);
+        for (const material of [node.material].flat()) localMaterials.add(material);
+      });
+      if (disposed) {
+        localGeometries.forEach(geometry => geometry.dispose());
+        localMaterials.forEach(material => material.dispose());
+        return;
+      }
+      localMaterials.forEach(material => materials.add(material));
+      const bounds = new T.Box3().setFromObject(asset);
+      const center = bounds.getCenter(new T.Vector3());
+      const scale = 3.24 / (bounds.max.z - bounds.min.z);
+      const lot = new T.Group();
+      lot.applyMatrix4(sites.starcars.matrix);
+      carPlacements.forEach(({ x, z, angle }, index) => {
+        const car = asset.clone(true);
+        car.position.set(-center.x * scale, -bounds.min.y * scale, -center.z * scale);
+        car.scale.setScalar(scale);
+        car.traverse(node => {
+          if (!(node instanceof T.Mesh)) return;
+          node.castShadow = true;
+          node.receiveShadow = true;
+          const colorPaint = (material: T.Material) => {
+            if (!(material instanceof T.MeshStandardMaterial) || material.name !== "paint") return material;
+            if (!variants.has(material)) variants.set(material, colors.map(color => {
+              const painted = material.clone();
+              painted.color.setHex(color);
+              materials.add(painted);
+              return painted;
+            }));
+            return variants.get(material)![index];
+          };
+          node.material = Array.isArray(node.material) ? node.material.map(colorPaint) : colorPaint(node.material);
+        });
+        const position = new T.Group();
+        position.position.set(x, 0.28, z);
+        position.rotation.y = angle + Math.PI;
+        position.add(car);
+        lot.add(position);
+      });
+      carModels.add(lot);
+      render();
+      new T.TextureLoader().load("/images/world/starcars-asphalt.webp", (texture) => {
+        if (disposed) { texture.dispose(); return; }
+        texture.colorSpace = T.SRGBColorSpace;
+        texture.wrapS = texture.wrapT = T.RepeatWrapping;
+        texture.repeat.set(0.45, 0.45);
+        textures.add(texture);
+        asphalt.map = texture;
+        asphalt.color.setHex(0xa5a6a8);
+        asphalt.needsUpdate = true;
+        render();
+      });
+    } catch {
+      carsRequested = false;
+    }
+  }
+
+  function showDetailedCars(visible: boolean) {
+    const show = visible && carModels.children.length > 0;
+    if (show === carModels.visible) return false;
+    carModels.visible = show;
+    carFallback.visible = !show;
+    return true;
+  }
+
+  function dispose() {
+    disposed = true;
+    const geometries = new Set<T.BufferGeometry>();
+    group.traverse(object => {
+      if (object instanceof T.Mesh) geometries.add(object.geometry);
+    });
+    geometries.forEach(geometry => geometry.dispose());
+    materials.forEach(material => material.dispose());
+    textures.forEach(texture => texture.dispose());
+    textures.clear();
+  }
+
+  return { group, sites, atlasSites, hits, avatar, legs, beacon, loadSurfaces, loadCars, showDetailedCars, cull, dispose };
+}
