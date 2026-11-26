@@ -1,12 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
 import Image from "next/image";
 import {
-  ArrowUpRight, ChevronLeft, ChevronRight, Menu, Move, X,
+  ArrowDown, ArrowUpRight, ChevronLeft, ChevronRight, Maximize2, Move, X,
 } from "lucide-react";
 import { gsap } from "gsap";
-import { classicPaths, contactPaths, copy, mapStops, projectIndex, projects, projectStops, sceneStops, worldPaths, zones, type ProjectId, type StopId, type WorldLocale, type Zone } from "./content";
+import { classicPaths, contactPaths, copy, mapStops, projectIndex, projects, projectStops, sceneStops, worldEditorial, worldPaths, zones, type ProjectId, type StopId, type WorldLocale, type Zone } from "./content";
 import { ExperienceDialog, rememberExperience } from "./Experience";
 import type { WorldController } from "./scene";
 import { GameBeacons, GameHud, GameMenu } from "./GameHud";
@@ -43,13 +43,14 @@ function ActionLink({ href, children, primary = false }: { href: string; childre
   const external = href.startsWith("https://");
   return <a className={primary ? styles.primary : styles.inlineLink} href={href}
     target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined}>
-    {children}<ArrowUpRight size={17} strokeWidth={1.55} />
+    <span>{children}</span><span className={primary ? styles.actionIcon : undefined}><ArrowUpRight size={16} strokeWidth={1.35} aria-hidden="true" /></span>
   </a>;
 }
 
 export function World({ locale }: { locale: WorldLocale }) {
   const t = copy[locale];
   const gt = gameCopy(locale);
+  const editorial = worldEditorial[locale];
   const game = useWorldGame();
   const gameRef = useRef(game);
   gameRef.current = game;
@@ -70,10 +71,14 @@ export function World({ locale }: { locale: WorldLocale }) {
   const markers = useRef<Partial<Record<StopId, HTMLButtonElement | null>>>({});
   const menuButton = useRef<HTMLButtonElement>(null);
   const menuPanel = useRef<HTMLDialogElement>(null);
+  const photoPanel = useRef<HTMLDialogElement>(null);
+  const photoTrigger = useRef<HTMLButtonElement>(null);
+  const menuReturn = useRef<HTMLElement | null>(null);
   const lastTrigger = useRef<HTMLElement | null>(null);
   const current = useRef<Selection>(overview);
   const title = useRef<HTMLHeadingElement>(null);
   const gallery = selection.project !== null ? projects[selection.project] : null;
+  const [previewOpen, setPreviewOpen] = useState(false);
   const isOverview = selection.zone === null;
   const showOpening = isOverview && game.body === "home" && game.mode !== "photo" && !game.transit;
   const focusOnChange = useRef(false);
@@ -209,7 +214,7 @@ export function World({ locale }: { locale: WorldLocale }) {
     };
   }, [locale, selectProject, selectZone, staticOnly, sceneAttempt]);
 
-  useEffect(() => { scene.current?.refresh(); }, [status, game.body, game.chartedMoon, selection.zone]);
+  useLayoutEffect(() => { scene.current?.refresh(); }, [status, game.body, game.transit, game.mode, game.chartedMoon, selection]);
 
   useEffect(() => {
     if (!main.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -223,29 +228,35 @@ export function World({ locale }: { locale: WorldLocale }) {
   }, []);
 
   useLayoutEffect(() => {
-    if (!focusOnChange.current) return;
+    if (!focusOnChange.current || game.transit) return;
     focusOnChange.current = false;
     if (selection.zone) {
       title.current?.focus({ preventScroll: true });
-      if (window.matchMedia("(max-width: 830px)").matches) window.scrollTo({ top: 0, behavior: "instant" });
+      if (window.matchMedia("(max-width: 830px)").matches) {
+        const panel = title.current?.closest("[data-testid=world-place]");
+        if (panel) panel.scrollIntoView({ block: "start", behavior: "instant" });
+      } else {
+        const panel = title.current?.closest("[data-testid=world-place]");
+        if (panel) panel.scrollTop = 0;
+      }
       return;
     }
     const trigger = lastTrigger.current;
     if (trigger && trigger !== document.body && trigger.isConnected) trigger.focus({ preventScroll: true });
     else menuButton.current?.focus({ preventScroll: true });
-  }, [selection]);
+  }, [selection, game.transit]);
 
   useEffect(() => {
-    if (!selection.zone || !copyArea.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (game.transit || !selection.zone || !copyArea.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const context = gsap.context(() => {
       gsap.from("[data-testid=world-place]", { y: 12, opacity: 0, delay: 0.12, duration: 0.56, ease: "power3.out", clearProps: "transform,opacity" });
     }, copyArea.current);
     return () => context.revert();
-  }, [selection]);
+  }, [selection, game.transit]);
 
   function keydown(event: KeyboardEvent<HTMLElement>) {
     if (event.key === "Escape") {
-      if (modeDialog || menuOpen) return;
+      if (modeDialog || menuOpen || photoPanel.current?.open) return;
       if (game.mode === "photo") { changeMode("explore"); return; }
       if (game.transit) { scene.current?.stopFlight(); return; }
       if (selection.zone) { go(overview); return; }
@@ -293,7 +304,28 @@ export function World({ locale }: { locale: WorldLocale }) {
     go({ zone: "gallery", project: (selection.project + direction + projects.length) % projects.length }, false);
   }
 
+  function cyclePhoto(direction: number) {
+    if (!gallery) return;
+    setPhoto(value => (value + direction + gallery.images.length) % gallery.images.length);
+  }
+
+  function closePhoto() {
+    photoPanel.current?.close();
+    setPreviewOpen(false);
+    photoTrigger.current?.focus({ preventScroll: true });
+  }
+
+  function photoControls(className: string) {
+    if (!gallery || gallery.images.length < 2) return null;
+    return <div className={className}>
+      <button type="button" aria-label={t.prevPhoto} onClick={() => cyclePhoto(-1)}><ChevronLeft size={16} aria-hidden="true" /></button>
+      <span aria-live="polite">{photo + 1} / {gallery.images.length}</span>
+      <button type="button" aria-label={t.nextPhoto} onClick={() => cyclePhoto(1)}><ChevronRight size={16} aria-hidden="true" /></button>
+    </div>;
+  }
+
   function openMenu() {
+    menuReturn.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     menuPanel.current?.showModal();
     setMenuOpen(true);
   }
@@ -301,7 +333,9 @@ export function World({ locale }: { locale: WorldLocale }) {
   function closeMenu() {
     menuPanel.current?.close();
     setMenuOpen(false);
-    menuButton.current?.focus({ preventScroll: true });
+    const trigger = menuReturn.current;
+    if (trigger && trigger !== document.body && trigger.isConnected) trigger.focus({ preventScroll: true });
+    else menuButton.current?.focus({ preventScroll: true });
   }
   function changeMode(mode: CameraMode) {
     if (menuOpen) closeMenu();
@@ -326,15 +360,18 @@ export function World({ locale }: { locale: WorldLocale }) {
   const stopLabel = (id: StopId) => isProject(id) ? projectLabels[id] : t.zones[id].short;
 
   return <main ref={main} className={styles.world} data-render={status} data-view={selection.zone === "gallery" && !gallery ? "gallery-list" : selection.zone ?? "overview"} data-testid="world"
-    data-camera={game.mode} data-light={game.equipment.day} data-body={game.body} data-transit={game.transit ?? undefined}
+    data-opening={showOpening} data-camera={game.mode} data-light={game.equipment.day} data-body={game.body} data-transit={game.transit ?? undefined}
     onKeyDown={keydown}>
     <header className={styles.header}>
       <a href={classicPaths[locale]} className={styles.brand} onClick={() => rememberExperience("classic")} data-world-logo="">
         <Image src="/favicon.svg" alt="" width={34} height={34} unoptimized />
         <span>bernecki<span className={styles.brandExtension}>.dev</span></span>
       </a>
-      <button type="button" ref={menuButton} className={styles.menuTrigger} aria-haspopup="dialog"
-        aria-expanded={menuOpen} aria-controls="world-menu" onClick={openMenu}>{t.menu}<Menu size={20} strokeWidth={1.45} /></button>
+      <div className={styles.headerActions}>
+        <a href={contactPaths[locale]} className={styles.headerContact}>{t.contact}<ArrowUpRight size={14} strokeWidth={1.35} aria-hidden="true" /></a>
+        <button type="button" ref={menuButton} className={styles.menuTrigger} aria-haspopup="dialog"
+          aria-expanded={menuOpen} aria-controls="world-menu" onClick={openMenu}>{t.menu}<span className={styles.menuGlyph} aria-hidden="true" /></button>
+      </div>
     </header>
 
     <div className={styles.experience}>
@@ -343,6 +380,7 @@ export function World({ locale }: { locale: WorldLocale }) {
         onPointerDown={event => {
           if (event.pointerType === "mouse" && event.target instanceof HTMLCanvasElement) stage.current?.focus({ preventScroll: true });
         }}>
+        {showOpening && <div className={styles.observation} aria-hidden="true" />}
         <div className={styles.fallback} aria-hidden="true">
           <Image ref={poster} src="/images/world/model.webp" alt="" fill unoptimized priority fetchPriority="high" />
         </div>
@@ -363,32 +401,43 @@ export function World({ locale }: { locale: WorldLocale }) {
 
       <section ref={copyArea} className={styles.story} aria-label={activePlace?.title ?? "Bernecki World"}>
         <div className={showOpening ? styles.intro : styles.visuallyHidden}>
-          <h1 className={styles.title} aria-label="Bernecki Universe"><span data-world-line="">Bernecki <em>Universe.</em></span></h1>
+          {showOpening && <p className={styles.edition} data-world-reveal="">{t.explore}</p>}
+          <h1 className={styles.title} aria-label="Bernecki Universe">
+            <span className={styles.titleLine}><span data-world-line="">Bernecki</span></span>
+            <span className={styles.titleLine}><em data-world-line="">Universe.</em></span>
+          </h1>
+          {showOpening && <>
+            <p className={styles.introLead} data-world-reveal="">{editorial.lead}</p>
+            <div className={styles.introActions} data-world-reveal="">
+              {status !== "static" && <button type="button" className={styles.primary} aria-busy={status === "loading"}
+                disabled={status === "loading"} onClick={() => void scene.current?.fly("system")}>
+                <span>{editorial.atlas}</span><span className={styles.actionIcon}><ArrowUpRight size={17} strokeWidth={1.35} aria-hidden="true" /></span>
+              </button>}
+              <button type="button" className={styles.introSecondary} onClick={() => selectZone("gallery")}>
+                {editorial.projects}<ArrowDown size={16} strokeWidth={1.35} aria-hidden="true" />
+              </button>
+            </div>
+          </>}
         </div>
 
         {activePlace && game.mode !== "photo" && !game.transit && <div className={styles.place} data-testid="world-place">
           <div className={styles.placeTop} data-place-reveal="">
             <button type="button" className={styles.back} onClick={() => go(overview)}>
-              <ChevronLeft size={16} strokeWidth={1.6} />{t.overview}
+              <ChevronLeft size={17} strokeWidth={1.35} />{editorial.return}
             </button>
           </div>
-          {!gallery && <p className={styles.kicker} data-place-reveal=""><span />{activePlace.eyebrow}</p>}
+          <p className={styles.kicker} data-place-reveal=""><span />{gallery ? editorial.commission : activePlace.eyebrow}</p>
           <h2 tabIndex={-1} ref={title} data-place-reveal="">{gallery?.name ?? activePlace.title}</h2>
           {gallery && <>
-            <div className={styles.projectNav} data-place-reveal="">
-              <button type="button" className={styles.square} aria-label={t.prev} onClick={() => cycleProject(-1)}><ChevronLeft size={17} strokeWidth={1.55} /></button>
-              <span aria-live="polite">{String((selection.project ?? 0) + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}</span>
-              <button type="button" className={styles.square} aria-label={t.next} onClick={() => cycleProject(1)}><ChevronRight size={17} strokeWidth={1.55} /></button>
-            </div>
             <div className={styles.projectPhoto} data-place-reveal="">
-              <a href={`/images/projects/${gallery.images[photo]}`} target="_blank" rel="noopener noreferrer" aria-label={`${t.photo} — ${gallery.name}`}>
+              <button type="button" ref={photoTrigger} aria-haspopup="dialog" aria-controls="world-photo" aria-label={`${t.photo} — ${gallery.name}`} onClick={() => {
+                photoPanel.current?.showModal();
+                setPreviewOpen(true);
+              }}>
                 <Image key={gallery.images[photo]} src={`/images/projects/${gallery.images[photo]}`} alt={`${t.projectImage} — ${gallery.name}`} fill loading="eager" sizes="(max-width: 830px) 87vw, 360px" />
-              </a>
-              {gallery.images.length > 1 && <div className={styles.photoNav}>
-                <button type="button" aria-label={t.prevPhoto} onClick={() => setPhoto(value => (value - 1 + gallery.images.length) % gallery.images.length)}><ChevronLeft size={16} /></button>
-                <span aria-live="polite">{photo + 1} / {gallery.images.length}</span>
-                <button type="button" aria-label={t.nextPhoto} onClick={() => setPhoto(value => (value + 1) % gallery.images.length)}><ChevronRight size={16} /></button>
-              </div>}
+                <span className={styles.expandPhoto}><Maximize2 size={16} strokeWidth={1.6} aria-hidden="true" /></span>
+              </button>
+              {photoControls(styles.photoNav)}
             </div>
             <p className={styles.placeText}>{gallery.copy[locale][0]}</p>
             <div className={styles.placeLinks}>
@@ -400,13 +449,18 @@ export function World({ locale }: { locale: WorldLocale }) {
             <h3>{t.features}</h3>
             <ul className={styles.features}>{gallery.copy[locale][1].map(feature => <li key={feature}>{feature}</li>)}</ul>
             {gallery.stack && <p className={styles.stack}><strong>{t.stack}</strong> {gallery.stack.join(" · ")}</p>}
+            <div className={styles.projectNav} data-place-reveal="">
+              <button type="button" className={styles.square} aria-label={t.prev} onClick={() => cycleProject(-1)}><ChevronLeft size={17} strokeWidth={1.55} /></button>
+              <span aria-live="polite">{String((selection.project ?? 0) + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}</span>
+              <button type="button" className={styles.square} aria-label={t.next} onClick={() => cycleProject(1)}><ChevronRight size={17} strokeWidth={1.55} /></button>
+            </div>
           </>}
           {!gallery && <>
             {selection.zone === "hq" && <div className={styles.portrait} data-place-reveal="">
               <Image src="/images/world/kacper-plush.webp" alt={t.portrait} width={118} height={147} sizes="92px" />
               <div><strong>Kacper Bernecki</strong><span>bernecki.dev</span></div>
             </div>}
-            <p className={styles.placeText} data-place-reveal="">{activePlace.text}</p>
+            <p className={styles.placeText} data-place-reveal="">{selection.zone === "gallery" ? editorial.gallery : activePlace.text}</p>
             {selection.zone === "gallery" && <ul className={styles.projectList} aria-label={t.gallery} data-place-reveal="">
               {projects.map((project, i) => <li key={project.id}><button type="button" onClick={() => selectProject(i)}>
                 <Image src={`/images/world/${project.id}.webp`} alt="" width={68} height={38} unoptimized />
@@ -443,7 +497,7 @@ export function World({ locale }: { locale: WorldLocale }) {
       onClick={event => { if (event.target === event.currentTarget) closeMenu(); }}>
       <div className={styles.menuInner}>
         <div className={styles.menuHeading}>
-          <h2 id="world-menu-title">{gt.universe}</h2>
+          <h2 id="world-menu-title">{editorial.index}</h2>
           <button type="button" onClick={closeMenu} aria-label={t.close} className={styles.square}><X size={19} strokeWidth={1.5} /></button>
         </div>
         <nav className={styles.menuPlaces} aria-label={gt.fast}>
@@ -454,7 +508,10 @@ export function World({ locale }: { locale: WorldLocale }) {
           <h3 className={styles.menuSection}>{gt.projects}</h3>
           {projectBodies.map(id =>
             <button type="button" key={id} aria-current={activeStop === id || game.body === id ? "location" : undefined}
-              onClick={() => { closeMenu(); selectStop(id); }} data-testid={`nav-${id}`}>{stopLabel(id)}<ChevronRight size={16} strokeWidth={1.5} /></button>
+              onClick={() => { closeMenu(); selectStop(id); }} data-testid={`nav-${id}`}>
+                <span className={styles.navBody}><span className={styles.navPlanet} style={{ "--planet-color": `#${planets[id].colors[2].toString(16).padStart(6, "0")}` } as CSSProperties} aria-hidden="true" />{stopLabel(id)}</span>
+                <ChevronRight size={16} strokeWidth={1.35} aria-hidden="true" />
+              </button>
           )}
           <h3 className={styles.menuSection}>{gt.technology}</h3>
           <button type="button" onClick={() => { closeMenu(); selectStop("lab"); }} data-testid="nav-lab">{planets.ai.label}<ChevronRight size={16} strokeWidth={1.5} /></button>
@@ -492,6 +549,25 @@ export function World({ locale }: { locale: WorldLocale }) {
         </div>
       </div>
     </dialog>
+    {gallery && <dialog ref={photoPanel} id="world-photo" className={styles.photoPanel} aria-labelledby="world-photo-title"
+      onCancel={event => { event.preventDefault(); closePhoto(); }}
+      onClick={event => { if (event.target === event.currentTarget) closePhoto(); }}
+      onKeyDown={event => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+        event.preventDefault();
+        cyclePhoto(event.key === "ArrowLeft" ? -1 : 1);
+      }}>
+      <div className={styles.photoInner}>
+        <div className={styles.photoHeading}>
+          <h2 id="world-photo-title">{gallery.name}</h2>
+          <button type="button" className={styles.square} onClick={closePhoto} aria-label={t.close}><X size={19} strokeWidth={1.5} aria-hidden="true" /></button>
+        </div>
+        {previewOpen && <div className={styles.photoFrame}>
+          <Image key={gallery.images[photo]} src={`/images/projects/${gallery.images[photo]}`} alt={`${t.projectImage} — ${gallery.name}`} fill loading="eager" sizes="(max-width: 830px) 94vw, 1100px" />
+        </div>}
+        {photoControls(styles.photoPager)}
+      </div>
+    </dialog>}
     <ExperienceDialog locale={locale} current="world" open={modeDialog} onClose={() => { setModeDialog(false); menuButton.current?.focus(); }} />
     <noscript><style>{`.${styles.hotspots},.${styles.menuTrigger}{display:none!important}`}</style>
       <div className={styles.noScript}><a href={contactPaths[locale]}>{t.contact}</a> · <a href={locale === "en" ? "/en/case-studies" : "/case-studies"}>{t.zones.gallery.title}</a></div>

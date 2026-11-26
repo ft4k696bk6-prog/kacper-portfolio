@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Geist } from "next/font/google";
+import { Cormorant_Garamond, Geist } from "next/font/google";
 import { classicPaths, copy, worldPaths, type WorldLocale } from "./content";
 
 const geist = Geist({ subsets: ["latin", "latin-ext"], variable: "--world-font" });
+const editorial = Cormorant_Garamond({
+  subsets: ["latin", "latin-ext"],
+  weight: "500",
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--world-editorial",
+});
 const origin = "https://bernecki.dev";
 const openGraphLocales = { pl: "pl_PL", en: "en_US", uk: "uk_UA" } as const;
 const alternates = { "pl-PL": worldPaths.pl, en: worldPaths.en, "uk-UA": worldPaths.uk };
@@ -29,8 +36,8 @@ export function worldMetadata(locale: WorldLocale): Metadata {
 }
 
 export function WorldDocument({ locale, children }: { locale: WorldLocale; children: ReactNode }) {
-  return <html lang={locale} className={geist.variable}>
-    <body style={{ margin: 0, background: "#0b101b" }}>
+  return <html lang={locale} className={`${geist.variable} ${editorial.variable}`}>
+    <body style={{ margin: 0, background: "#090e19" }}>
       {children}
     </body>
   </html>;

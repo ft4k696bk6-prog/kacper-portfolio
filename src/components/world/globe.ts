@@ -1,5 +1,6 @@
 import * as T from "three";
 import type { StopId } from "./content";
+import { planetAtmosphere } from "./planetFinish";
 
 export const globeRadius = 23;
 const radians = Math.PI / 180;
@@ -40,33 +41,14 @@ export function makeSurfaceSites() {
   }>;
 }
 
-export function loadPlanet(software: boolean, low: boolean) {
-  const sphere = new T.SphereGeometry(globeRadius, low ? 112 : 160, low ? 64 : 96);
-  const material = software
+export function loadPlanet(software: boolean, low: boolean, finish?: T.Material) {
+  const sphere = new T.SphereGeometry(globeRadius, low ? 76 : 140, low ? 46 : 84);
+  const material = finish ?? (software
     ? new T.MeshBasicMaterial({ vertexColors: true, toneMapped: false })
-    : new T.MeshPhongMaterial({ vertexColors: true, shininess: 18, specular: 0x122b38, emissive: 0x2c3b51, emissiveIntensity: 0.27 });
+    : new T.MeshPhongMaterial({ vertexColors: true, shininess: 18, specular: 0x122b38, emissive: 0x2c3b51, emissiveIntensity: 0.27 }));
   const globe = new T.Mesh(sphere, material);
   const group = new T.Group().add(globe);
-  const atmosphere = new T.Mesh(new T.SphereGeometry(globeRadius * 1.060, low ? 48 : 80, low ? 24 : 48), new T.ShaderMaterial({
-    transparent: true, depthWrite: false, side: T.BackSide, blending: T.AdditiveBlending,
-    vertexShader: `
-      varying vec3 viewNormal;
-      varying vec3 toEye;
-      void main() {
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        viewNormal = normalize(normalMatrix * normal);
-        toEye = -mvPosition.xyz;
-        gl_Position = projectionMatrix * mvPosition;
-      }`,
-    fragmentShader: `
-      varying vec3 viewNormal;
-      varying vec3 toEye;
-      void main() {
-        float edge = abs(dot(normalize(viewNormal), normalize(toEye)));
-        float haze = smoothstep(0.0, 0.20, edge) * exp(-2.6 * (1.0 - edge));
-        gl_FragColor = vec4(vec3(0.32, 0.67, 0.92), haze * 0.64);
-      }`,
-  }));
+  const atmosphere = planetAtmosphere(globeRadius, new T.Color("#568cba"), low, .72);
   group.add(atmosphere);
   if (!software) globe.receiveShadow = true;
   return {

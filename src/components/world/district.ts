@@ -1,4 +1,5 @@
 import * as T from "three";
+import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { alignRadially, box, gamePalette, solid } from "./gameObjects";
 import { makeCar } from "./vehicle";
 import { frontNormal, worldSurface } from "./planetSurface";
@@ -60,13 +61,48 @@ export function makeDistrict(id: ProjectBody | "home", low: boolean, effects: Ef
   function booth(group: T.Group, x: number, z: number, height: number, tint = wall) {
     const building = new T.Group();
     building.position.set(x, 0, z);
-    building.add(box(1.16, height, .86, tint, 0, height / 2), box(1.25, .12, .96, roof, 0, height),
-      box(.26, .46, .08, p.ink, .25, .25, .45));
+    const pieces = [box(1.16, height, .86, tint, 0, height / 2), box(1.25, .12, .96, roof, 0, height),
+      box(1.20, .095, .91, p.ink, 0, .055), box(.31, .47, .08, p.ink, .28, .263, .447),
+      box(.23, .35, .025, p.glass, .28, .292, .489, .022)];
     for (let y = .58; y < height - .13; y += .40) {
-      building.add(box(.63, .17, .062, p.glass, -.10, y, .45), box(.055, .16, .57, p.glass, .61, y, -.04));
+      pieces.push(box(.76, .18, .055, p.glass, -.12, y, .445, .022), box(.055, .17, .57, p.glass, .584, y, -.04, .022),
+        box(.82, .024, .080, roof, -.12, y - .105, .452, .012));
     }
+    if (id === "b-crm" || id === "ai") {
+      for (const dx of [-.48, -.23, .02, .52]) pieces.push(box(.041, height - .16, .068, roof, dx, height / 2, .475, .02));
+      pieces.push(box(.65, .14, .56, p.ink, -.21, height + .095, -.13, .032));
+      for (let i = 0; i < 4; i++) pieces.push(box(.085, .022, .43, p.glass, -.43 + i * .145, height + .173, -.13, .01));
+    } else if (id === "reenergy") {
+      const collector = box(.70, .048, .52, p.glass, -.1, height + .163, -.06, .03);
+      collector.rotation.x = .27;
+      pieces.push(box(.66, .11, .41, p.ink, -.1, height + .075, -.06, .023), collector);
+      for (const dx of [-.46, -.20, .06]) pieces.push(box(.04, .40, .08, p.chalk, dx, .58, .487, .015));
+    } else {
+      pieces.push(box(1.24, .10, .29, roof, 0, Math.min(height - .13, .65), .48, .035));
+      pieces.push(box(.70, .055, .026, id === "starcars" ? p.coral : p.warm, -.14, Math.min(height - .13, .65), .628, .01));
+      if (id === "starcars") pieces.push(box(.64, .05, .58, p.chalk, .22, height + .06, -.10, .023));
+    }
+    addStatic(building, pieces);
     group.add(building);
     return building;
+  }
+  function addStatic(group: T.Group, pieces: T.Mesh[]) {
+    const batches = new Map<T.Material, T.BufferGeometry[]>();
+    for (const piece of pieces) {
+      const material = piece.material as T.Material;
+      piece.updateMatrix();
+      piece.geometry.applyMatrix4(piece.matrix);
+      const geometries = batches.get(material) ?? [];
+      geometries.push(piece.geometry);
+      batches.set(material, geometries);
+    }
+    for (const [material, geometries] of batches) {
+      if (geometries.length === 1) group.add(solid(geometries[0], material));
+      else {
+        group.add(solid(mergeGeometries(geometries), material));
+        geometries.forEach(geometry => geometry.dispose());
+      }
+    }
   }
   function planter(group: T.Group, x: number, z: number) {
     group.add(box(.54, .14, .52, roof, x, .07, z),
@@ -482,13 +518,43 @@ export function makeDistrict(id: ProjectBody | "home", low: boolean, effects: Ef
       traffic.add(guest.figure, walk, .54, i / 4, 0, guest.move);
     }
   } else {
-    for (let i = 0; i < 4; i++) booth(town, (i % 2 - .5) * 1.58, (Math.floor(i / 2) - .5) * 1.29, 1.68 + i * .54, i % 2 ? p.chalk : wall);
+    const courtyard = [box(3.34, .18, 2.94, roof, 0, .072, .026, .18),
+      box(3.21, .046, 2.80, p.chalk, 0, .172, .026, .15), box(.29, .016, 2.64, roof, 0, .199, .026, .04)];
+    for (let i = -4; i <= 4; i++) courtyard.push(box(.094, .014, .146, p.warm, 0, .208, i * .27, .01));
+    addStatic(town, courtyard);
+    for (let i = 0; i < 4; i++) {
+      const tower = booth(town, (i % 2 - .5) * 1.58, (Math.floor(i / 2) - .5) * 1.29, 1.49 + i * .46, i % 2 ? p.chalk : wall);
+      tower.position.y = .202;
+      if (i >= 2) {
+        const deck = i === 2 ? p.glass : p.sea;
+        const level = 1.55 + i * .46;
+        addStatic(tower, [box(.71, .22, .62, deck, -.14, level, -.12, .07),
+          box(.81, .071, .715, roof, -.14, level + .14, -.12, .046),
+          box(.53, .024, .062, p.warm, -.14, level + .092, .19, .014)]);
+      }
+    }
     const runway = district(.40, .20, .098, 2.4);
-    runway.add(box(1.65, .14, 3.43, p.ink, 0, .08), box(1.53, .85, .75, wall, 1.33, .43, -.86));
-    for (let i = -2; i <= 2; i++) runway.add(box(.073, .018, .278, p.chalk, 0, .16, i * .59));
+    runway.add(box(1.65, .14, 3.43, p.ink, 0, .08), box(1.53, .85, .75, wall, 1.33, .43, -.86),
+      box(1.60, .12, .85, roof, 1.33, .872, -.86));
+    const tarmac = [box(1.03, .025, .93, roof, 0, .166, .087, .14)];
+    for (let i = -2; i <= 2; i++) tarmac.push(box(.073, .018, .278, p.chalk, 0, .16, i * .59, .01));
+    for (const x of [-.60, .60]) tarmac.push(box(.043, .023, 3.15, p.chalk, x, .164, 0, .011));
+    for (let i = 0; i < 4; i++) tarmac.push(box(.83, .061, .047, p.ink, 1.32, .23 + i * .13, -.46, .015));
+    addStatic(runway, tarmac);
     const shuttle = new T.Group();
-    shuttle.add(solid(new T.CylinderGeometry(.21, .34, 1.2, 14), p.chalk, 0, .82),
-      solid(new T.ConeGeometry(.211, .55, 14), p.coral, 0, 1.68));
+    shuttle.add(solid(new T.CylinderGeometry(.261, .31, .20, 14), p.ink, 0, .23),
+      solid(new T.CylinderGeometry(.21, .31, 1.12, 18), p.chalk, 0, .87),
+      solid(new T.CylinderGeometry(.229, .244, .067, 18), p.coral, 0, 1.22),
+      solid(new T.ConeGeometry(.214, .51, 18), p.coral, 0, 1.682));
+    const port = solid(new T.CylinderGeometry(.089, .093, .034, 13), p.glass, 0, 1.10, .248);
+    port.rotation.x = Math.PI / 2;
+    shuttle.add(port);
+    for (let i = 0; i < 3; i++) {
+      const a = i * ring / 3;
+      const wing = box(.11, .36, .26, roof, .274 * Math.sin(a), .42, .274 * Math.cos(a), .045);
+      wing.rotation.set(.25, a, 0, "YXZ");
+      shuttle.add(wing);
+    }
     runway.add(shuttle);
     let launch = -50, time = 0;
     secret(shuttle, "launch", () => { launch = time; effects.alert("launch"); });

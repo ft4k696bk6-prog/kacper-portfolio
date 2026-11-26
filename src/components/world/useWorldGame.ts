@@ -57,8 +57,10 @@ export function useWorldGame() {
       button.tabIndex = visible ? 0 : -1;
     }
     if (visible) {
-      const translate = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, -50%)`;
-      if (button.style.transform !== translate) button.style.transform = translate;
+      const left = `${x.toFixed(1)}px`;
+      const top = `${y.toFixed(1)}px`;
+      if (button.style.getPropertyValue("--atlas-marker-x") !== left) button.style.setProperty("--atlas-marker-x", left);
+      if (button.style.getPropertyValue("--atlas-marker-y") !== top) button.style.setProperty("--atlas-marker-y", top);
     }
   }
 

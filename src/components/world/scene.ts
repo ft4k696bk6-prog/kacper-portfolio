@@ -5,7 +5,7 @@ import { projects, zones, type Zone, type StopId } from "./content";
 import { buildModel, type Hit } from "./model";
 import { loadLighting } from "./lighting";
 import { globeDirection, loadPlanet, type SurfaceStop } from "./globe";
-import { colorTerrain, surfaceRadius } from "./terrain";
+import { shapeTerrain, surfaceRadius, terrainFinish } from "./terrain";
 import { createPlay, type Beacon } from "./play";
 import { makeUniverse } from "./universe";
 import { clearancePose, flightPath, safeDirection, spheres, systemAxis } from "./cameraFlight";
@@ -29,7 +29,7 @@ type Callbacks = {
   interrupted: (previous: View, failed: boolean) => void;
 };
 type Pose = { target: T.Vector3; eye: T.Vector3 };
-const homeOrbit = globeDirection(21, 5);
+const homeOrbit = globeDirection(-25, -4);
 const heading = new T.Vector3(.54, .32, .78).normalize();
 const fov = T.MathUtils.degToRad(36) / 2;
 const origin = new T.Vector3();
@@ -67,9 +67,9 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   controls.dampingFactor = software ? .18 : .095;
   controls.mouseButtons = { LEFT: T.MOUSE.ROTATE, MIDDLE: T.MOUSE.DOLLY, RIGHT: T.MOUSE.ROTATE };
   controls.touches = { ONE: T.TOUCH.ROTATE, TWO: T.TOUCH.DOLLY_ROTATE };
-  const ambient = new T.HemisphereLight(0xf5f2ff, 0x626378, 1.45);
-  const sun = new T.DirectionalLight(0xffe6c8, 2.25);
-  const fill = new T.DirectionalLight(0xc9e9ff, .66);
+  const ambient = new T.HemisphereLight(0xf2f5ff, 0x586581, 1.32);
+  const sun = new T.DirectionalLight(0xffe6c8, 2.18);
+  const fill = new T.DirectionalLight(0xb5d6ff, .56);
   sun.position.set(38, 49, 44);
   fill.position.set(-15, 17, -31);
   scene.add(ambient, sun, sun.target, fill, fill.target);
@@ -83,8 +83,8 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   sun.shadow.bias = -.00015;
   sun.shadow.intensity = .62;
 
-  const planet = loadPlanet(software, low);
-  colorTerrain(planet.sphere, software);
+  const planet = loadPlanet(software, low, terrainFinish(low));
+  shapeTerrain(planet.sphere);
   const home = buildModel(low, software, new Set<SurfaceStop>(["hq", "studio"]));
   scene.add(planet.group, home.group);
   const universe = makeUniverse(low);
@@ -95,6 +95,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     observatory() { revealMoon(); void fly("system"); },
   });
   const bounds = new T.Vector2();
+  const measured = new T.Vector2();
   const v = new T.Vector3(), center = new T.Vector3(), projected = new T.Vector3(), radial = new T.Vector3(), offset = new T.Vector3();
   const originRay = new T.Vector2();
   const cast = new T.Raycaster(), sphere = new T.Sphere(), rayPoint = new T.Vector3();
@@ -136,27 +137,30 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       if (prepared) {
         const target = prepared.focus.clone();
         const direction = prepared.viewDirection;
-        return { target, eye: target.clone().addScaledVector(direction, (radius * .73 + 1.1) / Math.max(.63, factor)) };
+        return { target, eye: target.clone().addScaledVector(direction, prepared.viewDistance / Math.max(.72, factor)) };
       }
     }
     if (id === "home" && (view?.zone === "hq" || view?.zone === "studio")) {
       const s = home.sites[view.zone];
-      const target = new T.Vector3(...zones.find(zone => zone.id === view.zone)!.target);
-      if (view.zone === "hq") target.add(home.avatar.position);
+      const headquarters = view.zone === "hq";
+      const target = headquarters ? new T.Vector3(-.14, 1.80, 2.19) : new T.Vector3(...zones.find(zone => zone.id === view.zone)!.target);
+      const direction = s.normal.clone().addScaledVector(s.south, headquarters ? 1.23 : .77).normalize();
       target.applyMatrix4(s.matrix);
-      return { target, eye: target.clone().addScaledVector(s.normal.clone().addScaledVector(s.south, .77).normalize(), 10.8 / Math.max(.62, factor)) };
+      return { target, eye: target.clone().addScaledVector(direction, (headquarters ? 13.4 : 10.8) / Math.max(.62, factor)) };
     }
-    const distance = (radius * 1.08) / Math.sin(Math.atan(Math.tan(fov) * factor * (compact ? .83 : .77)));
+    const framing = compact ? .84 : id === "home" ? .87 : .80;
+    const distance = (radius * 1.08) / Math.sin(Math.atan(Math.tan(fov) * factor * framing));
     const direction = safeDirection(id, normalOf(id), distance);
     return { target: point, eye: point.clone().addScaledVector(direction, distance) };
   }
-  function mapPose(): Pose {
+  function mapPose(width = bounds.x, height = bounds.y): Pose {
     // The camera remains in front of the orbital plane. Narrow screens use depth rather than smaller hit targets.
-    const portrait = camera.aspect < .77;
-    const short = portrait && bounds.y < 725;
+    const aspect = width / height;
+    const portrait = aspect < .77;
+    const short = portrait && height < 725;
     const target = new T.Vector3(portrait ? short ? -20 : -7 : 6, 0, 0);
-    const width = portrait ? 106 : 153;
-    const distance = Math.max(short ? 640 : systemDistance, width / (Math.tan(fov) * Math.min(1, camera.aspect)));
+    const span = portrait ? 106 : 153;
+    const distance = Math.max(short ? 640 : systemDistance, span / (Math.tan(fov) * Math.min(1, aspect)));
     return { target, eye: target.clone().addScaledVector(systemAxis, distance) };
   }
   function setUp(id: Body | null) {
@@ -251,9 +255,9 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     }
   }
   function resize() {
-    const size = new T.Vector2(host.clientWidth || 1, host.clientHeight || 1);
-    if (bounds.equals(size)) return;
-    bounds.copy(size);
+    measured.set(host.clientWidth || 1, host.clientHeight || 1);
+    if (bounds.equals(measured)) return;
+    bounds.copy(measured);
     camera.aspect = bounds.x / bounds.y;
     camera.updateProjectionMatrix();
     if (!flight && !flying && (!ready || !body || !!poseView.zone || camera.position.distanceTo(controls.target) > planets[body].radius * 2.7)) {
@@ -264,6 +268,8 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     redraw();
   }
   function frame(now: number) {
+    // Match the drawing buffer and projected labels to the same committed layout.
+    resize();
     pending = 0;
     const seconds = previous ? Math.min((now - previous) / 1000, .12) : .016;
     previous = now;
@@ -296,19 +302,22 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     }
     const night = body === "beatmarket" || day === "night" ? .72 : day === "day" || !animate ? 0 : T.MathUtils.smoothstep(Math.sin(worldTime * .019 - .9), .34, .98) * .58;
     sun.intensity = 2.18 - night * 1.35;
-    sun.color.setRGB(1 - night * .31, .9 - night * .22, .74 + night * .23);
-    ambient.intensity = 1.39 - night * .65;
+    sun.color.setRGB(1 - night * .28, .91 - night * .21, .81 + night * .15);
+    ambient.intensity = 1.28 - night * .56;
     const moving = !!flight || dragging || !!orbiting;
     if (moving && seconds > .064) slow = Math.min(12, slow + 1);
     else slow = Math.max(0, slow - 1);
     if (slow > 5) fastBudget = false;
-    const budget = software ? moving ? 120_000 : 365_000 : fastBudget && quality !== "economy" ? 1_440_000 : 390_000;
+    const chart = body === null && !flying;
+    const softwareBudget = chart ? 580_000 : moving ? 135_000 : 475_000;
+    const budget = software ? softwareBudget : fastBudget && quality !== "economy" ? 1_440_000 : 390_000;
     const ratio = Math.min(devicePixelRatio || 1, quality === "high" ? 1.55 : 1.25, Math.sqrt(budget / (bounds.x * bounds.y)));
     if (Math.abs(ratio - engineDpr) > .018 || canvas.width !== Math.floor(bounds.x * engineDpr) || canvas.height !== Math.floor(bounds.y * engineDpr)) {
       engineDpr = ratio;
       renderer.setDrawingBufferSize(bounds.x, bounds.y, ratio);
     }
     play.cull(camera.position);
+    detail?.cull(camera.position);
     renderer.render(scene, camera);
     projectMarkers();
     if (!ready) {
@@ -373,10 +382,13 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
         }
       }
       if (disposed || token !== flightToken) { if (prepared && prepared !== detail) prepared.dispose(); return; }
-      const destinationPose = next ? focusOf(next, requested, prepared) : mapPose();
+      // Travel to the full-screen map even when the launch view has a shorter, inset canvas.
+      const mapWidth = document.documentElement.clientWidth;
+      const mapHeight = window.innerHeight;
+      const destinationPose = next ? focusOf(next, requested, prepared) : mapPose(mapWidth, mapHeight);
       const follow = flightPath(camera.position, destinationPose.eye, previousBody, next);
       const startingAim = controls.target.clone(), startingUp = camera.up.clone();
-      const endingUp = next === null && camera.aspect < .77 ? new T.Vector3(1, 0, 0) : new T.Vector3(0, 1, 0);
+      const endingUp = next === null && mapWidth / mapHeight < .77 ? new T.Vector3(1, 0, 0) : new T.Vector3(0, 1, 0);
       const eye = new T.Vector3(), aim = new T.Vector3();
       const endPoint = play.bodyFocus(next, new T.Vector3());
       const showTransit = () => {
@@ -386,6 +398,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       play.sound.play("warp");
       function finish() {
         if (token !== flightToken || disposed) return;
+        resize();
         if (detail && detail !== prepared) detail.dispose();
         if (previousBody !== next && isSecretBody(previousBody)) play.release(previousBody);
         detail = prepared;
@@ -398,7 +411,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
         if (next === "moon") moonKnown = true;
         show();
         setUp(body);
-        setPose(destinationPose);
+        setPose(next ? destinationPose : mapPose());
         setControls(!!requested?.zone && requested.zone !== "contact");
         placeLight();
         detail?.loadSurfaces(redraw);
@@ -552,7 +565,8 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
 
   const observer = new ResizeObserver(resize);
   const controller = {
-    moveView, fly, zoom, nudge, inspect, revealMoon, stopFlight, refresh: redraw,
+    moveView, fly, zoom, nudge, inspect, revealMoon, stopFlight,
+    refresh() { resize(); redraw(); },
     setMode(next: CameraMode) { mode = next; if (next === "planet" && body) focus({ zone: null, project: null }, false); redraw(); },
     scan() {
       if (body !== "home" || flying) return;
@@ -601,6 +615,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   setPose(focusOf("home"));
   setControls(false);
   show();
+  placeLight();
   try {
     if (gl.getExtension("KHR_parallel_shader_compile")) await renderer.compileAsync(scene, camera);
     else renderer.compile(scene, camera);

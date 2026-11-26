@@ -139,6 +139,36 @@ export const sceneStops = [
 
 export const mapStops = ["reenergy", "starcars", "isto-kebab", "b-crm", "lab", "motomizer", "beatmarket", "hq", "jalapeno", "gallery", "studio", "contact"] as const satisfies readonly StopId[];
 
+export const worldEditorial = {
+  pl: {
+    atlas: "Eksploruj układ",
+    projects: "Zobacz realizacje",
+    lead: "Strony, aplikacje i automatyzacje. Każda realizacja ma tu własną planetę.",
+    index: "Atlas projektów",
+    commission: "Realizacja",
+    return: "Wróć do planety",
+    gallery: "Wybierz realizację, by zobaczyć opis, zrzuty i link do projektu.",
+  },
+  en: {
+    atlas: "Explore the system",
+    projects: "View the work",
+    lead: "Websites, applications and automation. Each project has a planet of its own.",
+    index: "Project atlas",
+    commission: "Project",
+    return: "Back to the planet",
+    gallery: "Choose a project to see its story, screenshots and link.",
+  },
+  uk: {
+    atlas: "Досліджуйте систему",
+    projects: "Переглянути роботи",
+    lead: "Сайти, застосунки й автоматизація. Кожен проєкт має власну планету.",
+    index: "Атлас проєктів",
+    commission: "Проєкт",
+    return: "Назад до планети",
+    gallery: "Оберіть проєкт, щоб переглянути опис, знімки екрана й посилання.",
+  },
+} as const satisfies Record<WorldLocale, Record<string, string>>;
+
 type PlaceCopy = { title: string; short: string; eyebrow: string; text: string; links?: ReadonlyArray<readonly [string, string]> };
 type Labels = {
   description: string; enter: string; explore: string; overview: string; classic: string; interactive: string;

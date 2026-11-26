@@ -1,5 +1,7 @@
 # Bernecki Universe
 
+- Wydanie atlasu wprowadza nowy ekran wejścia, mapę i menu, karty realizacji z podglądem zdjęć oraz nową oprawę sceny 3D. Wariant sprzed zmian jest zachowany na `backup/universe-before-visual-refinement`.
+- Dopracowano siedzibę i budynki projektowe, wybrzeża, oświetlenie i kadr otwarcia. Drogi na planecie startowej nadal korzystają ze wspólnej walidacji terenu i przeszkód.
 - Wersja gry `c0d9e51` jest zachowana na `backup/bernecki-world-before-universe` i w poprzednim podglądzie Vercel.
 - Gotowe — planeta startowa, siedem planet realizacji, AI World, dwa księżyce i tajna planeta. Sterowanie obejmuje kamerę. Postacie, pojazdy i otoczenie działają autonomicznie.
 - Mapa pokazuje uproszczone reprezentacje, a aktywna planeta wczytuje własną architekturę i animacje. Trasy wynikają z masek terenu i omijają zabudowę. Dziennik zachowuje 25 odkryć i postęp poprzedniego wydania.

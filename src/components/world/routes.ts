@@ -67,10 +67,10 @@ export function placeOnLane(object: T.Object3D, lane: Lane, distance: number, ba
   object.quaternion.setFromRotationMatrix(basis.makeBasis(right, up, forward));
 }
 
-export function laneMesh(lanes: Lane[]) {
+export function laneMesh(lanes: Lane[], roadbed = "#565668") {
   const positions: number[] = [], colors: number[] = [], indices: number[] = [];
   const right = new T.Vector3(), direction = new T.Vector3();
-  const body = new T.Color("#565668"), pavement = new T.Color("#c6a98c"), marker = new T.Color("#efd496"), rail = new T.Color("#a8c4c3");
+  const body = new T.Color(roadbed), pavement = new T.Color("#c6a98c"), marker = new T.Color("#efd496"), rail = new T.Color("#a8c4c3");
   function strip(lane: Lane, i: number, j: number, offset: number, stripWidth: number, height: number, color: T.Color) {
     const base = positions.length / 3;
     for (let k = i; k <= j; k++) {

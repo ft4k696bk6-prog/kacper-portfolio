@@ -1,5 +1,11 @@
 # Bernecki Universe — kontrola jakości
 
+## Audyt wydania atlasu
+
+- Porównano rzeczywiste kadry z `fdcf47c` z przebudowanym ekranem wejścia, mapą, kartą realizacji i menu. Na wejściu jest jeden główny tytuł, a widok planety otrzymał własną przestrzeń. Sprawdzono czytelność menu, etykiet planet i przycisków na ekranach 1440 × 900, 390 × 844, 390 × 664 i 320 × 568.
+- Kosmiczna mapa i znaczniki korzystają z tych samych wymiarów płótna. Na telefonie atlas ma identyczny kadr po locie animowanym i po przejściu z ograniczeniem ruchu. Karty mają stały dostęp z planety, rzeczywiste materiały projektowe i powiększony podgląd zdjęć.
+- Zweryfikowano obsługę dotyku i klawiatury, powrót fokusu z menu i podglądu zdjęć, przejście PL → EN → UK z zachowaniem projektu oraz dostęp bez WebGL. Build, TypeScript, 363 testy i kontrola 41 tras przeszły. [Kadry atlasu](docs/world/README.md#kadry-z-buildu-produkcyjnego)
+
 ## Scena i portfolio
 
 - Produkcyjny build Next.js, weryfikacja TypeScript i 363 testy przeszły. Zmiany zachowują istniejące ścieżki oraz hashe projektów.
@@ -12,7 +18,7 @@
 
 Planety łączą modele autorskie, istniejącą zabudowę i uproszczone detale. Rozbudowane tunele, policyjny pościg, przestrzenne nagrania i dodatkowe mikrohistorie pozostają do rozwoju. Dźwięk oraz muzyka BeatMarket są syntetyczne. Pomiary wydajności pochodzą z przeglądarek emulowanych i nie potwierdzają celów na fizycznych urządzeniach.
 
-## Pomiary
+## Pomiary poprzedniego wydania
 
 Próbka automatycznego obrotu wokół StarCars przez około 3,5 sekundy. Liczono faktyczne odświeżenia WebGL. Linuksowe środowisko testowe nie miało sprzętowego GPU ani fizycznego telefonu.
 

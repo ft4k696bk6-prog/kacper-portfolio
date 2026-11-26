@@ -8,7 +8,7 @@ Portfel projektów działa pod adresami `/world`, `/en/world` i `/uk/world`. Wej
 | --- | --- |
 | Obejrzyj planetę | Przeciągnij palcem lub myszą. Użyj gestu dwoma palcami, kółka albo klawiszy + i −, by zmienić zoom. Strzałki na scenie obracają kamerę. |
 | Przejdź między światami | Użyj Mapy układu lub menu. Klawisz G otwiera mapę, a Escape przerywa lot. |
-| Zobacz projekt | Wybierz obiekt z nazwą na powierzchni lub otwórz kartę z menu. |
+| Zobacz projekt | Wybierz „Zobacz realizacje” na wejściu albo „O projekcie” podczas wizyty na planecie. Możesz też wybrać obiekt na powierzchni lub otworzyć kartę z menu. |
 | Odkrywaj | Klikaj miejsca w scenie. E aktywuje najbliższą widoczną wskazówkę. Dziennik zachowuje stan w przeglądarce. |
 | Fotografuj | Klawisz F lub menu kamery włącza tryb zdjęć. Escape przywraca interfejs. |
 
@@ -32,6 +32,13 @@ Dodatkowe ciała niebieskie pojawiają się na mapie po odkryciu.
 
 ## Kadry z buildu produkcyjnego
 
+- [Wejście](screenshots/atlas-home.webp) · [Atlas](screenshots/atlas-map.webp) · [Menu](screenshots/atlas-menu.webp)
+- [StarCars i karta realizacji](screenshots/atlas-project.webp) · [Podgląd zdjęcia](screenshots/atlas-photo.webp)
+- [Wejście na telefonie](screenshots/atlas-mobile-home.webp) · [Mapa na ekranie 320 px](screenshots/atlas-mobile-map.webp) · [Karta projektu na telefonie](screenshots/atlas-mobile-project.webp)
+- [Sprawdzenia i pomiary](../../QUALITY_GATE.md) · [Stan projektu](../../PROGRESS.md)
+
+## Kadry z poprzedniego wydania
+
 - [Start](screenshots/universe-home.webp) · [Mapa](screenshots/universe-system.webp) · [Menu](screenshots/universe-menu.webp)
 - [Telefon](screenshots/universe-mobile-home.webp) · [Mapa na telefonie](screenshots/universe-mobile-system.webp) · [Krótki ekran w WebKit](screenshots/universe-mobile-short.webp) · [BeatMarket na telefonie](screenshots/universe-mobile-beatmarket.webp)
 - [StarCars](screenshots/universe-starcars.webp) · [ReEnergy](screenshots/universe-reenergy.webp) · [B-CRM](screenshots/universe-b-crm.webp) · [AI World](screenshots/universe-ai.webp)
@@ -39,7 +46,6 @@ Dodatkowe ciała niebieskie pojawiają się na mapie po odkryciu.
 - [K-01](screenshots/universe-moon.webp) · [G-02](screenshots/universe-garage.webp) · [The Unknown](screenshots/universe-unknown.webp)
 - [Skan UFO](screenshots/universe-ufo.webp) · [Podróż](screenshots/universe-flight.webp)
 - [Szczegóły B-CRM i karta](screenshots/universe-b-crm-panel.webp) · [Widok bez WebGL](screenshots/universe-static.webp)
-- [Sprawdzenia i pomiary](../../QUALITY_GATE.md) · [Stan projektu](../../PROGRESS.md)
 
 ## Scena i źródła
 

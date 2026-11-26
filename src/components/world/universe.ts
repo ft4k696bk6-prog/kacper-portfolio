@@ -4,6 +4,7 @@ import { box, disposeObjects, gamePalette, solid } from "./gameObjects";
 import { colorTerrain } from "./terrain";
 import { planets, visibleBodies } from "./planets";
 import { makePlanetSkin } from "./planetSurface";
+import { planetAtmosphere } from "./planetFinish";
 import type { Body } from "./discoveries";
 
 export function makeUniverse(low: boolean) {
@@ -29,42 +30,77 @@ export function makeUniverse(low: boolean) {
     selectable.push(skin);
 
     const hue = planets[id].colors[1];
-    const shell = solid(new T.SphereGeometry(planets[id].radius * 1.045, 28, 16), new T.ShaderMaterial({
-      uniforms: { hue: { value: new T.Color(hue) } }, transparent: true, depthWrite: false, side: T.BackSide, blending: T.AdditiveBlending,
-      vertexShader: "varying vec3 normalInView; void main(){normalInView=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",
-      fragmentShader: "uniform vec3 hue; varying vec3 normalInView; void main(){gl_FragColor=vec4(hue,pow(1.-abs(normalInView.z),2.)*.60);}",
-    }));
+    const shell = planetAtmosphere(planets[id].radius, new T.Color(hue), true, .58);
     system.add(shell);
     if (id === "beatmarket" || id === "reenergy" || id === "signal") {
-      const line = new T.Mesh(new T.RingGeometry(planets[id].radius * 1.36, planets[id].radius * 1.47, 58),
-        new T.MeshBasicMaterial({ color: hue, opacity: .34, transparent: true, depthWrite: false, side: T.DoubleSide }));
-      line.rotation.set(.99, -.28, .12);
-      system.add(line);
+      const radius = planets[id].radius;
+      const ash = new T.Color(hue).lerp(new T.Color("#ba9c7e"), .58);
+      const rings = new T.Group();
+      rings.add(new T.Mesh(new T.RingGeometry(radius * 1.36, radius * 1.59, 66),
+        new T.MeshBasicMaterial({ color: ash, opacity: .15, transparent: true, depthWrite: false, side: T.DoubleSide })));
+      for (const [start, end, opacity] of [[1.38, 1.405, .41], [1.48, 1.494, .31], [1.58, 1.60, .43]]) {
+        rings.add(new T.Mesh(new T.RingGeometry(radius * start, radius * end, 66),
+          new T.MeshBasicMaterial({ color: ash, opacity, transparent: true, depthWrite: false, side: T.DoubleSide })));
+      }
+      rings.rotation.set(1.10, -.32, .12);
+      system.add(rings);
     }
   }
 
   const orbitGroup = new T.Group();
-  for (const [rx, ry] of [[40, 32], [74, 58], [121, 86]]) {
+  const ticks: T.Vector3[] = [];
+  const orbitalColor = new T.Color("#9a8c82");
+  for (const [index, [rx, ry]] of [[40, 32], [75, 59], [121, 86]].entries()) {
     const points = Array.from({ length: 120 }, (_, i) => {
       const theta = i * Math.PI / 60;
-      return new T.Vector3(rx * Math.cos(theta), ry * Math.sin(theta), -.13 * rx + 4 * Math.sin(theta));
+      return new T.Vector3(rx * Math.cos(theta), ry * Math.sin(theta), -39 + 4 * Math.sin(theta));
     });
-    const trace = new T.LineLoop(new T.BufferGeometry().setFromPoints(points), new T.LineBasicMaterial({ color: 0x8fabd2, transparent: true, opacity: .19, depthWrite: false }));
+    const trace = new T.LineLoop(new T.BufferGeometry().setFromPoints(points), new T.LineBasicMaterial({ color: orbitalColor, transparent: true, opacity: index === 2 ? .36 : .25, depthWrite: false }));
     orbitGroup.add(trace);
+    for (let i = 0; i < points.length; i += index === 2 ? 3 : 6) {
+      const point = points[i];
+      const tick = i % 15 === 0 ? 3.6 : 1.34;
+      const normal = new T.Vector2(point.x / (rx * rx), point.y / (ry * ry)).setLength(tick);
+      ticks.push(point, point.clone().add(new T.Vector3(normal.x, normal.y, 0)));
+    }
   }
+  orbitGroup.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(ticks), new T.LineBasicMaterial({
+    color: "#a89581", transparent: true, opacity: .41, depthWrite: false,
+  })));
   const positions: T.Vector3[] = [];
-  const colors: number[] = [];
-  for (let i = 0; i < (low ? 240 : 520); i++) {
-    const lat = Math.asin(1 - 2 * (i + .5) / (low ? 240 : 520)) * 180 / Math.PI;
-    positions.push(globeDirection(lat, i * 137.508).multiplyScalar(695 + i % 11 * 51));
-    const value = .14 + (i % 11) * .045;
-    colors.push(value * (i % 2 ? .85 : 1), value, value * 1.33);
+  const shine: number[] = [];
+  const count = low ? 400 : 760;
+  for (let i = 0; i < count; i++) {
+    const offset = Math.sin((i + 1) * 538.23);
+    const lat = Math.asin(1 - 2 * (i + .5) / count) * 180 / Math.PI;
+    positions.push(globeDirection(lat + offset * 2.4, i * 137.508 + offset * 4).multiplyScalar(710 + i % 11 * 51));
+    shine.push(offset * .5 + .5);
   }
   const starGeometry = new T.BufferGeometry().setFromPoints(positions);
-  starGeometry.setAttribute("color", new T.Float32BufferAttribute(colors, 3));
-  const stars = new T.Points(starGeometry, new T.PointsMaterial({ vertexColors: true, size: low ? 1.05 : 1.42, sizeAttenuation: true, depthWrite: false, transparent: true, opacity: .81 }));
+  starGeometry.setAttribute("shine", new T.Float32BufferAttribute(shine, 1));
+  const stars = new T.Points(starGeometry, new T.ShaderMaterial({
+    transparent: true, depthWrite: false, toneMapped: false,
+    vertexShader: /* glsl */ `
+      attribute float shine;
+      varying float intensity;
+      void main() {
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.);
+        intensity = shine;
+        gl_PointSize = 1.2 + pow(shine, 8.) * 2.7;
+      }`,
+    fragmentShader: /* glsl */ `
+      varying float intensity;
+      void main() {
+        vec2 p = abs(2. * gl_PointCoord - 1.);
+        float center = 1. - smoothstep(.08, 1., length(p));
+        float flare = (1. - smoothstep(.025, .23, min(p.x, p.y))) * (1. - smoothstep(.16, 1., max(p.x, p.y)));
+        float light = center * (.20 + intensity * .38) + step(.94, intensity) * flare * .19;
+        gl_FragColor = vec4(mix(vec3(.32, .49, .72), vec3(.78, .63, .43), intensity * intensity), light);
+        #include <colorspace_fragment>
+      }`,
+  }));
 
-  const belt = new T.InstancedMesh(new T.IcosahedronGeometry(1, 0), new T.MeshLambertMaterial({ color: 0x8e8ca6 }), low ? 40 : 75);
+  const belt = new T.InstancedMesh(new T.IcosahedronGeometry(1, 0), new T.MeshLambertMaterial({ color: 0x737384 }), low ? 30 : 64);
   const dummy = new T.Object3D();
   for (let i = 0; i < belt.count; i++) {
     const a = 2.39996 * i, r = 132 + i % 11 * 1.1;

@@ -7,6 +7,7 @@ import { disposeObjects } from "./gameObjects";
 import { buildModel, type Hit } from "./model";
 import { planets } from "./planets";
 import { frontNormal, makePlanetSkin } from "./planetSurface";
+import { planetAtmosphere } from "./planetFinish";
 
 export type ProjectScene = ReturnType<typeof buildProjectScene>;
 export function buildProjectScene(body: ProjectBody, low: boolean, software: boolean, effects: Parameters<typeof makeDistrict>[2]) {
@@ -15,12 +16,15 @@ export function buildProjectScene(body: ProjectBody, low: boolean, software: boo
   root.position.fromArray(info.center);
   const skin = makePlanetSkin(body, low);
   const district = makeDistrict(body, low, effects);
-  root.add(skin, district.root);
+  const atmosphere = planetAtmosphere(info.radius, new T.Color(info.colors[1]), low, .56);
+  root.add(skin, atmosphere, district.root);
   const inspect: Hit = body === "ai" ? { zone: "lab" } : { zone: "gallery", project: projectIndex(body) };
   let architecture: ReturnType<typeof buildModel> | undefined;
   let hits: T.Mesh[] = [];
   let marker = district.mainPoint?.clone().add(root.position) ?? root.position.clone();
   let focus = marker.clone();
+  let viewDirection = frontNormal.clone().add(new T.Vector3(-.8, -.14, .3)).normalize();
+  let viewDistance = 11.4;
   let proxy: T.Mesh<T.SphereGeometry, T.MeshBasicMaterial> | undefined;
   if (body === "jalapeno") {
     proxy = new T.Mesh(new T.SphereGeometry(1.78,12,8), new T.MeshBasicMaterial({ visible: false }));
@@ -40,12 +44,39 @@ export function buildProjectScene(body: ProjectBody, low: boolean, software: boo
       .applyMatrix4(site.matrix).applyMatrix4(architecture.group.matrixWorld);
     focus = (body === "ai" ? new T.Vector3(5.1, 2.4, -7.8) : new T.Vector3(...projectStops[body].target))
       .applyMatrix4(site.matrix).applyMatrix4(architecture.group.matrixWorld);
+    // Detail shots lead with the entrance and form of the building before exposing its rooftop.
+    const east = new T.Vector3().setFromMatrixColumn(site.matrix, 0).applyQuaternion(architecture.group.quaternion);
+    const south = site.south.clone().applyQuaternion(architecture.group.quaternion);
+    const elevation = body === "starcars" ? .88 : .58;
+    viewDirection = frontNormal.clone().multiplyScalar(elevation).add(south).addScaledVector(east, -.44).normalize();
+    viewDistance = Math.max(site.width, site.depth) * 1.92;
     hits = architecture.hits;
   }
-  const viewDirection = new T.Vector3(.05, .28, 1).add(frontNormal).normalize();
+  root.updateMatrixWorld(true);
+  const radialGroups = district.root.children.filter(child => child.position.length() > info.radius * .8);
+  if (architecture) radialGroups.push(architecture.group);
+  const view = new T.Vector3();
+  const ground = info.radius - .07;
+  const clusters = radialGroups.map(object => {
+    const bound = new T.Box3().setFromObject(object).getBoundingSphere(new T.Sphere());
+    const direction = bound.center.sub(root.position);
+    const distance = direction.length();
+    // Both the roof height and the cluster's angular extent can reach beyond the ground horizon.
+    const angle = Math.acos(T.MathUtils.clamp(ground / (distance + bound.radius + .32), 0, 1))
+      + Math.asin(T.MathUtils.clamp(bound.radius / distance, 0, 1));
+    return { object, direction: direction.normalize(), angle };
+  });
   return {
-    root, marker, focus, viewDirection, inspect, interactive: district.interactive, hits, bounds: district.bounds,
+    root, marker, focus, viewDirection, viewDistance, inspect, interactive: district.interactive, hits, bounds: district.bounds,
     update: district.update,
+    cull(eye: T.Vector3) {
+      view.copy(eye).sub(root.position);
+      const horizon = Math.acos(T.MathUtils.clamp(ground / view.length(), 0, 1));
+      view.normalize();
+      for (const { object, direction, angle } of clusters) {
+        object.visible = horizon + angle >= Math.PI || view.dot(direction) >= Math.cos(horizon + angle);
+      }
+    },
     loadSurfaces(redraw: () => void) { architecture?.loadSurfaces(redraw); },
     loadCars(redraw: () => void) { if (body === "starcars") void architecture?.loadCars(redraw); },
     showCars(visible: boolean) { architecture?.showDetailedCars(visible); },

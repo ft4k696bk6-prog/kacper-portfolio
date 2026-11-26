@@ -1,7 +1,8 @@
 import * as T from "three";
+import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { globeDirection, globeRadius, makeSurfaceSites } from "./globe";
-import { surfaceRadius, terrainField } from "./terrain";
-import { createTraffic, laneMesh, makeLane, ringWaypoints, type Lane } from "./routes";
+import { lighthouseDirection, surfaceRadius, terrainField } from "./terrain";
+import { createTraffic, laneMesh, makeLane, regionFrame, ringWaypoints, type Lane } from "./routes";
 import { makeCar } from "./vehicle";
 import { alignRadially, box, solid, type GamePalette } from "./gameObjects";
 
@@ -12,6 +13,17 @@ export const portDirection = globeDirection(-19, -52);
 export const windDirection = globeDirection(52, 29);
 export const ridgeDirection = globeDirection(56, 10);
 export const impactDirection = globeDirection(41, 145);
+
+function coastRoad(normal: T.Vector3, size: number, bend: number) {
+  const { east, south } = regionFrame(normal);
+  return Array.from({ length: 13 }, (_, i) => {
+    const angle = (i + .37) * Math.PI * 2 / 13;
+    const length = size * (.87 + .11 * Math.cos(angle * 3 + bend));
+    const easting = Math.cos(angle) * length;
+    const southing = Math.sin(angle) * size * .74 + Math.sin(angle * 2 + bend) * size * .18;
+    return normal.clone().addScaledVector(east, easting).addScaledVector(south, southing).normalize();
+  });
+}
 
 function seeded(seed: number) {
   return () => {
@@ -26,7 +38,7 @@ export function makeWorldLife(p: GamePalette, low: boolean) {
   const direction = new T.Vector3(), dummy = new T.Object3D();
   const { hq, studio } = makeSurfaceSites();
   const siteNormals = [hq.normal, studio.normal];
-  const decorative = [volcanoDirection, observatoryDirection, lakeDirection, portDirection, windDirection, ridgeDirection, impactDirection];
+  const decorative = [volcanoDirection, observatoryDirection, lakeDirection, portDirection, windDirection, ridgeDirection, impactDirection, lighthouseDirection];
   const lanes: Lane[] = [];
   const traffic = createTraffic();
   const surface = { radius: surfaceRadius, land: (point: T.Vector3) => terrainField(point) > .655 };
@@ -36,9 +48,14 @@ export function makeWorldLife(p: GamePalette, low: boolean) {
     { kind: "road", candidates: [[1, -40, .22], [0, -42, .19], [10, -30, .20]] },
     { kind: "rail", candidates: [[-41, 130, .19], [-33, 133, .23], [25, 150, .23], [-48, -125, .20]] },
   ] as const;
-  for (const { kind, candidates } of trails) {
-    const lane = candidates.map(([lat,lon,size]) => makeLane(kind, ringWaypoints(globeDirection(lat,lon), size, 13), surface, obstacles))
-      .find(candidate => candidate !== null);
+  for (const [route, { kind, candidates }] of trails.entries()) {
+    let lane = null;
+    for (const [lat, lon, size] of candidates) {
+      const normal = globeDirection(lat, lon);
+      lane = kind === "road" ? makeLane(kind, coastRoad(normal, size, route * 1.8), surface, obstacles) : null;
+      lane ??= makeLane(kind, ringWaypoints(normal, size, 13), surface, obstacles);
+      if (lane) break;
+    }
     if (!lane) continue;
     lanes.push(lane);
     for (let i = 0; i < (kind === "rail" ? 3 : 2); i++) {
@@ -61,7 +78,7 @@ export function makeWorldLife(p: GamePalette, low: boolean) {
   tortoise.add(solid(new T.SphereGeometry(.25,12,8).scale(.89,.58,1.19),p.moss,0,.18),
     solid(new T.SphereGeometry(.09,8,6),p.chalk,0,.13,.29),...legs);
   traffic.add(tortoise,wildlife,.21,.36,0,t => legs.forEach((leg,i) => {leg.position.z = Math.sign(i%2-.5)*.13 + Math.sin(t*4.7+i)*.055;}));
-  group.add(traffic.group, laneMesh(lanes));
+  group.add(traffic.group, laneMesh(lanes, "#6e6b62"));
   const groveCount = low ? 175 : 320;
   const trees = new T.InstancedMesh(new T.SphereGeometry(0.49, low ? 7 : 10, low ? 6 : 8), new T.MeshLambertMaterial({ color: 0xffffff }), groveCount);
   const trunks = new T.InstancedMesh(new T.CylinderGeometry(0.054, .095, .61, 6), p.ink, groveCount);
@@ -120,6 +137,21 @@ export function makeWorldLife(p: GamePalette, low: boolean) {
   }
   const edifice = new T.MeshLambertMaterial({ color: 0x78555b });
   const ash = new T.MeshLambertMaterial({ color: 0x514954 });
+  const lighthouse = site(lighthouseDirection);
+  const terrace = new T.MeshLambertMaterial({ color: 0x9b806e });
+  lighthouse.add(solid(new T.CylinderGeometry(.96, 1.14, .22, 14), terrace, 0, .055),
+    solid(new T.CylinderGeometry(.34, .46, 1.64, 18), p.chalk, 0, .91),
+    solid(new T.CylinderGeometry(.38, .40, .21, 18), p.coral, 0, .95),
+    solid(new T.CylinderGeometry(.49, .38, .13, 18), p.ink, 0, 1.71),
+    solid(new T.CylinderGeometry(.28, .32, .48, 18), p.warm, 0, 1.99),
+    solid(new T.ConeGeometry(.43, .40, 18), p.coral, 0, 2.40),
+    solid(new T.SphereGeometry(.068, 8, 6), p.warm, 0, 2.62),
+    box(.24, .34, .09, p.ink, 0, .34, .42));
+  for (let i = 0; i < 6; i++) {
+    const angle = Math.PI * i / 3;
+    lighthouse.add(solid(new T.CylinderGeometry(.019, .019, .49, 6), p.ink, Math.cos(angle) * .29, 1.98, Math.sin(angle) * .29));
+  }
+  for (let i = 0; i < 5; i++) lighthouse.add(box(.46, .11, .18, p.chalk, 0, .18 - i * .02, .60 + i * .18));
   const ridge = site(ridgeDirection);
   const granite = new T.MeshLambertMaterial({color: 0x85808a});
   const snow = new T.MeshLambertMaterial({color: 0xebe4cb});
@@ -238,7 +270,12 @@ export function makeWorldLife(p: GamePalette, low: boolean) {
     port.add(gull);
     return { gull, wings };
   });
-  const clouds = new T.InstancedMesh(new T.SphereGeometry(.68, 9, 6), new T.MeshLambertMaterial({ color: 0xe1dac5, transparent: true, opacity: .65, depthWrite: false }), 16);
+  const billows = [
+    [-.78, .09, .07, .76, .25, .47], [-.29, .22, -.05, .72, .39, .56],
+    [.31, .24, -.12, .72, .43, .50], [.81, .05, .06, .63, .25, .40],
+  ].map(([x, y, z, width, height, depth]) => new T.SphereGeometry(1, 10, 8).scale(width, height, depth).translate(x, y, z));
+  const clouds = new T.InstancedMesh(mergeGeometries(billows), new T.MeshLambertMaterial({ color: 0xe7e5dc }), low ? 5 : 8);
+  billows.forEach(lobe => lobe.dispose());
   group.add(clouds);
   const gate = new T.Group();
   gate.position.set(-1.46, .34, .57);
@@ -335,10 +372,11 @@ export function makeWorldLife(p: GamePalette, low: boolean) {
       flyer.rotateY(-angle + Math.PI / 3);
     });
     for (let i = 0; i < clouds.count; i++) {
-      const angle = (t * .018 + Math.floor(i / 3) * 1.21 + i % 3 * .051);
-      direction.set(Math.cos(angle), Math.sin(i * .88) * .41, Math.sin(angle)).normalize();
-      alignRadially(dummy, direction, globeRadius + 1.65 + i % 3 * .18);
-      dummy.scale.set(1.53 + i % 4 * .14, .37, .98);
+      const angle = t * .018 + i * 2.4 + .33;
+      direction.set(Math.cos(angle), Math.sin(i * 1.97 + 1.35) * .64, Math.sin(angle)).normalize();
+      alignRadially(dummy, direction, globeRadius + 1.68 + i % 3 * .22);
+      dummy.rotateY(i * 2.4);
+      dummy.scale.setScalar(.59 + i % 4 * .13);
       dummy.updateMatrix();
       clouds.setMatrixAt(i, dummy.matrix);
     }

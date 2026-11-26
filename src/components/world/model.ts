@@ -198,10 +198,12 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   }
 
   function box(x: number, y: number, z: number, w: number, h: number, d: number, m: T.Material, cast = true, ry = 0) {
+    if (included && !included.has(active)) return;
     add(new T.BoxGeometry(w, h, d), m, x, y, z, cast, 0, ry);
   }
 
   function rounded(x: number, y: number, z: number, w: number, h: number, d: number, m: T.Material, radius = 0.08, ry = 0) {
+    if (included && !included.has(active)) return;
     const geometry = bakeLighting && radius < 0.055
       ? new T.BoxGeometry(w, h, d)
       : new RoundedBoxGeometry(w, h, d, low ? 1 : 2, radius);
@@ -209,20 +211,24 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   }
 
   function slab(w: number, d: number, height: number, radius: number, base: number, m: T.Material, x = 0, z = 0) {
+    if (included && !included.has(active)) return;
     add(new T.ExtrudeGeometry(roundedFootprint(w, d, radius), {
       depth: height, steps: 1, bevelEnabled: false, curveSegments: 10,
     }), m, x, base, z, true, -Math.PI / 2);
   }
 
   function cylinder(x: number, y: number, z: number, rt: number, rb: number, h: number, m: T.Material, n = 32, cast = true) {
+    if (included && !included.has(active)) return;
     add(new T.CylinderGeometry(rt, rb, h, n), m, x, y, z, cast);
   }
 
   function ring(x: number, y: number, z: number, radius: number, tube: number, m: T.Material, segments = 64) {
+    if (included && !included.has(active)) return;
     add(new T.TorusGeometry(radius, tube, 6, bakeLighting ? Math.min(segments, 36) : segments), m, x, y, z, false, Math.PI / 2);
   }
 
   function groundShade(x: number, z: number, w: number, d: number, y = 0.054, material = shadow) {
+    if (included && !included.has(active)) return;
     add(new T.PlaneGeometry(w, d), material, x, y, z, false, -Math.PI / 2);
   }
 
@@ -232,6 +238,7 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   }
 
   function tree(x: number, z: number, size: number, base = 0.1) {
+    if (included && !included.has(active)) return;
     groundShade(x, z, size * 1.8, size * 1.6, base + 0.013);
     cylinder(x, base + size * 0.37, z, size * 0.042, size * 0.068, size * 0.74, wood, 6);
     const count = low ? 17 : 43;
@@ -306,10 +313,12 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   }
 
   function ball(x: number, y: number, z: number, w: number, h: number, d: number, material: T.Material, rx = 0, ry = 0, rz = 0) {
+    if (included && !included.has(active)) return;
     add(new T.SphereGeometry(1, low ? 10 : 18, low ? 7 : 12).scale(w, h, d), material, x, y, z, true, rx, ry, rz);
   }
 
   function rail(a: readonly [number, number, number], b: readonly [number, number, number], width: number, material: T.Material, cast = true) {
+    if (included && !included.has(active)) return;
     const start = new T.Vector3(...a);
     const end = new T.Vector3(...b);
     const delta = end.clone().sub(start);
@@ -319,12 +328,13 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
     add(geometry, material, midpoint.x, midpoint.y, midpoint.z, cast);
   }
 
-  function flowerBed(x: number, z: number, width: number, depth: number) {
-    rounded(x, 0.23, z, width, 0.32, depth, stone, 0.07);
-    box(x, 0.40, z, width - 0.13, 0.035, depth - 0.13, soil);
+  function flowerBed(x: number, z: number, width: number, depth: number, raisedBy = 0) {
+    if (included && !included.has(active)) return;
+    rounded(x, raisedBy + 0.23, z, width, 0.32, depth, stone, 0.07);
+    box(x, raisedBy + 0.40, z, width - 0.13, 0.035, depth - 0.13, soil);
     for (let i = 0; i < 7; i++) {
       const r = random();
-      ball(x + (r - 0.5) * (width - 0.30), 0.45 + random() * 0.09, z + (random() - 0.5) * (depth - 0.25), 0.13, 0.17, 0.14, leaves[i % leaves.length]);
+      ball(x + (r - 0.5) * (width - 0.30), raisedBy + 0.45 + random() * 0.09, z + (random() - 0.5) * (depth - 0.25), 0.13, 0.17, 0.14, leaves[i % leaves.length]);
     }
   }
 
@@ -373,6 +383,7 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   }
 
   for (const id of Object.keys(sites) as SurfaceStop[]) {
+    if (included && !included.has(id)) continue;
     active = id;
     const { x, z, width, depth } = sites[id];
     const ground = standard(siteTint ?? terrains[id], 1, 0, noise);
@@ -397,23 +408,33 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
     }
   }
 
-  // ReEnergy. Terracotta structure, glass showroom and two tracked arrays of solar cells.
+  // ReEnergy headquarters. Laminated fins shade a showroom below two roof arrays.
   active = "reenergy";
-  const terracotta = standard(0xa2907c, 0.81);
+  const terracotta = standard(0xb19371, 0.86);
   finishes.set(terracotta, "stone");
   const solarFrame = standard(0x93a7b6, 0.44, 0.37);
-  const solarCell = [0x2c4968, 0x325373, 0x466b86].map(color => standard(color, 0.28, 0.42));
+  const solarCell = [0x304e75, 0x3d628d, 0x4d789a].map(color => standard(color, 0.28, 0.42));
   const solarGrid = standard(0x9aaab9, 0.53, 0.35);
   const energyX = -7.45, energyZ = -7.28;
   shadeBuilding(energyX, energyZ, 8.6, 6.2);
   rounded(energyX, 0.37, energyZ, 6.75, 0.26, 4.05, slate, 0.10);
   rounded(energyX, 1.38, energyZ, 6.25, 1.96, 3.48, terracotta, 0.08);
   box(energyX, 1.37, energyZ + 1.75, 5.98, 1.49, 0.054, glass);
-  for (let i = -5; i <= 5; i++) box(energyX + i * 0.56, 1.34, energyZ + 1.78, 0.048, 1.55, 0.065, pale);
+  for (let i = -5; i <= 5; i++) {
+    const x = energyX + i * 0.56;
+    box(x, 1.36, energyZ + 1.81, 0.072, 1.57, 0.19, wood);
+    if (i !== 0 && Math.abs(i) !== 1) box(x + 0.13, 1.40, energyZ + 1.81, 0.030, 1.48, 0.12, bronze, false);
+  }
+  box(energyX, 0.69, energyZ + 1.855, 5.86, 0.044, 0.087, bronze, false);
   for (let i = -4; i <= 4; i++) {
     box(energyX + i * 0.53, 1.2, energyZ + 1.79, 0.38, 0.7, 0.025, i % 3 === 0 ? warmGlass : deepGlass, false);
   }
-  rounded(energyX, 2.51, energyZ, 6.66, 0.29, 3.93, sandstone, 0.08);
+  rounded(energyX, 2.49, energyZ, 6.72, 0.31, 4.18, sandstone, 0.094);
+  rounded(energyX, 2.626, energyZ - 0.12, 6.07, 0.062, 3.78, slate, 0.026);
+  for (const side of [-1, 1]) {
+    rounded(energyX + side * 1.91, 2.81, energyZ - 1.68, 1.06, 0.26, 0.30, metal, 0.05);
+    for (let i = -3; i <= 3; i++) box(energyX + side * 1.91 + i * 0.12, 2.946, energyZ - 1.68, 0.045, 0.008, 0.24, graphite, false);
+  }
   for (const side of [-1, 1]) {
     box(energyX + side * 0.37, 1.17, energyZ + 1.82, 0.038, 1.39, 0.043, graphite);
     box(energyX + side * 0.10, 1.15, energyZ + 1.84, 0.022, 0.21, 0.038, metal, false);
@@ -421,18 +442,30 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
       box(energyX + side * 3.10, 1.30, energyZ + offset, 0.046, 1.67, 0.07, metal);
     }
     box(energyX + side * 3.24, 2.55, energyZ - 0.08, 0.052, 0.043, 3.6, metal, false);
+    box(energyX + side * 3.135, 1.42, energyZ - 0.27, 0.033, 1.17, 1.66, deepGlass);
+    for (let i = -3; i <= 3; i++) box(energyX + side * 3.166, 1.42, energyZ - 0.27 + i * 0.237, 0.115, 1.29, 0.048, wood, false);
+    box(energyX + side * 3.204, 0.79, energyZ - 0.27, 0.085, 0.047, 1.66, bronze, false);
   }
   box(energyX, 0.52, energyZ + 1.98, 1.05, 0.052, 0.46, stone);
-  box(energyX, 2.332, energyZ + 1.99, 6.0, 0.065, 0.055, lamp, false);
-  sign("RE · ENERGY", energyX, 2.52, energyZ + 1.97, 2.7, 0.33, "#342a25");
-  for (const z of [energyZ - 0.91, energyZ + 0.46]) {
-    for (let i = -1; i <= 1; i++) panel(energyX + i * 1.9, 2.95, z, 1.69, 1.13);
+  box(energyX, 2.332, energyZ + 2.064, 6.2, 0.035, 0.048, lamp, false);
+  sign("RE · ENERGY", energyX, 2.49, energyZ + 2.094, 2.7, 0.289, "#342a25");
+  for (const z of [energyZ - 0.91, energyZ + 0.52]) {
+    for (let i = -1; i <= 1; i++) panel(energyX + i * 1.97, 2.99, z, 1.81, 1.22);
   }
-  for (const x of [energyX - 2.4, energyX + 2.4]) flowerBed(x, energyZ + 2.35, 1.42, 0.72);
+  for (const x of [energyX - 2.4, energyX + 2.4]) flowerBed(x, energyZ + 2.41, 1.62, 0.58);
+  for (const side of [-1, 1]) {
+    const x = energyX + side * 3.67;
+    rounded(x, 0.70, energyZ - 0.64, 0.44, 0.89, 1.28, slate, 0.064);
+    rounded(x, 0.79, energyZ - 0.63, 0.457, 0.52, 1.12, metal, 0.046);
+    for (let i = -1; i <= 1; i++) {
+      box(x, 0.80 + i * 0.099, energyZ - 0.064, 0.30, 0.039, 0.02, graphite, false);
+      box(x + side * 0.231, 0.75, energyZ - 0.62 + i * 0.37, 0.012, 0.045, 0.13, cyanGlass, false);
+    }
+  }
   projectHit("reenergy", energyX, 1.88, energyZ, 6.86, 3.44, 4.09);
 
   function panel(x: number, y: number, z: number, width: number, depth: number) {
-    const tilt = 0.31;
+    const tilt = 0.33;
     for (const dx of [-0.64, 0.64]) {
       rail([x + dx, y - 0.32, z - 0.34], [x + dx, y + 0.1, z - 0.34], 0.08, graphite);
       rail([x + dx, y - 0.32, z + 0.34], [x + dx, y - 0.09, z + 0.34], 0.08, graphite);
@@ -450,9 +483,8 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   // B-CRM headquarters with a columned façade.
   active = "b-crm";
   const civicX = -9.55, civicZ = -0.28;
-  const civicRoof = standard(0x78716a, 0.79, 0.12);
-  finishes.set(civicRoof, "stone");
-  const roofSeam = standard(0x6e6760, 0.78, 0.12);
+  const civicRoof = standard(0x4b5865, 0.64, 0.22);
+  const roofSeam = standard(0x8994a0, 0.66, 0.26);
   const civicTrim = standard(0xb4a48d, 0.79);
   finishes.set(civicTrim, "stone");
   const civicBay = standard(0x756e61, 0.93);
@@ -474,8 +506,14 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
     }
   }
   box(civicX, 1.52, civicZ + 1.63, 2.88, 1.81, 0.23, civicBay);
-  box(civicX, 1.28, civicZ + 1.77, 1.16, 1.51, 0.037, deepGlass);
-  box(civicX, 1.27, civicZ + 1.80, 0.06, 1.51, 0.045, bronze);
+  rounded(civicX, 1.36, civicZ + 1.77, 1.44, 1.69, 0.095, bronze, 0.05);
+  box(civicX, 1.33, civicZ + 1.829, 1.24, 1.54, 0.037, deepGlass);
+  box(civicX, 1.32, civicZ + 1.85, 0.054, 1.52, 0.046, bronze);
+  box(civicX, 1.77, civicZ + 1.855, 1.25, 0.038, 0.043, bronze);
+  for (const side of [-1, 1]) {
+    box(civicX + side * 0.112, 1.18, civicZ + 1.873, 0.035, 0.175, 0.022, metal, false);
+    box(civicX + side * 0.33, 1.93, civicZ + 1.853, 0.50, 0.16, 0.025, warmGlass, false);
+  }
   for (const x of [-1.36,-0.47,0.47,1.36]) {
     const column = new T.CylinderGeometry(0.101, 0.138, 1.98, 40);
     const position = column.getAttribute("position");
@@ -498,6 +536,12 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   const roof = new T.CylinderGeometry(1, 1.62, 0.62, 4, 1).rotateY(Math.PI / 4).scale(2.44, 1, 1.66);
   add(roof, civicRoof, civicX, 3.46, civicZ - 0.12, true);
   box(civicX, 3.79, civicZ - 0.12, 2.6, 0.10, 1.86, civicRoof);
+  rounded(civicX, 3.98, civicZ - 0.57, 2.06, 0.32, 1.02, deepGlass, 0.075);
+  rounded(civicX, 4.16, civicZ - 0.57, 2.26, 0.12, 1.24, civicRoof, 0.046);
+  for (const side of [-1, 1]) {
+    for (let i = -4; i <= 4; i++) box(civicX + i * 0.21, 3.991, civicZ - 0.57 + side * 0.518, 0.036, 0.274, 0.036, bronze, false);
+    box(civicX, 3.851, civicZ - 0.57 + side * 0.55, 2.04, 0.04, 0.03, roofSeam, false);
+  }
   for (const side of [-1, 1]) {
     for (let i = -4; i <= 4; i++) {
       const x = i * 0.51;
@@ -514,7 +558,12 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   rail([civicX - 1.63, 2.94, civicZ + 2.39], [civicX, 3.56, civicZ + 2.39], 0.07, pale);
   rail([civicX, 3.56, civicZ + 2.39], [civicX + 1.63, 2.94, civicZ + 2.39], 0.07, pale);
   add(new T.CylinderGeometry(0.13, 0.13, 0.04, 20), bronze, civicX, 3.15, civicZ + 2.386, false, Math.PI / 2);
-  projectHit("b-crm", civicX, 2.07, civicZ + 0.11, 5.91, 3.72, 5.2);
+  for (const side of [-1, 1]) {
+    flowerBed(civicX + side * 2.42, civicZ + 2.43, 1.17, 0.62);
+    box(civicX + side * 2.71, 2.64, civicZ - 0.15, 0.088, 0.065, 3.25, civicTrim, false);
+    box(civicX + side * 2.71, 0.67, civicZ - 0.15, 0.088, 0.075, 3.25, civicTrim, false);
+  }
+  projectHit("b-crm", civicX, 2.19, civicZ + 0.11, 5.91, 4.01, 5.2);
 
   function shadeBuilding(x: number, z: number, w: number, d: number) {
     groundShade(x + 0.36, z - 0.25, w, d, 0.263);
@@ -588,15 +637,40 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
     buildingCars = false;
     projectHit("starcars", x, 0.70, z, 1.92, 0.93, 3.13);
   }
-  const canopyZ = carsZ - 2.03;
-  rounded(carsX, 1.89, canopyZ, 7.8, 0.21, 1.1, slate, 0.075);
-  box(carsX, 1.83, canopyZ + 0.58, 7.57, 0.082, 0.052, tail, false);
-  for (const x of [carsX - 3.74, carsX + 3.74]) box(x, 1.05, canopyZ + 0.43, 0.14, 1.50, 0.16, graphite);
-  rounded(carsX, 2.15, canopyZ + 0.34, 2.81, 0.37, 0.14, black, 0.04);
-  sign("STAR CARS", carsX, 2.148, canopyZ + 0.413, 2.45, 0.26, "#fff2e0");
-  projectHit("starcars", carsX, 1.25, canopyZ, 7.8, 2.0, 1.24);
+  const canopyZ = carsZ - 2.1;
+  // Low pit wall and cantilevered roof leave the display cars open on three sides.
+  const pitRed = standard(0x933c35, 0.69, 0.15);
+  rounded(carsX, 0.41, canopyZ, 8.75, 0.28, 1.47, graphite, 0.10);
+  rounded(carsX, 1.50, canopyZ - 0.57, 8.39, 1.90, 0.17, slate, 0.067);
+  for (const x of [-3.92, -1.35, 1.35, 3.92]) {
+    rounded(carsX + x, 1.43, canopyZ + 0.32, 0.18, 1.83, 0.23, graphite, 0.05);
+    box(carsX + x, 0.61, canopyZ + 0.33, 0.22, 0.21, 0.27, pitRed);
+  }
+  for (const x of [-2.55, 0, 2.55]) {
+    box(carsX + x, 1.34, canopyZ - 0.459, 1.79, 0.92, 0.069, glass);
+    for (const mullion of [-0.88, 0, 0.88]) box(carsX + x + mullion, 1.34, canopyZ - 0.415, 0.039, 0.91, 0.037, metal, false);
+    box(carsX + x, 0.83, canopyZ - 0.41, 1.77, 0.08, 0.08, bronze);
+  }
+  const wing = new T.Shape().moveTo(-4.34, 0.02).lineTo(-3.99, 0.38).lineTo(3.96, 0.38).lineTo(4.43, 0.09).lineTo(4.18, 0).closePath();
+  add(new T.ExtrudeGeometry(wing, { depth: 1.60, bevelEnabled: true, bevelSize: 0.035, bevelThickness: 0.035, bevelSegments: 1 }), pitRed, carsX, 2.29, canopyZ - 0.81);
+  box(carsX, 2.454, canopyZ + 0.826, 8.22, 0.066, 0.034, paintLine, false);
+  box(carsX, 2.267, canopyZ + 0.764, 7.92, 0.025, 0.030, lamp, false);
+  for (const side of [-1, 1]) {
+    box(carsX + side * 2.91, 2.709, canopyZ, 1.77, 0.015, 1.24, graphite, false);
+    for (const z of [-0.39, 0, 0.39]) box(carsX + side * 2.91, 2.722, canopyZ + z, 1.66, 0.012, 0.033, metal, false);
+  }
+  rounded(carsX, 2.73, canopyZ + 0.40, 2.91, 0.38, 0.21, graphite, 0.048);
+  sign("STAR CARS", carsX, 2.736, canopyZ + 0.514, 2.59, 0.274, "#fff2e0");
+  for (const side of [-1, 1]) {
+    const x = carsX + side * 4.21;
+    for (let i = 0; i < 6; i++) box(x + (i % 2) * side * 0.16, 0.293, carsZ + 2.01 - i * 0.16, 0.15, 0.014, 0.16, paintLine, false);
+    rounded(x, 0.41, carsZ + 0.53, 0.26, 0.25, 2.16, slate, 0.07);
+    for (const z of [-0.27, 0.53, 1.33]) box(x, 0.547, carsZ + z, 0.285, 0.018, 0.13, pitRed, false);
+  }
+  projectHit("starcars", carsX, 1.62, canopyZ, 8.86, 2.45, 1.84);
 
   function car(x: number, z: number, angle: number, paint: T.Material, variant: number) {
+    if (included && !included.has(active)) return;
     const cos = Math.cos(angle), sin = Math.sin(angle);
     const local = (dx: number, y: number, dz: number): [number, number, number] => [x + dx * cos + dz * sin, y, z - dx * sin + dz * cos];
     const height = variant === 2 ? 0.91 : 0.85;
@@ -659,21 +733,24 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
     }
   }
 
-  // AI lab. A dark observatory with segmented glazing, a luminous chamber and roof antenna.
+  // AI laboratory. A shuttered observatory with instrument pods and a luminous ring.
   active = "lab";
   const labX = 5.25, labZ = -7.77;
-  const ceramic = standard(0x3a4d54, 0.53, 0.43);
-  const chamber = standard(0x717c7d, 0.65, 0.40);
+  const ceramic = standard(0x526675, 0.58, 0.38);
+  const chamber = standard(0x99aaac, 0.65, 0.40);
   const labRoof = low ? new T.MeshPhongMaterial({ color: 0x37545e, emissive: 0x222d30, emissiveIntensity: 0.13, shininess: 82 })
-    : new T.MeshPhysicalMaterial({ color: 0x456170, emissive: 0x273239, emissiveIntensity: 0.09, roughness: 0.19, metalness: 0.27, clearcoat: 0.65 });
+    : new T.MeshPhysicalMaterial({ color: 0x597b88, emissive: 0x273239, emissiveIntensity: 0.09, roughness: 0.26, metalness: 0.27, clearcoat: 0.55 });
   shadeBuilding(labX, labZ, 8.30, 7.28);
   cylinder(labX, 0.43, labZ, 3.19, 3.34, 0.34, slate, 48);
   cylinder(labX, 0.72, labZ, 2.93, 3.15, 0.28, metal, 48);
+  ring(labX, 0.75, labZ, 3.059, 0.029, bronze, 72);
   cylinder(labX, 1.55, labZ, 2.75, 2.90, 1.48, ceramic, 48);
   cylinder(labX, 2.36, labZ, 2.95, 2.75, 0.24, bronze, 48);
   cylinder(labX, 2.58, labZ, 2.92, 3.01, 0.24, slate, 48);
   const dome = new T.SphereGeometry(1, low ? 24 : 48, low ? 10 : 18, 0, tau, 0, Math.PI * 0.5).scale(2.71, 1.94, 2.71);
   add(dome, labRoof, labX, 2.69, labZ);
+  const shutter = new T.SphereGeometry(1, low ? 12 : 24, low ? 8 : 16, Math.PI * 0.19, Math.PI * 0.20, 0.08, 1.48).scale(2.725, 1.95, 2.725);
+  add(shutter, deepGlass, labX, 2.699, labZ, false);
   ring(labX, 2.70, labZ, 2.78, 0.036, metal, 96);
   ring(labX, 3.50, labZ, 2.48, 0.033, metal, 72);
   ring(labX, 4.16, labZ, 1.79, 0.033, chamber, 60);
@@ -685,9 +762,13 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
       rail([labX + 2.73 * Math.cos(p) * x, 2.69 + 1.96 * Math.sin(p), labZ + 2.73 * Math.cos(p) * z],
         [labX + 2.73 * Math.cos(q) * x, 2.69 + 1.96 * Math.sin(q), labZ + 2.73 * Math.cos(q) * z], 0.048, metal, false);
     }
-    for (const y of [1.06, 1.88]) {
-      box(labX + x * 2.83, y, labZ + z * 2.83, 0.65, 0.15, 0.055, y < 1.5 ? cyanGlass : glass, false, Math.PI / 2 - a);
+    const rotation = Math.PI / 2 - a;
+    if (i !== 3) {
+      rounded(labX + x * 2.81, 1.72, labZ + z * 2.81, 0.86, 0.48, 0.12, graphite, 0.04, rotation);
+      box(labX + x * 2.88, 1.725, labZ + z * 2.88, 0.68, 0.235, 0.031, i % 3 === 1 ? cyanGlass : deepGlass, false, rotation);
+      box(labX + x * 2.913, 2.098, labZ + z * 2.913, 0.96, 0.10, 0.09, chamber, false, rotation);
     }
+    if (i % 3 === 1) box(labX + x * 2.94, 1.023, labZ + z * 2.94, 0.39, 0.056, 0.03, cyan, false, rotation);
   }
   rounded(labX, 1.16, labZ + 2.83, 1.97, 1.81, 1.06, graphite, 0.12);
   box(labX, 1.08, labZ + 3.385, 1.40, 1.39, 0.045, cyanGlass, false);
@@ -695,7 +776,13 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   for (const x of [-0.72, 0.72]) box(labX + x, 1.09, labZ + 3.439, 0.036, 1.41, 0.028, cyan, false);
   rounded(labX, 2.07, labZ + 3.18, 1.94, 0.25, 0.54, slate, 0.055);
   sign("AI LAB", labX, 2.065, labZ + 3.46, 1.62, 0.26, "#d2e0dd");
+  for (const x of [-1.06, 1.06]) {
+    box(labX + x, 0.59, labZ + 3.16, 0.19, 0.78, 0.44, ceramic);
+    box(labX + x, 0.94, labZ + 3.40, 0.19, 0.051, 0.038, cyan, false);
+  }
   cylinder(labX, 4.63, labZ, 0.37, 0.57, 0.23, bronze, 20);
+  ring(labX, 4.77, labZ, 0.36, 0.028, cyan, 24);
+  add(new T.TorusGeometry(0.31, 0.027, 6, 32), metal, labX, 4.99, labZ, false, 0.44, 0.65);
   cylinder(labX, 4.98, labZ, 0.037, 0.083, 0.60, metal, 12);
   ball(labX, 5.29, labZ, 0.11, 0.11, 0.11, cyan);
   for (const dx of [-3.35, 3.35]) {
@@ -703,7 +790,17 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
     cylinder(labX + dx, 1.32, labZ - 0.95, 0.23, 0.22, 0.18, cyanGlass, 16);
     rail([labX + dx,0.62,labZ - 0.95],[labX + dx * 0.82,0.62,labZ - 0.95],0.13,bronze);
   }
-  proxy(labX, 2.48, labZ + 0.35, 6.32, 4.55, 6.67, { zone: "lab" });
+  for (const side of [-1, 1]) {
+    const x = labX + side * 2.52;
+    const z = labZ - 2.10;
+    rounded(x, 0.84, z, 0.83, 1.13, 1.80, graphite, 0.12);
+    rounded(x, 1.50, z, 0.87, 0.26, 1.72, chamber, 0.087);
+    box(x + side * 0.421, 0.96, z, 0.025, 0.51, 1.20, deepGlass, false);
+    for (let i = -3; i <= 3; i++) box(x + side * 0.445, 1.00, z + i * 0.169, 0.051, 0.35, 0.037, metal, false);
+    box(x, 0.99, z + 0.922, 0.43, 0.068, 0.039, cyanGlass, false);
+    rail([x, 1.66, z], [labX + side * 1.66, 1.94, labZ - 2.02], 0.14, bronze);
+  }
+  proxy(labX, 2.70, labZ + 0.17, 6.88, 5.20, 6.89, { zone: "lab" });
 
   // Motomizer's tuning garage and BeatMarket's open-air sound stage.
   active = "motomizer";
@@ -711,20 +808,43 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   const amber = lit(0xffac55, 0.68);
   const yellow = standard(0xcca85a, 0.76);
   shadeBuilding(garageX, garageZ, 4.63, 3.95);
-  rounded(garageX, 1.16, garageZ, 3.66, 1.81, 2.62, graphite, 0.07);
+  shadeBuilding(garageX, garageZ, 5.4, 4.65);
+  rounded(garageX, 1.18, garageZ, 3.70, 1.89, 2.62, graphite, 0.09);
+  rounded(garageX, 0.34, garageZ + 0.12, 3.87, 0.16, 2.98, slate, 0.061);
+  for (const side of [-1, 1]) {
+    const x = garageX + side * 1.87;
+    box(x, 1.44, garageZ - 0.25, 0.035, 0.65, 1.38, glass, false);
+    box(x, 0.63, garageZ, 0.038, 0.09, 2.61, metal);
+    for (let i = -3; i <= 3; i++) box(x + side * 0.035, 1.45, garageZ - 0.25 + i * 0.17, 0.075, 0.70, 0.036, black, false);
+  }
   box(garageX, 1.08, garageZ + 1.33, 2.92, 1.35, 0.136, black);
-  for (let i = 0; i < 4; i++) box(garageX, 1.39 + i * 0.12, garageZ + 1.405, 2.85, 0.065, 0.049, metal, false);
+  box(garageX, 1.16, garageZ + 1.412, 2.85, 1.06, 0.043, slate);
+  for (let i = 0; i < 8; i++) box(garageX, 0.702 + i * 0.122, garageZ + 1.442, 2.82, 0.042, 0.031, metal, false);
+  box(garageX, 0.647, garageZ + 1.445, 2.85, 0.073, 0.051, black);
   for (const s of [-1, 1]) box(garageX + s * 1.48, 1.05, garageZ + 1.42, 0.082, 1.39, 0.066, amber, false);
-  rounded(garageX, 2.17, garageZ, 3.98, 0.30, 2.90, yellow, 0.075);
-  sign("MOTOMIZER", garageX, 2.16, garageZ + 1.46, 3.10, 0.27, "#282422");
+  rounded(garageX, 2.17, garageZ, 4.04, 0.30, 2.87, yellow, 0.075);
+  sign("MOTOMIZER", garageX, 2.16, garageZ + 1.446, 3.10, 0.27, "#282422");
+  rounded(garageX, 2.35, garageZ - 0.20, 3.60, 0.073, 2.36, slate, 0.036);
+  for (let i = -3; i <= 3; i++) box(garageX + i * 0.44, 2.40, garageZ - 0.22, 0.026, 0.041, 2.21, graphite, false);
+  for (const side of [-1, 1]) {
+    const x = garageX + side * 1.28;
+    cylinder(x, 2.58, garageZ - 0.62, 0.13, 0.15, 0.36, graphite, 16);
+    cylinder(x, 2.79, garageZ - 0.62, 0.192, 0.18, 0.10, metal, 16);
+    for (let i = 0; i < 3; i++) box(garageX + side * (1.07 + i * 0.19), 0.431, garageZ + 1.52, 0.11, 0.012, 0.20, i % 2 ? yellow : black, false);
+  }
   for (let i = 0; i < 4; i++) cylinder(garageX + 1.69, 0.29 + i * 0.13, garageZ + 1.70, 0.20, 0.20, 0.12, tire, 16);
-  projectHit("motomizer", garageX, 1.36, garageZ, 4.01, 2.20, 3.33);
+  projectHit("motomizer", garageX, 1.47, garageZ, 4.06, 2.69, 3.53);
 
   active = "beatmarket";
   const stageX = 1.23, stageZ = -2.68;
   const aubergine = standard(0x684b63, 0.72);
   const pink = lit(0xdc8295, 0.51);
-  rounded(stageX, 0.40, stageZ, 4.0, 0.25, 2.04, graphite, 0.06);
+  shadeBuilding(stageX, stageZ, 5.3, 3.2);
+  rounded(stageX, 0.40, stageZ, 4.07, 0.25, 2.05, graphite, 0.073);
+  box(stageX, 0.446, stageZ + 1.035, 3.58, 0.047, 0.038, pink, false);
+  for (const x of [-1.34, 1.34]) {
+    for (let j = 0; j < 3; j++) box(stageX + x, 0.29 + 0.069 * j, stageZ + 1.24 - 0.092 * j, 0.54, 0.074, 0.27, slate);
+  }
   box(stageX, 1.21, stageZ - 0.85, 3.73, 1.43, 0.064, aubergine);
   box(stageX, 1.41, stageZ - 0.803, 2.46, 0.89, 0.06, black);
   const bars = [0.26,0.43,0.33,0.65,0.55,0.38,0.68,0.46,0.54,0.22];
@@ -733,10 +853,28 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
     box(stageX + x, 1.21, stageZ + 0.32, 0.52, 1.42, 0.57, black);
     for (const h of [0.89,1.42]) add(new T.CylinderGeometry(0.178,0.178,0.033,20), metal, stageX + x, h, stageZ + 0.62, false, Math.PI / 2);
   }
-  for (const x of [-1.84,1.84]) box(stageX + x, 1.36, stageZ - 0.68, 0.08, 2.0, 0.08, metal);
-  rounded(stageX, 2.40, stageZ - 0.34, 4.04, 0.24, 1.68, aubergine, 0.06);
-  sign("BEATMARKET", stageX, 2.406, stageZ + 0.51, 3.12, 0.23);
-  projectHit("beatmarket", stageX, 1.4, stageZ, 4.04, 2.35, 2.17);
+  for (const x of [-1.84, 1.84]) {
+    for (const dz of [-0.69, 0.43]) box(stageX + x, 1.41, stageZ + dz, 0.088, 1.93, 0.088, metal);
+    for (let i = 0; i < 4; i++) rail([stageX + x, 0.60 + i * 0.40, stageZ - 0.69],
+      [stageX + x, 0.98 + i * 0.40, stageZ + 0.43], 0.036, metal, false);
+    for (const y of [1.04, 1.80]) box(stageX + x, y, stageZ - 0.13, 0.069, 0.065, 1.16, aubergine);
+  }
+  const mixerZ = stageZ + 0.28;
+  rounded(stageX, 0.84, mixerZ, 1.31, 0.62, 0.57, graphite, 0.075);
+  box(stageX, 0.874, mixerZ + 0.29, 1.18, 0.119, 0.047, aubergine);
+  box(stageX, 0.871, mixerZ + 0.319, 1.05, 0.023, 0.024, cyanGlass, false);
+  for (const x of [-0.37, 0.37]) {
+    cylinder(stageX + x, 1.164, mixerZ, 0.198, 0.20, 0.06, black, 22);
+    cylinder(stageX + x, 1.200, mixerZ, 0.084, 0.084, 0.014, bronze, 16, false);
+  }
+  rounded(stageX, 2.41, stageZ - 0.34, 4.04, 0.23, 1.68, aubergine, 0.07);
+  box(stageX, 2.262, stageZ + 0.45, 3.85, 0.065, 0.10, graphite);
+  for (let i = -3; i <= 3; i++) {
+    add(new T.CylinderGeometry(0.058, 0.08, 0.08, 12), i % 2 === 0 ? pink : amber, stageX + i * 0.42, 2.205, stageZ + 0.45, false);
+  }
+  box(stageX, 2.508, stageZ - 0.34, 3.78, 0.073, 1.41, graphite);
+  sign("BEATMARKET", stageX, 2.411, stageZ + 0.514, 3.12, 0.206);
+  projectHit("beatmarket", stageX, 1.4, stageZ, 4.10, 2.37, 2.45);
 
   active = "studio";
   const studioX = -2.68, studioZ = -4.45;
@@ -747,26 +885,74 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   sign("STUDIO", studioX, 1.79, studioZ + 1.118, 1.52, 0.22);
   proxy(studioX, 1.05, studioZ, 2.75, 1.63, 2.28, { zone: "studio" });
 
-  // The headquarters and the mascot's plaza share the home planet. and a small fountain at the centre of the map.
+  // Home headquarters. The terrace and the glass tower open onto the public plaza.
   active = "hq";
-  rounded(-.14, .50, .49, 3.02, .81, 1.77, sandstone, .18);
-  rounded(-.14, 1.82, .48, 2.82, 2.45, 1.56, pale, .21);
-  rounded(-.14, 3.15, .44, 2.97, .22, 1.68, graphite, .09);
-  rounded(-.61, 3.48, .43, 1.47, .64, 1.37, glass, .22);
-  rounded(-.61, 3.82, .43, 1.51, .14, 1.43, pale, .1);
-  for (const x of [-1.14, -.71, -.28, .15, .58, 1.01]) {
-    rounded(x, 1.82, 1.268, .30, 1.63, .075, glass, .031);
-    box(x, 1.75, 1.315, .30, .065, .035, stone, false);
+  const hqX = -0.18, hqZ = 0.61;
+  const towerX = hqX - 0.94;
+  shadeBuilding(hqX, hqZ, 6.75, 3.42);
+  slab(6.04, 2.62, 0.23, 0.39, 0.238, curb, hqX, hqZ);
+  slab(5.90, 2.50, 0.10, 0.35, 0.46, sandstone, hqX, hqZ);
+  rounded(hqX, 1.22, hqZ - 0.12, 5.12, 1.39, 1.95, graphite, 0.14);
+  rounded(hqX, 1.25, hqZ + 0.83, 4.97, 1.22, 0.20, deepGlass, 0.09);
+  for (let i = 0; i < 11; i++) {
+    const x = hqX + (i - 5) * 0.43;
+    box(x, 1.20, hqZ + 0.94, 0.36, 0.99, 0.03, i < 7 && i % 3 !== 0 ? glass : deepGlass, false);
+    box(x - 0.20, 1.25, hqZ + 0.96, 0.027, 1.19, 0.044, bronze, false);
+    if (i === 1 || i === 8 || i === 9) box(x, 0.78, hqZ + 0.965, 0.30, 0.20, 0.024, warmGlass, false);
   }
-  rounded(-.14, .43, 1.41, .57, .78, .083, deepGlass, .047);
-  rounded(-.13, .87, 1.50, 1.06, .117, .56, graphite, .045);
-  cylinder(.67, 3.67, .39, .033, .075, 1.04, bronze, 9);
-  ball(.67, 4.24, .39, .075, .087, .075, lamp);
-  sign("BERNECKI.DEV", -.14, 2.90, 1.274, 2.35, .22);
-  proxy(-.14, 1.61, .51, 2.91, 3.26, 1.82, { zone: "hq" });
-  cylinder(0.10, 0.193, 3.43, 3.03, 3.17, 0.096, stone, 60);
-  ring(0.10, 0.247, 3.43, 2.88, 0.019, bronze, 70);
-  ring(0.10, 0.247, 3.43, 2.30, 0.011, curb, 60);
+  for (const side of [-1, 1]) {
+    box(hqX + side * 2.56, 1.05, hqZ + 0.035, 0.042, 0.62, 1.37, glass, false);
+    for (const z of [-0.53, -0.01, 0.51]) box(hqX + side * 2.59, 1.09, hqZ + z, 0.057, 0.78, 0.033, bronze);
+  }
+  rounded(hqX, 1.94, hqZ - 0.068, 5.49, 0.31, 2.29, sandstone, 0.095);
+  box(hqX, 1.84, hqZ + 1.091, 5.20, 0.039, 0.032, bronze, false);
+  for (const x of [-2.35, 2.35]) box(hqX + x, 1.16, hqZ + 1.07, 0.13, 1.30, 0.12, sandstone);
+  rounded(hqX + 0.86, 1.72, hqZ + 1.13, 1.04, 0.095, 0.49, pale, 0.035);
+  box(hqX + 0.86, 1.14, hqZ + 0.995, 0.66, 1.03, 0.057, deepGlass);
+  box(hqX + 0.86, 1.15, hqZ + 1.028, 0.028, 1.02, 0.035, bronze);
+  for (const side of [-1, 1]) box(hqX + 0.86 + side * 0.079, 1.09, hqZ + 1.047, 0.026, 0.19, 0.030, metal, false);
+  for (let i = 0; i < 3; i++) box(hqX + 0.86, 0.327 + i * 0.077, hqZ + 1.54 - i * 0.16, 1.45, 0.085, 0.44, sandstone);
+  sign("BERNECKI.DEV", hqX + 0.62, 1.985, hqZ + 1.085, 2.65, 0.225, "#312f28");
+
+  rounded(towerX, 2.28, hqZ - 0.13, 2.93, 0.40, 1.87, pale, 0.13);
+  rounded(towerX, 3.06, hqZ - 0.13, 2.55, 1.38, 1.68, glass, 0.19);
+  for (const dz of [-0.96, 0.71]) {
+    for (let i = 0; i < 8; i++) {
+      const x = towerX + (i - 3.5) * 0.29;
+      box(x, 3.04, hqZ + dz, 0.053, 1.45, 0.11, i % 3 === 0 ? sandstone : bronze, false);
+      if (i === 1 || i === 6) box(x + 0.13, 2.88, hqZ + dz, 0.17, 0.77, 0.034, warmGlass, false);
+    }
+    box(towerX, 2.58, hqZ + dz, 2.54, 0.057, 0.077, bronze);
+  }
+  rounded(towerX, 3.81, hqZ - 0.13, 2.94, 0.20, 2.02, sandstone, 0.092);
+  rounded(towerX, 3.98, hqZ - 0.18, 2.52, 0.20, 1.66, graphite, 0.095);
+  for (const side of [-1, 1]) {
+    rail([towerX + side * 0.93, 4.02, hqZ - 0.13], [towerX + side * 0.67, 4.58, hqZ - 0.13], 0.10, bronze);
+    rail([towerX + side * 0.93, 4.02, hqZ - 0.13], [towerX + side * 0.67, 4.58, hqZ - 0.79], 0.059, metal);
+  }
+  rail([towerX - 0.71, 4.57, hqZ - 0.13], [towerX + 0.71, 4.57, hqZ - 0.13], 0.092, bronze);
+  add(new T.TorusGeometry(0.33, 0.026, 6, 32), bronze, towerX, 4.35, hqZ - 0.12, false);
+  cylinder(towerX, 4.31, hqZ - 0.13, 0.032, 0.053, 0.59, metal, 12);
+  ball(towerX, 4.61, hqZ - 0.13, 0.05, 0.062, 0.05, lamp);
+
+  const terraceX = hqX + 1.58;
+  for (const z of [-0.84, 0.74]) {
+    box(terraceX, 2.35, hqZ + z, 1.52, 0.044, 0.055, bronze);
+    for (const dx of [-0.72, 0, 0.72]) box(terraceX + dx, 2.23, hqZ + z, 0.034, 0.25, 0.034, metal);
+  }
+  flowerBed(terraceX, hqZ + 0.46, 1.20, 0.38, 1.98);
+  cylinder(terraceX, 2.14, hqZ - 0.35, 0.25, 0.25, 0.19, stone, 18);
+  tree(terraceX, hqZ - 0.35, 0.81, 2.23);
+  proxy(hqX, 2.43, hqZ - 0.02, 5.58, 4.32, 2.40, { zone: "hq" });
+
+  cylinder(0.10, 0.235, 3.43, 3.02, 3.17, 0.10, stone, 60);
+  ring(0.10, 0.291, 3.43, 2.89, 0.016, bronze, 60);
+  ring(0.10, 0.291, 3.43, 2.30, 0.012, curb, 60);
+  for (let i = 0; i < 16; i++) {
+    const angle = i * tau / 16;
+    const length = i % 4 === 0 ? 0.46 : 0.18;
+    box(0.10 + Math.sin(angle) * 2.60, 0.291, 3.43 + Math.cos(angle) * 2.60, 0.025, 0.008, length, bronze, false, angle);
+  }
   const water = low ? new T.MeshPhongMaterial({ color: 0x4b7d7d, shininess: 85, specular: 0x91c9c9 })
     : new T.MeshPhysicalMaterial({ color: 0x4b7d7d, roughness: 0.18, metalness: 0.42, clearcoat: 0.68 });
   cylinder(0.10, 0.386, 3.43, 1.22, 1.30, 0.29, sandstone, 48);
@@ -775,7 +961,7 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   ring(0.10, 0.559, 3.43, 0.79, 0.009, cyanGlass, 44);
   cylinder(0.10, 0.66, 3.43, 0.115, 0.18, 0.23, bronze, 16);
   cylinder(0.10, 0.82, 3.43, 0.033, 0.066, 0.30, water, 12, false);
-  for (const [x,z,r] of [[-2.28,4.04,1.03],[1.81,5.21,-0.83],[-0.24,1.17,0],[2.51,3.57,-1.45]]) seat(x,z,r);
+  for (const [x,z,r] of [[-2.28,4.04,1.03],[1.81,5.21,-0.83],[-1.62,2.32,0.51],[2.51,3.57,-1.45]]) seat(x,z,r);
   for (const [x,z] of [[-2.9,5.74],[2.79,6.06],[0.55,6.54]]) post(x,z,0.75,0.15);
 
   const beaconMaterial = lit(0x86e9d9, 0.8);
@@ -860,7 +1046,7 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   avatarShadow.rotation.x = -Math.PI / 2;
   avatarShadow.position.y = 0.009;
   avatar.add(avatarShadow);
-  avatar.position.set(-0.28,0.25,5.12);
+  avatar.position.set(-0.28,0.29,5.12);
   avatar.rotation.y = 0.40;
   const avatarHit = new T.Mesh(new T.BoxGeometry(1.02, 1.59, 0.74), new T.MeshBasicMaterial({ visible: false }));
   materials.add(avatarHit.material);
@@ -940,6 +1126,7 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
     const loader = new T.TextureLoader();
     for (const [finish, bound] of surfaceMaterials) {
       const suffixes = low ? ["color"] : ["color", "normal", "roughness"];
+      if (!bound.size) continue;
       for (const suffix of suffixes) {
         loader.load(`/images/world/${finish}-${suffix}.webp`, texture => {
           if (disposed) { texture.dispose(); return; }
