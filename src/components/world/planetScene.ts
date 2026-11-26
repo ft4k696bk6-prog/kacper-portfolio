@@ -2,11 +2,10 @@ import * as T from "three";
 import { projectIndex, projectStops } from "./content";
 import type { ProjectBody } from "./discoveries";
 import { makeDistrict } from "./district";
-import { globeRadius } from "./globe";
 import { disposeObjects } from "./gameObjects";
 import { buildModel, type Hit } from "./model";
 import { planets } from "./planets";
-import { frontNormal, makePlanetSkin } from "./planetSurface";
+import { frontNormal, makePlanetSkin, placeArchitecture } from "./planetSurface";
 import { planetAtmosphere } from "./planetFinish";
 
 export type ProjectScene = ReturnType<typeof buildProjectScene>;
@@ -36,9 +35,7 @@ export function buildProjectScene(body: ProjectBody, low: boolean, software: boo
     const siteId = body === "ai" ? "lab" : body;
     architecture = buildModel(low, software, new Set([siteId]), info.colors[2]);
     const site = architecture.sites[siteId];
-    architecture.group.quaternion.setFromUnitVectors(site.normal, frontNormal);
-    architecture.group.position.copy(frontNormal).multiplyScalar(info.radius - globeRadius + .12);
-    root.add(architecture.group);
+    root.add(placeArchitecture(architecture.group, site.normal, info.radius));
     root.updateMatrixWorld(true);
     marker = (body === "ai" ? new T.Vector3(5.35, 5.85, -7.78) : new T.Vector3(...projectStops[body].marker))
       .applyMatrix4(site.matrix).applyMatrix4(architecture.group.matrixWorld);

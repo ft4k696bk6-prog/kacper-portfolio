@@ -8,6 +8,7 @@ import { frontNormal, worldSurface } from "./planetSurface";
 import { makeWorldLife } from "./worldLife";
 import { gamePalette } from "./gameObjects";
 import { makeDistrict } from "./district";
+import { makeUniverse } from "./universe";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -68,6 +69,29 @@ describe("routes", () => {
 });
 
 describe("system camera", () => {
+  it("shows structures on every atlas planet before a destination is selected", () => {
+    const atlas = makeUniverse(true);
+    try {
+      atlas.show(true, null, false, false, false);
+      expect(atlas.visible().map(skin => skin.userData.body)).toEqual(visibleBodies(false, false));
+      for (const skin of atlas.visible()) {
+        const landmarks: T.Mesh[] = [];
+        skin.parent!.traverseVisible(object => {
+          if (object !== skin && object instanceof T.Mesh && object.material.vertexColors) landmarks.push(object);
+        });
+        expect(landmarks, skin.userData.body).not.toHaveLength(0);
+      }
+      atlas.setDetail("starcars", .5, 1);
+      expect(atlas.marker("starcars")).not.toBeNull();
+      atlas.setDetail("starcars", 1, 1);
+      expect(atlas.marker("starcars")).toBeNull();
+      atlas.show(true, null, false, false, false);
+      expect(atlas.marker("starcars")).not.toBeNull();
+    } finally {
+      atlas.dispose();
+    }
+  });
+
   it("keeps worlds apart and keeps secret bodies out of the initial catalog", () => {
     for (const [i, a] of spheres.entries()) {
       for (const b of spheres.slice(i + 1)) expect(a.center.distanceTo(b.center)).toBeGreaterThan(a.radius + b.radius + 12);

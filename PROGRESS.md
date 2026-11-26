@@ -1,5 +1,6 @@
 # Bernecki Universe
 
+- Atlas pokazuje zabudowę przed wybraniem planety. Odpowiedniki budynków i tor StarCars widać z orbity, a scena w pełnym detalu stopniowo przejmuje obraz podczas dolotu.
 - Wydanie atlasu wprowadza nowy ekran wejścia, mapę i menu, karty realizacji z podglądem zdjęć oraz nową oprawę sceny 3D. Wariant sprzed zmian jest zachowany na `backup/universe-before-visual-refinement`.
 - Dopracowano siedzibę i budynki projektowe, wybrzeża, oświetlenie i kadr otwarcia. Drogi na planecie startowej nadal korzystają ze wspólnej walidacji terenu i przeszkód.
 - StarCars wykorzystuje na telefonie lżejsze sylwetki z orbity i pobiera pełne modele po zbliżeniu do salonu. Test WebKit potwierdził oba widoki.

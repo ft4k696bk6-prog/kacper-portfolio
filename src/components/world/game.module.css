@@ -40,7 +40,7 @@
 .beacon[data-visible="false"], .mapTag[data-visible="false"] { visibility: hidden; pointer-events: none; }
 .beacon[data-beacon="moon"] { --atlas-offset-y: 37px; }
 .beacon[data-beacon="nearby"] { --atlas-offset-y: -22px; }
-.mapTag { --atlas-offset-y: 24px; z-index: 2; }
+.mapTag { --atlas-offset-y: 33px; z-index: 2; }
 
 .beacon:is(:hover, :focus-visible), .mapTag:is(:hover, :focus-visible) {
   background: #212a3a;

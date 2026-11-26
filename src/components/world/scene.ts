@@ -13,6 +13,7 @@ import { isSecretBody, planets, systemDistance } from "./planets";
 import type { Body, CameraMode, Destination, FindId } from "./discoveries";
 import type { ProjectScene } from "./planetScene";
 import { observatoryDirection } from "./worldLife";
+import { planetLod } from "./planetLod";
 
 type View = { zone: Zone | null; project: number | null };
 type Callbacks = {
@@ -94,6 +95,8 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     voyage(destination) { void fly(destination); },
     observatory() { revealMoon(); void fly("system"); },
   });
+  const surfaces = new WeakMap<T.Object3D, ReturnType<typeof planetLod>>();
+  const homeSurface = [planet.group, home.group, play.homeSurface];
   const bounds = new T.Vector2();
   const measured = new T.Vector2();
   const v = new T.Vector3(), center = new T.Vector3(), projected = new T.Vector3(), radial = new T.Vector3(), offset = new T.Vector3();
@@ -112,10 +115,11 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   let previous = 0, worldTime = 0, pending = 0, timer = 0, flightToken = 0;
   let engineDpr = 1, fastBudget = !software, slow = 0;
   let started = false, disposed = false, lost = false, dragging = false, ready = false, flying = false;
-  let flight: { tween: gsap.core.Tween; start: number; duration: number; finish: () => void; cancel?: () => void } | undefined;
+  let flight: { tween: gsap.core.Tween; start: number; duration: number; progress: number; maxStep: number; finish: () => void } | undefined;
   let action: (() => void) | undefined;
   let press: { x: number; y: number; id: number } | undefined;
   let previewPrepared: ProjectScene | undefined;
+  let resetArrival: (() => void) | undefined;
 
   function redraw() {
     if (started && !disposed && !lost && !document.hidden && !pending) pending = requestAnimationFrame(frame);
@@ -277,6 +281,10 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     nearShowroom = close;
     detail.showCars(close);
   }
+  function cullHome(eye: T.Vector3) {
+    home.cull(eye);
+    play.cullHome(eye);
+  }
   function frame(now: number) {
     // Match the drawing buffer and projected labels to the same committed layout.
     resize();
@@ -287,8 +295,9 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     const decorated = fx && quality !== "economy";
     if (animate) worldTime += seconds;
     if (flight) {
-      const progress = Math.min(1, (now - flight.start) / flight.duration);
-      flight.tween.progress(Math.max(0, progress));
+      const progress = Math.max(0, Math.min(1, (now - flight.start) / flight.duration, flight.progress + flight.maxStep));
+      flight.progress = progress;
+      flight.tween.progress(progress);
       if (progress === 1) {
         const done = flight.finish;
         flight.tween.kill();
@@ -308,7 +317,6 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       home.avatar.position.z = 3.43 + Math.cos(a) * 1.73;
       home.avatar.rotation.y = Math.atan2(Math.cos(a), -Math.sin(a));
       home.legs.forEach((leg, i) => { leg.rotation.x = Math.sin(worldTime * 6 + i * Math.PI) * .42; });
-      home.cull(camera.position);
     }
     const night = body === "beatmarket" || day === "night" ? .72 : day === "day" || !animate ? 0 : T.MathUtils.smoothstep(Math.sin(worldTime * .019 - .9), .34, .98) * .58;
     sun.intensity = 2.18 - night * 1.35;
@@ -326,7 +334,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       engineDpr = ratio;
       renderer.setDrawingBufferSize(bounds.x, bounds.y, ratio);
     }
-    play.cull(camera.position);
+    if (body === "home") cullHome(camera.position);
     detail?.cull(camera.position);
     updateShowroom();
     renderer.render(scene, camera);
@@ -343,14 +351,17 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   }
   function cancelTransition() {
     flight?.tween.kill();
-    flight?.cancel?.();
     flight = undefined;
   }
-  function transition(duration: number, update: (phase: number) => void, finish: () => void, cancel?: () => void) {
+  function clearArrival() {
+    resetArrival?.();
+    resetArrival = undefined;
+  }
+  function transition(duration: number, update: (phase: number) => void, finish: () => void, maxStep = 1) {
     if (motion.matches) { update(1); finish(); return; }
     const phase = { p: 0 };
     const tween = gsap.to(phase, { p: 1, paused: true, duration: duration / 1000, ease: "sine.inOut", onUpdate: () => update(phase.p) });
-    flight = { tween, start: performance.now(), duration, finish, cancel };
+    flight = { tween, start: performance.now(), duration, progress: 0, maxStep, finish };
     redraw();
   }
   function revealMoon() {
@@ -366,6 +377,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     }
     const token = ++flightToken;
     cancelTransition();
+    clearArrival();
     previewPrepared?.dispose();
     previewPrepared = undefined;
     flying = true;
@@ -374,9 +386,13 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     const previousBody = body;
     try {
       let prepared: ProjectScene | undefined;
+      let arrival: T.Group[] | undefined;
       if (isSecretBody(next)) {
-        await play.load(next);
-      } else if (next && next !== "home") {
+        const satellite = await play.load(next);
+        arrival = [satellite.root];
+      } else if (next === "home") {
+        arrival = homeSurface;
+      } else if (next) {
         if (next === body && detail) prepared = detail;
         else {
           const { buildProjectScene } = await import("./planetScene");
@@ -391,6 +407,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
           prepared.root.visible = false;
           scene.add(prepared.root);
         }
+        arrival = [prepared.root];
       }
       if (disposed || token !== flightToken) { if (prepared && prepared !== detail) prepared.dispose(); return; }
       // Travel to the full-screen map even when the launch view has a shorter, inset canvas.
@@ -402,13 +419,11 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       const endingUp = next === null && mapWidth / mapHeight < .77 ? new T.Vector3(1, 0, 0) : new T.Vector3(0, 1, 0);
       const eye = new T.Vector3(), aim = new T.Vector3();
       const endPoint = play.bodyFocus(next, new T.Vector3());
-      const showTransit = () => {
-        universe.show(true, previousBody, moonKnown || next === "moon", unknown || next === "signal", garage || next === "garage");
-      };
-      showTransit();
+      universe.show(true, previousBody, moonKnown || next === "moon", unknown || next === "signal", garage || next === "garage");
       play.sound.play("warp");
       function finish() {
         if (token !== flightToken || disposed) return;
+        clearArrival();
         resize();
         if (detail && detail !== prepared) detail.dispose();
         if (previousBody !== next && isSecretBody(previousBody)) play.release(previousBody);
@@ -432,16 +447,47 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
         redraw();
       }
       if (instant || motion.matches) { finish(); return; }
+      let approach: ((eye: T.Vector3) => void) | undefined;
+      if (next && previousBody !== next && arrival) {
+        const roots = arrival;
+        const root = roots[0];
+        const mix = surfaces.get(root) ?? planetLod(roots);
+        surfaces.set(root, mix);
+        const radius = planets[next].radius;
+        const near = Math.max(radius * 6, destinationPose.eye.distanceTo(endPoint) * 1.19);
+        const far = near + radius * 10;
+        for (const item of roots) renderer.compile(item, camera, scene);
+        prepared?.loadSurfaces(redraw);
+        resetArrival = () => {
+          universe.setDetail(next, 0);
+          mix(1);
+          for (const item of roots) item.visible = false;
+        };
+        approach = eye => {
+          const distance = eye.distanceTo(endPoint);
+          const fraction = 1 - T.MathUtils.smoothstep(distance, near, far);
+          const turn = 1 - T.MathUtils.smoothstep(distance, far, far + radius * 12);
+          universe.setDetail(next, fraction, turn);
+          mix(fraction);
+          for (const item of roots) item.visible = fraction > 0;
+          if (fraction > 0) {
+            if (next === "home") cullHome(eye);
+            else prepared?.cull(eye);
+          }
+        };
+      }
+      // Leave enough transition frames even after a slow frame or a shader compilation stall.
       transition(next === "signal" ? 2300 : next === null || previousBody === null ? 1770 : 1960, amount => {
         follow.sample(amount, eye);
+        approach?.(eye);
         aim.copy(startingAim).lerp(endPoint, T.MathUtils.smoothstep(amount, .13, .63)).lerp(destinationPose.target, T.MathUtils.smoothstep(amount, .65, .98));
         if (eye.distanceToSquared(aim) < .025) aim.z -= .85;
         camera.up.copy(startingUp).lerp(endingUp, T.MathUtils.smoothstep(amount,.33,.85)).normalize();
         setPose({ target: aim, eye });
-      }, finish);
+      }, finish, .085);
     } catch {
       if (disposed || flightToken !== token) return;
-      previewPrepared?.dispose(); previewPrepared = undefined;
+      clearArrival(); previewPrepared?.dispose(); previewPrepared = undefined;
       flying = false; show(); setControls(!!poseView.zone); callbacks.traveling(null); callbacks.interrupted(poseView, true); redraw();
     }
   }
@@ -449,6 +495,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     const interrupted = flying;
     flightToken++;
     cancelTransition();
+    clearArrival();
     previewPrepared?.dispose(); previewPrepared = undefined;
     flying = false;
     if (disposed) return;

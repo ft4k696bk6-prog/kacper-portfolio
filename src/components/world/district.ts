@@ -3,7 +3,7 @@ import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { alignRadially, box, gamePalette, solid } from "./gameObjects";
 import { makeCar } from "./vehicle";
 import { frontNormal, worldSurface } from "./planetSurface";
-import { createTraffic, laneMesh, makeLane, regionFrame, ringWaypoints, type Lane, type TrafficKind } from "./routes";
+import { createTraffic, laneMesh, loopLane, regionFrame, type Lane, type TrafficKind } from "./routes";
 import { planets } from "./planets";
 import { globeDirection } from "./globe";
 import { surfaceRadius, terrainField } from "./terrain";
@@ -51,12 +51,9 @@ export function makeDistrict(id: ProjectBody | "home", low: boolean, effects: Ef
     interactive.push({ root: object, action: () => { effects.find(name); action?.(); } });
   }
   function lane(kind: TrafficKind, size: number, center = north, squash = 1) {
-    const candidates = kind === "water" ? [size, size * .63] : [size, size + .13, size + .25, size + .36];
-    for (const width of candidates) {
-      const created = makeLane(kind, ringWaypoints(center, width, 14, squash), surface, bounds);
-      if (created) { lanes.push(created); return created; }
-    }
-    return null;
+    const created = loopLane(kind, size, center, squash, surface, bounds);
+    if (created) lanes.push(created);
+    return created;
   }
   function booth(group: T.Group, x: number, z: number, height: number, tint = wall) {
     const building = new T.Group();

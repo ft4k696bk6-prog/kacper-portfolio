@@ -1,5 +1,6 @@
 import * as T from "three";
 import type { Body } from "./discoveries";
+import { globeRadius } from "./globe";
 import { detailDirection, planets } from "./planets";
 import { surfaceFinish } from "./planetFinish";
 
@@ -7,6 +8,12 @@ export const frontNormal = new T.Vector3(...detailDirection).normalize();
 const farNormal = new T.Vector3(-.8, .34, -.45).normalize();
 const iceNormal = new T.Vector3(.12, -.92, -.24).normalize();
 export const terminator = new T.Vector3(1, 2, 3).normalize();
+
+export function placeArchitecture(group: T.Group, normal: T.Vector3, radius: number) {
+  group.quaternion.setFromUnitVectors(normal, frontNormal);
+  group.position.copy(frontNormal).multiplyScalar(radius - globeRadius + .12);
+  return group;
+}
 
 const shoreline: Record<Body, number> = {
   home: .42, starcars: .52, reenergy: .57, ai: .47, "b-crm": .51, beatmarket: .53,

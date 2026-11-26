@@ -1,21 +1,31 @@
 import * as T from "three";
-import { globeDirection, loadPlanet } from "./globe";
+import { globeDirection, loadPlanet, type SurfaceStop } from "./globe";
 import { box, disposeObjects, gamePalette, solid } from "./gameObjects";
 import { colorTerrain } from "./terrain";
-import { planets, visibleBodies } from "./planets";
-import { makePlanetSkin } from "./planetSurface";
+import { planets, projectBodies, visibleBodies } from "./planets";
+import { frontNormal, makePlanetSkin, placeArchitecture } from "./planetSurface";
 import { planetAtmosphere } from "./planetFinish";
+import { planetLod } from "./planetLod";
+import { buildModel } from "./model";
+import { orbitLandmarks } from "./orbitLandmarks";
 import type { Body } from "./discoveries";
 
 export function makeUniverse(low: boolean) {
   const group = new T.Group();
-  const objects = new Map<Body, T.Object3D>();
+  const objects = new Map<Body, T.Group>();
+  const levels = new Map<Body, ReturnType<typeof planetLod>>();
+  const portraits = new Map<Body, T.Quaternion>();
+  const axis = new T.Vector3(0, .09, 1).normalize();
+  const face = new T.Vector3(0, .42, .91).normalize();
+  const aligned = new T.Quaternion();
   const selectable: T.Mesh[] = [];
   const home = loadPlanet(true, true);
   colorTerrain(home.sphere, true);
   const homeTarget = new T.Mesh(new T.SphereGeometry(planets.home.radius, 16, 10), new T.MeshBasicMaterial({ visible: false }));
+  const homeLandmarks = new T.Group();
   homeTarget.userData.body = "home";
-  home.group.add(homeTarget);
+  home.group.add(homeTarget, homeLandmarks);
+  portraits.set("home", new T.Quaternion().setFromUnitVectors(globeDirection(-25, -4), axis));
   objects.set("home", home.group);
   group.add(home.group);
   selectable.push(homeTarget);
@@ -28,6 +38,8 @@ export function makeUniverse(low: boolean) {
     objects.set(id, system);
     group.add(system);
     selectable.push(skin);
+    const front = id === "signal" ? globeDirection(16, -24) : id === "moon" || id === "garage" ? globeDirection(20, 26) : frontNormal;
+    portraits.set(id, new T.Quaternion().setFromUnitVectors(front, face));
 
     const hue = planets[id].colors[1];
     const shell = planetAtmosphere(planets[id].radius, new T.Color(hue), true, .58);
@@ -44,6 +56,23 @@ export function makeUniverse(low: boolean) {
       }
       rings.rotation.set(1.10, -.32, .12);
       system.add(rings);
+    }
+  }
+
+  function populateAtlas() {
+    const sites = new Set<SurfaceStop>(["hq", "lab", ...projectBodies.filter(id => id !== "jalapeno")]);
+    const architecture = buildModel(true, true, sites, undefined, true);
+    for (const [siteId, site] of architecture.atlasSites) {
+      if (siteId === "hq") homeLandmarks.add(site);
+      else if (siteId !== "studio") {
+        const id = siteId === "lab" ? "ai" : siteId;
+        objects.get(id)!.add(placeArchitecture(site, architecture.sites[siteId].normal, planets[id].radius));
+      }
+    }
+    homeLandmarks.add(orbitLandmarks("home"));
+    for (const [id, planet] of objects) {
+      if (id !== "home") planet.add(orbitLandmarks(id));
+      levels.set(id, planetLod([planet], true));
     }
   }
 
@@ -133,13 +162,23 @@ export function makeUniverse(low: boolean) {
   const transitProbe = new T.Vector3();
   group.add(orbitGroup);
   function show(system: boolean, active: Body | null, revealedMoon: boolean, unknown: boolean, garage: boolean) {
+    if ((system || revealedMoon) && !levels.size) populateAtlas();
     orbitGroup.visible = system;
+    const revealed = visibleBodies(revealedMoon, unknown, garage);
     objects.forEach((object, id) => {
-      object.visible = active !== id && ((system && visibleBodies(revealedMoon, unknown, garage).includes(id)) || (id === "moon" && active === "home" && revealedMoon));
+      levels.get(id)?.(0);
+      object.quaternion.copy(portraits.get(id)!);
+      object.visible = active !== id && ((system && revealed.includes(id)) || (id === "moon" && active === "home" && revealedMoon));
     });
   }
   return {
     group, stars, show,
+    setDetail(id: Body, fraction: number, turn = 0) {
+      levels.get(id)?.(fraction);
+      const object = objects.get(id)!;
+      object.quaternion.slerpQuaternions(portraits.get(id)!, aligned, turn);
+      object.visible = fraction < 1;
+    },
     visible() { return selectable.filter(item => item.parent?.visible); },
     get visitor() { return orbitGroup.visible && saucer.visible ? saucer.position : null; },
     hitVisitor(ray: T.Raycaster) { return orbitGroup.visible && saucer.visible && ray.intersectObject(saucer,true).length > 0; },
@@ -161,6 +200,7 @@ export function makeUniverse(low: boolean) {
     },
     dispose() {
       group.remove(home.group);
+      disposeObjects(homeLandmarks);
       home.dispose();
       homeTarget.geometry.dispose();
       homeTarget.material.dispose();

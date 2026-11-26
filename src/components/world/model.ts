@@ -98,7 +98,7 @@ function bakeSurface(geometry: T.BufferGeometry, material: T.MeshLambertMaterial
   return geometry;
 }
 
-export function buildModel(low: boolean, bakeLighting = false, included?: ReadonlySet<SurfaceStop>, siteTint?: number) {
+export function buildModel(low: boolean, bakeLighting = false, included?: ReadonlySet<SurfaceStop>, siteTint?: number, atlas = false) {
   const group = new T.Group();
   const sites = makeSurfaceSites();
   let active: SurfaceStop = "reenergy";
@@ -106,6 +106,7 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   const batches: Batches = new Map();
   const siteBatches = new Map<SurfaceStop, Batches>();
   const siteMeshes: { normal: T.Vector3; root: T.Group }[] = [];
+  const atlasSites = new Map<SurfaceStop, T.Group>();
   const carBatches: Batches = new Map();
   const carFallback = new T.Group();
   const carModels = new T.Group();
@@ -122,9 +123,9 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   const materials = new Set<T.Material>();
   const hits: T.Mesh<T.BufferGeometry, T.Material>[] = [];
   const noise = bakeLighting ? null : surfaceTexture();
-  const ao = contactTexture();
+  const ao = atlas ? null : contactTexture();
   if (noise) textures.add(noise);
-  textures.add(ao);
+  if (ao) textures.add(ao);
   const random = sampler(317);
   function standard(color: number, roughness = 0.76, metalness = 0, map: T.Texture | null = null) {
     return low
@@ -163,10 +164,17 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   const paintLine = standard(0xe8d9ba, 0.88);
   const shadow = new T.MeshBasicMaterial({ map: ao, transparent: true, depthWrite: false, opacity: 0.84, polygonOffset: true, polygonOffsetFactor: -2 });
 
+  const span = new T.Vector3();
   function add(geometry: T.BufferGeometry, material: T.Material, x: number, y: number, z: number, cast = true, rx = 0, ry = 0, rz = 0) {
     if (included && !included.has(active)) { geometry.dispose(); return; }
+    if (atlas) {
+      geometry.computeBoundingBox();
+      geometry.boundingBox!.getSize(span);
+      const area = Math.max(span.x * span.y, span.x * span.z, span.y * span.z);
+      if (material.transparent || area < (buildingCars ? .24 : .51)) { geometry.dispose(); return; }
+    }
     geometry.rotateX(rx).rotateY(ry).rotateZ(rz).translate(x, y, z);
-    if (finishes.has(material)) {
+    if (!atlas && finishes.has(material)) {
       const position = geometry.getAttribute("position");
       const normal = geometry.getAttribute("normal");
       const uv = geometry.getAttribute("uv");
@@ -204,7 +212,7 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
 
   function rounded(x: number, y: number, z: number, w: number, h: number, d: number, m: T.Material, radius = 0.08, ry = 0) {
     if (included && !included.has(active)) return;
-    const geometry = bakeLighting && radius < 0.055
+    const geometry = atlas || bakeLighting && radius < 0.055
       ? new T.BoxGeometry(w, h, d)
       : new RoundedBoxGeometry(w, h, d, low ? 1 : 2, radius);
     add(geometry, m, x, y, z, true, 0, ry);
@@ -219,7 +227,7 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
 
   function cylinder(x: number, y: number, z: number, rt: number, rb: number, h: number, m: T.Material, n = 32, cast = true) {
     if (included && !included.has(active)) return;
-    add(new T.CylinderGeometry(rt, rb, h, n), m, x, y, z, cast);
+    add(new T.CylinderGeometry(rt, rb, h, atlas ? Math.min(n, 14) : n), m, x, y, z, cast);
   }
 
   function ring(x: number, y: number, z: number, radius: number, tube: number, m: T.Material, segments = 64) {
@@ -265,7 +273,7 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
 
   const signs: Array<{ text: string; x: number; y: number; z: number; width: number; height: number; color: string; site: SurfaceStop }> = [];
   function sign(text: string, x: number, y: number, z: number, width: number, height: number, color = "#ebf1db") {
-    if (included && !included.has(active)) return;
+    if (atlas || included && !included.has(active)) return;
     signs.push({ text, x, y, z, width, height, color, site: active });
   }
 
@@ -297,7 +305,7 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   }
 
   function proxy(x: number, y: number, z: number, w: number, h: number, d: number, hit: Hit) {
-    if (included && !included.has(active)) return;
+    if (atlas || included && !included.has(active)) return;
     const material = new T.MeshBasicMaterial({ visible: false });
     materials.add(material);
     const object = new T.Mesh(new T.BoxGeometry(w, h, d), material);
@@ -1057,7 +1065,7 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   const plaza = new T.Group();
   plaza.applyMatrix4(sites.hq.matrix);
   plaza.add(avatar);
-  if (!included || included.has("hq")) group.add(plaza);
+  if (!atlas && (!included || included.has("hq"))) group.add(plaza);
   else avatar.traverse(object => { if (object instanceof T.Mesh) object.geometry.dispose(); });
 
   addSigns();
@@ -1074,8 +1082,8 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
           geometry.dispose();
           return indexed;
         });
-        if (bakeLighting && material !== asphalt && (material instanceof T.MeshLambertMaterial || material instanceof T.MeshPhongMaterial)) {
-          const finish = finishes.get(material);
+        if (bakeLighting && (atlas || material !== asphalt) && (material instanceof T.MeshLambertMaterial || material instanceof T.MeshPhongMaterial)) {
+          const finish = atlas ? undefined : finishes.get(material);
           const surfaces = baked.get(finish) ?? [];
           for (const geometry of compatible) surfaces.push(bakeSurface(geometry, material, finish !== undefined));
           baked.set(finish, surfaces);
@@ -1108,6 +1116,7 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
     flush(siteBatch, root);
     group.add(root);
     siteMeshes.push({ normal: sites[name].normal, root });
+    if (atlas) atlasSites.set(name, root);
   }
   const cameraNormal = new T.Vector3();
   function cull(eye: T.Vector3) {
@@ -1119,6 +1128,7 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
   flush(carBatches, carFallback);
   carModels.visible = false;
   group.add(carFallback, carModels);
+  if (atlas) atlasSites.get("starcars")?.add(carFallback);
 
   function loadSurfaces(render: () => void) {
     if (surfacesRequested || disposed) return;
@@ -1246,5 +1256,5 @@ export function buildModel(low: boolean, bakeLighting = false, included?: Readon
     textures.clear();
   }
 
-  return { group, sites, hits, avatar, legs, beacon, loadSurfaces, loadCars, showDetailedCars, cull, dispose };
+  return { group, sites, atlasSites, hits, avatar, legs, beacon, loadSurfaces, loadCars, showDetailedCars, cull, dispose };
 }

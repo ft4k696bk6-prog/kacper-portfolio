@@ -49,6 +49,15 @@ export function makeLane(kind: TrafficKind, waypoints: T.Vector3[], surface: Sur
 }
 export type Lane = NonNullable<ReturnType<typeof makeLane>>;
 
+export function loopLane(kind: TrafficKind, size: number, center: T.Vector3, squash: number, surface: Surface, obstacles: Parameters<typeof makeLane>[3]) {
+  const candidates = kind === "water" ? [size, size * .63] : [size, size + .13, size + .25, size + .36];
+  for (const width of candidates) {
+    const lane = makeLane(kind, ringWaypoints(center, width, 14, squash), surface, obstacles);
+    if (lane) return lane;
+  }
+  return null;
+}
+
 export function placeOnLane(object: T.Object3D, lane: Lane, distance: number, basis: T.Matrix4, up: T.Vector3, forward: T.Vector3, right: T.Vector3, lateral = 0) {
   const cursor = T.MathUtils.euclideanModulo(distance, lane.length);
   let first = 0, last = lane.distances.length - 1;
@@ -67,7 +76,7 @@ export function placeOnLane(object: T.Object3D, lane: Lane, distance: number, ba
   object.quaternion.setFromRotationMatrix(basis.makeBasis(right, up, forward));
 }
 
-export function laneMesh(lanes: Lane[], roadbed = "#565668") {
+export function laneGeometry(lanes: Lane[], roadbed = "#565668") {
   const positions: number[] = [], colors: number[] = [], indices: number[] = [];
   const right = new T.Vector3(), direction = new T.Vector3();
   const body = new T.Color(roadbed), pavement = new T.Color("#c6a98c"), marker = new T.Color("#efd496"), rail = new T.Color("#a8c4c3");
@@ -106,7 +115,11 @@ export function laneMesh(lanes: Lane[], roadbed = "#565668") {
   geometry.setAttribute("color", new T.Float32BufferAttribute(colors, 3));
   geometry.setIndex(indices);
   geometry.computeVertexNormals();
-  return new T.Mesh(geometry, new T.MeshLambertMaterial({ vertexColors: true, side: T.DoubleSide }));
+  return geometry;
+}
+
+export function laneMesh(lanes: Lane[], roadbed?: string) {
+  return new T.Mesh(laneGeometry(lanes, roadbed), new T.MeshLambertMaterial({ vertexColors: true, side: T.DoubleSide }));
 }
 
 export function createTraffic() {

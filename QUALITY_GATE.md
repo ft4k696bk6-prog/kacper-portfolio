@@ -1,5 +1,10 @@
 # Bernecki Universe — kontrola jakości
 
+## Widoczność zabudowy z orbity
+
+- Sprawdzono kadry atlasu przed wyborem planety. Widać dziewięć światów z zabudową, w tym salon i tor StarCars. Ukryte światy nadal pojawiają się po odkryciu.
+- Na buildzie produkcyjnym Chromium wyrenderował warstwy przejściowe podczas dolotu na desktopie i w profilu telefonu. Sprawdzono przerwanie lotu, powrót na planetę startową i nawigację przy szerokości 320 px. Build, TypeScript i 364 testy przeszły. [Kadry atlasu](docs/world/README.md#kadry-z-buildu-produkcyjnego)
+
 ## Audyt wydania atlasu
 
 - Porównano rzeczywiste kadry z `fdcf47c` z przebudowanym ekranem wejścia, mapą, kartą realizacji i menu. Na wejściu jest jeden główny tytuł, a widok planety otrzymał własną przestrzeń. Sprawdzono czytelność menu, etykiet planet i przycisków na ekranach 1440 × 900, 390 × 844, 390 × 664 i 320 × 568.

@@ -49,7 +49,7 @@ Dodatkowe ciała niebieskie pojawiają się na mapie po odkryciu.
 
 ## Scena i źródła
 
-Rejestr planet utrzymuje pozycje i promienie. Widok układu używa prostych zastępników. Z aktywną planetą wczytywane są lokalna architektura i ruch, a zasoby projektu są zwalniane po opuszczeniu planety. Drogi, tory i chodniki powstają z tych samych zweryfikowanych próbek co ruch. Trasy wodne korzystają z maski przeciwnej do tras lądowych.
+Rejestr planet utrzymuje pozycje i promienie. Widok układu pokazuje uproszczone wersje charakterystycznych budynków oraz detale dzielnic. Podczas dolotu kamera widzi stopniowe przejście do dokładniejszej sceny. Lokalny ruch uruchamia się po przybyciu, a zasoby projektu są zwalniane po opuszczeniu planety. Drogi, tory i chodniki powstają z tych samych zweryfikowanych próbek co ruch. Trasy wodne korzystają z maski przeciwnej do tras lądowych.
 
 - Samochody ekspozycyjne StarCars pochodzą z modelu [Mid-Engine Supercar v2, tevy · CC0](https://tevy.dev/models/supercar).
 - Kolor, normalne i szorstkość wykorzystują [Asphalt 012](https://ambientcg.com/view?id=Asphalt012), [Concrete 034](https://ambientcg.com/view?id=Concrete034) i [Wood 049](https://ambientcg.com/view?id=Wood049).
