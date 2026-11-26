@@ -5,6 +5,7 @@
 - Porównano rzeczywiste kadry z `fdcf47c` z przebudowanym ekranem wejścia, mapą, kartą realizacji i menu. Na wejściu jest jeden główny tytuł, a widok planety otrzymał własną przestrzeń. Sprawdzono czytelność menu, etykiet planet i przycisków na ekranach 1440 × 900, 390 × 844, 390 × 664 i 320 × 568.
 - Kosmiczna mapa i znaczniki korzystają z tych samych wymiarów płótna. Na telefonie atlas ma identyczny kadr po locie animowanym i po przejściu z ograniczeniem ruchu. Karty mają stały dostęp z planety, rzeczywiste materiały projektowe i powiększony podgląd zdjęć.
 - Zweryfikowano obsługę dotyku i klawiatury, powrót fokusu z menu i podglądu zdjęć, przejście PL → EN → UK z zachowaniem projektu oraz dostęp bez WebGL. Build, TypeScript, 363 testy i kontrola 41 tras przeszły. [Kadry atlasu](docs/world/README.md#kadry-z-buildu-produkcyjnego)
+- W profilu dotykowym StarCars pobiera szczegółowe modele dopiero po zbliżeniu do salonu. Test przejścia z orbity potwierdził pobranie modelu i render samochodów z bliska. Próbka obrotu w WebKit WPE z profilem iPhone 13 osiągnęła 50,7 FPS. Przed zmianą poziomu detalu uzyskano 31,8 FPS w tym profilu. Test wykonano w środowisku emulowanym.
 
 ## Scena i portfolio
 

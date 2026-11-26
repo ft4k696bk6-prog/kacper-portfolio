@@ -107,6 +107,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   let day: "cycle" | "day" | "night" = "cycle";
   let auto = false;
   let fx = true;
+  let nearShowroom = false;
   let moonKnown = false, unknown = false, garage = false;
   let previous = 0, worldTime = 0, pending = 0, timer = 0, flightToken = 0;
   let engineDpr = 1, fastBudget = !software, slow = 0;
@@ -267,6 +268,15 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     }
     redraw();
   }
+  function updateShowroom() {
+    if (flying || body !== "starcars" || !detail) return;
+    // Keep the full cars for close inspection. The orbit uses the batched silhouettes on touch screens.
+    const threshold = detail.viewDistance * (nearShowroom ? 1.95 : 1.75);
+    const close = !compact || camera.position.distanceToSquared(detail.focus) < threshold ** 2;
+    if (close && !nearShowroom) detail.loadCars(() => { renderer.shadowMap.needsUpdate = true; redraw(); });
+    nearShowroom = close;
+    detail.showCars(close);
+  }
   function frame(now: number) {
     // Match the drawing buffer and projected labels to the same committed layout.
     resize();
@@ -318,6 +328,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     }
     play.cull(camera.position);
     detail?.cull(camera.position);
+    updateShowroom();
     renderer.render(scene, camera);
     projectMarkers();
     if (!ready) {
@@ -402,6 +413,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
         if (detail && detail !== prepared) detail.dispose();
         if (previousBody !== next && isSecretBody(previousBody)) play.release(previousBody);
         detail = prepared;
+        nearShowroom = false;
         previewPrepared = undefined;
         body = next;
         poseView = requested ?? { zone: null, project: null };
@@ -415,7 +427,6 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
         setControls(!!requested?.zone && requested.zone !== "contact");
         placeLight();
         detail?.loadSurfaces(redraw);
-        detail?.loadCars(() => { detail?.showCars(true); renderer.shadowMap.needsUpdate = true; redraw(); });
         callbacks.traveling(null);
         callbacks.arrived(destination);
         redraw();
