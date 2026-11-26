@@ -7,7 +7,8 @@ Portfel projektów działa pod adresami `/world`, `/en/world` i `/uk/world`. Wej
 | Cel | Sterowanie |
 | --- | --- |
 | Obejrzyj planetę | Przeciągnij palcem lub myszą. Użyj gestu dwoma palcami, kółka albo klawiszy + i −, by zmienić zoom. Strzałki na scenie obracają kamerę. |
-| Przejdź między światami | Użyj Mapy układu lub menu. Klawisz G otwiera mapę, a Escape przerywa lot. |
+| Przejdź między światami | Użyj Mapy układu lub menu. Wskazanie planety myszą lub klawiaturą pokazuje jej opis. Wybierz planetę, aby polecieć. Klawisz G otwiera mapę, a Escape przerywa lot. |
+| Odzyskaj kadr | Użyj przycisku z okrągłą strzałką obok opisu planety lub mapy. |
 | Zobacz projekt | Wybierz „Zobacz realizacje” na wejściu albo „O projekcie” podczas wizyty na planecie. Możesz też wybrać obiekt na powierzchni lub otworzyć kartę z menu. |
 | Odkrywaj | Klikaj miejsca w scenie. E aktywuje najbliższą widoczną wskazówkę. Dziennik zachowuje stan w przeglądarce. |
 | Fotografuj | Klawisz F lub menu kamery włącza tryb zdjęć. Escape przywraca interfejs. |
@@ -33,8 +34,9 @@ Dodatkowe ciała niebieskie pojawiają się na mapie po odkryciu.
 ## Kadry z buildu produkcyjnego
 
 - [Wejście](screenshots/atlas-home.webp) · [Atlas](screenshots/atlas-map.webp) · [Menu](screenshots/atlas-menu.webp)
+- [Podświetlenie planety](screenshots/atlas-highlight.webp) · [Postęp lotu](screenshots/atlas-travel.webp)
 - [StarCars i karta realizacji](screenshots/atlas-project.webp) · [Podgląd zdjęcia](screenshots/atlas-photo.webp)
-- [Wejście na telefonie](screenshots/atlas-mobile-home.webp) · [Mapa na ekranie 320 px](screenshots/atlas-mobile-map.webp) · [Karta projektu na telefonie](screenshots/atlas-mobile-project.webp)
+- [Wejście na telefonie](screenshots/atlas-mobile-home.webp) · [Mapa na ekranie 320 px](screenshots/atlas-mobile-map.webp) · [Karta projektu na ekranie 320 px](screenshots/atlas-mobile-project.webp)
 - [Sprawdzenia i pomiary](../../QUALITY_GATE.md) · [Stan projektu](../../PROGRESS.md)
 
 ## Kadry z poprzedniego wydania

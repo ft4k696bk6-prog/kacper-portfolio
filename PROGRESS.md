@@ -1,5 +1,6 @@
 # Bernecki Universe
 
+- Atlas podświetla planetę i pokazuje opis po wskazaniu myszą lub klawiaturą. Podczas lotu widać postęp i przycisk przerwania. Dopracowano niebo, bryły gór, wybrzeża i pomost przy latarni. Na ekranie 320 px karta projektu otwiera się od nagłówka.
 - Atlas pokazuje zabudowę przed wybraniem planety. Odpowiedniki budynków i tor StarCars widać z orbity, a scena w pełnym detalu stopniowo przejmuje obraz podczas dolotu.
 - Wydanie atlasu wprowadza nowy ekran wejścia, mapę i menu, karty realizacji z podglądem zdjęć oraz nową oprawę sceny 3D. Wariant sprzed zmian jest zachowany na `backup/universe-before-visual-refinement`.
 - Dopracowano siedzibę i budynki projektowe, wybrzeża, oświetlenie i kadr otwarcia. Drogi na planecie startowej nadal korzystają ze wspólnej walidacji terenu i przeszkód.

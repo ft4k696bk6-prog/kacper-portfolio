@@ -18,6 +18,8 @@
   --bar: 83px;
   --split: clamp(245px, 28vw, 510px);
   --field: #192b3b;
+  --dust: .58;
+  --dust-tone: 0deg;
   position: relative;
   isolation: isolate;
   display: grid;
@@ -28,11 +30,12 @@
   background: radial-gradient(ellipse at 57% 53%, var(--field), #101726 51%, var(--ink) 81%);
 }
 .world[data-opening="true"] { background: radial-gradient(ellipse at 68% 49%, var(--field), #0e1624 55%, var(--ink) 83%); }
-.world[data-body="system"] { --field: #1a263d; }
-.world[data-body="signal"] { --field: #302844; }
-.world[data-body="starcars"], .world[data-body="motomizer"] { --field: #302c37; }
-.world[data-body="reenergy"] { --field: #203b39; }
-.world[data-body="beatmarket"], .world[data-body="ai"] { --field: #2a2746; }
+.world[data-body="system"] { --field: #1a263d; --dust: 1; }
+.world[data-body="signal"] { --field: #302844; --dust-tone: 43deg; }
+.world[data-body="starcars"], .world[data-body="motomizer"] { --field: #302c37; --dust-tone: 15deg; }
+.world[data-body="reenergy"] { --field: #203b39; --dust-tone: -25deg; }
+.world[data-body="beatmarket"], .world[data-body="ai"] { --field: #2a2746; --dust-tone: 37deg; }
+.world[data-transit] { --dust: 1; }
 .world[data-light="night"] { --field: #20233c; }
 .world[data-light="night"] .canvas { filter: brightness(.81) saturate(.84) hue-rotate(5deg); }
 .world::before {
@@ -50,6 +53,13 @@
   background-position: 31px 13px, 131px 89px, 80% 43%;
   background-repeat: repeat, repeat, no-repeat;
   mask-image: radial-gradient(ellipse at 62% 51%, #000, #0008 69%, transparent 93%);
+}
+.world::after {
+  content: ""; position: absolute; z-index: -1; inset: 0; pointer-events: none;
+  background: url("/images/world/cosmic-dust.webp") 76% 48% / cover no-repeat;
+  mix-blend-mode: screen; filter: hue-rotate(var(--dust-tone)); opacity: var(--dust);
+  mask-image: radial-gradient(ellipse at 62% 53%, #000 17%, #000a 59%, transparent 91%);
+  transition: opacity .6s var(--ease);
 }
 .world :focus-visible, .choicePage :focus-visible { outline: 2px solid var(--lime); outline-offset: 4px; }
 
@@ -482,5 +492,8 @@
 }
 @keyframes world-menu-mobile { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
-  .world *, .world *::before, .world *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  .world::before, .world::after, .world *, .world *::before, .world *::after {
+    animation-duration: .01ms !important;
+    transition: none !important;
+  }
 }

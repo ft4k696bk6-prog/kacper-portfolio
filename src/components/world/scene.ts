@@ -24,6 +24,8 @@ type Callbacks = {
   found: (id: FindId) => void;
   beacon: (id: Beacon, x: number, y: number, visible: boolean) => void;
   planet: (id: Body, x: number, y: number, visible: boolean) => void;
+  atlasFocus: (id: Body | null) => void;
+  flightProgress: (progress: number) => void;
   arrived: (body: Destination) => void;
   traveling: (body: Destination | null, keepPanel?: boolean) => void;
   moonRevealed: () => void;
@@ -111,6 +113,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   let auto = false;
   let fx = true;
   let nearShowroom = false;
+  let atlasFocus: Body | null = null;
   let moonKnown = false, unknown = false, garage = false;
   let previous = 0, worldTime = 0, pending = 0, timer = 0, flightToken = 0;
   let engineDpr = 1, fastBudget = !software, slow = 0;
@@ -230,7 +233,10 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   function projectMarkers() {
     for (const { key } of spheres) {
       const point = !body && universe.marker(key);
-      coords(point || null, (x, y, on) => callbacks.planet(key, x, y, on));
+      coords(point || null, (x, y, on) => {
+        if (!on && atlasFocus === key) highlightPlanet(null);
+        callbacks.planet(key, x, y, on);
+      });
     }
     const hq = body === "home" && !poseView.zone ? v.copy(home.avatar.position).add(new T.Vector3(0, 2.3, 0)).applyMatrix4(home.sites.hq.matrix) : null;
     coords(hq && v.dot(camera.position.clone().sub(v)) > 0 ? hq : null, (x, y, on) => callbacks.marker("hq", x, y, on));
@@ -297,6 +303,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     if (flight) {
       const progress = Math.max(0, Math.min(1, (now - flight.start) / flight.duration, flight.progress + flight.maxStep));
       flight.progress = progress;
+      if (flying) callbacks.flightProgress(progress);
       flight.tween.progress(progress);
       if (progress === 1) {
         const done = flight.finish;
@@ -335,6 +342,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       renderer.setDrawingBufferSize(bounds.x, bounds.y, ratio);
     }
     if (body === "home") cullHome(camera.position);
+    universe.highlight(atlasFocus, camera.position);
     detail?.cull(camera.position);
     updateShowroom();
     renderer.render(scene, camera);
@@ -376,6 +384,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
       return;
     }
     const token = ++flightToken;
+    highlightPlanet(null);
     cancelTransition();
     clearArrival();
     previewPrepared?.dispose();
@@ -535,12 +544,25 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     if (detail) callbacks.select(detail.inspect);
     else if (body === "home") callbacks.select({ zone: "hq" });
   }
-  function pick(event: PointerEvent) {
+  function setRay(event: PointerEvent) {
     const box = canvas.getBoundingClientRect();
     cast.setFromCamera(originRay.set((event.clientX - box.left) * 2 / box.width - 1, 1 - (event.clientY - box.top) * 2 / box.height), camera);
+  }
+  function raycastPlanet() {
+    return cast.intersectObjects(universe.visible(), false)[0]?.object.userData.body as Body | undefined;
+  }
+  function highlightPlanet(id: Body | null, owner?: Body) {
+    if (id && (body || flying || mode === "photo")) return;
+    if ((owner && owner !== atlasFocus) || atlasFocus === id) return;
+    atlasFocus = id;
+    callbacks.atlasFocus(id);
+    redraw();
+  }
+  function pick(event: PointerEvent) {
+    setRay(event);
     if (!body) {
       if (universe.hitVisitor(cast)) return encounter;
-      const found = cast.intersectObjects(universe.visible(), false)[0]?.object.userData.body as Body | undefined;
+      const found = raycastPlanet();
       return found ? () => { void fly(found); } : undefined;
     }
     if (body === "home" && moonKnown && universe.marker("moon")) {
@@ -580,6 +602,13 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   }
   function hover(event: PointerEvent) {
     if (event.pointerType !== "mouse" || event.buttons || flying) return;
+    if (!body && mode !== "photo") {
+      setRay(event);
+      const id = raycastPlanet();
+      highlightPlanet(id ?? null);
+      canvas.style.cursor = id || universe.hitVisitor(cast) ? "pointer" : "grab";
+      return;
+    }
     canvas.style.cursor = pick(event) ? "pointer" : "grab";
   }
   function startDrag() { dragging = true; redraw(); }
@@ -620,12 +649,21 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
     camera.position.copy(controls.target).add(offset.setFromSpherical(spherical));
     redraw();
   }
+  function resetCamera() {
+    if (flying) return;
+    if (body) { focus(poseView, false); return; }
+    cancelTransition();
+    setUp(null);
+    setPose(mapPose());
+    setControls(false);
+    redraw();
+  }
 
   const observer = new ResizeObserver(resize);
   const controller = {
-    moveView, fly, zoom, nudge, inspect, revealMoon, stopFlight,
+    moveView, fly, zoom, nudge, inspect, revealMoon, stopFlight, highlightPlanet, resetCamera,
     refresh() { resize(); redraw(); },
-    setMode(next: CameraMode) { mode = next; if (next === "planet" && body) focus({ zone: null, project: null }, false); redraw(); },
+    setMode(next: CameraMode) { mode = next; if (next === "photo") highlightPlanet(null); if (next === "planet") resetCamera(); redraw(); },
     scan() {
       if (body !== "home" || flying) return;
       cancelTransition();
@@ -686,6 +724,7 @@ export async function createWorld(host: HTMLElement, callbacks: Callbacks, signa
   canvas.addEventListener("pointerdown", down);
   canvas.addEventListener("pointerup", up);
   canvas.addEventListener("pointermove", hover);
+  canvas.addEventListener("pointerleave", () => { if (!document.activeElement?.matches("[data-map-body]")) highlightPlanet(null); });
   canvas.addEventListener("pointercancel", () => { press = undefined; });
   canvas.addEventListener("webglcontextlost", contextLost);
   document.addEventListener("visibilitychange", visibility);

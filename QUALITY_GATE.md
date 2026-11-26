@@ -1,5 +1,11 @@
 # Bernecki Universe — kontrola jakości
 
+## Oprawa i sterowanie eksploracją
+
+- Na mapie sprawdzono podświetlenie planety myszą i klawiaturą, opis celu, powrót kamery do domyślnego kadru oraz wskaźnik w trakcie lotu.
+- Chromium potwierdził czytelność dziewięciu etykiet na ekranach 1440 × 900, 390 × 844 i 320 × 568. Na 320 px Chromium i WebKit otwierają kartę od tytułu. Sprawdzono rozdzielenie przycisków projektu i kamery oraz położenie elementów paska sterowania.
+- Build produkcyjny, TypeScript, 364 testy, audyt Axe oraz kontrola 41 tras przeszły. Sprawdzono też tryb bez WebGL i przełączanie języków. [Kadry](docs/world/README.md#kadry-z-buildu-produkcyjnego)
+
 ## Widoczność zabudowy z orbity
 
 - Sprawdzono kadry atlasu przed wyborem planety. Widać dziewięć światów z zabudową, w tym salon i tor StarCars. Ukryte światy nadal pojawiają się po odkryciu.

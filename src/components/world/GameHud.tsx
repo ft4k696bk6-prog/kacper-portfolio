@@ -1,8 +1,8 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, ArrowUpRight, Camera, ChevronDown, Compass, Crosshair, Gem, House, Minus, Moon, Orbit, Plus, Radio, SlidersHorizontal, Telescope, X } from "lucide-react";
-import type { RefObject } from "react";
-import { awards, findCount, type CameraMode } from "./discoveries";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Camera, ChevronDown, Compass, Crosshair, Gem, House, Minus, Moon, Orbit, Plus, Radio, RotateCcw, SlidersHorizontal, Telescope, X } from "lucide-react";
+import type { CSSProperties, RefObject } from "react";
+import { awards, findCount, type Body, type CameraMode } from "./discoveries";
 import type { WorldLocale } from "./content";
 import type { GameCopy } from "./gameCopy";
 import { landmarkLabel, planets, projectBodies, publicBodies, visibleBodies } from "./planets";
@@ -12,6 +12,8 @@ import styles from "./game.module.css";
 
 type Game = ReturnType<typeof useWorldGame>;
 type Shared = { game: Game; copy: GameCopy; scene: RefObject<WorldController | null> };
+
+function bodyLabel(id: Body, copy: GameCopy) { return id === "moon" ? copy.moon : planets[id].label; }
 
 export function GameBeacons({ game, copy, scene, locale }: Shared & { locale: WorldLocale }) {
   const body = game.body;
@@ -29,17 +31,24 @@ export function GameBeacons({ game, copy, scene, locale }: Shared & { locale: Wo
     </button>)}
     {map.map(id => <button key={id} type="button" className={styles.mapTag}
       ref={node => { game.markers.current[`map-${id}`] = node; }}
-      data-map-body={id} data-visible="false" tabIndex={-1} onClick={() => void scene.current?.fly(id)}>
-      <span>{id === "moon" ? copy.moon : planets[id].label}</span>
-      <ArrowUpRight size={12} strokeWidth={1.55} aria-hidden="true" />
+      data-map-body={id} data-atlas-focus={game.atlasFocus === id || undefined} data-visible="false" tabIndex={-1}
+      aria-label={bodyLabel(id, copy)} aria-describedby={`atlas-note-${id}`}
+      style={{ "--atlas-planet-accent": `#${planets[id].colors[2].toString(16).padStart(6, "0")}` } as CSSProperties}
+      onPointerEnter={event => { if (event.pointerType === "mouse") scene.current?.highlightPlanet(id); }}
+      onPointerLeave={event => { if (event.currentTarget !== document.activeElement) scene.current?.highlightPlanet(null, id); }}
+      onFocus={() => scene.current?.highlightPlanet(id)} onBlur={() => scene.current?.highlightPlanet(null, id)}
+      onClick={() => void scene.current?.fly(id)}>
+      <span className={styles.tagDot} aria-hidden="true" /><span>{bodyLabel(id, copy)}</span>
+      <span id={`atlas-note-${id}`} className={styles.accessibleNote}>{copy.worldNotes[id]}</span>
     </button>)}
   </div>;
 }
 
 export function GameHud({ game, copy, scene, change, openLog }: Shared & { change: (mode: CameraMode) => void; openLog: () => void; }) {
-  const { body, mode, transit, notice, expedition } = game;
+  const { body, mode, transit, notice, expedition, atlasFocus } = game;
   const destination = transit === "system" ? copy.map : transit === "signal" && !expedition.signal ? copy.faint : transit ? planets[transit].label : "";
   const system = body === "system";
+  const caption = system ? atlasFocus : body;
   const hasProject = body === "ai" || projectBodies.some(id => id === body);
   const destinationLabel = system ? copy.home : copy.map;
   const MapIcon = system ? House : Orbit;
@@ -51,6 +60,7 @@ export function GameHud({ game, copy, scene, change, openLog }: Shared & { chang
   if (mode === "photo") return <button type="button" className={styles.exitPhoto} onClick={() => change("explore")}><X size={16} strokeWidth={1.55} aria-hidden="true" />{copy.photoExit} <kbd>Esc</kbd></button>;
   return <>
     {transit && <div className={styles.transit}>
+      <span className={styles.flightTrack} aria-hidden="true"><span ref={game.flightTrack} /></span>
       <span className={styles.transitStatus} role="status">
         <Radio size={18} strokeWidth={1.55} aria-hidden="true" />
         <span><span className={styles.eyebrow}>{copy.traveling}</span><strong>{destination}</strong></span>
@@ -58,18 +68,21 @@ export function GameHud({ game, copy, scene, change, openLog }: Shared & { chang
       <button type="button" onClick={() => scene.current?.stopFlight()} aria-label={copy.cancel} title={copy.cancel}><X size={17} strokeWidth={1.55} aria-hidden="true" /></button>
     </div>}
     <div className={styles.notice} role="status" aria-live="polite">{notice && <><Gem size={16} strokeWidth={1.55} aria-hidden="true" /><span>{notice}</span></>}</div>
-    {!transit && body !== "home" && <div className={styles.location}>
+    {!transit && body !== "home" && <div className={styles.location} data-location={system ? "atlas" : "world"}>
       <div className={styles.locationCopy}>
-        {system ? <><strong>{copy.map}</strong><p>{copy.mapHint}</p></> :
-          <><span className={styles.eyebrow}>{copy.world}</span><strong>{body === "moon" ? copy.moon : planets[body].label}</strong></>}
-        {body === "signal" && <p>{copy.signalNote}</p>}
-        {body === "moon" && <p>{copy.moonNote}</p>}
+        <strong>{caption ? bodyLabel(caption, copy) : copy.map}</strong>
+        <p>{system ? caption ? copy.worldNotes[caption] : copy.mapHint : body === "moon" ? copy.moonNote : body === "signal" ? copy.signalNote : copy.worldNotes[body]}</p>
       </div>
-      {hasProject && <button type="button" className={styles.caseAction} onClick={() => scene.current?.inspect()}>
-        {copy.projectDetails}<ArrowUpRight size={17} strokeWidth={1.55} aria-hidden="true" />
-      </button>}
+      <div className={styles.locationActions}>
+        {hasProject && <button type="button" className={styles.caseAction} onClick={() => scene.current?.inspect()}>
+          {copy.projectDetails}<ArrowUpRight size={17} strokeWidth={1.55} aria-hidden="true" />
+        </button>}
+        <button type="button" className={styles.resetView} onClick={() => scene.current?.resetCamera()} aria-label={copy.reset} title={copy.reset}>
+          <RotateCcw size={16} strokeWidth={1.55} aria-hidden="true" />
+        </button>
+      </div>
     </div>}
-    <div className={styles.hud} role="group" aria-label={copy.controls} data-hud-body={body}>
+    {!transit && <div className={styles.hud} role="group" aria-label={copy.controls} data-hud-body={body}>
       <div className={styles.dockPair}>
         <button type="button" onClick={() => traverse(-1)} aria-label={copy.previous} title={copy.previous}><ArrowLeft size={17} strokeWidth={1.55} aria-hidden="true" /></button>
         <button type="button" onClick={() => traverse(1)} aria-label={copy.next} title={copy.next}><ArrowRight size={17} strokeWidth={1.55} aria-hidden="true" /></button>
@@ -87,7 +100,7 @@ export function GameHud({ game, copy, scene, change, openLog }: Shared & { chang
       <button type="button" className={styles.count} onClick={openLog} aria-label={`${copy.discovery} ${expedition.finds.length}/${findCount}`} title={copy.discovery}>
         <Gem size={16} strokeWidth={1.55} aria-hidden="true" /><span>{expedition.finds.length}/{findCount}</span>
       </button>
-    </div>
+    </div>}
   </>;
 }
 

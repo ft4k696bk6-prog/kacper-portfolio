@@ -160,6 +160,8 @@ export function World({ locale }: { locale: WorldLocale }) {
             },
             beacon(id, x, y, visible) { gameRef.current.project(id, x, y, visible); },
             planet(id, x, y, visible) { gameRef.current.project(id, x, y, visible, true); },
+            atlasFocus(id) { gameRef.current.setAtlasFocus(id); },
+            flightProgress(progress) { gameRef.current.flightTrack.current?.style.setProperty("--flight-progress", String(progress)); },
             moonRevealed() { gameRef.current.revealMoon(true); },
             found(id) {
               if (gameRef.current.found(id)) gameRef.current.notify(finds[id][localeIndex[locale]]);
@@ -232,13 +234,10 @@ export function World({ locale }: { locale: WorldLocale }) {
     focusOnChange.current = false;
     if (selection.zone) {
       title.current?.focus({ preventScroll: true });
-      if (window.matchMedia("(max-width: 830px)").matches) {
-        const panel = title.current?.closest("[data-testid=world-place]");
-        if (panel) panel.scrollIntoView({ block: "start", behavior: "instant" });
-      } else {
-        const panel = title.current?.closest("[data-testid=world-place]");
-        if (panel) panel.scrollTop = 0;
-      }
+      const panel = title.current?.closest("[data-testid=world-place]");
+      if (!panel) return;
+      if (window.matchMedia("(max-width: 830px)").matches) panel.scrollIntoView({ block: "start", behavior: "instant" });
+      else panel.scrollTop = 0;
       return;
     }
     const trigger = lastTrigger.current;

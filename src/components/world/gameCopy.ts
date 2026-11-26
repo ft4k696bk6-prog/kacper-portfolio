@@ -1,4 +1,4 @@
-import { localeIndex, type Award } from "./discoveries";
+import { localeIndex, type Award, type Body } from "./discoveries";
 import type { WorldLocale } from "./content";
 
 export function gameCopy(locale: WorldLocale) {
@@ -60,6 +60,20 @@ export function gameCopy(locale: WorldLocale) {
     moonNote: l("Baza K-01 · Zbadaj teren wokół lądowiska.", "Base K-01 · Explore the area around the landing site.", "База K-01 · Дослідіть місцевість навколо посадки."),
     signalNote: l("Stacja w The Unknown · Odczytaj ślady po dawnym eksperymencie.", "The Unknown station · Trace the remains of an old experiment.", "Станція в The Unknown · Знайдіть сліди давнього експерименту."),
     docking: l("Wróć na planetę", "Return to the planet", "Повернутися на планету"),
+    worldNotes: {
+      home: l("Siedziba, port i obserwatorium", "Headquarters, harbour and observatory", "Штаб, порт і обсерваторія"),
+      starcars: l("Import aut, salon i tor", "Car imports, showroom and track", "Імпорт авто, салон і траса"),
+      reenergy: l("Fotowoltaika i magazyny energii", "Solar power and energy storage", "Сонячна енергія та її зберігання"),
+      "b-crm": l("CRM i przepływ leadów", "CRM and lead workflows", "CRM і робота з лідами"),
+      ai: l("Sztuczna inteligencja i automatyzacje", "AI and automation", "ШІ та автоматизація"),
+      motomizer: l("Warsztat i linia montażowa", "Workshop and assembly line", "Майстерня і складальна лінія"),
+      beatmarket: l("Muzyka na scenie i w sieci", "Music on stage and online", "Музика на сцені й онлайн"),
+      "isto-kebab": l("Bistro i zamówienia online", "Bistro and online ordering", "Бістро та онлайн-замовлення"),
+      jalapeno: l("Street food i kampanie reklamowe", "Street food and ad campaigns", "Вулична їжа та рекламні кампанії"),
+      moon: l("Baza i lądowisko K-01", "K-01 base and landing pad", "База та посадковий майданчик K-01"),
+      garage: l("Platforma i hangar G-02", "G-02 platform and hangar", "Платформа й ангар G-02"),
+      signal: l("Opuszczona stacja badawcza", "Abandoned research station", "Покинута дослідницька станція"),
+    } satisfies Record<Body, string>,
     awards: {
       first: l("Pierwsze odkrycie", "First discovery", "Перше відкриття"),
       traveler: l("Podróżnik", "Traveler", "Мандрівник"),

@@ -84,7 +84,31 @@ export function makeUniverse(low: boolean) {
       const theta = i * Math.PI / 60;
       return new T.Vector3(rx * Math.cos(theta), ry * Math.sin(theta), -39 + 4 * Math.sin(theta));
     });
-    const trace = new T.LineLoop(new T.BufferGeometry().setFromPoints(points), new T.LineBasicMaterial({ color: orbitalColor, transparent: true, opacity: index === 2 ? .36 : .25, depthWrite: false }));
+    // Use fragment coverage for the orbit strokes at both full and reduced render resolution.
+    const trace = new T.Mesh(new T.RingGeometry(.97, 1.03, 144), new T.ShaderMaterial({
+      transparent: true, depthWrite: false, side: T.DoubleSide, toneMapped: false,
+      uniforms: { tint: { value: orbitalColor }, strength: { value: index === 2 ? .28 : .21 } },
+      vertexShader: /* glsl */ `
+        varying vec2 orbitPoint;
+        void main() {
+          orbitPoint = position.xy;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }`,
+      fragmentShader: /* glsl */ `
+        varying vec2 orbitPoint;
+        uniform vec3 tint;
+        uniform float strength;
+        void main() {
+          float radius = length(orbitPoint);
+          float pixelWidth = max(fwidth(radius), .0005);
+          float stroke = 1.0 - smoothstep(.18, 1.18, abs(radius - 1.0) / pixelWidth);
+          gl_FragColor = vec4(tint, strength * stroke);
+          #include <colorspace_fragment>
+        }`,
+    }));
+    trace.scale.set(rx, Math.hypot(ry, 4), 1);
+    trace.rotation.x = Math.atan2(4, ry);
+    trace.position.z = -39;
     orbitGroup.add(trace);
     for (let i = 0; i < points.length; i += index === 2 ? 3 : 6) {
       const point = points[i];
@@ -96,6 +120,32 @@ export function makeUniverse(low: boolean) {
   orbitGroup.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(ticks), new T.LineBasicMaterial({
     color: "#a89581", transparent: true, opacity: .41, depthWrite: false,
   })));
+  const focusTint = new T.Color();
+  const focusLight = new T.Color(0xffe6c0);
+  const halo = new T.Mesh(new T.RingGeometry(1.035, 1.34, 72), new T.ShaderMaterial({
+    transparent: true, depthWrite: false, toneMapped: false,
+    uniforms: { tint: { value: focusTint } },
+    vertexShader: /* glsl */ `
+      varying vec2 ring;
+      void main() {
+        ring = position.xy;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.);
+      }`,
+    fragmentShader: /* glsl */ `
+      varying vec2 ring;
+      uniform vec3 tint;
+      void main() {
+        float r = length(ring);
+        float glow = .19 * (1.0 - smoothstep(.014, .23, abs(r - 1.09)));
+        float outline = .49 * (1.0 - smoothstep(.010, .041, abs(r - 1.10)));
+        float arcs = smoothstep(.63, .81, abs(cos(2.0 * atan(ring.y, ring.x) - .41)));
+        float edge = .48 * arcs * (1.0 - smoothstep(.009, .037, abs(r - 1.23)));
+        gl_FragColor = vec4(tint, glow + outline + edge);
+        #include <colorspace_fragment>
+      }`,
+  }));
+  halo.visible = false;
+  orbitGroup.add(halo);
   const positions: T.Vector3[] = [];
   const shine: number[] = [];
   const count = low ? 400 : 760;
@@ -180,6 +230,16 @@ export function makeUniverse(low: boolean) {
       object.visible = fraction < 1;
     },
     visible() { return selectable.filter(item => item.parent?.visible); },
+    highlight(id: Body | null, eye: T.Vector3) {
+      const target = id && objects.get(id);
+      halo.visible = !!target && target.visible && orbitGroup.visible;
+      if (!id || !target || !halo.visible) return;
+      const radius = planets[id].radius;
+      halo.position.copy(target.position);
+      halo.scale.setScalar(radius);
+      halo.lookAt(eye);
+      focusTint.setHex(planets[id].colors[2]).lerp(focusLight, .48);
+    },
     get visitor() { return orbitGroup.visible && saucer.visible ? saucer.position : null; },
     hitVisitor(ray: T.Raycaster) { return orbitGroup.visible && saucer.visible && ray.intersectObject(saucer,true).length > 0; },
     marker(id: Body) { return objects.get(id)?.visible ? objects.get(id)!.position : null; },

@@ -10,7 +10,7 @@ const islands = [
 const coast = 0.65;
 const palette = {
   ocean: new T.Color("#245a78"), deep: new T.Color("#142648"), shoal: new T.Color("#409194"),
-  foam: new T.Color("#9ab9b0"), sand: new T.Color("#ac916e"), grass: new T.Color("#819571"),
+  foam: new T.Color("#c5d8c2"), sand: new T.Color("#ac916e"), grass: new T.Color("#819571"),
   meadow: new T.Color("#a6a476"), pine: new T.Color("#4b655d"), rock: new T.Color("#9c8581"),
 };
 const sun = new T.Vector3(33, 56, 37).normalize();
@@ -39,8 +39,10 @@ function paintTerrain(direction: T.Vector3, color: T.Color, value = terrainField
   if (value < coast) {
     color.copy(palette.deep).lerp(palette.ocean, edge(value + variation * .030, -0.025, 0.49));
     color.lerp(palette.shoal, edge(value + grain * .006, 0.437, coast));
-    const surf = edge(value + grain * .003, coast - .025, coast - .016) * (1 - edge(value, coast - .008, coast));
-    color.lerp(palette.foam, surf * (.19 + variation * .11)).lerp(palette.sand, shore);
+    const breakers = coast - value + grain * .003;
+    const surf = 1 - edge(Math.abs(breakers - .022), .005, .020);
+    const foam = (1 - edge(Math.abs(breakers - .062 + .004 * variation), .004, .014)) * (variation * .5 + .5);
+    color.lerp(palette.foam, surf * (.36 + variation * .12) + foam * .16).lerp(palette.sand, shore);
     const wind = Math.sin(z * 31 + y * 19 + 1.4 * Math.sin(x * 8 - y * 10));
     const swell = edge(wind, .86, .99) * edge(variation, -.36, .83) * (1 - edge(value, .45, .61));
     color.multiplyScalar(1 + variation * .032 + grain * .012 + swell * .10);

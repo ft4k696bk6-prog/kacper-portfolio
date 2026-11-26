@@ -52,6 +52,7 @@ export function makePlanetSkin(body: Body, low: boolean, proxy = false) {
   const [deep, shallows, land, shore] = info.colors.map(color => new T.Color(color));
   deep.lerp(new T.Color("#142541"), .22);
   const accent = new T.Color("#69647d");
+  const spray = shallows.clone().lerp(new T.Color("#f1e4ca"), .64);
   const Highlands = land.clone().lerp(accent, .36);
   const next = new T.Color(), direction = new T.Vector3();
   const ground = (body === "moon" || body === "signal" || body === "garage");
@@ -70,7 +71,8 @@ export function makePlanetSkin(body: Body, low: boolean, proxy = false) {
       color.lerp(Highlands, ease(relief + stratum * .15, -.43, .85) * .83);
     } else {
       color.copy(deep).lerp(shallows, ease(edge + relief * .045, -.42, .006) * .85);
-      color.lerp(shore, ease(edge - grain * .004, -.014, -.002) * (1 - ease(edge, -.001, 0)) * .27);
+      const surf = 1 - ease(Math.abs(edge + .019 + grain * .002), .004, .014);
+      color.lerp(spray, surf * (.25 + stratum * .12));
     }
     color.multiplyScalar(1 + grain * .028 + stratum * .043 + relief * .059);
     return ground ? 0 : 1 - ease(edge, -.018, 0);

@@ -11,9 +11,11 @@ export function useWorldGame() {
   const [expedition, setExpedition] = useState<Expedition>(emptyExpedition);
   const [equipment, setEquipment] = useState({ auto: false, sound: false, fx: true, day: "cycle" as "cycle" | "day" | "night", quality: "auto" as "auto" | "economy" | "high" });
   const [notice, setNotice] = useState("");
+  const [atlasFocus, setAtlasFocus] = useState<Body | null>(null);
   const live = useRef(emptyExpedition);
   const markers = useRef<Partial<Record<Beacon | `map-${Body}`, HTMLButtonElement | null>>>({});
   const timer = useRef<number>(0);
+  const flightTrack = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     live.current = readExpedition();
@@ -72,5 +74,6 @@ export function useWorldGame() {
     scene.setEffects(equipment.fx);
   }
 
-  return { body, transit, mode, expedition, equipment, notice, markers, notify, found, arrive, project, init, chartedMoon, revealMoon, setTransit, setMode, setEquipment };
+  return { body, transit, mode, expedition, equipment, notice, markers, notify, found, arrive, project, init, chartedMoon, revealMoon, setTransit, setMode, setEquipment,
+    atlasFocus, setAtlasFocus, flightTrack };
 }

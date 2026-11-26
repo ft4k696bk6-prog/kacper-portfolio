@@ -2,7 +2,7 @@ import * as T from "three";
 import { findCount, type Body, type FindId, type SecretBody } from "./discoveries";
 import { alignRadially, box, disposeObjects, gamePalette, solid } from "./gameObjects";
 import { globeDirection, globeRadius, makeSurfaceSites } from "./globe";
-import { surfaceRadius } from "./terrain";
+import { lighthouseDirection, surfaceRadius } from "./terrain";
 import { isSecretBody, planets } from "./planets";
 import { makeDistrict } from "./district";
 import { impactDirection, lakeDirection, makeWorldLife, observatoryDirection, portDirection, ridgeDirection, volcanoDirection } from "./worldLife";
@@ -241,6 +241,7 @@ export function createPlay(scene: T.Scene, low: boolean, hooks: Hooks) {
       { normal: volcanoDirection, radius: .18, height: 2.75 },
       { normal: ridgeDirection, radius: .13, height: 3.73 },
       { normal: observatoryDirection, radius: .09, height: 2.68 },
+      { normal: lighthouseDirection, radius: .10, height: 2.65 },
       { normal: portDirection, radius: .092, height: 1.7 }],
     homeSurface: home,
     get storm() { return stormActive && currentBody === "home"; },

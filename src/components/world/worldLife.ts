@@ -152,13 +152,49 @@ export function makeWorldLife(p: GamePalette, low: boolean) {
     lighthouse.add(solid(new T.CylinderGeometry(.019, .019, .49, 6), p.ink, Math.cos(angle) * .29, 1.98, Math.sin(angle) * .29));
   }
   for (let i = 0; i < 5; i++) lighthouse.add(box(.46, .11, .18, p.chalk, 0, .18 - i * .02, .60 + i * .18));
+  const dock = new T.Group();
+  lighthouse.add(dock);
+  const timber = new T.MeshLambertMaterial({ color: 0x9e7d62 });
+  const wetTimber = new T.MeshLambertMaterial({ color: 0x6a5048 });
+  const deck = new T.InstancedMesh(new T.BoxGeometry(.82, .089, .145), timber, 19);
+  const deckPoint = new T.Vector3(), pierMatrix = new T.Matrix4();
+  const baseRadius = lighthouse.position.length();
+  function deckHeight(z: number) {
+    deckPoint.set(0, 0, z).applyQuaternion(lighthouse.quaternion).add(lighthouse.position).normalize();
+    return Math.sqrt(surfaceRadius(deckPoint) ** 2 - z ** 2) - baseRadius + .14;
+  }
+  for (let i = 0; i < deck.count; i++) {
+    const z = 1.42 + i * .151;
+    const y = deckHeight(z);
+    deck.setMatrixAt(i, pierMatrix.makeTranslation(0, y, z));
+    if (i % 4 === 0 || i === deck.count - 1) for (const x of [-.32, .32]) {
+      dock.add(solid(new T.CylinderGeometry(.047, .060, .43, 7), wetTimber, x, y - .12, z));
+    }
+  }
+  dock.add(deck, box(1.07, .10, .48, timber, 0, deckHeight(4.28), 4.28));
+  for (const [x, z] of [[-.68, 2.92], [.83, 2.45], [.63, 3.19]]) {
+    dock.add(solid(new T.IcosahedronGeometry(.29, 1).scale(1.2, .68, .88), terrace, x, -.25, z));
+  }
   const ridge = site(ridgeDirection);
-  const granite = new T.MeshLambertMaterial({color: 0x85808a});
-  const snow = new T.MeshLambertMaterial({color: 0xebe4cb});
-  for (const [x,z,width,height] of [[-.98,.28,1.12,2.47],[.27,-.15,1.49,3.53],[1.24,.25,1.03,2.23]]) {
-    const silhouette = new T.LatheGeometry([[0,.01],[width,.01],[width*.81,height*.18],[width*.55,height*.43],[width*.27,height*.69],[0,height]]
-      .map(([a,b])=>new T.Vector2(a,b)), 13);
-    ridge.add(solid(silhouette,granite,x,0,z),solid(new T.ConeGeometry(width*.29,height*.33,12),snow,x,height*.84,z));
+  const granite = new T.MeshLambertMaterial({vertexColors: true});
+  const slate = new T.Color(0x65707a), warmRock = new T.Color(0xa18a83), snow = new T.Color(0xefe6cf), tint = new T.Color();
+  for (const [x,z,width,height] of [[-.98,.28,1.27,2.58],[.27,-.19,1.57,3.64],[1.33,.25,1.13,2.29]]) {
+    const silhouette = new T.LatheGeometry([[0,.01],[width,.01],[width*.83,height*.16],[width*.62,height*.38],[width*.39,height*.59],[width*.23,height*.76],[width*.10,height*.92],[0,height]]
+      .map(([a,b])=>new T.Vector2(a,b)), low ? 16 : 24);
+    const points = silhouette.attributes.position;
+    const colors = new Float32Array(points.count * 3);
+    for (let i = 0; i < points.count; i++) {
+      const y = points.getY(i), fraction = y / height;
+      const angle = Math.atan2(points.getZ(i), points.getX(i));
+      const flutes = Math.cos(angle * 4 + x * 2 + fraction) * .18 + Math.sin(angle * 7 + x) * .07;
+      points.setXYZ(i, points.getX(i) * (1 + flutes) + fraction ** 2 * x * .14, y, points.getZ(i) * (1 + flutes) - fraction ** 2 * .22);
+      tint.copy(slate).lerp(warmRock, .43 + flutes * 1.4);
+      tint.lerp(snow, T.MathUtils.smoothstep(fraction, .60 + flutes * .42, .81 + flutes * .24));
+      tint.toArray(colors, i * 3);
+    }
+    silhouette.setAttribute("color", new T.BufferAttribute(colors, 3));
+    silhouette.computeVertexNormals();
+    ridge.add(solid(silhouette, granite, x, 0, z));
   }
   const lava = new T.MeshLambertMaterial({ color: 0xf06b38, emissive: 0xec441e, emissiveIntensity: 0.7 });
   const volcano = site(volcanoDirection);
